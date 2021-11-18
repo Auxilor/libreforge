@@ -1,0 +1,4 @@
+rootProject.name = 'libreforge'
+
+// Core
+include ':eco-api'

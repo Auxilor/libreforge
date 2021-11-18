@@ -1,0 +1,65 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.10"
+    }
+}
+
+plugins {
+    id 'java-library'
+    id 'com.github.johnrengelman.shadow' version '7.0.0'
+    id 'maven-publish'
+    id 'java'
+}
+
+dependencies {
+    implementation project(":eco-api")
+}
+
+allprojects {
+    apply plugin: 'kotlin'
+    apply plugin: 'java'
+    apply plugin: 'maven-publish'
+    apply plugin: 'com.github.johnrengelman.shadow'
+
+    repositories {
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+        maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+        maven { url 'https://papermc.io/repo/repository/maven-public/' }
+    }
+
+    jar {
+        onlyIf { !sourceSets.main.allSource.files.isEmpty() }
+    }
+
+    dependencies {
+        compileOnly 'com.willfp:eco:6.13.11'
+
+        compileOnly 'org.jetbrains:annotations:23.0.0'
+
+        compileOnly 'org.jetbrains.kotlin:kotlin-stdlib:1.5.21'
+    }
+
+    tasks.withType(JavaCompile) {
+        options.deprecation = true
+        options.encoding = 'UTF-8'
+    }
+
+    compileJava.options.encoding = 'UTF-8'
+    compileJava.dependsOn clean
+
+    build.dependsOn shadowJar
+}
+
+group = 'com.willfp'
+archivesBaseName = project.name
+version = findProperty("version")
+java.sourceCompatibility = JavaVersion.VERSION_16
+
+compileJava.options.encoding = 'UTF-8'
+
+build.dependsOn shadowJar
