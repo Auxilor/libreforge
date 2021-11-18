@@ -19,6 +19,7 @@ private val previousStates: MutableMap<UUID, Iterable<Holder>> = WeakHashMap()
 private val holderCache = mutableMapOf<UUID, Iterable<Holder>>()
 
 object LibReforge {
+    @JvmStatic
     lateinit var plugin: EcoPlugin
 
     private val defaultPackage = StringUtils.join(
@@ -26,6 +27,7 @@ object LibReforge {
         "."
     )
 
+    @JvmStatic
     fun init(plugin: EcoPlugin) {
         this.plugin = plugin
         plugin.eventManager.registerListener(WatcherTriggers(plugin))
@@ -38,6 +40,7 @@ object LibReforge {
         }
     }
 
+    @JvmStatic
     fun getIntegrationLoaders(): List<IntegrationLoader> {
         return listOf(
             IntegrationLoader("EcoSkills", EcoSkillsIntegration::load),
@@ -45,6 +48,7 @@ object LibReforge {
         )
     }
 
+    @JvmStatic
     fun registerHolderProvider(provider: HolderProvider) {
         holderProviders.add(provider)
     }

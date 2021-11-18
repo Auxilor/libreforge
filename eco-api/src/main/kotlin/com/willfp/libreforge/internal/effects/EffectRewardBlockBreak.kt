@@ -15,6 +15,10 @@ class EffectRewardBlockBreak : Effect("reward_block_break") {
         event: BlockBreakEvent,
         config: JSONConfig
     ) {
+        if (!this.getFilter(config).matches(block)) {
+            return
+        }
+
         EconomyManager.giveMoney(player, config.getDouble("amount"))
     }
 

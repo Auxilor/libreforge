@@ -192,7 +192,7 @@ interface Watcher {
      * @param event  The event that called this watcher.
      * @param config The effect config.
      */
-    fun onDamageWearingArmor(
+    fun onIncomingDamage(
         victim: Player,
         event: EntityDamageEvent,
         config: JSONConfig
