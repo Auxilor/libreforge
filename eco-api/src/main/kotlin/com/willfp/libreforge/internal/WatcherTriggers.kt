@@ -351,7 +351,7 @@ internal class WatcherTriggers(
                 val aEvent = EffectActivateEvent(victim, holder, effect)
                 this.plugin.server.pluginManager.callEvent(aEvent)
                 if (!aEvent.isCancelled) {
-                    effect.onDamageWearingArmor(victim, event, config)
+                    effect.onIncomingDamage(victim, event, config)
                 }
             }
         }

@@ -7,7 +7,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.entity.EntityDamageEvent
 
 class EffectFallDamageMultiplier : Effect("fall_damage_multiplier") {
-    override fun onDamageWearingArmor(
+    override fun onIncomingDamage(
         victim: Player,
         event: EntityDamageEvent,
         config: JSONConfig

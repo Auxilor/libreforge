@@ -15,6 +15,10 @@ class EffectRewardKill : Effect("reward_kill") {
         event: EntityDeathByEntityEvent,
         config: JSONConfig
     ) {
+        if (!this.getFilter(config).matches(victim)) {
+            return
+        }
+
         EconomyManager.giveMoney(killer, config.getDouble("amount"))
     }
 

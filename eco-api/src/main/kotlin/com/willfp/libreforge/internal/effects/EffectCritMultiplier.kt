@@ -14,6 +14,10 @@ class EffectCritMultiplier : Effect("crit_multiplier") {
         event: EntityDamageByEntityEvent,
         config: JSONConfig
     ) {
+        if (!this.getFilter(config).matches(victim)) {
+            return
+        }
+
         if (attacker.velocity.y >= 0) {
             return
         }

@@ -14,6 +14,10 @@ class EffectDamageMultiplier : Effect("damage_multiplier") {
         event: EntityDamageByEntityEvent,
         config: JSONConfig
     ) {
+        if (!this.getFilter(config).matches(victim)) {
+            return
+        }
+
         event.damage *= config.getDouble("multiplier")
     }
 

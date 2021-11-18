@@ -2,8 +2,12 @@ package com.willfp.libreforge.api.effects
 
 import com.willfp.eco.core.config.interfaces.JSONConfig
 import com.willfp.libreforge.api.ConfigurableProperty
-import com.willfp.libreforge.api.LibReforge
 import com.willfp.libreforge.api.Watcher
+import com.willfp.libreforge.api.filter.Filter
+import com.willfp.libreforge.internal.filter.CompoundFilter
+import com.willfp.libreforge.internal.filter.FilterBlock
+import com.willfp.libreforge.internal.filter.FilterEmpty
+import com.willfp.libreforge.internal.filter.FilterLivingEntity
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
 import java.util.UUID
@@ -76,5 +80,26 @@ abstract class Effect(
 
     protected open fun handleDisable(player: Player) {
         // Override when needed.
+    }
+
+    /**
+     * Get filter from config.
+     *
+     * @return The filter.
+     */
+    fun getFilter(config: JSONConfig): Filter {
+        val filters = mutableListOf<Filter>()
+
+        for (filterConfig in config.getSubsections("filters")) {
+            filters.add(
+                when (filterConfig.getString("id", false)) {
+                    "block" -> FilterBlock(filterConfig)
+                    "entity" -> FilterLivingEntity(filterConfig)
+                    else -> FilterEmpty()
+                }
+            )
+        }
+
+        return CompoundFilter(*filters.toTypedArray())
     }
 }
