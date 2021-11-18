@@ -3,14 +3,17 @@ package com.willfp.libreforge.api.effects
 import com.google.common.collect.HashBiMap
 import com.google.common.collect.ImmutableList
 import com.willfp.libreforge.internal.effects.EffectAttackSpeedMultiplier
+import com.willfp.libreforge.internal.effects.EffectBonusHealth
+import com.willfp.libreforge.internal.effects.EffectBowDamageMultiplier
 import com.willfp.libreforge.internal.effects.EffectCritMultiplier
 import com.willfp.libreforge.internal.effects.EffectDamageMultiplier
-import com.willfp.libreforge.internal.effects.EffectDurabilityMultiplier
+import com.willfp.libreforge.internal.effects.EffectFallDamageMultiplier
 import com.willfp.libreforge.internal.effects.EffectIncomingDamageMultiplier
 import com.willfp.libreforge.internal.effects.EffectKnockbackMultiplier
 import com.willfp.libreforge.internal.effects.EffectMovementSpeedMultiplier
 import com.willfp.libreforge.internal.effects.EffectRewardBlockBreak
 import com.willfp.libreforge.internal.effects.EffectRewardKill
+import com.willfp.libreforge.internal.effects.EffectTridentDamageMultiplier
 
 object Effects {
     private val BY_ID = HashBiMap.create<String, Effect>()
@@ -24,6 +27,10 @@ object Effects {
     val ATTACK_SPEED_MULTIPLIER: Effect = EffectAttackSpeedMultiplier()
     val DURABILITY_MULTIPLIER: Effect = EffectDurabilityMultiplier()
     val MOVEMENT_SPEED_MULTIPLIER: Effect = EffectMovementSpeedMultiplier()
+    val BONUS_HEALTH: Effect = EffectBonusHealth()
+    val BOW_DAMAGE_MULTIPLIER: Effect = EffectBowDamageMultiplier()
+    val FALL_DAMAGE_MULTIPLIER: Effect = EffectFallDamageMultiplier()
+    val TRIDENT_DAMAGE_MULTIPLIER: Effect = EffectTridentDamageMultiplier()
 
     /**
      * Get effect matching id.

@@ -2,6 +2,7 @@ package com.willfp.libreforge.internal.effects
 
 import com.willfp.eco.core.config.interfaces.JSONConfig
 import com.willfp.eco.core.integrations.economy.EconomyManager
+import com.willfp.libreforge.api.effects.ConfigViolation
 import com.willfp.libreforge.api.effects.Effect
 import org.bukkit.block.Block
 import org.bukkit.entity.Player
@@ -15,5 +16,19 @@ class EffectRewardBlockBreak : Effect("reward_block_break") {
         config: JSONConfig
     ) {
         EconomyManager.giveMoney(player, config.getDouble("amount"))
+    }
+
+    override fun validateConfig(config: JSONConfig): List<ConfigViolation> {
+        val violations = mutableListOf<ConfigViolation>()
+
+        config.getDoubleOrNull("amount")
+            ?: violations.add(
+                ConfigViolation(
+                    "amount",
+                    "You must specify the amount of money to give!"
+                )
+            )
+
+        return violations
     }
 }

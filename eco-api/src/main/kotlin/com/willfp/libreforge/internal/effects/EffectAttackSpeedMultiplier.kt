@@ -1,6 +1,7 @@
 package com.willfp.libreforge.internal.effects
 
 import com.willfp.eco.core.config.interfaces.JSONConfig
+import com.willfp.libreforge.api.effects.ConfigViolation
 import com.willfp.libreforge.api.effects.Effect
 import com.willfp.libreforge.api.effects.getEffectAmount
 import org.bukkit.attribute.Attribute
@@ -32,5 +33,19 @@ class EffectAttackSpeedMultiplier : Effect("attack_speed_multiplier") {
                 AttributeModifier.Operation.MULTIPLY_SCALAR_1
             )
         )
+    }
+
+    override fun validateConfig(config: JSONConfig): List<ConfigViolation> {
+        val violations = mutableListOf<ConfigViolation>()
+
+        config.getDoubleOrNull("multiplier")
+            ?: violations.add(
+                ConfigViolation(
+                    "multiplier",
+                    "You must specify the attack speed multiplier!"
+                )
+            )
+
+        return violations
     }
 }

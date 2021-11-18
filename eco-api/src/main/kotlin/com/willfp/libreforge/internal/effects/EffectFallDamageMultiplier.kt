@@ -1,31 +1,31 @@
 package com.willfp.libreforge.internal.effects
 
 import com.willfp.eco.core.config.interfaces.JSONConfig
-import com.willfp.eco.core.events.EntityDeathByEntityEvent
-import com.willfp.eco.core.integrations.economy.EconomyManager
 import com.willfp.libreforge.api.effects.ConfigViolation
 import com.willfp.libreforge.api.effects.Effect
-import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
+import org.bukkit.event.entity.EntityDamageEvent
 
-class EffectRewardKill : Effect("reward_kill") {
-    override fun onKill(
-        killer: Player,
-        victim: LivingEntity,
-        event: EntityDeathByEntityEvent,
+class EffectFallDamageMultiplier : Effect("fall_damage_multiplier") {
+    override fun onDamageWearingArmor(
+        victim: Player,
+        event: EntityDamageEvent,
         config: JSONConfig
     ) {
-        EconomyManager.giveMoney(killer, config.getDouble("amount"))
+        if (event.cause != EntityDamageEvent.DamageCause.FALL) {
+            return
+        }
+        event.damage *= config.getDouble("multiplier")
     }
 
     override fun validateConfig(config: JSONConfig): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
-        config.getDoubleOrNull("amount")
+        config.getDoubleOrNull("multiplier")
             ?: violations.add(
                 ConfigViolation(
-                    "amount",
-                    "You must specify the amount of money to give!"
+                    "multiplier",
+                    "You must specify the incoming fall damage multiplier!"
                 )
             )
 
