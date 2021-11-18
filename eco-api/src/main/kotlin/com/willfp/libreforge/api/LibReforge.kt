@@ -1,4 +1,4 @@
-@file:JvmName("LibReforge")
+@file:JvmName("LibReforgeUtils")
 
 package com.willfp.libreforge.api
 
