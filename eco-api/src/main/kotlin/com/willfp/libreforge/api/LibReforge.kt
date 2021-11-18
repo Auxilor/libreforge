@@ -1,3 +1,5 @@
+@file:JvmName("LibReforge")
+
 package com.willfp.libreforge.api
 
 import com.willfp.eco.core.EcoPlugin
@@ -30,13 +32,17 @@ object LibReforge {
     @JvmStatic
     fun init(plugin: EcoPlugin) {
         this.plugin = plugin
-        plugin.eventManager.registerListener(WatcherTriggers(plugin))
-        for (condition in Conditions.values()) {
-            plugin.eventManager.registerListener(condition)
-        }
 
         if (this.javaClass.packageName == defaultPackage) {
             throw IllegalStateException("You must shade and relocate libreforge into your jar!")
+        }
+    }
+
+    @JvmStatic
+    fun enable(plugin: EcoPlugin) {
+        plugin.eventManager.registerListener(WatcherTriggers(plugin))
+        for (condition in Conditions.values()) {
+            plugin.eventManager.registerListener(condition)
         }
     }
 
