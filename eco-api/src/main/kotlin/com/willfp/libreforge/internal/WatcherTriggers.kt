@@ -8,7 +8,7 @@ import com.willfp.eco.core.integrations.mcmmo.McmmoManager
 import com.willfp.eco.util.NumberUtils
 import com.willfp.libreforge.api.Watcher
 import com.willfp.libreforge.api.events.EffectActivateEvent
-import com.willfp.libreforge.api.provider.LibReforgeProviders
+import com.willfp.libreforge.api.getHolders
 import org.bukkit.entity.Arrow
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
@@ -37,7 +37,7 @@ internal class WatcherTriggers(
             return
         }
 
-        for (holder in LibReforgeProviders.providerHolders(player)) {
+        for (holder in player.getHolders()) {
             for ((effect, config) in holder.effects) {
                 if (NumberUtils.randFloat(0.0, 100.0) > (config.getDoubleOrNull("chance") ?: 100.0)) {
                     continue
@@ -82,7 +82,7 @@ internal class WatcherTriggers(
             return
         }
 
-        for (holder in LibReforgeProviders.providerHolders(shooter)) {
+        for (holder in shooter.getHolders()) {
             for ((effect, config) in holder.effects) {
                 if (NumberUtils.randFloat(0.0, 100.0) > (config.getDoubleOrNull("chance") ?: 100.0)) {
                     continue
@@ -128,7 +128,7 @@ internal class WatcherTriggers(
             return
         }
 
-        for (holder in LibReforgeProviders.providerHolders(shooter)) {
+        for (holder in shooter.getHolders()) {
             for ((effect, config) in holder.effects) {
                 if (NumberUtils.randFloat(0.0, 100.0) > (config.getDoubleOrNull("chance") ?: 100.0)) {
                     continue
@@ -150,7 +150,7 @@ internal class WatcherTriggers(
         }
         val player = event.player
 
-        for (holder in LibReforgeProviders.providerHolders(player)) {
+        for (holder in player.getHolders()) {
             for ((effect, config) in holder.effects) {
                 if (NumberUtils.randFloat(0.0, 100.0) > (config.getDoubleOrNull("chance") ?: 100.0)) {
                     continue
@@ -194,7 +194,7 @@ internal class WatcherTriggers(
             return
         }
 
-        for (holder in LibReforgeProviders.providerHolders(attacker)) {
+        for (holder in attacker.getHolders()) {
             for ((effect, config) in holder.effects) {
                 if (NumberUtils.randFloat(0.0, 100.0) > (config.getDoubleOrNull("chance") ?: 100.0)) {
                     continue
@@ -234,7 +234,7 @@ internal class WatcherTriggers(
             return
         }
 
-        for (holder in LibReforgeProviders.providerHolders(killer)) {
+        for (holder in killer.getHolders()) {
             for ((effect, config) in holder.effects) {
                 if (NumberUtils.randFloat(0.0, 100.0) > (config.getDoubleOrNull("chance") ?: 100.0)) {
                     continue
@@ -260,7 +260,7 @@ internal class WatcherTriggers(
             return
         }
 
-        for (holder in LibReforgeProviders.providerHolders(shooter)) {
+        for (holder in shooter.getHolders()) {
             for ((effect, config) in holder.effects) {
                 if (NumberUtils.randFloat(0.0, 100.0) > (config.getDoubleOrNull("chance") ?: 100.0)) {
                     continue
@@ -290,7 +290,7 @@ internal class WatcherTriggers(
             return
         }
 
-        for (holder in LibReforgeProviders.providerHolders(victim)) {
+        for (holder in victim.getHolders()) {
             for ((effect, config) in holder.effects) {
                 if (NumberUtils.randFloat(0.0, 100.0) > (config.getDoubleOrNull("chance") ?: 100.0)) {
                     continue
@@ -317,7 +317,7 @@ internal class WatcherTriggers(
             return
         }
 
-        for (holder in LibReforgeProviders.providerHolders(shooter)) {
+        for (holder in shooter.getHolders()) {
             for ((effect, config) in holder.effects) {
                 if (NumberUtils.randFloat(0.0, 100.0) > (config.getDoubleOrNull("chance") ?: 100.0)) {
                     continue
@@ -343,7 +343,7 @@ internal class WatcherTriggers(
             return
         }
 
-        for (holder in LibReforgeProviders.providerHolders(victim)) {
+        for (holder in victim.getHolders()) {
             for ((effect, config) in holder.effects) {
                 if (NumberUtils.randFloat(0.0, 100.0) > (config.getDoubleOrNull("chance") ?: 100.0)) {
                     continue

@@ -8,7 +8,7 @@ import java.util.Objects
 abstract class ConfigurableProperty(
     val id: String
 ) {
-    protected val plugin = LibReforge.instance.plugin
+    protected val plugin = LibReforge.plugin
 
     /**
      * Check if the config for this effect is valid.

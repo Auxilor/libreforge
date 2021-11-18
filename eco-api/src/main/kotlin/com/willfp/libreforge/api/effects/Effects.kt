@@ -25,7 +25,6 @@ object Effects {
     val REWARD_BLOCK_BREAK: Effect = EffectRewardBlockBreak()
     val INCOMING_DAMAGE_MULTIPLIER: Effect = EffectIncomingDamageMultiplier()
     val ATTACK_SPEED_MULTIPLIER: Effect = EffectAttackSpeedMultiplier()
-    val DURABILITY_MULTIPLIER: Effect = EffectDurabilityMultiplier()
     val MOVEMENT_SPEED_MULTIPLIER: Effect = EffectMovementSpeedMultiplier()
     val BONUS_HEALTH: Effect = EffectBonusHealth()
     val BOW_DAMAGE_MULTIPLIER: Effect = EffectBowDamageMultiplier()
