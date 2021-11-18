@@ -1,10 +1,9 @@
 package com.willfp.libreforge.api.provider
 
-import com.willfp.eco.core.config.interfaces.JSONConfig
-import com.willfp.libreforge.api.conditions.Condition
-import com.willfp.libreforge.api.effects.Effect
+import com.willfp.libreforge.api.conditions.ConfiguredCondition
+import com.willfp.libreforge.api.effects.ConfiguredEffect
 
 interface Holder {
-    val effects: Map<Effect, JSONConfig>
-    val conditions: Map<Condition, JSONConfig>
+    val effects: Set<ConfiguredEffect>
+    val conditions: Set<ConfiguredCondition>
 }
