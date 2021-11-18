@@ -2,6 +2,7 @@ package com.willfp.libreforge.internal.conditions
 
 import com.willfp.eco.core.config.interfaces.JSONConfig
 import com.willfp.libreforge.api.conditions.Condition
+import com.willfp.libreforge.api.effects.ConfigViolation
 import com.willfp.libreforge.api.provider.LibReforgeProviders
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -24,10 +25,24 @@ class ConditionInBiome: Condition("in_biome") {
     }
 
     override fun isConditionMet(player: Player, config: JSONConfig): Boolean {
-        return config.getStrings("biomes").contains(player.world.getBiome(
+        return config.getStrings("biomes", false).contains(player.world.getBiome(
             player.location.blockX,
             player.location.blockY,
             player.location.blockZ
         ).name.lowercase())
+    }
+
+    override fun validateConfig(config: JSONConfig): List<ConfigViolation> {
+        val violations = mutableListOf<ConfigViolation>()
+
+        config.getStringsOrNull("biomes", false)
+            ?: violations.add(
+                ConfigViolation(
+                    "biomes",
+                    "You must specify the biomes!"
+                )
+            )
+
+        return violations
     }
 }

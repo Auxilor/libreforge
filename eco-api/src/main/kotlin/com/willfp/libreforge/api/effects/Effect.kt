@@ -1,17 +1,15 @@
 package com.willfp.libreforge.api.effects
 
 import com.willfp.eco.core.config.interfaces.JSONConfig
+import com.willfp.libreforge.api.ConfigurableProperty
 import com.willfp.libreforge.api.LibReforge
 import com.willfp.libreforge.api.Watcher
 import org.bukkit.entity.Player
-import java.util.Objects
 import java.util.UUID
 
 abstract class Effect(
-    val id: String
-) : Watcher {
-    protected val plugin = LibReforge.instance.plugin
-
+    id: String
+) : ConfigurableProperty(id), Watcher {
     init {
         postInit()
     }
@@ -65,17 +63,5 @@ abstract class Effect(
 
     protected open fun handleDisable(player: Player) {
         // Override when needed.
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (other !is Effect) {
-            return false
-        }
-
-        return this.id == other.id
-    }
-
-    override fun hashCode(): Int {
-        return Objects.hash(this.id)
     }
 }
