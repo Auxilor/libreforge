@@ -3,7 +3,7 @@ package com.willfp.libreforge.internal.conditions
 import com.willfp.eco.core.config.interfaces.JSONConfig
 import com.willfp.libreforge.api.conditions.Condition
 import com.willfp.libreforge.api.effects.ConfigViolation
-import com.willfp.libreforge.api.provider.LibReforgeProviders
+import com.willfp.libreforge.api.updateEffects
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
@@ -22,7 +22,7 @@ class ConditionAboveHungerPercent : Condition("above_hunger_percent") {
             return
         }
 
-        LibReforgeProviders.updateEffects(player)
+        player.updateEffects()
     }
 
     override fun isConditionMet(player: Player, config: JSONConfig): Boolean {

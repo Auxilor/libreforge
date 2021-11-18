@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.JSONConfig
 import com.willfp.libreforge.api.ConfigurableProperty
 import com.willfp.libreforge.api.LibReforge
 import com.willfp.libreforge.api.Watcher
+import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
 import java.util.UUID
 
@@ -28,6 +29,18 @@ abstract class Effect(
         offset: Int
     ): UUID {
         return UUID.nameUUIDFromBytes("$id$offset".toByteArray())
+    }
+
+    /**
+     * Generate a NamespacedKey with a specified offset.
+     *
+     * @param offset The offset.
+     * @return The NamespacedKey.
+     */
+    fun getNamespacedKey(
+        offset: Int
+    ): NamespacedKey {
+        return this.plugin.namespacedKeyFactory.create("${id}_$offset")
     }
 
     /**
