@@ -120,8 +120,6 @@ internal class WatcherTriggers(
             return
         }
 
-        val item = trident.item
-
         if (!AntigriefManager.canInjure(shooter, victim)) {
             return
         }
