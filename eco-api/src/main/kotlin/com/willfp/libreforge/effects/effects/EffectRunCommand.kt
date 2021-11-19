@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.JSONConfig
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
+import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
@@ -11,7 +12,9 @@ import org.bukkit.entity.Player
 class EffectRunCommand : Effect(
     "run_command",
     supportsFilters = true,
-    applicableTriggers = Triggers.values()
+    applicableTriggers = Triggers.withParameters(
+        TriggerParameter.PLAYER
+    )
 ) {
     override fun handle(data: TriggerData, config: JSONConfig) {
         val player = data.player ?: return

@@ -2,6 +2,7 @@ package com.willfp.libreforge.triggers.triggers
 
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
+import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.FluidCollisionMode
 import org.bukkit.Material
 import org.bukkit.Tag
@@ -11,7 +12,13 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 
-class TriggerAltClick : Trigger("alt_click") {
+class TriggerAltClick : Trigger(
+    "alt_click", listOf(
+        TriggerParameter.PLAYER,
+        TriggerParameter.VICTIM,
+        TriggerParameter.LOCATION
+    )
+) {
     companion object {
         private val LEFT_CLICK_ITEMS = listOf(
             Material.FISHING_ROD,

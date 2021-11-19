@@ -14,3 +14,12 @@ data class TriggerData(
     val location: Location? = null,
     val projectile: Projectile? = null
 )
+
+enum class TriggerParameter {
+    PLAYER,
+    VICTIM,
+    BLOCK,
+    EVENT,
+    LOCATION,
+    PROJECTILE
+}

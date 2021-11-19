@@ -4,22 +4,14 @@ import com.willfp.eco.core.config.interfaces.JSONConfig
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
+import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
 
 class EffectStrikeLightning : Effect(
     "strike_lightning",
     supportsFilters = false,
-    applicableTriggers = listOf(
-        Triggers.ALT_CLICK,
-        Triggers.MELEE_ATTACK,
-        Triggers.BOW_ATTACK,
-        Triggers.TRIDENT_ATTACK,
-        Triggers.PROJECTILE_HIT,
-        Triggers.TAKE_ENTITY_DAMAGE,
-        Triggers.KILL,
-        Triggers.FALL_DAMAGE,
-        Triggers.JUMP,
-        Triggers.MINE_BLOCK
+    applicableTriggers = Triggers.withParameters(
+        TriggerParameter.LOCATION
     )
 ) {
     override fun handle(data: TriggerData, config: JSONConfig) {
