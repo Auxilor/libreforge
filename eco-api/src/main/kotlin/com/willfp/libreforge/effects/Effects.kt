@@ -23,6 +23,7 @@ object Effects {
     val BONUS_HEALTH: Effect = EffectBonusHealth()
     val RUN_COMMAND: Effect = EffectRunCommand()
     val STRIKE_LIGHTNING: Effect = EffectStrikeLightning()
+    val SPAWN_MOBS: Effect = EffectSpawnMobs()
 
     /**
      * Get effect matching id.
