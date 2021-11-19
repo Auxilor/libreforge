@@ -12,7 +12,8 @@ class EffectDamageMultiplier : Effect(
     applicableTriggers = listOf(
         Triggers.TRIDENT_ATTACK,
         Triggers.BOW_ATTACK,
-        Triggers.MELEE_ATTACK
+        Triggers.MELEE_ATTACK,
+        Triggers.TAKE_DAMAGE
     )
 ) {
     override fun handle(data: TriggerData, config: JSONConfig) {

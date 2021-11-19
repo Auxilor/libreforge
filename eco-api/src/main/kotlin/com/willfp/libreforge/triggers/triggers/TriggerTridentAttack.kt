@@ -49,6 +49,7 @@ class TriggerTridentAttack : Trigger("trident_attack") {
                 player = shooter,
                 victim = victim,
                 projectile = trident,
+                location = trident.location,
                 event = WrappedDamageEvent(event)
             )
         )

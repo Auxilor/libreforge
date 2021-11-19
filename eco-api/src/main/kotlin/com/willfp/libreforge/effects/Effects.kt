@@ -5,15 +5,7 @@ import com.google.common.collect.ImmutableList
 import com.willfp.eco.core.config.interfaces.JSONConfig
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.LibReforge
-import com.willfp.libreforge.effects.effects.EffectAttackSpeedMultiplier
-import com.willfp.libreforge.effects.effects.EffectBonusHealth
-import com.willfp.libreforge.effects.effects.EffectCritMultiplier
-import com.willfp.libreforge.effects.effects.EffectDamageMultiplier
-import com.willfp.libreforge.effects.effects.EffectFallDamageMultiplier
-import com.willfp.libreforge.effects.effects.EffectGiveMoney
-import com.willfp.libreforge.effects.effects.EffectIncomingDamageMultiplier
-import com.willfp.libreforge.effects.effects.EffectKnockbackMultiplier
-import com.willfp.libreforge.effects.effects.EffectMovementSpeedMultiplier
+import com.willfp.libreforge.effects.effects.*
 import com.willfp.libreforge.filters.Filter
 import com.willfp.libreforge.filters.Filters
 import com.willfp.libreforge.filters.filters.CompoundFilter
@@ -28,7 +20,6 @@ object Effects {
     val CRIT_MULTIPLIER: Effect = EffectCritMultiplier()
     val KNOCKBACK_MULTIPLIER: Effect = EffectKnockbackMultiplier()
     val GIVE_MONEY: Effect = EffectGiveMoney()
-    val INCOMING_DAMAGE_MULTIPLIER: Effect = EffectIncomingDamageMultiplier()
     val ATTACK_SPEED_MULTIPLIER: Effect = EffectAttackSpeedMultiplier()
     val MOVEMENT_SPEED_MULTIPLIER: Effect = EffectMovementSpeedMultiplier()
     val BONUS_HEALTH: Effect = EffectBonusHealth()
