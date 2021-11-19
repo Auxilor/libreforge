@@ -11,7 +11,7 @@ import java.util.*
 abstract class Effect(
     id: String,
     val supportsFilters: Boolean = false,
-    val applicableTriggers: List<Trigger> = emptyList()
+    val applicableTriggers: Collection<Trigger> = emptyList()
 ) : ConfigurableProperty(id) {
     init {
         postInit()
