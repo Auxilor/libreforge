@@ -8,6 +8,7 @@ import com.willfp.eco.util.ListUtils
 import com.willfp.libreforge.api.conditions.Conditions
 import com.willfp.libreforge.api.provider.Holder
 import com.willfp.libreforge.api.provider.HolderProvider
+import com.willfp.libreforge.api.triggers.Triggers
 import com.willfp.libreforge.internal.WatcherTriggers
 import com.willfp.libreforge.internal.integrations.aureliumskills.AureliumSkillsIntegration
 import com.willfp.libreforge.internal.integrations.ecoskills.EcoSkillsIntegration
@@ -43,6 +44,9 @@ object LibReforge {
         plugin.eventManager.registerListener(WatcherTriggers(plugin))
         for (condition in Conditions.values()) {
             plugin.eventManager.registerListener(condition)
+        }
+        for (trigger in Triggers.values()) {
+            plugin.eventManager.registerListener(trigger)
         }
     }
 

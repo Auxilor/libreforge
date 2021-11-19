@@ -8,17 +8,16 @@ import com.willfp.libreforge.api.effects.Effect
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 
-class EffectRewardKill : Effect("reward_kill", supportsFilters = true) {
+class EffectRewardKill : Effect(
+    "reward_kill",
+    supportsFilters = true
+) {
     override fun onKill(
         killer: Player,
         victim: LivingEntity,
         event: EntityDeathByEntityEvent,
         config: JSONConfig
     ) {
-        if (!this.getFilter(config).matches(victim)) {
-            return
-        }
-
         EconomyManager.giveMoney(killer, config.getDouble("amount"))
     }
 

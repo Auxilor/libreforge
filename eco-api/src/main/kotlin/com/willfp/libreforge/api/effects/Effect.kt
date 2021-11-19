@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.JSONConfig
 import com.willfp.libreforge.api.ConfigurableProperty
 import com.willfp.libreforge.api.Watcher
 import com.willfp.libreforge.api.filter.Filter
+import com.willfp.libreforge.api.triggers.Trigger
 import com.willfp.libreforge.internal.filter.CompoundFilter
 import com.willfp.libreforge.internal.filter.FilterBlock
 import com.willfp.libreforge.internal.filter.FilterEmpty
@@ -15,7 +16,7 @@ import java.util.UUID
 abstract class Effect(
     id: String,
     val supportsFilters: Boolean = false,
-    val supportsTriggers: Boolean = false
+    val applicableTriggers: List<Trigger> = emptyList()
 ) : ConfigurableProperty(id), Watcher {
     init {
         postInit()
