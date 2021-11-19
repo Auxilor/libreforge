@@ -21,6 +21,7 @@ object Effects {
     val ATTACK_SPEED_MULTIPLIER: Effect = EffectAttackSpeedMultiplier()
     val MOVEMENT_SPEED_MULTIPLIER: Effect = EffectMovementSpeedMultiplier()
     val BONUS_HEALTH: Effect = EffectBonusHealth()
+    val RUN_COMMANd: Effect = EffectRunCommand()
 
     /**
      * Get effect matching id.
