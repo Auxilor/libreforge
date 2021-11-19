@@ -1,7 +1,7 @@
 package com.willfp.libreforge.events
 
+import com.willfp.libreforge.Holder
 import com.willfp.libreforge.effects.Effect
-import com.willfp.libreforge.provider.Holder
 import org.bukkit.entity.Player
 import org.bukkit.event.Cancellable
 import org.bukkit.event.HandlerList
