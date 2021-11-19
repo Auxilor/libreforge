@@ -61,9 +61,11 @@ object LibReforge {
 
     @JvmStatic
     fun logViolation(id: String, context: String, violation: ConfigViolation) {
+        plugin.logger.warning("")
         plugin.logger.warning("Invalid configuration for $id in context $context:")
         plugin.logger.warning("(Cause) Argument ${violation.param}")
         plugin.logger.warning("(Reason) ${violation.message}")
+        plugin.logger.warning("")
     }
 }
 
