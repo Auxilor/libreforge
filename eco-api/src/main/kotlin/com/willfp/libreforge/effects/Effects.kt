@@ -6,10 +6,8 @@ import com.willfp.eco.core.config.interfaces.JSONConfig
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.LibReforge
 import com.willfp.libreforge.effects.effects.*
-import com.willfp.libreforge.filters.Filter
-import com.willfp.libreforge.filters.Filters
-import com.willfp.libreforge.filters.filters.CompoundFilter
-import com.willfp.libreforge.filters.filters.FilterEmpty
+import com.willfp.libreforge.filters.ConfiguredFilter
+import com.willfp.libreforge.filters.EmptyFilter
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.Triggers
 
@@ -81,7 +79,7 @@ object Effects {
             return null
         }
 
-        val filters = config.getSubsectionsOrNull("filters").let {
+        val filter = config.getSubsectionOrNull("filters").let {
             if (!effect.supportsFilters && it != null) {
                 LibReforge.logViolation(
                     effect.id,
@@ -92,25 +90,7 @@ object Effects {
                 return@let null
             }
 
-            val builder = mutableListOf<Filter>()
-
-            for (filterConfig in it ?: emptyList()) {
-                val id = filterConfig.getString("id")
-                val filter = Filters.createById(id, filterConfig)
-                if (filter is FilterEmpty) {
-                    LibReforge.logViolation(
-                        effect.id,
-                        context,
-                        ConfigViolation(
-                            "filters", "Invalid filter specified: $id"
-                        )
-                    )
-                } else {
-                    builder.add(filter)
-                }
-            }
-
-            return@let CompoundFilter(*builder.toTypedArray())
+            if (it == null) EmptyFilter() else ConfiguredFilter(it)
         } ?: return null
 
         val triggers = config.getStrings("triggers").let {
@@ -171,6 +151,6 @@ object Effects {
             triggers
         } ?: return null
 
-        return ConfiguredEffect(effect, args, filters, triggers)
+        return ConfiguredEffect(effect, args, filter, triggers)
     }
 }
