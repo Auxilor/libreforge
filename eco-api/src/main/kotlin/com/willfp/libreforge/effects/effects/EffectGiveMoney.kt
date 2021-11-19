@@ -5,12 +5,15 @@ import com.willfp.eco.core.integrations.economy.EconomyManager
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
+import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
 
 class EffectGiveMoney : Effect(
     "give_money",
     supportsFilters = true,
-    applicableTriggers = Triggers.values()
+    applicableTriggers = Triggers.withParameters(
+        TriggerParameter.PLAYER
+    )
 ) {
     override fun handle(data: TriggerData, config: JSONConfig) {
         val player = data.player ?: return

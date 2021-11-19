@@ -4,18 +4,15 @@ import com.willfp.eco.core.config.interfaces.JSONConfig
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
+import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
 import com.willfp.libreforge.triggers.wrappers.WrappedDamageEvent
 
 class EffectDamageMultiplier : Effect(
     "damage_multiplier",
     supportsFilters = true,
-    applicableTriggers = listOf(
-        Triggers.TRIDENT_ATTACK,
-        Triggers.BOW_ATTACK,
-        Triggers.MELEE_ATTACK,
-        Triggers.TAKE_DAMAGE,
-        Triggers.FALL_DAMAGE
+    applicableTriggers = Triggers.withParameters(
+        TriggerParameter.EVENT
     )
 ) {
     override fun handle(data: TriggerData, config: JSONConfig) {

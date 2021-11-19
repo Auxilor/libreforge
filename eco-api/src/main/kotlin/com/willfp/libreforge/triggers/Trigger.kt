@@ -10,7 +10,8 @@ import org.bukkit.event.Listener
 import java.util.*
 
 abstract class Trigger(
-    val id: String
+    val id: String,
+    val parameters: Collection<TriggerParameter>
 ) : Listener {
     protected val plugin = LibReforge.plugin
 

@@ -5,6 +5,7 @@ import com.willfp.eco.util.NumberUtils
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
+import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.LivingEntity
@@ -19,17 +20,8 @@ import org.bukkit.event.entity.EntityTargetEvent
 class EffectSpawnMobs : Effect(
     "spawn_mobs",
     supportsFilters = false,
-    applicableTriggers = listOf(
-        Triggers.ALT_CLICK,
-        Triggers.MELEE_ATTACK,
-        Triggers.BOW_ATTACK,
-        Triggers.TRIDENT_ATTACK,
-        Triggers.PROJECTILE_HIT,
-        Triggers.TAKE_ENTITY_DAMAGE,
-        Triggers.KILL,
-        Triggers.FALL_DAMAGE,
-        Triggers.JUMP,
-        Triggers.MINE_BLOCK
+    applicableTriggers = Triggers.withParameters(
+        TriggerParameter.LOCATION
     )
 ), Listener {
     override fun handle(data: TriggerData, config: JSONConfig) {
