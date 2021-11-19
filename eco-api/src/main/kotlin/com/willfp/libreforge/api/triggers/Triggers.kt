@@ -5,6 +5,7 @@ import com.willfp.libreforge.internal.triggers.TriggerMeleeAttack
 import com.willfp.libreforge.internal.triggers.TriggerMineBlock
 import com.willfp.libreforge.internal.triggers.TriggerJump
 import com.willfp.libreforge.internal.triggers.TriggerKill
+import com.willfp.libreforge.internal.triggers.TriggerProjectileLaunch
 import com.willfp.libreforge.internal.triggers.TriggerTridentAttack
 
 object Triggers {
@@ -16,6 +17,7 @@ object Triggers {
     val MINE_BLOCK: Trigger = TriggerMineBlock()
     val JUMP: Trigger = TriggerJump()
     val KILL: Trigger = TriggerKill()
+    val PROJECTILE_LAUNCH: Trigger = TriggerProjectileLaunch()
 
     fun values(): Set<Trigger> {
         return BY_ID.values.toSet()
