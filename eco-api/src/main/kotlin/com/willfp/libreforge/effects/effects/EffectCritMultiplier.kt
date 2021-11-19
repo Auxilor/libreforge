@@ -11,8 +11,8 @@ class EffectCritMultiplier : Effect(
     "crit_multiplier",
     supportsFilters = true,
     applicableTriggers = listOf(
-        Triggers.TRIDENT_HIT,
-        Triggers.ARROW_HIT,
+        Triggers.TRIDENT_ATTACK,
+        Triggers.BOW_ATTACK,
         Triggers.MELEE_ATTACK
     )
 ) {
