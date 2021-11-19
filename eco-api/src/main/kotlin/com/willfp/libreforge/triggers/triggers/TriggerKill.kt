@@ -39,7 +39,8 @@ class TriggerKill : Trigger("kill") {
             killer,
             TriggerData(
                 player = killer,
-                victim = victim
+                victim = victim,
+                location = victim.location
             )
         )
     }

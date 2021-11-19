@@ -24,7 +24,8 @@ class TriggerMineBlock : Trigger("mine_block") {
             player,
             TriggerData(
                 player = player,
-                block = block
+                block = block,
+                location = block.location
             )
         )
     }
