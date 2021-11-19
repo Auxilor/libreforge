@@ -2,9 +2,8 @@ package com.willfp.libreforge.internal.filter
 
 import com.willfp.eco.core.config.interfaces.JSONConfig
 import com.willfp.eco.util.NamespacedKeyUtils
-import com.willfp.libreforge.api.effects.ConfigViolation
+import com.willfp.libreforge.api.ConfigViolation
 import com.willfp.libreforge.api.filter.Filter
-import org.bukkit.block.Block
 import org.bukkit.entity.Boss
 import org.bukkit.entity.ElderGuardian
 import org.bukkit.entity.LivingEntity

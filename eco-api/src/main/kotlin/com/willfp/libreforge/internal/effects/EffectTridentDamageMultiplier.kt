@@ -1,14 +1,14 @@
 package com.willfp.libreforge.internal.effects
 
 import com.willfp.eco.core.config.interfaces.JSONConfig
-import com.willfp.libreforge.api.effects.ConfigViolation
+import com.willfp.libreforge.api.ConfigViolation
 import com.willfp.libreforge.api.effects.Effect
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.entity.Trident
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 
-class EffectTridentDamageMultiplier : Effect("trident_damage_multiplier") {
+class EffectTridentDamageMultiplier : Effect("trident_damage_multiplier", supportsFilters = true) {
     override fun onTridentDamage(
         attacker: Player,
         victim: LivingEntity,

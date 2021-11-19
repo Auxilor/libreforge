@@ -13,7 +13,9 @@ import org.bukkit.entity.Player
 import java.util.UUID
 
 abstract class Effect(
-    id: String
+    id: String,
+    val supportsFilters: Boolean = false,
+    val supportsTriggers: Boolean = false
 ) : ConfigurableProperty(id), Watcher {
     init {
         postInit()
@@ -80,26 +82,5 @@ abstract class Effect(
 
     protected open fun handleDisable(player: Player) {
         // Override when needed.
-    }
-
-    /**
-     * Get filter from config.
-     *
-     * @return The filter.
-     */
-    fun getFilter(config: JSONConfig): Filter {
-        val filters = mutableListOf<Filter>()
-
-        for (filterConfig in config.getSubsections("filters")) {
-            filters.add(
-                when (filterConfig.getString("id", false)) {
-                    "block" -> FilterBlock(filterConfig)
-                    "entity" -> FilterLivingEntity(filterConfig)
-                    else -> FilterEmpty()
-                }
-            )
-        }
-
-        return CompoundFilter(*filters.toTypedArray())
     }
 }

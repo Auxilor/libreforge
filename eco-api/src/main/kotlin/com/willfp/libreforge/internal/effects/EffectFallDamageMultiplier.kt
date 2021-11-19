@@ -1,7 +1,7 @@
 package com.willfp.libreforge.internal.effects
 
 import com.willfp.eco.core.config.interfaces.JSONConfig
-import com.willfp.libreforge.api.effects.ConfigViolation
+import com.willfp.libreforge.api.ConfigViolation
 import com.willfp.libreforge.api.effects.Effect
 import org.bukkit.entity.Player
 import org.bukkit.event.entity.EntityDamageEvent

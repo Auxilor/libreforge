@@ -2,7 +2,7 @@ package com.willfp.libreforge.internal.conditions
 
 import com.willfp.eco.core.config.interfaces.JSONConfig
 import com.willfp.libreforge.api.conditions.Condition
-import com.willfp.libreforge.api.effects.ConfigViolation
+import com.willfp.libreforge.api.ConfigViolation
 import org.bukkit.entity.Player
 
 

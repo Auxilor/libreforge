@@ -1,7 +1,7 @@
 package com.willfp.libreforge.internal.filter
 
 import com.willfp.eco.core.config.interfaces.JSONConfig
-import com.willfp.libreforge.api.effects.ConfigViolation
+import com.willfp.libreforge.api.ConfigViolation
 import com.willfp.libreforge.api.filter.Filter
 
 class CompoundFilter(
