@@ -1,5 +1,6 @@
 package com.willfp.libreforge.internal.triggers
 
+import com.willfp.eco.core.events.EntityDeathByEntityEvent
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.eco.core.integrations.mcmmo.McmmoManager
 import com.willfp.eco.util.NumberUtils
@@ -7,23 +8,37 @@ import com.willfp.libreforge.api.events.EffectActivateEvent
 import com.willfp.libreforge.api.getHolders
 import com.willfp.libreforge.api.triggers.Trigger
 import com.willfp.libreforge.api.triggers.TriggerData
+import org.bukkit.entity.Player
+import org.bukkit.entity.Projectile
 import org.bukkit.event.EventHandler
-import org.bukkit.event.block.BlockBreakEvent
 
-class TriggerMineBlock : Trigger("mine_block") {
+class TriggerKill : Trigger("kill") {
     @EventHandler(ignoreCancelled = true)
-    fun onBlockBreak(event: BlockBreakEvent) {
+    fun onKill(event: EntityDeathByEntityEvent) {
         if (McmmoManager.isFake(event)) {
             return
         }
 
-        val player = event.player
-        val block = event.block
-        if (!AntigriefManager.canBreakBlock(player, block)) {
+        var killer: Any? = null
+        if (event.killer is Player) {
+            killer = event.killer
+        } else if (event.killer is Projectile) {
+            if ((event.killer as Projectile).shooter is Player) {
+                killer = (event.killer as Projectile).shooter
+            }
+        }
+
+        if (killer !is Player) {
             return
         }
 
-        for (holder in player.getHolders()) {
+        val victim = event.victim
+
+        if (!AntigriefManager.canInjure(killer, victim)) {
+            return
+        }
+
+        for (holder in killer.getHolders()) {
             for ((effect, config, filter, triggers) in holder.effects) {
                 if (NumberUtils.randFloat(0.0, 100.0) > (config.getDoubleOrNull("chance") ?: 100.0)) {
                     continue
@@ -33,17 +48,18 @@ class TriggerMineBlock : Trigger("mine_block") {
                     continue
                 }
 
-                if (!filter.matches(block)) {
+                if (!filter.matches(victim)) {
                     continue
                 }
 
-                val aEvent = EffectActivateEvent(player, holder, effect)
-                this.plugin.server.pluginManager.callEvent(aEvent)
-                if (!aEvent.isCancelled) {
+                val activateEvent = EffectActivateEvent(killer, holder, effect)
+                this.plugin.server.pluginManager.callEvent(activateEvent)
+
+                if (!activateEvent.isCancelled) {
                     effect.handle(
                         TriggerData(
-                            player = player,
-                            block = block
+                            player = killer,
+                            victim = victim
                         ), config
                     )
                 }

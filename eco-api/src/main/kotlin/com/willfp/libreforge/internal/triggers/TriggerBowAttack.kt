@@ -6,15 +6,15 @@ import com.willfp.eco.util.NumberUtils
 import com.willfp.libreforge.api.events.EffectActivateEvent
 import com.willfp.libreforge.api.getHolders
 import com.willfp.libreforge.api.triggers.Trigger
+import com.willfp.libreforge.api.triggers.TriggerData
+import com.willfp.libreforge.api.triggers.wrappers.WrappedDamageEvent
 import org.bukkit.entity.Arrow
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageByEntityEvent
-import org.bukkit.event.entity.EntityDamageEvent
 
-class TriggerBowAttack: Trigger("bow_attack") {
-
+class TriggerBowAttack : Trigger("bow_attack") {
     @EventHandler(ignoreCancelled = true)
     fun onArrowDamage(event: EntityDamageByEntityEvent) {
         if (McmmoManager.isFake(event)) {
@@ -63,8 +63,13 @@ class TriggerBowAttack: Trigger("bow_attack") {
                 val aEvent = EffectActivateEvent(shooter, holder, effect)
                 this.plugin.server.pluginManager.callEvent(aEvent)
                 if (!aEvent.isCancelled) {
-                    effect.onArrowDamage(shooter, victim, arrow, event, config)
-                    effect.onAnyDamage(shooter, victim, event, config)
+                    effect.handle(
+                        TriggerData(
+                            player = shooter,
+                            victim = victim,
+                            event = WrappedDamageEvent(event)
+                        ), config
+                    )
                 }
             }
         }

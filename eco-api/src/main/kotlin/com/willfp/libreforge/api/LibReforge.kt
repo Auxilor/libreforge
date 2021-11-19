@@ -9,7 +9,7 @@ import com.willfp.libreforge.api.conditions.Conditions
 import com.willfp.libreforge.api.provider.Holder
 import com.willfp.libreforge.api.provider.HolderProvider
 import com.willfp.libreforge.api.triggers.Triggers
-import com.willfp.libreforge.internal.WatcherTriggers
+import com.willfp.libreforge.internal.triggers.WatcherTriggers
 import com.willfp.libreforge.internal.integrations.aureliumskills.AureliumSkillsIntegration
 import com.willfp.libreforge.internal.integrations.ecoskills.EcoSkillsIntegration
 import org.apache.commons.lang.StringUtils

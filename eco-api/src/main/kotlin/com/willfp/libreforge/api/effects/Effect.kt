@@ -5,6 +5,7 @@ import com.willfp.libreforge.api.ConfigurableProperty
 import com.willfp.libreforge.api.Watcher
 import com.willfp.libreforge.api.filter.Filter
 import com.willfp.libreforge.api.triggers.Trigger
+import com.willfp.libreforge.api.triggers.TriggerData
 import com.willfp.libreforge.internal.filter.CompoundFilter
 import com.willfp.libreforge.internal.filter.FilterBlock
 import com.willfp.libreforge.internal.filter.FilterEmpty
@@ -83,5 +84,9 @@ abstract class Effect(
 
     protected open fun handleDisable(player: Player) {
         // Override when needed.
+    }
+
+    open fun handle(data: TriggerData, config: JSONConfig) {
+        // Override when needed
     }
 }
