@@ -59,10 +59,11 @@ object LibReforge {
         holderProviders.add(provider)
     }
 
-    fun logViolation(id: String, context: String, violation: com.willfp.libreforge.ConfigViolation) {
-        LibReforge.plugin.logger.warning("Invalid configuration for $id in context $context:")
-        LibReforge.plugin.logger.warning("(Cause) Argument ${violation.param}")
-        LibReforge.plugin.logger.warning("(Reason) ${violation.message}")
+    @JvmStatic
+    fun logViolation(id: String, context: String, violation: ConfigViolation) {
+        plugin.logger.warning("Invalid configuration for $id in context $context:")
+        plugin.logger.warning("(Cause) Argument ${violation.param}")
+        plugin.logger.warning("(Reason) ${violation.message}")
     }
 }
 
