@@ -8,8 +8,6 @@ import com.willfp.eco.util.ListUtils
 import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.integrations.aureliumskills.AureliumSkillsIntegration
 import com.willfp.libreforge.integrations.ecoskills.EcoSkillsIntegration
-import com.willfp.libreforge.provider.Holder
-import com.willfp.libreforge.provider.HolderProvider
 import com.willfp.libreforge.triggers.Triggers
 import org.apache.commons.lang.StringUtils
 import org.bukkit.entity.Player
@@ -39,6 +37,7 @@ object LibReforge {
 
     @JvmStatic
     fun enable(plugin: EcoPlugin) {
+        plugin.eventManager.registerListener(TridentHolderDataAttacher(plugin))
         for (condition in Conditions.values()) {
             plugin.eventManager.registerListener(condition)
         }

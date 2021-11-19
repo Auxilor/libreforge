@@ -2,10 +2,9 @@ package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.JSONConfig
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.Triggers
-import org.bukkit.entity.LivingEntity
-import org.bukkit.entity.Player
-import org.bukkit.event.entity.EntityDamageByEntityEvent
+import com.willfp.libreforge.triggers.wrappers.WrappedDamageEvent
 
 class EffectCritMultiplier : Effect(
     "crit_multiplier",
@@ -16,15 +15,14 @@ class EffectCritMultiplier : Effect(
         Triggers.MELEE_ATTACK
     )
 ) {
-    override fun onAnyDamage(
-        attacker: Player,
-        victim: LivingEntity,
-        event: EntityDamageByEntityEvent,
-        config: JSONConfig
-    ) {
-        if (attacker.velocity.y >= 0) {
+    override fun handle(data: TriggerData, config: JSONConfig) {
+        val event = data.event as? WrappedDamageEvent ?: return
+        val player = data.player ?: return
+
+        if (player.velocity.y >= 0) {
             return
         }
+
         event.damage *= config.getDouble("multiplier")
     }
 

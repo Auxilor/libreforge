@@ -1,12 +1,13 @@
 package com.willfp.libreforge.triggers
 
 import com.willfp.eco.util.NumberUtils
+import com.willfp.libreforge.Holder
 import com.willfp.libreforge.LibReforge
 import com.willfp.libreforge.events.EffectActivateEvent
 import com.willfp.libreforge.getHolders
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
-import java.util.Objects
+import java.util.*
 
 abstract class Trigger(
     val id: String
@@ -21,8 +22,8 @@ abstract class Trigger(
         Triggers.addNewTrigger(this)
     }
 
-    protected fun processTrigger(player: Player, data: TriggerData) {
-        for (holder in player.getHolders()) {
+    protected fun processTrigger(player: Player, data: TriggerData, forceHolders: Iterable<Holder>? = null) {
+        for (holder in forceHolders ?: player.getHolders()) {
             for ((effect, config, filter, triggers) in holder.effects) {
                 if (NumberUtils.randFloat(0.0, 100.0) > (config.getDoubleOrNull("chance") ?: 100.0)) {
                     continue

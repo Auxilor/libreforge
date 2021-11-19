@@ -1,4 +1,4 @@
-package com.willfp.libreforge.provider
+package com.willfp.libreforge
 
 import org.bukkit.entity.Player
 

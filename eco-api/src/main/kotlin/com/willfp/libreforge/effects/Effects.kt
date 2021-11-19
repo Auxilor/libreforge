@@ -23,7 +23,6 @@ object Effects {
     val ATTACK_SPEED_MULTIPLIER: Effect = EffectAttackSpeedMultiplier()
     val MOVEMENT_SPEED_MULTIPLIER: Effect = EffectMovementSpeedMultiplier()
     val BONUS_HEALTH: Effect = EffectBonusHealth()
-    val FALL_DAMAGE_MULTIPLIER: Effect = EffectFallDamageMultiplier()
 
     /**
      * Get effect matching id.
@@ -153,9 +152,19 @@ object Effects {
                     )
 
                     return@let null
-                } else {
-                    triggers.add(trigger)
                 }
+
+                if (!effect.applicableTriggers.contains(trigger)) {
+                    LibReforge.logViolation(
+                        effect.id,
+                        context,
+                        ConfigViolation(
+                            "triggers", "Specified effect does not support trigger $id"
+                        )
+                    )
+                }
+
+                triggers.add(trigger)
             }
 
             triggers

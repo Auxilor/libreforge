@@ -2,6 +2,7 @@ package com.willfp.libreforge.triggers.triggers
 
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.eco.core.integrations.mcmmo.McmmoManager
+import com.willfp.libreforge.getAttachedHolders
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.wrappers.WrappedDamageEvent
@@ -51,7 +52,8 @@ class TriggerTridentAttack : Trigger("trident_attack") {
                 projectile = trident,
                 location = trident.location,
                 event = WrappedDamageEvent(event)
-            )
+            ),
+            trident.getAttachedHolders()
         )
     }
 }
