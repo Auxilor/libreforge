@@ -25,33 +25,6 @@ import org.bukkit.event.entity.ProjectileLaunchEvent
 internal class WatcherTriggers(
     private val plugin: EcoPlugin
 ) : Listener {
-
-    @EventHandler(ignoreCancelled = true)
-    fun onProjectileLaunch(event: ProjectileLaunchEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
-        val shooter = event.entity.shooter
-
-        if (shooter !is Player) {
-            return
-        }
-
-        for (holder in shooter.getHolders()) {
-            for ((effect, config) in holder.effects) {
-                if (NumberUtils.randFloat(0.0, 100.0) > (config.getDoubleOrNull("chance") ?: 100.0)) {
-                    continue
-                }
-                val aEvent = EffectActivateEvent(shooter, holder, effect)
-                this.plugin.server.pluginManager.callEvent(aEvent)
-                if (!aEvent.isCancelled) {
-                    effect.onProjectileLaunch(shooter, event.entity, event, config)
-                }
-            }
-        }
-    }
-
     @EventHandler(ignoreCancelled = true)
     fun onFallDamage(event: EntityDamageEvent) {
         if (McmmoManager.isFake(event)) {
