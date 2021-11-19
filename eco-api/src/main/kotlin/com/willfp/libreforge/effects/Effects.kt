@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects
 import com.google.common.collect.HashBiMap
 import com.google.common.collect.ImmutableList
 import com.willfp.eco.core.config.interfaces.JSONConfig
+import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.LibReforge
 import com.willfp.libreforge.effects.effects.EffectAttackSpeedMultiplier
 import com.willfp.libreforge.effects.effects.EffectBonusHealth
@@ -77,7 +78,7 @@ object Effects {
                 LibReforge.logViolation(
                     it,
                     context,
-                    com.willfp.libreforge.ConfigViolation("id", "Invalid effect ID specified!")
+                    ConfigViolation("id", "Invalid effect ID specified!")
                 )
             }
 
@@ -94,7 +95,7 @@ object Effects {
                 LibReforge.logViolation(
                     effect.id,
                     context,
-                    com.willfp.libreforge.ConfigViolation("filters", "Specified effect does not support filters")
+                    ConfigViolation("filters", "Specified effect does not support filters")
                 )
 
                 return@let null
@@ -109,7 +110,7 @@ object Effects {
                     LibReforge.logViolation(
                         effect.id,
                         context,
-                        com.willfp.libreforge.ConfigViolation(
+                        ConfigViolation(
                             "filters", "Invalid filter specified: $id"
                         )
                     )
@@ -128,8 +129,20 @@ object Effects {
                 LibReforge.logViolation(
                     effect.id,
                     context,
-                    com.willfp.libreforge.ConfigViolation(
+                    ConfigViolation(
                         "triggers", "Specified effect does not support triggers"
+                    )
+                )
+
+                return@let null
+            }
+
+            if (effect.applicableTriggers.isNotEmpty() && it.isEmpty()) {
+                LibReforge.logViolation(
+                    effect.id,
+                    context,
+                    ConfigViolation(
+                        "triggers", "Specified effect requires at least 1 trigger"
                     )
                 )
 
@@ -143,10 +156,12 @@ object Effects {
                     LibReforge.logViolation(
                         effect.id,
                         context,
-                        com.willfp.libreforge.ConfigViolation(
+                        ConfigViolation(
                             "triggers", "Invalid trigger specified: $id"
                         )
                     )
+
+                    return@let null
                 } else {
                     triggers.add(trigger)
                 }
