@@ -10,10 +10,7 @@ import com.willfp.libreforge.triggers.Triggers
 class EffectGiveMoney : Effect(
     "give_money",
     supportsFilters = true,
-    applicableTriggers = listOf(
-        Triggers.MINE_BLOCK,
-        Triggers.KILL
-    )
+    applicableTriggers = Triggers.values()
 ) {
     override fun handle(data: TriggerData, config: JSONConfig) {
         val player = data.player ?: return
