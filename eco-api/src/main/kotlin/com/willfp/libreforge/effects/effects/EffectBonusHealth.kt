@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.JSONConfig
+import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.getEffectAmount
 import org.bukkit.attribute.Attribute
@@ -35,12 +36,12 @@ class EffectBonusHealth : Effect("bonus_health") {
         )
     }
 
-    override fun validateConfig(config: JSONConfig): List<com.willfp.libreforge.ConfigViolation> {
-        val violations = mutableListOf<com.willfp.libreforge.ConfigViolation>()
+    override fun validateConfig(config: JSONConfig): List<ConfigViolation> {
+        val violations = mutableListOf<ConfigViolation>()
 
         config.getDoubleOrNull("health")
             ?: violations.add(
-                com.willfp.libreforge.ConfigViolation(
+                ConfigViolation(
                     "health",
                     "You must specify the bonus health to give!"
                 )

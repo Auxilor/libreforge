@@ -61,6 +61,7 @@ object Effects {
      *
      * @return The configured effect, or null if invalid.
      */
+    @JvmStatic
     fun compile(config: JSONConfig, context: String): ConfiguredEffect? {
         val effect = config.getString("id").let {
             val found = Effects.getByID(it)

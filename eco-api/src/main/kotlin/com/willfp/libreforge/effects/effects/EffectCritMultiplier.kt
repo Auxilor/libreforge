@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.JSONConfig
+import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.Triggers
@@ -26,12 +27,12 @@ class EffectCritMultiplier : Effect(
         event.damage *= config.getDouble("multiplier")
     }
 
-    override fun validateConfig(config: JSONConfig): List<com.willfp.libreforge.ConfigViolation> {
-        val violations = mutableListOf<com.willfp.libreforge.ConfigViolation>()
+    override fun validateConfig(config: JSONConfig): List<ConfigViolation> {
+        val violations = mutableListOf<ConfigViolation>()
 
         config.getDoubleOrNull("multiplier")
             ?: violations.add(
-                com.willfp.libreforge.ConfigViolation(
+                ConfigViolation(
                     "multiplier",
                     "You must specify the crit damage multiplier!"
                 )
