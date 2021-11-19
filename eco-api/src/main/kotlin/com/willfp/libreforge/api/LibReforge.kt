@@ -58,6 +58,12 @@ object LibReforge {
     fun registerHolderProvider(provider: HolderProvider) {
         holderProviders.add(provider)
     }
+
+    fun logViolation(id: String, context: String, violation: ConfigViolation) {
+        LibReforge.plugin.logger.warning("Invalid configuration for $id in context $context:")
+        LibReforge.plugin.logger.warning("(Cause) Argument ${violation.param}")
+        LibReforge.plugin.logger.warning("(Reason) ${violation.message}")
+    }
 }
 
 private fun Player.clearEffectCache() {

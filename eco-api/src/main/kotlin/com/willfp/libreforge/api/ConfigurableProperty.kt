@@ -1,7 +1,6 @@
 package com.willfp.libreforge.api
 
 import com.willfp.eco.core.config.interfaces.JSONConfig
-import com.willfp.libreforge.api.effects.ConfigViolation
 import com.willfp.libreforge.api.effects.Effect
 import java.util.Objects
 
@@ -17,15 +16,16 @@ abstract class ConfigurableProperty(
      *
      * @param config The config.
      * @param context Additional context, e.g. path in config.
+     * @return If any violations.
      */
-    fun checkConfig(config: JSONConfig, context: String) {
-        val violations = validateConfig(config)
+    fun checkConfig(config: JSONConfig, context: String): Boolean {
+        val violations = this.validateConfig(config)
 
         for (violation in violations) {
-            plugin.logger.warning("Invalid configuration for $id in context $context:")
-            plugin.logger.warning("(Cause) Missing argument ${violation.param}")
-            plugin.logger.warning("(Fix) ${violation.message}")
+            LibReforge.logViolation(this.id, context, violation)
         }
+
+        return violations.isNotEmpty()
     }
 
     /**

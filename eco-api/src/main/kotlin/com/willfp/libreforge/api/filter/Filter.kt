@@ -2,7 +2,7 @@ package com.willfp.libreforge.api.filter
 
 import com.willfp.eco.core.config.interfaces.JSONConfig
 import com.willfp.libreforge.api.LibReforge
-import com.willfp.libreforge.api.effects.ConfigViolation
+import com.willfp.libreforge.api.ConfigViolation
 
 abstract class Filter {
     protected val plugin = LibReforge.plugin

@@ -2,13 +2,13 @@ package com.willfp.libreforge.internal.effects
 
 import com.willfp.eco.core.config.interfaces.JSONConfig
 import com.willfp.eco.core.integrations.economy.EconomyManager
-import com.willfp.libreforge.api.effects.ConfigViolation
+import com.willfp.libreforge.api.ConfigViolation
 import com.willfp.libreforge.api.effects.Effect
 import org.bukkit.block.Block
 import org.bukkit.entity.Player
 import org.bukkit.event.block.BlockBreakEvent
 
-class EffectRewardBlockBreak : Effect("reward_block_break") {
+class EffectRewardBlockBreak : Effect("reward_block_break", supportsFilters = true) {
     override fun onBlockBreak(
         player: Player,
         block: Block,
