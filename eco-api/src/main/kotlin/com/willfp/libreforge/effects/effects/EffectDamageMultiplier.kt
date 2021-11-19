@@ -16,8 +16,6 @@ class EffectDamageMultiplier : Effect(
     )
 ) {
     override fun handle(data: TriggerData, config: JSONConfig) {
-        val player = data.player ?: return
-        val victim = data.victim ?: return
         val event = data.event as? WrappedDamageEvent ?: return
 
         event.damage *= config.getDouble("multiplier")
