@@ -11,11 +11,9 @@ import com.willfp.libreforge.integrations.ecoskills.EcoSkillsIntegration
 import com.willfp.libreforge.provider.Holder
 import com.willfp.libreforge.provider.HolderProvider
 import com.willfp.libreforge.triggers.Triggers
-import com.willfp.libreforge.triggers.triggers.WatcherTriggers
 import org.apache.commons.lang.StringUtils
 import org.bukkit.entity.Player
-import java.util.UUID
-import java.util.WeakHashMap
+import java.util.*
 
 private val holderProviders = mutableSetOf<HolderProvider>()
 private val previousStates: MutableMap<UUID, Iterable<Holder>> = WeakHashMap()
@@ -41,7 +39,6 @@ object LibReforge {
 
     @JvmStatic
     fun enable(plugin: EcoPlugin) {
-        plugin.eventManager.registerListener(WatcherTriggers(plugin))
         for (condition in Conditions.values()) {
             plugin.eventManager.registerListener(condition)
         }

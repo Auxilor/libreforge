@@ -48,6 +48,7 @@ class TriggerBowAttack : Trigger("bow_attack") {
             TriggerData(
                 player = shooter,
                 victim = victim,
+                location = victim.location,
                 event = WrappedDamageEvent(event)
             )
         )

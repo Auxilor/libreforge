@@ -1,20 +1,18 @@
 package com.willfp.libreforge.effects
 
 import com.willfp.eco.core.config.interfaces.JSONConfig
-import com.willfp.ecoskills.data.storage.MySQLDataHandler.Players.id
 import com.willfp.libreforge.ConfigurableProperty
-import com.willfp.libreforge.Watcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
-import java.util.UUID
+import java.util.*
 
 abstract class Effect(
     id: String,
     val supportsFilters: Boolean = false,
     val applicableTriggers: List<Trigger> = emptyList()
-) : ConfigurableProperty(id), Watcher {
+) : ConfigurableProperty(id) {
     init {
         postInit()
     }
