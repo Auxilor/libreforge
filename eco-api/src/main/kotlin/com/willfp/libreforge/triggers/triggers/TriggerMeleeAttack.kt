@@ -1,0 +1,54 @@
+package com.willfp.libreforge.triggers.triggers
+
+import com.willfp.eco.core.integrations.antigrief.AntigriefManager
+import com.willfp.eco.core.integrations.mcmmo.McmmoManager
+import com.willfp.libreforge.triggers.Trigger
+import com.willfp.libreforge.triggers.TriggerData
+import com.willfp.libreforge.triggers.wrappers.WrappedDamageEvent
+import org.bukkit.entity.LivingEntity
+import org.bukkit.entity.Player
+import org.bukkit.event.EventHandler
+import org.bukkit.event.entity.EntityDamageByEntityEvent
+import org.bukkit.event.entity.EntityDamageEvent
+
+class TriggerMeleeAttack : Trigger("melee_attack") {
+    @EventHandler(ignoreCancelled = true)
+    fun onMeleeAttack(event: EntityDamageByEntityEvent) {
+        if (McmmoManager.isFake(event)) {
+            return
+        }
+
+        val attacker = event.damager
+
+        if (attacker !is Player) {
+            return
+        }
+
+        val victim = event.entity
+
+        if (victim !is LivingEntity) {
+            return
+        }
+
+        if (event.isCancelled) {
+            return
+        }
+
+        if (event.cause == EntityDamageEvent.DamageCause.THORNS) {
+            return
+        }
+
+        if (!AntigriefManager.canInjure(attacker, victim)) {
+            return
+        }
+
+        this.processTrigger(
+            attacker,
+            TriggerData(
+                player = attacker,
+                victim = victim,
+                event = WrappedDamageEvent(event)
+            )
+        )
+    }
+}
