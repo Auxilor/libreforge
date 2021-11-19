@@ -17,8 +17,7 @@ import com.willfp.libreforge.internal.effects.EffectFallDamageMultiplier
 import com.willfp.libreforge.internal.effects.EffectIncomingDamageMultiplier
 import com.willfp.libreforge.internal.effects.EffectKnockbackMultiplier
 import com.willfp.libreforge.internal.effects.EffectMovementSpeedMultiplier
-import com.willfp.libreforge.internal.effects.EffectReward
-import com.willfp.libreforge.internal.effects.EffectRewardKill
+import com.willfp.libreforge.internal.effects.EffectGiveMoney
 import com.willfp.libreforge.internal.filter.CompoundFilter
 import com.willfp.libreforge.internal.filter.FilterEmpty
 
@@ -27,9 +26,8 @@ object Effects {
 
     val DAMAGE_MULTIPLIER: Effect = EffectDamageMultiplier()
     val CRIT_MULTIPLIER: Effect = EffectCritMultiplier()
-    val REWARD_KILL: Effect = EffectRewardKill()
     val KNOCKBACK_MULTIPLIER: Effect = EffectKnockbackMultiplier()
-    val REWARD_BLOCK_BREAK: Effect = EffectReward()
+    val GIVE_MONEY: Effect = EffectGiveMoney()
     val INCOMING_DAMAGE_MULTIPLIER: Effect = EffectIncomingDamageMultiplier()
     val ATTACK_SPEED_MULTIPLIER: Effect = EffectAttackSpeedMultiplier()
     val MOVEMENT_SPEED_MULTIPLIER: Effect = EffectMovementSpeedMultiplier()

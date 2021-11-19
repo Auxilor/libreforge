@@ -6,13 +6,15 @@ import com.willfp.eco.util.NumberUtils
 import com.willfp.libreforge.api.events.EffectActivateEvent
 import com.willfp.libreforge.api.getHolders
 import com.willfp.libreforge.api.triggers.Trigger
+import com.willfp.libreforge.api.triggers.TriggerData
+import com.willfp.libreforge.api.triggers.wrappers.WrappedDamageEvent
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
 
-class TriggerMeleeAttack: Trigger<(Player, LivingEntity) -> Unit>("melee_attack") {
+class TriggerMeleeAttack: Trigger("melee_attack") {
     @EventHandler(ignoreCancelled = true)
     fun onMeleeAttack(event: EntityDamageByEntityEvent) {
         if (McmmoManager.isFake(event)) {
@@ -61,8 +63,13 @@ class TriggerMeleeAttack: Trigger<(Player, LivingEntity) -> Unit>("melee_attack"
                 this.plugin.server.pluginManager.callEvent(activateEvent)
 
                 if (!activateEvent.isCancelled) {
-                    effect.onMeleeAttack(attacker, victim, event, config)
-                    effect.onAnyDamage(attacker, victim, event, config)
+                    effect.handle(
+                        TriggerData(
+                            player = attacker,
+                            victim = victim,
+                            event = WrappedDamageEvent(event)
+                        ), config
+                    )
                 }
             }
         }

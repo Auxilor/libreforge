@@ -1,4 +1,4 @@
-package com.willfp.libreforge.internal
+package com.willfp.libreforge.internal.triggers
 
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.events.EntityDeathByEntityEvent
@@ -25,44 +25,6 @@ import org.bukkit.event.entity.ProjectileLaunchEvent
 internal class WatcherTriggers(
     private val plugin: EcoPlugin
 ) : Listener {
-    @EventHandler(ignoreCancelled = true)
-    fun onKill(event: EntityDeathByEntityEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
-        var killer: Any? = null
-        if (event.killer is Player) {
-            killer = event.killer
-        } else if (event.killer is Projectile) {
-            if ((event.killer as Projectile).shooter is Player) {
-                killer = (event.killer as Projectile).shooter
-            }
-        }
-
-        if (killer !is Player) {
-            return
-        }
-
-        val victim = event.victim
-
-        if (!AntigriefManager.canInjure(killer, victim)) {
-            return
-        }
-
-        for (holder in killer.getHolders()) {
-            for ((effect, config) in holder.effects) {
-                if (NumberUtils.randFloat(0.0, 100.0) > (config.getDoubleOrNull("chance") ?: 100.0)) {
-                    continue
-                }
-                val aEvent = EffectActivateEvent(killer, holder, effect)
-                this.plugin.server.pluginManager.callEvent(aEvent)
-                if (!aEvent.isCancelled) {
-                    (effect as Watcher).onKill(killer, victim, event, config)
-                }
-            }
-        }
-    }
 
     @EventHandler(ignoreCancelled = true)
     fun onProjectileLaunch(event: ProjectileLaunchEvent) {

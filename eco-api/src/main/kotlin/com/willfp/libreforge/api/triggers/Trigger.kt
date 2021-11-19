@@ -4,7 +4,7 @@ import com.willfp.libreforge.api.LibReforge
 import org.bukkit.event.Listener
 import java.util.Objects
 
-abstract class Trigger<T>(
+abstract class Trigger(
     val id: String
 ) : Listener {
     protected val plugin = LibReforge.plugin
@@ -18,7 +18,7 @@ abstract class Trigger<T>(
     }
 
     override fun equals(other: Any?): Boolean {
-        if (other !is Trigger<*>) {
+        if (other !is Trigger) {
             return false
         }
 
