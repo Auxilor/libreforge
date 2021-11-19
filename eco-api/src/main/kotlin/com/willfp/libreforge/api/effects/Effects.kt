@@ -7,23 +7,20 @@ import com.willfp.libreforge.api.ConfigViolation
 import com.willfp.libreforge.api.LibReforge
 import com.willfp.libreforge.api.filter.Filter
 import com.willfp.libreforge.api.filter.Filters
+import com.willfp.libreforge.api.triggers.Trigger
+import com.willfp.libreforge.api.triggers.Triggers
 import com.willfp.libreforge.internal.effects.EffectAttackSpeedMultiplier
 import com.willfp.libreforge.internal.effects.EffectBonusHealth
-import com.willfp.libreforge.internal.effects.EffectBowDamageMultiplier
 import com.willfp.libreforge.internal.effects.EffectCritMultiplier
 import com.willfp.libreforge.internal.effects.EffectDamageMultiplier
 import com.willfp.libreforge.internal.effects.EffectFallDamageMultiplier
 import com.willfp.libreforge.internal.effects.EffectIncomingDamageMultiplier
 import com.willfp.libreforge.internal.effects.EffectKnockbackMultiplier
 import com.willfp.libreforge.internal.effects.EffectMovementSpeedMultiplier
-import com.willfp.libreforge.internal.effects.EffectRewardBlockBreak
+import com.willfp.libreforge.internal.effects.EffectReward
 import com.willfp.libreforge.internal.effects.EffectRewardKill
-import com.willfp.libreforge.internal.effects.EffectTridentDamageMultiplier
 import com.willfp.libreforge.internal.filter.CompoundFilter
-import com.willfp.libreforge.internal.filter.FilterBlock
 import com.willfp.libreforge.internal.filter.FilterEmpty
-import com.willfp.libreforge.internal.filter.FilterLivingEntity
-import it.unimi.dsi.fastutil.ints.Int2IntFunctions
 
 object Effects {
     private val BY_ID = HashBiMap.create<String, Effect>()
@@ -32,14 +29,12 @@ object Effects {
     val CRIT_MULTIPLIER: Effect = EffectCritMultiplier()
     val REWARD_KILL: Effect = EffectRewardKill()
     val KNOCKBACK_MULTIPLIER: Effect = EffectKnockbackMultiplier()
-    val REWARD_BLOCK_BREAK: Effect = EffectRewardBlockBreak()
+    val REWARD_BLOCK_BREAK: Effect = EffectReward()
     val INCOMING_DAMAGE_MULTIPLIER: Effect = EffectIncomingDamageMultiplier()
     val ATTACK_SPEED_MULTIPLIER: Effect = EffectAttackSpeedMultiplier()
     val MOVEMENT_SPEED_MULTIPLIER: Effect = EffectMovementSpeedMultiplier()
     val BONUS_HEALTH: Effect = EffectBonusHealth()
-    val BOW_DAMAGE_MULTIPLIER: Effect = EffectBowDamageMultiplier()
     val FALL_DAMAGE_MULTIPLIER: Effect = EffectFallDamageMultiplier()
-    val TRIDENT_DAMAGE_MULTIPLIER: Effect = EffectTridentDamageMultiplier()
 
     /**
      * Get effect matching id.
@@ -102,7 +97,7 @@ object Effects {
                 LibReforge.logViolation(
                     effect.id,
                     context,
-                    ConfigViolation("filters", "Filters specified on an effect that does not support them!")
+                    ConfigViolation("filters", "Specified effect does not support filters")
                 )
 
                 return@let null
@@ -129,6 +124,40 @@ object Effects {
             return@let CompoundFilter(*builder.toTypedArray())
         } ?: return null
 
-        return ConfiguredEffect(effect, args, filters)
+        val triggers = config.getStrings("triggers").let {
+            val triggers = mutableListOf<Trigger>()
+
+            if (it.isNotEmpty() && effect.applicableTriggers.isEmpty()) {
+                LibReforge.logViolation(
+                    effect.id,
+                    context,
+                    ConfigViolation(
+                        "triggers", "Specified effect does not support triggers"
+                    )
+                )
+
+                return@let null
+            }
+
+            for (id in it) {
+                val trigger = Triggers.getById(id)
+
+                if (trigger == null) {
+                    LibReforge.logViolation(
+                        effect.id,
+                        context,
+                        ConfigViolation(
+                            "triggers", "Invalid trigger specified: $id"
+                        )
+                    )
+                } else {
+                    triggers.add(trigger)
+                }
+            }
+
+            triggers
+        } ?: return null
+
+        return ConfiguredEffect(effect, args, filters, triggers)
     }
 }
