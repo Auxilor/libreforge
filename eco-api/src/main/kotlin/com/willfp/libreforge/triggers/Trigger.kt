@@ -37,10 +37,17 @@ abstract class Trigger(
                     continue
                 }
 
+                if (effect.getCooldown(player) > 0) {
+                    effect.sendCooldownMessage(player)
+                    continue
+                }
+
                 val activateEvent = EffectActivateEvent(player, holder, effect)
                 this.plugin.server.pluginManager.callEvent(activateEvent)
 
                 if (!activateEvent.isCancelled) {
+                    effect.resetCooldown(player, config)
+
                     effect.handle(data, config)
                 }
             }

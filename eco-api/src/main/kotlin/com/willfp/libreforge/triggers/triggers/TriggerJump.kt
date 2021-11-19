@@ -17,7 +17,8 @@ class TriggerJump : Trigger("jump") {
         this.processTrigger(
             player,
             TriggerData(
-                player = player
+                player = player,
+                location = player.location
             )
         )
     }
