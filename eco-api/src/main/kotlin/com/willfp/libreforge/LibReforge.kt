@@ -10,6 +10,7 @@ import com.willfp.libreforge.integrations.aureliumskills.AureliumSkillsIntegrati
 import com.willfp.libreforge.integrations.ecoskills.EcoSkillsIntegration
 import com.willfp.libreforge.triggers.Triggers
 import org.apache.commons.lang.StringUtils
+import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.util.*
 
@@ -43,6 +44,17 @@ object LibReforge {
         }
         for (trigger in Triggers.values()) {
             plugin.eventManager.registerListener(trigger)
+        }
+    }
+
+    @JvmStatic
+    fun disable(plugin: EcoPlugin) {
+        for (player in Bukkit.getOnlinePlayers()) {
+            for (holder in player.getHolders()) {
+                for ((effect) in holder.effects) {
+                    effect.disableForPlayer(player)
+                }
+            }
         }
     }
 

@@ -19,6 +19,10 @@ class EffectDamageMultiplier : Effect(
         val event = data.event as? WrappedDamageEvent ?: return
 
         event.damage *= config.getDouble("multiplier")
+
+        if (event.damage < 0.01) {
+            event.isCancelled = true
+        }
     }
 
     override fun validateConfig(config: JSONConfig): List<ConfigViolation> {
