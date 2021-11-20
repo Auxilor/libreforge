@@ -6,12 +6,14 @@ import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.integrations.IntegrationLoader
 import com.willfp.eco.util.ListUtils
 import com.willfp.libreforge.conditions.Conditions
+import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.integrations.aureliumskills.AureliumSkillsIntegration
 import com.willfp.libreforge.integrations.ecoskills.EcoSkillsIntegration
 import com.willfp.libreforge.triggers.Triggers
 import org.apache.commons.lang.StringUtils
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import org.bukkit.event.Listener
 import java.util.*
 
 private val holderProviders = mutableSetOf<HolderProvider>()
@@ -42,6 +44,11 @@ object LibReforge {
         for (condition in Conditions.values()) {
             plugin.eventManager.registerListener(condition)
         }
+        for (effect in Effects.values()) {
+            if (effect is Listener) {
+                plugin.eventManager.registerListener(effect)
+            }
+        }
         for (trigger in Triggers.values()) {
             plugin.eventManager.registerListener(trigger)
         }
@@ -50,10 +57,14 @@ object LibReforge {
     @JvmStatic
     fun disable(plugin: EcoPlugin) {
         for (player in Bukkit.getOnlinePlayers()) {
-            for (holder in player.getHolders()) {
-                for ((effect) in holder.effects) {
-                    effect.disableForPlayer(player)
+            try {
+                for (holder in player.getHolders()) {
+                    for ((effect) in holder.effects) {
+                        effect.disableForPlayer(player)
+                    }
                 }
+            } catch (e: Exception) {
+                Bukkit.getLogger().warning("Error disabling effects, not important - do not report this")
             }
         }
     }
