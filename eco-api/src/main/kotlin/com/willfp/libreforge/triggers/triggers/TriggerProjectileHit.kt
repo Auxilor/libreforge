@@ -16,7 +16,7 @@ class TriggerProjectileHit : Trigger(
     )
 ) {
     @EventHandler(ignoreCancelled = true)
-    fun onProjectileHit(event: ProjectileHitEvent) {
+    fun handle(event: ProjectileHitEvent) {
         if (McmmoManager.isFake(event)) {
             return
         }

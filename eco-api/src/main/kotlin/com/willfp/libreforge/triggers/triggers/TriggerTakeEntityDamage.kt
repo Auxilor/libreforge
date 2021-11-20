@@ -21,7 +21,7 @@ class TriggerTakeEntityDamage : Trigger(
     )
 ) {
     @EventHandler(ignoreCancelled = true)
-    fun onMeleeAttack(event: EntityDamageByEntityEvent) {
+    fun handle(event: EntityDamageByEntityEvent) {
         if (McmmoManager.isFake(event)) {
             return
         }
