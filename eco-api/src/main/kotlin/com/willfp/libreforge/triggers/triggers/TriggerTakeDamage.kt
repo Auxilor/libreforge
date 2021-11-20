@@ -16,7 +16,7 @@ class TriggerTakeDamage : Trigger(
     )
 ) {
     @EventHandler(ignoreCancelled = true)
-    fun onDamageWearingArmor(event: EntityDamageEvent) {
+    fun handle(event: EntityDamageEvent) {
         if (McmmoManager.isFake(event)) {
             return
         }

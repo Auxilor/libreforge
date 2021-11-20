@@ -24,6 +24,8 @@ object Effects {
     val RUN_COMMAND: Effect = EffectRunCommand()
     val STRIKE_LIGHTNING: Effect = EffectStrikeLightning()
     val SPAWN_MOBS: Effect = EffectSpawnMobs()
+    val HUNGER_MULTIPLIER: Effect = EffectHungerMultiplier()
+    val REGEN_MULTIPLIER: Effect = EffectRegenMultiplier()
 
     /**
      * Get effect matching id.

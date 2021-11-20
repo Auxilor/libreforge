@@ -23,7 +23,7 @@ class TriggerTridentAttack : Trigger(
     )
 ) {
     @EventHandler(ignoreCancelled = true)
-    fun onTridentDamage(event: EntityDamageByEntityEvent) {
+    fun handle(event: EntityDamageByEntityEvent) {
         if (McmmoManager.isFake(event)) {
             return
         }

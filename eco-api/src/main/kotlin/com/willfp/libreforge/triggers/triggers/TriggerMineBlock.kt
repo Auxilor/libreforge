@@ -16,7 +16,7 @@ class TriggerMineBlock : Trigger(
     )
 ) {
     @EventHandler(ignoreCancelled = true)
-    fun onBlockBreak(event: BlockBreakEvent) {
+    fun handle(event: BlockBreakEvent) {
         if (McmmoManager.isFake(event)) {
             return
         }

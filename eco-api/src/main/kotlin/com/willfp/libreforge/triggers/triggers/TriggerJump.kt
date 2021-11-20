@@ -14,7 +14,7 @@ class TriggerJump : Trigger(
     )
 ) {
     @EventHandler(ignoreCancelled = true)
-    fun onJump(event: PlayerJumpEvent) {
+    fun handle(event: PlayerJumpEvent) {
         if (McmmoManager.isFake(event)) {
             return
         }

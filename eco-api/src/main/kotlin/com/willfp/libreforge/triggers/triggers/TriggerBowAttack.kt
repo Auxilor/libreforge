@@ -21,7 +21,7 @@ class TriggerBowAttack : Trigger(
     )
 ) {
     @EventHandler(ignoreCancelled = true)
-    fun onArrowDamage(event: EntityDamageByEntityEvent) {
+    fun handle(event: EntityDamageByEntityEvent) {
         if (McmmoManager.isFake(event)) {
             return
         }

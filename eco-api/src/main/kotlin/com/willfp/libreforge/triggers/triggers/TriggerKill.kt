@@ -18,7 +18,7 @@ class TriggerKill : Trigger(
     )
 ) {
     @EventHandler(ignoreCancelled = true)
-    fun onKill(event: EntityDeathByEntityEvent) {
+    fun handle(event: EntityDeathByEntityEvent) {
         if (McmmoManager.isFake(event)) {
             return
         }

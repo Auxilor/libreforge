@@ -17,7 +17,7 @@ class TriggerFallDamage : Trigger(
     )
 ) {
     @EventHandler(ignoreCancelled = true)
-    fun onFallDamage(event: EntityDamageEvent) {
+    fun handle(event: EntityDamageEvent) {
         if (McmmoManager.isFake(event)) {
             return
         }

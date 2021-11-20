@@ -65,7 +65,7 @@ class TriggerAltClick : Trigger(
     }
 
     @EventHandler
-    fun altClickListener(event: PlayerInteractEvent) {
+    fun handle(event: PlayerInteractEvent) {
         val player = event.player
         val itemStack = player.inventory.itemInMainHand
 

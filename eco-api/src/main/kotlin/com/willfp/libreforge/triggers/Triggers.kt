@@ -17,6 +17,8 @@ object Triggers {
     val FALL_DAMAGE: Trigger = TriggerFallDamage()
     val TAKE_ENTITY_DAMAGE: Trigger = TriggerTakeEntityDamage()
     val ALT_CLICK: Trigger = TriggerAltClick()
+    val HEAL: Trigger = TriggerHeal()
+    val LOSE_HUNGER: Trigger = TriggerLoseHunger()
 
     fun values(): Set<Trigger> {
         return BY_ID.values.toSet()
