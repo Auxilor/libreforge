@@ -15,7 +15,7 @@ class EffectPermanentPotionEffect : Effect("permanent_potion_effect") {
     private val metaKey = "${LibReforge.plugin.name}_${this.id}"
 
     override fun handleEnable(player: Player, config: JSONConfig) {
-        val effectType = PotionEffectType.getByName(config.getString("effect"))
+        val effectType = PotionEffectType.getByName(config.getString("effect").uppercase())
             ?: PotionEffectType.INCREASE_DAMAGE
 
         val effect = PotionEffect(
