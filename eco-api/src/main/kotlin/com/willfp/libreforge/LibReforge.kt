@@ -55,6 +55,7 @@ object LibReforge {
     }
 
     @JvmStatic
+    @Suppress("UNUSED_PARAMETER")
     fun disable(plugin: EcoPlugin) {
         for (player in Bukkit.getOnlinePlayers()) {
             try {
