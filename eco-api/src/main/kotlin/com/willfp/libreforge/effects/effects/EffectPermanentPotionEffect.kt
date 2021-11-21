@@ -33,6 +33,8 @@ class EffectPermanentPotionEffect : Effect("permanent_potion_effect") {
                 as? MutableMap<UUID, PotionEffectType> ?: mutableMapOf()
 
         meta[this.getUUID(player.getEffectAmount(this))] = effectType
+
+        player.setMetadata(metaKey, plugin.metadataValueFactory.create(meta))
     }
 
     override fun handleDisable(player: Player) {
@@ -46,6 +48,9 @@ class EffectPermanentPotionEffect : Effect("permanent_potion_effect") {
         if (active.duration < 1_000_000_000) {
             return
         }
+
+        meta.remove(this.getUUID(player.getEffectAmount(this)))
+        player.setMetadata(metaKey, plugin.metadataValueFactory.create(meta))
 
         player.removePotionEffect(toRemove)
     }
