@@ -25,7 +25,7 @@ class EffectPotionEffect : Effect(
 
         toApply.addPotionEffect(
             PotionEffect(
-                PotionEffectType.getByName(config.getString("effect"))
+                PotionEffectType.getByName(config.getString("effect").uppercase())
                     ?: PotionEffectType.INCREASE_DAMAGE,
                 1_500_000_000,
                 config.getInt("level") - 1,
