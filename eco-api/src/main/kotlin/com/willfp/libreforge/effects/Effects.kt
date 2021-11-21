@@ -26,6 +26,8 @@ object Effects {
     val SPAWN_MOBS: Effect = EffectSpawnMobs()
     val HUNGER_MULTIPLIER: Effect = EffectHungerMultiplier()
     val REGEN_MULTIPLIER: Effect = EffectRegenMultiplier()
+    val PERMANENT_POTION_EFFECT: Effect = EffectPermanentPotionEffect()
+    val POTION_EFFECT: Effect = EffectPotionEffect()
 
     /**
      * Get effect matching id.
