@@ -6,21 +6,23 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
-import org.bukkit.event.entity.ProjectileLaunchEvent
+import org.bukkit.event.entity.ProjectileHitEvent
 
-class TriggerProjectileLaunch : Trigger(
-    "projectile_launch", listOf(
+class TriggerProjectileHit : Trigger(
+    "projectile_hit", listOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.PROJECTILE
+        TriggerParameter.PROJECTILE,
+        TriggerParameter.LOCATION
     )
 ) {
     @EventHandler(ignoreCancelled = true)
-    fun handle(event: ProjectileLaunchEvent) {
+    fun handle(event: ProjectileHitEvent) {
         if (McmmoManager.isFake(event)) {
             return
         }
 
-        val shooter = event.entity.shooter
+        val projectile = event.entity
+        val shooter = projectile.shooter
 
         if (shooter !is Player) {
             return
@@ -30,7 +32,8 @@ class TriggerProjectileLaunch : Trigger(
             shooter,
             TriggerData(
                 player = shooter,
-                projectile = event.entity
+                projectile = projectile,
+                location = projectile.location
             )
         )
     }

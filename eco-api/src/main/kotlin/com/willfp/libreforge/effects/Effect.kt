@@ -1,26 +1,65 @@
 package com.willfp.libreforge.effects
 
 import com.willfp.eco.core.config.interfaces.JSONConfig
-import com.willfp.ecoskills.data.storage.MySQLDataHandler.Players.id
+import com.willfp.eco.util.PlayerUtils
+import com.willfp.eco.util.StringUtils
 import com.willfp.libreforge.ConfigurableProperty
-import com.willfp.libreforge.Watcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.NamespacedKey
+import org.bukkit.Sound
 import org.bukkit.entity.Player
-import java.util.UUID
+import java.util.*
+import kotlin.math.ceil
 
 abstract class Effect(
     id: String,
     val supportsFilters: Boolean = false,
-    val applicableTriggers: List<Trigger> = emptyList()
-) : ConfigurableProperty(id), Watcher {
+    val applicableTriggers: Collection<Trigger> = emptyList()
+) : ConfigurableProperty(id) {
+    private val cooldownTracker = mutableMapOf<UUID, Long>()
+
     init {
         postInit()
     }
 
     private fun postInit() {
         Effects.addNewEffect(this)
+    }
+
+    fun getCooldown(player: Player): Int {
+        val endTime = cooldownTracker[player.uniqueId] ?: return 0
+        val msLeft = endTime - System.currentTimeMillis()
+        val secondsLeft = ceil(msLeft.toDouble() / 1000).toLong()
+        return secondsLeft.toInt()
+    }
+
+    fun sendCooldownMessage(player: Player) {
+        val cooldown = getCooldown(player)
+
+        val message = plugin.langYml.getMessage("on-cooldown").replace("%seconds%", cooldown.toString())
+        if (plugin.configYml.getBool("cooldown.in-actionbar")) {
+            PlayerUtils.getAudience(player).sendActionBar(StringUtils.toComponent(message))
+        } else {
+            player.sendMessage(message)
+        }
+
+        if (plugin.configYml.getBool("cooldown.sound.enabled")) {
+            player.playSound(
+                player.location,
+                Sound.valueOf(plugin.configYml.getString("cooldown.sound.sound").uppercase()),
+                1.0f,
+                plugin.configYml.getDouble("cooldown.sound.pitch").toFloat()
+            )
+        }
+    }
+
+    fun resetCooldown(player: Player, config: JSONConfig) {
+        if (!config.has("cooldown")) {
+            return
+        }
+
+        cooldownTracker[player.uniqueId] = (config.getDouble("cooldown") * 1000L).toLong()
     }
 
     /**

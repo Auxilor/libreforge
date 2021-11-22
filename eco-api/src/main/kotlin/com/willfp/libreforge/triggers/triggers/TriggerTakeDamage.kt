@@ -4,33 +4,34 @@ import com.willfp.eco.core.integrations.mcmmo.McmmoManager
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import com.willfp.libreforge.triggers.wrappers.WrappedDamageEvent
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
-import org.bukkit.event.entity.ProjectileLaunchEvent
+import org.bukkit.event.entity.EntityDamageEvent
 
-class TriggerProjectileLaunch : Trigger(
-    "projectile_launch", listOf(
+class TriggerTakeDamage : Trigger(
+    "take_damage", listOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.PROJECTILE
+        TriggerParameter.EVENT
     )
 ) {
     @EventHandler(ignoreCancelled = true)
-    fun handle(event: ProjectileLaunchEvent) {
+    fun handle(event: EntityDamageEvent) {
         if (McmmoManager.isFake(event)) {
             return
         }
 
-        val shooter = event.entity.shooter
+        val victim = event.entity
 
-        if (shooter !is Player) {
+        if (victim !is Player) {
             return
         }
 
         this.processTrigger(
-            shooter,
+            victim,
             TriggerData(
-                player = shooter,
-                projectile = event.entity
+                player = victim,
+                event = WrappedDamageEvent(event)
             )
         )
     }

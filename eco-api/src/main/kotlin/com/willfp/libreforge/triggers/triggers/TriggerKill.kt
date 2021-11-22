@@ -5,13 +5,20 @@ import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.eco.core.integrations.mcmmo.McmmoManager
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
+import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
 import org.bukkit.event.EventHandler
 
-class TriggerKill : Trigger("kill") {
+class TriggerKill : Trigger(
+    "kill", listOf(
+        TriggerParameter.PLAYER,
+        TriggerParameter.VICTIM,
+        TriggerParameter.LOCATION
+    )
+) {
     @EventHandler(ignoreCancelled = true)
-    fun onKill(event: EntityDeathByEntityEvent) {
+    fun handle(event: EntityDeathByEntityEvent) {
         if (McmmoManager.isFake(event)) {
             return
         }
@@ -39,7 +46,8 @@ class TriggerKill : Trigger("kill") {
             killer,
             TriggerData(
                 player = killer,
-                victim = victim
+                victim = victim,
+                location = victim.location
             )
         )
     }

@@ -1,12 +1,6 @@
 package com.willfp.libreforge.triggers
 
-import com.willfp.libreforge.triggers.triggers.TriggerBowAttack
-import com.willfp.libreforge.triggers.triggers.TriggerJump
-import com.willfp.libreforge.triggers.triggers.TriggerKill
-import com.willfp.libreforge.triggers.triggers.TriggerMeleeAttack
-import com.willfp.libreforge.triggers.triggers.TriggerMineBlock
-import com.willfp.libreforge.triggers.triggers.TriggerProjectileLaunch
-import com.willfp.libreforge.triggers.triggers.TriggerTridentAttack
+import com.willfp.libreforge.triggers.triggers.*
 
 object Triggers {
     private val BY_ID = mutableMapOf<String, Trigger>()
@@ -18,9 +12,28 @@ object Triggers {
     val JUMP: Trigger = TriggerJump()
     val KILL: Trigger = TriggerKill()
     val PROJECTILE_LAUNCH: Trigger = TriggerProjectileLaunch()
+    val TAKE_DAMAGE: Trigger = TriggerTakeDamage()
+    val PROJECTILE_HIT: Trigger = TriggerProjectileHit()
+    val FALL_DAMAGE: Trigger = TriggerFallDamage()
+    val TAKE_ENTITY_DAMAGE: Trigger = TriggerTakeEntityDamage()
+    val ALT_CLICK: Trigger = TriggerAltClick()
+    val HEAL: Trigger = TriggerHeal()
+    val LOSE_HUNGER: Trigger = TriggerLoseHunger()
 
     fun values(): Set<Trigger> {
         return BY_ID.values.toSet()
+    }
+
+    fun withParameters(vararg parameters: TriggerParameter): Set<Trigger> {
+        val found = mutableSetOf<Trigger>()
+
+        for (trigger in values()) {
+            if (trigger.parameters.containsAll(parameters.toSet())) {
+                found.add(trigger)
+            }
+        }
+
+        return found
     }
 
     fun getById(id: String): Trigger? {

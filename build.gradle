@@ -63,3 +63,4 @@ java.sourceCompatibility = JavaVersion.VERSION_16
 compileJava.options.encoding = 'UTF-8'
 
 build.dependsOn shadowJar
+build.dependsOn publishToMavenLocal

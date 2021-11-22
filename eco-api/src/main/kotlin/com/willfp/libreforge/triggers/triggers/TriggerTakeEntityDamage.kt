@@ -12,8 +12,8 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
 
-class TriggerMeleeAttack : Trigger(
-    "melee_attack", listOf(
+class TriggerTakeEntityDamage : Trigger(
+    "take_entity_damage", listOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
         TriggerParameter.LOCATION,
@@ -28,13 +28,13 @@ class TriggerMeleeAttack : Trigger(
 
         val attacker = event.damager
 
-        if (attacker !is Player) {
+        if (attacker !is LivingEntity) {
             return
         }
 
         val victim = event.entity
 
-        if (victim !is LivingEntity) {
+        if (victim !is Player) {
             return
         }
 
@@ -46,16 +46,16 @@ class TriggerMeleeAttack : Trigger(
             return
         }
 
-        if (!AntigriefManager.canInjure(attacker, victim)) {
+        if (!AntigriefManager.canInjure(victim, attacker)) {
             return
         }
 
         this.processTrigger(
-            attacker,
+            victim,
             TriggerData(
-                player = attacker,
-                victim = victim,
-                location = victim.location,
+                player = victim,
+                victim = attacker,
+                location = attacker.location,
                 event = WrappedDamageEvent(event)
             )
         )
