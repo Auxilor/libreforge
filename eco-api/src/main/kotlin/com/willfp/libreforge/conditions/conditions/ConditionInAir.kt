@@ -1,6 +1,7 @@
 package com.willfp.libreforge.conditions.conditions
 
 import com.willfp.eco.core.config.interfaces.JSONConfig
+import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.updateEffects
 import org.bukkit.entity.Player
@@ -20,6 +21,20 @@ class ConditionInAir: Condition("in_air") {
     }
 
     override fun isConditionMet(player: Player, config: JSONConfig): Boolean {
-        return player.location.block.isEmpty
+        return player.location.block.isEmpty == config.getBool("in_air")
+    }
+
+    override fun validateConfig(config: JSONConfig): List<ConfigViolation> {
+        val violations = mutableListOf<ConfigViolation>()
+
+        config.getBoolOrNull("in_air")
+            ?: violations.add(
+                ConfigViolation(
+                    "in_air",
+                    "You must specify if the player must be in air on on land!"
+                )
+            )
+
+        return violations
     }
 }
