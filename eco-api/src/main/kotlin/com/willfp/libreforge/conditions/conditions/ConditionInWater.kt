@@ -1,6 +1,7 @@
 package com.willfp.libreforge.conditions.conditions
 
 import com.willfp.eco.core.config.interfaces.JSONConfig
+import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.updateEffects
 import org.bukkit.entity.Player
@@ -24,6 +25,20 @@ class ConditionInWater: Condition("in_water") {
     }
 
     override fun isConditionMet(player: Player, config: JSONConfig): Boolean {
-        return player.isInWater
+        return player.isInWater == config.getBool("in_water")
+    }
+
+    override fun validateConfig(config: JSONConfig): List<ConfigViolation> {
+        val violations = mutableListOf<ConfigViolation>()
+
+        config.getBoolOrNull("in_water")
+            ?: violations.add(
+                ConfigViolation(
+                    "in_water",
+                    "You must specify if the player must be in water or not!"
+                )
+            )
+
+        return violations
     }
 }
