@@ -11,4 +11,12 @@ class WrappedDamageEvent(
         set(value) {
             event.damage = value
         }
+
+    var isCancelled: Boolean
+        get() {
+            return event.isCancelled
+        }
+        set(value) {
+            event.isCancelled = value
+        }
 }

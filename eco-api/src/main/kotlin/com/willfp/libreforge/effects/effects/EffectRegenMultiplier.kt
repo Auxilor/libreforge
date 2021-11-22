@@ -6,25 +6,19 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
-import com.willfp.libreforge.triggers.wrappers.WrappedDamageEvent
+import com.willfp.libreforge.triggers.wrappers.WrappedRegenEvent
 
-class EffectCritMultiplier : Effect(
-    "crit_multiplier",
+class EffectRegenMultiplier : Effect(
+    "regen_multiplier",
     supportsFilters = true,
     applicableTriggers = Triggers.withParameters(
-        TriggerParameter.EVENT,
-        TriggerParameter.PLAYER
+        TriggerParameter.EVENT
     )
 ) {
     override fun handle(data: TriggerData, config: JSONConfig) {
-        val event = data.event as? WrappedDamageEvent ?: return
-        val player = data.player ?: return
+        val event = data.event as? WrappedRegenEvent ?: return
 
-        if (player.velocity.y >= 0) {
-            return
-        }
-
-        event.damage *= config.getDouble("multiplier")
+        event.amount *= config.getDouble("multiplier")
     }
 
     override fun validateConfig(config: JSONConfig): List<ConfigViolation> {
@@ -34,7 +28,7 @@ class EffectCritMultiplier : Effect(
             ?: violations.add(
                 ConfigViolation(
                     "multiplier",
-                    "You must specify the crit damage multiplier!"
+                    "You must specify the regen multiplier!"
                 )
             )
 

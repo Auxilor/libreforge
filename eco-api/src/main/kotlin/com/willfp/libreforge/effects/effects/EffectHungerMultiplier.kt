@@ -1,30 +1,34 @@
 package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.JSONConfig
+import com.willfp.eco.util.NumberUtils
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
-import com.willfp.libreforge.triggers.wrappers.WrappedDamageEvent
+import com.willfp.libreforge.triggers.wrappers.WrappedHungerEvent
+import kotlin.math.ceil
 
-class EffectCritMultiplier : Effect(
-    "crit_multiplier",
+class EffectHungerMultiplier : Effect(
+    "hunger_multiplier",
     supportsFilters = true,
     applicableTriggers = Triggers.withParameters(
-        TriggerParameter.EVENT,
-        TriggerParameter.PLAYER
+        TriggerParameter.EVENT
     )
 ) {
     override fun handle(data: TriggerData, config: JSONConfig) {
-        val event = data.event as? WrappedDamageEvent ?: return
-        val player = data.player ?: return
+        val event = data.event as? WrappedHungerEvent ?: return
 
-        if (player.velocity.y >= 0) {
-            return
+        val multiplier = config.getDouble("multiplier")
+
+        if (multiplier < 1) {
+            if (NumberUtils.randFloat(0.0, 1.0) > multiplier) {
+                event.isCancelled = true
+            }
+        } else {
+            event.amount = ceil(event.amount * multiplier).toInt()
         }
-
-        event.damage *= config.getDouble("multiplier")
     }
 
     override fun validateConfig(config: JSONConfig): List<ConfigViolation> {
@@ -34,7 +38,7 @@ class EffectCritMultiplier : Effect(
             ?: violations.add(
                 ConfigViolation(
                     "multiplier",
-                    "You must specify the crit damage multiplier!"
+                    "You must specify the hunger multiplier!"
                 )
             )
 

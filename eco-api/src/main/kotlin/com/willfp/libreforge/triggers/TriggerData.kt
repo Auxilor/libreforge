@@ -1,5 +1,6 @@
 package com.willfp.libreforge.triggers
 
+import org.bukkit.Location
 import org.bukkit.block.Block
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
@@ -10,5 +11,15 @@ data class TriggerData(
     val victim: LivingEntity? = null,
     val block: Block? = null,
     val event: WrappedEvent<*>? = null,
+    val location: Location? = null,
     val projectile: Projectile? = null
 )
+
+enum class TriggerParameter {
+    PLAYER,
+    VICTIM,
+    BLOCK,
+    EVENT,
+    LOCATION,
+    PROJECTILE
+}

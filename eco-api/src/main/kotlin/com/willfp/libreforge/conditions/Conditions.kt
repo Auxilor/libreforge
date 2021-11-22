@@ -2,20 +2,10 @@ package com.willfp.libreforge.conditions
 
 import com.google.common.collect.HashBiMap
 import com.google.common.collect.ImmutableList
-import com.willfp.libreforge.conditions.conditions.ConditionAboveHealthPercent
-import com.willfp.libreforge.conditions.conditions.ConditionAboveHungerPercent
-import com.willfp.libreforge.conditions.conditions.ConditionAboveXPLevel
-import com.willfp.libreforge.conditions.conditions.ConditionAboveY
-import com.willfp.libreforge.conditions.conditions.ConditionBelowHealthPercent
-import com.willfp.libreforge.conditions.conditions.ConditionBelowHungerPercent
-import com.willfp.libreforge.conditions.conditions.ConditionBelowXPLevel
-import com.willfp.libreforge.conditions.conditions.ConditionBelowY
-import com.willfp.libreforge.conditions.conditions.ConditionHasPermission
-import com.willfp.libreforge.conditions.conditions.ConditionInAir
-import com.willfp.libreforge.conditions.conditions.ConditionInBiome
-import com.willfp.libreforge.conditions.conditions.ConditionInWater
-import com.willfp.libreforge.conditions.conditions.ConditionInWorld
-import com.willfp.libreforge.conditions.conditions.ConditionIsSneaking
+import com.willfp.eco.core.config.interfaces.JSONConfig
+import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.LibReforge
+import com.willfp.libreforge.conditions.conditions.*
 
 object Conditions {
     private val BY_ID = HashBiMap.create<String, Condition>()
@@ -62,5 +52,36 @@ object Conditions {
     fun addNewCondition(condition: Condition) {
         BY_ID.remove(condition.id)
         BY_ID[condition.id] = condition
+    }
+
+    /**
+     * Compile a condition.
+     *
+     * @param config The config for the condition.
+     * @param context The context to log violations for.
+     *
+     * @return The configured condition, or null if invalid.
+     */
+    @JvmStatic
+    fun compile(config: JSONConfig, context: String): ConfiguredCondition? {
+        val condition = config.getString("id").let {
+            val found = getByID(it)
+            if (found == null) {
+                LibReforge.logViolation(
+                    it,
+                    context,
+                    ConfigViolation("id", "Invalid condition ID specified!")
+                )
+            }
+
+            found
+        } ?: return null
+
+        val args = config.getSubsection("args")
+        if (condition.checkConfig(args, context)) {
+            return null
+        }
+
+        return ConfiguredCondition(condition, args)
     }
 }

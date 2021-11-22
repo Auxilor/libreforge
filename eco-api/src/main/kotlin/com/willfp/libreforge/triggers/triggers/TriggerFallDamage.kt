@@ -1,60 +1,41 @@
 package com.willfp.libreforge.triggers.triggers
 
-import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.eco.core.integrations.mcmmo.McmmoManager
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.wrappers.WrappedDamageEvent
-import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
-import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
 
-class TriggerMeleeAttack : Trigger(
-    "melee_attack", listOf(
+class TriggerFallDamage : Trigger(
+    "fall_damage", listOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.VICTIM,
         TriggerParameter.LOCATION,
         TriggerParameter.EVENT
     )
 ) {
     @EventHandler(ignoreCancelled = true)
-    fun handle(event: EntityDamageByEntityEvent) {
+    fun handle(event: EntityDamageEvent) {
         if (McmmoManager.isFake(event)) {
             return
         }
 
-        val attacker = event.damager
-
-        if (attacker !is Player) {
+        if (event.cause != EntityDamageEvent.DamageCause.FALL) {
             return
         }
 
         val victim = event.entity
 
-        if (victim !is LivingEntity) {
-            return
-        }
-
-        if (event.isCancelled) {
-            return
-        }
-
-        if (event.cause == EntityDamageEvent.DamageCause.THORNS) {
-            return
-        }
-
-        if (!AntigriefManager.canInjure(attacker, victim)) {
+        if (victim !is Player) {
             return
         }
 
         this.processTrigger(
-            attacker,
+            victim,
             TriggerData(
-                player = attacker,
-                victim = victim,
+                player = victim,
                 location = victim.location,
                 event = WrappedDamageEvent(event)
             )

@@ -6,35 +6,33 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
-import com.willfp.libreforge.triggers.wrappers.WrappedDamageEvent
 
-class EffectCritMultiplier : Effect(
-    "crit_multiplier",
-    supportsFilters = true,
+class EffectStrikeLightning : Effect(
+    "strike_lightning",
+    supportsFilters = false,
     applicableTriggers = Triggers.withParameters(
-        TriggerParameter.EVENT,
-        TriggerParameter.PLAYER
+        TriggerParameter.LOCATION
     )
 ) {
     override fun handle(data: TriggerData, config: JSONConfig) {
-        val event = data.event as? WrappedDamageEvent ?: return
-        val player = data.player ?: return
+        val location = data.location ?: return
+        val world = location.world ?: return
 
-        if (player.velocity.y >= 0) {
-            return
+        for (i in 1..config.getInt("amount")) {
+            plugin.scheduler.runLater({
+                world.strikeLightning(location)
+            }, 1)
         }
-
-        event.damage *= config.getDouble("multiplier")
     }
 
     override fun validateConfig(config: JSONConfig): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
-        config.getDoubleOrNull("multiplier")
+        config.getIntOrNull("amount")
             ?: violations.add(
                 ConfigViolation(
-                    "multiplier",
-                    "You must specify the crit damage multiplier!"
+                    "amount",
+                    "You must specify the amount of lightning!"
                 )
             )
 

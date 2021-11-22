@@ -5,19 +5,9 @@ import com.google.common.collect.ImmutableList
 import com.willfp.eco.core.config.interfaces.JSONConfig
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.LibReforge
-import com.willfp.libreforge.effects.effects.EffectAttackSpeedMultiplier
-import com.willfp.libreforge.effects.effects.EffectBonusHealth
-import com.willfp.libreforge.effects.effects.EffectCritMultiplier
-import com.willfp.libreforge.effects.effects.EffectDamageMultiplier
-import com.willfp.libreforge.effects.effects.EffectFallDamageMultiplier
-import com.willfp.libreforge.effects.effects.EffectGiveMoney
-import com.willfp.libreforge.effects.effects.EffectIncomingDamageMultiplier
-import com.willfp.libreforge.effects.effects.EffectKnockbackMultiplier
-import com.willfp.libreforge.effects.effects.EffectMovementSpeedMultiplier
-import com.willfp.libreforge.filters.Filter
-import com.willfp.libreforge.filters.Filters
-import com.willfp.libreforge.filters.filters.CompoundFilter
-import com.willfp.libreforge.filters.filters.FilterEmpty
+import com.willfp.libreforge.effects.effects.*
+import com.willfp.libreforge.filters.ConfiguredFilter
+import com.willfp.libreforge.filters.EmptyFilter
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.Triggers
 
@@ -28,11 +18,16 @@ object Effects {
     val CRIT_MULTIPLIER: Effect = EffectCritMultiplier()
     val KNOCKBACK_MULTIPLIER: Effect = EffectKnockbackMultiplier()
     val GIVE_MONEY: Effect = EffectGiveMoney()
-    val INCOMING_DAMAGE_MULTIPLIER: Effect = EffectIncomingDamageMultiplier()
     val ATTACK_SPEED_MULTIPLIER: Effect = EffectAttackSpeedMultiplier()
     val MOVEMENT_SPEED_MULTIPLIER: Effect = EffectMovementSpeedMultiplier()
     val BONUS_HEALTH: Effect = EffectBonusHealth()
-    val FALL_DAMAGE_MULTIPLIER: Effect = EffectFallDamageMultiplier()
+    val RUN_COMMAND: Effect = EffectRunCommand()
+    val STRIKE_LIGHTNING: Effect = EffectStrikeLightning()
+    val SPAWN_MOBS: Effect = EffectSpawnMobs()
+    val HUNGER_MULTIPLIER: Effect = EffectHungerMultiplier()
+    val REGEN_MULTIPLIER: Effect = EffectRegenMultiplier()
+    val PERMANENT_POTION_EFFECT: Effect = EffectPermanentPotionEffect()
+    val POTION_EFFECT: Effect = EffectPotionEffect()
 
     /**
      * Get effect matching id.
@@ -71,6 +66,7 @@ object Effects {
      *
      * @return The configured effect, or null if invalid.
      */
+    @JvmStatic
     fun compile(config: JSONConfig, context: String): ConfiguredEffect? {
         val effect = config.getString("id").let {
             val found = Effects.getByID(it)
@@ -90,7 +86,7 @@ object Effects {
             return null
         }
 
-        val filters = config.getSubsectionsOrNull("filters").let {
+        val filter = config.getSubsectionOrNull("filters").let {
             if (!effect.supportsFilters && it != null) {
                 LibReforge.logViolation(
                     effect.id,
@@ -101,25 +97,7 @@ object Effects {
                 return@let null
             }
 
-            val builder = mutableListOf<Filter>()
-
-            for (filterConfig in it ?: emptyList()) {
-                val id = filterConfig.getString("id")
-                val filter = Filters.createById(id, filterConfig)
-                if (filter is FilterEmpty) {
-                    LibReforge.logViolation(
-                        effect.id,
-                        context,
-                        ConfigViolation(
-                            "filters", "Invalid filter specified: $id"
-                        )
-                    )
-                } else {
-                    builder.add(filter)
-                }
-            }
-
-            return@let CompoundFilter(*builder.toTypedArray())
+            if (it == null) EmptyFilter() else ConfiguredFilter(it)
         } ?: return null
 
         val triggers = config.getStrings("triggers").let {
@@ -162,14 +140,24 @@ object Effects {
                     )
 
                     return@let null
-                } else {
-                    triggers.add(trigger)
                 }
+
+                if (!effect.applicableTriggers.contains(trigger)) {
+                    LibReforge.logViolation(
+                        effect.id,
+                        context,
+                        ConfigViolation(
+                            "triggers", "Specified effect does not support trigger $id"
+                        )
+                    )
+                }
+
+                triggers.add(trigger)
             }
 
             triggers
         } ?: return null
 
-        return ConfiguredEffect(effect, args, filters, triggers)
+        return ConfiguredEffect(effect, args, filter, triggers)
     }
 }
