@@ -1,33 +1,68 @@
 package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.JSONConfig
+import com.willfp.eco.core.integrations.mcmmo.McmmoManager
 import com.willfp.eco.util.NumberUtils
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
-import com.willfp.libreforge.triggers.TriggerData
-import com.willfp.libreforge.triggers.TriggerParameter
-import com.willfp.libreforge.triggers.Triggers
+import com.willfp.libreforge.effects.MultiplierModifier
+import com.willfp.libreforge.effects.getEffectAmount
 import com.willfp.libreforge.triggers.wrappers.WrappedHungerEvent
+import org.bukkit.entity.Player
+import org.bukkit.event.EventHandler
+import org.bukkit.event.entity.FoodLevelChangeEvent
+import java.util.UUID
 import kotlin.math.ceil
 
-class EffectHungerMultiplier : Effect(
-    "hunger_multiplier",
-    supportsFilters = false,
-    applicableTriggers = Triggers.withParameters(
-        TriggerParameter.EVENT
-    )
-) {
-    override fun handle(data: TriggerData, config: JSONConfig) {
-        val event = data.event as? WrappedHungerEvent ?: return
+class EffectHungerMultiplier : Effect("hunger_multiplier") {
+    private val modifiers = mutableMapOf<UUID, MutableList<MultiplierModifier>>()
 
-        val multiplier = config.getDouble("multiplier")
+    override fun handleEnable(player: Player, config: JSONConfig) {
+        val registeredModifiers = modifiers[player.uniqueId] ?: mutableListOf()
+        val uuid = this.getUUID(player.getEffectAmount(this))
+        registeredModifiers.removeIf { it.uuid == uuid }
+        registeredModifiers.add(
+            MultiplierModifier(
+                uuid,
+                config.getDouble("multiplier")
+            )
+        )
+        modifiers[player.uniqueId] = registeredModifiers
+    }
+
+    override fun handleDisable(player: Player) {
+        val registeredModifiers = modifiers[player.uniqueId] ?: mutableListOf()
+        val uuid = this.getUUID(player.getEffectAmount(this))
+        registeredModifiers.removeIf { it.uuid == uuid }
+        modifiers[player.uniqueId] = registeredModifiers
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    fun handle(event: FoodLevelChangeEvent) {
+        if (McmmoManager.isFake(event)) {
+            return
+        }
+
+        val player = event.entity
+
+        if (player !is Player) {
+            return
+        }
+
+        var multiplier = 1.0
+
+        for (modifier in (modifiers[player.uniqueId] ?: emptyList())) {
+            multiplier *= modifier.multiplier
+        }
+
+        val wrapped = WrappedHungerEvent(event)
 
         if (multiplier < 1) {
             if (NumberUtils.randFloat(0.0, 1.0) > multiplier) {
-                event.isCancelled = true
+                wrapped.isCancelled = true
             }
         } else {
-            event.amount = ceil(event.amount * multiplier).toInt()
+            wrapped.amount = ceil(wrapped.amount * multiplier).toInt()
         }
     }
 
