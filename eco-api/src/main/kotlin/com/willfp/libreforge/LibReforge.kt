@@ -54,9 +54,7 @@ object LibReforge {
             plugin.eventManager.registerListener(condition)
         }
         for (effect in Effects.values()) {
-            if (effect is Listener) {
-                plugin.eventManager.registerListener(effect)
-            }
+            plugin.eventManager.registerListener(effect)
         }
         for (trigger in Triggers.values()) {
             plugin.eventManager.registerListener(trigger)
