@@ -12,7 +12,7 @@ import kotlin.math.ceil
 
 class EffectXpMultiplier : Effect(
     "xp_multiplier",
-    supportsFilters = true,
+    supportsFilters = false,
     applicableTriggers = Triggers.withParameters(
         TriggerParameter.EVENT
     )

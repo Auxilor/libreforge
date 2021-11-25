@@ -10,7 +10,7 @@ import com.willfp.libreforge.triggers.wrappers.WrappedRegenEvent
 
 class EffectRegenMultiplier : Effect(
     "regen_multiplier",
-    supportsFilters = true,
+    supportsFilters = false,
     applicableTriggers = Triggers.withParameters(
         TriggerParameter.EVENT
     )

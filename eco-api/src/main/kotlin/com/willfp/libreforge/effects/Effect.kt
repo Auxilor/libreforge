@@ -9,6 +9,7 @@ import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.NamespacedKey
 import org.bukkit.Sound
 import org.bukkit.entity.Player
+import org.bukkit.event.Listener
 import java.util.*
 import kotlin.math.ceil
 
@@ -16,7 +17,7 @@ abstract class Effect(
     id: String,
     val supportsFilters: Boolean = false,
     val applicableTriggers: Collection<Trigger> = emptyList()
-) : ConfigurableProperty(id) {
+) : ConfigurableProperty(id), Listener {
     private val cooldownTracker = mutableMapOf<UUID, Long>()
 
     init {
