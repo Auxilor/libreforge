@@ -28,6 +28,8 @@ object Effects {
     val REGEN_MULTIPLIER: Effect = EffectRegenMultiplier()
     val PERMANENT_POTION_EFFECT: Effect = EffectPermanentPotionEffect()
     val POTION_EFFECT: Effect = EffectPotionEffect()
+    val ARMOR: Effect = EffectArmor()
+    val ARMOR_TOUGHNESS: Effect = EffectArmorToughness()
 
     /**
      * Get effect matching id.

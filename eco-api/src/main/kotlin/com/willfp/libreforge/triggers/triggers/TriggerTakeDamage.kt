@@ -12,7 +12,8 @@ import org.bukkit.event.entity.EntityDamageEvent
 class TriggerTakeDamage : Trigger(
     "take_damage", listOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.EVENT
+        TriggerParameter.EVENT,
+        TriggerParameter.DAMAGE_CAUSE
     )
 ) {
     @EventHandler(ignoreCancelled = true)
@@ -31,7 +32,8 @@ class TriggerTakeDamage : Trigger(
             victim,
             TriggerData(
                 player = victim,
-                event = WrappedDamageEvent(event)
+                event = WrappedDamageEvent(event),
+                damageCause = event.cause
             )
         )
     }
