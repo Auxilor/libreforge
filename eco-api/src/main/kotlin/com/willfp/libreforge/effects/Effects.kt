@@ -30,6 +30,7 @@ object Effects {
     val POTION_EFFECT: Effect = EffectPotionEffect()
     val ARMOR: Effect = EffectArmor()
     val ARMOR_TOUGHNESS: Effect = EffectArmorToughness()
+    val GIVE_XP: Effect = EffectGiveXp()
 
     /**
      * Get effect matching id.
