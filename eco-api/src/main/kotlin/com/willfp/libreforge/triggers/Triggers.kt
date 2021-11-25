@@ -19,6 +19,7 @@ object Triggers {
     val ALT_CLICK: Trigger = TriggerAltClick()
     val HEAL: Trigger = TriggerHeal()
     val LOSE_HUNGER: Trigger = TriggerLoseHunger()
+    val GAIN_XP: Trigger = TriggerGainXp()
 
     fun values(): Set<Trigger> {
         return BY_ID.values.toSet()

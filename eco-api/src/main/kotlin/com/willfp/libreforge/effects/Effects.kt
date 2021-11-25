@@ -31,6 +31,7 @@ object Effects {
     val ARMOR: Effect = EffectArmor()
     val ARMOR_TOUGHNESS: Effect = EffectArmorToughness()
     val GIVE_XP: Effect = EffectGiveXp()
+    val XP_MULTIPLIER: Effect = EffectXpMultiplier()
 
     /**
      * Get effect matching id.
