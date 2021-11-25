@@ -7,6 +7,7 @@ import org.bukkit.block.Block
 import org.bukkit.entity.Boss
 import org.bukkit.entity.ElderGuardian
 import org.bukkit.entity.LivingEntity
+import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.persistence.PersistentDataType
 import java.util.function.Predicate
 
@@ -38,6 +39,13 @@ open class ConfiguredFilter(
         return@Predicate materialNames.contains(block.type.name)
     }
 
+    private val damageCauseFilter = Predicate<EntityDamageEvent.DamageCause> { cause ->
+        val causeNames = config.getStringsOrNull("damageCause", false)
+            ?.map { it.uppercase() } ?: emptyList()
+
+        return@Predicate causeNames.contains(cause.name)
+    }
+
     override fun matches(data: TriggerData): Boolean {
         val testResults = mutableListOf<Boolean>()
 
@@ -51,6 +59,12 @@ open class ConfiguredFilter(
         if (data.block != null) {
             testResults.addAll(
                 materialTypeFilter.test(data.block)
+            )
+        }
+
+        if (data.damageCause != null) {
+            testResults.addAll(
+                damageCauseFilter.test(data.damageCause)
             )
         }
 
