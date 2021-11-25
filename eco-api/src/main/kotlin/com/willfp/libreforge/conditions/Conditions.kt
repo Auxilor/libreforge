@@ -24,6 +24,7 @@ object Conditions {
     val HAS_PERMISSION: Condition = ConditionHasPermission()
     val IS_SNEAKING: Condition = ConditionIsSneaking()
     val IN_AIR: Condition = ConditionInAir()
+    val IS_NIGHT: Condition = ConditionIsNight()
 
     /**
      * Get condition matching id.

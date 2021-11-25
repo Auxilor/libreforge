@@ -39,6 +39,15 @@ object LibReforge {
     }
 
     @JvmStatic
+    fun reload(plugin: EcoPlugin) {
+        plugin.scheduler.runTimer({
+            for (player in Bukkit.getOnlinePlayers()) {
+                player.updateEffects()
+            }
+        }, 30, 30)
+    }
+
+    @JvmStatic
     fun enable(plugin: EcoPlugin) {
         plugin.eventManager.registerListener(TridentHolderDataAttacher(plugin))
         for (condition in Conditions.values()) {
