@@ -17,6 +17,10 @@ class ConditionInAir: Condition("in_air") {
     fun handle(event: PlayerMoveEvent) {
         val player = event.player
 
+        if (event.from.world?.getBlockAt(event.from)?.type == event.to.world?.getBlockAt(event.to)?.type) {
+            return
+        }
+
         player.updateEffects()
     }
 

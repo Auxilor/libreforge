@@ -5,12 +5,16 @@ dependencies {
     compileOnly 'com.github.Archy-X:AureliumSkills:Beta1.2.4'
 }
 
+group 'com.willfp'
+version rootProject.version
+
 build.dependsOn publishToMavenLocal
 
 publishing {
     publications {
         maven(MavenPublication) {
             from(components.java)
+            artifactId 'libreforge'
         }
     }
 }
