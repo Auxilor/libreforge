@@ -13,7 +13,6 @@ import com.willfp.libreforge.triggers.Triggers
 import org.apache.commons.lang.StringUtils
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
-import org.bukkit.event.Listener
 import java.util.*
 
 private val holderProviders = mutableSetOf<HolderProvider>()
@@ -129,73 +128,72 @@ fun Player.updateEffects() {
     }
     this.clearEffectCache()
 
-    LibReforge.plugin.scheduler.run {
-        val after = this.getHolders()
-        previousStates[this.uniqueId] = after
+    val after = this.getHolders()
+    previousStates[this.uniqueId] = after
 
-        val beforeFreq = ListUtils.listToFrequencyMap(before)
-        val afterFreq = ListUtils.listToFrequencyMap(after.toList())
+    val beforeFreq = ListUtils.listToFrequencyMap(before)
+    val afterFreq = ListUtils.listToFrequencyMap(after.toList())
 
-        val added = mutableListOf<Holder>()
-        val removed = mutableListOf<Holder>()
+    val added = mutableListOf<Holder>()
+    val removed = mutableListOf<Holder>()
 
-        for ((holder, freq) in afterFreq) {
-            var amount = freq
-            amount -= beforeFreq[holder] ?: 0
-            if (amount < 1) {
-                continue
-            }
+    for ((holder, freq) in afterFreq) {
+        var amount = freq
+        amount -= beforeFreq[holder] ?: 0
+        if (amount < 1) {
+            continue
+        }
 
-            for (i in 0 until amount) {
-                added.add(holder)
+        for (i in 0 until amount) {
+            added.add(holder)
+        }
+    }
+
+    for ((holder, freq) in beforeFreq) {
+        var amount = freq
+
+        amount -= afterFreq[holder] ?: 0
+        if (amount < 1) {
+            continue
+        }
+        for (i in 0 until amount) {
+            removed.add(holder)
+        }
+    }
+
+    for (holder in added) {
+        var areConditionsMet = true
+        for ((condition, config) in holder.conditions) {
+            if (!condition.isConditionMet(this, config)) {
+                areConditionsMet = false
+                break
             }
         }
 
-        for ((holder, freq) in beforeFreq) {
-            var amount = freq
-
-            amount -= afterFreq[holder] ?: 0
-            if (amount < 1) {
-                continue
-            }
-            for (i in 0 until amount) {
-                removed.add(holder)
+        if (areConditionsMet) {
+            for ((effect, config) in holder.effects) {
+                effect.enableForPlayer(this, config)
             }
         }
+    }
 
-        for (holder in added) {
-            var areConditionsMet = true
-            for ((condition, config) in holder.conditions) {
-                if (!condition.isConditionMet(this, config)) {
-                    areConditionsMet = false
-                    break
-                }
-            }
+    for (holder in removed) {
+        for ((effect, _) in holder.effects) {
+            effect.disableForPlayer(this)
+        }
+    }
 
-            if (areConditionsMet) {
-                for ((effect, config) in holder.effects) {
-                    effect.enableForPlayer(this, config)
-                }
+    for (holder in after) {
+        var areConditionsMet = true
+        for ((condition, config) in holder.conditions) {
+            if (!condition.isConditionMet(this, config)) {
+                areConditionsMet = false
+                break
             }
         }
-        for (holder in removed) {
+        if (!areConditionsMet) {
             for ((effect, _) in holder.effects) {
                 effect.disableForPlayer(this)
-            }
-        }
-
-        for (holder in after) {
-            var areConditionsMet = true
-            for ((condition, config) in holder.conditions) {
-                if (!condition.isConditionMet(this, config)) {
-                    areConditionsMet = false
-                    break
-                }
-            }
-            if (!areConditionsMet) {
-                for ((effect, _) in holder.effects) {
-                    effect.disableForPlayer(this)
-                }
             }
         }
     }
