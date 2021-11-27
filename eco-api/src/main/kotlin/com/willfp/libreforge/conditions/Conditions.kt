@@ -25,6 +25,7 @@ object Conditions {
     val IS_SNEAKING: Condition = ConditionIsSneaking()
     val IN_AIR: Condition = ConditionInAir()
     val IS_NIGHT: Condition = ConditionIsNight()
+    val IS_STORM: Condition = ConditionIsStorm()
 
     /**
      * Get condition matching id.
