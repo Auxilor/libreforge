@@ -27,7 +27,7 @@ class EffectPotionEffect : Effect(
             PotionEffect(
                 PotionEffectType.getByName(config.getString("effect").uppercase())
                     ?: PotionEffectType.INCREASE_DAMAGE,
-                1_500_000_000,
+                config.getInt("duration"),
                 config.getInt("level") - 1,
                 false,
                 true,
