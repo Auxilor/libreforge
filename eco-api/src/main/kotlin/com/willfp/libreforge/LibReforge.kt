@@ -24,7 +24,7 @@ object LibReforge {
     lateinit var plugin: EcoPlugin
 
     private val defaultPackage = StringUtils.join(
-        arrayOf("com", "willfp", "libreforge", "api"),
+        arrayOf("com", "willfp", "libreforge"),
         "."
     )
 
