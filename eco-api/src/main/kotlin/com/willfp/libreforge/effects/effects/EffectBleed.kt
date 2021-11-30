@@ -16,7 +16,7 @@ import kotlin.math.sin
 
 class EffectBleed : Effect(
     "bleed",
-    supportsFilters = false,
+    supportsFilters = true,
     applicableTriggers = Triggers.withParameters(
         TriggerParameter.VICTIM
     )
