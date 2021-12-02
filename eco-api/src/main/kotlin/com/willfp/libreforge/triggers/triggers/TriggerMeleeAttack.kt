@@ -26,17 +26,8 @@ class TriggerMeleeAttack : Trigger(
             return
         }
 
-        val attacker = event.damager
-
-        if (attacker !is Player) {
-            return
-        }
-
-        val victim = event.entity
-
-        if (victim !is LivingEntity) {
-            return
-        }
+        val attacker = event.damager as? Player ?: return
+        val victim = event.entity as? LivingEntity ?: return
 
         if (event.isCancelled) {
             return
