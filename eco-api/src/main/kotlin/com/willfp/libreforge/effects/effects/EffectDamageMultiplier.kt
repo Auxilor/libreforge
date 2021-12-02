@@ -19,9 +19,7 @@ class EffectDamageMultiplier : Effect(
     override fun handle(data: TriggerData, config: JSONConfig) {
         val event = data.event as? WrappedDamageEvent ?: return
 
-        Bukkit.getLogger().info("Before: ${event.damage}")
         event.damage *= config.getDouble("multiplier")
-        Bukkit.getLogger().info("After: ${event.damage}")
 
         if (event.damage < 0.01) {
             event.isCancelled = true
