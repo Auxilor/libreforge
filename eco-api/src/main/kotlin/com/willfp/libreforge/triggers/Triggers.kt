@@ -20,6 +20,7 @@ object Triggers {
     val HEAL: Trigger = TriggerHeal()
     val LOSE_HUNGER: Trigger = TriggerLoseHunger()
     val GAIN_XP: Trigger = TriggerGainXp()
+    val SHIELD_BLOCK: Trigger = TriggerShieldBlock()
 
     fun values(): Set<Trigger> {
         return BY_ID.values.toSet()
