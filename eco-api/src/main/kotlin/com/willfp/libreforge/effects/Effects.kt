@@ -2,7 +2,7 @@ package com.willfp.libreforge.effects
 
 import com.google.common.collect.HashBiMap
 import com.google.common.collect.ImmutableList
-import com.willfp.eco.core.config.interfaces.JSONConfig
+import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.LibReforge
 import com.willfp.libreforge.effects.effects.*
@@ -72,7 +72,7 @@ object Effects {
      * @return The configured effect, or null if invalid.
      */
     @JvmStatic
-    fun compile(config: JSONConfig, context: String): ConfiguredEffect? {
+    fun compile(config: Config, context: String): ConfiguredEffect? {
         val effect = config.getString("id").let {
             val found = Effects.getByID(it)
             if (found == null) {

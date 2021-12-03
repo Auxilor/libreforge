@@ -1,6 +1,6 @@
 package com.willfp.libreforge
 
-import com.willfp.eco.core.config.interfaces.JSONConfig
+import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.effects.Effect
 import java.util.*
 
@@ -18,7 +18,7 @@ abstract class ConfigurableProperty(
      * @param context Additional context, e.g. path in config.
      * @return If any violations.
      */
-    fun checkConfig(config: JSONConfig, context: String): Boolean {
+    fun checkConfig(config: Config, context: String): Boolean {
         val violations = this.validateConfig(config)
 
         for (violation in violations) {
@@ -34,7 +34,7 @@ abstract class ConfigurableProperty(
      * @param config The config.
      * @return A list of violations.
      */
-    protected open fun validateConfig(config: JSONConfig): List<ConfigViolation> {
+    protected open fun validateConfig(config: Config): List<ConfigViolation> {
         return emptyList()
     }
 

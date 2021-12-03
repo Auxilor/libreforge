@@ -1,6 +1,6 @@
 package com.willfp.libreforge.effects.effects
 
-import com.willfp.eco.core.config.interfaces.JSONConfig
+import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.util.NumberUtils
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
@@ -24,7 +24,7 @@ class EffectSpawnMobs : Effect(
         TriggerParameter.LOCATION
     )
 ), Listener {
-    override fun handle(data: TriggerData, config: JSONConfig) {
+    override fun handle(data: TriggerData, config: Config) {
         val location = data.location ?: return
         val world = location.world ?: return
         val victim = data.victim
@@ -59,7 +59,7 @@ class EffectSpawnMobs : Effect(
         }
     }
 
-    override fun validateConfig(config: JSONConfig): List<ConfigViolation> {
+    override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
         config.getIntOrNull("amount")

@@ -2,7 +2,7 @@ package com.willfp.libreforge.conditions
 
 import com.google.common.collect.HashBiMap
 import com.google.common.collect.ImmutableList
-import com.willfp.eco.core.config.interfaces.JSONConfig
+import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.LibReforge
 import com.willfp.libreforge.conditions.conditions.*
@@ -65,7 +65,7 @@ object Conditions {
      * @return The configured condition, or null if invalid.
      */
     @JvmStatic
-    fun compile(config: JSONConfig, context: String): ConfiguredCondition? {
+    fun compile(config: Config, context: String): ConfiguredCondition? {
         val condition = config.getString("id").let {
             val found = getByID(it)
             if (found == null) {

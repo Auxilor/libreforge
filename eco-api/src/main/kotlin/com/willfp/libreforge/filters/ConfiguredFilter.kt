@@ -1,6 +1,6 @@
 package com.willfp.libreforge.filters
 
-import com.willfp.eco.core.config.interfaces.JSONConfig
+import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.util.NamespacedKeyUtils
 import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.block.Block
@@ -12,7 +12,7 @@ import org.bukkit.persistence.PersistentDataType
 import java.util.function.Predicate
 
 open class ConfiguredFilter(
-    private val config: JSONConfig
+    private val config: Config
 ): Filter {
     private val entityTypeFilter = Predicate<LivingEntity> { entity ->
         val entityNames = config.getStringsOrNull("entities", false)

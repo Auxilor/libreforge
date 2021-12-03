@@ -1,6 +1,6 @@
 package com.willfp.libreforge.effects.effects
 
-import com.willfp.eco.core.config.interfaces.JSONConfig
+import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.LibReforge
 import com.willfp.libreforge.effects.Effect
@@ -14,7 +14,7 @@ import java.util.*
 class EffectPermanentPotionEffect : Effect("permanent_potion_effect") {
     private val metaKey = "${LibReforge.plugin.name}_${this.id}"
 
-    override fun handleEnable(player: Player, config: JSONConfig) {
+    override fun handleEnable(player: Player, config: Config) {
         val effectType = PotionEffectType.getByName(config.getString("effect").uppercase())
             ?: PotionEffectType.INCREASE_DAMAGE
 
@@ -55,7 +55,7 @@ class EffectPermanentPotionEffect : Effect("permanent_potion_effect") {
         player.removePotionEffect(toRemove)
     }
 
-    override fun validateConfig(config: JSONConfig): List<ConfigViolation> {
+    override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
         config.getStringOrNull("effect")

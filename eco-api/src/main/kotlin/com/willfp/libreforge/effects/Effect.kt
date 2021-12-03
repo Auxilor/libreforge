@@ -1,6 +1,6 @@
 package com.willfp.libreforge.effects
 
-import com.willfp.eco.core.config.interfaces.JSONConfig
+import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.util.PlayerUtils
 import com.willfp.eco.util.StringUtils
 import com.willfp.libreforge.ConfigurableProperty
@@ -55,7 +55,7 @@ abstract class Effect(
         }
     }
 
-    fun resetCooldown(player: Player, config: JSONConfig) {
+    fun resetCooldown(player: Player, config: Config) {
         if (!config.has("cooldown")) {
             return
         }
@@ -95,7 +95,7 @@ abstract class Effect(
      */
     fun enableForPlayer(
         player: Player,
-        config: JSONConfig
+        config: Config
     ) {
         player.pushEffect(this)
         handleEnable(player, config)
@@ -103,7 +103,7 @@ abstract class Effect(
 
     protected open fun handleEnable(
         player: Player,
-        config: JSONConfig
+        config: Config
     ) {
         // Override when needed.
     }
@@ -122,7 +122,7 @@ abstract class Effect(
         // Override when needed.
     }
 
-    open fun handle(data: TriggerData, config: JSONConfig) {
+    open fun handle(data: TriggerData, config: Config) {
         // Override when needed
     }
 }
