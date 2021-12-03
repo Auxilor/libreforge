@@ -1,6 +1,6 @@
 package com.willfp.libreforge.effects.effects
 
-import com.willfp.eco.core.config.interfaces.JSONConfig
+import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
@@ -16,7 +16,7 @@ class EffectPotionEffect : Effect(
         TriggerParameter.VICTIM
     )
 ) {
-    override fun handle(data: TriggerData, config: JSONConfig) {
+    override fun handle(data: TriggerData, config: Config) {
         val toApply = if (config.getBool("apply_to_player")) {
             data.player ?: return
         } else {
@@ -36,7 +36,7 @@ class EffectPotionEffect : Effect(
         )
     }
 
-    override fun validateConfig(config: JSONConfig): List<ConfigViolation> {
+    override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
         config.getStringOrNull("effect")

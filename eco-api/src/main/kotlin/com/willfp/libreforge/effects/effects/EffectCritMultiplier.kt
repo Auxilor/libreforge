@@ -1,6 +1,6 @@
 package com.willfp.libreforge.effects.effects
 
-import com.willfp.eco.core.config.interfaces.JSONConfig
+import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
@@ -16,7 +16,7 @@ class EffectCritMultiplier : Effect(
         TriggerParameter.PLAYER
     )
 ) {
-    override fun handle(data: TriggerData, config: JSONConfig) {
+    override fun handle(data: TriggerData, config: Config) {
         val event = data.event as? WrappedDamageEvent ?: return
         val player = data.player ?: return
 
@@ -27,7 +27,7 @@ class EffectCritMultiplier : Effect(
         event.damage *= config.getDouble("multiplier")
     }
 
-    override fun validateConfig(config: JSONConfig): List<ConfigViolation> {
+    override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
         config.getDoubleOrNull("multiplier")

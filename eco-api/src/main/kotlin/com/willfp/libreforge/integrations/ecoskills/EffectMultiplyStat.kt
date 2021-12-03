@@ -1,6 +1,6 @@
 package com.willfp.libreforge.integrations.ecoskills
 
-import com.willfp.eco.core.config.interfaces.JSONConfig
+import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.ecoskills.api.EcoSkillsAPI
 import com.willfp.ecoskills.api.modifier.ModifierOperation
 import com.willfp.ecoskills.api.modifier.PlayerStatModifier
@@ -15,7 +15,7 @@ class EffectMultiplyStat : Effect("multiply_stat") {
 
     override fun handleEnable(
         player: Player,
-        config: JSONConfig
+        config: Config
     ) {
         api.addStatModifier(
             player,
@@ -35,7 +35,7 @@ class EffectMultiplyStat : Effect("multiply_stat") {
         )
     }
 
-    override fun validateConfig(config: JSONConfig): List<ConfigViolation> {
+    override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
         config.getStringOrNull("stat")

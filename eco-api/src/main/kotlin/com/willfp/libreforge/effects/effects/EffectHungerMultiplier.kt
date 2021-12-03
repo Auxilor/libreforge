@@ -1,6 +1,6 @@
 package com.willfp.libreforge.effects.effects
 
-import com.willfp.eco.core.config.interfaces.JSONConfig
+import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.mcmmo.McmmoManager
 import com.willfp.eco.util.NumberUtils
 import com.willfp.libreforge.ConfigViolation
@@ -17,7 +17,7 @@ import kotlin.math.ceil
 class EffectHungerMultiplier : Effect("hunger_multiplier") {
     private val modifiers = mutableMapOf<UUID, MutableList<MultiplierModifier>>()
 
-    override fun handleEnable(player: Player, config: JSONConfig) {
+    override fun handleEnable(player: Player, config: Config) {
         val registeredModifiers = modifiers[player.uniqueId] ?: mutableListOf()
         val uuid = this.getUUID(player.getEffectAmount(this))
         registeredModifiers.removeIf { it.uuid == uuid }
@@ -66,7 +66,7 @@ class EffectHungerMultiplier : Effect("hunger_multiplier") {
         }
     }
 
-    override fun validateConfig(config: JSONConfig): List<ConfigViolation> {
+    override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
         config.getDoubleOrNull("multiplier")

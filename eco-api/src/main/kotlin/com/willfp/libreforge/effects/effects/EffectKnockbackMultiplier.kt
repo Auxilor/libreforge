@@ -1,6 +1,6 @@
 package com.willfp.libreforge.effects.effects
 
-import com.willfp.eco.core.config.interfaces.JSONConfig
+import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.getEffectAmount
@@ -11,7 +11,7 @@ import org.bukkit.entity.Player
 class EffectKnockbackMultiplier : Effect("knockback_multiplier") {
     override fun handleEnable(
         player: Player,
-        config: JSONConfig
+        config: Config
     ) {
         val attribute = player.getAttribute(Attribute.GENERIC_ATTACK_KNOCKBACK) ?: return
         val uuid = this.getUUID(player.getEffectAmount(this))
@@ -38,7 +38,7 @@ class EffectKnockbackMultiplier : Effect("knockback_multiplier") {
         )
     }
 
-    override fun validateConfig(config: JSONConfig): List<ConfigViolation> {
+    override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
         config.getDoubleOrNull("multiplier")

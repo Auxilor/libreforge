@@ -1,6 +1,6 @@
 package com.willfp.libreforge.conditions
 
-import com.willfp.eco.core.config.interfaces.JSONConfig
+import com.willfp.eco.core.config.interfaces.Config
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
 
@@ -24,6 +24,6 @@ abstract class Condition(
      */
     abstract fun isConditionMet(
         player: Player,
-        config: JSONConfig
+        config: Config
     ): Boolean
 }

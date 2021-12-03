@@ -1,6 +1,6 @@
 package com.willfp.libreforge.effects.effects
 
-import com.willfp.eco.core.config.interfaces.JSONConfig
+import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
@@ -21,7 +21,7 @@ class EffectBleed : Effect(
         TriggerParameter.VICTIM
     )
 ) {
-    override fun handle(data: TriggerData, config: JSONConfig) {
+    override fun handle(data: TriggerData, config: Config) {
         val victim = data.victim ?: return
 
         val damage = config.getDouble("damage")
@@ -40,7 +40,7 @@ class EffectBleed : Effect(
         }.runTaskTimer(interval.toLong(), interval.toLong())
     }
 
-    override fun validateConfig(config: JSONConfig): List<ConfigViolation> {
+    override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
         config.getIntOrNull("amount")

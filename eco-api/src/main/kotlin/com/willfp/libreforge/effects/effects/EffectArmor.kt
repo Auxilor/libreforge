@@ -1,6 +1,6 @@
 package com.willfp.libreforge.effects.effects
 
-import com.willfp.eco.core.config.interfaces.JSONConfig
+import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.getEffectAmount
@@ -9,7 +9,7 @@ import org.bukkit.attribute.AttributeModifier
 import org.bukkit.entity.Player
 
 class EffectArmor : Effect("armor") {
-    override fun handleEnable(player: Player, config: JSONConfig) {
+    override fun handleEnable(player: Player, config: Config) {
         val attribute = player.getAttribute(Attribute.GENERIC_ARMOR) ?: return
         val uuid = this.getUUID(player.getEffectAmount(this))
         attribute.removeModifier(AttributeModifier(uuid, this.id, 0.0, AttributeModifier.Operation.MULTIPLY_SCALAR_1))
@@ -35,7 +35,7 @@ class EffectArmor : Effect("armor") {
         )
     }
 
-    override fun validateConfig(config: JSONConfig): List<ConfigViolation> {
+    override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
         config.getIntOrNull("points")
