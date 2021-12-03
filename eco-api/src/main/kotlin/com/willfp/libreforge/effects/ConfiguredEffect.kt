@@ -1,7 +1,6 @@
 package com.willfp.libreforge.effects
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.filters.Filter
 import com.willfp.libreforge.triggers.Trigger
 
