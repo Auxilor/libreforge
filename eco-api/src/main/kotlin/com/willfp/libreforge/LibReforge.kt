@@ -19,6 +19,8 @@ private val holderProviders = mutableSetOf<HolderProvider>()
 private val previousStates: MutableMap<UUID, Iterable<Holder>> = WeakHashMap()
 private val holderCache = mutableMapOf<UUID, Iterable<Holder>>()
 
+typealias HolderProvider = (Player) -> Iterable<Holder>
+
 object LibReforge {
     @JvmStatic
     lateinit var plugin: EcoPlugin
@@ -110,7 +112,7 @@ fun Player.getHolders(): Iterable<Holder> {
 
     val holders = mutableListOf<Holder>()
     for (provider in holderProviders) {
-        holders.addAll(provider.providerHolders(this))
+        holders.addAll(provider(this))
     }
 
     holderCache[this.uniqueId] = holders
