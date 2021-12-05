@@ -5,7 +5,7 @@ import com.willfp.libreforge.conditions.Condition
 import org.bukkit.entity.Player
 
 
-class ConditionHasPermission : Condition("is_sneaking") {
+class ConditionHasPermission : Condition("has_permission") {
     override fun isConditionMet(player: Player, config: Config): Boolean {
         return player.hasPermission(config.getString("permission"))
     }
