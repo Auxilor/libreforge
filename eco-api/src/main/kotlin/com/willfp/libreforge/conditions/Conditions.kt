@@ -26,6 +26,9 @@ object Conditions {
     val IN_AIR: Condition = ConditionInAir()
     val IS_NIGHT: Condition = ConditionIsNight()
     val IS_STORM: Condition = ConditionIsStorm()
+    val PLACEHOLDER_EQUALS: Condition = ConditionPlaceholderEquals()
+    val PLACEHOLDER_GREATER_THAN: Condition = ConditionPlaceholderGreaterThan()
+    val PLACEHOLDER_LESS_THAN: Condition = ConditionPlaceholderLessThan()
 
     /**
      * Get condition matching id.
