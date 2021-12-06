@@ -6,7 +6,6 @@ import com.willfp.libreforge.filters.FilterComponent
 import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.entity.Boss
 import org.bukkit.entity.ElderGuardian
-import org.bukkit.entity.LivingEntity
 import org.bukkit.persistence.PersistentDataType
 
 class FilterOnlyBosses: FilterComponent() {

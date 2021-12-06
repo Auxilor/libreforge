@@ -1,7 +1,6 @@
 package com.willfp.libreforge.triggers.wrappers
 
 import com.willfp.libreforge.triggers.WrappedEvent
-import org.bukkit.event.entity.EntityRegainHealthEvent
 import org.bukkit.event.player.PlayerExpChangeEvent
 
 class WrappedXpEvent(

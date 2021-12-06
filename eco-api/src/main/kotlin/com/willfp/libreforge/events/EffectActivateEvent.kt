@@ -58,7 +58,7 @@ class EffectActivateEvent(
          */
         @JvmStatic
         fun getHandlerList(): HandlerList {
-            return HANDLERS;
+            return HANDLERS
         }
     }
 }
