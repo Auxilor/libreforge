@@ -2,7 +2,6 @@ package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.integrations.economy.EconomyManager
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData

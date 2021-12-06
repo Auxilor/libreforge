@@ -33,6 +33,7 @@ object Effects {
     val GIVE_XP: Effect = EffectGiveXp()
     val XP_MULTIPLIER: Effect = EffectXpMultiplier()
     val BLEED: Effect = EffectBleed()
+    val ARROW_RING: Effect = EffectArrowRing()
 
     /**
      * Get effect matching id.
@@ -74,7 +75,7 @@ object Effects {
     @JvmStatic
     fun compile(config: Config, context: String): ConfiguredEffect? {
         val effect = config.getString("id").let {
-            val found = Effects.getByID(it)
+            val found = getByID(it)
             if (found == null) {
                 LibReforge.logViolation(
                     it,

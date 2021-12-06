@@ -7,7 +7,6 @@ import com.willfp.libreforge.updateEffects
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
-import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.event.weather.WeatherChangeEvent
 
 class ConditionIsStorm: Condition("is_storm") {

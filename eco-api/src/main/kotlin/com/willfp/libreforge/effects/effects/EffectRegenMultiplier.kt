@@ -2,22 +2,15 @@ package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.mcmmo.McmmoManager
-import com.willfp.eco.util.NumberUtils
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.MultiplierModifier
 import com.willfp.libreforge.effects.getEffectAmount
-import com.willfp.libreforge.triggers.TriggerData
-import com.willfp.libreforge.triggers.TriggerParameter
-import com.willfp.libreforge.triggers.Triggers
-import com.willfp.libreforge.triggers.wrappers.WrappedHungerEvent
 import com.willfp.libreforge.triggers.wrappers.WrappedRegenEvent
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityRegainHealthEvent
-import org.bukkit.event.entity.FoodLevelChangeEvent
 import java.util.UUID
-import kotlin.math.ceil
 
 class EffectRegenMultiplier : Effect("regen_multiplier") {
     private val modifiers = mutableMapOf<UUID, MutableList<MultiplierModifier>>()

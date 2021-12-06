@@ -2,9 +2,6 @@ package com.willfp.libreforge.filters
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.triggers.TriggerData
-import org.bukkit.block.Block
-import org.bukkit.event.entity.EntityDamageEvent
-import java.util.function.Predicate
 
 class ConfiguredFilter(
     private val config: Config

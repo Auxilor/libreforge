@@ -7,7 +7,6 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
 import com.willfp.libreforge.triggers.wrappers.WrappedDamageEvent
-import org.bukkit.Bukkit
 
 class EffectDamageMultiplier : Effect(
     "damage_multiplier",

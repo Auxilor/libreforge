@@ -6,12 +6,6 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
-import org.bukkit.entity.Arrow
-import org.bukkit.util.Vector
-import java.util.concurrent.atomic.AtomicInteger
-import kotlin.math.PI
-import kotlin.math.cos
-import kotlin.math.sin
 
 
 class EffectBleed : Effect(
