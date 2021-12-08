@@ -25,6 +25,17 @@ abstract class Trigger(
 
     protected fun processTrigger(player: Player, data: TriggerData, forceHolders: Iterable<Holder>? = null) {
         for (holder in forceHolders ?: player.getHolders()) {
+            var areMet = true
+            for ((condition, config) in holder.conditions) {
+                if (!condition.isConditionMet(player, config)) {
+                    areMet = false
+                }
+            }
+
+            if (!areMet) {
+                continue
+            }
+
             for ((effect, config, filter, triggers) in holder.effects) {
                 if (NumberUtils.randFloat(0.0, 100.0) > (config.getDoubleOrNull("chance") ?: 100.0)) {
                     continue
