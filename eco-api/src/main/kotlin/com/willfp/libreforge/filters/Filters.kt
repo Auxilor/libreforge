@@ -1,9 +1,6 @@
 package com.willfp.libreforge.filters
 
-import com.willfp.libreforge.filters.filters.FilterBlocks
-import com.willfp.libreforge.filters.filters.FilterDamageCause
-import com.willfp.libreforge.filters.filters.FilterEntityType
-import com.willfp.libreforge.filters.filters.FilterOnlyBosses
+import com.willfp.libreforge.filters.filters.*
 
 object Filters {
     private val REGISTERED = mutableListOf<FilterComponent>()
@@ -12,6 +9,7 @@ object Filters {
     val ONLY_BOSSES: FilterComponent = FilterOnlyBosses()
     val BLOCKS: FilterComponent = FilterBlocks()
     val DAMAGE_CAUSE: FilterComponent = FilterDamageCause()
+    val ONLY_NON_BOSSES: FilterComponent = FilterOnlyNonBosses()
 
     /**
      * List of all registered filters.
