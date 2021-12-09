@@ -14,11 +14,9 @@ class FilterOnlyBosses: FilterComponent() {
 
         val onlyBosses = config.getBoolOrNull("onlyBosses") ?: false
 
-        if (!onlyBosses) {
-            return true
-        }
-
-        return entity is Boss || entity is ElderGuardian || entity.persistentDataContainer
+        val isBoss = entity is Boss || entity is ElderGuardian || entity.persistentDataContainer
             .has(NamespacedKeyUtils.create("ecobosses", "boss"), PersistentDataType.STRING)
+
+        return onlyBosses == isBoss
     }
 }
