@@ -1,6 +1,7 @@
 package com.willfp.libreforge.conditions.conditions
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.updateEffects
 import org.bukkit.entity.Player
@@ -27,12 +28,12 @@ class ConditionBelowY: Condition("below_y") {
         return player.location.y < config.getDouble("y")
     }
 
-    override fun validateConfig(config: Config): List<com.willfp.libreforge.ConfigViolation> {
-        val violations = mutableListOf<com.willfp.libreforge.ConfigViolation>()
+    override fun validateConfig(config: Config): List<ConfigViolation> {
+        val violations = mutableListOf<ConfigViolation>()
 
         config.getDoubleOrNull("y")
             ?: violations.add(
-                com.willfp.libreforge.ConfigViolation(
+                ConfigViolation(
                     "y",
                     "You must specify the y level!"
                 )
