@@ -7,7 +7,7 @@ import com.willfp.libreforge.events.EffectActivateEvent
 import com.willfp.libreforge.getHolders
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
-import java.util.*
+import java.util.Objects
 
 abstract class Trigger(
     val id: String,

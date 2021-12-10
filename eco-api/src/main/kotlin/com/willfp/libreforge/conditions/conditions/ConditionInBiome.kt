@@ -1,6 +1,7 @@
 package com.willfp.libreforge.conditions.conditions
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.updateEffects
 import org.bukkit.entity.Player
@@ -31,12 +32,12 @@ class ConditionInBiome: Condition("in_biome") {
         ).name.lowercase())
     }
 
-    override fun validateConfig(config: Config): List<com.willfp.libreforge.ConfigViolation> {
-        val violations = mutableListOf<com.willfp.libreforge.ConfigViolation>()
+    override fun validateConfig(config: Config): List<ConfigViolation> {
+        val violations = mutableListOf<ConfigViolation>()
 
         config.getStringsOrNull("biomes", false)
             ?: violations.add(
-                com.willfp.libreforge.ConfigViolation(
+                ConfigViolation(
                     "biomes",
                     "You must specify the biomes!"
                 )

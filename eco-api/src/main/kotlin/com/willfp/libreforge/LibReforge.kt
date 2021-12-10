@@ -13,7 +13,8 @@ import com.willfp.libreforge.triggers.Triggers
 import org.apache.commons.lang.StringUtils
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
-import java.util.*
+import java.util.UUID
+import java.util.WeakHashMap
 
 private val holderProviders = mutableSetOf<HolderProvider>()
 private val previousStates: MutableMap<UUID, Iterable<Holder>> = WeakHashMap()

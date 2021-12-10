@@ -8,7 +8,7 @@ import com.willfp.libreforge.effects.getEffectAmount
 import org.bukkit.entity.Player
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
-import java.util.*
+import java.util.UUID
 
 @Suppress("UNCHECKED_CAST")
 class EffectPermanentPotionEffect : Effect("permanent_potion_effect") {

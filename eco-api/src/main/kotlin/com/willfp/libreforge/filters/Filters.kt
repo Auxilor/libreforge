@@ -1,7 +1,12 @@
 package com.willfp.libreforge.filters
 
-import com.willfp.libreforge.filters.filters.*
+import com.willfp.libreforge.filters.filters.FilterBlocks
+import com.willfp.libreforge.filters.filters.FilterDamageCause
+import com.willfp.libreforge.filters.filters.FilterEntityType
+import com.willfp.libreforge.filters.filters.FilterOnlyBosses
+import com.willfp.libreforge.filters.filters.FilterOnlyNonBosses
 
+@Suppress("UNUSED")
 object Filters {
     private val REGISTERED = mutableListOf<FilterComponent>()
 
