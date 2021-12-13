@@ -11,6 +11,6 @@ class FilterEntityType: FilterComponent() {
         val entityNames = config.getStringsOrNull("entities", false)
             ?.map { it.lowercase() } ?: emptyList()
 
-        return entityNames.contains(entity.type.name.lowercase())
+        return entityNames.contains(entity.type.name.lowercase()) || entityNames.contains(entity.category.name.lowercase())
     }
 }
