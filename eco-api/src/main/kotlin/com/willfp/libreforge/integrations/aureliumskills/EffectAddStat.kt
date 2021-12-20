@@ -15,7 +15,7 @@ class EffectAddStat : Effect("add_stat") {
         AureliumAPI.addStatModifier(
             player,
             this.getNamespacedKey(player.getEffectAmount(this)).key,
-            Stats.valueOf(config.getString("stat", false)),
+            Stats.valueOf(config.getString("stat", false).uppercase()),
             config.getDouble("amount")
         )
     }
