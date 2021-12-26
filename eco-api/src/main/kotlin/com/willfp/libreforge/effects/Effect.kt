@@ -134,3 +134,5 @@ data class ConfiguredEffect(
     val filter: Filter,
     val triggers: Collection<Trigger>
 )
+
+data class MultiplierModifier(val uuid: UUID, val multiplier: Double)
