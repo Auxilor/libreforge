@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.util.PlayerUtils
 import com.willfp.eco.util.StringUtils
 import com.willfp.libreforge.ConfigurableProperty
+import com.willfp.libreforge.filters.Filter
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.NamespacedKey
@@ -126,3 +127,10 @@ abstract class Effect(
         // Override when needed
     }
 }
+
+data class ConfiguredEffect(
+    val effect: Effect,
+    val args: Config,
+    val filter: Filter,
+    val triggers: Collection<Trigger>
+)

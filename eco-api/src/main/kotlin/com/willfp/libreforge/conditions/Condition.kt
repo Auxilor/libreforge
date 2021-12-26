@@ -1,12 +1,13 @@
 package com.willfp.libreforge.conditions
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ConfigurableProperty
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
 
 abstract class Condition(
     id: String
-) : com.willfp.libreforge.ConfigurableProperty(id), Listener {
+) : ConfigurableProperty(id), Listener {
     init {
         postInit()
     }
@@ -27,3 +28,5 @@ abstract class Condition(
         config: Config
     ): Boolean
 }
+
+data class ConfiguredCondition(val condition: Condition, val config: Config)
