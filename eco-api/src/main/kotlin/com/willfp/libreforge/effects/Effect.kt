@@ -60,7 +60,7 @@ abstract class Effect(
             return
         }
 
-        cooldownTracker[player.uniqueId] = (config.getDouble("cooldown") * 1000L).toLong()
+        cooldownTracker[player.uniqueId] = System.currentTimeMillis() + (config.getDouble("cooldown") * 1000L).toLong()
     }
 
     /**

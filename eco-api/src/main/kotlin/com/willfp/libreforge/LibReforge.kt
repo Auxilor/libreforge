@@ -6,6 +6,7 @@ import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.integrations.IntegrationLoader
 import com.willfp.eco.util.ListUtils
 import com.willfp.libreforge.conditions.Conditions
+import com.willfp.libreforge.conditions.MovementConditionListener
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.integrations.aureliumskills.AureliumSkillsIntegration
 import com.willfp.libreforge.integrations.ecoskills.EcoSkillsIntegration
@@ -52,6 +53,7 @@ object LibReforge {
     @JvmStatic
     fun enable(plugin: EcoPlugin) {
         plugin.eventManager.registerListener(TridentHolderDataAttacher(plugin))
+        plugin.eventManager.registerListener(MovementConditionListener())
         for (condition in Conditions.values()) {
             plugin.eventManager.registerListener(condition)
         }
