@@ -12,8 +12,7 @@ import org.bukkit.potion.PotionEffectType
 class EffectPotionEffect : Effect(
     "potion_effect",
     applicableTriggers = Triggers.withParameters(
-        TriggerParameter.PLAYER,
-        TriggerParameter.VICTIM
+        TriggerParameter.PLAYER
     )
 ) {
     override fun handle(data: TriggerData, config: Config) {
