@@ -11,7 +11,7 @@ import com.willfp.libreforge.triggers.wrappers.WrappedHungerEvent
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.FoodLevelChangeEvent
-import java.util.UUID
+import java.util.*
 import kotlin.math.ceil
 
 class EffectHungerMultiplier : Effect("hunger_multiplier") {
@@ -56,6 +56,10 @@ class EffectHungerMultiplier : Effect("hunger_multiplier") {
         }
 
         val wrapped = WrappedHungerEvent(event)
+
+        if (wrapped.amount > 0) {
+            return
+        }
 
         if (multiplier < 1) {
             if (NumberUtils.randFloat(0.0, 1.0) > multiplier) {
