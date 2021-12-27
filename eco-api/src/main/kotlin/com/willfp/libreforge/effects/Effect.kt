@@ -11,7 +11,7 @@ import org.bukkit.NamespacedKey
 import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
-import java.util.UUID
+import java.util.*
 import kotlin.math.ceil
 
 abstract class Effect(
@@ -132,7 +132,8 @@ data class ConfiguredEffect(
     val effect: Effect,
     val args: Config,
     val filter: Filter,
-    val triggers: Collection<Trigger>
+    val triggers: Collection<Trigger>,
+    val uuid: UUID
 )
 
 data class MultiplierModifier(val uuid: UUID, val multiplier: Double)
