@@ -5,30 +5,12 @@ import com.google.common.collect.ImmutableList
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.LibReforge
-import com.willfp.libreforge.effects.effects.EffectArmor
-import com.willfp.libreforge.effects.effects.EffectArmorToughness
-import com.willfp.libreforge.effects.effects.EffectArrowRing
-import com.willfp.libreforge.effects.effects.EffectAttackSpeedMultiplier
-import com.willfp.libreforge.effects.effects.EffectBleed
-import com.willfp.libreforge.effects.effects.EffectBonusHealth
-import com.willfp.libreforge.effects.effects.EffectCritMultiplier
-import com.willfp.libreforge.effects.effects.EffectDamageMultiplier
-import com.willfp.libreforge.effects.effects.EffectGiveMoney
-import com.willfp.libreforge.effects.effects.EffectGiveXp
-import com.willfp.libreforge.effects.effects.EffectHungerMultiplier
-import com.willfp.libreforge.effects.effects.EffectKnockbackMultiplier
-import com.willfp.libreforge.effects.effects.EffectMovementSpeedMultiplier
-import com.willfp.libreforge.effects.effects.EffectPermanentPotionEffect
-import com.willfp.libreforge.effects.effects.EffectPotionEffect
-import com.willfp.libreforge.effects.effects.EffectRegenMultiplier
-import com.willfp.libreforge.effects.effects.EffectRunCommand
-import com.willfp.libreforge.effects.effects.EffectSpawnMobs
-import com.willfp.libreforge.effects.effects.EffectStrikeLightning
-import com.willfp.libreforge.effects.effects.EffectXpMultiplier
+import com.willfp.libreforge.effects.effects.*
 import com.willfp.libreforge.filters.ConfiguredFilter
 import com.willfp.libreforge.filters.EmptyFilter
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.Triggers
+import java.util.*
 
 @Suppress("UNUSED")
 object Effects {
@@ -184,6 +166,6 @@ object Effects {
             triggers
         } ?: return null
 
-        return ConfiguredEffect(effect, args, filter, triggers)
+        return ConfiguredEffect(effect, args, filter, triggers, UUID.randomUUID())
     }
 }

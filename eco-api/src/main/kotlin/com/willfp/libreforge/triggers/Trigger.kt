@@ -7,7 +7,9 @@ import com.willfp.libreforge.events.EffectActivateEvent
 import com.willfp.libreforge.getHolders
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
-import java.util.Objects
+import java.util.*
+
+private val everyHandler = mutableMapOf<UUID, MutableMap<UUID, Int>>()
 
 abstract class Trigger(
     val id: String,
@@ -36,9 +38,30 @@ abstract class Trigger(
                 continue
             }
 
-            for ((effect, config, filter, triggers) in holder.effects) {
+            for ((effect, config, filter, triggers, uuid) in holder.effects) {
                 if (NumberUtils.randFloat(0.0, 100.0) > (config.getDoubleOrNull("chance") ?: 100.0)) {
                     continue
+                }
+
+                val every = config.getIntOrNull("every") ?: 0
+
+                if (every > 0) {
+                    val everyMap = everyHandler[player.uniqueId] ?: mutableMapOf()
+                    var current = everyMap[uuid] ?: 0
+
+                    if (current != 0) {
+                        current++
+
+                        if (current >= every) {
+                            current = 0
+                        }
+
+                        everyHandler[player.uniqueId] = everyMap.apply {
+                            this[uuid] = current
+                        }
+
+                        continue
+                    }
                 }
 
                 if (!triggers.contains(this)) {
