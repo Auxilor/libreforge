@@ -36,6 +36,7 @@ object Effects {
     val XP_MULTIPLIER: Effect = EffectXpMultiplier()
     val BLEED: Effect = EffectBleed()
     val ARROW_RING: Effect = EffectArrowRing()
+    val FOOD_MULTIPLIER: Effect = EffectFoodMultiplier()
 
     /**
      * Get effect matching id.
