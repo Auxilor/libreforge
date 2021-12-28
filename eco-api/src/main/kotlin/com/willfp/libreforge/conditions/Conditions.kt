@@ -5,25 +5,7 @@ import com.google.common.collect.ImmutableList
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.LibReforge
-import com.willfp.libreforge.conditions.conditions.ConditionAboveHealthPercent
-import com.willfp.libreforge.conditions.conditions.ConditionAboveHungerPercent
-import com.willfp.libreforge.conditions.conditions.ConditionAboveXPLevel
-import com.willfp.libreforge.conditions.conditions.ConditionAboveY
-import com.willfp.libreforge.conditions.conditions.ConditionBelowHealthPercent
-import com.willfp.libreforge.conditions.conditions.ConditionBelowHungerPercent
-import com.willfp.libreforge.conditions.conditions.ConditionBelowXPLevel
-import com.willfp.libreforge.conditions.conditions.ConditionBelowY
-import com.willfp.libreforge.conditions.conditions.ConditionHasPermission
-import com.willfp.libreforge.conditions.conditions.ConditionInAir
-import com.willfp.libreforge.conditions.conditions.ConditionInBiome
-import com.willfp.libreforge.conditions.conditions.ConditionInWater
-import com.willfp.libreforge.conditions.conditions.ConditionInWorld
-import com.willfp.libreforge.conditions.conditions.ConditionIsNight
-import com.willfp.libreforge.conditions.conditions.ConditionIsSneaking
-import com.willfp.libreforge.conditions.conditions.ConditionIsStorm
-import com.willfp.libreforge.conditions.conditions.ConditionPlaceholderEquals
-import com.willfp.libreforge.conditions.conditions.ConditionPlaceholderGreaterThan
-import com.willfp.libreforge.conditions.conditions.ConditionPlaceholderLessThan
+import com.willfp.libreforge.conditions.conditions.*
 
 @Suppress("UNUSED")
 object Conditions {
@@ -48,6 +30,8 @@ object Conditions {
     val PLACEHOLDER_EQUALS: Condition = ConditionPlaceholderEquals()
     val PLACEHOLDER_GREATER_THAN: Condition = ConditionPlaceholderGreaterThan()
     val PLACEHOLDER_LESS_THAN: Condition = ConditionPlaceholderLessThan()
+    val ABOVE_BALANCE: Condition = ConditionAboveBalance()
+    val BELOW_BALANCE: Condition = ConditionBelowBalance()
 
     /**
      * Get condition matching id.
