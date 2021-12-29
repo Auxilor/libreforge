@@ -27,6 +27,8 @@ class EffectArrowRing : Effect(
         val amount = config.getInt("amount")
         val height = config.getDouble("height")
         val radius = config.getDouble("radius")
+        val damage = config.getDoubleOrNull("arrow-damage")
+        val flameTicks = config.getIntOrNull("burning-ticks")
 
         val apex = location.clone().add(0.0, height, 0.0)
 
@@ -39,10 +41,17 @@ class EffectArrowRing : Effect(
                 0.0,
                 cos(angle * i) * radius
             )
-            world.spawn(
+            val arrow = world.spawn(
                 spawn,
                 Arrow::class.java
-            ).velocity = Vector(0, -1, 0)
+            )
+            arrow.velocity = Vector(0, -1, 0)
+            if (damage != null) {
+                arrow.damage = damage
+            }
+            if (flameTicks != null) {
+                arrow.fireTicks = flameTicks
+            }
         }
     }
 
