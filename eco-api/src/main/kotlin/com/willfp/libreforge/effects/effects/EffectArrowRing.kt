@@ -27,8 +27,8 @@ class EffectArrowRing : Effect(
         val amount = config.getInt("amount")
         val height = config.getDouble("height")
         val radius = config.getDouble("radius")
-        val damage = config.getDoubleOrNull("arrow-damage")
-        val flameTicks = config.getIntOrNull("burning-ticks")
+        val damage = config.getDoubleOrNull("arrow_damage")
+        val flameTicks = config.getIntOrNull("fire_ticks")
 
         val apex = location.clone().add(0.0, height, 0.0)
 
