@@ -1,21 +1,6 @@
 package com.willfp.libreforge.triggers
 
-import com.willfp.libreforge.triggers.triggers.TriggerAltClick
-import com.willfp.libreforge.triggers.triggers.TriggerBowAttack
-import com.willfp.libreforge.triggers.triggers.TriggerFallDamage
-import com.willfp.libreforge.triggers.triggers.TriggerGainXp
-import com.willfp.libreforge.triggers.triggers.TriggerHeal
-import com.willfp.libreforge.triggers.triggers.TriggerJump
-import com.willfp.libreforge.triggers.triggers.TriggerKill
-import com.willfp.libreforge.triggers.triggers.TriggerLoseHunger
-import com.willfp.libreforge.triggers.triggers.TriggerMeleeAttack
-import com.willfp.libreforge.triggers.triggers.TriggerMineBlock
-import com.willfp.libreforge.triggers.triggers.TriggerProjectileHit
-import com.willfp.libreforge.triggers.triggers.TriggerProjectileLaunch
-import com.willfp.libreforge.triggers.triggers.TriggerShieldBlock
-import com.willfp.libreforge.triggers.triggers.TriggerTakeDamage
-import com.willfp.libreforge.triggers.triggers.TriggerTakeEntityDamage
-import com.willfp.libreforge.triggers.triggers.TriggerTridentAttack
+import com.willfp.libreforge.triggers.triggers.*
 
 @Suppress("UNUSED")
 object Triggers {
@@ -37,6 +22,8 @@ object Triggers {
     val LOSE_HUNGER: Trigger = TriggerLoseHunger()
     val GAIN_XP: Trigger = TriggerGainXp()
     val SHIELD_BLOCK: Trigger = TriggerShieldBlock()
+    val BLOCK_ITEM_DROP: Trigger = TriggerBlockItemDrop()
+    val ENTITY_ITEM_DROP: Trigger = TriggerEntityItemDrop()
 
     fun values(): Set<Trigger> {
         return BY_ID.values.toSet()
