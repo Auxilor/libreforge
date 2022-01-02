@@ -13,9 +13,10 @@ import com.willfp.libreforge.integrations.ecoskills.EcoSkillsIntegration
 import com.willfp.libreforge.triggers.Triggers
 import org.apache.commons.lang.StringUtils
 import org.bukkit.Bukkit
+import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
-import java.util.UUID
-import java.util.WeakHashMap
+import org.bukkit.entity.Projectile
+import java.util.*
 
 private val holderProviders = mutableSetOf<HolderProvider>()
 private val previousStates: MutableMap<UUID, Iterable<Holder>> = WeakHashMap()
@@ -201,5 +202,13 @@ fun Player.updateEffects() {
                 effect.disableForPlayer(this)
             }
         }
+    }
+}
+
+fun Entity.tryAsPlayer(): Player? {
+    return when (this) {
+        is Projectile -> this.shooter as? Player
+        is Player -> this
+        else -> null
     }
 }

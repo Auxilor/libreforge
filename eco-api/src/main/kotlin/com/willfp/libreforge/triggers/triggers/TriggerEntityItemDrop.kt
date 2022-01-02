@@ -3,11 +3,11 @@ package com.willfp.libreforge.triggers.triggers
 import com.willfp.eco.core.drops.DropQueue
 import com.willfp.eco.core.events.EntityDeathByEntityEvent
 import com.willfp.eco.core.integrations.mcmmo.McmmoManager
-import com.willfp.ecoskills.tryAsPlayer
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.wrappers.WrappedEntityDropEvent
+import com.willfp.libreforge.tryAsPlayer
 import org.bukkit.event.EventHandler
 
 
