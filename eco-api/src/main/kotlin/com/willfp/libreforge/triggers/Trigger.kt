@@ -1,5 +1,6 @@
 package com.willfp.libreforge.triggers
 
+import com.willfp.eco.core.integrations.economy.EconomyManager
 import com.willfp.eco.util.NumberUtils
 import com.willfp.libreforge.Holder
 import com.willfp.libreforge.LibReforge
@@ -75,6 +76,15 @@ abstract class Trigger(
                 if (effect.getCooldown(player) > 0) {
                     effect.sendCooldownMessage(player)
                     continue
+                }
+
+                if (config.has("cost")) {
+                    if (!EconomyManager.hasAmount(player, config.getDouble("cost"))) {
+                        effect.sendCannotAffordMessage(player, config.getDouble("cost"))
+                        continue
+                    }
+
+                    EconomyManager.removeMoney(player, config.getDouble("cost"))
                 }
 
                 val activateEvent = EffectActivateEvent(player, holder, effect)
