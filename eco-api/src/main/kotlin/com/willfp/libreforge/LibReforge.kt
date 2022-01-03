@@ -16,6 +16,7 @@ import org.bukkit.Bukkit
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
+import org.bukkit.entity.Tameable
 import java.util.*
 
 private val holderProviders = mutableSetOf<HolderProvider>()
@@ -209,6 +210,7 @@ fun Entity.tryAsPlayer(): Player? {
     return when (this) {
         is Projectile -> this.shooter as? Player
         is Player -> this
+        is Tameable -> this.owner as? Player
         else -> null
     }
 }
