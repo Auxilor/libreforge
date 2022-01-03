@@ -19,7 +19,7 @@ abstract class Effect(
     val supportsFilters: Boolean = false,
     val applicableTriggers: Collection<Trigger> = emptyList()
 ) : ConfigurableProperty(id), Listener {
-    private val cooldownTracker = mutableMapOf<UUID, Long>()
+    private val cooldownTracker = mutableMapOf<UUID, MutableMap<UUID, Long>>()
 
     init {
         postInit()
@@ -29,15 +29,15 @@ abstract class Effect(
         Effects.addNewEffect(this)
     }
 
-    fun getCooldown(player: Player): Int {
-        val endTime = cooldownTracker[player.uniqueId] ?: return 0
+    fun getCooldown(player: Player, uuid: UUID): Int {
+        val endTime = (cooldownTracker[player.uniqueId] ?: return 0)[uuid] ?: return 0
         val msLeft = endTime - System.currentTimeMillis()
         val secondsLeft = ceil(msLeft.toDouble() / 1000).toLong()
         return secondsLeft.toInt()
     }
 
-    fun sendCooldownMessage(player: Player) {
-        val cooldown = getCooldown(player)
+    fun sendCooldownMessage(player: Player, uuid: UUID) {
+        val cooldown = getCooldown(player, uuid)
 
         val message = plugin.langYml.getMessage("on-cooldown").replace("%seconds%", cooldown.toString())
         if (plugin.configYml.getBool("cooldown.in-actionbar")) {
@@ -74,12 +74,13 @@ abstract class Effect(
         }
     }
 
-    fun resetCooldown(player: Player, config: Config) {
+    fun resetCooldown(player: Player, config: Config, uuid: UUID) {
         if (!config.has("cooldown")) {
             return
         }
-
-        cooldownTracker[player.uniqueId] = System.currentTimeMillis() + (config.getDouble("cooldown") * 1000L).toLong()
+        val current = cooldownTracker[player.uniqueId] ?: mutableMapOf()
+        current[uuid] = System.currentTimeMillis() + (config.getDouble("cooldown") * 1000L).toLong()
+        cooldownTracker[player.uniqueId] = current
     }
 
     /**

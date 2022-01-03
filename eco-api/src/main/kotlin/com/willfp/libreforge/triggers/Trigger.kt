@@ -73,8 +73,8 @@ abstract class Trigger(
                     continue
                 }
 
-                if (effect.getCooldown(player) > 0) {
-                    effect.sendCooldownMessage(player)
+                if (effect.getCooldown(player, uuid) > 0) {
+                    effect.sendCooldownMessage(player, uuid)
                     continue
                 }
 
@@ -91,7 +91,7 @@ abstract class Trigger(
                 this.plugin.server.pluginManager.callEvent(activateEvent)
 
                 if (!activateEvent.isCancelled) {
-                    effect.resetCooldown(player, config)
+                    effect.resetCooldown(player, config, uuid)
 
                     effect.handle(data, config)
                 }
