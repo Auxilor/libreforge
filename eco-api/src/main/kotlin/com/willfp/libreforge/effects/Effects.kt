@@ -38,6 +38,7 @@ object Effects {
     val ARROW_RING: Effect = EffectArrowRing()
     val FOOD_MULTIPLIER: Effect = EffectFoodMultiplier()
     val AUTOSMELT: Effect = EffectAutosmelt()
+    val TELEPORT: Effect = EffectTeleport()
 
     /**
      * Get effect matching id.
