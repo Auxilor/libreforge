@@ -32,6 +32,9 @@ object Conditions {
     val PLACEHOLDER_LESS_THAN: Condition = ConditionPlaceholderLessThan()
     val ABOVE_BALANCE: Condition = ConditionAboveBalance()
     val BELOW_BALANCE: Condition = ConditionBelowBalance()
+    val IS_GLIDING: Condition = ConditionIsGliding()
+    val ON_FIRE: Condition = ConditionOnFire()
+    val STANDING_ON_BLOCK: Condition = ConditionStandingOnBlock()
 
     /**
      * Get condition matching id.
