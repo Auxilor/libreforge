@@ -9,8 +9,8 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.FoodLevelChangeEvent
 
-class TriggerLoseHunger : Trigger(
-    "lose_hunger", listOf(
+class TriggerGainHunger : Trigger(
+    "gain_hunger", listOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT
     )
@@ -27,7 +27,7 @@ class TriggerLoseHunger : Trigger(
             return
         }
 
-        if (event.foodLevel > player.foodLevel) {
+        if (event.foodLevel < player.foodLevel) {
             return
         }
 

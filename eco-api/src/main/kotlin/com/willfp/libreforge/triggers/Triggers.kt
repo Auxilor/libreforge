@@ -1,6 +1,30 @@
 package com.willfp.libreforge.triggers
 
-import com.willfp.libreforge.triggers.triggers.*
+import com.willfp.libreforge.triggers.triggers.TriggerAltClick
+import com.willfp.libreforge.triggers.triggers.TriggerBlockItemDrop
+import com.willfp.libreforge.triggers.triggers.TriggerBowAttack
+import com.willfp.libreforge.triggers.triggers.TriggerEntityItemDrop
+import com.willfp.libreforge.triggers.triggers.TriggerFallDamage
+import com.willfp.libreforge.triggers.triggers.TriggerGainHunger
+import com.willfp.libreforge.triggers.triggers.TriggerGainXp
+import com.willfp.libreforge.triggers.triggers.TriggerHeal
+import com.willfp.libreforge.triggers.triggers.TriggerJump
+import com.willfp.libreforge.triggers.triggers.TriggerKill
+import com.willfp.libreforge.triggers.triggers.TriggerLoseHunger
+import com.willfp.libreforge.triggers.triggers.TriggerMeleeAttack
+import com.willfp.libreforge.triggers.triggers.TriggerMineBlock
+import com.willfp.libreforge.triggers.triggers.TriggerMove
+import com.willfp.libreforge.triggers.triggers.TriggerProjectileHit
+import com.willfp.libreforge.triggers.triggers.TriggerProjectileLaunch
+import com.willfp.libreforge.triggers.triggers.TriggerShieldBlock
+import com.willfp.libreforge.triggers.triggers.TriggerSwapHands
+import com.willfp.libreforge.triggers.triggers.TriggerSwing
+import com.willfp.libreforge.triggers.triggers.TriggerTakeDamage
+import com.willfp.libreforge.triggers.triggers.TriggerTakeEntityDamage
+import com.willfp.libreforge.triggers.triggers.TriggerToggleFlight
+import com.willfp.libreforge.triggers.triggers.TriggerToggleSneak
+import com.willfp.libreforge.triggers.triggers.TriggerToggleSprint
+import com.willfp.libreforge.triggers.triggers.TriggerTridentAttack
 
 @Suppress("UNUSED")
 object Triggers {
@@ -24,6 +48,13 @@ object Triggers {
     val SHIELD_BLOCK: Trigger = TriggerShieldBlock()
     val BLOCK_ITEM_DROP: Trigger = TriggerBlockItemDrop()
     val ENTITY_ITEM_DROP: Trigger = TriggerEntityItemDrop()
+    val GAIN_HUNGER: Trigger = TriggerGainHunger()
+    val MOVE: Trigger = TriggerMove()
+    val SWAP_HANDS: Trigger = TriggerSwapHands()
+    val SWING: Trigger = TriggerSwing()
+    val TOGGLE_FLIGHT: Trigger = TriggerToggleFlight()
+    val TOGGLE_SNEAK: Trigger = TriggerToggleSneak()
+    val TOGGLE_SPRINT: Trigger = TriggerToggleSprint()
 
     fun values(): Set<Trigger> {
         return BY_ID.values.toSet()
