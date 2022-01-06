@@ -4,38 +4,27 @@ import com.willfp.eco.core.integrations.mcmmo.McmmoManager
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import com.willfp.libreforge.triggers.wrappers.WrappedHungerEvent
-import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
-import org.bukkit.event.entity.FoodLevelChangeEvent
+import org.bukkit.event.player.PlayerToggleSprintEvent
 
-class TriggerLoseHunger : Trigger(
-    "lose_hunger", listOf(
+class TriggerToggleSprint : Trigger(
+    "toggle_sprint", listOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.EVENT
+        TriggerParameter.LOCATION
     )
 ) {
     @EventHandler(ignoreCancelled = true)
-    fun handle(event: FoodLevelChangeEvent) {
+    fun handle(event: PlayerToggleSprintEvent) {
         if (McmmoManager.isFake(event)) {
             return
         }
-
-        val player = event.entity
-
-        if (player !is Player) {
-            return
-        }
-
-        if (event.foodLevel > player.foodLevel) {
-            return
-        }
+        val player = event.player
 
         this.processTrigger(
             player,
             TriggerData(
                 player = player,
-                event = WrappedHungerEvent(event)
+                location = player.location
             )
         )
     }
