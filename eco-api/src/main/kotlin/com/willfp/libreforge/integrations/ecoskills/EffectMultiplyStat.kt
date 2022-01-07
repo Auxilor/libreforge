@@ -21,7 +21,7 @@ class EffectMultiplyStat : Effect("multiply_stat") {
             player,
             PlayerStatModifier(
                 this.getNamespacedKey(player.getEffectAmount(this)),
-                Stats.getByID(config.getString("stat", false)) ?: Stats.STRENGTH,
+                Stats.getByID(config.getString("stat")) ?: Stats.STRENGTH,
                 config.getDouble("multiplier"),
                 ModifierOperation.MULTIPLY
             )
