@@ -9,14 +9,14 @@ import org.bukkit.entity.Player
 
 class ConditionPlaceholderLessThan : Condition("placeholder_less_than") {
     override fun isConditionMet(player: Player, config: Config): Boolean {
-        val value = PlaceholderManager.translatePlaceholders(config.getString("placeholder", false), player).toDoubleOrNull() ?: 0.0
+        val value = PlaceholderManager.translatePlaceholders(config.getString("placeholder"), player).toDoubleOrNull() ?: 0.0
         return value < config.getDouble("value")
     }
 
     override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
-        config.getStringOrNull("placeholder", false)
+        config.getStringOrNull("placeholder")
             ?: violations.add(
                 ConfigViolation(
                     "placeholder",

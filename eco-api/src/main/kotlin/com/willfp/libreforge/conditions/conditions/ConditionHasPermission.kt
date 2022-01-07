@@ -14,7 +14,7 @@ class ConditionHasPermission : Condition("has_permission") {
     override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
-        config.getStringOrNull("permission", false)
+        config.getStringOrNull("permission")
             ?: violations.add(
                 ConfigViolation(
                     "permission",

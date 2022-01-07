@@ -9,7 +9,7 @@ class FilterBlocks : FilterComponent() {
     override fun passes(data: TriggerData, config: Config): Boolean {
         val block = data.block ?: return true
 
-        return config.getStringsOrNull("blocks", false)
+        return config.getStringsOrNull("blocks")
             ?.containsIgnoreCase(block.type.name) ?: true
     }
 }

@@ -26,7 +26,7 @@ class EffectSpawnMobs : Effect(
 ), Listener {
     override fun handle(data: TriggerData, config: Config) {
         val location = data.location ?: return
-        val world = location.world ?: return
+        location.world ?: return
         val victim = data.victim
 
         if (victim?.getMetadata("eco-target")?.isEmpty() == true) {
