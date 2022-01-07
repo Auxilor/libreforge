@@ -1,13 +1,13 @@
 package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.entities.Entities
 import com.willfp.eco.util.NumberUtils
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
-import org.bukkit.entity.EntityType
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Mob
 import org.bukkit.event.EventHandler
@@ -38,7 +38,7 @@ class EffectSpawnMobs : Effect(
         val health = config.getDouble("health")
         val range = config.getDouble("range")
 
-        val entityType = EntityType.valueOf(config.getString("entity").uppercase())
+        val entityType = Entities.lookup("entity")
 
         for (i in 1..amount) {
             val locationToSpawn = location.clone().add(
@@ -46,7 +46,7 @@ class EffectSpawnMobs : Effect(
                 NumberUtils.randFloat(0.0, range),
                 NumberUtils.randFloat(-range, range)
             )
-            val mob = world.spawnEntity(locationToSpawn, entityType) as Mob
+            val mob = entityType.spawn(locationToSpawn) as Mob
 
             if (victim != null) {
                 mob.target = victim
@@ -75,14 +75,6 @@ class EffectSpawnMobs : Effect(
                 ConfigViolation(
                     "ticks_to_live",
                     "You must specify the amount of ticks the mobs should live!"
-                )
-            )
-
-        config.getDoubleOrNull("health")
-            ?: violations.add(
-                ConfigViolation(
-                    "health",
-                    "You must specify the mob health!"
                 )
             )
 
