@@ -9,8 +9,7 @@ class FilterEntityType : FilterComponent() {
     override fun passes(data: TriggerData, config: Config): Boolean {
         val entity = data.victim ?: return true
 
-
-        val entityNames = config.getStrings("entities", false)
+        val entityNames = config.getStrings("entities")
 
         return entityNames.containsIgnoreCase(entity.type.name)
                 || entityNames.containsIgnoreCase(entity.category.name)
