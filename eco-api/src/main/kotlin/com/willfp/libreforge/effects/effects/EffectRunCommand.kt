@@ -20,7 +20,7 @@ class EffectRunCommand : Effect(
         val player = data.player ?: return
         val victim = data.victim as? Player
 
-        var command = config.getString("command", false)
+        var command = config.getString("command")
             .replace("%player%", player.name)
 
         if (victim != null) {

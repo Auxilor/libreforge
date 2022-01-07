@@ -20,7 +20,7 @@ class EffectAddStat : Effect("add_stat") {
             player,
             PlayerStatModifier(
                 this.getNamespacedKey(player.getEffectAmount(this)),
-                Stats.getByID(config.getString("stat", false)) ?: Stats.STRENGTH,
+                Stats.getByID(config.getString("stat")) ?: Stats.STRENGTH,
                 config.getInt("amount")
             )
         )

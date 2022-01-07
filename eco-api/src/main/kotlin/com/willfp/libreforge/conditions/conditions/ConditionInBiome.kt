@@ -7,7 +7,7 @@ import org.bukkit.entity.Player
 
 class ConditionInBiome: Condition("in_biome") {
     override fun isConditionMet(player: Player, config: Config): Boolean {
-        return config.getStrings("biomes", false).contains(player.world.getBiome(
+        return config.getStrings("biomes").contains(player.world.getBiome(
             player.location.blockX,
             player.location.blockY,
             player.location.blockZ
@@ -17,7 +17,7 @@ class ConditionInBiome: Condition("in_biome") {
     override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
-        config.getStringsOrNull("biomes", false)
+        config.getStringsOrNull("biomes")
             ?: violations.add(
                 ConfigViolation(
                     "biomes",
