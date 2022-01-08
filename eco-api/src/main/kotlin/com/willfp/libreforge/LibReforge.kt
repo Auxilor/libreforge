@@ -17,7 +17,8 @@ import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
 import org.bukkit.entity.Tameable
-import java.util.*
+import java.util.UUID
+import java.util.WeakHashMap
 
 private val holderProviders = mutableSetOf<HolderProvider>()
 private val previousStates: MutableMap<UUID, Iterable<Holder>> = WeakHashMap()
@@ -94,6 +95,12 @@ object LibReforge {
     @JvmStatic
     fun registerHolderProvider(provider: HolderProvider) {
         holderProviders.add(provider)
+    }
+
+
+    @JvmStatic
+    fun registerJavaHolderProvider(provider: java.util.function.Function<Player, Iterable<Holder>>) {
+        holderProviders.add(provider::apply)
     }
 
     @JvmStatic
