@@ -3,35 +3,67 @@ package com.willfp.libreforge.integrations.ecoskills
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.mcmmo.McmmoManager
 import com.willfp.ecoskills.api.PlayerSkillExpGainEvent
+import com.willfp.ecoskills.skills.Skill
+import com.willfp.ecoskills.skills.Skills
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.MultiplierModifier
 import com.willfp.libreforge.effects.getEffectAmount
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
-import java.util.*
+import java.util.UUID
 
 class EffectSkillXpMultiplier : Effect("skill_xp_multiplier") {
-    private val modifiers = mutableMapOf<UUID, MutableList<MultiplierModifier>>()
+    private val modifiers = mutableMapOf<UUID, MutableMap<Skill, MutableList<MultiplierModifier>>>()
+    private val globalModifiers = mutableMapOf<UUID, MutableList<MultiplierModifier>>()
 
     override fun handleEnable(player: Player, config: Config) {
-        val registeredModifiers = modifiers[player.uniqueId] ?: mutableListOf()
-        val uuid = this.getUUID(player.getEffectAmount(this))
-        registeredModifiers.removeIf { it.uuid == uuid }
-        registeredModifiers.add(
-            MultiplierModifier(
-                uuid,
-                config.getDouble("multiplier")
+        if (config.has("skills")) {
+            val skills = config.getStrings("skills").mapNotNull { Skills.getByID(it) }
+            for (skill in skills) {
+                val skillModifiers = modifiers[player.uniqueId] ?: mutableMapOf()
+                val registeredModifiers = skillModifiers[skill] ?: mutableListOf()
+                val uuid = this.getUUID(player.getEffectAmount(this))
+                registeredModifiers.removeIf { it.uuid == uuid }
+                registeredModifiers.add(
+                    MultiplierModifier(
+                        uuid,
+                        config.getDouble("multiplier")
+                    )
+                )
+                skillModifiers[skill] = registeredModifiers
+                modifiers[player.uniqueId] = skillModifiers
+            }
+        } else {
+            val registeredModifiers = globalModifiers[player.uniqueId] ?: mutableListOf()
+            val uuid = this.getUUID(player.getEffectAmount(this))
+            registeredModifiers.removeIf { it.uuid == uuid }
+            registeredModifiers.add(
+                MultiplierModifier(
+                    uuid,
+                    config.getDouble("multiplier")
+                )
             )
-        )
-        modifiers[player.uniqueId] = registeredModifiers
+            globalModifiers[player.uniqueId] = registeredModifiers
+        }
+
+
     }
 
     override fun handleDisable(player: Player) {
-        val registeredModifiers = modifiers[player.uniqueId] ?: mutableListOf()
+        val registeredModifiers = globalModifiers[player.uniqueId] ?: mutableListOf()
         val uuid = this.getUUID(player.getEffectAmount(this))
         registeredModifiers.removeIf { it.uuid == uuid }
-        modifiers[player.uniqueId] = registeredModifiers
+        globalModifiers[player.uniqueId] = registeredModifiers
+
+
+        for (skill in Skills.values()) {
+            val skillModifierMap = modifiers[player.uniqueId] ?: mutableMapOf()
+            val registeredSkillModifiers = skillModifierMap[skill] ?: mutableListOf()
+            registeredSkillModifiers.removeIf { it.uuid == uuid }
+            skillModifierMap[skill] = registeredSkillModifiers
+            modifiers[player.uniqueId] = skillModifierMap
+        }
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -44,7 +76,12 @@ class EffectSkillXpMultiplier : Effect("skill_xp_multiplier") {
 
         var multiplier = 1.0
 
-        for (modifier in (modifiers[player.uniqueId] ?: emptyList())) {
+        for (modifier in (globalModifiers[player.uniqueId] ?: emptyList())) {
+            multiplier *= modifier.multiplier
+        }
+
+
+        for (modifier in (modifiers[player.uniqueId]?.get(event.skill) ?: emptyList())) {
             multiplier *= modifier.multiplier
         }
 
