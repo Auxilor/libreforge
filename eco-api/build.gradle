@@ -3,6 +3,8 @@ dependencies {
 
     compileOnly 'com.willfp:EcoSkills:1.15.0'
     compileOnly 'com.github.Archy-X:AureliumSkills:Beta1.2.4'
+
+    compileOnly fileTree(dir: '../lib', include: ['*.jar'])
 }
 
 group 'com.willfp'
