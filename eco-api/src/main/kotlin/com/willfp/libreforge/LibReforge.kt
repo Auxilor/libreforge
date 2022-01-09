@@ -10,7 +10,8 @@ import com.willfp.libreforge.conditions.MovementConditionListener
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.integrations.aureliumskills.AureliumSkillsIntegration
 import com.willfp.libreforge.integrations.ecoskills.EcoSkillsIntegration
-import com.willfp.libreforge.integrations.mcmmo.McMmoIntegration
+import com.willfp.libreforge.integrations.jobs.JobsIntegration
+import com.willfp.libreforge.integrations.mcmmo.McMMOIntegration
 import com.willfp.libreforge.triggers.Triggers
 import org.apache.commons.lang.StringUtils
 import org.bukkit.Bukkit
@@ -89,7 +90,8 @@ object LibReforge {
         return listOf(
             IntegrationLoader("EcoSkills", EcoSkillsIntegration::load),
             IntegrationLoader("AureliumSkills", AureliumSkillsIntegration::load),
-            IntegrationLoader("mcMMO", McMmoIntegration::load),
+            IntegrationLoader("mcMMO", McMMOIntegration::load),
+            IntegrationLoader("Jobs", JobsIntegration::load),
         )
     }
 

@@ -4,6 +4,7 @@ dependencies {
     compileOnly 'com.willfp:EcoSkills:1.15.0'
     compileOnly 'com.github.Archy-X:AureliumSkills:Beta1.2.4'
     compileOnly 'com.gmail.nossr50.mcMMO:mcMMO:2.1.202'
+    compileOnly 'com.github.Zrips:Jobs:v4.17.2'
 }
 
 group 'com.willfp'
