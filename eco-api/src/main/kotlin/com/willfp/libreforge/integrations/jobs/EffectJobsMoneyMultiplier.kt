@@ -12,7 +12,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import java.util.*
 
-class EffectJobsMoneyMultiplier : Effect("jobs_xp_multiplier") {
+class EffectJobsMoneyMultiplier : Effect("jobs_money_multiplier") {
     private val globalModifiers = mutableMapOf<UUID, MutableList<MultiplierModifier>>()
 
     override fun handleEnable(player: Player, config: Config) {
