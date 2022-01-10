@@ -13,6 +13,6 @@ object JobsIntegration : Integration {
     }
 
     override fun getPluginName(): String {
-        return "mcMMO"
+        return "Jobs"
     }
 }
