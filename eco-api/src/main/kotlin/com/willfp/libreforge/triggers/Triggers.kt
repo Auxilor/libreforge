@@ -11,9 +11,11 @@ import com.willfp.libreforge.triggers.triggers.TriggerHeal
 import com.willfp.libreforge.triggers.triggers.TriggerJump
 import com.willfp.libreforge.triggers.triggers.TriggerKill
 import com.willfp.libreforge.triggers.triggers.TriggerLoseHunger
+import com.willfp.libreforge.triggers.triggers.TriggerLosePotionEffect
 import com.willfp.libreforge.triggers.triggers.TriggerMeleeAttack
 import com.willfp.libreforge.triggers.triggers.TriggerMineBlock
 import com.willfp.libreforge.triggers.triggers.TriggerMove
+import com.willfp.libreforge.triggers.triggers.TriggerPotionEffect
 import com.willfp.libreforge.triggers.triggers.TriggerProjectileHit
 import com.willfp.libreforge.triggers.triggers.TriggerProjectileLaunch
 import com.willfp.libreforge.triggers.triggers.TriggerShieldBlock
@@ -55,6 +57,8 @@ object Triggers {
     val TOGGLE_FLIGHT: Trigger = TriggerToggleFlight()
     val TOGGLE_SNEAK: Trigger = TriggerToggleSneak()
     val TOGGLE_SPRINT: Trigger = TriggerToggleSprint()
+    val POTION_EFFECT: Trigger = TriggerPotionEffect()
+    val LOSE_POTION_EFFECT: Trigger = TriggerLosePotionEffect()
 
     fun values(): Set<Trigger> {
         return BY_ID.values.toSet()
