@@ -16,6 +16,7 @@ import com.willfp.libreforge.effects.effects.EffectCancelEvent
 import com.willfp.libreforge.effects.effects.EffectCritMultiplier
 import com.willfp.libreforge.effects.effects.EffectDamageMultiplier
 import com.willfp.libreforge.effects.effects.EffectFoodMultiplier
+import com.willfp.libreforge.effects.effects.EffectGiveFood
 import com.willfp.libreforge.effects.effects.EffectGiveMoney
 import com.willfp.libreforge.effects.effects.EffectGiveXp
 import com.willfp.libreforge.effects.effects.EffectHungerMultiplier
@@ -65,6 +66,7 @@ object Effects {
     val TELEPORT: Effect = EffectTeleport()
     val CANCEL_EVENT: Effect = EffectCancelEvent()
     val SEND_MESSAGE: Effect = EffectSendMessage()
+    val GIVE_FOOD: Effect = EffectGiveFood()
 
     /**
      * Get effect matching id.
