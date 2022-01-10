@@ -3,6 +3,7 @@
 package com.willfp.libreforge
 
 import com.willfp.eco.core.EcoPlugin
+import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.integrations.IntegrationLoader
 import com.willfp.eco.util.ListUtils
 import com.willfp.libreforge.conditions.Conditions
@@ -12,6 +13,7 @@ import com.willfp.libreforge.integrations.aureliumskills.AureliumSkillsIntegrati
 import com.willfp.libreforge.integrations.ecoskills.EcoSkillsIntegration
 import com.willfp.libreforge.integrations.jobs.JobsIntegration
 import com.willfp.libreforge.integrations.mcmmo.McMMOIntegration
+import com.willfp.libreforge.integrations.paper.PaperIntegration
 import com.willfp.libreforge.triggers.Triggers
 import org.apache.commons.lang.StringUtils
 import org.bukkit.Bukkit
@@ -19,7 +21,8 @@ import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
 import org.bukkit.entity.Tameable
-import java.util.*
+import java.util.UUID
+import java.util.WeakHashMap
 
 private val holderProviders = mutableSetOf<HolderProvider>()
 private val previousStates: MutableMap<UUID, Iterable<Holder>> = WeakHashMap()
@@ -42,6 +45,10 @@ object LibReforge {
 
         if (this.javaClass.packageName == defaultPackage) {
             throw IllegalStateException("You must shade and relocate libreforge into your jar!")
+        }
+
+        if (Prerequisite.HAS_PAPER.isMet) {
+            PaperIntegration.load()
         }
     }
 
