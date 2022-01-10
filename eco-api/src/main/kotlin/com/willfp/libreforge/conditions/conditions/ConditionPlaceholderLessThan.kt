@@ -4,13 +4,15 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.placeholder.PlaceholderManager
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.conditions.Condition
+import com.willfp.libreforge.getDouble
 import org.bukkit.entity.Player
 
 
 class ConditionPlaceholderLessThan : Condition("placeholder_less_than") {
     override fun isConditionMet(player: Player, config: Config): Boolean {
-        val value = PlaceholderManager.translatePlaceholders(config.getString("placeholder"), player).toDoubleOrNull() ?: 0.0
-        return value < config.getDouble("value")
+        val value =
+            PlaceholderManager.translatePlaceholders(config.getString("placeholder"), player).toDoubleOrNull() ?: 0.0
+        return value < config.getDouble("value", player)
     }
 
     override fun validateConfig(config: Config): List<ConfigViolation> {
@@ -24,13 +26,12 @@ class ConditionPlaceholderLessThan : Condition("placeholder_less_than") {
                 )
             )
 
-        config.getDoubleOrNull("value")
-            ?: violations.add(
-                ConfigViolation(
-                    "value",
-                    "You must specify the value!"
-                )
+        if (!config.has("value")) violations.add(
+            ConfigViolation(
+                "value",
+                "You must specify the value!"
             )
+        )
 
         return violations
     }

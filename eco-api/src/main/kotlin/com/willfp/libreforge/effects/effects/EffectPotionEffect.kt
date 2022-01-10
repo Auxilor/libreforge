@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.effects
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getInt
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
@@ -26,8 +27,8 @@ class EffectPotionEffect : Effect(
             PotionEffect(
                 PotionEffectType.getByName(config.getString("effect").uppercase())
                     ?: PotionEffectType.INCREASE_DAMAGE,
-                config.getInt("duration"),
-                config.getInt("level") - 1,
+                config.getInt("duration", data.player),
+                config.getInt("level", data.player) - 1,
                 false,
                 true,
                 true
@@ -46,21 +47,19 @@ class EffectPotionEffect : Effect(
                 )
             )
 
-        config.getIntOrNull("level")
-            ?: violations.add(
-                ConfigViolation(
-                    "level",
-                    "You must specify the effect level!"
-                )
+        if (!config.has("level")) violations.add(
+            ConfigViolation(
+                "level",
+                "You must specify the effect level!"
             )
+        )
 
-        config.getIntOrNull("duration")
-            ?: violations.add(
-                ConfigViolation(
-                    "duration",
-                    "You must specify the duration!"
-                )
+        if (!config.has("duration")) violations.add(
+            ConfigViolation(
+                "duration",
+                "You must specify the duration!"
             )
+        )
 
         config.getBoolOrNull("apply_to_player")
             ?: violations.add(

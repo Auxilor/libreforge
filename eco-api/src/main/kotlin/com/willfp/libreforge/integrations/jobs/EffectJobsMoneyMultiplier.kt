@@ -8,6 +8,7 @@ import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.MultiplierModifier
 import com.willfp.libreforge.effects.getEffectAmount
+import com.willfp.libreforge.getDouble
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import java.util.*
@@ -22,7 +23,7 @@ class EffectJobsMoneyMultiplier : Effect("jobs_money_multiplier") {
         registeredModifiers.add(
             MultiplierModifier(
                 uuid,
-                config.getDouble("multiplier")
+                config.getDouble("multiplier", player)
             )
         )
         globalModifiers[player.uniqueId] = registeredModifiers
@@ -57,13 +58,12 @@ class EffectJobsMoneyMultiplier : Effect("jobs_money_multiplier") {
     override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
-        config.getDoubleOrNull("multiplier")
-            ?: violations.add(
-                ConfigViolation(
-                    "multiplier",
-                    "You must specify the money multiplier!"
-                )
+        if (!config.has("multiplier")) violations.add(
+            ConfigViolation(
+                "multiplier",
+                "You must specify the money multiplier!"
             )
+        )
 
         return violations
     }

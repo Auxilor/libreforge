@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.getEffectAmount
+import com.willfp.libreforge.getDouble
 import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeModifier
 import org.bukkit.entity.Player
@@ -17,7 +18,7 @@ class EffectAttackSpeedMultiplier : Effect("attack_speed_multiplier") {
             AttributeModifier(
                 uuid,
                 this.id,
-                config.getDouble("multiplier") - 1,
+                config.getDouble("multiplier", player) - 1,
                 AttributeModifier.Operation.MULTIPLY_SCALAR_1
             )
         )
@@ -38,13 +39,12 @@ class EffectAttackSpeedMultiplier : Effect("attack_speed_multiplier") {
     override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
-        config.getDoubleOrNull("multiplier")
-            ?: violations.add(
-                ConfigViolation(
-                    "multiplier",
-                    "You must specify the attack speed multiplier!"
-                )
+        if (!config.has("multiplier")) violations.add(
+            ConfigViolation(
+                "multiplier",
+                "You must specify the attack speed multiplier!"
             )
+        )
 
         return violations
     }

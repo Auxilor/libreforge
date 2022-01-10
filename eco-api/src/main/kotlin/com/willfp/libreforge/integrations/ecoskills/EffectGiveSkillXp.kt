@@ -5,6 +5,7 @@ import com.willfp.ecoskills.api.EcoSkillsAPI
 import com.willfp.ecoskills.skills.Skills
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getDouble
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
@@ -22,20 +23,19 @@ class EffectGiveSkillXp : Effect(
         EcoSkillsAPI.getInstance().giveSkillExperience(
             player,
             Skills.getByID(config.getString("skill")) ?: Skills.COMBAT,
-            config.getDouble("amount")
+            config.getDouble("amount", player)
         )
     }
 
     override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
-        config.getDoubleOrNull("amount")
-            ?: violations.add(
-                ConfigViolation(
-                    "amount",
-                    "You must specify the amount of xp to give!"
-                )
+        if (!config.has("amount")) violations.add(
+            ConfigViolation(
+                "amount",
+                "You must specify the amount of xp to give!"
             )
+        )
 
         config.getStringOrNull("skill")
             ?: violations.add(

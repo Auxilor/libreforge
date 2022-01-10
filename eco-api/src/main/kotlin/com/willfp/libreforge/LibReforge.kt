@@ -234,11 +234,30 @@ fun Entity.tryAsPlayer(): Player? {
     }
 }
 
-fun Config.getInt(path: String, player: Player): Int {
+fun Config.getInt(path: String, player: Player?): Int {
     return getDouble(path, player).toInt()
 }
 
-fun Config.getDouble(path: String, player: Player): Double {
+fun Config.getDouble(path: String, player: Player?): Double {
+    if (player == null) {
+        return this.getDouble(path)
+    }
+    val string = PlaceholderManager.translatePlaceholders(this.getString(path), player)
+    val expression = Crunch.compileExpression(string)
+    return expression.evaluate()
+}
+
+fun Config.getIntOrNull(path: String, player: Player?): Int? {
+    return getDoubleOrNull(path, player)?.toInt()
+}
+
+fun Config.getDoubleOrNull(path: String, player: Player?): Double? {
+    if (!this.has(path)) {
+        return null
+    }
+    if (player == null) {
+        return this.getDoubleOrNull(path)
+    }
     val string = PlaceholderManager.translatePlaceholders(this.getString(path), player)
     val expression = Crunch.compileExpression(string)
     return expression.evaluate()
