@@ -12,6 +12,7 @@ import com.willfp.libreforge.effects.effects.EffectAttackSpeedMultiplier
 import com.willfp.libreforge.effects.effects.EffectAutosmelt
 import com.willfp.libreforge.effects.effects.EffectBleed
 import com.willfp.libreforge.effects.effects.EffectBonusHealth
+import com.willfp.libreforge.effects.effects.EffectBreakBlock
 import com.willfp.libreforge.effects.effects.EffectCancelEvent
 import com.willfp.libreforge.effects.effects.EffectCritMultiplier
 import com.willfp.libreforge.effects.effects.EffectDamageMultiplier
@@ -69,6 +70,7 @@ object Effects {
     val SEND_MESSAGE: Effect = EffectSendMessage()
     val GIVE_FOOD: Effect = EffectGiveFood()
     val GIVE_HEALTH: Effect = EffectGiveHealth()
+    val BREAK_BLOCK: Effect = EffectBreakBlock()
 
     /**
      * Get effect matching id.
