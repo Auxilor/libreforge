@@ -22,7 +22,7 @@ class EffectSendMessage : Effect(
         val message = config.getFormattedString("message")
             .replace("%player%", player.name)
 
-        val actionBar = config.getBool("actionBar")
+        val actionBar = config.getBool("action_bar")
 
         if (actionBar) {
             PlayerUtils.getAudience(player)
@@ -44,10 +44,10 @@ class EffectSendMessage : Effect(
                 )
             )
 
-        config.getBoolOrNull("actionBar")
+        config.getBoolOrNull("action_bar")
             ?: violations.add(
                 ConfigViolation(
-                    "actionBar",
+                    "action_bar",
                     "You must specify if to send the message to the action bar!"
                 )
             )
