@@ -1,5 +1,7 @@
 package com.willfp.libreforge.triggers
 
+import com.willfp.eco.core.integrations.anticheat.AnticheatManager
+import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.eco.core.integrations.economy.EconomyManager
 import com.willfp.eco.util.NumberUtils
 import com.willfp.libreforge.Holder
@@ -42,6 +44,12 @@ abstract class Trigger(
             for ((effect, config, filter, triggers, uuid) in holder.effects) {
                 if (NumberUtils.randFloat(0.0, 100.0) > (config.getDoubleOrNull("chance") ?: 100.0)) {
                     continue
+                }
+
+                if (config.getBool("antigrief-check") && data.player != null && data.victim != null) {
+                    if (!AntigriefManager.canInjure(data.player, data.victim)) {
+                        continue
+                    }
                 }
 
                 val every = config.getIntOrNull("every") ?: 0
