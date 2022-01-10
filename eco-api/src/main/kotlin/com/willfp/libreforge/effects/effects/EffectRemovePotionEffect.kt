@@ -21,10 +21,12 @@ class EffectRemovePotionEffect : Effect(
             data.victim ?: return
         }
 
-        toApply.removePotionEffect(
-            PotionEffectType.getByName(config.getString("effect").uppercase())
-                ?: PotionEffectType.INCREASE_DAMAGE
-        )
+        plugin.scheduler.run {
+            toApply.removePotionEffect(
+                PotionEffectType.getByName(config.getString("effect").uppercase())
+                    ?: PotionEffectType.INCREASE_DAMAGE
+            )
+        }
     }
 
     override fun validateConfig(config: Config): List<ConfigViolation> {
