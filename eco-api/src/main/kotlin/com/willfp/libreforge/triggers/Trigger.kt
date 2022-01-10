@@ -81,7 +81,9 @@ abstract class Trigger(
                 }
 
                 if (effect.getCooldown(player, uuid) > 0) {
-                    effect.sendCooldownMessage(player, uuid)
+                    if (config.getBoolOrNull("send-cooldown-message") != false) {
+                        effect.sendCooldownMessage(player, uuid)
+                    }
                     continue
                 }
 
