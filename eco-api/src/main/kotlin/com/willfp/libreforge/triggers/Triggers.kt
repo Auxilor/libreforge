@@ -21,7 +21,7 @@ import com.willfp.libreforge.triggers.triggers.TriggerProjectileHit
 import com.willfp.libreforge.triggers.triggers.TriggerProjectileLaunch
 import com.willfp.libreforge.triggers.triggers.TriggerShieldBlock
 import com.willfp.libreforge.triggers.triggers.TriggerSwapHands
-import com.willfp.libreforge.triggers.triggers.TriggerSwing
+import com.willfp.libreforge.integrations.paper.TriggerSwing
 import com.willfp.libreforge.triggers.triggers.TriggerTakeDamage
 import com.willfp.libreforge.triggers.triggers.TriggerTakeEntityDamage
 import com.willfp.libreforge.triggers.triggers.TriggerToggleFlight
