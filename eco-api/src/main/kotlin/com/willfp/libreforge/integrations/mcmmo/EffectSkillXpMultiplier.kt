@@ -19,6 +19,7 @@ class EffectSkillXpMultiplier : Effect("skill_xp_multiplier") {
 
     override fun handleEnable(player: Player, config: Config) {
         if (config.has("skills")) {
+
             val skills = config.getStrings("skills").mapNotNull { mcMMO.p.skillTools.matchSkill(it) }
             for (skill in skills) {
                 val skillModifiers = modifiers[player.uniqueId] ?: mutableMapOf()
@@ -46,6 +47,8 @@ class EffectSkillXpMultiplier : Effect("skill_xp_multiplier") {
             )
             globalModifiers[player.uniqueId] = registeredModifiers
         }
+
+
     }
 
     override fun handleDisable(player: Player) {

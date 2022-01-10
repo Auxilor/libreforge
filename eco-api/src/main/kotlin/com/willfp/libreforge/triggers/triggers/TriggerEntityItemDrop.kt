@@ -7,7 +7,7 @@ import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.wrappers.WrappedEntityDropEvent
-import com.willfp.libreforge.tryAsPlayer
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 
 
@@ -30,7 +30,10 @@ class TriggerEntityItemDrop : Trigger(
         }
 
         val entity = event.victim
-        val player = event.killer.tryAsPlayer() ?: return
+        if (event.killer !is Player) {
+            return
+        }
+        val player = event.killer as Player
         val originalDrops = event.drops
 
         val wrapped = WrappedEntityDropEvent(event.deathEvent)
