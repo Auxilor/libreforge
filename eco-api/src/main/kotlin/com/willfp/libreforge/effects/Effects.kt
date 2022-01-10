@@ -27,6 +27,7 @@ import com.willfp.libreforge.effects.effects.EffectMovementSpeedMultiplier
 import com.willfp.libreforge.effects.effects.EffectPermanentPotionEffect
 import com.willfp.libreforge.effects.effects.EffectPotionEffect
 import com.willfp.libreforge.effects.effects.EffectRegenMultiplier
+import com.willfp.libreforge.effects.effects.EffectRemovePotionEffect
 import com.willfp.libreforge.effects.effects.EffectRunCommand
 import com.willfp.libreforge.effects.effects.EffectSendMessage
 import com.willfp.libreforge.effects.effects.EffectSpawnMobs
@@ -71,6 +72,7 @@ object Effects {
     val GIVE_FOOD: Effect = EffectGiveFood()
     val GIVE_HEALTH: Effect = EffectGiveHealth()
     val BREAK_BLOCK: Effect = EffectBreakBlock()
+    val REMOVE_POTION_EFFECT: Effect = EffectRemovePotionEffect()
 
     /**
      * Get effect matching id.
