@@ -5,12 +5,35 @@ import com.google.common.collect.ImmutableList
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.LibReforge
-import com.willfp.libreforge.effects.effects.*
+import com.willfp.libreforge.effects.effects.EffectArmor
+import com.willfp.libreforge.effects.effects.EffectArmorToughness
+import com.willfp.libreforge.effects.effects.EffectArrowRing
+import com.willfp.libreforge.effects.effects.EffectAttackSpeedMultiplier
+import com.willfp.libreforge.effects.effects.EffectAutosmelt
+import com.willfp.libreforge.effects.effects.EffectBleed
+import com.willfp.libreforge.effects.effects.EffectBonusHealth
+import com.willfp.libreforge.effects.effects.EffectCancelEvent
+import com.willfp.libreforge.effects.effects.EffectCritMultiplier
+import com.willfp.libreforge.effects.effects.EffectDamageMultiplier
+import com.willfp.libreforge.effects.effects.EffectFoodMultiplier
+import com.willfp.libreforge.effects.effects.EffectGiveMoney
+import com.willfp.libreforge.effects.effects.EffectGiveXp
+import com.willfp.libreforge.effects.effects.EffectHungerMultiplier
+import com.willfp.libreforge.effects.effects.EffectKnockbackMultiplier
+import com.willfp.libreforge.effects.effects.EffectMovementSpeedMultiplier
+import com.willfp.libreforge.effects.effects.EffectPermanentPotionEffect
+import com.willfp.libreforge.effects.effects.EffectPotionEffect
+import com.willfp.libreforge.effects.effects.EffectRegenMultiplier
+import com.willfp.libreforge.effects.effects.EffectRunCommand
+import com.willfp.libreforge.effects.effects.EffectSpawnMobs
+import com.willfp.libreforge.effects.effects.EffectStrikeLightning
+import com.willfp.libreforge.effects.effects.EffectTeleport
+import com.willfp.libreforge.effects.effects.EffectXpMultiplier
 import com.willfp.libreforge.filters.ConfiguredFilter
 import com.willfp.libreforge.filters.EmptyFilter
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.Triggers
-import java.util.*
+import java.util.UUID
 
 @Suppress("UNUSED")
 object Effects {
@@ -39,6 +62,7 @@ object Effects {
     val FOOD_MULTIPLIER: Effect = EffectFoodMultiplier()
     val AUTOSMELT: Effect = EffectAutosmelt()
     val TELEPORT: Effect = EffectTeleport()
+    val CANCEL_EVENT: Effect = EffectCancelEvent()
 
     /**
      * Get effect matching id.
