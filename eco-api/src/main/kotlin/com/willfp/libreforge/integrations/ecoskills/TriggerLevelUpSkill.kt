@@ -1,21 +1,20 @@
 package com.willfp.libreforge.integrations.ecoskills
 
 import com.willfp.eco.core.integrations.mcmmo.McmmoManager
-import com.willfp.ecoskills.api.PlayerSkillExpGainEvent
+import com.willfp.ecoskills.api.PlayerSkillLevelUpEvent
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.event.EventHandler
 
-class TriggerGainSkillXp : Trigger(
-    "gain_skill_xp", listOf(
+class TriggerLevelUpSkill : Trigger(
+    "level_up_skill", listOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.LOCATION,
-        TriggerParameter.EVENT
+        TriggerParameter.LOCATION
     )
 ) {
     @EventHandler(ignoreCancelled = true)
-    fun handle(event: PlayerSkillExpGainEvent) {
+    fun handle(event: PlayerSkillLevelUpEvent) {
         if (McmmoManager.isFake(event)) {
             return
         }
@@ -26,8 +25,7 @@ class TriggerGainSkillXp : Trigger(
             player,
             TriggerData(
                 player = player,
-                location = player.location,
-                event = WrappedSkillXpEvent(event)
+                location = player.location
             )
         )
     }

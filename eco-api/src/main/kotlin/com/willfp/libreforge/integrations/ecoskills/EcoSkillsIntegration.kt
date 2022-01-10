@@ -12,6 +12,7 @@ object EcoSkillsIntegration : Integration {
     private lateinit var SKILL_XP_MULTIPLIER: Effect
     private lateinit var GAIN_SKILL_XP: Trigger
     private lateinit var GIVE_SKILL_XP: Effect
+    private lateinit var LEVEL_UP_SKILL: Trigger
 
     fun load() {
         ADD_STAT = EffectAddStat()
@@ -19,6 +20,7 @@ object EcoSkillsIntegration : Integration {
         HAS_SKILL_LEVEL = ConditionHasSkillLevel()
         SKILL_XP_MULTIPLIER = EffectSkillXpMultiplier()
         GAIN_SKILL_XP = TriggerGainSkillXp()
+        LEVEL_UP_SKILL = TriggerLevelUpSkill()
         GIVE_SKILL_XP = EffectGiveSkillXp()
     }
 
