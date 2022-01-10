@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.effects
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getInt
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
@@ -18,7 +19,7 @@ class EffectStrikeLightning : Effect(
         val location = data.location ?: return
         val world = location.world ?: return
 
-        for (i in 1..config.getInt("amount")) {
+        for (i in 1..config.getInt("amount", data.player)) {
             plugin.scheduler.runLater({
                 world.strikeLightning(location)
             }, 1)
@@ -28,8 +29,7 @@ class EffectStrikeLightning : Effect(
     override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
-        config.getIntOrNull("amount")
-            ?: violations.add(
+        if (!config.has("amount")) violations.add(
                 ConfigViolation(
                     "amount",
                     "You must specify the amount of lightning!"

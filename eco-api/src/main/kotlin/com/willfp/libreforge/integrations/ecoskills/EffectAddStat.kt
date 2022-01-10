@@ -7,6 +7,7 @@ import com.willfp.ecoskills.stats.Stats
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.getEffectAmount
+import com.willfp.libreforge.getInt
 import org.bukkit.entity.Player
 
 class EffectAddStat : Effect("add_stat") {
@@ -21,7 +22,7 @@ class EffectAddStat : Effect("add_stat") {
             PlayerStatModifier(
                 this.getNamespacedKey(player.getEffectAmount(this)),
                 Stats.getByID(config.getString("stat")) ?: Stats.STRENGTH,
-                config.getInt("amount")
+                config.getInt("amount", player)
             )
         )
     }
@@ -44,13 +45,12 @@ class EffectAddStat : Effect("add_stat") {
                 )
             )
 
-        config.getIntOrNull("amount")
-            ?: violations.add(
-                ConfigViolation(
-                    "amount",
-                    "You must specify the amount to add/remove!"
-                )
+        if (!config.has("amount")) violations.add(
+            ConfigViolation(
+                "amount",
+                "You must specify the amount to add/remove!"
             )
+        )
 
         return violations
     }

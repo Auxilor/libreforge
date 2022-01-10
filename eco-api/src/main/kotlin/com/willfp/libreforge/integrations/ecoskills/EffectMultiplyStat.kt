@@ -8,6 +8,7 @@ import com.willfp.ecoskills.stats.Stats
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.getEffectAmount
+import com.willfp.libreforge.getDouble
 import org.bukkit.entity.Player
 
 class EffectMultiplyStat : Effect("multiply_stat") {
@@ -22,7 +23,7 @@ class EffectMultiplyStat : Effect("multiply_stat") {
             PlayerStatModifier(
                 this.getNamespacedKey(player.getEffectAmount(this)),
                 Stats.getByID(config.getString("stat")) ?: Stats.STRENGTH,
-                config.getDouble("multiplier"),
+                config.getDouble("multiplier", player),
                 ModifierOperation.MULTIPLY
             )
         )
@@ -46,13 +47,12 @@ class EffectMultiplyStat : Effect("multiply_stat") {
                 )
             )
 
-        config.getDoubleOrNull("multiplier")
-            ?: violations.add(
-                ConfigViolation(
-                    "multiplier",
-                    "You must specify the multiplier!"
-                )
+        if (!config.has("multiplier")) violations.add(
+            ConfigViolation(
+                "multiplier",
+                "You must specify the multiplier!"
             )
+        )
 
         return violations
     }

@@ -5,6 +5,8 @@ import com.willfp.eco.core.entities.Entities
 import com.willfp.eco.util.NumberUtils
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getDouble
+import com.willfp.libreforge.getInt
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
@@ -33,10 +35,10 @@ class EffectSpawnMobs : Effect(
             return
         }
 
-        val amount = config.getInt("amount")
-        val ticksToLive = config.getInt("ticks_to_live")
-        val health = config.getDouble("health")
-        val range = config.getDouble("range")
+        val amount = config.getInt("amount", data.player)
+        val ticksToLive = config.getInt("ticks_to_live", data.player)
+        val health = config.getDouble("health", data.player)
+        val range = config.getDouble("range", data.player)
 
         val entityType = Entities.lookup("entity")
 
@@ -62,24 +64,21 @@ class EffectSpawnMobs : Effect(
     override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
-        config.getIntOrNull("amount")
-            ?: violations.add(
-                ConfigViolation(
-                    "amount",
-                    "You must specify the amount of mobs to spawn!"
-                )
+        if (!config.has("amount")) violations.add(
+            ConfigViolation(
+                "amount",
+                "You must specify the amount of mobs to spawn!"
             )
+        )
 
-        config.getIntOrNull("ticks_to_live")
-            ?: violations.add(
-                ConfigViolation(
-                    "ticks_to_live",
-                    "You must specify the amount of ticks the mobs should live!"
-                )
+        if (!config.has("ticks_to_live")) violations.add(
+            ConfigViolation(
+                "ticks_to_live",
+                "You must specify the amount of ticks the mobs should live!"
             )
+        )
 
-        config.getDoubleOrNull("range")
-            ?: violations.add(
+        if (!config.has("range")) violations.add(
                 ConfigViolation(
                     "range",
                     "You must specify the range for mobs to spawn!"

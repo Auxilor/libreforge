@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.effects
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getDouble
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
@@ -18,7 +19,7 @@ class EffectDamageMultiplier : Effect(
     override fun handle(data: TriggerData, config: Config) {
         val event = data.event as? WrappedDamageEvent ?: return
 
-        event.damage *= config.getDouble("multiplier")
+        event.damage *= config.getDouble("multiplier", data.player)
 
         if (event.damage < 0.01) {
             event.isCancelled = true
@@ -28,13 +29,12 @@ class EffectDamageMultiplier : Effect(
     override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
-        config.getDoubleOrNull("multiplier")
-            ?: violations.add(
-                ConfigViolation(
-                    "multiplier",
-                    "You must specify the damage multiplier!"
-                )
+        if (!config.has("multiplier")) violations.add(
+            ConfigViolation(
+                "multiplier",
+                "You must specify the damage multiplier!"
             )
+        )
 
         return violations
     }
