@@ -3,6 +3,7 @@ package com.willfp.libreforge.triggers
 import com.willfp.libreforge.triggers.triggers.TriggerAltClick
 import com.willfp.libreforge.triggers.triggers.TriggerBlockItemDrop
 import com.willfp.libreforge.triggers.triggers.TriggerBowAttack
+import com.willfp.libreforge.triggers.triggers.TriggerDeath
 import com.willfp.libreforge.triggers.triggers.TriggerEntityItemDrop
 import com.willfp.libreforge.triggers.triggers.TriggerFallDamage
 import com.willfp.libreforge.triggers.triggers.TriggerGainHunger
@@ -59,6 +60,7 @@ object Triggers {
     val TOGGLE_SPRINT: Trigger = TriggerToggleSprint()
     val POTION_EFFECT: Trigger = TriggerPotionEffect()
     val LOSE_POTION_EFFECT: Trigger = TriggerLosePotionEffect()
+    val DEATH: Trigger = TriggerDeath()
 
     fun values(): Set<Trigger> {
         return BY_ID.values.toSet()
