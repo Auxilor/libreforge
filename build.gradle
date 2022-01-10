@@ -35,10 +35,6 @@ allprojects {
         maven { url 'https://redempt.dev' }
     }
 
-    shadowJar {
-        relocate('redempt.crunch', 'com.willfp.libreforge.crunch')
-    }
-
     jar {
         onlyIf { !sourceSets.main.allSource.files.isEmpty() }
     }
