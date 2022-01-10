@@ -25,6 +25,7 @@ import com.willfp.libreforge.effects.effects.EffectPermanentPotionEffect
 import com.willfp.libreforge.effects.effects.EffectPotionEffect
 import com.willfp.libreforge.effects.effects.EffectRegenMultiplier
 import com.willfp.libreforge.effects.effects.EffectRunCommand
+import com.willfp.libreforge.effects.effects.EffectSendMessage
 import com.willfp.libreforge.effects.effects.EffectSpawnMobs
 import com.willfp.libreforge.effects.effects.EffectStrikeLightning
 import com.willfp.libreforge.effects.effects.EffectTeleport
@@ -63,6 +64,7 @@ object Effects {
     val AUTOSMELT: Effect = EffectAutosmelt()
     val TELEPORT: Effect = EffectTeleport()
     val CANCEL_EVENT: Effect = EffectCancelEvent()
+    val SEND_MESSAGE: Effect = EffectSendMessage()
 
     /**
      * Get effect matching id.
