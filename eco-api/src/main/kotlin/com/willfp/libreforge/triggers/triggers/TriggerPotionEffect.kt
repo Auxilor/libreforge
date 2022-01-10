@@ -1,0 +1,37 @@
+package com.willfp.libreforge.triggers.triggers
+
+import com.willfp.eco.core.integrations.mcmmo.McmmoManager
+import com.willfp.libreforge.triggers.Trigger
+import com.willfp.libreforge.triggers.TriggerData
+import com.willfp.libreforge.triggers.TriggerParameter
+import org.bukkit.entity.Player
+import org.bukkit.event.EventHandler
+import org.bukkit.event.entity.EntityPotionEffectEvent
+
+class TriggerPotionEffect : Trigger(
+    "potion_effect", listOf(
+        TriggerParameter.PLAYER,
+        TriggerParameter.LOCATION
+    )
+) {
+    @EventHandler(ignoreCancelled = true)
+    fun handle(event: EntityPotionEffectEvent) {
+        if (McmmoManager.isFake(event)) {
+            return
+        }
+
+        if (event.newEffect == null) {
+            return
+        }
+
+        val player = event.entity as? Player ?: return
+
+        this.processTrigger(
+            player,
+            TriggerData(
+                player = player,
+                location = player.location
+            )
+        )
+    }
+}
