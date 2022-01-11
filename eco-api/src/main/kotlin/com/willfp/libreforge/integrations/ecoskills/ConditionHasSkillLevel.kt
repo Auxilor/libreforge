@@ -6,6 +6,7 @@ import com.willfp.ecoskills.api.PlayerSkillLevelUpEvent
 import com.willfp.ecoskills.skills.Skills
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.conditions.Condition
+import com.willfp.libreforge.getInt
 import com.willfp.libreforge.updateEffects
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -27,7 +28,7 @@ class ConditionHasSkillLevel : Condition("has_skill_level") {
         return EcoSkillsAPI.getInstance().getSkillLevel(
             player,
             Skills.getByID(config.getString("skill").lowercase()) ?: Skills.COMBAT
-        ) >= config.getInt("level")
+        ) >= config.getInt("level", player)
     }
 
     override fun validateConfig(config: Config): List<ConfigViolation> {
@@ -41,13 +42,12 @@ class ConditionHasSkillLevel : Condition("has_skill_level") {
                 )
             )
 
-        config.getIntOrNull("level")
-            ?: violations.add(
-                ConfigViolation(
-                    "level",
-                    "You must specify the skill level!"
-                )
+        if (!config.has("level")) violations.add(
+            ConfigViolation(
+                "level",
+                "You must specify the skill level!"
             )
+        )
 
         return violations
     }

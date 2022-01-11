@@ -4,7 +4,9 @@ package com.willfp.libreforge
 
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.Prerequisite
+import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.IntegrationLoader
+import com.willfp.eco.core.integrations.placeholder.PlaceholderManager
 import com.willfp.eco.util.ListUtils
 import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.conditions.MovementConditionListener
@@ -21,8 +23,8 @@ import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
 import org.bukkit.entity.Tameable
-import java.util.UUID
-import java.util.WeakHashMap
+import redempt.crunch.Crunch
+import java.util.*
 
 private val holderProviders = mutableSetOf<HolderProvider>()
 private val previousStates: MutableMap<UUID, Iterable<Holder>> = WeakHashMap()
@@ -230,4 +232,33 @@ fun Entity.tryAsPlayer(): Player? {
         is Tameable -> this.owner as? Player
         else -> null
     }
+}
+
+fun Config.getInt(path: String, player: Player?): Int {
+    return getDouble(path, player).toInt()
+}
+
+fun Config.getDouble(path: String, player: Player?): Double {
+    if (player == null) {
+        return this.getDouble(path)
+    }
+    val string = PlaceholderManager.translatePlaceholders(this.getString(path), player)
+    val expression = Crunch.compileExpression(string)
+    return expression.evaluate()
+}
+
+fun Config.getIntOrNull(path: String, player: Player?): Int? {
+    return getDoubleOrNull(path, player)?.toInt()
+}
+
+fun Config.getDoubleOrNull(path: String, player: Player?): Double? {
+    if (!this.has(path)) {
+        return null
+    }
+    if (player == null) {
+        return this.getDoubleOrNull(path)
+    }
+    val string = PlaceholderManager.translatePlaceholders(this.getString(path), player)
+    val expression = Crunch.compileExpression(string)
+    return expression.evaluate()
 }

@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.getEffectAmount
+import com.willfp.libreforge.getInt
 import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeModifier
 import org.bukkit.entity.Player
@@ -17,7 +18,7 @@ class EffectArmorToughness : Effect("armor_toughness") {
             AttributeModifier(
                 uuid,
                 this.id,
-                config.getInt("points").toDouble(),
+                config.getInt("points", player).toDouble(),
                 AttributeModifier.Operation.ADD_NUMBER
             )
         )
@@ -38,13 +39,12 @@ class EffectArmorToughness : Effect("armor_toughness") {
     override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
-        config.getIntOrNull("points")
-            ?: violations.add(
-                ConfigViolation(
-                    "points",
-                    "You must specify the amount of points to add/remove!"
-                )
+        if (!config.has("points")) violations.add(
+            ConfigViolation(
+                "points",
+                "You must specify the amount of points to add/remove!"
             )
+        )
 
         return violations
     }
