@@ -17,14 +17,19 @@ import com.willfp.libreforge.integrations.jobs.JobsIntegration
 import com.willfp.libreforge.integrations.mcmmo.McMMOIntegration
 import com.willfp.libreforge.integrations.paper.PaperIntegration
 import com.willfp.libreforge.triggers.Triggers
+import me.clip.placeholderapi.PlaceholderAPI
 import org.apache.commons.lang.StringUtils
 import org.bukkit.Bukkit
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
 import org.bukkit.entity.Tameable
+import redempt.crunch.CompiledExpression
 import redempt.crunch.Crunch
-import java.util.*
+import redempt.crunch.functional.EvaluationEnvironment
+import java.util.UUID
+import java.util.WeakHashMap
+
 
 private val holderProviders = mutableSetOf<HolderProvider>()
 private val previousStates: MutableMap<UUID, Iterable<Holder>> = WeakHashMap()
@@ -234,17 +239,14 @@ fun Entity.tryAsPlayer(): Player? {
     }
 }
 
+val compiledConfigExpressions = mutableMapOf<Config, MutableMap<String, CompiledExpression>>()
+
 fun Config.getInt(path: String, player: Player?): Int {
     return getDouble(path, player).toInt()
 }
 
 fun Config.getDouble(path: String, player: Player?): Double {
-    if (player == null) {
-        return this.getDouble(path)
-    }
-    val string = PlaceholderManager.translatePlaceholders(this.getString(path), player)
-    val expression = Crunch.compileExpression(string)
-    return expression.evaluate()
+    return getDoubleOrNull(path, player) ?: 0.0
 }
 
 fun Config.getIntOrNull(path: String, player: Player?): Int? {
@@ -258,7 +260,42 @@ fun Config.getDoubleOrNull(path: String, player: Player?): Double? {
     if (player == null) {
         return this.getDoubleOrNull(path)
     }
-    val string = PlaceholderManager.translatePlaceholders(this.getString(path), player)
-    val expression = Crunch.compileExpression(string)
-    return expression.evaluate()
+
+    val raw = this.getString(path)
+    val placeholderValues = raw.getPlaceholders()
+        .map { PlaceholderManager.translatePlaceholders(it, player).toDouble() }
+    val expression = this.getExpression(path)
+    return CrunchHelper.evaluate(expression, placeholderValues)
+}
+
+private fun String.getPlaceholders(): List<String> {
+    val placeholders = mutableListOf<String>()
+    val matcher = PlaceholderAPI.getPlaceholderPattern().matcher(this)
+    while (matcher.find()) {
+        placeholders.add(matcher.group())
+    }
+
+    return placeholders
+}
+
+private fun Config.getExpression(path: String): CompiledExpression {
+    val cached = compiledConfigExpressions[this]?.get(path)
+
+    if (cached != null) {
+        return cached
+    }
+
+    val rawString = this.getString(path)
+
+    val placeholders = rawString.getPlaceholders()
+
+    val env = EvaluationEnvironment().apply {
+        setVariableNames(*placeholders.toTypedArray())
+    }
+
+    val expression = Crunch.compileExpression(this.getString("path"), env)
+    val cache = compiledConfigExpressions[this] ?: mutableMapOf()
+    cache[path] = expression
+    compiledConfigExpressions[this] = cache
+    return expression
 }

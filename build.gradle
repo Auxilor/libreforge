@@ -33,6 +33,7 @@ allprojects {
         maven { url 'https://repo.codemc.org/repository/maven-public/' }
         maven { url 'https://maven.enginehub.org/repo/' }
         maven { url 'https://redempt.dev' }
+        maven { url 'https://repo.extendedclip.com/content/repositories/placeholderapi/' }
     }
 
     jar {
@@ -43,6 +44,7 @@ allprojects {
         compileOnly 'com.willfp:eco:6.18.1'
         compileOnly 'org.jetbrains:annotations:23.0.0'
         compileOnly 'org.jetbrains.kotlin:kotlin-stdlib:1.6.0'
+        compileOnly 'me.clip:placeholderapi:2.11.1'
         implementation 'com.github.Redempt:Crunch:1.0'
     }
 
