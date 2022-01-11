@@ -6,7 +6,6 @@ import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.IntegrationLoader
-import com.willfp.eco.core.integrations.placeholder.PlaceholderManager
 import com.willfp.eco.util.ListUtils
 import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.conditions.MovementConditionListener
@@ -66,6 +65,8 @@ object LibReforge {
                 player.updateEffects()
             }
         }, 30, 30)
+
+        compiledConfigExpressions.clear()
     }
 
     @JvmStatic
@@ -263,7 +264,7 @@ fun Config.getDoubleOrNull(path: String, player: Player?): Double? {
 
     val raw = this.getString(path)
     val placeholderValues = raw.getPlaceholders()
-        .map { PlaceholderManager.translatePlaceholders(it, player).toDouble() }
+        .map { PlaceholderAPI.setPlaceholders(player, it).toDouble() }
     val expression = this.getExpression(path)
     return CrunchHelper.evaluate(expression, placeholderValues)
 }
@@ -289,11 +290,10 @@ private fun Config.getExpression(path: String): CompiledExpression {
 
     val placeholders = rawString.getPlaceholders()
 
-    val env = EvaluationEnvironment().apply {
-        setVariableNames(*placeholders.toTypedArray())
-    }
+    val env = EvaluationEnvironment()
+    env.setVariableNames(*placeholders.toTypedArray())
 
-    val expression = Crunch.compileExpression(this.getString("path"), env)
+    val expression = Crunch.compileExpression(this.getString(path), env)
     val cache = compiledConfigExpressions[this] ?: mutableMapOf()
     cache[path] = expression
     compiledConfigExpressions[this] = cache
