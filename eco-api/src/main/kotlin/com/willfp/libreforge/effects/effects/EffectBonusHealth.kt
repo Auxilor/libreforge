@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.getEffectAmount
+import com.willfp.libreforge.getInt
 import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeModifier
 import org.bukkit.entity.Player
@@ -18,7 +19,7 @@ class EffectBonusHealth : Effect("bonus_health") {
             AttributeModifier(
                 uuid,
                 this.id,
-                config.getInt("health").toDouble(),
+                config.getInt("health", player).toDouble(),
                 AttributeModifier.Operation.ADD_NUMBER
             )
         )
@@ -39,13 +40,12 @@ class EffectBonusHealth : Effect("bonus_health") {
     override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
-        config.getDoubleOrNull("health")
-            ?: violations.add(
-                ConfigViolation(
-                    "health",
-                    "You must specify the bonus health to give!"
-                )
+        if (!config.has("health")) violations.add(
+            ConfigViolation(
+                "health",
+                "You must specify the bonus health to give!"
             )
+        )
 
         return violations
     }

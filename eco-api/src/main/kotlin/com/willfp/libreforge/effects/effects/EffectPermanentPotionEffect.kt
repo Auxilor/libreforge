@@ -5,10 +5,11 @@ import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.LibReforge
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.getEffectAmount
+import com.willfp.libreforge.getInt
 import org.bukkit.entity.Player
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
-import java.util.UUID
+import java.util.*
 
 @Suppress("UNCHECKED_CAST")
 class EffectPermanentPotionEffect : Effect("permanent_potion_effect") {
@@ -21,7 +22,7 @@ class EffectPermanentPotionEffect : Effect("permanent_potion_effect") {
         val effect = PotionEffect(
             effectType,
             1_500_000_000,
-            config.getInt("level") - 1,
+            config.getInt("level", player) - 1,
             false,
             false,
             true
@@ -66,13 +67,12 @@ class EffectPermanentPotionEffect : Effect("permanent_potion_effect") {
                 )
             )
 
-        config.getIntOrNull("level")
-            ?: violations.add(
-                ConfigViolation(
-                    "level",
-                    "You must specify the effect level!"
-                )
+        if (!config.has("level")) violations.add(
+            ConfigViolation(
+                "level",
+                "You must specify the effect level!"
             )
+        )
 
         return violations
     }

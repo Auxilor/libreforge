@@ -4,6 +4,7 @@ import com.gmail.nossr50.api.ExperienceAPI
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getDouble
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
@@ -21,7 +22,7 @@ class EffectGiveSkillXp : Effect(
         ExperienceAPI.addRawXP(
             player,
             config.getString("skill"),
-            config.getDouble("amount").toFloat(),
+            config.getDouble("amount", player).toFloat(),
             "UNKNOWN"
         )
     }
@@ -29,8 +30,7 @@ class EffectGiveSkillXp : Effect(
     override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
-        config.getDoubleOrNull("amount")
-            ?: violations.add(
+        if (!config.has("amount")) violations.add(
                 ConfigViolation(
                     "amount",
                     "You must specify the amount of xp to give!"

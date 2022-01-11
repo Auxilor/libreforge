@@ -32,6 +32,7 @@ allprojects {
         maven { url 'https://papermc.io/repo/repository/maven-public/' }
         maven { url 'https://repo.codemc.org/repository/maven-public/' }
         maven { url 'https://maven.enginehub.org/repo/' }
+        maven { url 'https://redempt.dev' }
     }
 
     jar {
@@ -40,10 +41,9 @@ allprojects {
 
     dependencies {
         compileOnly 'com.willfp:eco:6.18.1'
-
         compileOnly 'org.jetbrains:annotations:23.0.0'
-
         compileOnly 'org.jetbrains.kotlin:kotlin-stdlib:1.6.0'
+        implementation 'com.github.Redempt:Crunch:1.0'
     }
 
     tasks.withType(JavaCompile) {

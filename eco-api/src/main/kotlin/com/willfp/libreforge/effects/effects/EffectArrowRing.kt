@@ -3,6 +3,9 @@ package com.willfp.libreforge.effects.effects
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getDouble
+import com.willfp.libreforge.getDoubleOrNull
+import com.willfp.libreforge.getIntOrNull
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
@@ -25,10 +28,10 @@ class EffectArrowRing : Effect(
         val world = location.world ?: return
 
         val amount = config.getInt("amount")
-        val height = config.getDouble("height")
-        val radius = config.getDouble("radius")
-        val damage = config.getDoubleOrNull("arrow_damage")
-        val flameTicks = config.getIntOrNull("fire_ticks")
+        val height = config.getDouble("height", data.player)
+        val radius = config.getDouble("radius", data.player)
+        val damage = config.getDoubleOrNull("arrow_damage", data.player)
+        val flameTicks = config.getIntOrNull("fire_ticks", data.player)
 
         val apex = location.clone().add(0.0, height, 0.0)
 
@@ -58,29 +61,26 @@ class EffectArrowRing : Effect(
     override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
-        config.getIntOrNull("amount")
-            ?: violations.add(
-                ConfigViolation(
-                    "amount",
-                    "You must specify the amount of arrows!"
-                )
+        if (!config.has("amount")) violations.add(
+            ConfigViolation(
+                "amount",
+                "You must specify the amount of arrows!"
             )
+        )
 
-        config.getDoubleOrNull("height")
-            ?: violations.add(
-                ConfigViolation(
-                    "height",
-                    "You must specify the height at which to spawn the arrows!"
-                )
+        if (!config.has("height")) violations.add(
+            ConfigViolation(
+                "height",
+                "You must specify the height at which to spawn the arrows!"
             )
+        )
 
-        config.getDoubleOrNull("radius")
-            ?: violations.add(
-                ConfigViolation(
-                    "radius",
-                    "You must specify the radius of the circle!"
-                )
+        if (!config.has("radius")) violations.add(
+            ConfigViolation(
+                "radius",
+                "You must specify the radius of the circle!"
             )
+        )
 
         return violations
     }
