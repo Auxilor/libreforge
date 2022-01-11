@@ -1,5 +1,6 @@
 package com.willfp.libreforge.triggers
 
+import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.eco.core.integrations.economy.EconomyManager
 import com.willfp.eco.util.NumberUtils
 import com.willfp.libreforge.Holder
@@ -44,6 +45,12 @@ abstract class Trigger(
                     continue
                 }
 
+                if (config.has("antigrief-check") && config.getBool("antigrief-check") && data.player != null && data.victim != null) {
+                    if (!AntigriefManager.canInjure(data.player, data.victim)) {
+                        continue
+                    }
+                }
+
                 val every = config.getIntOrNull("every") ?: 0
 
                 if (every > 0) {
@@ -74,7 +81,9 @@ abstract class Trigger(
                 }
 
                 if (effect.getCooldown(player, uuid) > 0) {
-                    effect.sendCooldownMessage(player, uuid)
+                    if (config.getBoolOrNull("send-cooldown-message") != false) {
+                        effect.sendCooldownMessage(player, uuid)
+                    }
                     continue
                 }
 
