@@ -3,7 +3,6 @@ package com.willfp.libreforge.conditions.conditions
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.conditions.Condition
-import com.willfp.libreforge.getDouble
 import com.willfp.libreforge.updateEffects
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.Player
@@ -45,7 +44,7 @@ class ConditionBelowHealthPercent : Condition("below_health_percent") {
         val maxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.value ?: return false
         val health = player.health
 
-        return health / maxHealth * 100 <= config.getDouble("percent", player)
+        return health / maxHealth * 100 <= config.getDoubleFromExpression("percent", player)
     }
 
     override fun validateConfig(config: Config): List<ConfigViolation> {

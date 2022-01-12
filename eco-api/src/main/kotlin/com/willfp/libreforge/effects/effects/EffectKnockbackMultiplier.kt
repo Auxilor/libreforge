@@ -4,7 +4,6 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.getEffectAmount
-import com.willfp.libreforge.getDouble
 import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeModifier
 import org.bukkit.entity.Player
@@ -21,7 +20,7 @@ class EffectKnockbackMultiplier : Effect("knockback_multiplier") {
             AttributeModifier(
                 uuid,
                 this.id,
-                config.getDouble("multiplier", player) - 1,
+                config.getDoubleFromExpression("multiplier", player) - 1,
                 AttributeModifier.Operation.MULTIPLY_SCALAR_1
             )
         )

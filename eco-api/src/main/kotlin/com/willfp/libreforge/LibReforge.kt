@@ -4,7 +4,6 @@ package com.willfp.libreforge
 
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.Prerequisite
-import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.IntegrationLoader
 import com.willfp.eco.util.ListUtils
 import com.willfp.libreforge.conditions.Conditions
@@ -16,19 +15,14 @@ import com.willfp.libreforge.integrations.jobs.JobsIntegration
 import com.willfp.libreforge.integrations.mcmmo.McMMOIntegration
 import com.willfp.libreforge.integrations.paper.PaperIntegration
 import com.willfp.libreforge.triggers.Triggers
-import me.clip.placeholderapi.PlaceholderAPI
 import org.apache.commons.lang.StringUtils
 import org.bukkit.Bukkit
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
 import org.bukkit.entity.Tameable
-import redempt.crunch.CompiledExpression
-import redempt.crunch.Crunch
-import redempt.crunch.functional.EvaluationEnvironment
 import java.util.UUID
 import java.util.WeakHashMap
-
 
 private val holderProviders = mutableSetOf<HolderProvider>()
 private val previousStates: MutableMap<UUID, Iterable<Holder>> = WeakHashMap()
@@ -36,18 +30,19 @@ private val holderCache = mutableMapOf<UUID, Iterable<Holder>>()
 
 typealias HolderProvider = (Player) -> Iterable<Holder>
 
-object LibReforge {
-    @JvmStatic
-    lateinit var plugin: EcoPlugin
-
+abstract class LibReforgePlugin(
+    resourceId: Int,
+    bstatsId: Int,
+    color: String,
+    proxyPackage: String = ""
+) : EcoPlugin(resourceId, bstatsId, proxyPackage, color, true) {
     private val defaultPackage = StringUtils.join(
         arrayOf("com", "willfp", "libreforge"),
         "."
     )
 
-    @JvmStatic
-    fun init(plugin: EcoPlugin) {
-        this.plugin = plugin
+    init {
+        setInstance()
 
         if (this.javaClass.packageName == defaultPackage) {
             throw IllegalStateException("You must shade and relocate libreforge into your jar!")
@@ -58,35 +53,55 @@ object LibReforge {
         }
     }
 
-    @JvmStatic
-    fun reload(plugin: EcoPlugin) {
-        plugin.scheduler.runTimer({
-            for (player in Bukkit.getOnlinePlayers()) {
-                player.updateEffects()
-            }
-        }, 30, 30)
+    open fun handleReforgeEnable() {
 
-        compiledConfigExpressions.clear()
     }
 
-    @JvmStatic
-    fun enable(plugin: EcoPlugin) {
-        plugin.eventManager.registerListener(TridentHolderDataAttacher(plugin))
-        plugin.eventManager.registerListener(MovementConditionListener())
+    open fun handleReforgeDisable() {
+
+    }
+
+    open fun handleReforgeReload() {
+
+    }
+
+    open fun loadAdditionalIntegrations(): List<IntegrationLoader> {
+        return emptyList()
+    }
+
+    fun registerHolderProvider(provider: HolderProvider) {
+        holderProviders.add(provider)
+    }
+
+    fun registerJavaHolderProvider(provider: java.util.function.Function<Player, Iterable<Holder>>) {
+        holderProviders.add(provider::apply)
+    }
+
+    fun logViolation(id: String, context: String, violation: ConfigViolation) {
+        this.logger.warning("")
+        this.logger.warning("Invalid configuration for $id in context $context:")
+        this.logger.warning("(Cause) Argument '${violation.param}'")
+        this.logger.warning("(Reason) ${violation.message}")
+        this.logger.warning("")
+    }
+
+    final override fun handleEnable() {
+        this.eventManager.registerListener(TridentHolderDataAttacher(this))
+        this.eventManager.registerListener(MovementConditionListener())
         for (condition in Conditions.values()) {
-            plugin.eventManager.registerListener(condition)
+            this.eventManager.registerListener(condition)
         }
         for (effect in Effects.values()) {
-            plugin.eventManager.registerListener(effect)
+            this.eventManager.registerListener(effect)
         }
         for (trigger in Triggers.values()) {
-            plugin.eventManager.registerListener(trigger)
+            this.eventManager.registerListener(trigger)
         }
+
+        handleReforgeEnable()
     }
 
-    @JvmStatic
-    @Suppress("UNUSED_PARAMETER")
-    fun disable(plugin: EcoPlugin) {
+    final override fun handleDisable() {
         for (player in Bukkit.getOnlinePlayers()) {
             try {
                 for (holder in player.getHolders()) {
@@ -98,36 +113,40 @@ object LibReforge {
                 Bukkit.getLogger().warning("Error disabling effects, not important - do not report this")
             }
         }
+
+        handleReforgeDisable()
     }
 
-    @JvmStatic
-    fun getIntegrationLoaders(): List<IntegrationLoader> {
-        return listOf(
+    final override fun handleReload() {
+        this.scheduler.runTimer({
+            for (player in Bukkit.getOnlinePlayers()) {
+                player.updateEffects()
+            }
+        }, 30, 30)
+
+        handleReforgeReload()
+    }
+
+    final override fun loadIntegrationLoaders(): List<IntegrationLoader> {
+        val integrations = mutableListOf(
             IntegrationLoader("EcoSkills", EcoSkillsIntegration::load),
             IntegrationLoader("AureliumSkills", AureliumSkillsIntegration::load),
             IntegrationLoader("mcMMO", McMMOIntegration::load),
             IntegrationLoader("Jobs", JobsIntegration::load),
         )
+
+        integrations.addAll(loadAdditionalIntegrations())
+
+        return integrations
     }
 
-    @JvmStatic
-    fun registerHolderProvider(provider: HolderProvider) {
-        holderProviders.add(provider)
+    private fun setInstance() {
+        instance = this
     }
 
-
-    @JvmStatic
-    fun registerJavaHolderProvider(provider: java.util.function.Function<Player, Iterable<Holder>>) {
-        holderProviders.add(provider::apply)
-    }
-
-    @JvmStatic
-    fun logViolation(id: String, context: String, violation: ConfigViolation) {
-        plugin.logger.warning("")
-        plugin.logger.warning("Invalid configuration for $id in context $context:")
-        plugin.logger.warning("(Cause) Argument '${violation.param}'")
-        plugin.logger.warning("(Reason) ${violation.message}")
-        plugin.logger.warning("")
+    companion object {
+        @JvmStatic
+        internal lateinit var instance: LibReforgePlugin
     }
 }
 
@@ -146,7 +165,7 @@ fun Player.getHolders(): Iterable<Holder> {
     }
 
     holderCache[this.uniqueId] = holders
-    LibReforge.plugin.scheduler.runLater({
+    LibReforgePlugin.instance.scheduler.runLater({
         holderCache.remove(this.uniqueId)
     }, 40)
 
@@ -238,64 +257,4 @@ fun Entity.tryAsPlayer(): Player? {
         is Tameable -> this.owner as? Player
         else -> null
     }
-}
-
-val compiledConfigExpressions = mutableMapOf<Config, MutableMap<String, CompiledExpression>>()
-
-fun Config.getInt(path: String, player: Player?): Int {
-    return getDouble(path, player).toInt()
-}
-
-fun Config.getDouble(path: String, player: Player?): Double {
-    return getDoubleOrNull(path, player) ?: 0.0
-}
-
-fun Config.getIntOrNull(path: String, player: Player?): Int? {
-    return getDoubleOrNull(path, player)?.toInt()
-}
-
-fun Config.getDoubleOrNull(path: String, player: Player?): Double? {
-    if (!this.has(path)) {
-        return null
-    }
-    if (player == null) {
-        return this.getDoubleOrNull(path)
-    }
-
-    val raw = this.getString(path)
-    val placeholderValues = raw.getPlaceholders()
-        .map { PlaceholderAPI.setPlaceholders(player, it).toDouble() }
-    val expression = this.getExpression(path)
-    return CrunchHelper.evaluate(expression, placeholderValues)
-}
-
-private fun String.getPlaceholders(): List<String> {
-    val placeholders = mutableListOf<String>()
-    val matcher = PlaceholderAPI.getPlaceholderPattern().matcher(this)
-    while (matcher.find()) {
-        placeholders.add(matcher.group())
-    }
-
-    return placeholders
-}
-
-private fun Config.getExpression(path: String): CompiledExpression {
-    val cached = compiledConfigExpressions[this]?.get(path)
-
-    if (cached != null) {
-        return cached
-    }
-
-    val rawString = this.getString(path)
-
-    val placeholders = rawString.getPlaceholders()
-
-    val env = EvaluationEnvironment()
-    env.setVariableNames(*placeholders.toTypedArray())
-
-    val expression = Crunch.compileExpression(this.getString(path), env)
-    val cache = compiledConfigExpressions[this] ?: mutableMapOf()
-    cache[path] = expression
-    compiledConfigExpressions[this] = cache
-    return expression
 }

@@ -4,7 +4,6 @@ import com.gmail.nossr50.api.ExperienceAPI
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
-import com.willfp.libreforge.getDouble
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
@@ -22,7 +21,7 @@ class EffectGiveSkillXp : Effect(
         ExperienceAPI.addRawXP(
             player,
             config.getString("skill"),
-            config.getDouble("amount", player).toFloat(),
+            config.getDoubleFromExpression("amount", player).toFloat(),
             "UNKNOWN"
         )
     }

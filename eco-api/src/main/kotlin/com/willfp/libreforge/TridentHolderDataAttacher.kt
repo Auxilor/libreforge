@@ -40,6 +40,6 @@ class TridentHolderDataAttacher(
 
 fun Trident.getAttachedHolders(): Iterable<Holder> {
     @Suppress("UNCHECKED_CAST")
-    return this.getMetadata("${LibReforge.plugin.name.lowercase()}_trident_holders")
+    return this.getMetadata("${LibReforgePlugin.instance.name.lowercase()}_trident_holders")
         .firstOrNull() as? Iterable<Holder> ?: emptyList()
 }

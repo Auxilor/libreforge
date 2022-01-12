@@ -4,7 +4,6 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.getEffectAmount
-import com.willfp.libreforge.getInt
 import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeModifier
 import org.bukkit.entity.Player
@@ -19,7 +18,7 @@ class EffectBonusHealth : Effect("bonus_health") {
             AttributeModifier(
                 uuid,
                 this.id,
-                config.getInt("health", player).toDouble(),
+                config.getIntFromExpression("health", player).toDouble(),
                 AttributeModifier.Operation.ADD_NUMBER
             )
         )

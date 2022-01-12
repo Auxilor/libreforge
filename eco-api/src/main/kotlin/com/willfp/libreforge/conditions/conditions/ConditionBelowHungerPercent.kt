@@ -3,7 +3,6 @@ package com.willfp.libreforge.conditions.conditions
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.conditions.Condition
-import com.willfp.libreforge.getDouble
 import com.willfp.libreforge.updateEffects
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -27,7 +26,7 @@ class ConditionBelowHungerPercent : Condition("below_hunger_percent") {
     }
 
     override fun isConditionMet(player: Player, config: Config): Boolean {
-        return (player.foodLevel / 20) * 100 <= config.getDouble("percent", player)
+        return (player.foodLevel / 20) * 100 <= config.getDoubleFromExpression("percent", player)
     }
 
     override fun validateConfig(config: Config): List<ConfigViolation> {

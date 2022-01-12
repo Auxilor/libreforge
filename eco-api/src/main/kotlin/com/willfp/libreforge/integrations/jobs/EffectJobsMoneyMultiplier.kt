@@ -8,10 +8,9 @@ import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.MultiplierModifier
 import com.willfp.libreforge.effects.getEffectAmount
-import com.willfp.libreforge.getDouble
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
-import java.util.*
+import java.util.UUID
 
 class EffectJobsMoneyMultiplier : Effect("jobs_money_multiplier") {
     private val globalModifiers = mutableMapOf<UUID, MutableList<MultiplierModifier>>()
@@ -23,7 +22,7 @@ class EffectJobsMoneyMultiplier : Effect("jobs_money_multiplier") {
         registeredModifiers.add(
             MultiplierModifier(
                 uuid,
-                config.getDouble("multiplier", player)
+                config.getDoubleFromExpression("multiplier", player)
             )
         )
         globalModifiers[player.uniqueId] = registeredModifiers

@@ -2,18 +2,17 @@ package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
-import com.willfp.libreforge.LibReforge
+import com.willfp.libreforge.LibReforgePlugin
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.getEffectAmount
-import com.willfp.libreforge.getInt
 import org.bukkit.entity.Player
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
-import java.util.*
+import java.util.UUID
 
 @Suppress("UNCHECKED_CAST")
 class EffectPermanentPotionEffect : Effect("permanent_potion_effect") {
-    private val metaKey = "${LibReforge.plugin.name}_${this.id}"
+    private val metaKey = "${LibReforgePlugin.instance.name}_${this.id}"
 
     override fun handleEnable(player: Player, config: Config) {
         val effectType = PotionEffectType.getByName(config.getString("effect").uppercase())
@@ -22,7 +21,7 @@ class EffectPermanentPotionEffect : Effect("permanent_potion_effect") {
         val effect = PotionEffect(
             effectType,
             1_500_000_000,
-            config.getInt("level", player) - 1,
+            config.getIntFromExpression("level", player) - 1,
             false,
             false,
             true
