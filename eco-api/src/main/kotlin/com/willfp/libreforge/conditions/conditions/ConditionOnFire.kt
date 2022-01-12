@@ -35,13 +35,12 @@ class ConditionOnFire : Condition("on_fire") {
     override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
-        config.getBoolOrNull("on_fire")
-            ?: violations.add(
-                ConfigViolation(
-                    "on_fire",
-                    "You must specify if the player must be on fire or not!"
-                )
+        if (!config.has("on_fire")) violations.add(
+            ConfigViolation(
+                "on_fire",
+                "You must specify if the player must be on fire or not!"
             )
+        )
 
         return violations
     }

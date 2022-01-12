@@ -9,7 +9,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.player.PlayerToggleSneakEvent
 
-class ConditionIsSneaking: Condition("is_sneaking") {
+class ConditionIsSneaking : Condition("is_sneaking") {
     @EventHandler(
         priority = EventPriority.MONITOR,
         ignoreCancelled = true
@@ -27,13 +27,12 @@ class ConditionIsSneaking: Condition("is_sneaking") {
     override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
-        config.getBoolOrNull("is_sneaking")
-            ?: violations.add(
-                ConfigViolation(
-                    "is_sneaking",
-                    "You must specify if the player must be sneaking or standing!"
-                )
+        if (!config.has("is_sneaking")) violations.add(
+            ConfigViolation(
+                "is_sneaking",
+                "You must specify if the player must be sneaking or standing!"
             )
+        )
 
         return violations
     }

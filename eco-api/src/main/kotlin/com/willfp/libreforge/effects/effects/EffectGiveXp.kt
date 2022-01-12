@@ -36,13 +36,12 @@ class EffectGiveXp : Effect(
         )
 
         if (Prerequisite.HAS_PAPER.isMet) {
-            config.getBoolOrNull("apply_mending")
-                ?: violations.add(
-                    ConfigViolation(
-                        "apply_mending",
-                        "You must specify whether or not to apply mending!"
-                    )
+            if (!config.has("apply_mending")) violations.add(
+                ConfigViolation(
+                    "apply_mending",
+                    "You must specify whether or not to apply mending!"
                 )
+            )
         }
 
         return violations

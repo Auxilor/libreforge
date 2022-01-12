@@ -27,8 +27,7 @@ class ConditionIsStorm: Condition("is_storm") {
     override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
-        config.getBoolOrNull("is_storm")
-            ?: violations.add(
+        if (!config.has("is_storm")) violations.add(
                 ConfigViolation(
                     "is_storm",
                     "You must specify if the player must be in a storm or not!"

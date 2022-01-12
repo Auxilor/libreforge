@@ -36,21 +36,19 @@ class EffectSendMessage : Effect(
     override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
-        config.getStringOrNull("message")
-            ?: violations.add(
-                ConfigViolation(
-                    "message",
-                    "You must specify the message to send!"
-                )
+        if (!config.has("message")) violations.add(
+            ConfigViolation(
+                "message",
+                "You must specify the message to send!"
             )
+        )
 
-        config.getBoolOrNull("action_bar")
-            ?: violations.add(
-                ConfigViolation(
-                    "action_bar",
-                    "You must specify if to send the message to the action bar!"
-                )
+        if (!config.has("action_bar")) violations.add(
+            ConfigViolation(
+                "action_bar",
+                "You must specify if to send the message to the action bar!"
             )
+        )
 
         return violations
     }

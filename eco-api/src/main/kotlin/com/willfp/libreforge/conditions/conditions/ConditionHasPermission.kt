@@ -14,13 +14,12 @@ class ConditionHasPermission : Condition("has_permission") {
     override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
-        config.getStringOrNull("permission")
-            ?: violations.add(
-                ConfigViolation(
-                    "permission",
-                    "You must specify the permission!"
-                )
+        if (!config.has("permission")) violations.add(
+            ConfigViolation(
+                "permission",
+                "You must specify the permission!"
             )
+        )
 
         return violations
     }

@@ -16,21 +16,19 @@ class ConditionPlaceholderEquals : Condition("placeholder_equals") {
     override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
-        config.getStringOrNull("placeholder")
-            ?: violations.add(
-                ConfigViolation(
-                    "placeholder",
-                    "You must specify the placeholder!"
-                )
+        if (!config.has("placeholder")) violations.add(
+            ConfigViolation(
+                "placeholder",
+                "You must specify the placeholder!"
             )
+        )
 
-        config.getStringOrNull("value")
-            ?: violations.add(
-                ConfigViolation(
-                    "value",
-                    "You must specify the value!"
-                )
+        if (!config.has("value")) violations.add(
+            ConfigViolation(
+                "value",
+                "You must specify the value!"
             )
+        )
 
         return violations
     }

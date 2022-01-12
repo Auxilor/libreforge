@@ -28,29 +28,26 @@ class EffectPlaySound : Effect(
     override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
-        config.getStringOrNull("sound")
-            ?: violations.add(
-                ConfigViolation(
-                    "sound",
-                    "You must specify the sound to play!"
-                )
+        if (!config.has("sound")) violations.add(
+            ConfigViolation(
+                "sound",
+                "You must specify the sound to play!"
             )
+        )
 
-        config.getDoubleOrNull("pitch")
-            ?: violations.add(
-                ConfigViolation(
-                    "pitch",
-                    "You must specify the pitch of the sound (0.5-2)!"
-                )
+        if (!config.has("pitch")) violations.add(
+            ConfigViolation(
+                "pitch",
+                "You must specify the pitch of the sound (0.5-2)!"
             )
+        )
 
-        config.getDoubleOrNull("volume")
-            ?: violations.add(
-                ConfigViolation(
-                    "volume",
-                    "You must specify the volume of the sound!"
-                )
+        if (!config.has("volume")) violations.add(
+            ConfigViolation(
+                "volume",
+                "You must specify the volume of the sound!"
             )
+        )
 
         return violations
     }

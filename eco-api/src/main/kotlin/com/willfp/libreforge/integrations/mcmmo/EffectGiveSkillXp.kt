@@ -30,19 +30,18 @@ class EffectGiveSkillXp : Effect(
         val violations = mutableListOf<ConfigViolation>()
 
         if (!config.has("amount")) violations.add(
-                ConfigViolation(
-                    "amount",
-                    "You must specify the amount of xp to give!"
-                )
+            ConfigViolation(
+                "amount",
+                "You must specify the amount of xp to give!"
             )
+        )
 
-        config.getStringOrNull("skill")
-            ?: violations.add(
-                ConfigViolation(
-                    "amount",
-                    "You must specify the skill to give xp for!"
-                )
+        if (!config.has("amount")) violations.add(
+            ConfigViolation(
+                "amount",
+                "You must specify the skill to give xp for!"
             )
+        )
 
         return violations
     }

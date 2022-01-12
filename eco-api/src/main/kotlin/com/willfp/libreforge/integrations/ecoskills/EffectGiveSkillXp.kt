@@ -36,13 +36,12 @@ class EffectGiveSkillXp : Effect(
             )
         )
 
-        config.getStringOrNull("skill")
-            ?: violations.add(
-                ConfigViolation(
-                    "amount",
-                    "You must specify the skill to give xp for!"
-                )
+        if (!config.has("skill")) violations.add(
+            ConfigViolation(
+                "skill",
+                "You must specify the skill to give xp for!"
             )
+        )
 
         return violations
     }
