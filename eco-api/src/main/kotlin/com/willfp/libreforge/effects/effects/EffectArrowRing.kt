@@ -45,12 +45,8 @@ class EffectArrowRing : Effect(
                 Arrow::class.java
             )
             arrow.velocity = Vector(0, -1, 0)
-            if (damage != null) {
-                arrow.damage = damage
-            }
-            if (flameTicks != null) {
-                arrow.fireTicks = flameTicks
-            }
+            arrow.damage = damage
+            arrow.fireTicks = flameTicks
         }
     }
 
