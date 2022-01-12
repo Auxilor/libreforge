@@ -4,7 +4,7 @@ import com.google.common.collect.HashBiMap
 import com.google.common.collect.ImmutableList
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
-import com.willfp.libreforge.LibReforge
+import com.willfp.libreforge.LibReforgePlugin
 import com.willfp.libreforge.conditions.conditions.ConditionAboveBalance
 import com.willfp.libreforge.conditions.conditions.ConditionAboveHealthPercent
 import com.willfp.libreforge.conditions.conditions.ConditionAboveHungerPercent
@@ -103,7 +103,7 @@ object Conditions {
         val condition = config.getString("id").let {
             val found = getByID(it)
             if (found == null) {
-                LibReforge.logViolation(
+                LibReforgePlugin.instance.logViolation(
                     it,
                     context,
                     ConfigViolation("id", "Invalid condition ID specified!")

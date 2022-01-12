@@ -6,7 +6,6 @@ import com.willfp.ecoskills.api.PlayerSkillLevelUpEvent
 import com.willfp.ecoskills.skills.Skills
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.conditions.Condition
-import com.willfp.libreforge.getInt
 import com.willfp.libreforge.updateEffects
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
