@@ -17,13 +17,12 @@ class ConditionPlaceholderLessThan : Condition("placeholder_less_than") {
     override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
-        config.getStringOrNull("placeholder")
-            ?: violations.add(
-                ConfigViolation(
-                    "placeholder",
-                    "You must specify the placeholder!"
-                )
+        if (!config.has("placeholder")) violations.add(
+            ConfigViolation(
+                "placeholder",
+                "You must specify the placeholder!"
             )
+        )
 
         if (!config.has("value")) violations.add(
             ConfigViolation(

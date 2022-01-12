@@ -58,13 +58,12 @@ class EffectPermanentPotionEffect : Effect("permanent_potion_effect") {
     override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
-        config.getStringOrNull("effect")
-            ?: violations.add(
-                ConfigViolation(
-                    "effect",
-                    "You must specify the potion effect!"
-                )
+        if (!config.has("effect")) violations.add(
+            ConfigViolation(
+                "effect",
+                "You must specify the potion effect!"
             )
+        )
 
         if (!config.has("level")) violations.add(
             ConfigViolation(

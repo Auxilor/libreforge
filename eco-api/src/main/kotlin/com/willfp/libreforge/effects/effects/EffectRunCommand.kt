@@ -36,13 +36,12 @@ class EffectRunCommand : Effect(
     override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
-        config.getStringOrNull("command")
-            ?: violations.add(
-                ConfigViolation(
-                    "command",
-                    "You must specify the command to execute!"
-                )
+        if (!config.has("command")) violations.add(
+            ConfigViolation(
+                "command",
+                "You must specify the command to execute!"
             )
+        )
 
         return violations
     }

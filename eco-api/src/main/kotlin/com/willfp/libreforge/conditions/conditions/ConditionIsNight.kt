@@ -5,7 +5,7 @@ import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.conditions.Condition
 import org.bukkit.entity.Player
 
-class ConditionIsNight: Condition("is_night") {
+class ConditionIsNight : Condition("is_night") {
     override fun isConditionMet(player: Player, config: Config): Boolean {
         val isNight = player.world.time < 12300 || player.world.time > 23850
 
@@ -15,13 +15,12 @@ class ConditionIsNight: Condition("is_night") {
     override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
-        config.getBoolOrNull("is_night")
-            ?: violations.add(
-                ConfigViolation(
-                    "is_night",
-                    "You must specify if the time must be night or not!"
-                )
+        if (!config.has("is_night")) violations.add(
+            ConfigViolation(
+                "is_night",
+                "You must specify if the time must be night or not!"
             )
+        )
 
         return violations
     }

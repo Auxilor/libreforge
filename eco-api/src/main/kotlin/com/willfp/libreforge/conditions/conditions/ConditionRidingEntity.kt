@@ -40,13 +40,12 @@ class ConditionRidingEntity : Condition("riding_entity") {
     override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
-        config.getStringsOrNull("entities")
-            ?: violations.add(
-                ConfigViolation(
-                    "entities",
-                    "You must specify the entity list!"
-                )
+        if (!config.has("entities")) violations.add(
+            ConfigViolation(
+                "entities",
+                "You must specify the entity list!"
             )
+        )
 
         return violations
     }

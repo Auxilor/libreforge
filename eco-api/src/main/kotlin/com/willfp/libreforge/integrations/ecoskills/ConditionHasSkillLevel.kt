@@ -33,13 +33,12 @@ class ConditionHasSkillLevel : Condition("has_skill_level") {
     override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
-        config.getStringOrNull("skill")
-            ?: violations.add(
-                ConfigViolation(
-                    "skill",
-                    "You must specify the skill!"
-                )
+        if (!config.has("skill")) violations.add(
+            ConfigViolation(
+                "skill",
+                "You must specify the skill!"
             )
+        )
 
         if (!config.has("level")) violations.add(
             ConfigViolation(

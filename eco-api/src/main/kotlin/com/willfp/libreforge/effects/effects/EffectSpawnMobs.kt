@@ -77,19 +77,18 @@ class EffectSpawnMobs : Effect(
         )
 
         if (!config.has("range")) violations.add(
-                ConfigViolation(
-                    "range",
-                    "You must specify the range for mobs to spawn!"
-                )
+            ConfigViolation(
+                "range",
+                "You must specify the range for mobs to spawn!"
             )
+        )
 
-        config.getStringOrNull("entity")
-            ?: violations.add(
-                ConfigViolation(
-                    "entity",
-                    "You must specify the mob to spawn!"
-                )
+        if (!config.has("entity")) violations.add(
+            ConfigViolation(
+                "entity",
+                "You must specify the mob to spawn!"
             )
+        )
 
         return violations
     }

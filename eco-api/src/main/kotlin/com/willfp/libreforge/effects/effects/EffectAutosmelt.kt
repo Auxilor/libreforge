@@ -78,13 +78,12 @@ class EffectAutosmelt : Effect(
     override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
-        config.getBoolOrNull("drop_xp")
-            ?: violations.add(
-                ConfigViolation(
-                    "drop_xp",
-                    "You must specify if xp should be dropped!"
-                )
+        if (!config.has("drop_xp")) violations.add(
+            ConfigViolation(
+                "drop_xp",
+                "You must specify if xp should be dropped!"
             )
+        )
 
         return violations
     }

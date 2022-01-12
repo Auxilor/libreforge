@@ -38,13 +38,12 @@ class EffectMultiplyStat : Effect("multiply_stat") {
     override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
-        config.getStringOrNull("stat")
-            ?: violations.add(
-                ConfigViolation(
-                    "stat",
-                    "You must specify the stat!"
-                )
+        if (!config.has("stat")) violations.add(
+            ConfigViolation(
+                "stat",
+                "You must specify the stat!"
             )
+        )
 
         if (!config.has("multiplier")) violations.add(
             ConfigViolation(

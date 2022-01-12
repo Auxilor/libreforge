@@ -32,21 +32,19 @@ class EffectRemovePotionEffect : Effect(
     override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
-        config.getStringOrNull("effect")
-            ?: violations.add(
-                ConfigViolation(
-                    "effect",
-                    "You must specify the potion effect!"
-                )
+        if (!config.has("effect")) violations.add(
+            ConfigViolation(
+                "effect",
+                "You must specify the potion effect!"
             )
+        )
 
-        config.getBoolOrNull("apply_to_player")
-            ?: violations.add(
-                ConfigViolation(
-                    "apply_to_player",
-                    "You must specify whether the player or victim loses the effect!"
-                )
+        if (!config.has("apply_to_player")) violations.add(
+            ConfigViolation(
+                "apply_to_player",
+                "You must specify whether the player or victim loses the effect!"
             )
+        )
 
         return violations
     }
