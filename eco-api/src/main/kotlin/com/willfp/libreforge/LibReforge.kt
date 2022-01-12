@@ -53,15 +53,15 @@ abstract class LibReforgePlugin(
         }
     }
 
-    open fun handleReforgeEnable() {
+    open fun handleEnableAdditional() {
 
     }
 
-    open fun handleReforgeDisable() {
+    open fun handleDisableAdditional() {
 
     }
 
-    open fun handleReforgeReload() {
+    open fun handleReloadAdditional() {
 
     }
 
@@ -98,7 +98,7 @@ abstract class LibReforgePlugin(
             this.eventManager.registerListener(trigger)
         }
 
-        handleReforgeEnable()
+        handleEnableAdditional()
     }
 
     final override fun handleDisable() {
@@ -114,7 +114,7 @@ abstract class LibReforgePlugin(
             }
         }
 
-        handleReforgeDisable()
+        handleDisableAdditional()
     }
 
     final override fun handleReload() {
@@ -124,7 +124,7 @@ abstract class LibReforgePlugin(
             }
         }, 30, 30)
 
-        handleReforgeReload()
+        handleReloadAdditional()
     }
 
     final override fun loadIntegrationLoaders(): List<IntegrationLoader> {
