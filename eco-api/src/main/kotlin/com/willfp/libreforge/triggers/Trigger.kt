@@ -3,12 +3,13 @@ package com.willfp.libreforge.triggers
 import com.willfp.eco.core.integrations.economy.EconomyManager
 import com.willfp.eco.util.NumberUtils
 import com.willfp.libreforge.Holder
-import com.willfp.libreforge.LibReforge
+import com.willfp.libreforge.LibReforgePlugin
 import com.willfp.libreforge.events.EffectActivateEvent
 import com.willfp.libreforge.getHolders
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
-import java.util.*
+import java.util.Objects
+import java.util.UUID
 
 private val everyHandler = mutableMapOf<UUID, MutableMap<UUID, Int>>()
 
@@ -16,7 +17,7 @@ abstract class Trigger(
     val id: String,
     val parameters: Collection<TriggerParameter>
 ) : Listener {
-    protected val plugin = LibReforge.plugin
+    protected val plugin = LibReforgePlugin.instance
 
     init {
         postInit()
@@ -79,12 +80,12 @@ abstract class Trigger(
                 }
 
                 if (config.has("cost")) {
-                    if (!EconomyManager.hasAmount(player, config.getDouble("cost"))) {
-                        effect.sendCannotAffordMessage(player, config.getDouble("cost"))
+                    if (!EconomyManager.hasAmount(player, config.getDoubleFromExpression("cost"))) {
+                        effect.sendCannotAffordMessage(player, config.getDoubleFromExpression("cost"))
                         continue
                     }
 
-                    EconomyManager.removeMoney(player, config.getDouble("cost"))
+                    EconomyManager.removeMoney(player, config.getDoubleFromExpression("cost"))
                 }
 
                 val activateEvent = EffectActivateEvent(player, holder, effect)

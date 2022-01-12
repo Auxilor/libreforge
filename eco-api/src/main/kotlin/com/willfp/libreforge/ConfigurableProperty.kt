@@ -7,7 +7,7 @@ import java.util.Objects
 abstract class ConfigurableProperty(
     val id: String
 ) {
-    protected val plugin = LibReforge.plugin
+    protected val plugin = LibReforgePlugin.instance
 
     /**
      * Check if the config for this is valid.
@@ -22,7 +22,7 @@ abstract class ConfigurableProperty(
         val violations = this.validateConfig(config)
 
         for (violation in violations) {
-            LibReforge.logViolation(this.id, context, violation)
+            plugin.logViolation(this.id, context, violation)
         }
 
         return violations.isNotEmpty()

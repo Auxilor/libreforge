@@ -4,7 +4,6 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.getEffectAmount
-import com.willfp.libreforge.getInt
 import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeModifier
 import org.bukkit.entity.Player
@@ -18,7 +17,7 @@ class EffectArmorToughness : Effect("armor_toughness") {
             AttributeModifier(
                 uuid,
                 this.id,
-                config.getInt("points", player).toDouble(),
+                config.getIntFromExpression("points", player).toDouble(),
                 AttributeModifier.Operation.ADD_NUMBER
             )
         )

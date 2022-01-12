@@ -28,7 +28,7 @@ class ConditionHasSkillLevel : Condition("has_skill_level") {
         return EcoSkillsAPI.getInstance().getSkillLevel(
             player,
             Skills.getByID(config.getString("skill").lowercase()) ?: Skills.COMBAT
-        ) >= config.getInt("level", player)
+        ) >= config.getIntFromExpression("level", player)
     }
 
     override fun validateConfig(config: Config): List<ConfigViolation> {

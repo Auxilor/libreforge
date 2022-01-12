@@ -7,11 +7,10 @@ import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.MultiplierModifier
 import com.willfp.libreforge.effects.getEffectAmount
-import com.willfp.libreforge.getDouble
 import com.willfp.libreforge.triggers.wrappers.WrappedXpEvent
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
-import java.util.*
+import java.util.UUID
 import kotlin.math.ceil
 
 class EffectXpMultiplier : Effect("xp_multiplier") {
@@ -24,7 +23,7 @@ class EffectXpMultiplier : Effect("xp_multiplier") {
         registeredModifiers.add(
             MultiplierModifier(
                 uuid,
-                config.getDouble("multiplier", player)
+                config.getDoubleFromExpression("multiplier", player)
             )
         )
         modifiers[player.uniqueId] = registeredModifiers

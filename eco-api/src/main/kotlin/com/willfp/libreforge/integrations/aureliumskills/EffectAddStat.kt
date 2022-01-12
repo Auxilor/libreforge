@@ -5,7 +5,6 @@ import com.archyx.aureliumskills.stats.Stats
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.getEffectAmount
-import com.willfp.libreforge.getDouble
 import org.bukkit.entity.Player
 
 class EffectAddStat : Effect("add_stat") {
@@ -17,7 +16,7 @@ class EffectAddStat : Effect("add_stat") {
             player,
             this.getNamespacedKey(player.getEffectAmount(this)).key,
             Stats.valueOf(config.getString("stat").uppercase()),
-            config.getDouble("amount", player)
+            config.getDoubleFromExpression("amount", player)
         )
     }
 

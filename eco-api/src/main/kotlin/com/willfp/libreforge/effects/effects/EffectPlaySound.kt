@@ -19,8 +19,8 @@ class EffectPlaySound : Effect(
         val player = data.player ?: return
 
         val sound = Sound.valueOf(config.getString("sound").uppercase())
-        val pitch = config.getDouble("pitch")
-        val volume = config.getDouble("volume")
+        val pitch = config.getDoubleFromExpression("pitch")
+        val volume = config.getDoubleFromExpression("volume")
 
         player.playSound(player.location, sound, volume.toFloat(), pitch.toFloat())
     }

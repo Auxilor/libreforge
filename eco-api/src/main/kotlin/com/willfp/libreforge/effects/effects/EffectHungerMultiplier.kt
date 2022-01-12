@@ -7,12 +7,11 @@ import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.MultiplierModifier
 import com.willfp.libreforge.effects.getEffectAmount
-import com.willfp.libreforge.getDouble
 import com.willfp.libreforge.triggers.wrappers.WrappedHungerEvent
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.FoodLevelChangeEvent
-import java.util.*
+import java.util.UUID
 import kotlin.math.ceil
 
 class EffectHungerMultiplier : Effect("hunger_multiplier") {
@@ -25,7 +24,7 @@ class EffectHungerMultiplier : Effect("hunger_multiplier") {
         registeredModifiers.add(
             MultiplierModifier(
                 uuid,
-                config.getDouble("multiplier", player)
+                config.getDoubleFromExpression("multiplier", player)
             )
         )
         modifiers[player.uniqueId] = registeredModifiers

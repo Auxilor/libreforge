@@ -11,7 +11,7 @@ import org.bukkit.NamespacedKey
 import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
-import java.util.*
+import java.util.UUID
 import kotlin.math.ceil
 
 abstract class Effect(
@@ -79,7 +79,7 @@ abstract class Effect(
             return
         }
         val current = cooldownTracker[player.uniqueId] ?: mutableMapOf()
-        current[uuid] = System.currentTimeMillis() + (config.getDouble("cooldown") * 1000L).toLong()
+        current[uuid] = System.currentTimeMillis() + (config.getDoubleFromExpression("cooldown") * 1000L).toLong()
         cooldownTracker[player.uniqueId] = current
     }
 

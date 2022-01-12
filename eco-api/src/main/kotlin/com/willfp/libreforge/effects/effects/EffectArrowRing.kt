@@ -3,9 +3,6 @@ package com.willfp.libreforge.effects.effects
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
-import com.willfp.libreforge.getDouble
-import com.willfp.libreforge.getDoubleOrNull
-import com.willfp.libreforge.getIntOrNull
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
@@ -14,7 +11,6 @@ import org.bukkit.util.Vector
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
-
 
 class EffectArrowRing : Effect(
     "arrow_ring",
@@ -27,11 +23,11 @@ class EffectArrowRing : Effect(
         val location = data.location ?: return
         val world = location.world ?: return
 
-        val amount = config.getInt("amount")
-        val height = config.getDouble("height", data.player)
-        val radius = config.getDouble("radius", data.player)
-        val damage = config.getDoubleOrNull("arrow_damage", data.player)
-        val flameTicks = config.getIntOrNull("fire_ticks", data.player)
+        val amount = config.getIntFromExpression("amount")
+        val height = config.getDoubleFromExpression("height", data.player)
+        val radius = config.getDoubleFromExpression("radius", data.player)
+        val damage = config.getDoubleFromExpression("arrow_damage", data.player)
+        val flameTicks = config.getIntFromExpression("fire_ticks", data.player)
 
         val apex = location.clone().add(0.0, height, 0.0)
 
@@ -79,6 +75,20 @@ class EffectArrowRing : Effect(
             ConfigViolation(
                 "radius",
                 "You must specify the radius of the circle!"
+            )
+        )
+
+        if (!config.has("damage")) violations.add(
+            ConfigViolation(
+                "damage",
+                "You must specify the arrow damage!"
+            )
+        )
+
+        if (!config.has("fire_ticks")) violations.add(
+            ConfigViolation(
+                "fire_ticks",
+                "You must specify the arrow fire ticks!"
             )
         )
 

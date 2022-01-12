@@ -5,7 +5,6 @@ import com.willfp.ecoskills.api.EcoSkillsAPI
 import com.willfp.ecoskills.skills.Skills
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
-import com.willfp.libreforge.getDouble
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
@@ -23,7 +22,7 @@ class EffectGiveSkillXp : Effect(
         EcoSkillsAPI.getInstance().giveSkillExperience(
             player,
             Skills.getByID(config.getString("skill")) ?: Skills.COMBAT,
-            config.getDouble("amount", player)
+            config.getDoubleFromExpression("amount", player)
         )
     }
 

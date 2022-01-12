@@ -27,6 +27,7 @@ allprojects {
 
     repositories {
         mavenCentral()
+        mavenLocal()
         maven { url 'https://jitpack.io' }
         maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
         maven { url 'https://papermc.io/repo/repository/maven-public/' }
@@ -41,11 +42,9 @@ allprojects {
     }
 
     dependencies {
-        compileOnly 'com.willfp:eco:6.18.1'
+        compileOnly 'com.willfp:eco:6.19.0'
         compileOnly 'org.jetbrains:annotations:23.0.0'
         compileOnly 'org.jetbrains.kotlin:kotlin-stdlib:1.6.0'
-        compileOnly 'me.clip:placeholderapi:2.11.1'
-        implementation 'com.github.Redempt:Crunch:1.0'
     }
 
     tasks.withType(JavaCompile) {

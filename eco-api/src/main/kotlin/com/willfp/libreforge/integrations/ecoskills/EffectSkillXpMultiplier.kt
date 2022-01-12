@@ -9,10 +9,9 @@ import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.MultiplierModifier
 import com.willfp.libreforge.effects.getEffectAmount
-import com.willfp.libreforge.getDouble
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
-import java.util.*
+import java.util.UUID
 
 class EffectSkillXpMultiplier : Effect("skill_xp_multiplier") {
     private val modifiers = mutableMapOf<UUID, MutableMap<Skill, MutableList<MultiplierModifier>>>()
@@ -29,7 +28,7 @@ class EffectSkillXpMultiplier : Effect("skill_xp_multiplier") {
                 registeredModifiers.add(
                     MultiplierModifier(
                         uuid,
-                        config.getDouble("multiplier", player)
+                        config.getDoubleFromExpression("multiplier", player)
                     )
                 )
                 skillModifiers[skill] = registeredModifiers
@@ -42,7 +41,7 @@ class EffectSkillXpMultiplier : Effect("skill_xp_multiplier") {
             registeredModifiers.add(
                 MultiplierModifier(
                     uuid,
-                    config.getDouble("multiplier", player)
+                    config.getDoubleFromExpression("multiplier", player)
                 )
             )
             globalModifiers[player.uniqueId] = registeredModifiers
