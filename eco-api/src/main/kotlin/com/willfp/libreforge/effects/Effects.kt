@@ -4,7 +4,7 @@ import com.google.common.collect.HashBiMap
 import com.google.common.collect.ImmutableList
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
-import com.willfp.libreforge.LibReforge
+import com.willfp.libreforge.LibReforgePlugin
 import com.willfp.libreforge.effects.effects.EffectArmor
 import com.willfp.libreforge.effects.effects.EffectArmorToughness
 import com.willfp.libreforge.effects.effects.EffectArrowRing
@@ -118,7 +118,7 @@ object Effects {
         val effect = config.getString("id").let {
             val found = getByID(it)
             if (found == null) {
-                LibReforge.logViolation(
+                LibReforgePlugin.instance.logViolation(
                     it,
                     context,
                     ConfigViolation("id", "Invalid effect ID specified!")
@@ -135,7 +135,7 @@ object Effects {
 
         val filter = config.getSubsectionOrNull("filters").let {
             if (!effect.supportsFilters && it != null) {
-                LibReforge.logViolation(
+                LibReforgePlugin.instance.logViolation(
                     effect.id,
                     context,
                     ConfigViolation("filters", "Specified effect does not support filters")
@@ -151,7 +151,7 @@ object Effects {
             val triggers = mutableListOf<Trigger>()
 
             if (it.isNotEmpty() && effect.applicableTriggers.isEmpty()) {
-                LibReforge.logViolation(
+                LibReforgePlugin.instance.logViolation(
                     effect.id,
                     context,
                     ConfigViolation(
@@ -163,7 +163,7 @@ object Effects {
             }
 
             if (effect.applicableTriggers.isNotEmpty() && it.isEmpty()) {
-                LibReforge.logViolation(
+                LibReforgePlugin.instance.logViolation(
                     effect.id,
                     context,
                     ConfigViolation(
@@ -178,7 +178,7 @@ object Effects {
                 val trigger = Triggers.getById(id)
 
                 if (trigger == null) {
-                    LibReforge.logViolation(
+                    LibReforgePlugin.instance.logViolation(
                         effect.id,
                         context,
                         ConfigViolation(
@@ -190,7 +190,7 @@ object Effects {
                 }
 
                 if (!effect.applicableTriggers.contains(trigger)) {
-                    LibReforge.logViolation(
+                    LibReforgePlugin.instance.logViolation(
                         effect.id,
                         context,
                         ConfigViolation(
