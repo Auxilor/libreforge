@@ -22,6 +22,7 @@ import com.willfp.libreforge.effects.effects.EffectGiveHealth
 import com.willfp.libreforge.effects.effects.EffectGiveMoney
 import com.willfp.libreforge.effects.effects.EffectGiveXp
 import com.willfp.libreforge.effects.effects.EffectHungerMultiplier
+import com.willfp.libreforge.effects.effects.EffectIgnite
 import com.willfp.libreforge.effects.effects.EffectKnockbackMultiplier
 import com.willfp.libreforge.effects.effects.EffectMovementSpeedMultiplier
 import com.willfp.libreforge.effects.effects.EffectPermanentPotionEffect
@@ -75,6 +76,7 @@ object Effects {
     val BREAK_BLOCK: Effect = EffectBreakBlock()
     val REMOVE_POTION_EFFECT: Effect = EffectRemovePotionEffect()
     val PLAY_SOUND: Effect = EffectPlaySound()
+    val IGNITE: Effect = EffectIgnite()
 
     /**
      * Get effect matching id.
