@@ -37,9 +37,9 @@ class EffectIgnite: Effect(
 
     override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
-        if (!config.has("damage-per-tick")) violations.add(
+        if (!config.has("damage_per_tick")) violations.add(
             ConfigViolation(
-                "damage-per-tick",
+                "damage_per_tick",
                 "You must specify the damage of fire per tick!"
             )
         )
