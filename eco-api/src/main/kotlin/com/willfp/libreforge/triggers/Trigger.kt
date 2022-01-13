@@ -9,8 +9,7 @@ import com.willfp.libreforge.events.EffectActivateEvent
 import com.willfp.libreforge.getHolders
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
-import java.util.Objects
-import java.util.UUID
+import java.util.*
 
 private val everyHandler = mutableMapOf<UUID, MutableMap<UUID, Int>>()
 
@@ -46,7 +45,7 @@ abstract class Trigger(
                     continue
                 }
 
-                if (config.has("antigrief-check") && config.getBool("antigrief-check") && data.player != null && data.victim != null) {
+                if (config.has("check_antigrief") && config.getBool("check_antigrief") && data.player != null && data.victim != null) {
                     if (!AntigriefManager.canInjure(data.player, data.victim)) {
                         continue
                     }
@@ -82,7 +81,7 @@ abstract class Trigger(
                 }
 
                 if (effect.getCooldown(player, uuid) > 0) {
-                    if (config.getBoolOrNull("send-cooldown-message") != false) {
+                    if (config.getBoolOrNull("send_cooldown_message") != false) {
                         effect.sendCooldownMessage(player, uuid)
                     }
                     continue
