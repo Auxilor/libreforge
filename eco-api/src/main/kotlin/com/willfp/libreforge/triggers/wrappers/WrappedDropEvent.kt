@@ -9,6 +9,8 @@ import org.bukkit.inventory.ItemStack
 
 interface WrappedDropEvent<out T> : WrappedCancellableEvent<T> where T : Event, T : Cancellable {
     var modifier: (ItemStack) -> Pair<ItemStack, Int>
+
+    val items: Collection<ItemStack>
 }
 
 class WrappedBlockDropEvent(
@@ -23,6 +25,9 @@ class WrappedBlockDropEvent(
         set(value) {
             event.isCancelled = value
         }
+
+    override val items: Collection<ItemStack>
+        get() = event.items.map { it.itemStack }
 }
 
 class WrappedEntityDropEvent(
@@ -37,4 +42,7 @@ class WrappedEntityDropEvent(
         set(value) {
             event.isCancelled = value
         }
+
+    override val items: Collection<ItemStack>
+        get() = event.drops
 }
