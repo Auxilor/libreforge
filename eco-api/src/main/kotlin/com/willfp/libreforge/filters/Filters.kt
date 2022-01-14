@@ -3,6 +3,7 @@ package com.willfp.libreforge.filters
 import com.willfp.libreforge.filters.filters.FilterBlocks
 import com.willfp.libreforge.filters.filters.FilterDamageCause
 import com.willfp.libreforge.filters.filters.FilterEntityType
+import com.willfp.libreforge.filters.filters.FilterItems
 import com.willfp.libreforge.filters.filters.FilterOnlyBosses
 import com.willfp.libreforge.filters.filters.FilterOnlyNonBosses
 
@@ -15,6 +16,7 @@ object Filters {
     val BLOCKS: FilterComponent = FilterBlocks()
     val DAMAGE_CAUSE: FilterComponent = FilterDamageCause()
     val ONLY_NON_BOSSES: FilterComponent = FilterOnlyNonBosses()
+    val ITEMS: FilterComponent = FilterItems()
 
     /**
      * List of all registered filters.
