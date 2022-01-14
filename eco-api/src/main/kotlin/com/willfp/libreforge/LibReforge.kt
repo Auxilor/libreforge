@@ -14,6 +14,7 @@ import com.willfp.libreforge.integrations.ecoskills.EcoSkillsIntegration
 import com.willfp.libreforge.integrations.jobs.JobsIntegration
 import com.willfp.libreforge.integrations.mcmmo.McMMOIntegration
 import com.willfp.libreforge.integrations.paper.PaperIntegration
+import com.willfp.libreforge.integrations.vault.VaultIntegration
 import com.willfp.libreforge.triggers.Triggers
 import org.apache.commons.lang.StringUtils
 import org.bukkit.Bukkit
@@ -133,6 +134,7 @@ abstract class LibReforgePlugin(
             IntegrationLoader("AureliumSkills", AureliumSkillsIntegration::load),
             IntegrationLoader("mcMMO", McMMOIntegration::load),
             IntegrationLoader("Jobs", JobsIntegration::load),
+            IntegrationLoader("Vault", VaultIntegration::load),
         )
 
         integrations.addAll(loadAdditionalIntegrations())
