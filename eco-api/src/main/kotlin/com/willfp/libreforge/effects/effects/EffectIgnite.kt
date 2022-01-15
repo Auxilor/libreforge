@@ -21,7 +21,7 @@ class EffectIgnite: Effect(
 
     override fun handle(data: TriggerData, config: Config) {
         val victim = data.victim ?: return
-        val damage = config.getDoubleFromExpression("damage-per-tick", data.player)
+        val damage = config.getDoubleFromExpression("damage_per_tick", data.player)
         val duration = config.getIntFromExpression("ticks", data.player)
 
         victim.fireTicks = duration
