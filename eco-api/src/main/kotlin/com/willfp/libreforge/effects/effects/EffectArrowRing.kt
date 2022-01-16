@@ -74,7 +74,7 @@ class EffectArrowRing : Effect(
             )
         )
 
-        if (!config.has("damage")) violations.add(
+        if (!config.has("arrow_damage")) violations.add(
             ConfigViolation(
                 "damage",
                 "You must specify the arrow damage!"
