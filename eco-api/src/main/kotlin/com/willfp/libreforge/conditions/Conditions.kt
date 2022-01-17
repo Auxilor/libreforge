@@ -8,11 +8,13 @@ import com.willfp.libreforge.LibReforgePlugin
 import com.willfp.libreforge.conditions.conditions.ConditionAboveBalance
 import com.willfp.libreforge.conditions.conditions.ConditionAboveHealthPercent
 import com.willfp.libreforge.conditions.conditions.ConditionAboveHungerPercent
+import com.willfp.libreforge.conditions.conditions.ConditionAbovePoints
 import com.willfp.libreforge.conditions.conditions.ConditionAboveXPLevel
 import com.willfp.libreforge.conditions.conditions.ConditionAboveY
 import com.willfp.libreforge.conditions.conditions.ConditionBelowBalance
 import com.willfp.libreforge.conditions.conditions.ConditionBelowHealthPercent
 import com.willfp.libreforge.conditions.conditions.ConditionBelowHungerPercent
+import com.willfp.libreforge.conditions.conditions.ConditionBelowPoints
 import com.willfp.libreforge.conditions.conditions.ConditionBelowXPLevel
 import com.willfp.libreforge.conditions.conditions.ConditionBelowY
 import com.willfp.libreforge.conditions.conditions.ConditionHasPermission
@@ -28,6 +30,7 @@ import com.willfp.libreforge.conditions.conditions.ConditionOnFire
 import com.willfp.libreforge.conditions.conditions.ConditionPlaceholderEquals
 import com.willfp.libreforge.conditions.conditions.ConditionPlaceholderGreaterThan
 import com.willfp.libreforge.conditions.conditions.ConditionPlaceholderLessThan
+import com.willfp.libreforge.conditions.conditions.ConditionPointsEqual
 import com.willfp.libreforge.conditions.conditions.ConditionRidingEntity
 import com.willfp.libreforge.conditions.conditions.ConditionStandingOnBlock
 
@@ -60,6 +63,9 @@ object Conditions {
     val ON_FIRE: Condition = ConditionOnFire()
     val STANDING_ON_BLOCK: Condition = ConditionStandingOnBlock()
     val RIDING_ENTITY: Condition = ConditionRidingEntity()
+    val ABOVE_POINTS: Condition = ConditionAbovePoints()
+    val BELOW_POINTS: Condition = ConditionBelowPoints()
+    val POINTS_EQUAL: Condition = ConditionPointsEqual()
 
     /**
      * Get condition matching id.
