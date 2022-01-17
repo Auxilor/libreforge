@@ -21,12 +21,14 @@ import com.willfp.libreforge.effects.effects.EffectFoodMultiplier
 import com.willfp.libreforge.effects.effects.EffectGiveFood
 import com.willfp.libreforge.effects.effects.EffectGiveHealth
 import com.willfp.libreforge.effects.effects.EffectGiveMoney
+import com.willfp.libreforge.effects.effects.EffectGivePoints
 import com.willfp.libreforge.effects.effects.EffectGiveXp
 import com.willfp.libreforge.effects.effects.EffectHungerMultiplier
 import com.willfp.libreforge.effects.effects.EffectIgnite
 import com.willfp.libreforge.effects.effects.EffectKnockbackMultiplier
 import com.willfp.libreforge.effects.effects.EffectMineRadius
 import com.willfp.libreforge.effects.effects.EffectMovementSpeedMultiplier
+import com.willfp.libreforge.effects.effects.EffectMultiplyPoints
 import com.willfp.libreforge.effects.effects.EffectPermanentPotionEffect
 import com.willfp.libreforge.effects.effects.EffectPlaySound
 import com.willfp.libreforge.effects.effects.EffectPotionEffect
@@ -34,6 +36,7 @@ import com.willfp.libreforge.effects.effects.EffectRegenMultiplier
 import com.willfp.libreforge.effects.effects.EffectRemovePotionEffect
 import com.willfp.libreforge.effects.effects.EffectRunCommand
 import com.willfp.libreforge.effects.effects.EffectSendMessage
+import com.willfp.libreforge.effects.effects.EffectSetPoints
 import com.willfp.libreforge.effects.effects.EffectSpawnMobs
 import com.willfp.libreforge.effects.effects.EffectStrikeLightning
 import com.willfp.libreforge.effects.effects.EffectTeleport
@@ -81,6 +84,9 @@ object Effects {
     val IGNITE: Effect = EffectIgnite()
     val FEATHER_STEP: Effect = EffectFeatherStep()
     val MINE_RADIUS: Effect = EffectMineRadius()
+    val GIVE_POINTS: Effect = EffectGivePoints()
+    val SET_POINTS: Effect = EffectSetPoints()
+    val MULTIPLY_POINTS: Effect = EffectMultiplyPoints()
 
     /**
      * Get effect matching id.
