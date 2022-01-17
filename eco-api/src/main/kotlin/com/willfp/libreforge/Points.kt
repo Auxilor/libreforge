@@ -16,6 +16,7 @@ private val keys = mutableMapOf<String, PersistentDataKey<Double>>()
 
 private fun getKeyForType(type: String): PersistentDataKey<Double> {
     val existing = keys[type.lowercase()]
+
     return if (existing == null) {
         keys[type.lowercase()] = PersistentDataKey(
             LibReforgePlugin.instance.namespacedKeyFactory.create("points_${type.lowercase()}"),
@@ -25,6 +26,7 @@ private fun getKeyForType(type: String): PersistentDataKey<Double> {
 
         PlaceholderManager.registerPlaceholder(
             PlaceholderEntry(
+                LibReforgePlugin.instance,
                 "points_${type.lowercase()}"
             ) { NumberUtils.format(it.getPoints(type)) }
         )
