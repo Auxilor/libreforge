@@ -3,30 +3,35 @@ package com.willfp.libreforge.effects.effects
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
-import com.willfp.libreforge.triggers.TriggerData
-import com.willfp.libreforge.triggers.TriggerParameter
-import com.willfp.libreforge.triggers.Triggers
+import com.willfp.libreforge.effects.getEffectAmount
 import org.bukkit.entity.Player
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
-import org.bukkit.potion.PotionEffect
-import org.bukkit.potion.PotionEffectType
+import java.util.UUID
 
 class EffectFeatherStep : Effect("feather_step") {
-
-    private val players = mutableListOf<Player>()
+    private val players = mutableMapOf<UUID, MutableList<UUID>>()
 
     override fun handleEnable(player: Player, config: Config) {
-        players.add(player)
+        val existing = players[player.uniqueId] ?: mutableListOf()
+        existing.add(this.getUUID(player.getEffectAmount(this)))
+        players[player.uniqueId] = existing
     }
 
     override fun handleDisable(player: Player) {
-        players.remove(player)
+        val existing = players[player.uniqueId] ?: mutableListOf()
+        existing.remove(this.getUUID(player.getEffectAmount(this)))
+        players[player.uniqueId] = existing
     }
 
     fun handle(event: PlayerInteractEvent) {
-        if (event.action != Action.PHYSICAL) return
-        if (players.contains(event.player)) {
+        if (event.action != Action.PHYSICAL) {
+            return
+        }
+
+        val player = event.player
+
+        if ((players[player.uniqueId] ?: emptyList()).isNotEmpty()) {
             event.isCancelled = true
         }
     }
