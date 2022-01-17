@@ -12,7 +12,7 @@ class EffectBreakBlock : Effect(
     "break_block",
     supportsFilters = false,
     applicableTriggers = Triggers.withParameters(
-        TriggerParameter.PLAYER
+        TriggerParameter.PLAYER,
     )
 ) {
     override fun handle(data: TriggerData, config: Config) {

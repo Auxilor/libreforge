@@ -25,6 +25,7 @@ import com.willfp.libreforge.effects.effects.EffectGiveXp
 import com.willfp.libreforge.effects.effects.EffectHungerMultiplier
 import com.willfp.libreforge.effects.effects.EffectIgnite
 import com.willfp.libreforge.effects.effects.EffectKnockbackMultiplier
+import com.willfp.libreforge.effects.effects.EffectMineRadius
 import com.willfp.libreforge.effects.effects.EffectMovementSpeedMultiplier
 import com.willfp.libreforge.effects.effects.EffectPermanentPotionEffect
 import com.willfp.libreforge.effects.effects.EffectPlaySound
@@ -79,6 +80,7 @@ object Effects {
     val PLAY_SOUND: Effect = EffectPlaySound()
     val IGNITE: Effect = EffectIgnite()
     val FEATHER_STEP: Effect = EffectFeatherStep()
+    val MINE_RADIUS: Effect = EffectMineRadius()
 
     /**
      * Get effect matching id.
