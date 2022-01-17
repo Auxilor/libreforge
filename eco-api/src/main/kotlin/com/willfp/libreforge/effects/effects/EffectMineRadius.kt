@@ -23,6 +23,10 @@ class EffectMineRadius : Effect(
     override fun handle(data: TriggerData, config: Config) {
         val block = data.block ?: data.location?.block ?: return
 
+        if (block.hasMetadata("block-ignore")) {
+            return
+        }
+
         val player = data.player ?: return
 
         val radius = config.getIntFromExpression("radius")
@@ -65,7 +69,9 @@ class EffectMineRadius : Effect(
 
         player.runExempted {
             for (toBreak in blocks) {
+                toBreak.setMetadata("block-ignore", plugin.metadataValueFactory.create(true))
                 BlockUtils.breakBlock(player, toBreak)
+                toBreak.removeMetadata("block-ignore", plugin)
             }
         }
     }
