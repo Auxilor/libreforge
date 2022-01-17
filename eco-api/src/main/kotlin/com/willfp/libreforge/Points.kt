@@ -7,6 +7,7 @@ import com.willfp.eco.core.data.keys.PersistentDataKey
 import com.willfp.eco.core.data.keys.PersistentDataKeyType
 import com.willfp.eco.core.integrations.placeholder.PlaceholderEntry
 import com.willfp.eco.core.integrations.placeholder.PlaceholderManager
+import com.willfp.eco.util.NamespacedKeyUtils
 import com.willfp.eco.util.NumberUtils
 import com.willfp.libreforge.events.PointsChangeEvent
 import org.bukkit.Bukkit
@@ -18,8 +19,14 @@ private fun getKeyForType(type: String): PersistentDataKey<Double> {
     val existing = keys[type.lowercase()]
 
     return if (existing == null) {
+        val key = if (type.startsWith("g_")) {
+            NamespacedKeyUtils.createEcoKey("points_${type.lowercase()}")
+        } else {
+            LibReforgePlugin.instance.namespacedKeyFactory.create("points_${type.lowercase()}")
+        }
+
         keys[type.lowercase()] = PersistentDataKey(
-            LibReforgePlugin.instance.namespacedKeyFactory.create("points_${type.lowercase()}"),
+            key,
             PersistentDataKeyType.DOUBLE,
             0.0
         )
