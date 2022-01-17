@@ -5,37 +5,7 @@ import com.google.common.collect.ImmutableList
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.LibReforgePlugin
-import com.willfp.libreforge.effects.effects.EffectArmor
-import com.willfp.libreforge.effects.effects.EffectArmorToughness
-import com.willfp.libreforge.effects.effects.EffectArrowRing
-import com.willfp.libreforge.effects.effects.EffectAttackSpeedMultiplier
-import com.willfp.libreforge.effects.effects.EffectAutosmelt
-import com.willfp.libreforge.effects.effects.EffectBleed
-import com.willfp.libreforge.effects.effects.EffectBonusHealth
-import com.willfp.libreforge.effects.effects.EffectBreakBlock
-import com.willfp.libreforge.effects.effects.EffectCancelEvent
-import com.willfp.libreforge.effects.effects.EffectCritMultiplier
-import com.willfp.libreforge.effects.effects.EffectDamageMultiplier
-import com.willfp.libreforge.effects.effects.EffectFoodMultiplier
-import com.willfp.libreforge.effects.effects.EffectGiveFood
-import com.willfp.libreforge.effects.effects.EffectGiveHealth
-import com.willfp.libreforge.effects.effects.EffectGiveMoney
-import com.willfp.libreforge.effects.effects.EffectGiveXp
-import com.willfp.libreforge.effects.effects.EffectHungerMultiplier
-import com.willfp.libreforge.effects.effects.EffectIgnite
-import com.willfp.libreforge.effects.effects.EffectKnockbackMultiplier
-import com.willfp.libreforge.effects.effects.EffectMovementSpeedMultiplier
-import com.willfp.libreforge.effects.effects.EffectPermanentPotionEffect
-import com.willfp.libreforge.effects.effects.EffectPlaySound
-import com.willfp.libreforge.effects.effects.EffectPotionEffect
-import com.willfp.libreforge.effects.effects.EffectRegenMultiplier
-import com.willfp.libreforge.effects.effects.EffectRemovePotionEffect
-import com.willfp.libreforge.effects.effects.EffectRunCommand
-import com.willfp.libreforge.effects.effects.EffectSendMessage
-import com.willfp.libreforge.effects.effects.EffectSpawnMobs
-import com.willfp.libreforge.effects.effects.EffectStrikeLightning
-import com.willfp.libreforge.effects.effects.EffectTeleport
-import com.willfp.libreforge.effects.effects.EffectXpMultiplier
+import com.willfp.libreforge.effects.effects.*
 import com.willfp.libreforge.filters.ConfiguredFilter
 import com.willfp.libreforge.filters.EmptyFilter
 import com.willfp.libreforge.triggers.Trigger
@@ -77,6 +47,7 @@ object Effects {
     val REMOVE_POTION_EFFECT: Effect = EffectRemovePotionEffect()
     val PLAY_SOUND: Effect = EffectPlaySound()
     val IGNITE: Effect = EffectIgnite()
+    val FEATHER_STEP: Effect = EffectFeatherStep()
 
     /**
      * Get effect matching id.
