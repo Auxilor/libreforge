@@ -20,7 +20,7 @@ class TriggerDeath : Trigger(
             return
         }
 
-        val player = event.player
+        val player = event.entity
 
         this.processTrigger(
             player,
