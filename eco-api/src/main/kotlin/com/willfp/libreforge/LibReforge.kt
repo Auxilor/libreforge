@@ -5,6 +5,7 @@ package com.willfp.libreforge
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.integrations.IntegrationLoader
+import com.willfp.eco.core.integrations.anticheat.AnticheatManager
 import com.willfp.eco.util.ListUtils
 import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.conditions.MovementConditionListener
@@ -258,5 +259,14 @@ fun Entity.tryAsPlayer(): Player? {
         is Player -> this
         is Tameable -> this.owner as? Player
         else -> null
+    }
+}
+
+fun Player.runExempted(toRun: (Player) -> Unit) {
+    AnticheatManager.exemptPlayer(this)
+    try {
+        toRun(this)
+    } finally {
+        AnticheatManager.unexemptPlayer(this)
     }
 }
