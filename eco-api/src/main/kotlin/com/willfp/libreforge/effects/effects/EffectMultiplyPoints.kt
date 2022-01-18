@@ -34,7 +34,7 @@ class EffectMultiplyPoints : Effect(
             )
         )
 
-        if (!config.has("amount")) violations.add(
+        if (!config.has("multiplier")) violations.add(
             ConfigViolation(
                 "multiplier",
                 "You must specify the points multiplier!"
