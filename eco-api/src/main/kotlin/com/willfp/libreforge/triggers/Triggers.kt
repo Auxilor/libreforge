@@ -1,33 +1,7 @@
 package com.willfp.libreforge.triggers
 
-import com.willfp.libreforge.triggers.triggers.TriggerAltClick
-import com.willfp.libreforge.triggers.triggers.TriggerBlockItemDrop
-import com.willfp.libreforge.triggers.triggers.TriggerBowAttack
-import com.willfp.libreforge.triggers.triggers.TriggerDeath
-import com.willfp.libreforge.triggers.triggers.TriggerEntityItemDrop
-import com.willfp.libreforge.triggers.triggers.TriggerFallDamage
-import com.willfp.libreforge.triggers.triggers.TriggerGainHunger
-import com.willfp.libreforge.triggers.triggers.TriggerGainXp
-import com.willfp.libreforge.triggers.triggers.TriggerHeal
-import com.willfp.libreforge.triggers.triggers.TriggerJump
-import com.willfp.libreforge.triggers.triggers.TriggerKill
-import com.willfp.libreforge.triggers.triggers.TriggerLoseHunger
-import com.willfp.libreforge.triggers.triggers.TriggerLosePotionEffect
-import com.willfp.libreforge.triggers.triggers.TriggerMeleeAttack
-import com.willfp.libreforge.triggers.triggers.TriggerMineBlock
-import com.willfp.libreforge.triggers.triggers.TriggerMove
-import com.willfp.libreforge.triggers.triggers.TriggerPotionEffect
-import com.willfp.libreforge.triggers.triggers.TriggerProjectileHit
-import com.willfp.libreforge.triggers.triggers.TriggerProjectileLaunch
-import com.willfp.libreforge.triggers.triggers.TriggerShieldBlock
-import com.willfp.libreforge.triggers.triggers.TriggerSwapHands
 import com.willfp.libreforge.integrations.paper.TriggerSwing
-import com.willfp.libreforge.triggers.triggers.TriggerTakeDamage
-import com.willfp.libreforge.triggers.triggers.TriggerTakeEntityDamage
-import com.willfp.libreforge.triggers.triggers.TriggerToggleFlight
-import com.willfp.libreforge.triggers.triggers.TriggerToggleSneak
-import com.willfp.libreforge.triggers.triggers.TriggerToggleSprint
-import com.willfp.libreforge.triggers.triggers.TriggerTridentAttack
+import com.willfp.libreforge.triggers.triggers.*
 
 @Suppress("UNUSED")
 object Triggers {
@@ -61,6 +35,7 @@ object Triggers {
     val POTION_EFFECT: Trigger = TriggerPotionEffect()
     val LOSE_POTION_EFFECT: Trigger = TriggerLosePotionEffect()
     val DEATH: Trigger = TriggerDeath()
+    val MINE_BLOCK_PROGRESS: Trigger = TriggerMineBlockProgress()
 
     fun values(): Set<Trigger> {
         return BY_ID.values.toSet()
