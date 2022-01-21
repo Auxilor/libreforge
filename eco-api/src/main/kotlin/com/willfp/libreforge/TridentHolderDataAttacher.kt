@@ -17,12 +17,7 @@ class TridentHolderDataAttacher(
             return
         }
 
-        val shooter = event.entity.shooter
-
-        if (shooter !is Player) {
-            return
-        }
-
+        val shooter = event.entity.shooter as? Player ?: return
         val trident = event.entity
 
         if (trident !is Trident) {
@@ -41,5 +36,5 @@ class TridentHolderDataAttacher(
 fun Trident.getAttachedHolders(): Iterable<Holder> {
     @Suppress("UNCHECKED_CAST")
     return this.getMetadata("${LibReforgePlugin.instance.name.lowercase()}_trident_holders")
-        .firstOrNull() as? Iterable<Holder> ?: emptyList()
+        .firstOrNull()?.value() as? Iterable<Holder> ?: emptyList()
 }
