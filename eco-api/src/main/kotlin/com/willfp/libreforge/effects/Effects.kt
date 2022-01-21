@@ -28,6 +28,7 @@ import com.willfp.libreforge.effects.effects.EffectIgnite
 import com.willfp.libreforge.effects.effects.EffectKnockbackMultiplier
 import com.willfp.libreforge.effects.effects.EffectMineRadius
 import com.willfp.libreforge.effects.effects.EffectMovementSpeedMultiplier
+import com.willfp.libreforge.effects.effects.EffectMultiplyDrops
 import com.willfp.libreforge.effects.effects.EffectMultiplyPoints
 import com.willfp.libreforge.effects.effects.EffectPermanentPotionEffect
 import com.willfp.libreforge.effects.effects.EffectPlaySound
@@ -87,6 +88,7 @@ object Effects {
     val GIVE_POINTS: Effect = EffectGivePoints()
     val SET_POINTS: Effect = EffectSetPoints()
     val MULTIPLY_POINTS: Effect = EffectMultiplyPoints()
+    val MULTIPLY_DROPS: Effect = EffectMultiplyDrops()
 
     /**
      * Get effect matching id.
