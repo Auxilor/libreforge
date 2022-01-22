@@ -1,9 +1,9 @@
 package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.items.Items
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
-import com.willfp.libreforge.filters.containsIgnoreCase
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
@@ -23,7 +23,10 @@ class EffectMultiplyDrops : Effect(
         event.modifier = {
             val fortune = config.getIntFromExpression("fortune")
 
-            if (fortune > 0 && it.maxStackSize > 1 && config.getStrings("on_items").containsIgnoreCase(it.type.name)) {
+            val items = config.getStrings("on_items").map { string -> Items.lookup(string) }
+            val matches = items.any { test -> test.matches(it) }
+
+            if (fortune > 0 && it.maxStackSize > 1 && matches) {
                 it.amount = (Math.random() * (fortune.toDouble() - 1) + 1.1).roundToInt()
             }
 
