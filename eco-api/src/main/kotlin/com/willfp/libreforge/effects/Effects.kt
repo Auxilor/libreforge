@@ -33,6 +33,7 @@ import com.willfp.libreforge.effects.effects.EffectMultiplyPoints
 import com.willfp.libreforge.effects.effects.EffectPermanentPotionEffect
 import com.willfp.libreforge.effects.effects.EffectPlaySound
 import com.willfp.libreforge.effects.effects.EffectPotionEffect
+import com.willfp.libreforge.effects.effects.EffectPullToLocation
 import com.willfp.libreforge.effects.effects.EffectRegenMultiplier
 import com.willfp.libreforge.effects.effects.EffectRemovePotionEffect
 import com.willfp.libreforge.effects.effects.EffectRunCommand
@@ -91,6 +92,7 @@ object Effects {
     val MULTIPLY_POINTS: Effect = EffectMultiplyPoints()
     val MULTIPLY_DROPS: Effect = EffectMultiplyDrops()
     val SPAWN_PARTICLE: Effect = EffectSpawnParticle()
+    val PULL_TO_LOCATION: Effect = EffectPullToLocation()
 
     /**
      * Get effect matching id.
