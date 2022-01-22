@@ -224,10 +224,24 @@ fun Player.updateEffects() {
             }
         }
 
-        if (areConditionsMet) {
-            for ((effect, config) in holder.effects) {
-                effect.enableForPlayer(this, config)
+        if (!areConditionsMet) {
+            continue
+        }
+
+        for ((effect, config, _, _, _, conditions) in holder.effects) {
+            var effectConditions = true
+            for ((condition, conditionConfig) in conditions) {
+                if (!condition.isConditionMet(this, conditionConfig)) {
+                    effectConditions = false
+                    break
+                }
             }
+
+            if (!effectConditions) {
+                continue
+            }
+
+            effect.enableForPlayer(this, config)
         }
     }
 
@@ -247,6 +261,20 @@ fun Player.updateEffects() {
         }
         if (!areConditionsMet) {
             for ((effect, _) in holder.effects) {
+                effect.disableForPlayer(this)
+            }
+        }
+
+        for ((effect, _, _, _, _, conditions) in holder.effects) {
+            var effectConditions = true
+            for ((condition, conditionConfig) in conditions) {
+                if (!condition.isConditionMet(this, conditionConfig)) {
+                    effectConditions = false
+                    break
+                }
+            }
+
+            if (!effectConditions) {
                 effect.disableForPlayer(this)
             }
         }

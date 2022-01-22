@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.util.PlayerUtils
 import com.willfp.eco.util.StringUtils
 import com.willfp.libreforge.ConfigurableProperty
+import com.willfp.libreforge.conditions.ConfiguredCondition
 import com.willfp.libreforge.filters.Filter
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
@@ -152,7 +153,8 @@ data class ConfiguredEffect(
     val args: Config,
     val filter: Filter,
     val triggers: Collection<Trigger>,
-    val uuid: UUID
+    val uuid: UUID,
+    val conditions: Collection<ConfiguredCondition>
 )
 
 data class MultiplierModifier(val uuid: UUID, val multiplier: Double)
