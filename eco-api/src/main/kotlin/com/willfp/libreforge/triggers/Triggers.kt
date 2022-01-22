@@ -2,14 +2,20 @@ package com.willfp.libreforge.triggers
 
 import com.willfp.libreforge.integrations.paper.TriggerSwing
 import com.willfp.libreforge.triggers.triggers.TriggerAltClick
+import com.willfp.libreforge.triggers.triggers.TriggerBite
 import com.willfp.libreforge.triggers.triggers.TriggerBlockItemDrop
 import com.willfp.libreforge.triggers.triggers.TriggerBowAttack
+import com.willfp.libreforge.triggers.triggers.TriggerCastRod
+import com.willfp.libreforge.triggers.triggers.TriggerCatchEntity
+import com.willfp.libreforge.triggers.triggers.TriggerCatchFish
+import com.willfp.libreforge.triggers.triggers.TriggerCatchFishFail
 import com.willfp.libreforge.triggers.triggers.TriggerDeath
 import com.willfp.libreforge.triggers.triggers.TriggerEntityItemDrop
 import com.willfp.libreforge.triggers.triggers.TriggerFallDamage
 import com.willfp.libreforge.triggers.triggers.TriggerGainHunger
 import com.willfp.libreforge.triggers.triggers.TriggerGainXp
 import com.willfp.libreforge.triggers.triggers.TriggerHeal
+import com.willfp.libreforge.triggers.triggers.TriggerHookInGround
 import com.willfp.libreforge.triggers.triggers.TriggerItemBreak
 import com.willfp.libreforge.triggers.triggers.TriggerJump
 import com.willfp.libreforge.triggers.triggers.TriggerKill
@@ -22,6 +28,7 @@ import com.willfp.libreforge.triggers.triggers.TriggerMove
 import com.willfp.libreforge.triggers.triggers.TriggerPotionEffect
 import com.willfp.libreforge.triggers.triggers.TriggerProjectileHit
 import com.willfp.libreforge.triggers.triggers.TriggerProjectileLaunch
+import com.willfp.libreforge.triggers.triggers.TriggerReelIn
 import com.willfp.libreforge.triggers.triggers.TriggerShieldBlock
 import com.willfp.libreforge.triggers.triggers.TriggerSwapHands
 import com.willfp.libreforge.triggers.triggers.TriggerTakeDamage
@@ -65,6 +72,13 @@ object Triggers {
     val DEATH: Trigger = TriggerDeath()
     val MINE_BLOCK_PROGRESS: Trigger = TriggerMineBlockProgress()
     val ITEM_BREAK: Trigger = TriggerItemBreak()
+    val BITE: Trigger = TriggerBite()
+    val CAST_ROD: Trigger = TriggerCastRod()
+    val CATCH_ENTITY: Trigger = TriggerCatchEntity()
+    val CATCH_FISH: Trigger = TriggerCatchFish()
+    val CATCH_FISH_FAIL: Trigger = TriggerCatchFishFail()
+    val HOOK_IN_GROUND: Trigger = TriggerHookInGround()
+    val REEL_IN: Trigger = TriggerReelIn()
 
     fun values(): Set<Trigger> {
         return BY_ID.values.toSet()
