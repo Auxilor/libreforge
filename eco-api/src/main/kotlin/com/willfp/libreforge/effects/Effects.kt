@@ -39,6 +39,7 @@ import com.willfp.libreforge.effects.effects.EffectRunCommand
 import com.willfp.libreforge.effects.effects.EffectSendMessage
 import com.willfp.libreforge.effects.effects.EffectSetPoints
 import com.willfp.libreforge.effects.effects.EffectSpawnMobs
+import com.willfp.libreforge.effects.effects.EffectSpawnParticle
 import com.willfp.libreforge.effects.effects.EffectStrikeLightning
 import com.willfp.libreforge.effects.effects.EffectTeleport
 import com.willfp.libreforge.effects.effects.EffectXpMultiplier
@@ -89,6 +90,7 @@ object Effects {
     val SET_POINTS: Effect = EffectSetPoints()
     val MULTIPLY_POINTS: Effect = EffectMultiplyPoints()
     val MULTIPLY_DROPS: Effect = EffectMultiplyDrops()
+    val SPAWN_PARTICLE: Effect = EffectSpawnParticle()
 
     /**
      * Get effect matching id.
