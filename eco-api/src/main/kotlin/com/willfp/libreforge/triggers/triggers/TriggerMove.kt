@@ -20,6 +20,10 @@ class TriggerMove : Trigger(
         }
         val player = event.player
 
+        if (!event.hasExplicitlyChangedPosition()) {
+            return
+        }
+
         this.processTrigger(
             player,
             TriggerData(
