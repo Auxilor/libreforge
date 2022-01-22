@@ -5,19 +5,25 @@ import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.event.EventHandler
-import org.bukkit.event.player.PlayerItemBreakEvent
+import org.bukkit.event.player.PlayerFishEvent
 
-class TriggerItemBreak : Trigger(
-    "item_break", listOf(
+class TriggerCatchFish : Trigger(
+    "catch_fish", listOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION
     )
 ) {
     @EventHandler(ignoreCancelled = true)
-    fun handle(event: PlayerItemBreakEvent) {
+    fun handle(event: PlayerFishEvent) {
         if (McmmoManager.isFake(event)) {
             return
         }
+
+        if (event.state != PlayerFishEvent.State.CAUGHT_FISH) {
+            return
+        }
+
+        PlayerFishEvent.State.FAILED_ATTEMPT
 
         val player = event.player
 
@@ -25,7 +31,7 @@ class TriggerItemBreak : Trigger(
             player,
             TriggerData(
                 player = player,
-                location = player.location
+                location = event.hook.location
             )
         )
     }
