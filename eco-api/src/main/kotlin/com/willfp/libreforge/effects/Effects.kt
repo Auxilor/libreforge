@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableList
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.LibReforgePlugin
+import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.effects.effects.EffectArmor
 import com.willfp.libreforge.effects.effects.EffectArmorToughness
 import com.willfp.libreforge.effects.effects.EffectArrowRing
@@ -223,6 +224,10 @@ object Effects {
             triggers
         } ?: return null
 
-        return ConfiguredEffect(effect, args, filter, triggers, UUID.randomUUID())
+        val conditions = config.getSubsections("conditions").mapNotNull {
+            Conditions.compile(it, "$context (effect-specific conditions)")
+        }
+
+        return ConfiguredEffect(effect, args, filter, triggers, UUID.randomUUID(), conditions)
     }
 }
