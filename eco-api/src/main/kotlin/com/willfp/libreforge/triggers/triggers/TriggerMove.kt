@@ -1,6 +1,7 @@
 package com.willfp.libreforge.triggers.triggers
 
 import com.willfp.eco.core.integrations.mcmmo.McmmoManager
+import com.willfp.libreforge.LibReforgePlugin
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -22,6 +23,12 @@ class TriggerMove : Trigger(
 
         if (!event.hasExplicitlyChangedPosition()) {
             return
+        }
+
+        if (LibReforgePlugin.instance.configYml.getBool("use-faster-move-trigger")) {
+            if (!event.hasChangedBlock()) {
+                return
+            }
         }
 
         this.processTrigger(
