@@ -23,12 +23,11 @@ import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
 import org.bukkit.entity.Tameable
-import java.util.UUID
-import java.util.WeakHashMap
+import java.util.*
 
 private val holderProviders = mutableSetOf<HolderProvider>()
 private val previousStates: MutableMap<UUID, Iterable<Holder>> = WeakHashMap()
-private val holderCache = mutableMapOf<UUID, Iterable<Holder>>()
+private val holderCache = mutableMapOf<UUID, CachedItem<Iterable<Holder>>>()
 
 typealias HolderProvider = (Player) -> Iterable<Holder>
 
@@ -126,6 +125,15 @@ abstract class LibReforgePlugin(
             }
         }, 30, 30)
 
+        this.scheduler.runTimer(1, 1) {
+            for ((uuid, cache) in holderCache.toMap()) {
+                val expiry = cache.expiry
+                if (expiry <= System.currentTimeMillis()) {
+                    holderCache.remove(uuid)
+                }
+            }
+        }
+
         handleReloadAdditional()
     }
 
@@ -159,7 +167,7 @@ private fun Player.clearEffectCache() {
 
 fun Player.getHolders(): Iterable<Holder> {
     if (holderCache.containsKey(this.uniqueId)) {
-        return holderCache[this.uniqueId]?.toList() ?: emptyList()
+        return holderCache[this.uniqueId]?.item?.toList() ?: emptyList()
     }
 
     val holders = mutableListOf<Holder>()
@@ -167,10 +175,7 @@ fun Player.getHolders(): Iterable<Holder> {
         holders.addAll(provider(this))
     }
 
-    holderCache[this.uniqueId] = holders
-    LibReforgePlugin.instance.scheduler.runLater({
-        holderCache.remove(this.uniqueId)
-    }, 40)
+    holderCache[this.uniqueId] = CachedItem(holders, System.currentTimeMillis() + 4000)
 
     return holders
 }
