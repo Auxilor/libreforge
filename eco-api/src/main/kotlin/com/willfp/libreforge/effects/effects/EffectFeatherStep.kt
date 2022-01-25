@@ -24,6 +24,7 @@ class EffectFeatherStep : Effect("feather_step") {
         players.remove(player)
     }
 
+    @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerInteractEvent) {
         if (event.action != Action.PHYSICAL) return
         if (players.contains(event.player)) {
