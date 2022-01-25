@@ -21,10 +21,6 @@ class TriggerMove : Trigger(
         }
         val player = event.player
 
-        if (!event.hasExplicitlyChangedPosition()) {
-            return
-        }
-
         if (LibReforgePlugin.instance.configYml.getBool("use-faster-move-trigger")) {
             if (!event.hasChangedBlock()) {
                 return
