@@ -25,7 +25,7 @@ class ConditionOnFire : Condition("on_fire") {
             return
         }
 
-        player.updateEffects()
+        player.updateEffects(noRescan = true)
     }
 
     override fun isConditionMet(player: Player, config: Config): Boolean {

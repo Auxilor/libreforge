@@ -23,7 +23,7 @@ class ConditionAboveHealthPercent : Condition("above_health_percent") {
             return
         }
 
-        player.updateEffects()
+        player.updateEffects(noRescan = true)
     }
 
     @EventHandler(
@@ -37,7 +37,7 @@ class ConditionAboveHealthPercent : Condition("above_health_percent") {
             return
         }
 
-        player.updateEffects()
+        player.updateEffects(noRescan = true)
     }
 
     override fun isConditionMet(player: Player, config: Config): Boolean {

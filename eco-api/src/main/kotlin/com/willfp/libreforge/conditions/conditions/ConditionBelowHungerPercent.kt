@@ -22,7 +22,7 @@ class ConditionBelowHungerPercent : Condition("below_hunger_percent") {
             return
         }
 
-        player.updateEffects()
+        player.updateEffects(noRescan = true)
     }
 
     override fun isConditionMet(player: Player, config: Config): Boolean {

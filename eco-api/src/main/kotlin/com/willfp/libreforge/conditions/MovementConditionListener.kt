@@ -15,6 +15,6 @@ class MovementConditionListener : Listener {
         if (event.from.block == event.to.block) {
             return
         }
-        event.player.updateEffects()
+        event.player.updateEffects(noRescan = true)
     }
 }
