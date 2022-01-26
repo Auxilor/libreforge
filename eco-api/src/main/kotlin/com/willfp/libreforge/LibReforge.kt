@@ -175,6 +175,20 @@ fun Player.getHolders(): Iterable<Holder> {
         holders.addAll(provider(this))
     }
 
+    for (holder in holders.toList()) {
+        var isMet = true
+        for ((condition, config) in holder.conditions) {
+            if (!condition.isConditionMet(this, config)) {
+                isMet = false
+                break
+            }
+        }
+
+        if (!isMet) {
+            holders.remove(holder)
+        }
+    }
+
     holderCache[this.uniqueId] = CachedItem(holders, System.currentTimeMillis() + 4000)
 
     return holders
