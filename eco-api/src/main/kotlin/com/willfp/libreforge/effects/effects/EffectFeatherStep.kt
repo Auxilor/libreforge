@@ -5,6 +5,7 @@ import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.getEffectAmount
 import org.bukkit.entity.Player
+import org.bukkit.event.EventHandler
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import java.util.UUID
