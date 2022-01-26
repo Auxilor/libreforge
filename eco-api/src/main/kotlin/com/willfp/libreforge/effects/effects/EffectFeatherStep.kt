@@ -24,6 +24,7 @@ class EffectFeatherStep : Effect("feather_step") {
         players[player.uniqueId] = existing
     }
 
+    @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerInteractEvent) {
         if (event.action != Action.PHYSICAL) {
             return
