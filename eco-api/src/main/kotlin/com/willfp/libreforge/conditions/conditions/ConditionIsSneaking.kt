@@ -17,7 +17,7 @@ class ConditionIsSneaking : Condition("is_sneaking") {
     fun handle(event: PlayerToggleSneakEvent) {
         val player = event.player
 
-        player.updateEffects()
+        player.updateEffects(noRescan = true)
     }
 
     override fun isConditionMet(player: Player, config: Config): Boolean {

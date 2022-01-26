@@ -165,7 +165,7 @@ private fun Player.clearEffectCache() {
     holderCache.remove(this.uniqueId)
 }
 
-fun Player.getHolders(): Iterable<Holder> {
+private fun Player.getPureHolders(): Iterable<Holder> {
     if (holderCache.containsKey(this.uniqueId)) {
         return holderCache[this.uniqueId]?.item?.toList() ?: emptyList()
     }
@@ -175,31 +175,44 @@ fun Player.getHolders(): Iterable<Holder> {
         holders.addAll(provider(this))
     }
 
-    for (holder in holders.toList()) {
-        var isMet = true
-        for ((condition, config) in holder.conditions) {
-            if (!condition.isConditionMet(this, config)) {
-                isMet = false
-                break
-            }
-        }
-
-        if (!isMet) {
-            holders.remove(holder)
-        }
-    }
-
     holderCache[this.uniqueId] = CachedItem(holders, System.currentTimeMillis() + 4000)
 
     return holders
 }
 
-fun Player.updateEffects() {
+@JvmOverloads
+fun Player.getHolders(respectConditions: Boolean = true): Iterable<Holder> {
+    val holders = this.getPureHolders().toMutableList()
+
+    if (respectConditions) {
+        for (holder in holders.toList()) {
+            var isMet = true
+            for ((condition, config) in holder.conditions) {
+                if (!condition.isConditionMet(this, config)) {
+                    isMet = false
+                    break
+                }
+            }
+
+            if (!isMet) {
+                holders.remove(holder)
+            }
+        }
+    }
+
+    return holders
+}
+
+@JvmOverloads
+fun Player.updateEffects(noRescan: Boolean = false) {
     val before = mutableListOf<Holder>()
     if (previousStates.containsKey(this.uniqueId)) {
         before.addAll(previousStates[this.uniqueId] ?: emptyList())
     }
-    this.clearEffectCache()
+
+    if (!noRescan) {
+        this.clearEffectCache()
+    }
 
     val after = this.getHolders()
     previousStates[this.uniqueId] = after

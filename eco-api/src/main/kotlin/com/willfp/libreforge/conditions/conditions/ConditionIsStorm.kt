@@ -16,7 +16,7 @@ class ConditionIsStorm: Condition("is_storm") {
     )
     fun handle(event: WeatherChangeEvent) {
         for (player in event.world.players) {
-            player.updateEffects()
+            player.updateEffects(noRescan = true)
         }
     }
 

@@ -18,7 +18,7 @@ class ConditionBelowXPLevel : Condition("below_xp_level") {
     fun handle(event: PlayerExpChangeEvent) {
         val player = event.player
 
-        player.updateEffects()
+        player.updateEffects(noRescan = true)
     }
 
     override fun isConditionMet(player: Player, config: Config): Boolean {

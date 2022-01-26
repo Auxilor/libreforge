@@ -19,7 +19,7 @@ class ConditionRidingEntity : Condition("riding_entity") {
     fun handle(event: EntityDismountEvent) {
         val player = event.entity as? Player ?: return
 
-        player.updateEffects()
+        player.updateEffects(noRescan = true)
     }
 
     @EventHandler(
@@ -29,7 +29,7 @@ class ConditionRidingEntity : Condition("riding_entity") {
     fun handle(event: EntityMountEvent) {
         val player = event.entity as? Player ?: return
 
-        player.updateEffects()
+        player.updateEffects(noRescan = true)
     }
 
     override fun isConditionMet(player: Player, config: Config): Boolean {
