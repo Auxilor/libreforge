@@ -8,6 +8,7 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
+import org.bukkit.attribute.Attribute
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Mob
 import org.bukkit.event.EventHandler
@@ -49,6 +50,8 @@ class EffectSpawnMobs : Effect(
                 NumberUtils.randFloat(-range, range)
             )
             val mob = entityType.spawn(locationToSpawn) as Mob
+            val healthAttr = mob.getAttribute(Attribute.GENERIC_MAX_HEALTH) ?: continue
+            healthAttr.baseValue = health
 
             if (victim != null) {
                 mob.target = victim
