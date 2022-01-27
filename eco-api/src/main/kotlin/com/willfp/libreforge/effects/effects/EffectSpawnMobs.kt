@@ -29,8 +29,10 @@ class EffectSpawnMobs : Effect(
         location.world ?: return
         val victim = data.victim
 
-        if (victim?.getMetadata("eco-target")?.isEmpty() == true) {
-            return
+        if (victim != null) {
+            if (victim.getMetadata("eco-target").isNotEmpty()) {
+                return
+            }
         }
 
         val amount = config.getIntFromExpression("amount", data.player)
@@ -55,7 +57,7 @@ class EffectSpawnMobs : Effect(
 
             mob.health = health
 
-            this.plugin.scheduler.runLater({ mob.remove() }, ticksToLive.toLong())
+            this.plugin.scheduler.runLater(ticksToLive.toLong()) { mob.remove() }
         }
     }
 
