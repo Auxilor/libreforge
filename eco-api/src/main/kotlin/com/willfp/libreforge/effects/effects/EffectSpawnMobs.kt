@@ -40,7 +40,7 @@ class EffectSpawnMobs : Effect(
         val health = config.getDoubleFromExpression("health", data.player)
         val range = config.getDoubleFromExpression("range", data.player)
 
-        val entityType = Entities.lookup("entity")
+        val entityType = Entities.lookup(config.getString("entity"))
 
         for (i in 1..amount) {
             val locationToSpawn = location.clone().add(
