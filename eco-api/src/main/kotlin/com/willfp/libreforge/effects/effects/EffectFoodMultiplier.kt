@@ -57,7 +57,7 @@ class EffectFoodMultiplier : Effect("food_multiplier") {
 
         val wrapped = WrappedHungerEvent(event)
 
-        if (wrapped.amount < 0) {
+        if (wrapped.amount >= 0) {
             return
         }
 
