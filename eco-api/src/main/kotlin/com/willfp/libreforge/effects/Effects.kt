@@ -11,7 +11,7 @@ import com.willfp.libreforge.filters.ConfiguredFilter
 import com.willfp.libreforge.filters.EmptyFilter
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.Triggers
-import java.util.UUID
+import java.util.*
 
 @Suppress("UNUSED")
 object Effects {

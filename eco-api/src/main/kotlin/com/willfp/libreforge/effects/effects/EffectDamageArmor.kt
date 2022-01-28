@@ -15,7 +15,6 @@ import org.bukkit.event.player.PlayerItemBreakEvent
 import org.bukkit.event.player.PlayerItemDamageEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
-import org.bukkit.inventory.meta.ItemMeta
 
 
 class EffectDamageArmor : Effect(
@@ -59,7 +58,7 @@ class EffectDamageArmor : Effect(
                     applyDamage(item, event.damage, victim)
                 }
             } else {
-                applyDamage(item, damage)
+                applyDamage(item, damage, null)
             }
         }
     }
