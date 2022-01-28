@@ -58,6 +58,7 @@ object Effects {
     val PULL_TO_LOCATION: Effect = EffectPullToLocation()
     val DAMAGE_ARMOR: Effect = EffectDamageArmor()
     val EXTINGUISH: Effect = EffectExtinguish()
+    val GIVE_OXYGEN: Effect = EffectGiveOxygen()
 
     /**
      * Get effect matching id.
