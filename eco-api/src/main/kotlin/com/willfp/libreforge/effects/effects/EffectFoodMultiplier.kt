@@ -2,7 +2,6 @@ package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.mcmmo.McmmoManager
-import com.willfp.eco.util.NumberUtils
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.MultiplierModifier
@@ -61,13 +60,7 @@ class EffectFoodMultiplier : Effect("food_multiplier") {
             return
         }
 
-        if (multiplier < 1) {
-            if (NumberUtils.randFloat(0.0, 1.0) > multiplier) {
-                wrapped.isCancelled = true
-            }
-        } else {
-            wrapped.amount = ceil(wrapped.amount * multiplier).toInt()
-        }
+        wrapped.amount = ceil(wrapped.amount * multiplier).toInt()
     }
 
     override fun validateConfig(config: Config): List<ConfigViolation> {
