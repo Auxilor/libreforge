@@ -1,5 +1,6 @@
 package com.willfp.libreforge.triggers.triggers
 
+import com.willfp.libreforge.LibReforgePlugin
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -85,7 +86,7 @@ class TriggerAltClick : Trigger(
             }
         }
 
-        val result = player.rayTraceBlocks(50.0, FluidCollisionMode.NEVER) ?: return
+        val result = player.rayTraceBlocks(LibReforgePlugin.instance.configYml.getDoubleFromExpression("raytrace-distance"), FluidCollisionMode.NEVER) ?: return
         val world = player.location.world ?: return
 
         val entityResult = world.rayTraceEntities(
