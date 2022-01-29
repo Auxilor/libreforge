@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.effects
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.eco.util.BlockUtils
+import com.willfp.eco.util.VectorUtils
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.filters.containsIgnoreCase
@@ -10,11 +11,11 @@ import com.willfp.libreforge.runExempted
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
-import org.bukkit.Material
 import org.bukkit.block.Block
 
-class EffectMineRadius : Effect(
-    "mine_radius",
+
+class EffectDrill : Effect(
+    "drill",
     supportsFilters = false,
     applicableTriggers = Triggers.withParameters(
         TriggerParameter.PLAYER
@@ -29,7 +30,7 @@ class EffectMineRadius : Effect(
 
         val player = data.player ?: return
 
-        val radius = config.getIntFromExpression("radius")
+        val amount = config.getIntFromExpression("amount")
 
         if (player.isSneaking && config.getBool("disable_on_sneak")) {
             return;
@@ -37,38 +38,27 @@ class EffectMineRadius : Effect(
 
         val blocks = mutableSetOf<Block>()
 
-        for (x in (-radius..radius)) {
-            for (y in (-radius..radius)) {
-                for (z in (-radius..radius)) {
-                    if (x == 0 && y == 0 && z == 0) {
-                        continue
-                    }
+        for (i in 1..amount) {
+            val simplified = VectorUtils.simplifyVector(player.location.direction.normalize()).multiply(i)
+            val toBreak = block.world.getBlockAt(block.location.clone().add(simplified))
 
-                    val toBreak = block.world.getBlockAt(
-                        block.location.clone().add(x.toDouble(), y.toDouble(), z.toDouble())
-                    )
+            if (config.getStrings("blacklisted_blocks").containsIgnoreCase(toBreak.type.name)) {
+                continue
+            }
 
-                    if (config.getStrings("blacklisted_blocks").containsIgnoreCase(toBreak.type.name)) {
-                        continue
-                    }
-
-                    if (config.getBool("check_hardness")) {
-                        if (toBreak.type.hardness > block.type.hardness) {
-                            continue
-                        }
-                    }
-
-                    if (toBreak.type == Material.AIR) {
-                        continue
-                    }
-
-                    if (!AntigriefManager.canBreakBlock(player, toBreak)) {
-                        continue
-                    }
-
-                    blocks.add(toBreak)
+            if (config.getBool("check_hardness")) {
+                if (toBreak.type.hardness > block.type.hardness) {
+                    continue
                 }
             }
+
+            if (!AntigriefManager.canBreakBlock(player, toBreak)) {
+                continue
+            }
+
+            blocks.add(toBreak)
+            BlockUtils.breakBlock(player, toBreak)
+            toBreak.removeMetadata("block-ignore", plugin)
         }
 
         player.runExempted {
@@ -83,10 +73,10 @@ class EffectMineRadius : Effect(
     override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
-        if (!config.has("radius")) violations.add(
+        if (!config.has("amount")) violations.add(
             ConfigViolation(
-                "radius",
-                "You must specify the radius to break!"
+                "amount",
+                "You must specify the amount of blocks to break!"
             )
         )
 
