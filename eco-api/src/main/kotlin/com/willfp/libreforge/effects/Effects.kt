@@ -61,6 +61,7 @@ object Effects {
     val GIVE_OXYGEN: Effect = EffectGiveOxygen()
     val RUN_PLAYER_COMMAND: Effect = EffectRunPlayerCommand()
     val DRILL: Effect = EffectDrill()
+    val DAMAGE_NEARBY_ENTITIES: Effect = EffectDamageNearbyEntities()
 
     /**
      * Get effect matching id.
