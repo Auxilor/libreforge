@@ -4,6 +4,7 @@ import com.willfp.eco.core.integrations.mcmmo.McmmoManager
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import com.willfp.libreforge.triggers.wrappers.WrappedBlockBreakProgressEvent
 import org.bukkit.event.EventHandler
 import org.bukkit.event.block.BlockDamageEvent
 
@@ -28,7 +29,8 @@ class TriggerMineBlockProgress : Trigger(
             TriggerData(
                 player = player,
                 block = block,
-                location = block.location
+                location = block.location,
+                event = WrappedBlockBreakProgressEvent(event)
             )
         )
     }
