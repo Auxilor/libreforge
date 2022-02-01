@@ -91,6 +91,7 @@ abstract class LibReforgePlugin(
     }
 
     final override fun handleEnable() {
+        initPointPlaceholders()
         this.eventManager.registerListener(TridentHolderDataAttacher(this))
         this.eventManager.registerListener(MovementConditionListener())
         for (condition in Conditions.values()) {
