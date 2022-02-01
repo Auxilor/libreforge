@@ -26,6 +26,11 @@ class EffectBleed : Effect(
 
         this.plugin.runnableFactory.create {
             current++
+
+            if (damage >= victim.health) {
+                victim.killer = data.player
+            }
+
             victim.damage(damage)
 
             if (current >= amount) {
