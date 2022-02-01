@@ -3,6 +3,7 @@
 package com.willfp.libreforge
 
 import com.willfp.eco.core.data.PlayerProfile
+import com.willfp.eco.core.data.ServerProfile
 import com.willfp.eco.core.data.keys.PersistentDataKey
 import com.willfp.eco.core.data.keys.PersistentDataKeyType
 import com.willfp.eco.core.integrations.placeholder.PlaceholderEntry
@@ -14,6 +15,12 @@ import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
 private val keys = mutableMapOf<String, PersistentDataKey<Double>>()
+
+private val knownPointsKey = PersistentDataKey(
+    LibReforgePlugin.instance.namespacedKeyFactory.create("known_points"),
+    PersistentDataKeyType.STRING,
+    ""
+)
 
 private fun getKeyForType(type: String): PersistentDataKey<Double> {
     val existing = keys[type.lowercase()]
@@ -38,10 +45,18 @@ private fun getKeyForType(type: String): PersistentDataKey<Double> {
             ) { NumberUtils.format(it.getPoints(type)) }
         )
 
+        val knownPoints = ServerProfile.load().read(knownPointsKey).split(";").toMutableSet()
+        knownPoints.add(type)
+        ServerProfile.load().write(knownPointsKey, knownPoints.joinToString(";"))
+
         getKeyForType(type)
     } else {
         existing
     }
+}
+
+fun initPointPlaceholders() {
+    ServerProfile.load().read(knownPointsKey).split(";").forEach { getKeyForType(it) }
 }
 
 fun Player.getPoints(type: String): Double {
