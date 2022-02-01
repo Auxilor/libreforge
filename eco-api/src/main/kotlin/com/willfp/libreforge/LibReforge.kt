@@ -2,6 +2,7 @@
 
 package com.willfp.libreforge
 
+import com.github.benmanes.caffeine.cache.Caffeine
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.integrations.IntegrationLoader
@@ -24,10 +25,13 @@ import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
 import org.bukkit.entity.Tameable
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 private val holderProviders = mutableSetOf<HolderProvider>()
 private val previousStates: MutableMap<UUID, Iterable<Holder>> = WeakHashMap()
-private val holderCache = mutableMapOf<UUID, CachedItem<Iterable<Holder>>>()
+private val holderCache = Caffeine.newBuilder()
+    .expireAfterWrite(4L, TimeUnit.SECONDS)
+    .build<UUID, Iterable<Holder>>()
 
 typealias HolderProvider = (Player) -> Iterable<Holder>
 
@@ -125,15 +129,6 @@ abstract class LibReforgePlugin(
             }
         }, 30, 30)
 
-        this.scheduler.runTimer(1, 1) {
-            for ((uuid, cache) in holderCache.toMap()) {
-                val expiry = cache.expiry
-                if (expiry <= System.currentTimeMillis()) {
-                    holderCache.remove(uuid)
-                }
-            }
-        }
-
         handleReloadAdditional()
     }
 
@@ -162,22 +157,17 @@ abstract class LibReforgePlugin(
 }
 
 private fun Player.clearEffectCache() {
-    holderCache.remove(this.uniqueId)
+    holderCache.invalidate(this.uniqueId)
 }
 
 private fun Player.getPureHolders(): Iterable<Holder> {
-    if (holderCache.containsKey(this.uniqueId)) {
-        return holderCache[this.uniqueId]?.item?.toList() ?: emptyList()
+    return holderCache.get(this.uniqueId) {
+        val holders = mutableListOf<Holder>()
+        for (provider in holderProviders) {
+            holders.addAll(provider(this))
+        }
+        holders
     }
-
-    val holders = mutableListOf<Holder>()
-    for (provider in holderProviders) {
-        holders.addAll(provider(this))
-    }
-
-    holderCache[this.uniqueId] = CachedItem(holders, System.currentTimeMillis() + 4000)
-
-    return holders
 }
 
 @JvmOverloads
