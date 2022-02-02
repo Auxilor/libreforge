@@ -1,9 +1,9 @@
 package com.willfp.libreforge.conditions.conditions
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.util.containsIgnoreCase
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.conditions.Condition
-import com.willfp.libreforge.filters.containsIgnoreCase
 import com.willfp.libreforge.updateEffects
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler

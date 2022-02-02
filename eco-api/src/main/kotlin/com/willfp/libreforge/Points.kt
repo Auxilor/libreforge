@@ -2,10 +2,9 @@
 
 package com.willfp.libreforge
 
-import com.willfp.eco.core.data.PlayerProfile
-import com.willfp.eco.core.data.ServerProfile
 import com.willfp.eco.core.data.keys.PersistentDataKey
 import com.willfp.eco.core.data.keys.PersistentDataKeyType
+import com.willfp.eco.core.data.profile
 import com.willfp.eco.core.integrations.placeholder.PlaceholderEntry
 import com.willfp.eco.core.integrations.placeholder.PlaceholderManager
 import com.willfp.eco.util.NamespacedKeyUtils
@@ -45,9 +44,9 @@ private fun getKeyForType(type: String): PersistentDataKey<Double> {
             ) { NumberUtils.format(it.getPoints(type)) }
         )
 
-        val knownPoints = ServerProfile.load().read(knownPointsKey).split(";").toMutableSet()
+        val knownPoints = Bukkit.getServer().profile.read(knownPointsKey).split(";").toMutableSet()
         knownPoints.add(type)
-        ServerProfile.load().write(knownPointsKey, knownPoints.joinToString(";"))
+        Bukkit.getServer().profile.write(knownPointsKey, knownPoints.joinToString(";"))
 
         getKeyForType(type)
     } else {
@@ -56,18 +55,18 @@ private fun getKeyForType(type: String): PersistentDataKey<Double> {
 }
 
 fun initPointPlaceholders() {
-    ServerProfile.load().read(knownPointsKey).split(";").forEach { getKeyForType(it) }
+    Bukkit.getServer().profile.read(knownPointsKey).split(";").forEach { getKeyForType(it) }
 }
 
 fun Player.getPoints(type: String): Double {
-    return PlayerProfile.load(this).read(getKeyForType(type))
+    return this.profile.read(getKeyForType(type))
 }
 
 fun Player.setPoints(type: String, points: Double) {
     val event = PointsChangeEvent(this, type, points)
     Bukkit.getPluginManager().callEvent(event)
     if (!(event.isCancelled)) {
-        PlayerProfile.load(this).write(getKeyForType(type), event.amount)
+        this.profile.write(getKeyForType(type), event.amount)
     }
 }
 

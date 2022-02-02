@@ -20,11 +20,9 @@ class TriggerSwapHands : Trigger(
         }
 
         val player = event.player
-
         if (event.isCancelled) {
             return
         }
-
 
         this.processTrigger(
             player,

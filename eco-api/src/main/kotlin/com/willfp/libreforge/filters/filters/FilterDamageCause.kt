@@ -1,8 +1,8 @@
 package com.willfp.libreforge.filters.filters
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.util.containsIgnoreCase
 import com.willfp.libreforge.filters.FilterComponent
-import com.willfp.libreforge.filters.containsIgnoreCase
 import com.willfp.libreforge.triggers.TriggerData
 
 class FilterDamageCause: FilterComponent() {
