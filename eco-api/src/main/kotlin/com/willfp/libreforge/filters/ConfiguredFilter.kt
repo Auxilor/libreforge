@@ -16,7 +16,3 @@ class ConfiguredFilter(
         return testResults.isEmpty() || testResults.stream().allMatch { it }
     }
 }
-
-fun Collection<String>.containsIgnoreCase(other: String): Boolean {
-    return this.map { it.lowercase() }.contains(other.lowercase())
-}
