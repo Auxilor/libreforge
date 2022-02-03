@@ -75,6 +75,25 @@ abstract class Effect(
         }
     }
 
+    fun sendCannotAffordTypeMessage(player: Player, cost: Double, type: String) {
+        val message = plugin.langYml.getMessage("cannot-afford-type").replace("%cost%", cost.toString())
+            .replace("%type%", type)
+        if (plugin.configYml.getBool("cannot-afford-type.in-actionbar")) {
+            PlayerUtils.getAudience(player).sendActionBar(StringUtils.toComponent(message))
+        } else {
+            player.sendMessage(message)
+        }
+
+        if (plugin.configYml.getBool("cannot-afford-type.sound.enabled")) {
+            player.playSound(
+                player.location,
+                Sound.valueOf(plugin.configYml.getString("cannot-afford-type.sound.sound").uppercase()),
+                1.0f,
+                plugin.configYml.getDouble("cannot-afford-type.sound.pitch").toFloat()
+            )
+        }
+    }
+
     fun resetCooldown(player: Player, config: Config, uuid: UUID) {
         if (!config.has("cooldown")) {
             return

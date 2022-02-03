@@ -1,5 +1,7 @@
 package com.willfp.libreforge.events
 
+import com.willfp.eco.core.config.TransientConfig
+import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Holder
 import com.willfp.libreforge.effects.Effect
 import org.bukkit.entity.Player
@@ -10,7 +12,8 @@ import org.bukkit.event.player.PlayerEvent
 class EffectActivateEvent(
     who: Player,
     val holder: Holder,
-    val effect: Effect
+    val effect: Effect,
+    val config: Config = TransientConfig()
 ) : PlayerEvent(who), Cancellable {
     /**
      * If the event is cancelled.
