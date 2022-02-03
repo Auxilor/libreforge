@@ -24,7 +24,8 @@ import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
 import org.bukkit.entity.Tameable
-import java.util.*
+import java.util.UUID
+import java.util.WeakHashMap
 import java.util.concurrent.TimeUnit
 
 private val holderProviders = mutableSetOf<HolderProvider>()
@@ -94,6 +95,7 @@ abstract class LibReforgePlugin(
         initPointPlaceholders()
         this.eventManager.registerListener(TridentHolderDataAttacher(this))
         this.eventManager.registerListener(MovementConditionListener())
+        this.eventManager.registerListener(PointCostHandler())
         for (condition in Conditions.values()) {
             this.eventManager.registerListener(condition)
         }
