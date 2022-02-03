@@ -108,7 +108,7 @@ abstract class Trigger(
                     EconomyManager.removeMoney(player, config.getDoubleFromExpression("cost"))
                 }
 
-                val activateEvent = EffectActivateEvent(player, holder, effect)
+                val activateEvent = EffectActivateEvent(player, holder, effect, config)
                 this.plugin.server.pluginManager.callEvent(activateEvent)
 
                 if (!activateEvent.isCancelled) {
