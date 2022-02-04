@@ -62,6 +62,7 @@ object Effects {
     val RUN_PLAYER_COMMAND: Effect = EffectRunPlayerCommand()
     val DRILL: Effect = EffectDrill()
     val DAMAGE_NEARBY_ENTITIES: Effect = EffectDamageNearbyEntities()
+    val SEND_TITLE: Effect = EffectDamageNearbyEntities()
 
     /**
      * Get effect matching id.
