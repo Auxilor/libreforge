@@ -1,11 +1,17 @@
 package com.willfp.libreforge.effects
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.integrations.antigrief.AntigriefManager
+import com.willfp.eco.core.integrations.economy.EconomyManager
+import com.willfp.eco.util.NumberUtils
 import com.willfp.eco.util.PlayerUtils
 import com.willfp.eco.util.StringUtils
 import com.willfp.libreforge.ConfigurableProperty
+import com.willfp.libreforge.LibReforgePlugin
 import com.willfp.libreforge.conditions.ConfiguredCondition
+import com.willfp.libreforge.events.EffectActivateEvent
 import com.willfp.libreforge.filters.Filter
+import com.willfp.libreforge.triggers.InvocationData
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.NamespacedKey
@@ -165,7 +171,13 @@ abstract class Effect(
     open fun handle(data: TriggerData, config: Config) {
         // Override when needed
     }
+
+    open fun handle(invocation: InvocationData, config: Config) {
+        // Override when needed
+    }
 }
+
+private val everyHandler = mutableMapOf<UUID, MutableMap<UUID, Int>>()
 
 data class ConfiguredEffect(
     val effect: Effect,
@@ -174,6 +186,86 @@ data class ConfiguredEffect(
     val triggers: Collection<Trigger>,
     val uuid: UUID,
     val conditions: Collection<ConfiguredCondition>
-)
+) {
+    operator fun invoke(invocation: InvocationData) {
+        val (player, data, holder, trigger) = invocation
+
+        var effectAreMet = true
+        for ((condition, conditionConfig) in conditions) {
+            if (!condition.isConditionMet(player, conditionConfig)) {
+                effectAreMet = false
+            }
+        }
+
+        if (!effectAreMet) {
+            return
+        }
+
+        if (NumberUtils.randFloat(0.0, 100.0) > (args.getDoubleOrNull("chance") ?: 100.0)) {
+            return
+        }
+
+        if (args.has("check_antigrief") && args.getBool("check_antigrief") && data.player != null && data.victim != null) {
+            if (!AntigriefManager.canInjure(data.player, data.victim)) {
+                return
+            }
+        }
+
+        val every = args.getIntOrNull("every") ?: 0
+
+        if (every > 0) {
+            val everyMap = everyHandler[player.uniqueId] ?: mutableMapOf()
+            var current = everyMap[uuid] ?: 0
+
+            if (current != 0) {
+                current++
+
+                if (current >= every) {
+                    current = 0
+                }
+
+                everyHandler[player.uniqueId] = everyMap.apply {
+                    this[uuid] = current
+                }
+
+                return
+            }
+        }
+
+        if (!triggers.contains(trigger)) {
+            return
+        }
+
+        if (!filter.matches(data)) {
+            return
+        }
+
+        if (effect.getCooldown(player, uuid) > 0) {
+            if (args.getBoolOrNull("send_cooldown_message") != false) {
+                effect.sendCooldownMessage(player, uuid)
+            }
+            return
+        }
+
+        if (args.has("cost")) {
+            if (!EconomyManager.hasAmount(player, args.getDoubleFromExpression("cost"))) {
+                effect.sendCannotAffordMessage(player, args.getDoubleFromExpression("cost"))
+                return
+            }
+
+            EconomyManager.removeMoney(player, args.getDoubleFromExpression("cost"))
+        }
+
+        val activateEvent = EffectActivateEvent(player, holder, effect, args)
+        LibReforgePlugin.instance.server.pluginManager.callEvent(activateEvent)
+
+        if (!activateEvent.isCancelled) {
+            effect.resetCooldown(player, args, uuid)
+
+            effect.handle(data, args)
+            effect.handle(invocation, args)
+        }
+    }
+}
 
 data class MultiplierModifier(val uuid: UUID, val multiplier: Double)
