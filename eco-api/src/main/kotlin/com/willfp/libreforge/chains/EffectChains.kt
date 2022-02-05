@@ -41,7 +41,7 @@ object EffectChains {
         val id = config.getString("id")
 
         val effects = config.getSubsections("effects").mapNotNull {
-            Effects.compile(it, "$context Chain Effect", fromChain = true)
+            Effects.compile(it, "$context (Chain ID $id) Effect", fromChain = true)
         }
 
         if (effects.isEmpty()) {
