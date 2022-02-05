@@ -55,7 +55,7 @@ abstract class Trigger(
 
 data class InvocationData(
     val player: Player,
-    val data: TriggerData,
+    var data: TriggerData,
     val holder: Holder,
     val trigger: Trigger
 )

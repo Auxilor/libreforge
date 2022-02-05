@@ -188,11 +188,9 @@ data class ConfiguredEffect(
     val conditions: Collection<ConfiguredCondition>
 ) {
     operator fun invoke(invocation: InvocationData, ignoreTriggerList: Boolean = false) {
-        val (player, data, holder, trigger) = invocation
-
         var effectAreMet = true
         for ((condition, conditionConfig) in conditions) {
-            if (!condition.isConditionMet(player, conditionConfig)) {
+            if (!condition.isConditionMet(invocation.player, conditionConfig)) {
                 effectAreMet = false
             }
         }
@@ -200,6 +198,12 @@ data class ConfiguredEffect(
         if (!effectAreMet) {
             return
         }
+
+        if (args.getBool("self_as_victim")) {
+            invocation.data = invocation.data.copy(victim = invocation.data.player)
+        }
+
+        val (player, data, holder, trigger) = invocation
 
         if (NumberUtils.randFloat(0.0, 100.0) > (args.getDoubleOrNull("chance") ?: 100.0)) {
             return
