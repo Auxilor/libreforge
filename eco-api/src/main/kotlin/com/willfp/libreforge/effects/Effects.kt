@@ -19,6 +19,7 @@ import com.willfp.libreforge.effects.effects.EffectCritMultiplier
 import com.willfp.libreforge.effects.effects.EffectDamageArmor
 import com.willfp.libreforge.effects.effects.EffectDamageMultiplier
 import com.willfp.libreforge.effects.effects.EffectDamageNearbyEntities
+import com.willfp.libreforge.effects.effects.EffectDamageVictim
 import com.willfp.libreforge.effects.effects.EffectDrill
 import com.willfp.libreforge.effects.effects.EffectExtinguish
 import com.willfp.libreforge.effects.effects.EffectFeatherStep
@@ -109,6 +110,7 @@ object Effects {
     val DAMAGE_NEARBY_ENTITIES: Effect = EffectDamageNearbyEntities()
     val SEND_TITLE: Effect = EffectDamageNearbyEntities()
     val RUN_CHAIN: Effect = EffectRunChain()
+    val DAMAGE_VICTIM: Effect = EffectDamageVictim()
 
     /**
      * Get effect matching id.
