@@ -148,7 +148,8 @@ object Effects {
      * @return The configured effect, or null if invalid.
      */
     @JvmStatic
-    fun compile(config: Config, context: String): ConfiguredEffect? {
+    @JvmOverloads
+    fun compile(config: Config, context: String, fromChain: Boolean = false): ConfiguredEffect? {
         val effect = config.getString("id").let {
             val found = getByID(it)
             if (found == null) {
@@ -179,7 +180,7 @@ object Effects {
             }
 
             if (it == null) EmptyFilter() else ConfiguredFilter(it)
-        } ?: return null
+        } ?: EmptyFilter()
 
         val triggers = config.getStrings("triggers").let {
             val triggers = mutableListOf<Trigger>()
@@ -196,16 +197,32 @@ object Effects {
                 return@let null
             }
 
-            if (effect.applicableTriggers.isNotEmpty() && it.isEmpty()) {
-                LibReforgePlugin.instance.logViolation(
-                    effect.id,
-                    context,
-                    ConfigViolation(
-                        "triggers", "Specified effect requires at least 1 trigger"
+            if (fromChain) {
+                if (effect.applicableTriggers.isEmpty()) {
+                    LibReforgePlugin.instance.logViolation(
+                        effect.id,
+                        context,
+                        ConfigViolation(
+                            "triggers", "Permanent effects are not allowed in chains"
+                        )
                     )
-                )
 
-                return@let null
+                    return@let null
+                }
+            }
+
+            if (!fromChain) {
+                if (effect.applicableTriggers.isNotEmpty() && it.isEmpty()) {
+                    LibReforgePlugin.instance.logViolation(
+                        effect.id,
+                        context,
+                        ConfigViolation(
+                            "triggers", "Specified effect requires at least 1 trigger"
+                        )
+                    )
+
+                    return@let null
+                }
             }
 
             for (id in it) {

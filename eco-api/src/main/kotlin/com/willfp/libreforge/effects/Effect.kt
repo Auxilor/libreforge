@@ -187,7 +187,7 @@ data class ConfiguredEffect(
     val uuid: UUID,
     val conditions: Collection<ConfiguredCondition>
 ) {
-    operator fun invoke(invocation: InvocationData) {
+    operator fun invoke(invocation: InvocationData, ignoreTriggerList: Boolean = false) {
         val (player, data, holder, trigger) = invocation
 
         var effectAreMet = true
@@ -232,8 +232,10 @@ data class ConfiguredEffect(
             }
         }
 
-        if (!triggers.contains(trigger)) {
-            return
+        if (!ignoreTriggerList) {
+            if (!triggers.contains(trigger)) {
+                return
+            }
         }
 
         if (!filter.matches(data)) {
