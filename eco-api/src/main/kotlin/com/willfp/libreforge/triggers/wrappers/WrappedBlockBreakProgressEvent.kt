@@ -1,7 +1,6 @@
 package com.willfp.libreforge.triggers.wrappers
 
 import com.willfp.libreforge.triggers.WrappedCancellableEvent
-import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockDamageEvent
 
 class WrappedBlockBreakProgressEvent(private val event: BlockDamageEvent): WrappedCancellableEvent<BlockDamageEvent> {

@@ -33,7 +33,7 @@ class EffectDrill : Effect(
         val amount = config.getIntFromExpression("amount")
 
         if (player.isSneaking && config.getBool("disable_on_sneak")) {
-            return;
+            return
         }
 
         val blocks = mutableSetOf<Block>()
