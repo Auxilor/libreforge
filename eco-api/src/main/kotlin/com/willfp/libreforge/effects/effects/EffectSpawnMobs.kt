@@ -28,7 +28,7 @@ class EffectSpawnMobs : Effect(
     override fun handle(data: TriggerData, config: Config) {
         val location = data.location ?: return
         location.world ?: return
-        val victim = data.victim
+        val victim = if (config.getBool("self_as_victim")) data.player else data.victim
 
         if (victim != null) {
             if (victim.getMetadata("eco-target").isNotEmpty()) {
