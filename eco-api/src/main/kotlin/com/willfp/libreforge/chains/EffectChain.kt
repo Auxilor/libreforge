@@ -9,7 +9,7 @@ class EffectChain(
 ) {
     operator fun invoke(invocationData: InvocationData) {
         for (effect in effects) {
-            effect(invocationData)
+            effect(invocationData, ignoreTriggerList = true)
         }
     }
 }
