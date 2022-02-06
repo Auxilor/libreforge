@@ -12,7 +12,8 @@ class TriggerMineBlockProgress : Trigger(
     "mine_block_progress", listOf(
         TriggerParameter.PLAYER,
         TriggerParameter.BLOCK,
-        TriggerParameter.LOCATION
+        TriggerParameter.LOCATION,
+        TriggerParameter.EVENT
     )
 ) {
     @EventHandler(ignoreCancelled = true)

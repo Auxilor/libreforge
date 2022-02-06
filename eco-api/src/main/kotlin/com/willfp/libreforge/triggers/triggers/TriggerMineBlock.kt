@@ -13,7 +13,8 @@ class TriggerMineBlock : Trigger(
     "mine_block", listOf(
         TriggerParameter.PLAYER,
         TriggerParameter.BLOCK,
-        TriggerParameter.LOCATION
+        TriggerParameter.LOCATION,
+        TriggerParameter.EVENT
     )
 ) {
     @EventHandler(ignoreCancelled = true)
