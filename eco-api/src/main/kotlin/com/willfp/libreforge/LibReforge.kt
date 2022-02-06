@@ -18,6 +18,7 @@ import com.willfp.libreforge.integrations.mcmmo.McMMOIntegration
 import com.willfp.libreforge.integrations.paper.PaperIntegration
 import com.willfp.libreforge.integrations.vault.VaultIntegration
 import com.willfp.libreforge.triggers.Triggers
+import com.willfp.libreforge.triggers.triggers.TriggerStatic
 import org.apache.commons.lang.StringUtils
 import org.bukkit.Bukkit
 import org.bukkit.entity.Entity
@@ -131,6 +132,7 @@ abstract class LibReforgePlugin(
                 player.updateEffects()
             }
         }, 30, 30)
+        TriggerStatic.beginTiming(this)
 
         handleReloadAdditional()
     }
