@@ -57,6 +57,7 @@ import com.willfp.libreforge.filters.ConfiguredFilter
 import com.willfp.libreforge.filters.EmptyFilter
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.Triggers
+import com.willfp.libreforge.triggers.triggers.TriggerStatic
 import java.util.UUID
 
 @Suppress("UNUSED")
@@ -242,7 +243,7 @@ object Effects {
                     return@let null
                 }
 
-                if (!effect.applicableTriggers.contains(trigger)) {
+                if (!effect.applicableTriggers.contains(trigger) && trigger !is TriggerStatic) {
                     LibReforgePlugin.instance.logViolation(
                         effect.id,
                         context,
