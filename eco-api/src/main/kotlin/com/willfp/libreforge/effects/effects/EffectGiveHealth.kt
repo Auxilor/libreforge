@@ -6,6 +6,7 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
+import org.bukkit.attribute.Attribute
 
 class EffectGiveHealth : Effect(
     "give_health",
@@ -17,7 +18,8 @@ class EffectGiveHealth : Effect(
     override fun handle(data: TriggerData, config: Config) {
         val player = data.player ?: return
 
-        player.health = player.health + config.getDoubleFromExpression("amount", player)
+        player.health = (player.health + config.getDoubleFromExpression("amount", player))
+            .coerceAtMost(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)!!.value)
     }
 
     override fun validateConfig(config: Config): List<ConfigViolation> {

@@ -32,7 +32,7 @@ class EffectMineRadius : Effect(
         val radius = config.getIntFromExpression("radius")
 
         if (player.isSneaking && config.getBool("disable_on_sneak")) {
-            return;
+            return
         }
 
         val blocks = mutableSetOf<Block>()
