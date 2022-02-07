@@ -43,7 +43,7 @@ object EffectChains {
         val components = mutableListOf<ChainComponent>()
 
         config.getSubsections("effects").mapNotNull {
-            Effects.compile(it, "$context (Chain ID $id) Effect", fromChain = true)
+            Effects.compile(it, "$context (Chain ID $id)", fromChain = true)
         }.mapTo(components) { ChainComponentEffect(it) }
 
         if (components.isEmpty()) {
