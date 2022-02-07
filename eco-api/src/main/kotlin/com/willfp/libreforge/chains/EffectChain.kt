@@ -18,9 +18,7 @@ class EffectChain(
     }
 }
 
-sealed interface ChainComponent {
-
-}
+sealed interface ChainComponent
 
 class ChainComponentEffect(
     val effect: ConfiguredEffect
