@@ -8,7 +8,6 @@ import com.willfp.libreforge.triggers.Triggers
 
 class EffectExtinguish: Effect(
     "extinguish",
-    true,
     Triggers.withParameters(
         TriggerParameter.PLAYER
     )

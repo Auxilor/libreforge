@@ -25,12 +25,19 @@ abstract class Effect(
     id: String,
     val applicableTriggers: Collection<Trigger> = emptyList(),
     supportsFilters: Boolean = true,
-    val noDelay: Boolean = false
+    noDelay: Boolean = false
 ) : ConfigurableProperty(id), Listener {
     private val cooldownTracker = mutableMapOf<UUID, MutableMap<UUID, Long>>()
     val supportsFilters = applicableTriggers.isNotEmpty()
+    val noDelay: Boolean
 
     init {
+        if (applicableTriggers.isEmpty()) {
+            this.noDelay = true
+        } else {
+            this.noDelay = noDelay
+        }
+
         postInit()
     }
 
