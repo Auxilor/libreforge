@@ -37,6 +37,7 @@ object EffectChains {
      * @return The effect chain, or null if invalid.
      */
     @JvmStatic
+    @JvmOverloads
     fun compile(config: Config, context: String, anonymous: Boolean = false): EffectChain? {
         val id = if (anonymous) "anonymous" else config.getString("id")
 
