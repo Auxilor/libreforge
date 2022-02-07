@@ -40,15 +40,17 @@ object EffectChains {
     fun compile(config: Config, context: String): EffectChain? {
         val id = config.getString("id")
 
-        val effects = config.getSubsections("effects").mapNotNull {
-            Effects.compile(it, "$context (Chain ID $id) Effect", fromChain = true)
-        }
+        val components = mutableListOf<ChainComponent>()
 
-        if (effects.isEmpty()) {
+        config.getSubsections("effects").mapNotNull {
+            Effects.compile(it, "$context (Chain ID $id) Effect", fromChain = true)
+        }.mapTo(components) { ChainComponentEffect(it) }
+
+        if (components.isEmpty()) {
             return null
         }
 
-        val chain = EffectChain(id, effects)
+        val chain = EffectChain(id, components)
 
         BY_ID[id] = chain
 
