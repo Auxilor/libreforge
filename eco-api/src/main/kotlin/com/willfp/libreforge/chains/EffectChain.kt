@@ -5,11 +5,23 @@ import com.willfp.libreforge.triggers.InvocationData
 
 class EffectChain(
     val id: String,
-    val effects: Iterable<ConfiguredEffect>
+    private val components: Iterable<ChainComponent>
 ) {
     operator fun invoke(invocationData: InvocationData) {
-        for (effect in effects) {
-            effect(invocationData, ignoreTriggerList = true)
+        for (component in components) {
+            when (component) {
+                is ChainComponentEffect -> {
+                    component.effect(invocationData, ignoreTriggerList = true)
+                }
+            }
         }
     }
 }
+
+sealed interface ChainComponent {
+
+}
+
+class ChainComponentEffect(
+    val effect: ConfiguredEffect
+) : ChainComponent
