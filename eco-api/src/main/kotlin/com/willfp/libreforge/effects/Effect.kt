@@ -22,6 +22,7 @@ import org.bukkit.event.Listener
 import java.util.UUID
 import kotlin.math.ceil
 
+@Suppress("UNUSED_PARAMETER")
 abstract class Effect(
     id: String,
     val applicableTriggers: Collection<Trigger> = emptyList(),
