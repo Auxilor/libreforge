@@ -196,7 +196,6 @@ data class ConfiguredEffect(
     val triggers: Collection<Trigger>,
     val uuid: UUID,
     val conditions: Collection<ConfiguredCondition>,
-    val delay: Int,
     val mutators: Collection<ConfiguredDataMutator>
 ) {
     operator fun invoke(rawInvocation: InvocationData, ignoreTriggerList: Boolean = false) {
@@ -283,6 +282,8 @@ data class ConfiguredEffect(
 
             EconomyManager.removeMoney(player, args.getDoubleFromExpression("cost"))
         }
+
+        val delay = args.getInt("delay", 0)
 
         val activateEvent = EffectActivateEvent(player, holder, effect, args)
         LibReforgePlugin.instance.server.pluginManager.callEvent(activateEvent)
