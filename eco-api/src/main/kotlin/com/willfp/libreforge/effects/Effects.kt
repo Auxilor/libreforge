@@ -261,14 +261,17 @@ object Effects {
             triggers
         } ?: return null
 
-        val delay = config.getIntOrNull("delay") ?: 0
+        /*
+        Delays are in the compilation in order to flag up violations.
+         */
+        val delay = args.getInt("delay", 0)
 
         if (delay > 0 && effect.noDelay) {
             LibReforgePlugin.instance.logViolation(
                 effect.id,
                 context,
                 ConfigViolation(
-                    "delay", "Specified effect does not support delays"
+                    "args.delay", "Specified effect does not support delays"
                 )
             )
 
@@ -280,7 +283,7 @@ object Effects {
                 effect.id,
                 context,
                 ConfigViolation(
-                    "delay", "Delay cannot be negative!"
+                    "args.delay", "Delay cannot be negative!"
                 )
             )
 
@@ -295,6 +298,6 @@ object Effects {
             DataMutators.compile(it, "$context (mutators)")
         }
 
-        return ConfiguredEffect(effect, args, filter, triggers, UUID.randomUUID(), conditions, delay, mutators)
+        return ConfiguredEffect(effect, args, filter, triggers, UUID.randomUUID(), conditions, mutators)
     }
 }
