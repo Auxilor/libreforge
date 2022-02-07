@@ -10,7 +10,6 @@ import org.bukkit.entity.Player
 
 class EffectRunPlayerCommand : Effect(
     "run_player_command",
-    supportsFilters = true,
     applicableTriggers = Triggers.withParameters(
         TriggerParameter.PLAYER
     )

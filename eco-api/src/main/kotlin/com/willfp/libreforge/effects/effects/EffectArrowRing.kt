@@ -14,7 +14,6 @@ import kotlin.math.sin
 
 class EffectArrowRing : Effect(
     "arrow_ring",
-    supportsFilters = false,
     applicableTriggers = Triggers.withParameters(
         TriggerParameter.LOCATION
     )

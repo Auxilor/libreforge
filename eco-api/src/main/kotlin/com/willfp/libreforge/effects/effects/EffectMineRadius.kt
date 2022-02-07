@@ -15,7 +15,6 @@ import org.bukkit.block.Block
 
 class EffectMineRadius : Effect(
     "mine_radius",
-    supportsFilters = false,
     applicableTriggers = Triggers.withParameters(
         TriggerParameter.PLAYER
     )

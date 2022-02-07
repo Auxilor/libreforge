@@ -10,7 +10,6 @@ import com.willfp.libreforge.triggers.Triggers
 
 class EffectBreakBlock : Effect(
     "break_block",
-    supportsFilters = false,
     applicableTriggers = Triggers.withParameters(
         TriggerParameter.PLAYER,
     )

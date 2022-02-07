@@ -10,7 +10,6 @@ import com.willfp.libreforge.triggers.wrappers.WrappedDamageEvent
 
 class EffectDamageMultiplier : Effect(
     "damage_multiplier",
-    supportsFilters = true,
     applicableTriggers = Triggers.withParameters(
         TriggerParameter.EVENT
     )

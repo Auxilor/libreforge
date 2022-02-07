@@ -9,7 +9,6 @@ import com.willfp.libreforge.triggers.Triggers
 
 class EffectStrikeLightning : Effect(
     "strike_lightning",
-    supportsFilters = false,
     applicableTriggers = Triggers.withParameters(
         TriggerParameter.LOCATION
     )

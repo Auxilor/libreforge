@@ -11,7 +11,6 @@ import org.bukkit.entity.Player
 
 class EffectRunCommand : Effect(
     "run_command",
-    supportsFilters = true,
     applicableTriggers = Triggers.withParameters(
         TriggerParameter.PLAYER
     )

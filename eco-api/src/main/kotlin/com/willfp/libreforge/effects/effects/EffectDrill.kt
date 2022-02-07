@@ -16,7 +16,6 @@ import org.bukkit.block.Block
 
 class EffectDrill : Effect(
     "drill",
-    supportsFilters = false,
     applicableTriggers = Triggers.withParameters(
         TriggerParameter.PLAYER
     )

@@ -10,7 +10,6 @@ import com.willfp.libreforge.triggers.Triggers
 
 class EffectGiveMoney : Effect(
     "give_money",
-    supportsFilters = true,
     applicableTriggers = Triggers.withParameters(
         TriggerParameter.PLAYER
     )

@@ -10,7 +10,6 @@ import com.willfp.libreforge.triggers.Triggers
 
 class EffectDamageVictim : Effect(
     "damage_victim",
-    supportsFilters = false,
     applicableTriggers = Triggers.withParameters(
         TriggerParameter.VICTIM
     )

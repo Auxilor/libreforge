@@ -10,7 +10,6 @@ import com.willfp.libreforge.triggers.Triggers
 
 class EffectGivePoints : Effect(
     "give_points",
-    supportsFilters = true,
     applicableTriggers = Triggers.withParameters(
         TriggerParameter.PLAYER
     )

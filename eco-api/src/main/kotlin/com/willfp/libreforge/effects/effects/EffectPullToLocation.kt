@@ -9,7 +9,6 @@ import com.willfp.libreforge.triggers.Triggers
 
 class EffectPullToLocation : Effect(
     "pull_to_location",
-    supportsFilters = true,
     applicableTriggers = Triggers.withParameters(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION

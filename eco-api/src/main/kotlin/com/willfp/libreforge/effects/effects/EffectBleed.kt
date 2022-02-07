@@ -10,7 +10,6 @@ import com.willfp.libreforge.triggers.Triggers
 
 class EffectBleed : Effect(
     "bleed",
-    supportsFilters = true,
     applicableTriggers = Triggers.withParameters(
         TriggerParameter.VICTIM
     )

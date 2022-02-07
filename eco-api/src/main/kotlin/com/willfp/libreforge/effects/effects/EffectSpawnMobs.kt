@@ -20,7 +20,6 @@ import org.bukkit.event.entity.EntityTargetEvent
 
 class EffectSpawnMobs : Effect(
     "spawn_mobs",
-    supportsFilters = false,
     applicableTriggers = Triggers.withParameters(
         TriggerParameter.LOCATION
     )

@@ -19,7 +19,6 @@ import kotlin.math.roundToInt
 
 class EffectAutosmelt : Effect(
     "autosmelt",
-    supportsFilters = true,
     applicableTriggers = Triggers.withParameters(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT
