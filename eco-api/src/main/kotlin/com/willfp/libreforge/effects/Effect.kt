@@ -185,9 +185,17 @@ abstract class Effect(
     open fun handle(invocation: InvocationData, config: Config) {
         // Override when needed
     }
+
+    open fun makeCompileData(config: Config, context: String): CompileData? {
+        return null
+    }
 }
 
 private val everyHandler = mutableMapOf<UUID, MutableMap<UUID, Int>>()
+
+interface CompileData {
+    val data: Any
+}
 
 data class ConfiguredEffect(
     val effect: Effect,
@@ -196,10 +204,11 @@ data class ConfiguredEffect(
     val triggers: Collection<Trigger>,
     val uuid: UUID,
     val conditions: Collection<ConfiguredCondition>,
-    val mutators: Collection<ConfiguredDataMutator>
+    val mutators: Collection<ConfiguredDataMutator>,
+    val compileData: CompileData?
 ) {
     operator fun invoke(rawInvocation: InvocationData, ignoreTriggerList: Boolean = false) {
-        var invocation = rawInvocation.copy()
+        var invocation = rawInvocation.copy(compileData = compileData)
 
         if (args.getBool("self_as_victim")) {
             invocation = invocation.copy(
