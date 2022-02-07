@@ -6,6 +6,7 @@ import com.willfp.libreforge.LibReforgePlugin
 import com.willfp.libreforge.triggers.mutators.MutatorPlayerAsVictim
 import com.willfp.libreforge.triggers.mutators.MutatorSpinLocation
 import com.willfp.libreforge.triggers.mutators.MutatorTranslateLocation
+import com.willfp.libreforge.triggers.mutators.MutatorVictimToOwner
 
 @Suppress("UNUSED")
 object DataMutators {
@@ -14,6 +15,7 @@ object DataMutators {
     val TRANSLATE_LOCATION: DataMutator = MutatorTranslateLocation()
     val SPIN_LOCATION: DataMutator = MutatorSpinLocation()
     val PLAYER_AS_VICTIM: DataMutator = MutatorPlayerAsVictim()
+    val VICTIM_TO_OWNER: DataMutator = MutatorVictimToOwner()
 
     fun values(): Set<DataMutator> {
         return BY_ID.values.toSet()
