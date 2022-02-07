@@ -44,6 +44,7 @@ import com.willfp.libreforge.effects.effects.EffectPullToLocation
 import com.willfp.libreforge.effects.effects.EffectRegenMultiplier
 import com.willfp.libreforge.effects.effects.EffectRemovePotionEffect
 import com.willfp.libreforge.effects.effects.EffectRunChain
+import com.willfp.libreforge.effects.effects.EffectRunChainInline
 import com.willfp.libreforge.effects.effects.EffectRunCommand
 import com.willfp.libreforge.effects.effects.EffectRunPlayerCommand
 import com.willfp.libreforge.effects.effects.EffectSendMessage
@@ -114,6 +115,7 @@ object Effects {
     val SEND_TITLE: Effect = EffectSendTitle()
     val RUN_CHAIN: Effect = EffectRunChain()
     val DAMAGE_VICTIM: Effect = EffectDamageVictim()
+    val RUN_CHAIN_INLINE: Effect = EffectRunChainInline()
 
     /**
      * Get effect matching id.
@@ -269,6 +271,8 @@ object Effects {
             DataMutators.compile(it, "$context (mutators)")
         }
 
-        return ConfiguredEffect(effect, args, filter, triggers, UUID.randomUUID(), conditions, mutators)
+        val compileData = effect.makeCompileData(config, context)
+
+        return ConfiguredEffect(effect, args, filter, triggers, UUID.randomUUID(), conditions, mutators, compileData)
     }
 }

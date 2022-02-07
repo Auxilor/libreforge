@@ -37,8 +37,8 @@ object EffectChains {
      * @return The effect chain, or null if invalid.
      */
     @JvmStatic
-    fun compile(config: Config, context: String): EffectChain? {
-        val id = config.getString("id")
+    fun compile(config: Config, context: String, anonymous: Boolean = false): EffectChain? {
+        val id = if (anonymous) "anonymous" else config.getString("id")
 
         val components = mutableListOf<ChainComponent>()
 
@@ -52,7 +52,9 @@ object EffectChains {
 
         val chain = EffectChain(id, components)
 
-        BY_ID[id] = chain
+        if (!anonymous) {
+            BY_ID[id] = chain
+        }
 
         return chain
     }

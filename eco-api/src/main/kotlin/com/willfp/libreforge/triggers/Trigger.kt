@@ -2,6 +2,7 @@ package com.willfp.libreforge.triggers
 
 import com.willfp.libreforge.Holder
 import com.willfp.libreforge.LibReforgePlugin
+import com.willfp.libreforge.effects.CompileData
 import com.willfp.libreforge.getHolders
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
@@ -35,7 +36,7 @@ abstract class Trigger(
             }
 
             for (effect in holder.effects) {
-                effect(InvocationData(player, data, holder, this))
+                effect(InvocationData(player, data, holder, this, effect.compileData))
             }
         }
     }
@@ -57,5 +58,6 @@ data class InvocationData(
     val player: Player,
     val data: TriggerData,
     val holder: Holder,
-    val trigger: Trigger
+    val trigger: Trigger,
+    val compileData: CompileData?
 )
