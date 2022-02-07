@@ -23,10 +23,12 @@ import kotlin.math.ceil
 
 abstract class Effect(
     id: String,
-    val supportsFilters: Boolean = false,
-    val applicableTriggers: Collection<Trigger> = emptyList()
+    val applicableTriggers: Collection<Trigger> = emptyList(),
+    supportsFilters: Boolean = true,
+    val noDelay: Boolean = false
 ) : ConfigurableProperty(id), Listener {
     private val cooldownTracker = mutableMapOf<UUID, MutableMap<UUID, Long>>()
+    val supportsFilters = applicableTriggers.isNotEmpty()
 
     init {
         postInit()
@@ -185,7 +187,8 @@ data class ConfiguredEffect(
     val filter: Filter,
     val triggers: Collection<Trigger>,
     val uuid: UUID,
-    val conditions: Collection<ConfiguredCondition>
+    val conditions: Collection<ConfiguredCondition>,
+    val delay: Int
 ) {
     operator fun invoke(invocation: InvocationData, ignoreTriggerList: Boolean = false) {
         var effectAreMet = true
@@ -268,8 +271,15 @@ data class ConfiguredEffect(
         if (!activateEvent.isCancelled) {
             effect.resetCooldown(player, args, uuid)
 
-            effect.handle(data, args)
-            effect.handle(invocation, args)
+            if (delay > 0) {
+                LibReforgePlugin.instance.scheduler.runLater(delay.toLong()) {
+                    effect.handle(data, args)
+                    effect.handle(invocation, args)
+                }
+            } else {
+                effect.handle(data, args)
+                effect.handle(invocation, args)
+            }
         }
     }
 }

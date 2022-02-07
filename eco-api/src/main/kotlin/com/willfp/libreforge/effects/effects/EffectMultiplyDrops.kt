@@ -12,7 +12,6 @@ import kotlin.math.roundToInt
 
 class EffectMultiplyDrops : Effect(
     "multiply_drops",
-    supportsFilters = true,
     applicableTriggers = Triggers.withParameters(
         TriggerParameter.EVENT
     )

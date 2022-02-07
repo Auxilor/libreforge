@@ -9,7 +9,6 @@ import com.willfp.libreforge.triggers.Triggers
 
 class EffectRunChain : Effect(
     "run_chain",
-    supportsFilters = true,
     applicableTriggers = Triggers.values()
 ) {
     override fun handle(invocation: InvocationData, config: Config) {

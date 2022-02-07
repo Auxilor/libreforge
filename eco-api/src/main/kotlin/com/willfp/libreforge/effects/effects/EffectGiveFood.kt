@@ -9,7 +9,6 @@ import com.willfp.libreforge.triggers.Triggers
 
 class EffectGiveFood : Effect(
     "give_food",
-    supportsFilters = true,
     applicableTriggers = Triggers.withParameters(
         TriggerParameter.PLAYER
     )

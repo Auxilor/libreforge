@@ -11,7 +11,6 @@ import com.willfp.libreforge.triggers.Triggers
 
 class EffectSendMessage : Effect(
     "send_message",
-    supportsFilters = true,
     applicableTriggers = Triggers.withParameters(
         TriggerParameter.PLAYER
     )

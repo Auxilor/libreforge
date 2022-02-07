@@ -47,6 +47,7 @@ import com.willfp.libreforge.effects.effects.EffectRunChain
 import com.willfp.libreforge.effects.effects.EffectRunCommand
 import com.willfp.libreforge.effects.effects.EffectRunPlayerCommand
 import com.willfp.libreforge.effects.effects.EffectSendMessage
+import com.willfp.libreforge.effects.effects.EffectSendTitle
 import com.willfp.libreforge.effects.effects.EffectSetPoints
 import com.willfp.libreforge.effects.effects.EffectSpawnMobs
 import com.willfp.libreforge.effects.effects.EffectSpawnParticle
@@ -109,7 +110,7 @@ object Effects {
     val RUN_PLAYER_COMMAND: Effect = EffectRunPlayerCommand()
     val DRILL: Effect = EffectDrill()
     val DAMAGE_NEARBY_ENTITIES: Effect = EffectDamageNearbyEntities()
-    val SEND_TITLE: Effect = EffectDamageNearbyEntities()
+    val SEND_TITLE: Effect = EffectSendTitle()
     val RUN_CHAIN: Effect = EffectRunChain()
     val DAMAGE_VICTIM: Effect = EffectDamageVictim()
 
@@ -259,10 +260,36 @@ object Effects {
             triggers
         } ?: return null
 
+        val delay = config.getIntOrNull("delay") ?: 0
+
+        if (delay > 0 && effect.noDelay) {
+            LibReforgePlugin.instance.logViolation(
+                effect.id,
+                context,
+                ConfigViolation(
+                    "delay", "Specified effect does not support delays"
+                )
+            )
+
+            return null
+        }
+
+        if (delay < 0) {
+            LibReforgePlugin.instance.logViolation(
+                effect.id,
+                context,
+                ConfigViolation(
+                    "delay", "Delay cannot be negative!"
+                )
+            )
+
+            return null
+        }
+
         val conditions = config.getSubsections("conditions").mapNotNull {
             Conditions.compile(it, "$context (effect-specific conditions)")
         }
 
-        return ConfiguredEffect(effect, args, filter, triggers, UUID.randomUUID(), conditions)
+        return ConfiguredEffect(effect, args, filter, triggers, UUID.randomUUID(), conditions, delay)
     }
 }
