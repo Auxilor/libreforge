@@ -24,7 +24,7 @@ class EffectRunChainInline : Effect(
         if (!config.has("chain")) violations.add(
             ConfigViolation(
                 "chain",
-                "You must create an inline chain!"
+                "You must create a chain!"
             )
         )
 
