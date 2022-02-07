@@ -3,7 +3,9 @@ package com.willfp.libreforge.triggers
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.LibReforgePlugin
+import com.willfp.libreforge.triggers.mutators.MutatorLocationToBlock
 import com.willfp.libreforge.triggers.mutators.MutatorLocationToPlayer
+import com.willfp.libreforge.triggers.mutators.MutatorLocationToVictim
 import com.willfp.libreforge.triggers.mutators.MutatorPlayerAsVictim
 import com.willfp.libreforge.triggers.mutators.MutatorSpinLocation
 import com.willfp.libreforge.triggers.mutators.MutatorTranslateLocation
@@ -18,6 +20,8 @@ object DataMutators {
     val PLAYER_AS_VICTIM: DataMutator = MutatorPlayerAsVictim()
     val VICTIM_TO_OWNER: DataMutator = MutatorVictimToOwner()
     val LOCATION_TO_PLAYER: DataMutator = MutatorLocationToPlayer()
+    val LOCATION_TO_VICTIM: DataMutator = MutatorLocationToVictim()
+    val LOCATION_TO_BLOCK: DataMutator = MutatorLocationToBlock()
 
     fun values(): Set<DataMutator> {
         return BY_ID.values.toSet()
