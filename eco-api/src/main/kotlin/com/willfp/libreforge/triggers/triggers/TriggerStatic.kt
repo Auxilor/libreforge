@@ -11,7 +11,8 @@ class TriggerStatic(interval: Int) : Trigger(
     "static_$interval", listOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,
-        TriggerParameter.VICTIM
+        TriggerParameter.VICTIM,
+        TriggerParameter.BLOCK
     )
 ) {
     private fun invoke(player: Player) {
@@ -20,7 +21,8 @@ class TriggerStatic(interval: Int) : Trigger(
             TriggerData(
                 player = player,
                 location = player.location,
-                victim = player
+                victim = player,
+                block = player.getTargetBlock(LibReforgePlugin.instance.configYml.getDoubleFromExpression("raytrace-distance").toInt())
             )
         )
     }
