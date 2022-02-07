@@ -56,6 +56,7 @@ import com.willfp.libreforge.effects.effects.EffectTeleport
 import com.willfp.libreforge.effects.effects.EffectXpMultiplier
 import com.willfp.libreforge.filters.ConfiguredFilter
 import com.willfp.libreforge.filters.EmptyFilter
+import com.willfp.libreforge.triggers.DataMutators
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.Triggers
 import com.willfp.libreforge.triggers.triggers.TriggerStatic
@@ -290,6 +291,10 @@ object Effects {
             Conditions.compile(it, "$context (effect-specific conditions)")
         }
 
-        return ConfiguredEffect(effect, args, filter, triggers, UUID.randomUUID(), conditions, delay)
+        val mutators = config.getSubsections("mutators").mapNotNull {
+            DataMutators.compile(it, "$context (mutators)")
+        }
+
+        return ConfiguredEffect(effect, args, filter, triggers, UUID.randomUUID(), conditions, delay, mutators)
     }
 }

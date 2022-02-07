@@ -16,7 +16,7 @@ abstract class ConfigurableProperty(
      *
      * @param config The config.
      * @param context Additional context, e.g. path in config.
-     * @return If any violations.
+     * @return If any violations are found, take true to be a failure.
      */
     fun checkConfig(config: Config, context: String): Boolean {
         val violations = this.validateConfig(config)
