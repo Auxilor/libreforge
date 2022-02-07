@@ -12,7 +12,6 @@ import org.bukkit.metadata.FixedMetadataValue
 
 class EffectIgnite: Effect(
     "ignite",
-    true,
     Triggers.withParameters(
         TriggerParameter.VICTIM,
         TriggerParameter.PLAYER

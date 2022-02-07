@@ -14,7 +14,8 @@ class EffectMultiplyDrops : Effect(
     "multiply_drops",
     applicableTriggers = Triggers.withParameters(
         TriggerParameter.EVENT
-    )
+    ),
+    noDelay = true
 ) {
     override fun handle(data: TriggerData, config: Config) {
         val event = data.event as? WrappedDropEvent<*> ?: return

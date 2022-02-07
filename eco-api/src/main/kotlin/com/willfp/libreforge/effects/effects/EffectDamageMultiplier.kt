@@ -12,7 +12,8 @@ class EffectDamageMultiplier : Effect(
     "damage_multiplier",
     applicableTriggers = Triggers.withParameters(
         TriggerParameter.EVENT
-    )
+    ),
+    noDelay = true
 ) {
     override fun handle(data: TriggerData, config: Config) {
         val event = data.event as? WrappedDamageEvent ?: return

@@ -11,7 +11,8 @@ class EffectCancelEvent : Effect(
     "cancel_event",
     applicableTriggers = Triggers.withParameters(
         TriggerParameter.EVENT
-    )
+    ),
+    noDelay = true
 ) {
     override fun handle(data: TriggerData, config: Config) {
         val event = data.event as? WrappedCancellableEvent<*> ?: return

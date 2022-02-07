@@ -13,7 +13,8 @@ class EffectCritMultiplier : Effect(
     applicableTriggers = Triggers.withParameters(
         TriggerParameter.EVENT,
         TriggerParameter.PLAYER
-    )
+    ),
+    noDelay = true
 ) {
     override fun handle(data: TriggerData, config: Config) {
         val event = data.event as? WrappedDamageEvent ?: return
