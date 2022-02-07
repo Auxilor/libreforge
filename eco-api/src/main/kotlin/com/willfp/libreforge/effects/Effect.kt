@@ -11,6 +11,7 @@ import com.willfp.libreforge.LibReforgePlugin
 import com.willfp.libreforge.conditions.ConfiguredCondition
 import com.willfp.libreforge.events.EffectActivateEvent
 import com.willfp.libreforge.filters.Filter
+import com.willfp.libreforge.triggers.ConfiguredDataMutator
 import com.willfp.libreforge.triggers.InvocationData
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
@@ -195,9 +196,24 @@ data class ConfiguredEffect(
     val triggers: Collection<Trigger>,
     val uuid: UUID,
     val conditions: Collection<ConfiguredCondition>,
-    val delay: Int
+    val delay: Int,
+    val mutators: Collection<ConfiguredDataMutator>
 ) {
-    operator fun invoke(invocation: InvocationData, ignoreTriggerList: Boolean = false) {
+    operator fun invoke(rawInvocation: InvocationData, ignoreTriggerList: Boolean = false) {
+        var invocation = rawInvocation.copy()
+
+        if (args.getBool("self_as_victim")) {
+            invocation = invocation.copy(
+                data = invocation.data.copy(victim = invocation.data.player)
+            )
+        }
+
+        for (mutator in mutators) {
+            invocation = invocation.copy(
+                data = mutator(invocation.data)
+            )
+        }
+
         var effectAreMet = true
         for ((condition, conditionConfig) in conditions) {
             if (!condition.isConditionMet(invocation.player, conditionConfig)) {
@@ -207,10 +223,6 @@ data class ConfiguredEffect(
 
         if (!effectAreMet) {
             return
-        }
-
-        if (args.getBool("self_as_victim")) {
-            invocation.data = invocation.data.copy(victim = invocation.data.player)
         }
 
         val (player, data, holder, trigger) = invocation
