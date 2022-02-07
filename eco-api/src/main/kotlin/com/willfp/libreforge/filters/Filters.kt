@@ -6,6 +6,7 @@ import com.willfp.libreforge.filters.filters.FilterEntityType
 import com.willfp.libreforge.filters.filters.FilterItems
 import com.willfp.libreforge.filters.filters.FilterOnlyBosses
 import com.willfp.libreforge.filters.filters.FilterOnlyNonBosses
+import com.willfp.libreforge.filters.filters.FilterProjectiles
 
 @Suppress("UNUSED")
 object Filters {
@@ -17,6 +18,7 @@ object Filters {
     val DAMAGE_CAUSE: FilterComponent = FilterDamageCause()
     val ONLY_NON_BOSSES: FilterComponent = FilterOnlyNonBosses()
     val ITEMS: FilterComponent = FilterItems()
+    val PROJECTILES: FilterComponent = FilterProjectiles()
 
     /**
      * List of all registered filters.
