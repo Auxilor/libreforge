@@ -15,6 +15,7 @@ import com.willfp.libreforge.triggers.ConfiguredDataMutator
 import com.willfp.libreforge.triggers.InvocationData
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
+import com.willfp.libreforge.triggers.mutateInOrder
 import org.bukkit.NamespacedKey
 import org.bukkit.Sound
 import org.bukkit.entity.Player
@@ -217,11 +218,9 @@ data class ConfiguredEffect(
             )
         }
 
-        for (mutator in mutators) {
-            invocation = invocation.copy(
-                data = mutator(invocation.data)
-            )
-        }
+        invocation = invocation.copy(
+            data = mutators.mutateInOrder(invocation.data)
+        )
 
         var effectAreMet = true
         for ((condition, conditionConfig) in conditions) {
