@@ -283,7 +283,11 @@ data class ConfiguredEffect(
             EconomyManager.removeMoney(player, args.getDoubleFromExpression("cost"))
         }
 
-        val delay = args.getInt("delay", 0)
+        val delay = if (args.has("delay")) {
+            val found = args.getInt("delay")
+
+            if (effect.noDelay || found < 0) 0 else found
+        } else 0
 
         val activateEvent = EffectActivateEvent(player, holder, effect, args)
         LibReforgePlugin.instance.server.pluginManager.callEvent(activateEvent)

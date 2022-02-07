@@ -261,35 +261,6 @@ object Effects {
             triggers
         } ?: return null
 
-        /*
-        Delays are in the compilation in order to flag up violations.
-         */
-        val delay = args.getInt("delay", 0)
-
-        if (delay > 0 && effect.noDelay) {
-            LibReforgePlugin.instance.logViolation(
-                effect.id,
-                context,
-                ConfigViolation(
-                    "args.delay", "Specified effect does not support delays"
-                )
-            )
-
-            return null
-        }
-
-        if (delay < 0) {
-            LibReforgePlugin.instance.logViolation(
-                effect.id,
-                context,
-                ConfigViolation(
-                    "args.delay", "Delay cannot be negative!"
-                )
-            )
-
-            return null
-        }
-
         val conditions = config.getSubsections("conditions").mapNotNull {
             Conditions.compile(it, "$context (effect-specific conditions)")
         }
