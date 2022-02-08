@@ -7,6 +7,14 @@ abstract class DataMutator(
     id: String,
     val order: MutationOrder = MutationOrder.NORMAL
 ) : ConfigurableProperty(id) {
+    init {
+        register()
+    }
+
+    private fun register() {
+        DataMutators.addNewMutator(this)
+    }
+
     abstract fun mutate(data: TriggerData, config: Config): TriggerData
 }
 
