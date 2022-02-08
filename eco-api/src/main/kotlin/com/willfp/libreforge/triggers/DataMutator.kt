@@ -35,3 +35,12 @@ fun Collection<ConfiguredDataMutator>.mutateInOrder(data: TriggerData): TriggerD
 
     return currentData
 }
+
+fun Collection<ConfiguredDataMutator>.mutateOrderless(data: TriggerData): TriggerData {
+    var currentData = data
+    for (mutator in this) {
+        currentData = mutator(currentData)
+    }
+
+    return currentData
+}
