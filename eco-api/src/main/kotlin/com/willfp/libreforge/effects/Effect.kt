@@ -11,16 +11,12 @@ import com.willfp.libreforge.LibReforgePlugin
 import com.willfp.libreforge.conditions.ConfiguredCondition
 import com.willfp.libreforge.events.EffectActivateEvent
 import com.willfp.libreforge.filters.Filter
-import com.willfp.libreforge.triggers.ConfiguredDataMutator
-import com.willfp.libreforge.triggers.InvocationData
-import com.willfp.libreforge.triggers.Trigger
-import com.willfp.libreforge.triggers.TriggerData
-import com.willfp.libreforge.triggers.mutateOrderless
+import com.willfp.libreforge.triggers.*
 import org.bukkit.NamespacedKey
 import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
-import java.util.UUID
+import java.util.*
 import kotlin.math.ceil
 
 @Suppress("UNUSED_PARAMETER")
@@ -272,8 +268,14 @@ data class ConfiguredEffect(
             }
         }
 
-        if (!filter.matches(data)) {
-            return
+        if (args.getBool("filters_before_mutation")) {
+            if (!filter.matches(rawInvocation.data)) {
+                return
+            }
+        } else {
+            if (!filter.matches(data)) {
+                return
+            }
         }
 
         if (effect.getCooldown(player, uuid) > 0) {
