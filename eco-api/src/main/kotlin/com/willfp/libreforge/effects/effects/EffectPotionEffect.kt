@@ -38,24 +38,13 @@ class EffectPotionEffect : Effect(
     override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
-        if (!config.has("effect")) violations.add(
+        if (PotionEffectType.getByName(config.getStringOrNull("effect")?.uppercase() ?: "") == null) violations.add(
             ConfigViolation(
                 "effect",
-                "You must specify the potion effect!"
+                "You must specify the potion effect / invalid effect specified! Get a list of valid effects here: "
+                        + " https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/potion/PotionEffectType.html"
             )
         )
-
-        if (!config.getString("effect").equals("increase_damage", true)) {
-            val testEffect = PotionEffectType.getByName(config.getString("effect").uppercase())
-                ?: PotionEffectType.INCREASE_DAMAGE
-            if (testEffect == PotionEffectType.INCREASE_DAMAGE) {
-                ConfigViolation(
-                    "effect",
-                    "Invalid potion effect specified! See all potion effects there " +
-                            "https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/potion/PotionEffectType.html"
-                )
-            }
-        }
 
         if (!config.has("level")) violations.add(
             ConfigViolation(
