@@ -39,6 +39,18 @@ class EffectRemovePotionEffect : Effect(
             )
         )
 
+        if (!config.getString("effect").equals("increase_damage", true)) {
+            val testEffect = PotionEffectType.getByName(config.getString("effect").uppercase())
+                ?: PotionEffectType.INCREASE_DAMAGE
+            if (testEffect == PotionEffectType.INCREASE_DAMAGE) {
+                ConfigViolation(
+                    "effect",
+                    "Invalid potion effect specified! See all potion effects there " +
+                            "https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/potion/PotionEffectType.html"
+                )
+            }
+        }
+
         if (!config.has("apply_to_player")) violations.add(
             ConfigViolation(
                 "apply_to_player",
