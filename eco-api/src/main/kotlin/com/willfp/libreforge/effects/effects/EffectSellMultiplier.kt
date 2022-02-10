@@ -47,7 +47,7 @@ class EffectSellMultiplier : Effect("sell_multiplier") {
         if (!config.has("multiplier")) violations.add(
             ConfigViolation(
                 "multiplier",
-                "You must specify the regen multiplier!"
+                "You must specify the sell multiplier!"
             )
         )
 
