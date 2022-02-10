@@ -12,10 +12,12 @@ import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.conditions.MovementConditionListener
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.integrations.aureliumskills.AureliumSkillsIntegration
+import com.willfp.libreforge.integrations.deluxesellwands.DeluxeSellwandsIntegration
 import com.willfp.libreforge.integrations.ecoskills.EcoSkillsIntegration
 import com.willfp.libreforge.integrations.jobs.JobsIntegration
 import com.willfp.libreforge.integrations.mcmmo.McMMOIntegration
 import com.willfp.libreforge.integrations.paper.PaperIntegration
+import com.willfp.libreforge.integrations.shopguiplus.ShopGUIPlusIntegration
 import com.willfp.libreforge.integrations.vault.VaultIntegration
 import com.willfp.libreforge.triggers.Triggers
 import com.willfp.libreforge.triggers.triggers.TriggerStatic
@@ -144,6 +146,8 @@ abstract class LibReforgePlugin(
             IntegrationLoader("mcMMO", McMMOIntegration::load),
             IntegrationLoader("Jobs", JobsIntegration::load),
             IntegrationLoader("Vault", VaultIntegration::load),
+            IntegrationLoader("ShopGUIPlus") { ShopGUIPlusIntegration.load(this) },
+            IntegrationLoader("DeluxeSellwands") { DeluxeSellwandsIntegration.load(this) },
         )
 
         integrations.addAll(loadAdditionalIntegrations())
