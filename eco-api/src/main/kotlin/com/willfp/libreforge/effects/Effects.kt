@@ -47,6 +47,7 @@ import com.willfp.libreforge.effects.effects.EffectRunChain
 import com.willfp.libreforge.effects.effects.EffectRunChainInline
 import com.willfp.libreforge.effects.effects.EffectRunCommand
 import com.willfp.libreforge.effects.effects.EffectRunPlayerCommand
+import com.willfp.libreforge.effects.effects.EffectSellMultiplier
 import com.willfp.libreforge.effects.effects.EffectSendMessage
 import com.willfp.libreforge.effects.effects.EffectSendTitle
 import com.willfp.libreforge.effects.effects.EffectSetPoints
@@ -116,6 +117,7 @@ object Effects {
     val RUN_CHAIN: Effect = EffectRunChain()
     val DAMAGE_VICTIM: Effect = EffectDamageVictim()
     val RUN_CHAIN_INLINE: Effect = EffectRunChainInline()
+    val SELL_MULTIPLIER: EffectSellMultiplier = EffectSellMultiplier() // Explicit type for hooks
 
     /**
      * Get effect matching id.
