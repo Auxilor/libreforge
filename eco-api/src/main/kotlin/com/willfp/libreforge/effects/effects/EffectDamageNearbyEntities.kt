@@ -25,6 +25,7 @@ class EffectDamageNearbyEntities : Effect(
         val damageAsPlayer = config.getBool("damage_as_player")
         val entities = config.getStrings("entities").map { Entities.lookup(it) }
         val damage = config.getDoubleFromExpression("damage", player)
+        val damageSelf = config.getBoolOrNull("damage_self") ?: true
 
         for (entity in location.getNearbyEntities(radius, radius, radius)) {
             if (entity.hasMetadata("ignore-nearby-damage")) {
@@ -41,6 +42,10 @@ class EffectDamageNearbyEntities : Effect(
 
             entity.setMetadata("ignore-nearby-damage", plugin.metadataValueFactory.create(true))
             plugin.scheduler.runLater(5) { entity.removeMetadata("ignore-nearby-damage", plugin) }
+
+            if (!damageSelf && (entity == player)) {
+                continue
+            }
 
             if (damageAsPlayer) {
                 entity.damage(damage, player)
