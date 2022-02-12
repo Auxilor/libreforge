@@ -15,6 +15,9 @@ class EffectTeleport : Effect(
 ) {
     override fun handle(data: TriggerData, config: Config) {
         val player = data.player ?: return
-        player.teleport(data.location ?: return)
+        val location = data.location?: return
+        location.pitch = player.location.pitch
+        location.yaw = player.location.yaw
+        player.teleport(location)
     }
 }
