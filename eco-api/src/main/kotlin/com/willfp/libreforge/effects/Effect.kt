@@ -235,7 +235,7 @@ data class ConfiguredEffect(
             return
         }
 
-        if (args.has("check_antigrief") && args.getBool("check_antigrief") && data.player != null && data.victim != null) {
+        if (data.player != null && data.victim != null) {
             if (!AntigriefManager.canInjure(data.player, data.victim)) {
                 return
             }
