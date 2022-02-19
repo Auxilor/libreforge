@@ -3,7 +3,9 @@ package com.willfp.libreforge.triggers
 import com.willfp.libreforge.Holder
 import com.willfp.libreforge.LibReforgePlugin
 import com.willfp.libreforge.effects.CompileData
+import com.willfp.libreforge.events.TriggerProcessEvent
 import com.willfp.libreforge.getHolders
+import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
 import java.util.Objects
@@ -35,8 +37,13 @@ abstract class Trigger(
                 continue
             }
 
-            for (effect in holder.effects) {
-                effect(InvocationData(player, data, holder, this, effect.compileData))
+            val event = TriggerProcessEvent(player, holder, this)
+            Bukkit.getPluginManager().callEvent(event)
+
+            if (!event.isCancelled) {
+                for (effect in holder.effects) {
+                    effect(InvocationData(player, data, holder, this, effect.compileData))
+                }
             }
         }
     }
