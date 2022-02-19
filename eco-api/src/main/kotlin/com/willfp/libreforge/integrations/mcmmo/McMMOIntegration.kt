@@ -2,7 +2,6 @@ package com.willfp.libreforge.integrations.mcmmo
 
 import com.willfp.eco.core.integrations.Integration
 import com.willfp.libreforge.effects.Effect
-import com.willfp.libreforge.integrations.ecoskills.EffectSkillXpMultiplier
 
 object McMMOIntegration : Integration {
     private lateinit var SKILL_XP_MULTIPLIER: Effect

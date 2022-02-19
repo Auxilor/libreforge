@@ -36,8 +36,10 @@ class EffectDamageNearbyEntities : Effect(
                 continue
             }
 
-            if (entities.none { it.matches(entity) }) {
-                continue
+            if (entities.isNotEmpty()) {
+                if (entities.none { it.matches(entity) }) {
+                    continue
+                }
             }
 
             entity.setMetadata("ignore-nearby-damage", plugin.metadataValueFactory.create(true))
@@ -69,13 +71,6 @@ class EffectDamageNearbyEntities : Effect(
             ConfigViolation(
                 "damage_as_player",
                 "You must specify if the player should be marked as the damager!"
-            )
-        )
-
-        if (!config.has("entities")) violations.add(
-            ConfigViolation(
-                "entities",
-                "You must specify the list of valid entites!"
             )
         )
 
