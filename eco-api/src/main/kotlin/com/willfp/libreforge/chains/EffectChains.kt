@@ -39,7 +39,7 @@ object EffectChains {
     @JvmStatic
     @JvmOverloads
     fun compile(config: Config, context: String, anonymous: Boolean = false): EffectChain? {
-        val id = if (anonymous) "anonymous" else config.getString("id")
+        val id = if (anonymous) "<inline chain>" else config.getString("id")
 
         val components = mutableListOf<ChainComponent>()
 
