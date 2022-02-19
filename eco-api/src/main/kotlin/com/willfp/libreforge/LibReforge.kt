@@ -4,6 +4,7 @@ package com.willfp.libreforge
 
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.willfp.eco.core.EcoPlugin
+import com.willfp.eco.core.PluginProps
 import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.integrations.IntegrationLoader
 import com.willfp.eco.core.integrations.anticheat.AnticheatManager
@@ -157,6 +158,12 @@ abstract class LibReforgePlugin(
 
     private fun setInstance() {
         instance = this
+    }
+
+    override fun mutateProps(props: PluginProps): PluginProps {
+        return props.apply {
+            isSupportingExtensions = true
+        }
     }
 
     companion object {
