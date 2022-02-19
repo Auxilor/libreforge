@@ -25,7 +25,7 @@ data class ConfiguredDataMutator(
         mutator.mutate(data, config)
 }
 
-fun Collection<ConfiguredDataMutator>.mutateOrderless(data: TriggerData): TriggerData {
+fun Collection<ConfiguredDataMutator>.mutate(data: TriggerData): TriggerData {
     var currentData = data
     for (mutator in this) {
         currentData = mutator(currentData)

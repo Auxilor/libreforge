@@ -11,12 +11,16 @@ import com.willfp.libreforge.LibReforgePlugin
 import com.willfp.libreforge.conditions.ConfiguredCondition
 import com.willfp.libreforge.events.EffectActivateEvent
 import com.willfp.libreforge.filters.Filter
-import com.willfp.libreforge.triggers.*
+import com.willfp.libreforge.triggers.ConfiguredDataMutator
+import com.willfp.libreforge.triggers.InvocationData
+import com.willfp.libreforge.triggers.Trigger
+import com.willfp.libreforge.triggers.TriggerData
+import com.willfp.libreforge.triggers.mutate
 import org.bukkit.NamespacedKey
 import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
-import java.util.*
+import java.util.UUID
 import kotlin.math.ceil
 
 @Suppress("UNUSED_PARAMETER")
@@ -215,7 +219,7 @@ data class ConfiguredEffect(
         }
 
         invocation = invocation.copy(
-            data = mutators.mutateOrderless(invocation.data)
+            data = mutators.mutate(invocation.data)
         )
 
         var effectAreMet = true
