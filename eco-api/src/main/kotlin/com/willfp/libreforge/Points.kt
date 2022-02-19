@@ -66,7 +66,7 @@ fun Player.getPoints(type: String): Double {
 }
 
 fun Player.setPoints(type: String, points: Double) {
-    val event = PointsChangeEvent(this, type, points)
+    val event = PointsChangeEvent(this, type, points, this.getPoints(type))
     Bukkit.getPluginManager().callEvent(event)
     if (!(event.isCancelled)) {
         this.profile.write(getKeyForType(type), event.amount)

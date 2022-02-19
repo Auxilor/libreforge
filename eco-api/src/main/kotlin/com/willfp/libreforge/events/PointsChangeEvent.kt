@@ -8,7 +8,8 @@ import org.bukkit.event.player.PlayerEvent
 class PointsChangeEvent(
     who: Player,
     val type: String,
-    var amount: Double
+    var amount: Double,
+    val previous: Double
 ) : PlayerEvent(who), Cancellable {
     /**
      * If the event is cancelled.
