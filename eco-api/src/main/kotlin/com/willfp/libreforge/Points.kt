@@ -22,7 +22,7 @@ private val knownPointsKey = PersistentDataKey(
     LibReforgePlugin.instance.namespacedKeyFactory.create("known_points"),
     PersistentDataKeyType.STRING,
     ""
-)
+).server()
 
 private fun getKeyForType(type: String): PersistentDataKey<Double> {
     val existing = keys[type.lowercase()]
@@ -38,7 +38,7 @@ private fun getKeyForType(type: String): PersistentDataKey<Double> {
             key,
             PersistentDataKeyType.DOUBLE,
             0.0
-        )
+        ).player()
 
         PlaceholderManager.registerPlaceholder(
             PlaceholderEntry(
