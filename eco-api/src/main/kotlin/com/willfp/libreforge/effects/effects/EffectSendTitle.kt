@@ -2,6 +2,7 @@ package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.util.asAudience
+import com.willfp.eco.util.formatEco
 import com.willfp.eco.util.toComponent
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
@@ -19,11 +20,13 @@ class EffectSendTitle : Effect(
     override fun handle(data: TriggerData, config: Config) {
         val player = data.player ?: return
 
-        val title = config.getFormattedString("title")
+        val title = config.getString("title")
             .replace("%player%", player.name)
+            .formatEco(player)
 
-        val subtitle = config.getFormattedString("subtitle")
+        val subtitle = config.getString("subtitle")
             .replace("%player%", player.name)
+            .formatEco(player)
 
         val audience = player.asAudience()
 

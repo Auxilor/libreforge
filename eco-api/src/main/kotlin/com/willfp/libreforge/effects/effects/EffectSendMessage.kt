@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.effects
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.util.PlayerUtils
 import com.willfp.eco.util.StringUtils
+import com.willfp.eco.util.formatEco
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
@@ -18,8 +19,9 @@ class EffectSendMessage : Effect(
     override fun handle(data: TriggerData, config: Config) {
         val player = data.player ?: return
 
-        val message = config.getFormattedString("message")
+        val message = config.getString("message")
             .replace("%player%", player.name)
+            .formatEco(player)
 
         val actionBar = config.getBool("action_bar")
 
