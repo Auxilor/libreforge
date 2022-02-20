@@ -5,7 +5,7 @@ import com.willfp.libreforge.LibReforgePlugin
 
 object ShopGUIPlusIntegration : Integration {
     fun load(plugin: LibReforgePlugin) {
-        plugin.eventManager.registerListener(EconomyShopGUISellMultiplierHook())
+        plugin.eventManager.registerListener(ShopGUIPlusSellMultiplierHook())
     }
 
     override fun getPluginName(): String {
