@@ -14,6 +14,7 @@ import com.willfp.libreforge.conditions.MovementConditionListener
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.integrations.aureliumskills.AureliumSkillsIntegration
 import com.willfp.libreforge.integrations.deluxesellwands.DeluxeSellwandsIntegration
+import com.willfp.libreforge.integrations.economyshopgui.EconomyShopGUIIntegration
 import com.willfp.libreforge.integrations.ecoskills.EcoSkillsIntegration
 import com.willfp.libreforge.integrations.jobs.JobsIntegration
 import com.willfp.libreforge.integrations.mcmmo.McMMOIntegration
@@ -28,8 +29,7 @@ import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
 import org.bukkit.entity.Tameable
-import java.util.UUID
-import java.util.WeakHashMap
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 private val holderProviders = mutableSetOf<HolderProvider>()
@@ -149,6 +149,7 @@ abstract class LibReforgePlugin(
             IntegrationLoader("Vault", VaultIntegration::load),
             IntegrationLoader("ShopGUIPlus") { ShopGUIPlusIntegration.load(this) },
             IntegrationLoader("DeluxeSellwands") { DeluxeSellwandsIntegration.load(this) },
+            IntegrationLoader("EconomyShopGUI") { EconomyShopGUIIntegration.load(this) },
         )
 
         integrations.addAll(loadAdditionalIntegrations())
