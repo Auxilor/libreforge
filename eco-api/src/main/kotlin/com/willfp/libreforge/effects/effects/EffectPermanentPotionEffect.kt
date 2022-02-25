@@ -7,7 +7,7 @@ import com.willfp.libreforge.effects.getEffectAmount
 import org.bukkit.entity.Player
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
-import java.util.*
+import java.util.UUID
 
 @Suppress("UNCHECKED_CAST")
 class EffectPermanentPotionEffect : Effect("permanent_potion_effect") {
@@ -21,9 +21,9 @@ class EffectPermanentPotionEffect : Effect("permanent_potion_effect") {
             effectType,
             1_500_000_000,
             config.getIntFromExpression("level", player) - 1,
-            false,
-            false,
-            true
+            plugin.configYml.getBool("potions.ambient.permanent"),
+            plugin.configYml.getBool("potions.particles.permanent"),
+            plugin.configYml.getBool("potions.icon.permanent")
         )
 
         player.addPotionEffect(effect)
