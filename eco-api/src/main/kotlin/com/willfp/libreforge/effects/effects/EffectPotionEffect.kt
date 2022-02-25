@@ -28,9 +28,9 @@ class EffectPotionEffect : Effect(
                     ?: PotionEffectType.INCREASE_DAMAGE,
                 config.getIntFromExpression("duration", data.player),
                 config.getIntFromExpression("level", data.player) - 1,
-                false,
-                true,
-                true
+                plugin.configYml.getBool("potions.ambient.triggered"),
+                plugin.configYml.getBool("potions.particles.triggered"),
+                plugin.configYml.getBool("potions.icon.triggered")
             )
         )
     }
