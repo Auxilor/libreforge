@@ -35,6 +35,8 @@ class EffectDrill : Effect(
             return
         }
 
+        val whitelist = config.getStringsOrNull("whitelist")
+
         val blocks = mutableSetOf<Block>()
 
         for (i in 1..amount) {
@@ -43,6 +45,12 @@ class EffectDrill : Effect(
 
             if (config.getStrings("blacklisted_blocks").containsIgnoreCase(toBreak.type.name)) {
                 continue
+            }
+
+            if (whitelist != null) {
+                if (!whitelist.containsIgnoreCase(toBreak.type.name)) {
+                    continue
+                }
             }
 
             if (config.getBool("check_hardness")) {
