@@ -34,6 +34,8 @@ class EffectMineRadius : Effect(
             return
         }
 
+        val whitelist = config.getStringsOrNull("whitelist")
+
         val blocks = mutableSetOf<Block>()
 
         for (x in (-radius..radius)) {
@@ -49,6 +51,12 @@ class EffectMineRadius : Effect(
 
                     if (config.getStrings("blacklisted_blocks").containsIgnoreCase(toBreak.type.name)) {
                         continue
+                    }
+
+                    if (whitelist != null) {
+                        if (!whitelist.containsIgnoreCase(toBreak.type.name)) {
+                            continue
+                        }
                     }
 
                     if (config.getBool("check_hardness")) {
