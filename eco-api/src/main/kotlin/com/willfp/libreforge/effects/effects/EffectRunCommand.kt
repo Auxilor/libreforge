@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.integrations.placeholder.PlaceholderManager
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
@@ -25,6 +26,8 @@ class EffectRunCommand : Effect(
         if (victim != null) {
             command = command.replace("%victim%", victim.name)
         }
+
+        command = PlaceholderManager.translatePlaceholders(command, player)
 
         Bukkit.getServer().dispatchCommand(
             Bukkit.getConsoleSender(),
