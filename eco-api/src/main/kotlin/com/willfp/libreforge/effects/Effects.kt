@@ -12,6 +12,7 @@ import com.willfp.libreforge.effects.effects.EffectArrowRing
 import com.willfp.libreforge.effects.effects.EffectAttackSpeedMultiplier
 import com.willfp.libreforge.effects.effects.EffectAutosmelt
 import com.willfp.libreforge.effects.effects.EffectBleed
+import com.willfp.libreforge.effects.effects.EffectBlockCommands
 import com.willfp.libreforge.effects.effects.EffectBonusHealth
 import com.willfp.libreforge.effects.effects.EffectBreakBlock
 import com.willfp.libreforge.effects.effects.EffectCancelEvent
@@ -118,6 +119,7 @@ object Effects {
     val DAMAGE_VICTIM: Effect = EffectDamageVictim()
     val RUN_CHAIN_INLINE: Effect = EffectRunChainInline()
     val SELL_MULTIPLIER: EffectSellMultiplier = EffectSellMultiplier() // Explicit type for hooks
+    val BLOCK_COMMANDS: Effect = EffectBlockCommands()
 
     /**
      * Get effect matching id.
