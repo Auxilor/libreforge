@@ -1,7 +1,6 @@
 package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.util.BlockUtils
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.runExempted
 import com.willfp.libreforge.triggers.TriggerData
@@ -20,7 +19,7 @@ class EffectBreakBlock : Effect(
         val player = data.player ?: return
 
         player.runExempted {
-            BlockUtils.breakBlock(it, block)
+            it.breakBlock(block)
         }
     }
 }
