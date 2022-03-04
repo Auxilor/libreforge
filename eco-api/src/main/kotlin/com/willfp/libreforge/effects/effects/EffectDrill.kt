@@ -2,7 +2,6 @@ package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
-import com.willfp.eco.util.BlockUtils
 import com.willfp.eco.util.VectorUtils
 import com.willfp.eco.util.containsIgnoreCase
 import com.willfp.libreforge.ConfigViolation
@@ -64,14 +63,12 @@ class EffectDrill : Effect(
             }
 
             blocks.add(toBreak)
-            BlockUtils.breakBlock(player, toBreak)
-            toBreak.removeMetadata("block-ignore", plugin)
         }
 
         player.runExempted {
             for (toBreak in blocks) {
                 toBreak.setMetadata("block-ignore", plugin.metadataValueFactory.create(true))
-                BlockUtils.breakBlock(player, toBreak)
+                player.breakBlock(toBreak)
                 toBreak.removeMetadata("block-ignore", plugin)
             }
         }

@@ -2,7 +2,6 @@ package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
-import com.willfp.eco.util.BlockUtils
 import com.willfp.eco.util.containsIgnoreCase
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
@@ -81,7 +80,7 @@ class EffectMineRadius : Effect(
         player.runExempted {
             for (toBreak in blocks) {
                 toBreak.setMetadata("block-ignore", plugin.metadataValueFactory.create(true))
-                BlockUtils.breakBlock(player, toBreak)
+                player.breakBlock(toBreak)
                 toBreak.removeMetadata("block-ignore", plugin)
             }
         }
