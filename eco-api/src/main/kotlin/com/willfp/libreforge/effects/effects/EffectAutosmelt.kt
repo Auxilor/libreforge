@@ -1,6 +1,5 @@
 package com.willfp.libreforge.effects.effects
 
-import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.fast.FastItemStack
 import com.willfp.libreforge.ConfigViolation
@@ -27,7 +26,8 @@ class EffectAutosmelt : Effect(
     private val recipes = mutableMapOf<Material, Pair<Material, Int>>()
     private val fortuneMaterials = mutableSetOf(
         Material.GOLD_INGOT,
-        Material.IRON_INGOT
+        Material.IRON_INGOT,
+        Material.COPPER_INGOT
     )
 
     init {
@@ -39,10 +39,6 @@ class EffectAutosmelt : Effect(
             }
             val xp = ceil(recipe.experience).toInt()
             recipes[recipe.input.type] = Pair(recipe.result.type, xp)
-        }
-
-        if (Prerequisite.HAS_1_17.isMet) {
-            fortuneMaterials.add(Material.COPPER_INGOT)
         }
     }
 
