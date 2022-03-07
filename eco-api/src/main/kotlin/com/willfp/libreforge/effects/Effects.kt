@@ -27,6 +27,7 @@ import com.willfp.libreforge.effects.effects.EffectFeatherStep
 import com.willfp.libreforge.effects.effects.EffectFoodMultiplier
 import com.willfp.libreforge.effects.effects.EffectGiveFood
 import com.willfp.libreforge.effects.effects.EffectGiveHealth
+import com.willfp.libreforge.effects.effects.EffectGiveItem
 import com.willfp.libreforge.effects.effects.EffectGiveMoney
 import com.willfp.libreforge.effects.effects.EffectGiveOxygen
 import com.willfp.libreforge.effects.effects.EffectGivePoints
@@ -120,6 +121,7 @@ object Effects {
     val RUN_CHAIN_INLINE: Effect = EffectRunChainInline()
     val SELL_MULTIPLIER: EffectSellMultiplier = EffectSellMultiplier() // Explicit type for hooks
     val BLOCK_COMMANDS: Effect = EffectBlockCommands()
+    val GIVE_ITEM: Effect = EffectGiveItem()
 
     /**
      * Get effect matching id.
