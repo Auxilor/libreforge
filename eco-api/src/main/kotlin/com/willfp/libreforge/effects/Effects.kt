@@ -72,6 +72,7 @@ object Effects {
     val BLOCK_COMMANDS: Effect = EffectBlockCommands()
     val GIVE_ITEM: Effect = EffectGiveItem()
     val MULTIPLY_VELOCITY: Effect = EffectMultiplyVelocity()
+    val SHOOT_ARROW: Effect = EffectShootArrow()
 
     /**
      * Get effect matching id.
