@@ -22,7 +22,7 @@ class EffectArrowRing : Effect(
         val location = data.location ?: return
         val world = location.world ?: return
 
-        val amount = config.getIntFromExpression("amount")
+        val amount = config.getIntFromExpression("amount", data.player)
         val height = config.getDoubleFromExpression("height", data.player)
         val radius = config.getDoubleFromExpression("radius", data.player)
         val damage = config.getDoubleFromExpression("arrow_damage", data.player)

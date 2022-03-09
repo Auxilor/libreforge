@@ -117,7 +117,7 @@ abstract class Effect(
             return
         }
         val current = cooldownTracker[player.uniqueId] ?: mutableMapOf()
-        current[uuid] = System.currentTimeMillis() + (config.getDoubleFromExpression("cooldown") * 1000L).toLong()
+        current[uuid] = System.currentTimeMillis() + (config.getDoubleFromExpression("cooldown", player) * 1000L).toLong()
         cooldownTracker[player.uniqueId] = current
     }
 
@@ -290,12 +290,13 @@ data class ConfiguredEffect(
         }
 
         if (args.has("cost")) {
-            if (!EconomyManager.hasAmount(player, args.getDoubleFromExpression("cost"))) {
-                effect.sendCannotAffordMessage(player, args.getDoubleFromExpression("cost"))
+            val cost = args.getDoubleFromExpression("cost", player)
+            if (!EconomyManager.hasAmount(player, cost)) {
+                effect.sendCannotAffordMessage(player, cost)
                 return
             }
 
-            EconomyManager.removeMoney(player, args.getDoubleFromExpression("cost"))
+            EconomyManager.removeMoney(player, cost)
         }
 
         val delay = if (args.has("delay")) {

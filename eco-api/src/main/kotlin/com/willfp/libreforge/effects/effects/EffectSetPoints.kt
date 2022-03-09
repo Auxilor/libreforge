@@ -17,7 +17,7 @@ class EffectSetPoints : Effect(
     override fun handle(data: TriggerData, config: Config) {
         val player = data.player ?: return
 
-        player.setPoints(config.getString("type"), config.getDoubleFromExpression("amount"))
+        player.setPoints(config.getString("type"), config.getDoubleFromExpression("amount", player))
     }
 
     override fun validateConfig(config: Config): List<ConfigViolation> {

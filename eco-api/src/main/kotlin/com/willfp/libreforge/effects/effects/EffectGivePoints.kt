@@ -17,7 +17,7 @@ class EffectGivePoints : Effect(
     override fun handle(data: TriggerData, config: Config) {
         val player = data.player ?: return
 
-        player.givePoints(config.getString("type"), config.getDoubleFromExpression("amount"))
+        player.givePoints(config.getString("type"), config.getDoubleFromExpression("amount", player))
     }
 
     override fun validateConfig(config: Config): List<ConfigViolation> {
