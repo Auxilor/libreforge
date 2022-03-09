@@ -20,7 +20,7 @@ class EffectMultiplyPoints : Effect(
 
         val type = config.getString("type")
 
-        player.setPoints(type, player.getPoints(type) * config.getDoubleFromExpression("multiplier"))
+        player.setPoints(type, player.getPoints(type) * config.getDoubleFromExpression("multiplier", player))
     }
 
     override fun validateConfig(config: Config): List<ConfigViolation> {

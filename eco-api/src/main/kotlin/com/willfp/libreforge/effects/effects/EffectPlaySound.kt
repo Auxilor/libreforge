@@ -18,8 +18,8 @@ class EffectPlaySound : Effect(
         val player = data.player ?: return
 
         val sound = Sound.valueOf(config.getString("sound").uppercase())
-        val pitch = config.getDoubleFromExpression("pitch")
-        val volume = config.getDoubleFromExpression("volume")
+        val pitch = config.getDoubleFromExpression("pitch", player)
+        val volume = config.getDoubleFromExpression("volume", player)
 
         player.playSound(player.location, sound, volume.toFloat(), pitch.toFloat())
     }

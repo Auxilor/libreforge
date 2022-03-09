@@ -22,7 +22,7 @@ class ConditionHasMana : Condition("has_mana") {
     }
 
     override fun isConditionMet(player: Player, config: Config): Boolean {
-        return AureliumAPI.getMana(player) > config.getDoubleFromExpression("amount")
+        return AureliumAPI.getMana(player) > config.getDoubleFromExpression("amount", player)
     }
 
     override fun validateConfig(config: Config): List<ConfigViolation> {

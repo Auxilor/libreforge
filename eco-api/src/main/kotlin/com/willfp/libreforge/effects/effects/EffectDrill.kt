@@ -28,7 +28,7 @@ class EffectDrill : Effect(
 
         val player = data.player ?: return
 
-        val amount = config.getIntFromExpression("amount")
+        val amount = config.getIntFromExpression("amount", player)
 
         if (player.isSneaking && config.getBool("disable_on_sneak")) {
             return

@@ -23,7 +23,7 @@ class EffectPullToLocation : Effect(
         }
 
         val vector = location.toVector().subtract(player.location.toVector()).normalize()
-            .multiply(config.getDoubleFromExpression("velocity"))
+            .multiply(config.getDoubleFromExpression("velocity", player))
 
         player.velocity = vector
     }
