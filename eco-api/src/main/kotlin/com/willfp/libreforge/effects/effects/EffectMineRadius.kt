@@ -27,7 +27,7 @@ class EffectMineRadius : Effect(
 
         val player = data.player ?: return
 
-        val radius = config.getIntFromExpression("radius")
+        val radius = config.getIntFromExpression("radius", player)
 
         if (player.isSneaking && config.getBool("disable_on_sneak")) {
             return

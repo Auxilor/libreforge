@@ -21,7 +21,7 @@ class EffectMultiplyDrops : Effect(
         val event = data.event as? WrappedDropEvent<*> ?: return
 
         event.modifier = {
-            val fortune = config.getIntFromExpression("fortune")
+            val fortune = config.getIntFromExpression("fortune", data.player)
 
             val items = config.getStrings("on_items").map { string -> Items.lookup(string) }
             val matches = items.any { test -> test.matches(it) }
