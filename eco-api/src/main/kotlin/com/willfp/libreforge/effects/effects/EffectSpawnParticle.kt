@@ -18,7 +18,7 @@ class EffectSpawnParticle : Effect(
         val location = data.location ?: return
         val world = location.world ?: return
         val particle = Particle.valueOf(config.getString("particle").uppercase())
-        val amount = config.getIntFromExpression("amount")
+        val amount = config.getIntFromExpression("amount", data.player)
         world.spawnParticle(particle, location, amount)
     }
 

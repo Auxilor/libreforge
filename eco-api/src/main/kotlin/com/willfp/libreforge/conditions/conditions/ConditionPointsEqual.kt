@@ -8,7 +8,7 @@ import org.bukkit.entity.Player
 
 class ConditionPointsEqual : Condition("points_equal") {
     override fun isConditionMet(player: Player, config: Config): Boolean {
-        return player.getPoints(config.getString("type")) == config.getDoubleFromExpression("amount")
+        return player.getPoints(config.getString("type")) == config.getDoubleFromExpression("amount", player)
     }
 
     override fun validateConfig(config: Config): List<ConfigViolation> {
