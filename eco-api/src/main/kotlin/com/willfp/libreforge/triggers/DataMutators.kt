@@ -8,6 +8,7 @@ import com.willfp.libreforge.triggers.mutators.MutatorLocationToPlayer
 import com.willfp.libreforge.triggers.mutators.MutatorLocationToVictim
 import com.willfp.libreforge.triggers.mutators.MutatorPlayerAsVictim
 import com.willfp.libreforge.triggers.mutators.MutatorSpinLocation
+import com.willfp.libreforge.triggers.mutators.MutatorSpinVelocity
 import com.willfp.libreforge.triggers.mutators.MutatorTranslateLocation
 import com.willfp.libreforge.triggers.mutators.MutatorVictimToOwner
 
@@ -22,6 +23,7 @@ object DataMutators {
     val LOCATION_TO_PLAYER: DataMutator = MutatorLocationToPlayer()
     val LOCATION_TO_VICTIM: DataMutator = MutatorLocationToVictim()
     val LOCATION_TO_BLOCK: DataMutator = MutatorLocationToBlock()
+    val SPIN_VELOCITY: DataMutator = MutatorSpinVelocity()
 
     fun values(): Set<DataMutator> {
         return BY_ID.values.toSet()

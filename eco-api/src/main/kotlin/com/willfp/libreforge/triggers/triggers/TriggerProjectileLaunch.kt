@@ -11,7 +11,8 @@ import org.bukkit.event.entity.ProjectileLaunchEvent
 class TriggerProjectileLaunch : Trigger(
     "projectile_launch", listOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.PROJECTILE
+        TriggerParameter.PROJECTILE,
+        TriggerParameter.VELOCITY
     )
 ) {
     @EventHandler(ignoreCancelled = true)
@@ -30,7 +31,8 @@ class TriggerProjectileLaunch : Trigger(
             shooter,
             TriggerData(
                 player = shooter,
-                projectile = event.entity
+                projectile = event.entity,
+                velocity = event.entity.velocity
             )
         )
     }
