@@ -117,7 +117,8 @@ abstract class Effect(
             return
         }
         val current = cooldownTracker[player.uniqueId] ?: mutableMapOf()
-        current[uuid] = System.currentTimeMillis() + (config.getDoubleFromExpression("cooldown", player) * 1000L).toLong()
+        current[uuid] =
+            System.currentTimeMillis() + (config.getDoubleFromExpression("cooldown", player) * 1000L).toLong()
         cooldownTracker[player.uniqueId] = current
     }
 
@@ -193,7 +194,7 @@ abstract class Effect(
     }
 }
 
-private val everyHandler = mutableMapOf<UUID, MutableMap<UUID, Int>>()
+private val everyHandler = mutableMapOf<UUID, Int>()
 
 interface CompileData {
     val data: Any
@@ -245,27 +246,6 @@ data class ConfiguredEffect(
             }
         }
 
-        val every = args.getIntOrNull("every") ?: 0
-
-        if (every > 0) {
-            val everyMap = everyHandler[player.uniqueId] ?: mutableMapOf()
-            var current = everyMap[uuid] ?: 0
-
-            if (current != 0) {
-                current++
-
-                if (current >= every) {
-                    current = 0
-                }
-
-                everyHandler[player.uniqueId] = everyMap.apply {
-                    this[uuid] = current
-                }
-
-                return
-            }
-        }
-
         if (!ignoreTriggerList) {
             if (!triggers.contains(trigger)) {
                 return
@@ -278,6 +258,25 @@ data class ConfiguredEffect(
             }
         } else {
             if (!filter.matches(data)) {
+                return
+            }
+        }
+
+        val every = args.getIntOrNull("every") ?: 0
+
+        if (every > 0) {
+            var current = everyHandler[uuid] ?: 0
+            val prev = current
+
+            current++
+
+            if (current >= every) {
+                current = 0
+            }
+
+            everyHandler[uuid] = current
+
+            if (prev != 0) {
                 return
             }
         }
