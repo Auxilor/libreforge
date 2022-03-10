@@ -32,7 +32,11 @@ class EffectRunChainInline : Effect(
     }
 
     override fun makeCompileData(config: Config, context: String): CompileData? {
-        val chain = EffectChains.compile(config, "$context Inline Chain", anonymous = true) ?: return null
+        val chain = EffectChains.compile(
+            config.getSubsection("args").getSubsection("chain"),
+            "$context Inline Chain",
+            anonymous = true
+        ) ?: return null
         return EffectChainCompileData(chain)
     }
 
