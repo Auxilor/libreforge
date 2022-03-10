@@ -14,7 +14,8 @@ class TriggerShootBow : Trigger(
     "shoot_bow", listOf(
         TriggerParameter.PLAYER,
         TriggerParameter.PROJECTILE,
-        TriggerParameter.EVENT
+        TriggerParameter.EVENT,
+        TriggerParameter.VELOCITY
     )
 ) {
     @EventHandler(ignoreCancelled = true)
@@ -34,7 +35,8 @@ class TriggerShootBow : Trigger(
             TriggerData(
                 player = shooter,
                 projectile = event.projectile as? Projectile,
-                event = WrappedShootBowEvent(event)
+                event = WrappedShootBowEvent(event),
+                velocity = event.projectile.velocity
             )
         )
     }

@@ -19,11 +19,11 @@ class EffectShootArrow : Effect(
 ) {
     override fun handle(data: TriggerData, config: Config) {
         val player = data.player ?: return
-        val velocity = (data.event as? WrappedShootBowEvent)?.velocity
+        val velocity = data.velocity
         val fire = (data.event as? WrappedShootBowEvent)?.hasFire
 
         player.runExempted {
-            val arrow = if (velocity == null) {
+            val arrow = if (velocity == null || !config.getBool("inherit_velocity")) {
                 it.launchProjectile(Arrow::class.java)
             } else {
                 it.launchProjectile(Arrow::class.java, velocity)

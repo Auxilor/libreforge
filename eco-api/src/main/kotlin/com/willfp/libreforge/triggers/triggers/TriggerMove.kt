@@ -12,7 +12,8 @@ import org.bukkit.event.player.PlayerMoveEvent
 class TriggerMove : Trigger(
     "move", listOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.LOCATION
+        TriggerParameter.LOCATION,
+        TriggerParameter.VELOCITY
     )
 ) {
     @EventHandler(ignoreCancelled = true)
@@ -32,7 +33,8 @@ class TriggerMove : Trigger(
             player,
             TriggerData(
                 player = player,
-                location = player.location
+                location = player.location,
+                velocity = player.velocity
             )
         )
     }

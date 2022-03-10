@@ -6,6 +6,7 @@ import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
 import org.bukkit.event.entity.EntityDamageEvent
+import org.bukkit.util.Vector
 
 data class TriggerData(
     val player: Player? = null,
@@ -14,7 +15,8 @@ data class TriggerData(
     val event: WrappedEvent<*>? = null,
     val location: Location? = null,
     val projectile: Projectile? = null,
-    val damageCause: EntityDamageEvent.DamageCause? = null
+    val damageCause: EntityDamageEvent.DamageCause? = null,
+    val velocity: Vector? = null
 )
 
 enum class TriggerParameter {
@@ -24,5 +26,6 @@ enum class TriggerParameter {
     EVENT,
     LOCATION,
     PROJECTILE,
-    DAMAGE_CAUSE
+    DAMAGE_CAUSE,
+    VELOCITY
 }
