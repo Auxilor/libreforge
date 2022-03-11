@@ -5,8 +5,8 @@ package com.willfp.libreforge
 import com.willfp.eco.core.data.keys.PersistentDataKey
 import com.willfp.eco.core.data.keys.PersistentDataKeyType
 import com.willfp.eco.core.data.profile
-import com.willfp.eco.core.integrations.placeholder.PlaceholderEntry
 import com.willfp.eco.core.integrations.placeholder.PlaceholderManager
+import com.willfp.eco.core.placeholder.PlayerPlaceholder
 import com.willfp.eco.util.NamespacedKeyUtils
 import com.willfp.eco.util.NumberUtils
 import com.willfp.libreforge.events.EffectActivateEvent
@@ -41,7 +41,7 @@ private fun getKeyForType(type: String): PersistentDataKey<Double> {
         ).player()
 
         PlaceholderManager.registerPlaceholder(
-            PlaceholderEntry(
+            PlayerPlaceholder(
                 LibReforgePlugin.instance,
                 "points_${type.lowercase()}"
             ) { NumberUtils.format(it.getPoints(type)) }
