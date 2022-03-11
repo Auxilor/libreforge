@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.integrations.placeholder.PlaceholderManager
 import com.willfp.eco.util.PlayerUtils
 import com.willfp.eco.util.StringUtils
 import com.willfp.eco.util.formatEco
@@ -21,6 +22,7 @@ class EffectSendMessage : Effect(
 
         val message = config.getString("message")
             .replace("%player%", player.name)
+            .let { PlaceholderManager.translatePlaceholders(it, player, config.injectedPlaceholders) }
             .formatEco(player)
 
         val actionBar = config.getBool("action_bar")
