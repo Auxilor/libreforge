@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.eco.core.integrations.economy.EconomyManager
+import com.willfp.eco.core.placeholder.StaticPlaceholder
 import com.willfp.eco.util.NumberUtils
 import com.willfp.eco.util.PlayerUtils
 import com.willfp.eco.util.StringUtils
@@ -298,27 +299,52 @@ data class ConfiguredEffect(
             EconomyManager.removeMoney(player, cost)
         }
 
-        val delay = if (args.has("delay")) {
-            val found = args.getInt("delay")
+        val repeatSection = args.getSubsectionOrNull("repeat")
 
-            if (effect.noDelay || found < 0) 0 else found
-        } else 0
+        val (times, start, increment) = if (repeatSection == null) Triple(1, 0.0, 0.0) else {
+            Triple(
+                repeatSection.getIntFromExpression("times", player),
+                repeatSection.getDoubleFromExpression("start", player),
+                repeatSection.getDoubleFromExpression("increment", player)
+            )
+        }
 
-        val activateEvent = EffectActivateEvent(player, holder, effect, args)
-        LibReforgePlugin.instance.server.pluginManager.callEvent(activateEvent)
+        if (repeatSection != null) {
+            args.injectPlaceholders(
+                StaticPlaceholder("repeat_start") { start.toString() },
+                StaticPlaceholder("repeat_increment") { increment.toString() },
+                StaticPlaceholder("repeat_times") { times.toString() }
+            )
+        }
 
-        if (!activateEvent.isCancelled) {
-            effect.resetCooldown(player, args, uuid)
+        var count = start
+        for (i in 1..times) {
+            args.injectPlaceholders(StaticPlaceholder("repeat_count") { count.toString() })
 
-            if (delay > 0) {
-                LibReforgePlugin.instance.scheduler.runLater(delay.toLong()) {
+            val delay = if (args.has("delay")) {
+                val found = args.getInt("delay")
+
+                if (effect.noDelay || found < 0) 0 else found
+            } else 0
+
+            val activateEvent = EffectActivateEvent(player, holder, effect, args)
+            LibReforgePlugin.instance.server.pluginManager.callEvent(activateEvent)
+
+            if (!activateEvent.isCancelled) {
+                effect.resetCooldown(player, args, uuid)
+
+                if (delay > 0) {
+                    LibReforgePlugin.instance.scheduler.runLater(delay.toLong()) {
+                        effect.handle(data, args)
+                        effect.handle(invocation, args)
+                    }
+                } else {
                     effect.handle(data, args)
                     effect.handle(invocation, args)
                 }
-            } else {
-                effect.handle(data, args)
-                effect.handle(invocation, args)
             }
+
+            count += increment
         }
     }
 }
