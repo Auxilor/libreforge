@@ -3,7 +3,6 @@ package com.willfp.libreforge.effects
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.eco.core.integrations.economy.EconomyManager
-import com.willfp.eco.core.placeholder.StaticPlaceholder
 import com.willfp.eco.util.NumberUtils
 import com.willfp.eco.util.PlayerUtils
 import com.willfp.eco.util.StringUtils
@@ -201,7 +200,27 @@ interface CompileData {
     val data: Any
 }
 
-data class ConfiguredEffect(
+data class RepeatData(
+    val times: Int,
+    val start: Double,
+    val increment: Double,
+    val count: Double
+) {
+    fun update(config: Config, player: Player): RepeatData {
+        return this.copy(
+            times = config.getIntFromExpression("times", player),
+            start = config.getDoubleFromExpression("start", player),
+            increment = config.getDoubleFromExpression("increment", player),
+            count = config.getDoubleFromExpression("start", player)
+        )
+    }
+
+    companion object {
+        val MAPPED_DATA = mutableMapOf<UUID, RepeatData>()
+    }
+}
+
+data class ConfiguredEffect internal constructor(
     val effect: Effect,
     val args: Config,
     val filter: Filter,
@@ -211,6 +230,12 @@ data class ConfiguredEffect(
     val mutators: Collection<ConfiguredDataMutator>,
     val compileData: CompileData?
 ) {
+    private var repeatData: RepeatData
+        get() = RepeatData.MAPPED_DATA[uuid]!!
+        set(value) {
+            RepeatData.MAPPED_DATA[uuid] = value
+        }
+
     operator fun invoke(rawInvocation: InvocationData, ignoreTriggerList: Boolean = false) {
         var invocation = rawInvocation.copy(compileData = compileData)
 
@@ -219,6 +244,8 @@ data class ConfiguredEffect(
                 data = invocation.data.copy(victim = invocation.data.player)
             )
         }
+
+        repeatData = repeatData.update(args.getSubsection("repeat"), invocation.player)
 
         invocation = invocation.copy(
             data = mutators.mutate(invocation.data)
@@ -299,52 +326,36 @@ data class ConfiguredEffect(
             EconomyManager.removeMoney(player, cost)
         }
 
-        val repeatSection = args.getSubsectionOrNull("repeat")
+        val activateEvent = EffectActivateEvent(player, holder, effect, args)
+        LibReforgePlugin.instance.server.pluginManager.callEvent(activateEvent)
 
-        val (times, start, increment) = if (repeatSection == null) Triple(1, 0.0, 0.0) else {
-            Triple(
-                repeatSection.getIntFromExpression("times", player),
-                repeatSection.getDoubleFromExpression("start", player),
-                repeatSection.getDoubleFromExpression("increment", player)
-            )
-        }
+        if (!activateEvent.isCancelled) {
+            effect.resetCooldown(player, args, uuid)
 
-        if (repeatSection != null) {
-            args.injectPlaceholders(
-                StaticPlaceholder("repeat_start") { start.toString() },
-                StaticPlaceholder("repeat_increment") { increment.toString() },
-                StaticPlaceholder("repeat_times") { times.toString() }
-            )
-        }
+            for (i in 0 until repeatData.times) {
+                /*
+                Can't use the destructured objects as they haven't been affected by subsequent mutations in repeats.
+                 */
+                val delay = if (args.has("delay")) {
+                    val found = args.getIntFromExpression("delay", invocation.player)
 
-        var count = start
-        for (i in 1..times) {
-            args.injectPlaceholders(StaticPlaceholder("repeat_count") { count.toString() })
-
-            val delay = if (args.has("delay")) {
-                val found = args.getInt("delay")
-
-                if (effect.noDelay || found < 0) 0 else found
-            } else 0
-
-            val activateEvent = EffectActivateEvent(player, holder, effect, args)
-            LibReforgePlugin.instance.server.pluginManager.callEvent(activateEvent)
-
-            if (!activateEvent.isCancelled) {
-                effect.resetCooldown(player, args, uuid)
+                    if (effect.noDelay || found < 0) 0 else found
+                } else 0
 
                 if (delay > 0) {
                     LibReforgePlugin.instance.scheduler.runLater(delay.toLong()) {
-                        effect.handle(data, args)
+                        effect.handle(invocation.data, args)
                         effect.handle(invocation, args)
                     }
                 } else {
-                    effect.handle(data, args)
+                    effect.handle(invocation.data, args)
                     effect.handle(invocation, args)
                 }
-            }
 
-            count += increment
+                repeatData = repeatData.copy(count = repeatData.count + repeatData.increment)
+
+                invocation = invocation.copy(data = mutators.mutate(rawInvocation.copy(compileData = compileData).data))
+            }
         }
     }
 }

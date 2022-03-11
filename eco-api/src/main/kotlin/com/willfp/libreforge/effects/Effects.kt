@@ -3,17 +3,71 @@ package com.willfp.libreforge.effects
 import com.google.common.collect.HashBiMap
 import com.google.common.collect.ImmutableList
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.placeholder.StaticPlaceholder
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.LibReforgePlugin
 import com.willfp.libreforge.conditions.Conditions
-import com.willfp.libreforge.effects.effects.*
+import com.willfp.libreforge.effects.effects.EffectArmor
+import com.willfp.libreforge.effects.effects.EffectArmorToughness
+import com.willfp.libreforge.effects.effects.EffectArrowRing
+import com.willfp.libreforge.effects.effects.EffectAttackSpeedMultiplier
+import com.willfp.libreforge.effects.effects.EffectAutosmelt
+import com.willfp.libreforge.effects.effects.EffectBleed
+import com.willfp.libreforge.effects.effects.EffectBlockCommands
+import com.willfp.libreforge.effects.effects.EffectBonusHealth
+import com.willfp.libreforge.effects.effects.EffectBreakBlock
+import com.willfp.libreforge.effects.effects.EffectCancelEvent
+import com.willfp.libreforge.effects.effects.EffectCritMultiplier
+import com.willfp.libreforge.effects.effects.EffectDamageArmor
+import com.willfp.libreforge.effects.effects.EffectDamageMultiplier
+import com.willfp.libreforge.effects.effects.EffectDamageNearbyEntities
+import com.willfp.libreforge.effects.effects.EffectDamageVictim
+import com.willfp.libreforge.effects.effects.EffectDrill
+import com.willfp.libreforge.effects.effects.EffectExtinguish
+import com.willfp.libreforge.effects.effects.EffectFeatherStep
+import com.willfp.libreforge.effects.effects.EffectFoodMultiplier
+import com.willfp.libreforge.effects.effects.EffectGiveFood
+import com.willfp.libreforge.effects.effects.EffectGiveHealth
+import com.willfp.libreforge.effects.effects.EffectGiveItem
+import com.willfp.libreforge.effects.effects.EffectGiveMoney
+import com.willfp.libreforge.effects.effects.EffectGiveOxygen
+import com.willfp.libreforge.effects.effects.EffectGivePoints
+import com.willfp.libreforge.effects.effects.EffectGiveXp
+import com.willfp.libreforge.effects.effects.EffectHungerMultiplier
+import com.willfp.libreforge.effects.effects.EffectIgnite
+import com.willfp.libreforge.effects.effects.EffectKnockbackMultiplier
+import com.willfp.libreforge.effects.effects.EffectMineRadius
+import com.willfp.libreforge.effects.effects.EffectMovementSpeedMultiplier
+import com.willfp.libreforge.effects.effects.EffectMultiplyDrops
+import com.willfp.libreforge.effects.effects.EffectMultiplyPoints
+import com.willfp.libreforge.effects.effects.EffectMultiplyVelocity
+import com.willfp.libreforge.effects.effects.EffectPermanentPotionEffect
+import com.willfp.libreforge.effects.effects.EffectPlaySound
+import com.willfp.libreforge.effects.effects.EffectPotionEffect
+import com.willfp.libreforge.effects.effects.EffectPullToLocation
+import com.willfp.libreforge.effects.effects.EffectRegenMultiplier
+import com.willfp.libreforge.effects.effects.EffectRemovePotionEffect
+import com.willfp.libreforge.effects.effects.EffectRunChain
+import com.willfp.libreforge.effects.effects.EffectRunChainInline
+import com.willfp.libreforge.effects.effects.EffectRunCommand
+import com.willfp.libreforge.effects.effects.EffectRunPlayerCommand
+import com.willfp.libreforge.effects.effects.EffectSellMultiplier
+import com.willfp.libreforge.effects.effects.EffectSendMessage
+import com.willfp.libreforge.effects.effects.EffectSendTitle
+import com.willfp.libreforge.effects.effects.EffectSetPoints
+import com.willfp.libreforge.effects.effects.EffectShootArrow
+import com.willfp.libreforge.effects.effects.EffectSpawnMobs
+import com.willfp.libreforge.effects.effects.EffectSpawnParticle
+import com.willfp.libreforge.effects.effects.EffectStrikeLightning
+import com.willfp.libreforge.effects.effects.EffectTeleport
+import com.willfp.libreforge.effects.effects.EffectXpMultiplier
 import com.willfp.libreforge.filters.ConfiguredFilter
 import com.willfp.libreforge.filters.EmptyFilter
 import com.willfp.libreforge.triggers.DataMutators
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.Triggers
 import com.willfp.libreforge.triggers.triggers.TriggerStatic
-import java.util.*
+import java.util.UUID
 
 @Suppress("UNUSED")
 object Effects {
@@ -114,6 +168,20 @@ object Effects {
     @JvmStatic
     @JvmOverloads
     fun compile(config: Config, context: String, fromChain: Boolean = false): ConfiguredEffect? {
+        /* Important to have UUIDs preserved for placeholder injection */
+        val uuid = UUID.nameUUIDFromBytes("${config.toPlaintext()}${BY_ID.size}".hashCode().toString().toByteArray())
+
+        RepeatData.MAPPED_DATA[uuid] = RepeatData(1, 0.0, 0.0, 0.0)
+        val injections = setOf(
+            StaticPlaceholder("repeat_times") { RepeatData.MAPPED_DATA[uuid]?.times.toString() },
+            StaticPlaceholder("repeat_start") { RepeatData.MAPPED_DATA[uuid]?.start.toString() },
+            StaticPlaceholder("repeat_increment") { RepeatData.MAPPED_DATA[uuid]?.increment.toString() },
+            StaticPlaceholder("repeat_count") { RepeatData.MAPPED_DATA[uuid]?.count.toString() },
+            StaticPlaceholder("uuid") { uuid.toString() }
+        )
+        config.clearInjectedPlaceholders()
+        config.injectPlaceholders(injections)
+
         val effect = config.getString("id").let {
             val found = getByID(it)
             if (found == null) {
@@ -128,6 +196,7 @@ object Effects {
         } ?: return null
 
         val args = config.getSubsection("args")
+
         if (effect.checkConfig(args, context)) {
             return null
         }
@@ -230,6 +299,15 @@ object Effects {
 
         val compileData = effect.makeCompileData(config, context)
 
-        return ConfiguredEffect(effect, args, filter, triggers, UUID.randomUUID(), conditions, mutators, compileData)
+        return ConfiguredEffect(
+            effect,
+            args,
+            filter,
+            triggers,
+            uuid,
+            conditions,
+            mutators,
+            compileData
+        )
     }
 }
