@@ -11,16 +11,12 @@ import com.willfp.libreforge.LibReforgePlugin
 import com.willfp.libreforge.conditions.ConfiguredCondition
 import com.willfp.libreforge.events.EffectActivateEvent
 import com.willfp.libreforge.filters.Filter
-import com.willfp.libreforge.triggers.ConfiguredDataMutator
-import com.willfp.libreforge.triggers.InvocationData
-import com.willfp.libreforge.triggers.Trigger
-import com.willfp.libreforge.triggers.TriggerData
-import com.willfp.libreforge.triggers.mutate
+import com.willfp.libreforge.triggers.*
 import org.bukkit.NamespacedKey
 import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
-import java.util.UUID
+import java.util.*
 import kotlin.math.ceil
 
 @Suppress("UNUSED_PARAMETER")
@@ -200,23 +196,17 @@ interface CompileData {
     val data: Any
 }
 
-data class RepeatData(
-    val times: Int,
-    val start: Double,
-    val increment: Double,
-    val count: Double
+internal data class RepeatData(
+    var times: Int,
+    var start: Double,
+    var increment: Double,
+    var count: Double
 ) {
-    fun update(config: Config, player: Player): RepeatData {
-        return this.copy(
-            times = config.getIntFromExpression("times", player),
-            start = config.getDoubleFromExpression("start", player),
-            increment = config.getDoubleFromExpression("increment", player),
-            count = config.getDoubleFromExpression("start", player)
-        )
-    }
-
-    companion object {
-        val MAPPED_DATA = mutableMapOf<UUID, RepeatData>()
+    fun update(config: Config, player: Player) {
+        times = config.getIntFromExpression("times", player)
+        start = config.getDoubleFromExpression("start", player)
+        increment = config.getDoubleFromExpression("increment", player)
+        count = config.getDoubleFromExpression("start", player)
     }
 }
 
@@ -228,14 +218,9 @@ data class ConfiguredEffect internal constructor(
     val uuid: UUID,
     val conditions: Collection<ConfiguredCondition>,
     val mutators: Collection<ConfiguredDataMutator>,
-    val compileData: CompileData?
+    val compileData: CompileData?,
+    private val repeatData: RepeatData
 ) {
-    private var repeatData: RepeatData
-        get() = RepeatData.MAPPED_DATA[uuid]!!
-        set(value) {
-            RepeatData.MAPPED_DATA[uuid] = value
-        }
-
     operator fun invoke(rawInvocation: InvocationData, ignoreTriggerList: Boolean = false) {
         var invocation = rawInvocation.copy(compileData = compileData)
 
@@ -245,7 +230,7 @@ data class ConfiguredEffect internal constructor(
             )
         }
 
-        repeatData = repeatData.update(args.getSubsection("repeat"), invocation.player)
+        repeatData.update(args.getSubsection("repeat"), invocation.player)
 
         invocation = invocation.copy(
             data = mutators.mutate(invocation.data)
@@ -352,7 +337,7 @@ data class ConfiguredEffect internal constructor(
                     effect.handle(invocation, args)
                 }
 
-                repeatData = repeatData.copy(count = repeatData.count + repeatData.increment)
+                repeatData.count += repeatData.increment
 
                 invocation = invocation.copy(data = mutators.mutate(rawInvocation.copy(compileData = compileData).data))
             }
