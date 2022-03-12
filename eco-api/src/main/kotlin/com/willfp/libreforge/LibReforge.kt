@@ -167,6 +167,10 @@ abstract class LibReforgePlugin(
         }
     }
 
+    override fun getMinimumEcoVersion(): String {
+        return "6.28.1"
+    }
+
     companion object {
         @JvmStatic
         internal lateinit var instance: LibReforgePlugin
