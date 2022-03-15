@@ -5,6 +5,7 @@ import com.willfp.libreforge.triggers.Trigger
 
 object PaperIntegration {
     private lateinit var SWING: Trigger
+    private lateinit var BEACON_EFFECT: Trigger
     private lateinit var ELYTRA_BOOST: Trigger
 
     fun load() {
@@ -13,5 +14,6 @@ object PaperIntegration {
         }
 
         ELYTRA_BOOST = TriggerElytraBoost()
+        BEACON_EFFECT = TriggerBeaconEffect()
     }
 }
