@@ -46,13 +46,6 @@ class EffectSendMessage : Effect(
             )
         )
 
-        if (!config.has("action_bar")) violations.add(
-            ConfigViolation(
-                "action_bar",
-                "You must specify if to send the message to the action bar!"
-            )
-        )
-
         return violations
     }
 }
