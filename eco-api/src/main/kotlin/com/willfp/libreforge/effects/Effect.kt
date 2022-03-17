@@ -207,6 +207,8 @@ internal data class RepeatData(
         start = config.getDoubleFromExpression("start", player)
         increment = config.getDoubleFromExpression("increment", player)
         count = config.getDoubleFromExpression("start", player)
+
+        if (times < 1) times = 1
     }
 }
 
