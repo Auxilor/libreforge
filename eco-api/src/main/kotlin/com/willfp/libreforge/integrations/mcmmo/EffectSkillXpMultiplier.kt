@@ -13,7 +13,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import java.util.UUID
 
-class EffectSkillXpMultiplier : Effect("skill_xp_multiplier") {
+class EffectMcMMOXpMultiplier : Effect("mcmmo_xp_multiplier") {
     private val modifiers = mutableMapOf<UUID, MutableMap<PrimarySkillType, MutableList<MultiplierModifier>>>()
     private val globalModifiers = mutableMapOf<UUID, MutableList<MultiplierModifier>>()
 
