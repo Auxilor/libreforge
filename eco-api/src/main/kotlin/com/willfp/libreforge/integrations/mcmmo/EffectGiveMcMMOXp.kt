@@ -8,8 +8,8 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
 
-class EffectGiveSkillXp : Effect(
-    "give_skill_xp",
+class EffectGiveMcMMOXp : Effect(
+    "give_mcmmo_xp",
     applicableTriggers = Triggers.withParameters(
         TriggerParameter.PLAYER
     )
