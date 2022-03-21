@@ -17,7 +17,6 @@ class EffectIgnite: Effect(
         TriggerParameter.PLAYER
     )
 ) {
-
     override fun handle(data: TriggerData, config: Config) {
         val victim = data.victim ?: return
         val damage = config.getDoubleFromExpression("damage_per_tick", data.player)

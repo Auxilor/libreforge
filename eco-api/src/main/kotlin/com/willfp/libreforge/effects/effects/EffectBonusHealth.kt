@@ -12,7 +12,7 @@ class EffectBonusHealth : Effect("bonus_health") {
     override fun handleEnable(player: Player, config: Config) {
         val attribute = player.getAttribute(Attribute.GENERIC_MAX_HEALTH) ?: return
         val uuid = this.getUUID(player.getEffectAmount(this))
-        attribute.removeModifier(AttributeModifier(uuid, this.id, 0.0, AttributeModifier.Operation.MULTIPLY_SCALAR_1))
+        attribute.removeModifier(AttributeModifier(uuid, this.id, 0.0, AttributeModifier.Operation.ADD_NUMBER))
 
         attribute.addModifier(
             AttributeModifier(
