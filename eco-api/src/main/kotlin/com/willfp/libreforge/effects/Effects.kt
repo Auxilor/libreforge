@@ -74,6 +74,7 @@ object Effects {
     val GIVE_ITEM: Effect = EffectGiveItem()
     val MULTIPLY_VELOCITY: Effect = EffectMultiplyVelocity()
     val SHOOT_ARROW: Effect = EffectShootArrow()
+    val STRIP_AI: Effect = EffectStripAI()
 
     /**
      * Get effect matching id.
