@@ -18,6 +18,7 @@ import com.willfp.libreforge.conditions.conditions.ConditionBelowPoints
 import com.willfp.libreforge.conditions.conditions.ConditionBelowXPLevel
 import com.willfp.libreforge.conditions.conditions.ConditionBelowY
 import com.willfp.libreforge.conditions.conditions.ConditionHasPermission
+import com.willfp.libreforge.conditions.conditions.ConditionHasPotionEffect
 import com.willfp.libreforge.conditions.conditions.ConditionInAir
 import com.willfp.libreforge.conditions.conditions.ConditionInBiome
 import com.willfp.libreforge.conditions.conditions.ConditionInWater
@@ -66,6 +67,7 @@ object Conditions {
     val ABOVE_POINTS: Condition = ConditionAbovePoints()
     val BELOW_POINTS: Condition = ConditionBelowPoints()
     val POINTS_EQUAL: Condition = ConditionPointsEqual()
+    val HAS_POTION_EFFECT: Condition = ConditionHasPotionEffect()
 
     /**
      * Get condition matching id.
