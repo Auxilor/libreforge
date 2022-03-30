@@ -29,6 +29,7 @@ class EffectTransmission : Effect(
 
         if (ray != null) {
             player.sendMessage(plugin.langYml.getMessage("cannot-transmit"))
+            return
         }
 
         location.pitch = player.location.pitch
