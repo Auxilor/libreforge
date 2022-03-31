@@ -99,6 +99,8 @@ object Conditions {
             return null
         }
 
-        return ConfiguredCondition(condition, args)
+        val compileData = condition.makeCompileData(args, context)
+
+        return ConfiguredCondition(condition, args, compileData)
     }
 }

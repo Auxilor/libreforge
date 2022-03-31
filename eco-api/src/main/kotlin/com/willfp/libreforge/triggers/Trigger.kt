@@ -8,7 +8,7 @@ import com.willfp.libreforge.getHolders
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
-import java.util.Objects
+import java.util.*
 
 abstract class Trigger(
     val id: String,
@@ -27,8 +27,8 @@ abstract class Trigger(
     protected fun processTrigger(player: Player, data: TriggerData, forceHolders: Iterable<Holder>? = null) {
         for (holder in forceHolders ?: player.getHolders()) {
             var areMet = true
-            for ((condition, config) in holder.conditions) {
-                if (!condition.isConditionMet(player, config)) {
+            for ((condition, config, compileData) in holder.conditions) {
+                if (!condition.isConditionMet(player, config, compileData)) {
                     areMet = false
                 }
             }
