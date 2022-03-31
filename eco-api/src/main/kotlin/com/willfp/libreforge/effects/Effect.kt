@@ -11,16 +11,12 @@ import com.willfp.libreforge.LibReforgePlugin
 import com.willfp.libreforge.conditions.ConfiguredCondition
 import com.willfp.libreforge.events.EffectActivateEvent
 import com.willfp.libreforge.filters.Filter
-import com.willfp.libreforge.triggers.ConfiguredDataMutator
-import com.willfp.libreforge.triggers.InvocationData
-import com.willfp.libreforge.triggers.Trigger
-import com.willfp.libreforge.triggers.TriggerData
-import com.willfp.libreforge.triggers.mutate
+import com.willfp.libreforge.triggers.*
 import org.bukkit.NamespacedKey
 import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
-import java.util.UUID
+import java.util.*
 import kotlin.math.ceil
 
 @Suppress("UNUSED_PARAMETER")
@@ -243,8 +239,8 @@ data class ConfiguredEffect internal constructor(
         )
 
         var effectAreMet = true
-        for ((condition, conditionConfig) in conditions) {
-            if (!condition.isConditionMet(invocation.player, conditionConfig)) {
+        for ((condition, conditionConfig, compileData) in conditions) {
+            if (!condition.isConditionMet(invocation.player, conditionConfig, compileData)) {
                 effectAreMet = false
             }
         }

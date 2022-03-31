@@ -2,6 +2,7 @@ package com.willfp.libreforge.conditions
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigurableProperty
+import com.willfp.libreforge.effects.CompileData
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
 
@@ -23,10 +24,34 @@ abstract class Condition(
      * @param config The config of the condition.
      * @return If met.
      */
-    abstract fun isConditionMet(
+    open fun isConditionMet(
         player: Player,
         config: Config
-    ): Boolean
+    ): Boolean = true
+
+    /**
+     * Get if condition is met for a player.
+     *
+     * @param player The player.
+     * @param config The config of the condition.
+     * @return If met.
+     */
+    open fun isConditionMet(
+        player: Player,
+        config: Config,
+        data: CompileData?
+    ): Boolean = isConditionMet(player, config)
+
+    open fun makeCompileData(config: Config, context: String): CompileData? {
+        return null
+    }
 }
 
-data class ConfiguredCondition(val condition: Condition, val config: Config)
+data class ConfiguredCondition(
+    val condition: Condition,
+    val config: Config,
+    val compileData: CompileData? = null,
+) {
+    @Suppress("UNUSED")
+    constructor(condition: Condition, config: Config) : this(condition, config, null)
+}
