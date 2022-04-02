@@ -51,7 +51,11 @@ data class ConfiguredCondition(
     val condition: Condition,
     val config: Config,
     val compileData: CompileData? = null,
+    val inverse: Boolean = false
 ) {
-    @Suppress("UNUSED")
-    constructor(condition: Condition, config: Config) : this(condition, config, null)
+    fun isMet(player: Player): Boolean {
+        val raw = condition.isConditionMet(player, config, compileData)
+
+        return raw != inverse
+    }
 }

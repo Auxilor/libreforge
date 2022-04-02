@@ -44,7 +44,7 @@ class ConditionAnyOf : Condition("any_of") {
                 return true
             }
 
-            return list.any { it.condition.isConditionMet(player, it.config) }
+            return list.any { it.isMet(player) }
         }
     }
 }

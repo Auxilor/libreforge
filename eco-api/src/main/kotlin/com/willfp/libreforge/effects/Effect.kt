@@ -239,8 +239,8 @@ data class ConfiguredEffect internal constructor(
         )
 
         var effectAreMet = true
-        for ((condition, conditionConfig, compileData) in conditions) {
-            if (!condition.isConditionMet(invocation.player, conditionConfig, compileData)) {
+        for (condition in conditions) {
+            if (!condition.isMet(invocation.player)) {
                 effectAreMet = false
             }
         }

@@ -198,8 +198,8 @@ fun Player.getHolders(respectConditions: Boolean = true): Iterable<Holder> {
     if (respectConditions) {
         for (holder in holders.toList()) {
             var isMet = true
-            for ((condition, config, compileData) in holder.conditions) {
-                if (!condition.isConditionMet(this, config, compileData)) {
+            for (condition in holder.conditions) {
+                if (!condition.isMet(this)) {
                     isMet = false
                     break
                 }
@@ -260,8 +260,8 @@ fun Player.updateEffects(noRescan: Boolean = false) {
 
     for (holder in added) {
         var areConditionsMet = true
-        for ((condition, config, compileData) in holder.conditions) {
-            if (!condition.isConditionMet(this, config, compileData)) {
+        for (condition in holder.conditions) {
+            if (!condition.isMet(this)) {
                 areConditionsMet = false
                 break
             }
@@ -273,8 +273,8 @@ fun Player.updateEffects(noRescan: Boolean = false) {
 
         for ((effect, config, _, _, _, conditions) in holder.effects) {
             var effectConditions = true
-            for ((condition, conditionConfig, compileData) in conditions) {
-                if (!condition.isConditionMet(this, conditionConfig, compileData)) {
+            for (condition in conditions) {
+                if (!condition.isMet(this)) {
                     effectConditions = false
                     break
                 }
@@ -296,8 +296,8 @@ fun Player.updateEffects(noRescan: Boolean = false) {
 
     for (holder in after) {
         var areConditionsMet = true
-        for ((condition, config, compileData) in holder.conditions) {
-            if (!condition.isConditionMet(this, config, compileData)) {
+        for (condition in holder.conditions) {
+            if (!condition.isMet(this)) {
                 areConditionsMet = false
                 break
             }
@@ -310,8 +310,8 @@ fun Player.updateEffects(noRescan: Boolean = false) {
 
         for ((effect, _, _, _, _, conditions) in holder.effects) {
             var effectConditions = true
-            for ((condition, conditionConfig, compileData) in conditions) {
-                if (!condition.isConditionMet(this, conditionConfig, compileData)) {
+            for (condition in conditions) {
+                if (!condition.isMet(this)) {
                     effectConditions = false
                     break
                 }
