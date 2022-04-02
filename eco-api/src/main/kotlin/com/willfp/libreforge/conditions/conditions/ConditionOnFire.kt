@@ -1,7 +1,6 @@
 package com.willfp.libreforge.conditions.conditions
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.updateEffects
 import org.bukkit.entity.Player
@@ -29,19 +28,6 @@ class ConditionOnFire : Condition("on_fire") {
     }
 
     override fun isConditionMet(player: Player, config: Config): Boolean {
-        return (player.fireTicks > 0) == config.getBool("on_fire")
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("on_fire")) violations.add(
-            ConfigViolation(
-                "on_fire",
-                "You must specify if the player must be on fire or not!"
-            )
-        )
-
-        return violations
+        return (player.fireTicks > 0) == (config.getBoolOrNull("on_fire") ?: true)
     }
 }
