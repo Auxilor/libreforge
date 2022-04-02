@@ -101,6 +101,8 @@ object Conditions {
 
         val compileData = condition.makeCompileData(args, context)
 
-        return ConfiguredCondition(condition, args, compileData)
+        val inverse = args.getBool("inverse")
+
+        return ConfiguredCondition(condition, args, compileData, inverse)
     }
 }

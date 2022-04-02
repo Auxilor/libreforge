@@ -27,8 +27,8 @@ abstract class Trigger(
     protected fun processTrigger(player: Player, data: TriggerData, forceHolders: Iterable<Holder>? = null) {
         for (holder in forceHolders ?: player.getHolders()) {
             var areMet = true
-            for ((condition, config, compileData) in holder.conditions) {
-                if (!condition.isConditionMet(player, config, compileData)) {
+            for (condition in holder.conditions) {
+                if (!condition.isMet(player)) {
                     areMet = false
                 }
             }
