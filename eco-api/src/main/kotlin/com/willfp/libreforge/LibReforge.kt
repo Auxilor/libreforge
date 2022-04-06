@@ -21,6 +21,7 @@ import com.willfp.libreforge.integrations.mcmmo.McMMOIntegration
 import com.willfp.libreforge.integrations.paper.PaperIntegration
 import com.willfp.libreforge.integrations.shopguiplus.ShopGUIPlusIntegration
 import com.willfp.libreforge.integrations.vault.VaultIntegration
+import com.willfp.libreforge.integrations.zshop.ZShopIntegration
 import com.willfp.libreforge.triggers.Triggers
 import com.willfp.libreforge.triggers.triggers.TriggerStatic
 import org.apache.commons.lang.StringUtils
@@ -150,6 +151,7 @@ abstract class LibReforgePlugin(
             IntegrationLoader("ShopGUIPlus") { ShopGUIPlusIntegration.load(this) },
             IntegrationLoader("DeluxeSellwands") { DeluxeSellwandsIntegration.load(this) },
             IntegrationLoader("EconomyShopGUI") { EconomyShopGUIIntegration.load(this) },
+            IntegrationLoader("ZShop") { ZShopIntegration.load(this) },
         )
 
         integrations.addAll(loadAdditionalIntegrations())
