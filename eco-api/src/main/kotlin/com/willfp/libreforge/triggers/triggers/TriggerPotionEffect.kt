@@ -1,6 +1,7 @@
 package com.willfp.libreforge.triggers.triggers
 
 import com.willfp.eco.core.integrations.mcmmo.McmmoManager
+import com.willfp.libreforge.triggers.GenericCancellableEvent
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -11,7 +12,8 @@ import org.bukkit.event.entity.EntityPotionEffectEvent
 class TriggerPotionEffect : Trigger(
     "potion_effect", listOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.LOCATION
+        TriggerParameter.LOCATION,
+        TriggerParameter.EVENT
     )
 ) {
     @EventHandler(ignoreCancelled = true)
@@ -30,7 +32,8 @@ class TriggerPotionEffect : Trigger(
             player,
             TriggerData(
                 player = player,
-                location = player.location
+                location = player.location,
+                event = GenericCancellableEvent(event)
             )
         )
     }

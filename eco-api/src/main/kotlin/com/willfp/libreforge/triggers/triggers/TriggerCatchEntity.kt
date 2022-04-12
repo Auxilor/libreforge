@@ -1,6 +1,7 @@
 package com.willfp.libreforge.triggers.triggers
 
 import com.willfp.eco.core.integrations.mcmmo.McmmoManager
+import com.willfp.libreforge.triggers.GenericCancellableEvent
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -12,7 +13,8 @@ class TriggerCatchEntity : Trigger(
     "catch_entity", listOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,
-        TriggerParameter.VICTIM
+        TriggerParameter.VICTIM,
+        TriggerParameter.EVENT
     )
 ) {
     @EventHandler(ignoreCancelled = true)
@@ -32,7 +34,8 @@ class TriggerCatchEntity : Trigger(
             TriggerData(
                 player = player,
                 location = event.caught?.location ?: player.location,
-                victim = event.caught as? LivingEntity
+                victim = event.caught as? LivingEntity,
+                event = GenericCancellableEvent(event)
             )
         )
     }

@@ -1,6 +1,7 @@
 package com.willfp.libreforge.triggers.triggers
 
 import com.willfp.libreforge.LibReforgePlugin
+import com.willfp.libreforge.triggers.GenericCancellableEvent
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -17,7 +18,8 @@ class TriggerAltClick : Trigger(
     "alt_click", listOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
-        TriggerParameter.LOCATION
+        TriggerParameter.LOCATION,
+        TriggerParameter.EVENT
     )
 ) {
     companion object {
@@ -99,7 +101,8 @@ class TriggerAltClick : Trigger(
             TriggerData(
                 player = player,
                 victim = entityResult?.hitEntity as? LivingEntity,
-                location = result.hitPosition.toLocation(world)
+                location = result.hitPosition.toLocation(world),
+                event = GenericCancellableEvent(event)
             )
         )
     }
