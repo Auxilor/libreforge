@@ -1,6 +1,7 @@
 package com.willfp.libreforge.triggers.triggers
 
 import com.willfp.eco.core.integrations.mcmmo.McmmoManager
+import com.willfp.libreforge.triggers.GenericCancellableEvent
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -12,7 +13,8 @@ class TriggerProjectileLaunch : Trigger(
     "projectile_launch", listOf(
         TriggerParameter.PLAYER,
         TriggerParameter.PROJECTILE,
-        TriggerParameter.VELOCITY
+        TriggerParameter.VELOCITY,
+        TriggerParameter.EVENT
     )
 ) {
     @EventHandler(ignoreCancelled = true)
@@ -32,7 +34,8 @@ class TriggerProjectileLaunch : Trigger(
             TriggerData(
                 player = shooter,
                 projectile = event.entity,
-                velocity = event.entity.velocity
+                velocity = event.entity.velocity,
+                event = GenericCancellableEvent(event)
             )
         )
     }

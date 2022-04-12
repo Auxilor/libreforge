@@ -3,6 +3,7 @@ package com.willfp.libreforge.triggers.triggers
 import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.integrations.mcmmo.McmmoManager
 import com.willfp.libreforge.LibReforgePlugin
+import com.willfp.libreforge.triggers.GenericCancellableEvent
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -13,7 +14,8 @@ class TriggerMove : Trigger(
     "move", listOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,
-        TriggerParameter.VELOCITY
+        TriggerParameter.VELOCITY,
+        TriggerParameter.EVENT
     )
 ) {
     @EventHandler(ignoreCancelled = true)
@@ -34,7 +36,8 @@ class TriggerMove : Trigger(
             TriggerData(
                 player = player,
                 location = player.location,
-                velocity = player.velocity
+                velocity = player.velocity,
+                event = GenericCancellableEvent(event)
             )
         )
     }
