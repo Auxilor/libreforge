@@ -51,7 +51,7 @@ class EffectAutosmelt : Effect(
         val event = data.event as? WrappedDropEvent<*> ?: return
 
         val fortune = FastItemStack.wrap(player.inventory.itemInMainHand)
-            .getLevelOnItem(Enchantment.LOOT_BONUS_BLOCKS, false)
+            .getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS, false)
 
         event.modifier = {
             var (type, xp) = getOutput(it.type)
