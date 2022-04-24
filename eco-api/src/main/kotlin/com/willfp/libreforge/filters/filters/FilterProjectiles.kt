@@ -9,8 +9,9 @@ class FilterProjectiles : FilterComponent() {
     override fun passes(data: TriggerData, config: Config): Boolean {
         val projectile = data.projectile ?: return true
 
-        val valid = config.getStrings("projectiles").map { Entities.lookup(it) }
-
-        return valid.any { it.matches(projectile) }
+        return config.withInverse("projectiles", Config::getStrings) {
+            val valid = it.map { lookup -> Entities.lookup(lookup) }
+            valid.any { test -> test.matches(projectile) }
+        }
     }
 }

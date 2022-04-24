@@ -9,7 +9,8 @@ class FilterDamageCause: FilterComponent() {
     override fun passes(data: TriggerData, config: Config): Boolean {
         val cause = data.damageCause ?: return true
 
-        return config.getStringsOrNull("damageCause")
-            ?.containsIgnoreCase(cause.name) ?: true
+        return config.withInverse("damageCause", Config::getStringsOrNull) {
+            it?.containsIgnoreCase(cause.name) ?: true
+        }
     }
 }

@@ -10,16 +10,11 @@ class FilterItems : FilterComponent() {
     override fun passes(data: TriggerData, config: Config): Boolean {
         val event = data.event as? WrappedDropEvent<*> ?: return true
         val items = event.items
-        val allowed = config.getStringsOrNull("items")?.map { Items.lookup(it) }
-            ?: return true
-        for (testableItem in allowed) {
-            for (item in items) {
-                if (testableItem.matches(item)) {
-                    return true
-                }
-            }
-        }
 
-        return false
+        return config.withInverse("items", Config::getStringsOrNull) {
+            it?.map { lookup -> Items.lookup(lookup) }?.any { testableItem ->
+                items.any { item -> testableItem.matches(item) }
+            } == true
+        }
     }
 }
