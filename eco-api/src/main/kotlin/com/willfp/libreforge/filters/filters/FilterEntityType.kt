@@ -10,11 +10,12 @@ class FilterEntityType : FilterComponent() {
     override fun passes(data: TriggerData, config: Config): Boolean {
         val entity = data.victim ?: return true
 
-        val entityNames = config.getStrings("entities")
-        val testables = entityNames.map { Entities.lookup(it) }
+        return config.withInverse("entities", Config::getStrings) {
+            val testables = it.map { lookup -> Entities.lookup(lookup) }
 
-        return entityNames.containsIgnoreCase(entity.type.name)
-                || entityNames.containsIgnoreCase(entity.category.name)
-                || testables.stream().anyMatch { it.matches(entity) }
+            it.containsIgnoreCase(entity.type.name)
+                    || it.containsIgnoreCase(entity.category.name)
+                    || testables.any { test -> test.matches(entity) }
+        }
     }
 }

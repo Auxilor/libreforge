@@ -9,12 +9,12 @@ class FilterFromSpawner : FilterComponent() {
     override fun passes(data: TriggerData, config: Config): Boolean {
         val entity = data.victim ?: return true
 
-        val fromSpawner = config.getBoolOrNull("fromSpawner") ?: return true
-
         if (!Prerequisite.HAS_PAPER.isMet) {
             return true
         }
 
-        return fromSpawner == entity.fromMobSpawner()
+        return config.withInverse("fromSpawner", Config::getBoolOrNull) {
+            it == entity.fromMobSpawner()
+        }
     }
 }
