@@ -41,6 +41,7 @@ object Conditions {
     val POINTS_EQUAL: Condition = ConditionPointsEqual()
     val HAS_POTION_EFFECT: Condition = ConditionHasPotionEffect()
     val WITHIN_RADIUS_OF: Condition = ConditionWithinRadiusOf()
+    val IS_SPRINTING: Condition = ConditionIsSprinting()
 
     /**
      * Get condition matching id.
