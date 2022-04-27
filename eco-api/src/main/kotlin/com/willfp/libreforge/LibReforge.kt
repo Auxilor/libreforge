@@ -7,29 +7,22 @@ import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.PluginProps
 import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.integrations.IntegrationLoader
-import com.willfp.eco.core.integrations.anticheat.AnticheatManager
 import com.willfp.eco.util.ListUtils
 import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.conditions.MovementConditionListener
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.integrations.aureliumskills.AureliumSkillsIntegration
 import com.willfp.libreforge.integrations.deluxesellwands.DeluxeSellwandsIntegration
-import com.willfp.libreforge.integrations.economyshopgui.EconomyShopGUIIntegration
 import com.willfp.libreforge.integrations.ecoskills.EcoSkillsIntegration
 import com.willfp.libreforge.integrations.jobs.JobsIntegration
 import com.willfp.libreforge.integrations.mcmmo.McMMOIntegration
 import com.willfp.libreforge.integrations.paper.PaperIntegration
-import com.willfp.libreforge.integrations.shopguiplus.ShopGUIPlusIntegration
 import com.willfp.libreforge.integrations.vault.VaultIntegration
-import com.willfp.libreforge.integrations.zshop.ZShopIntegration
 import com.willfp.libreforge.triggers.Triggers
 import com.willfp.libreforge.triggers.triggers.TriggerStatic
 import org.apache.commons.lang.StringUtils
 import org.bukkit.Bukkit
-import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
-import org.bukkit.entity.Projectile
-import org.bukkit.entity.Tameable
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -148,10 +141,7 @@ abstract class LibReforgePlugin(
             IntegrationLoader("mcMMO", McMMOIntegration::load),
             IntegrationLoader("Jobs", JobsIntegration::load),
             IntegrationLoader("Vault", VaultIntegration::load),
-            IntegrationLoader("ShopGUIPlus") { ShopGUIPlusIntegration.load(this) },
-            IntegrationLoader("DeluxeSellwands") { DeluxeSellwandsIntegration.load(this) },
-            IntegrationLoader("EconomyShopGUI") { EconomyShopGUIIntegration.load(this) },
-            IntegrationLoader("ZShop") { ZShopIntegration.load(this) },
+            IntegrationLoader("DeluxeSellwands") { DeluxeSellwandsIntegration.load(this) }
         )
 
         integrations.addAll(loadAdditionalIntegrations())
@@ -170,7 +160,7 @@ abstract class LibReforgePlugin(
     }
 
     override fun getMinimumEcoVersion(): String {
-        return "6.28.1"
+        return "6.35.1"
     }
 
     companion object {
@@ -323,23 +313,5 @@ fun Player.updateEffects(noRescan: Boolean = false) {
                 effect.disableForPlayer(this)
             }
         }
-    }
-}
-
-fun Entity.tryAsPlayer(): Player? {
-    return when (this) {
-        is Projectile -> this.shooter as? Player
-        is Player -> this
-        is Tameable -> this.owner as? Player
-        else -> null
-    }
-}
-
-fun Player.runExempted(toRun: (Player) -> Unit) {
-    AnticheatManager.exemptPlayer(this)
-    try {
-        toRun(this)
-    } finally {
-        AnticheatManager.unexemptPlayer(this)
     }
 }

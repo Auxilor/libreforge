@@ -26,7 +26,7 @@ class EffectRunPlayerCommand : Effect(
             command = command.replace("%victim%", victim.name)
         }
 
-        command = PlaceholderManager.translatePlaceholders(command, player, config.injectedPlaceholders)
+        command = PlaceholderManager.translatePlaceholders(command, player, config)
 
         val isOp = player.isOp
 

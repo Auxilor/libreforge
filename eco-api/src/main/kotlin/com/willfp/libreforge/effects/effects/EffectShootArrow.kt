@@ -1,9 +1,9 @@
 package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.util.runExempted
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
-import com.willfp.libreforge.runExempted
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
@@ -24,9 +24,9 @@ class EffectShootArrow : Effect(
 
         player.runExempted {
             val arrow = if (velocity == null || !config.getBool("inherit_velocity")) {
-                it.launchProjectile(Arrow::class.java)
+                player.launchProjectile(Arrow::class.java)
             } else {
-                it.launchProjectile(Arrow::class.java, velocity)
+                player.launchProjectile(Arrow::class.java, velocity)
             }
 
             arrow.pickupStatus = AbstractArrow.PickupStatus.DISALLOWED
