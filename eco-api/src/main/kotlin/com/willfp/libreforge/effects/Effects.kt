@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects
 import com.google.common.collect.HashBiMap
 import com.google.common.collect.ImmutableList
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.placeholder.InjectablePlaceholder
 import com.willfp.eco.core.placeholder.StaticPlaceholder
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.LibReforgePlugin
@@ -120,14 +121,14 @@ object Effects {
         val uuid = UUID.randomUUID()
 
         val repeatData = RepeatData(1, 0.0, 0.0, 0.0)
-        val injections = setOf(
+        val injections = arrayOf<InjectablePlaceholder>(
             StaticPlaceholder("repeat_times") { repeatData.times.toString() },
             StaticPlaceholder("repeat_start") { repeatData.start.toString() },
             StaticPlaceholder("repeat_increment") { repeatData.increment.toString() },
             StaticPlaceholder("repeat_count") { repeatData.count.toString() }
         )
         config.clearInjectedPlaceholders()
-        config.injectPlaceholders(injections)
+        config.injectPlaceholders(*injections)
 
         val effect = config.getString("id").let {
             val found = getByID(it)

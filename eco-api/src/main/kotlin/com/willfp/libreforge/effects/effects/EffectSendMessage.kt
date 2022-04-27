@@ -22,7 +22,7 @@ class EffectSendMessage : Effect(
 
         val message = config.getString("message")
             .replace("%player%", player.name)
-            .let { PlaceholderManager.translatePlaceholders(it, player, config.injectedPlaceholders) }
+            .let { PlaceholderManager.translatePlaceholders(it, player, config) }
             .formatEco(player)
 
         val actionBar = config.getBool("action_bar")

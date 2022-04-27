@@ -27,7 +27,7 @@ class EffectRunCommand : Effect(
             command = command.replace("%victim%", victim.name)
         }
 
-        command = PlaceholderManager.translatePlaceholders(command, player, config.injectedPlaceholders)
+        command = PlaceholderManager.translatePlaceholders(command, player, config)
 
         Bukkit.getServer().dispatchCommand(
             Bukkit.getConsoleSender(),

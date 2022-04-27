@@ -1,15 +1,22 @@
 package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.integrations.shop.ShopSellEvent
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.MultiplierModifier
 import com.willfp.libreforge.effects.getEffectAmount
 import org.bukkit.entity.Player
-import java.util.UUID
+import org.bukkit.event.EventHandler
+import java.util.*
 
 class EffectSellMultiplier : Effect("sell_multiplier") {
     private val modifiers = mutableMapOf<UUID, MutableList<MultiplierModifier>>()
+
+    @EventHandler
+    fun handle(event: ShopSellEvent) {
+        event.price *= getMultiplier(event.player)
+    }
 
     override fun handleEnable(player: Player, config: Config) {
         val registeredModifiers = modifiers[player.uniqueId] ?: mutableListOf()
