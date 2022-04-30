@@ -11,7 +11,6 @@ dependencies {
     compileOnly 'com.github.ben-manes.caffeine:caffeine:3.0.5'
     compileOnly 'com.github.brcdev-minecraft:shopgui-api:2.2.0'
     compileOnly 'com.github.Gypopo:EconomyShopGUI-API:1.1.0'
-    compileOnly 'com.willfp:EcoArmor:7.50.1'
 
     compileOnly fileTree(dir: '../lib', include: ['*.jar'])
 }
