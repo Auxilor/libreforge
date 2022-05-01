@@ -5,8 +5,8 @@ package com.willfp.libreforge
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.PluginProps
-import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.integrations.IntegrationLoader
+import com.willfp.eco.util.ClassUtils
 import com.willfp.eco.util.ListUtils
 import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.conditions.MovementConditionListener
@@ -23,8 +23,7 @@ import com.willfp.libreforge.triggers.triggers.TriggerStatic
 import org.apache.commons.lang.StringUtils
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
-import java.util.UUID
-import java.util.WeakHashMap
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 private val holderProviders = mutableSetOf<HolderProvider>()
@@ -53,7 +52,7 @@ abstract class LibReforgePlugin(
             throw IllegalStateException("You must shade and relocate libreforge into your jar!")
         }
 
-        if (Prerequisite.HAS_PAPER.isMet) {
+        if (ClassUtils.exists("com.destroystokyo.paper.event.block.BeaconEffectEvent")) {
             PaperIntegration.load()
         }
     }
