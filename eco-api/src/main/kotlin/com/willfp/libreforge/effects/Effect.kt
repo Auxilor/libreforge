@@ -10,13 +10,18 @@ import com.willfp.libreforge.ConfigurableProperty
 import com.willfp.libreforge.LibReforgePlugin
 import com.willfp.libreforge.conditions.ConfiguredCondition
 import com.willfp.libreforge.events.EffectActivateEvent
+import com.willfp.libreforge.events.EffectPreActivateEvent
 import com.willfp.libreforge.filters.Filter
-import com.willfp.libreforge.triggers.*
+import com.willfp.libreforge.triggers.ConfiguredDataMutator
+import com.willfp.libreforge.triggers.InvocationData
+import com.willfp.libreforge.triggers.Trigger
+import com.willfp.libreforge.triggers.TriggerData
+import com.willfp.libreforge.triggers.mutate
 import org.bukkit.NamespacedKey
 import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
-import java.util.*
+import java.util.UUID
 import kotlin.math.ceil
 
 @Suppress("UNUSED_PARAMETER")
@@ -298,6 +303,13 @@ data class ConfiguredEffect internal constructor(
             }
         }
 
+        val preActivateEvent = EffectPreActivateEvent(player, holder, effect, args)
+        LibReforgePlugin.instance.server.pluginManager.callEvent(preActivateEvent)
+
+        if (preActivateEvent.isCancelled) {
+            return
+        }
+
         if (effect.getCooldown(player, uuid) > 0) {
             if (args.getBoolOrNull("send_cooldown_message") != false) {
                 effect.sendCooldownMessage(player, uuid)
@@ -318,33 +330,35 @@ data class ConfiguredEffect internal constructor(
         val activateEvent = EffectActivateEvent(player, holder, effect, args)
         LibReforgePlugin.instance.server.pluginManager.callEvent(activateEvent)
 
-        if (!activateEvent.isCancelled) {
-            effect.resetCooldown(player, args, uuid)
+        if (activateEvent.isCancelled) {
+            return
+        }
 
-            for (i in 0 until repeatData.times) {
-                /*
-                Can't use the destructured objects as they haven't been affected by subsequent mutations in repeats.
-                 */
-                val delay = if (args.has("delay")) {
-                    val found = args.getIntFromExpression("delay", invocation.player)
+        effect.resetCooldown(player, args, uuid)
 
-                    if (effect.noDelay || found < 0) 0 else found
-                } else 0
+        for (i in 0 until repeatData.times) {
+            /*
+            Can't use the destructured objects as they haven't been affected by subsequent mutations in repeats.
+             */
+            val delay = if (args.has("delay")) {
+                val found = args.getIntFromExpression("delay", invocation.player)
 
-                if (delay > 0) {
-                    LibReforgePlugin.instance.scheduler.runLater(delay.toLong()) {
-                        effect.handle(invocation.data, args)
-                        effect.handle(invocation, args)
-                    }
-                } else {
+                if (effect.noDelay || found < 0) 0 else found
+            } else 0
+
+            if (delay > 0) {
+                LibReforgePlugin.instance.scheduler.runLater(delay.toLong()) {
                     effect.handle(invocation.data, args)
                     effect.handle(invocation, args)
                 }
-
-                repeatData.count += repeatData.increment
-
-                invocation = invocation.copy(data = mutators.mutate(rawInvocation.copy(compileData = compileData).data))
+            } else {
+                effect.handle(invocation.data, args)
+                effect.handle(invocation, args)
             }
+
+            repeatData.count += repeatData.increment
+
+            invocation = invocation.copy(data = mutators.mutate(rawInvocation.copy(compileData = compileData).data))
         }
     }
 }

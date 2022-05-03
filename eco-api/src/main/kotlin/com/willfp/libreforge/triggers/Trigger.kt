@@ -3,12 +3,13 @@ package com.willfp.libreforge.triggers
 import com.willfp.libreforge.Holder
 import com.willfp.libreforge.LibReforgePlugin
 import com.willfp.libreforge.effects.CompileData
+import com.willfp.libreforge.events.EffectPreInvokeEvent
 import com.willfp.libreforge.events.TriggerProcessEvent
 import com.willfp.libreforge.getHolders
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
-import java.util.*
+import java.util.Objects
 
 abstract class Trigger(
     val id: String,
@@ -42,7 +43,12 @@ abstract class Trigger(
 
             if (!event.isCancelled) {
                 for (effect in holder.effects) {
-                    effect(InvocationData(player, data, holder, this, effect.compileData))
+                    val preInvoke = EffectPreInvokeEvent(player, holder, this, effect.effect)
+                    Bukkit.getPluginManager().callEvent(preInvoke)
+
+                    if (!preInvoke.isCancelled) {
+                        effect(InvocationData(player, data, holder, this, effect.compileData))
+                    }
                 }
             }
         }
