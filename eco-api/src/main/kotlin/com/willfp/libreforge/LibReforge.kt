@@ -208,6 +208,10 @@ fun Player.getHolders(respectConditions: Boolean = true): Iterable<Holder> {
     return holders
 }
 
+internal fun Player.purgePreviousStates() {
+    previousStates.remove(this.uniqueId)
+}
+
 @JvmOverloads
 fun Player.updateEffects(noRescan: Boolean = false) {
     val before = mutableListOf<Holder>()
