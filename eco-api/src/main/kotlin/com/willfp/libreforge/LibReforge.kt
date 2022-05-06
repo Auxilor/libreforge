@@ -23,7 +23,8 @@ import com.willfp.libreforge.triggers.triggers.TriggerStatic
 import org.apache.commons.lang.StringUtils
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
-import java.util.*
+import java.util.UUID
+import java.util.WeakHashMap
 import java.util.concurrent.TimeUnit
 
 private val holderProviders = mutableSetOf<HolderProvider>()
@@ -94,6 +95,7 @@ abstract class LibReforgePlugin(
         this.eventManager.registerListener(TridentHolderDataAttacher(this))
         this.eventManager.registerListener(MovementConditionListener())
         this.eventManager.registerListener(PointCostHandler())
+        this.eventManager.registerListener(ForceUpdater(this))
         for (condition in Conditions.values()) {
             this.eventManager.registerListener(condition)
         }
