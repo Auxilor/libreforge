@@ -95,7 +95,6 @@ abstract class LibReforgePlugin(
         this.eventManager.registerListener(TridentHolderDataAttacher(this))
         this.eventManager.registerListener(MovementConditionListener())
         this.eventManager.registerListener(PointCostHandler())
-        this.eventManager.registerListener(ForceUpdater(this))
         for (condition in Conditions.values()) {
             this.eventManager.registerListener(condition)
         }
@@ -206,10 +205,6 @@ fun Player.getHolders(respectConditions: Boolean = true): Iterable<Holder> {
     }
 
     return holders
-}
-
-internal fun Player.purgePreviousStates() {
-    previousStates.remove(this.uniqueId)
 }
 
 @JvmOverloads
