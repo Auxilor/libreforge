@@ -100,7 +100,7 @@ object Conditions {
             return null
         }
 
-        val notMetLines = config.getStringsOrNull("not-met-lines")
+        val notMetLines = config.getFormattedStringsOrNull("not-met-lines")
 
         val compileData = condition.makeCompileData(args, context)
 
