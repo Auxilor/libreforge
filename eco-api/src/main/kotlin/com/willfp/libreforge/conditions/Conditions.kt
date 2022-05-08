@@ -100,10 +100,12 @@ object Conditions {
             return null
         }
 
+        val notMetLines = config.getStringsOrNull("not-met-lines")
+
         val compileData = condition.makeCompileData(args, context)
 
         val inverse = args.getBool("inverse")
 
-        return ConfiguredCondition(condition, args, compileData, inverse)
+        return ConfiguredCondition(condition, args, notMetLines, compileData, inverse)
     }
 }

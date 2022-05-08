@@ -47,9 +47,10 @@ abstract class Condition(
     }
 }
 
-data class ConfiguredCondition(
+data class ConfiguredCondition internal constructor(
     val condition: Condition,
     val config: Config,
+    val notMetLines: List<String>?,
     val compileData: CompileData? = null,
     val inverse: Boolean = false
 ) {
