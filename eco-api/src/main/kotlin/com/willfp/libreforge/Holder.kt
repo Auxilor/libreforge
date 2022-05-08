@@ -13,7 +13,7 @@ interface Holder {
         val lines = mutableListOf<String>()
 
         for (condition in this.conditions) {
-            if (condition.isMet(player)) {
+            if (!condition.isMet(player)) {
                 lines.addAll(condition.notMetLines ?: continue)
             }
         }
