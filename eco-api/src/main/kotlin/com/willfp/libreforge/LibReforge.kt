@@ -5,8 +5,8 @@ package com.willfp.libreforge
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.PluginProps
+import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.integrations.IntegrationLoader
-import com.willfp.eco.util.ClassUtils
 import com.willfp.eco.util.ListUtils
 import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.conditions.MovementConditionListener
@@ -53,7 +53,7 @@ abstract class LibReforgePlugin(
             throw IllegalStateException("You must shade and relocate libreforge into your jar!")
         }
 
-        if (ClassUtils.exists("com.destroystokyo.paper.event.block.BeaconEffectEvent")) {
+        if (Prerequisite.HAS_PAPER.isMet) {
             PaperIntegration.load()
         }
     }
