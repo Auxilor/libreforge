@@ -9,17 +9,19 @@ class EffectChain(
 ) {
     operator fun invoke(invocationData: InvocationData) {
         for (component in components) {
-            when (component) {
-                is ChainComponentEffect -> {
-                    component.effect(invocationData, ignoreTriggerList = true)
-                }
-            }
+            component(invocationData)
         }
     }
 }
 
-sealed interface ChainComponent
+interface ChainComponent {
+    operator fun invoke(data: InvocationData)
+}
 
 class ChainComponentEffect(
     val effect: ConfiguredEffect
-) : ChainComponent
+) : ChainComponent {
+    override fun invoke(data: InvocationData) {
+        effect(data, ignoreTriggerList = true)
+    }
+}
