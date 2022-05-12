@@ -65,7 +65,7 @@ object Triggers {
 
     fun getById(id: String): Trigger? {
         if (id.startsWith("static_")) {
-            val interval = id.removePrefix("static_").toInt()
+            val interval = id.removePrefix("static_").toIntOrNull() ?: return null
             return TriggerStatic.getWithInterval(interval)
         }
 
