@@ -10,11 +10,15 @@ interface WrappedCancellableEvent<out T> : WrappedEvent<T> where T : Event, T : 
 }
 
 class GenericCancellableEvent<out T>(
-    private val handle: T
-) : WrappedCancellableEvent<T> where T : Event, T : Cancellable {
+    handle: T
+) : GenericEvent<T>(handle), WrappedCancellableEvent<T> where T : Event, T : Cancellable {
     override var isCancelled: Boolean
         get() = handle.isCancelled
         set(value) {
             handle.isCancelled = value
         }
 }
+
+open class GenericEvent<out T : Event>(
+    val handle: T
+) : WrappedEvent<T>
