@@ -70,7 +70,7 @@ import com.willfp.libreforge.triggers.DataMutators
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.Triggers
 import com.willfp.libreforge.triggers.triggers.TriggerStatic
-import java.util.UUID
+import java.util.*
 
 @Suppress("UNUSED")
 object Effects {
@@ -172,7 +172,11 @@ object Effects {
      */
     @JvmStatic
     @JvmOverloads
-    fun compile(config: Config, context: String, fromChain: Boolean = false): ConfiguredEffect? {
+    fun compile(
+        config: Config,
+        context: String,
+        fromChain: Boolean = false
+    ): ConfiguredEffect? {
         val uuid = UUID.randomUUID()
 
         val repeatData = RepeatData(1, 0.0, 0.0, 0.0)
@@ -182,7 +186,6 @@ object Effects {
             StaticPlaceholder("repeat_increment") { repeatData.increment.toString() },
             StaticPlaceholder("repeat_count") { repeatData.count.toString() }
         )
-        config.clearInjectedPlaceholders()
         config.addInjectablePlaceholder(injections)
 
         val effect = config.getString("id").let {
