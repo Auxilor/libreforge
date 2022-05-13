@@ -21,7 +21,7 @@ import org.bukkit.NamespacedKey
 import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
-import java.util.UUID
+import java.util.*
 import kotlin.math.ceil
 
 @Suppress("UNUSED_PARAMETER")
@@ -256,8 +256,10 @@ data class ConfiguredEffect internal constructor(
 
         val (player, data, holder, trigger) = invocation
 
-        if (NumberUtils.randFloat(0.0, 100.0) > (args.getDoubleOrNull("chance") ?: 100.0)) {
-            return
+        if (args.has("chance")) {
+            if (NumberUtils.randFloat(0.0, 100.0) > args.getDoubleFromExpression("chance", player)) {
+                return
+            }
         }
 
         if (data.player != null && data.victim != null) {
@@ -284,7 +286,7 @@ data class ConfiguredEffect internal constructor(
             }
         }
 
-        val every = args.getIntOrNull("every") ?: 0
+        val every = if (args.has("every")) args.getIntFromExpression("every", player) else 0
 
         if (every > 0) {
             var current = everyHandler[uuid] ?: 0
