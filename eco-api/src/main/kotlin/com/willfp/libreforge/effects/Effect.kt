@@ -256,6 +256,12 @@ data class ConfiguredEffect internal constructor(
 
         val (player, data, holder, trigger) = invocation
 
+        if (!ignoreTriggerList) {
+            if (!triggers.contains(trigger)) {
+                return
+            }
+        }
+
         if (args.has("chance")) {
             if (NumberUtils.randFloat(0.0, 100.0) > args.getDoubleFromExpression("chance", player)) {
                 return
@@ -267,12 +273,6 @@ data class ConfiguredEffect internal constructor(
                 if (!AntigriefManager.canInjure(data.player, data.victim)) {
                     return
                 }
-            }
-        }
-
-        if (!ignoreTriggerList) {
-            if (!triggers.contains(trigger)) {
-                return
             }
         }
 
