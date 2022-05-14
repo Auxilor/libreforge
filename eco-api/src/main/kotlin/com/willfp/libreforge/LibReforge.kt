@@ -36,12 +36,7 @@ private val holderCache = Caffeine.newBuilder()
 
 typealias HolderProvider = (Player) -> Iterable<Holder>
 
-abstract class LibReforgePlugin(
-    resourceId: Int,
-    bstatsId: Int,
-    color: String,
-    proxyPackage: String = ""
-) : EcoPlugin(resourceId, bstatsId, proxyPackage, color, true) {
+abstract class LibReforgePlugin : EcoPlugin() {
     private val defaultPackage = StringUtils.join(
         arrayOf("com", "willfp", "libreforge"),
         "."
