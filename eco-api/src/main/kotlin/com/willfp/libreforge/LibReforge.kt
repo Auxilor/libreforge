@@ -17,14 +17,15 @@ import com.willfp.libreforge.integrations.ecoskills.EcoSkillsIntegration
 import com.willfp.libreforge.integrations.jobs.JobsIntegration
 import com.willfp.libreforge.integrations.mcmmo.McMMOIntegration
 import com.willfp.libreforge.integrations.paper.PaperIntegration
-import com.willfp.libreforge.integrations.tmmobcoins.TMMobCoinsIntegration
+import com.willfp.libreforge.integrations.tmmobcoins.TMMobcoinsIntegration
 import com.willfp.libreforge.integrations.vault.VaultIntegration
 import com.willfp.libreforge.triggers.Triggers
 import com.willfp.libreforge.triggers.triggers.TriggerStatic
 import org.apache.commons.lang.StringUtils
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
-import java.util.*
+import java.util.UUID
+import java.util.WeakHashMap
 import java.util.concurrent.TimeUnit
 
 private val holderProviders = mutableSetOf<HolderProvider>()
@@ -142,7 +143,7 @@ abstract class LibReforgePlugin(
             IntegrationLoader("mcMMO", McMMOIntegration::load),
             IntegrationLoader("Jobs", JobsIntegration::load),
             IntegrationLoader("Vault", VaultIntegration::load),
-            IntegrationLoader("TMMobCoins", TMMobCoinsIntegration::load),
+            IntegrationLoader("TMMobcoins", TMMobcoinsIntegration::load),
             IntegrationLoader("EcoArmor", EcoArmorIntegration::load)
         )
 
