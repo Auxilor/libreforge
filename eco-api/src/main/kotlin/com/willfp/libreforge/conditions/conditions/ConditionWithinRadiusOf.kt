@@ -10,12 +10,12 @@ import kotlin.math.pow
 class ConditionWithinRadiusOf : Condition("within_radius_of") {
     override fun isConditionMet(player: Player, config: Config): Boolean {
         val vector = Vector(
-            config.getDouble("x"),
-            config.getDouble("y"),
-            config.getDouble("z")
+            config.getDoubleFromExpression("x", player),
+            config.getDoubleFromExpression("y", player),
+            config.getDoubleFromExpression("z", player)
         )
 
-        val dist = config.getDouble("radius").pow(2)
+        val dist = config.getDoubleFromExpression("radius", player).pow(2)
 
         return player.location.toVector().distanceSquared(vector) <= dist
     }
