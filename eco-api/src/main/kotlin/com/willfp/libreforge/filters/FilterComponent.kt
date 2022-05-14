@@ -21,12 +21,17 @@ abstract class FilterComponent {
     ): Boolean {
         val regularPresent = this.has(configName)
         val inversePresent = this.has("!$configName")
-        if (!regularPresent && !inversePresent) {
+        val notInversePresent = this.has("not_$configName")
+        if (!regularPresent && !inversePresent && !notInversePresent) {
             return true
         }
 
         if (inversePresent) {
             return !predicate(this.getter("!$configName"))
+        }
+
+        if (notInversePresent) {
+            return !predicate(this.getter("not_$configName"))
         }
 
         return predicate(this.getter(configName))
