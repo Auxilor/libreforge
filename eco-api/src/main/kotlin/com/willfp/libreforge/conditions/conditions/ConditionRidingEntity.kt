@@ -1,10 +1,13 @@
 package com.willfp.libreforge.conditions.conditions
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.util.containsIgnoreCase
+import com.willfp.eco.core.entities.Entities
+import com.willfp.eco.core.entities.TestableEntity
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.conditions.Condition
+import com.willfp.libreforge.effects.CompileData
 import com.willfp.libreforge.updateEffects
+import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
@@ -32,9 +35,10 @@ class ConditionRidingEntity : Condition("riding_entity") {
         player.updateEffects(noRescan = true)
     }
 
-    override fun isConditionMet(player: Player, config: Config): Boolean {
-        return config.getStrings("entities")
-            .containsIgnoreCase(player.vehicle?.type?.name ?: return false)
+    override fun isConditionMet(player: Player, config: Config, data: CompileData?): Boolean {
+        val compileData = data as? RidingEntityCompileData ?: return true
+
+        return compileData.isMet(player.vehicle)
     }
 
     override fun validateConfig(config: Config): List<ConfigViolation> {
@@ -48,5 +52,25 @@ class ConditionRidingEntity : Condition("riding_entity") {
         )
 
         return violations
+    }
+
+    override fun makeCompileData(config: Config, context: String): CompileData {
+        return RidingEntityCompileData(config.getStrings("entities").map {
+            Entities.lookup(it)
+        })
+    }
+
+    private class RidingEntityCompileData(
+        override val data: Iterable<TestableEntity>
+    ) : CompileData {
+        fun isMet(entity: Entity?): Boolean {
+            val list = data.toList()
+
+            if (list.isEmpty()) {
+                return true
+            }
+
+            return list.any { it.matches(entity) }
+        }
     }
 }
