@@ -132,7 +132,7 @@ object Conditions {
             return null
         }
 
-        val notMetLines = config.getFormattedStringsOrNull("not-met-lines")
+        val notMetLines = args.getFormattedStringsOrNull("not-met-lines")
 
         val compileData = condition.makeCompileData(args, context)
 
