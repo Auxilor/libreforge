@@ -30,6 +30,7 @@ import com.willfp.libreforge.conditions.conditions.ConditionIsSneaking
 import com.willfp.libreforge.conditions.conditions.ConditionIsSprinting
 import com.willfp.libreforge.conditions.conditions.ConditionIsStorm
 import com.willfp.libreforge.conditions.conditions.ConditionOnFire
+import com.willfp.libreforge.conditions.conditions.ConditionPlaceholderContains
 import com.willfp.libreforge.conditions.conditions.ConditionPlaceholderEquals
 import com.willfp.libreforge.conditions.conditions.ConditionPlaceholderGreaterThan
 import com.willfp.libreforge.conditions.conditions.ConditionPlaceholderLessThan
@@ -74,6 +75,7 @@ object Conditions {
     val WITHIN_RADIUS_OF: Condition = ConditionWithinRadiusOf()
     val IS_SPRINTING: Condition = ConditionIsSprinting()
     val ANY_OF: Condition = ConditionAnyOf()
+    val PLACEHOLDER_CONTAINS: Condition = ConditionPlaceholderContains()
 
     /**
      * Get condition matching id.
