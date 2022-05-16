@@ -26,7 +26,7 @@ class ConditionAnyOf : Condition("any_of") {
 
         if (!config.has("conditions")) violations.add(
             ConfigViolation(
-                "x",
+                "conditions",
                 "You must specify the conditions that can be met!"
             )
         )
