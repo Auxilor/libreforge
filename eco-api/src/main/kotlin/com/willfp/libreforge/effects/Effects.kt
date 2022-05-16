@@ -56,6 +56,7 @@ import com.willfp.libreforge.effects.effects.EffectSellMultiplier
 import com.willfp.libreforge.effects.effects.EffectSendMessage
 import com.willfp.libreforge.effects.effects.EffectSendTitle
 import com.willfp.libreforge.effects.effects.EffectSetPoints
+import com.willfp.libreforge.effects.effects.EffectSetVelocity
 import com.willfp.libreforge.effects.effects.EffectShootArrow
 import com.willfp.libreforge.effects.effects.EffectSpawnMobs
 import com.willfp.libreforge.effects.effects.EffectSpawnParticle
@@ -132,6 +133,7 @@ object Effects {
     val SHOOT_ARROW: Effect = EffectShootArrow()
     val STRIP_AI: Effect = EffectStripAI()
     val TRANSMISSION: Effect = EffectTransmission()
+    val SET_VELOCITY: Effect = EffectSetVelocity()
 
     /**
      * Get effect matching id.
