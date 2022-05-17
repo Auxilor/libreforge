@@ -2,7 +2,6 @@ package com.willfp.libreforge.triggers.triggers
 
 import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.integrations.mcmmo.McmmoManager
-import com.willfp.libreforge.LibReforgePlugin
 import com.willfp.libreforge.triggers.GenericCancellableEvent
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
@@ -25,7 +24,7 @@ class TriggerMove : Trigger(
         }
         val player = event.player
 
-        if (LibReforgePlugin.instance.configYml.getBool("use-faster-move-trigger") && Prerequisite.HAS_PAPER.isMet) {
+        if (plugin.configYml.getBool("use-faster-move-trigger") && Prerequisite.HAS_PAPER.isMet) {
             if (!event.hasChangedBlock()) {
                 return
             }

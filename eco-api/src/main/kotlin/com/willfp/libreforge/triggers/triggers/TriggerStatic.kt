@@ -22,7 +22,7 @@ class TriggerStatic(interval: Int) : Trigger(
                 player = player,
                 location = player.location,
                 victim = player,
-                block = player.getTargetBlock(LibReforgePlugin.instance.configYml.getDoubleFromExpression("raytrace-distance").toInt())
+                block = player.getTargetBlock(plugin.configYml.getDoubleFromExpression("raytrace-distance").toInt())
             )
         )
     }
