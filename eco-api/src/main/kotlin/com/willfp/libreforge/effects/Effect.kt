@@ -228,8 +228,22 @@ data class ConfiguredEffect internal constructor(
     val compileData: CompileData?,
     private val repeatData: RepeatData
 ) {
-    operator fun invoke(rawInvocation: InvocationData, ignoreTriggerList: Boolean = false) {
+    internal operator fun invoke(
+        rawInvocation: InvocationData,
+        ignoreTriggerList: Boolean = false,
+        namedArguments: Iterable<NamedArgument> = emptyList(),
+    ) {
+        if (!ignoreTriggerList) {
+            if (!triggers.contains(rawInvocation.trigger)) {
+                return
+            }
+        }
+        
         var invocation = rawInvocation.copy(compileData = compileData)
+
+        args.addInjectablePlaceholder(namedArguments.map { it.placeholder })
+        mutators.forEach { it.config.addInjectablePlaceholder(namedArguments.map { a -> a.placeholder }) }
+        conditions.forEach { it.config.addInjectablePlaceholder(namedArguments.map { a -> a.placeholder }) }
 
         if (args.getBool("self_as_victim")) {
             invocation = invocation.copy(
@@ -254,13 +268,7 @@ data class ConfiguredEffect internal constructor(
             return
         }
 
-        val (player, data, holder, trigger) = invocation
-
-        if (!ignoreTriggerList) {
-            if (!triggers.contains(trigger)) {
-                return
-            }
-        }
+        val (player, data, holder, _) = invocation
 
         if (args.has("chance")) {
             if (NumberUtils.randFloat(0.0, 100.0) > args.getDoubleFromExpression("chance", player)) {
