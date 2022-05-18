@@ -3,7 +3,7 @@ package com.willfp.libreforge.chains
 import com.willfp.libreforge.effects.ConfiguredEffect
 import com.willfp.libreforge.triggers.InvocationData
 
-class EffectChain(
+class EffectChain internal constructor(
     val id: String,
     private val components: Iterable<ChainComponent>
 ) {
