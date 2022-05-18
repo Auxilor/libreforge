@@ -9,7 +9,7 @@ import com.willfp.libreforge.getHolders
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
-import java.util.Objects
+import java.util.*
 
 abstract class Trigger(
     val id: String,
@@ -67,7 +67,7 @@ abstract class Trigger(
     }
 }
 
-data class InvocationData(
+data class InvocationData internal constructor(
     val player: Player,
     val data: TriggerData,
     val holder: Holder,
