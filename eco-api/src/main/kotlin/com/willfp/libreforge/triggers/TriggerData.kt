@@ -13,7 +13,7 @@ data class TriggerData(
     val victim: LivingEntity? = null,
     val block: Block? = null,
     val event: WrappedEvent<*>? = null,
-    val location: Location? = null,
+    val location: Location? = victim?.location ?: player?.location,
     val projectile: Projectile? = null,
     val damageCause: EntityDamageEvent.DamageCause? = null,
     val velocity: Vector? = null
