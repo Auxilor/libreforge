@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.integrations.placeholder.PlaceholderManager
 import com.willfp.eco.util.asAudience
 import com.willfp.eco.util.formatEco
 import com.willfp.eco.util.toComponent
@@ -22,10 +23,12 @@ class EffectSendTitle : Effect(
 
         val title = config.getString("title")
             .replace("%player%", player.name)
+            .let { PlaceholderManager.translatePlaceholders(it, player, config) }
             .formatEco(player)
 
         val subtitle = config.getString("subtitle")
             .replace("%player%", player.name)
+            .let { PlaceholderManager.translatePlaceholders(it, player, config) }
             .formatEco(player)
 
         val audience = player.asAudience()
