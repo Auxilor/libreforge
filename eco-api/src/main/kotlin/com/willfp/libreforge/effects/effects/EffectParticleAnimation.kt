@@ -50,8 +50,8 @@ class EffectParticleAnimation : Effect(
                 location.z.toFloat()
             )
 
-            val vectors = if (args.has("tick_multiplier")) {
-                val mult = args.getIntFromExpression("tick_multiplier", player)
+            val vectors = if (args.has("tick-multiplier")) {
+                val mult = args.getIntFromExpression("tick-multiplier", player)
                 val vectors = mutableSetOf<Vector3f>()
 
                 for (t in (tick * mult until (tick * mult) + mult)) {
@@ -138,7 +138,7 @@ class EffectParticleAnimation : Effect(
                 )
             )
         } else {
-            violations.addAll(animation.validateConfig(config.getSubsection("args")).map {
+            violations.addAll(animation.validateConfig(config.getSubsection("particle_args")).map {
                 it.copy(param = "particle_args.${it.param}")
             })
         }
