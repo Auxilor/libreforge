@@ -19,7 +19,7 @@ class EffectSpawnParticle : Effect(
         val world = location.world ?: return
         val particle = Particle.valueOf(config.getString("particle").uppercase())
         val amount = config.getIntFromExpression("amount", data.player)
-        world.spawnParticle(particle, location, amount)
+        world.spawnParticle(particle, location, amount, 0.0, 0.0, 0.0, 0.0, null)
     }
 
     override fun validateConfig(config: Config): List<ConfigViolation> {
