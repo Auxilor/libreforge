@@ -26,8 +26,8 @@ build.dependsOn publishToMavenLocal
 
 publishing {
     publications {
-        maven(MavenPublication) {
-            from(components.java)
+        shadow(MavenPublication) {
+            project.shadow.component(it)
             artifactId 'libreforge'
         }
     }
