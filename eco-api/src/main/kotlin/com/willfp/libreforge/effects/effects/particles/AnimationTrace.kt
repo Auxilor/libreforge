@@ -14,12 +14,12 @@ object AnimationTrace : ParticleAnimation(
         playerDirection: DirectionVector,
         location: Vector3f
     ): Iterable<Vector3f> {
-        val perTick = 8
+        val perTick = 3
 
         val t = tick * perTick
         return (t until t + perTick).map {
             location.copy().add(
-                playerLocation.copy().sub(location).normalize().mul(0.2f * t)
+                playerLocation.copy().sub(location).normalize().mul(0.6f * it)
             )
         }
     }
