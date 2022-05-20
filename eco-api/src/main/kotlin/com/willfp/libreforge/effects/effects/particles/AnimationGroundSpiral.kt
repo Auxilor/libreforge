@@ -11,8 +11,6 @@ import kotlin.math.sin
 object AnimationGroundSpiral : ParticleAnimation(
     "ground_spiral"
 ) {
-    override val particleAmount = 1
-
     override fun getParticleLocations(
         tick: Int,
         entityLocation: Vector3f,
