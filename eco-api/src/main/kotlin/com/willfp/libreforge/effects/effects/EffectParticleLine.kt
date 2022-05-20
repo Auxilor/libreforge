@@ -36,7 +36,7 @@ class EffectParticleLine : Effect(
         var currentVector = startPos
 
         repeat(particles) {
-            world.spawnParticle(particle, currentVector.toLocation(world), amount)
+            world.spawnParticle(particle, currentVector.toLocation(world), amount, 0.0, 0.0, 0.0, 0.0, null)
             currentVector = currentVector.add(addVector)
         }
     }
