@@ -40,12 +40,8 @@ allprojects {
         onlyIf { !sourceSets.main.allSource.files.isEmpty() }
     }
 
-    shadowJar {
-        relocate('org.joml', 'com.willfp.libreforge.joml')
-    }
-
     dependencies {
-        implementation 'org.joml:joml:1.10.4'
+        compileOnly 'org.joml:joml:1.10.4'
         compileOnly 'com.willfp:eco:6.35.1'
         compileOnly 'org.jetbrains:annotations:23.0.0'
         compileOnly 'org.jetbrains.kotlin:kotlin-stdlib:1.6.21'
