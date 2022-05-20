@@ -2,7 +2,7 @@ package com.willfp.libreforge
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.effects.Effect
-import java.util.Objects
+import java.util.*
 
 abstract class ConfigurableProperty(
     val id: String
@@ -34,7 +34,7 @@ abstract class ConfigurableProperty(
      * @param config The config.
      * @return A list of violations.
      */
-    protected open fun validateConfig(config: Config): List<ConfigViolation> {
+    open fun validateConfig(config: Config): List<ConfigViolation> {
         return emptyList()
     }
 
