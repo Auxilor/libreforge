@@ -21,9 +21,6 @@ object AnimationGroundSpiral : ParticleAnimation(
         config: Config,
         player: Player
     ): Iterable<Vector3f> {
-        println("Scalar: ${config.getDoubleFromExpression("scalar", player)}")
-        println("DScalar: ${config.getDoubleFromExpression("distance-scalar", player)}")
-
         val dx = cos(tick.toDouble() * 2 * PI / 20 * config.getDoubleFromExpression("scalar", player))
         val dz = sin(tick.toDouble() * 2 * PI / 20 * config.getDoubleFromExpression("scalar", player))
 
