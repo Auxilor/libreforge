@@ -14,14 +14,16 @@ abstract class ParticleAnimation(
         ParticleAnimations.addNewCondition(this)
     }
 
+    open val useEyeLocation: Boolean = false
+
     abstract val particleAmount: Int
 
-    abstract fun getParticleLocation(
+    abstract fun getParticleLocations(
         tick: Int,
         playerLocation: Vector3f,
         playerDirection: DirectionVector,
         location: Vector3f
-    ): Vector3f
+    ): Iterable<Vector3f>
 
     abstract fun shouldStopTicking(
         tick: Int,

@@ -10,12 +10,12 @@ object AnimationSlice : ParticleAnimation(
 ) {
     override val particleAmount = 1
 
-    override fun getParticleLocation(
+    override fun getParticleLocations(
         tick: Int,
         playerLocation: Vector3f,
         playerDirection: DirectionVector,
         location: Vector3f
-    ): Vector3f {
+    ): Iterable<Vector3f> {
         val yaw = Math.toRadians(playerDirection.yaw.toDouble()).toFloat()
         val pitch = Math.toRadians(playerDirection.pitch.toDouble()).toFloat()
 
@@ -25,19 +25,27 @@ object AnimationSlice : ParticleAnimation(
             .rotate(pitch, 1f, 0f, 0f)
             .rotate(PI.toFloat() * 0.25f, 0f, 0f, 1f)
 
-        val tickRadians = Math.toRadians(tick.toDouble())
-        val dx = cos(tickRadians) * 1.5
-        val dz = cos(tickRadians) * 1.5
+        val t = tick * 20
 
-        val offset = mat.transformPosition(
-            Vector3f(
-                dx.toFloat(),
-                0f,
-                dz.toFloat()
+        val vecs = mutableSetOf<Vector3f>()
+
+        for (i in t..t+20) {
+            val tickRadians = Math.toRadians(t.toDouble())
+            val dx = cos(tickRadians) * 1.5
+            val dz = cos(tickRadians) * 1.5
+
+            val offset = mat.transformPosition(
+                Vector3f(
+                    dx.toFloat(),
+                    0f,
+                    dz.toFloat()
+                )
             )
-        )
 
-        return playerLocation.add(offset)
+            vecs.add(playerLocation.copy().add(offset))
+        }
+
+        return vecs
     }
 
     override fun shouldStopTicking(
@@ -47,6 +55,6 @@ object AnimationSlice : ParticleAnimation(
         location: Vector3f,
         lastLocation: Vector3f
     ): Boolean {
-        return tick > 210
+        return tick > 50
     }
 }
