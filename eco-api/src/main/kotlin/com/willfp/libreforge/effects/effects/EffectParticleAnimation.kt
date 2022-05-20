@@ -25,7 +25,6 @@ class EffectParticleAnimation : Effect(
         val player = data.player ?: return
         val world = location.world ?: return
 
-
         val animation = ParticleAnimations.getByID(config.getString("animation")) ?: return
         val particle = Particle.valueOf(config.getString("particle").uppercase())
 
@@ -34,7 +33,7 @@ class EffectParticleAnimation : Effect(
         plugin.runnableFactory.create {
             val playerVector = Vector3f(
                 player.location.x.toFloat(),
-                player.location.y.toFloat(),
+                if (animation.useEyeLocation) player.eyeLocation.y.toFloat() else player.location.y.toFloat(),
                 player.location.z.toFloat()
             )
 
@@ -49,33 +48,36 @@ class EffectParticleAnimation : Effect(
                 location.z.toFloat()
             )
 
-            val vector = animation.getParticleLocation(
+            val vectors = animation.getParticleLocations(
                 tick,
                 playerVector.copy(),
                 playerDirectionVector.copy(),
                 locationVector.copy()
             )
 
-            world.spawnParticle(
-                particle,
-                Location(
-                    world,
-                    vector.x.toDouble(),
-                    vector.y.toDouble(),
-                    vector.z.toDouble()
-                ),
-                animation.particleAmount,
-                0.0, 0.0, 0.0, 0.0, null
-            )
-
-            if (animation.shouldStopTicking(
-                    tick,
-                    playerVector.copy(),
-                    playerDirectionVector.copy(),
-                    locationVector.copy(),
-                    vector
+            for (vector in vectors) {
+                world.spawnParticle(
+                    particle,
+                    Location(
+                        world,
+                        vector.x.toDouble(),
+                        vector.y.toDouble(),
+                        vector.z.toDouble()
+                    ),
+                    animation.particleAmount,
+                    0.0, 0.0, 0.0, 0.0, null
                 )
-            ) {
+            }
+
+            if (vectors.any { v ->
+                    animation.shouldStopTicking(
+                        tick,
+                        playerVector.copy(),
+                        playerDirectionVector.copy(),
+                        locationVector.copy(),
+                        v
+                    )
+                }) {
                 it.cancel()
             }
 

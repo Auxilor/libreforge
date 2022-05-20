@@ -6,16 +6,22 @@ object AnimationTrace : ParticleAnimation(
     "trace"
 ) {
     override val particleAmount = 1
+    override val useEyeLocation = true
 
-    override fun getParticleLocation(
+    override fun getParticleLocations(
         tick: Int,
         playerLocation: Vector3f,
         playerDirection: DirectionVector,
         location: Vector3f
-    ): Vector3f {
-        return location.add(
-            location.sub(playerLocation).normalize().mul(0.1f * tick)
-        )
+    ): Iterable<Vector3f> {
+        val perTick = 8
+
+        val t = tick * perTick
+        return (t until t + perTick).map {
+            location.copy().add(
+                playerLocation.copy().sub(location).normalize().mul(0.2f * t)
+            )
+        }
     }
 
     override fun shouldStopTicking(
@@ -25,6 +31,6 @@ object AnimationTrace : ParticleAnimation(
         location: Vector3f,
         lastLocation: Vector3f
     ): Boolean {
-        return playerLocation.distance(location) < 0.1 || tick > 100
+        return playerLocation.distance(lastLocation) < 1 || tick > 100
     }
 }
