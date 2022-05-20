@@ -15,8 +15,8 @@ object AnimationGroundSpiral : ParticleAnimation(
 
     override fun getParticleLocations(
         tick: Int,
-        playerLocation: Vector3f,
-        playerDirection: DirectionVector,
+        entityLocation: Vector3f,
+        entityDirection: DirectionVector,
         location: Vector3f,
         config: Config,
         player: Player
@@ -25,7 +25,7 @@ object AnimationGroundSpiral : ParticleAnimation(
         val dz = sin(tick.toDouble() * 2 * PI / 20 * config.getDoubleFromExpression("scalar", player))
 
         return listOf(-1, 1).map {
-            playerLocation.copy().add(
+            entityLocation.copy().add(
                 Vector3f(
                     dx.toFloat() * it * 3 * tick / 20 * config.getDoubleFromExpression("distance-scalar", player).toFloat(),
                     0.0f,
@@ -37,8 +37,8 @@ object AnimationGroundSpiral : ParticleAnimation(
 
     override fun shouldStopTicking(
         tick: Int,
-        playerLocation: Vector3f,
-        playerDirection: DirectionVector,
+        entityLocation: Vector3f,
+        entityDirection: DirectionVector,
         location: Vector3f,
         lastLocation: Vector3f,
         config: Config,
