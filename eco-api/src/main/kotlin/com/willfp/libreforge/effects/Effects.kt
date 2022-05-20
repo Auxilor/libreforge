@@ -42,6 +42,7 @@ import com.willfp.libreforge.effects.effects.EffectMovementSpeedMultiplier
 import com.willfp.libreforge.effects.effects.EffectMultiplyDrops
 import com.willfp.libreforge.effects.effects.EffectMultiplyPoints
 import com.willfp.libreforge.effects.effects.EffectMultiplyVelocity
+import com.willfp.libreforge.effects.effects.EffectParticleLine
 import com.willfp.libreforge.effects.effects.EffectPermanentPotionEffect
 import com.willfp.libreforge.effects.effects.EffectPlaySound
 import com.willfp.libreforge.effects.effects.EffectPotionEffect
@@ -134,6 +135,7 @@ object Effects {
     val STRIP_AI: Effect = EffectStripAI()
     val TRANSMISSION: Effect = EffectTransmission()
     val SET_VELOCITY: Effect = EffectSetVelocity()
+    val PARTICLE_LINE: Effect = EffectParticleLine()
 
     /**
      * Get effect matching id.
