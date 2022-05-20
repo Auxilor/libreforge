@@ -30,6 +30,8 @@ class EffectParticleAnimation : Effect(
 
         var tick = 0
 
+        val args = config.getSubsection("particle_args")
+
         plugin.runnableFactory.create {
             val playerVector = Vector3f(
                 player.location.x.toFloat(),
@@ -48,12 +50,34 @@ class EffectParticleAnimation : Effect(
                 location.z.toFloat()
             )
 
-            val vectors = animation.getParticleLocations(
-                tick,
-                playerVector.copy(),
-                playerDirectionVector.copy(),
-                locationVector.copy()
-            )
+            val vectors = if (args.has("tick_multiplier")) {
+                val mult = args.getIntFromExpression("tick_multiplier", player)
+                val vectors = mutableSetOf<Vector3f>()
+
+                for (t in (tick * mult until (tick * mult) + mult)) {
+                    vectors.addAll(
+                        animation.getParticleLocations(
+                            t,
+                            playerVector.copy(),
+                            playerDirectionVector.copy(),
+                            locationVector.copy(),
+                            args,
+                            player
+                        )
+                    )
+                }
+
+                vectors
+            } else {
+                animation.getParticleLocations(
+                    tick,
+                    playerVector.copy(),
+                    playerDirectionVector.copy(),
+                    locationVector.copy(),
+                    args,
+                    player
+                )
+            }
 
             for (vector in vectors) {
                 world.spawnParticle(
@@ -75,7 +99,9 @@ class EffectParticleAnimation : Effect(
                         playerVector.copy(),
                         playerDirectionVector.copy(),
                         locationVector.copy(),
-                        v
+                        v,
+                        args,
+                        player
                     )
                 }) {
                 it.cancel()
@@ -101,6 +127,21 @@ class EffectParticleAnimation : Effect(
                 "You must specify the animation!"
             )
         )
+
+        val animation = ParticleAnimations.getByID(config.getString("animation"))
+
+        if (animation == null) {
+            violations.add(
+                ConfigViolation(
+                    "animation",
+                    "Invalid animation!"
+                )
+            )
+        } else {
+            violations.addAll(animation.validateConfig(config.getSubsection("args")).map {
+                it.copy(param = "particle_args.${it.param}")
+            })
+        }
 
         return violations
     }

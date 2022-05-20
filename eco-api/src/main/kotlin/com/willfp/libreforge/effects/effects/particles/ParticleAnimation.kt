@@ -1,11 +1,14 @@
 package com.willfp.libreforge.effects.effects.particles
 
+import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ConfigurableProperty
+import org.bukkit.entity.Player
 import org.joml.Vector3f
 import java.util.*
 
 abstract class ParticleAnimation(
-    val id: String
-) {
+    id: String
+): ConfigurableProperty(id) {
     init {
         register()
     }
@@ -22,7 +25,9 @@ abstract class ParticleAnimation(
         tick: Int,
         playerLocation: Vector3f,
         playerDirection: DirectionVector,
-        location: Vector3f
+        location: Vector3f,
+        config: Config,
+        player: Player
     ): Iterable<Vector3f>
 
     abstract fun shouldStopTicking(
@@ -30,7 +35,9 @@ abstract class ParticleAnimation(
         playerLocation: Vector3f,
         playerDirection: DirectionVector,
         location: Vector3f,
-        lastLocation: Vector3f
+        lastLocation: Vector3f,
+        config: Config,
+        player: Player
     ): Boolean
 
     override fun equals(other: Any?): Boolean {

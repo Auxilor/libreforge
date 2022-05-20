@@ -8,7 +8,7 @@ object ParticleAnimations {
     private val BY_ID = HashBiMap.create<String, ParticleAnimation>()
 
     private val TRACE: ParticleAnimation = AnimationTrace
-    private val SLICE: ParticleAnimation = AnimationSlice
+    private val GROUND_SPIRAL: ParticleAnimation = AnimationGroundSpiral
 
     /**
      * Get ParticleAnimation matching id.
