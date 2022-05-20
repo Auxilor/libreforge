@@ -95,7 +95,7 @@ class EffectParticleAnimation : Effect(
                         vector.y.toDouble(),
                         vector.z.toDouble()
                     ),
-                    config.getIntFromExpression("particle_amount", player),
+                    config.getIntFromExpression("particle-amount", player),
                     0.0, 0.0, 0.0, 0.0, null
                 )
             }
