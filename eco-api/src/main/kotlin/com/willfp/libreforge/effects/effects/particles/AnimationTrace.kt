@@ -12,15 +12,15 @@ object AnimationTrace : ParticleAnimation(
 
     override fun getParticleLocations(
         tick: Int,
-        playerLocation: Vector3f,
-        playerDirection: DirectionVector,
+        entityLocation: Vector3f,
+        entityDirection: DirectionVector,
         location: Vector3f,
         config: Config,
         player: Player
     ): Iterable<Vector3f> {
         return setOf(
             location.copy().add(
-                playerLocation.copy().sub(location).normalize()
+                entityLocation.copy().sub(location).normalize()
                     .mul(0.6f * config.getDoubleFromExpression("spacing", player).toFloat())
             )
         )
@@ -28,13 +28,13 @@ object AnimationTrace : ParticleAnimation(
 
     override fun shouldStopTicking(
         tick: Int,
-        playerLocation: Vector3f,
-        playerDirection: DirectionVector,
+        entityLocation: Vector3f,
+        entityDirection: DirectionVector,
         location: Vector3f,
         lastLocation: Vector3f,
         config: Config,
         player: Player
     ): Boolean {
-        return playerLocation.distance(lastLocation) < 1 || tick > 100
+        return entityLocation.distance(lastLocation) < 1 || tick > 100
     }
 }

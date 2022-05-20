@@ -23,8 +23,8 @@ abstract class ParticleAnimation(
 
     abstract fun getParticleLocations(
         tick: Int,
-        playerLocation: Vector3f,
-        playerDirection: DirectionVector,
+        entityLocation: Vector3f,
+        entityDirection: DirectionVector,
         location: Vector3f,
         config: Config,
         player: Player
@@ -32,8 +32,8 @@ abstract class ParticleAnimation(
 
     abstract fun shouldStopTicking(
         tick: Int,
-        playerLocation: Vector3f,
-        playerDirection: DirectionVector,
+        entityLocation: Vector3f,
+        entityDirection: DirectionVector,
         location: Vector3f,
         lastLocation: Vector3f,
         config: Config,

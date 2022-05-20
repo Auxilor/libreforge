@@ -23,6 +23,13 @@ class EffectParticleAnimation : Effect(
     override fun handle(data: TriggerData, config: Config) {
         val location = data.location ?: return
         val player = data.player ?: return
+
+        val entity = if (config.getBool("victim_as_entity")) {
+            data.victim
+        } else {
+            data.player
+        } ?: return
+
         val world = location.world ?: return
 
         val animation = ParticleAnimations.getByID(config.getString("animation")) ?: return
@@ -34,14 +41,14 @@ class EffectParticleAnimation : Effect(
 
         plugin.runnableFactory.create {
             val playerVector = Vector3f(
-                player.location.x.toFloat(),
-                if (animation.useEyeLocation) player.eyeLocation.y.toFloat() else player.location.y.toFloat(),
-                player.location.z.toFloat()
+                entity.location.x.toFloat(),
+                if (animation.useEyeLocation) entity.eyeLocation.y.toFloat() else entity.location.y.toFloat(),
+                entity.location.z.toFloat()
             )
 
             val playerDirectionVector = DirectionVector(
-                player.location.yaw,
-                player.location.pitch
+                entity.location.yaw,
+                entity.location.pitch
             )
 
             val locationVector = Vector3f(
