@@ -1,5 +1,6 @@
 package com.willfp.libreforge.triggers.triggers
 
+import com.willfp.eco.core.Prerequisite
 import com.willfp.libreforge.LibReforgePlugin
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
@@ -16,13 +17,17 @@ class TriggerStatic(interval: Int) : Trigger(
     )
 ) {
     private fun invoke(player: Player) {
+        val block = if (Prerequisite.HAS_PAPER.isMet) {
+            player.getTargetBlock(plugin.configYml.getDoubleFromExpression("raytrace-distance").toInt())
+        } else null
+
         this.processTrigger(
             player,
             TriggerData(
                 player = player,
                 location = player.location,
                 victim = player,
-                block = player.getTargetBlock(plugin.configYml.getDoubleFromExpression("raytrace-distance").toInt())
+                block = block
             )
         )
     }
