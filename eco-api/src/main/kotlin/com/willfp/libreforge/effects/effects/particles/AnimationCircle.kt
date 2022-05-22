@@ -32,7 +32,9 @@ object AnimationCircle : ParticleAnimation(
         )
 
         return setOf(
-            circleVector.rotate(0f, pitch.toFloat(), roll.toFloat())
+            circleVector
+                .rotate(0f, pitch.toFloat(), roll.toFloat())
+                .add(location)
         )
     }
 
