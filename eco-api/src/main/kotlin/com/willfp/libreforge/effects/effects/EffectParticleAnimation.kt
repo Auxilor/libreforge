@@ -11,6 +11,7 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
 import org.bukkit.Location
 import org.bukkit.Particle
+import org.bukkit.entity.LivingEntity
 import org.joml.Vector3f
 
 class EffectParticleAnimation : Effect(
@@ -24,10 +25,10 @@ class EffectParticleAnimation : Effect(
         val location = data.location ?: return
         val player = data.player ?: return
 
-        val entity = if (config.getBool("victim_as_entity")) {
-            data.victim
-        } else {
-            data.player
+        val entity = when (config.getString("entity").lowercase()) {
+            "victim" -> data.victim
+            "projectile" -> data.projectile
+            else -> data.player
         } ?: return
 
         val world = location.world ?: return
@@ -42,7 +43,7 @@ class EffectParticleAnimation : Effect(
         plugin.runnableFactory.create {
             val playerVector = Vector3f(
                 entity.location.x.toFloat(),
-                if (animation.useEyeLocation) entity.eyeLocation.y.toFloat() else entity.location.y.toFloat(),
+                if (animation.useEyeLocation && entity is LivingEntity) entity.eyeLocation.y.toFloat() else entity.location.y.toFloat(),
                 entity.location.z.toFloat()
             )
 
@@ -132,6 +133,13 @@ class EffectParticleAnimation : Effect(
             ConfigViolation(
                 "animation",
                 "You must specify the animation!"
+            )
+        )
+
+        if (!config.has("entity")) violations.add(
+            ConfigViolation(
+                "entity",
+                "You must specify the entity!"
             )
         )
 
