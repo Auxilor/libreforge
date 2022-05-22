@@ -11,6 +11,7 @@ object ParticleAnimations {
     private val GROUND_SPIRAL: ParticleAnimation = AnimationGroundSpiral
     private val HELIX: ParticleAnimation = AnimationHelix
     private val TWIRL: ParticleAnimation = AnimationTwirl
+    private val CIRCLE: ParticleAnimation = AnimationCircle
 
     /**
      * Get ParticleAnimation matching id.
