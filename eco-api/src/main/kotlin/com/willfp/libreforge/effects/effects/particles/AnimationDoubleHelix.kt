@@ -7,8 +7,8 @@ import org.bukkit.entity.Player
 import org.joml.Vector3f
 import kotlin.math.PI
 
-object AnimationHelix : ParticleAnimation(
-    "helix"
+object AnimationDoubleHelix : ParticleAnimation(
+    "double_helix"
 ) {
     override fun getParticleLocations(
         tick: Int,
@@ -23,11 +23,15 @@ object AnimationHelix : ParticleAnimation(
         val speed = config.getDoubleFromExpression("speed", player)
         val radius = config.getDoubleFromExpression("radius", player)
 
-        val x = NumberUtils.fastCos(tick / (2 * PI) * speed) * radius
-        val y = height * (tick % duration) / duration
-        val z = NumberUtils.fastSin(tick / (2 * PI) * speed) * radius
+        val vector = Vector3f(
+            (NumberUtils.fastCos(tick / (2 * PI) * speed) * radius).toFloat(),
+            (height * (tick % duration) / duration).toFloat(),
+            (NumberUtils.fastSin(tick / (2 * PI) * speed) * radius).toFloat(),
+        )
 
-        return setOf(location.copy().add(x.toFloat(), y.toFloat(), z.toFloat()))
+        return arrayOf(-1f, 1f).map {
+            location.copy().add(vector.copy().mul(it))
+        }
     }
 
     override fun shouldStopTicking(

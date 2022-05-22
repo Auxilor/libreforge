@@ -10,6 +10,7 @@ object ParticleAnimations {
     private val TRACE: ParticleAnimation = AnimationTrace
     private val GROUND_SPIRAL: ParticleAnimation = AnimationGroundSpiral
     private val HELIX: ParticleAnimation = AnimationHelix
+    private val DOUBLE_HELIX: ParticleAnimation = AnimationDoubleHelix
     private val TWIRL: ParticleAnimation = AnimationTwirl
     private val CIRCLE: ParticleAnimation = AnimationCircle
 
