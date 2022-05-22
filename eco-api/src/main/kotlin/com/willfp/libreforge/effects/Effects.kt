@@ -309,7 +309,7 @@ object Effects {
             DataMutators.compile(it, "$context (mutators)")
         }
 
-        val compileData = effect.makeCompileData(config, context)
+        val compileData = effect.makeCompileData(args, context)
 
         return ConfiguredEffect(
             effect,
