@@ -9,6 +9,7 @@ object ParticleAnimations {
 
     private val TRACE: ParticleAnimation = AnimationTrace
     private val GROUND_SPIRAL: ParticleAnimation = AnimationGroundSpiral
+    private val HELIX: ParticleAnimation = AnimationHelix
 
     /**
      * Get ParticleAnimation matching id.
