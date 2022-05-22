@@ -11,6 +11,7 @@ import org.bukkit.event.entity.PlayerDeathEvent
 class TriggerDeath : Trigger(
     "death", listOf(
         TriggerParameter.PLAYER,
+        TriggerParameter.LOCATION,
         TriggerParameter.EVENT
     )
 ) {
@@ -26,6 +27,7 @@ class TriggerDeath : Trigger(
             player,
             TriggerData(
                 player = player,
+                location = player.location,
                 event = WrappedDeathEvent(event)
             )
         )

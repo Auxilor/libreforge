@@ -36,6 +36,7 @@ import com.willfp.libreforge.effects.effects.EffectGivePoints
 import com.willfp.libreforge.effects.effects.EffectGiveXp
 import com.willfp.libreforge.effects.effects.EffectHungerMultiplier
 import com.willfp.libreforge.effects.effects.EffectIgnite
+import com.willfp.libreforge.effects.effects.EffectKeepInventory
 import com.willfp.libreforge.effects.effects.EffectKnockbackMultiplier
 import com.willfp.libreforge.effects.effects.EffectMineRadius
 import com.willfp.libreforge.effects.effects.EffectMovementSpeedMultiplier
@@ -138,6 +139,7 @@ object Effects {
     val SET_VELOCITY: Effect = EffectSetVelocity()
     val PARTICLE_LINE: Effect = EffectParticleLine()
     val PARTICLE_ANIMATION: Effect = EffectParticleAnimation()
+    val KEEP_INVENTORY: Effect = EffectKeepInventory()
 
     /**
      * Get effect matching id.

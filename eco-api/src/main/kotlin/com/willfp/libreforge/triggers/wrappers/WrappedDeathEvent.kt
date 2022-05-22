@@ -13,4 +13,11 @@ class WrappedDeathEvent(
         set(value) {
             event.isCancelled = value
         }
+    var keepInventory: Boolean
+        get() {
+            return event.keepInventory
+        }
+        set(value) {
+            event.keepInventory = value
+        }
 }
