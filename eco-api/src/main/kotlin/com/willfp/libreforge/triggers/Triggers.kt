@@ -46,6 +46,7 @@ object Triggers {
     val REEL_IN: Trigger = TriggerReelIn()
     val DEPLOY_ELYTRA: Trigger = TriggerDeployElytra()
     val SHOOT_BOW: Trigger = TriggerShootBow()
+    val PLAYER_DEATH: Trigger = TriggerPlayerDeath()
 
     fun values(): Set<Trigger> {
         return BY_ID.values.toSet()
