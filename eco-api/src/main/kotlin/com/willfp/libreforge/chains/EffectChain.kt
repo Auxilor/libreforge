@@ -12,9 +12,8 @@ class EffectChain internal constructor(
         invocationData: InvocationData,
         namedArgs: Iterable<NamedArgument>
     ) {
-        for (component in components) {
-            component(invocationData, namedArgs)
-        }
+        val chainCompileData = invocationData.compileData as? ChainCompileData ?: return
+        chainCompileData.data(invocationData, namedArgs, components)
     }
 }
 

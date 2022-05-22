@@ -3,8 +3,11 @@ package com.willfp.libreforge.effects.effects
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.placeholder.PlaceholderManager
 import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.chains.ChainCompileData
+import com.willfp.libreforge.chains.CycleChainCompileData
 import com.willfp.libreforge.chains.EffectChain
 import com.willfp.libreforge.chains.EffectChains
+import com.willfp.libreforge.chains.NormalChainCompileData
 import com.willfp.libreforge.effects.CompileData
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.NamedArgument
@@ -16,7 +19,8 @@ class EffectRunChainInline : Effect(
     applicableTriggers = Triggers.values()
 ) {
     override fun handle(invocation: InvocationData, config: Config) {
-        val chain = (invocation.compileData as? EffectChainCompileData)?.data ?: return
+        val compileData = invocation.compileData as? InlineEffectChainCompileData ?: return
+        val chain = compileData.data
         val namedArgs = mutableListOf<NamedArgument>()
         val args = config.getSubsection("chain_args")
 
@@ -29,7 +33,8 @@ class EffectRunChainInline : Effect(
             )
         }
 
-        chain(invocation, namedArgs)
+        val chainInvocation = invocation.copy(compileData = compileData.child)
+        chain(chainInvocation, namedArgs)
     }
 
     override fun validateConfig(config: Config): List<ConfigViolation> {
@@ -46,15 +51,22 @@ class EffectRunChainInline : Effect(
     }
 
     override fun makeCompileData(config: Config, context: String): CompileData? {
+        val child = when (config.getString("run-type").lowercase()) {
+            "cycle" -> CycleChainCompileData()
+            else -> NormalChainCompileData
+        }
+
         val chain = EffectChains.compile(
             config.getSubsection("args").getSubsection("chain"),
             "$context Inline Chain",
             anonymous = true
         ) ?: return null
-        return EffectChainCompileData(chain)
+
+        return InlineEffectChainCompileData(chain, child)
     }
 
-    private class EffectChainCompileData(
-        override val data: EffectChain
+    private class InlineEffectChainCompileData(
+        override val data: EffectChain,
+        val child: ChainCompileData
     ) : CompileData
 }
