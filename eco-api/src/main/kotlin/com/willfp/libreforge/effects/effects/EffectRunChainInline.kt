@@ -57,7 +57,7 @@ class EffectRunChainInline : Effect(
         }
 
         val chain = EffectChains.compile(
-            config.getSubsection("args").getSubsection("chain"),
+            config.getSubsection("chain"),
             "$context Inline Chain",
             anonymous = true
         ) ?: return null
