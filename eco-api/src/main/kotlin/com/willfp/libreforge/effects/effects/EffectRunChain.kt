@@ -3,7 +3,10 @@ package com.willfp.libreforge.effects.effects
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.placeholder.PlaceholderManager
 import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.chains.CycleChainCompileData
 import com.willfp.libreforge.chains.EffectChains
+import com.willfp.libreforge.chains.NormalChainCompileData
+import com.willfp.libreforge.effects.CompileData
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.NamedArgument
 import com.willfp.libreforge.triggers.InvocationData
@@ -41,5 +44,12 @@ class EffectRunChain : Effect(
         )
 
         return violations
+    }
+
+    override fun makeCompileData(config: Config, context: String): CompileData {
+        return when (config.getString("run-type").lowercase()) {
+            "cycle" -> CycleChainCompileData()
+            else -> NormalChainCompileData
+        }
     }
 }
