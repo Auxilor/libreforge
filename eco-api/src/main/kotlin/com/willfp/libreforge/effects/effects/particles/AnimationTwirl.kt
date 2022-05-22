@@ -25,12 +25,13 @@ object AnimationTwirl : ParticleAnimation(
         val startHeight = config.getDoubleFromExpression("start-height", player)
         val endHeight = config.getDoubleFromExpression("end-height", player)
         val height = lerp(startHeight, endHeight, tick / duration)
+        val speed = config.getDoubleFromExpression("speed", player)
 
         return setOf(
             Vector3f(
-                (NumberUtils.fastSin(config.getDouble("spirals-per-second") * 2 * PI * tick / 20) * radius).toFloat(),
+                (NumberUtils.fastSin(2 * PI * tick / duration * speed) * radius).toFloat(),
                 height.toFloat(),
-                (NumberUtils.fastCos(config.getDouble("spirals-per-second") * 2 * PI * tick / 20) * radius).toFloat()
+                (NumberUtils.fastCos(2 * PI * tick / duration * speed) * radius).toFloat()
             ).let {
                 if (tick % 2 == 0) {
                     it.x = -it.x
@@ -96,6 +97,13 @@ object AnimationTwirl : ParticleAnimation(
             ConfigViolation(
                 "end-height",
                 "You must specify the end height!"
+            )
+        )
+
+        if (!config.has("speed")) violations.add(
+            ConfigViolation(
+                "speed",
+                "You must specify the speed!"
             )
         )
 
