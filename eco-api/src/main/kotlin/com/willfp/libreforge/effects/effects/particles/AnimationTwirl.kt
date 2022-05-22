@@ -50,8 +50,8 @@ object AnimationTwirl : ParticleAnimation(
         config: Config,
         player: Player
     ): Boolean {
-        val ticks = config.getIntFromExpression("ticks", player)
-        return tick >= ticks
+        val duration = config.getDoubleFromExpression("duration", player)
+        return tick >= duration
     }
 
     override fun validateConfig(config: Config): List<ConfigViolation> {
