@@ -24,3 +24,6 @@ class DirectionVector(
     val yaw = this.x
     val pitch = this.y
 }
+
+fun lerp(start: Double, end: Double, fraction: Double): Double =
+    (start * (1 - fraction)) + (end * fraction)
