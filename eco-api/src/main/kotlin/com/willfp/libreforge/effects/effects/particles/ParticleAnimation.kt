@@ -17,8 +17,6 @@ abstract class ParticleAnimation(
         ParticleAnimations.addNewCondition(this)
     }
 
-    open val useEyeLocation: Boolean = false
-
     abstract fun getParticleLocations(
         tick: Int,
         entityLocation: Vector3f,

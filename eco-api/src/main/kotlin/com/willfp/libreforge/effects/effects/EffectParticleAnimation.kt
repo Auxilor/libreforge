@@ -3,16 +3,16 @@ package com.willfp.libreforge.effects.effects
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
-import com.willfp.libreforge.effects.effects.particles.DirectionVector
 import com.willfp.libreforge.effects.effects.particles.ParticleAnimations
 import com.willfp.libreforge.effects.effects.particles.copy
+import com.willfp.libreforge.effects.effects.particles.toDirectionVector
+import com.willfp.libreforge.effects.effects.particles.toLocation
+import com.willfp.libreforge.effects.effects.particles.toVector3f
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
-import org.bukkit.Location
 import org.bukkit.Particle
 import org.bukkit.entity.LivingEntity
-import org.joml.Vector3f
 
 class EffectParticleAnimation : Effect(
     "particle_animation",
@@ -41,41 +41,31 @@ class EffectParticleAnimation : Effect(
         val args = config.getSubsection("particle_args")
 
         plugin.runnableFactory.create {
-            val entityVector = Vector3f(
-                entity.location.x.toFloat(),
-                if (animation.useEyeLocation && entity is LivingEntity) entity.eyeLocation.y.toFloat() else entity.location.y.toFloat(),
-                entity.location.z.toFloat()
-            )
+            val entityVector = if (config.getBool("use-eye-location") && entity is LivingEntity) {
+                entity.eyeLocation.toVector3f()
+            } else {
+                entity.location.toVector3f()
+            }
 
-            val entityDirectionVector = DirectionVector(
-                entity.location.yaw,
-                entity.location.pitch
-            )
+            val entityDirectionVector = entity.location.toDirectionVector()
 
-            val locationVector = Vector3f(
-                location.x.toFloat(),
-                location.y.toFloat(),
-                location.z.toFloat()
-            )
+            val locationVector = location.toVector3f()
 
             val vectors = if (args.has("tick-multiplier")) {
                 val mult = args.getIntFromExpression("tick-multiplier", player)
-                val vectors = mutableSetOf<Vector3f>()
 
-                for (t in (tick * mult until (tick * mult) + mult)) {
-                    vectors.addAll(
-                        animation.getParticleLocations(
-                            t,
-                            entityVector.copy(),
-                            entityDirectionVector.copy(),
-                            locationVector.copy(),
-                            args,
-                            player
-                        )
+                val mockTicks = (tick * mult until (tick * mult) + mult)
+
+                mockTicks.map { t ->
+                    animation.getParticleLocations(
+                        t,
+                        entityVector.copy(),
+                        entityDirectionVector.copy(),
+                        locationVector.copy(),
+                        args,
+                        player
                     )
-                }
-
-                vectors
+                }.flatten()
             } else {
                 animation.getParticleLocations(
                     tick,
@@ -90,12 +80,7 @@ class EffectParticleAnimation : Effect(
             for (vector in vectors) {
                 world.spawnParticle(
                     particle,
-                    Location(
-                        world,
-                        vector.x.toDouble(),
-                        vector.y.toDouble(),
-                        vector.z.toDouble()
-                    ),
+                    vector.toLocation(world),
                     config.getIntFromExpression("particle-amount", player),
                     0.0, 0.0, 0.0, 0.0, null
                 )

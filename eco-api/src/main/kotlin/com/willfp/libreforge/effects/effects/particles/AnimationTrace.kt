@@ -7,8 +7,6 @@ import org.joml.Vector3f
 object AnimationTrace : ParticleAnimation(
     "trace"
 ) {
-    override val useEyeLocation = true
-
     override fun getParticleLocations(
         tick: Int,
         entityLocation: Vector3f,
