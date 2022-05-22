@@ -37,7 +37,7 @@ object AnimationTwirl : ParticleAnimation(
                     it.z = -it.z
                     it
                 } else it
-            }
+            }.add(location)
         )
     }
 
