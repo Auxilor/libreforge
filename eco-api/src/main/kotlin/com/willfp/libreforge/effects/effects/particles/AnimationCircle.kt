@@ -19,22 +19,24 @@ object AnimationCircle : ParticleAnimation(
         player: Player
     ): Iterable<Vector3f> {
         val radius = config.getDoubleFromExpression("radius", player)
-        val duration = config.getDoubleFromExpression("duration", player)
+        val duration = config.getIntFromExpression("duration", player)
         val height = config.getDoubleFromExpression("height", player)
 
-        val pitch = config.getDoubleFromExpression("pitch", player)
-        val roll = config.getDoubleFromExpression("roll", player)
+        val pitch = Math.toRadians(config.getDoubleFromExpression("pitch", player))
+        val roll = Math.toRadians(config.getDoubleFromExpression("roll", player))
 
         val circleVector = Vector3f(
             (NumberUtils.fastSin(2 * PI * tick / duration) * radius).toFloat(),
-            height.toFloat(),
+            0f,
             (NumberUtils.fastCos(2 * PI * tick / duration) * radius).toFloat()
         )
 
+        circleVector.rotate(0f, pitch.toFloat(), roll.toFloat())
+        // Add height after to not break circle's center
+        circleVector.add(0f, height.toFloat(), 0f)
+
         return setOf(
-            circleVector
-                .rotate(0f, pitch.toFloat(), roll.toFloat())
-                .add(location)
+            location.add(circleVector)
         )
     }
 
@@ -47,7 +49,7 @@ object AnimationCircle : ParticleAnimation(
         config: Config,
         player: Player
     ): Boolean {
-        val duration = config.getDoubleFromExpression("duration", player)
+        val duration = config.getIntFromExpression("duration", player)
         return tick >= duration
     }
 

@@ -41,13 +41,13 @@ class EffectParticleAnimation : Effect(
         val args = config.getSubsection("particle_args")
 
         plugin.runnableFactory.create {
-            val playerVector = Vector3f(
+            val entityVector = Vector3f(
                 entity.location.x.toFloat(),
                 if (animation.useEyeLocation && entity is LivingEntity) entity.eyeLocation.y.toFloat() else entity.location.y.toFloat(),
                 entity.location.z.toFloat()
             )
 
-            val playerDirectionVector = DirectionVector(
+            val entityDirectionVector = DirectionVector(
                 entity.location.yaw,
                 entity.location.pitch
             )
@@ -66,8 +66,8 @@ class EffectParticleAnimation : Effect(
                     vectors.addAll(
                         animation.getParticleLocations(
                             t,
-                            playerVector.copy(),
-                            playerDirectionVector.copy(),
+                            entityVector.copy(),
+                            entityDirectionVector.copy(),
                             locationVector.copy(),
                             args,
                             player
@@ -79,8 +79,8 @@ class EffectParticleAnimation : Effect(
             } else {
                 animation.getParticleLocations(
                     tick,
-                    playerVector.copy(),
-                    playerDirectionVector.copy(),
+                    entityVector.copy(),
+                    entityDirectionVector.copy(),
                     locationVector.copy(),
                     args,
                     player
@@ -104,8 +104,8 @@ class EffectParticleAnimation : Effect(
             if (vectors.any { v ->
                     animation.shouldStopTicking(
                         tick,
-                        playerVector.copy(),
-                        playerDirectionVector.copy(),
+                        entityVector.copy(),
+                        entityDirectionVector.copy(),
                         locationVector.copy(),
                         v,
                         args,
@@ -133,13 +133,6 @@ class EffectParticleAnimation : Effect(
             ConfigViolation(
                 "animation",
                 "You must specify the animation!"
-            )
-        )
-
-        if (!config.has("entity")) violations.add(
-            ConfigViolation(
-                "entity",
-                "You must specify the entity!"
             )
         )
 
