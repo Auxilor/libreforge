@@ -1,5 +1,6 @@
 package com.willfp.libreforge.triggers.triggers
 
+import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.drops.DropQueue
 import com.willfp.eco.core.events.EntityDeathByEntityEvent
 import com.willfp.eco.core.integrations.mcmmo.McmmoManager
@@ -25,8 +26,10 @@ class TriggerEntityItemDrop : Trigger(
             return
         }
 
-        if (event.deathEvent.isCancelled) {
-            return
+        if (Prerequisite.HAS_PAPER.isMet) {
+            if (event.deathEvent.isCancelled) {
+                return
+            }
         }
 
         val entity = event.victim
