@@ -24,6 +24,16 @@ object NormalChainInvoker : ChainInvoker {
     }
 }
 
+object RandomChainInvoker : ChainInvoker {
+    override fun invoke(
+        invocationData: InvocationData,
+        namedArgs: Iterable<NamedArgument>,
+        components: Iterable<ChainComponent>
+    ) {
+        components.toList().random().invoke(invocationData, namedArgs)
+    }
+}
+
 class CycleChainInvoker : ChainInvoker {
     private var offset = 0
     override fun invoke(
