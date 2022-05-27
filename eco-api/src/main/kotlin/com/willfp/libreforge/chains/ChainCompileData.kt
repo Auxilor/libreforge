@@ -13,3 +13,7 @@ object NormalChainCompileData : ChainCompileData {
 class CycleChainCompileData : ChainCompileData {
     override val data = CycleChainInvoker()
 }
+
+class RandomChainCompileData : ChainCompileData {
+    override val data = RandomChainInvoker
+}
