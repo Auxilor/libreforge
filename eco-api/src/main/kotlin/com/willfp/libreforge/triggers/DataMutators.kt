@@ -5,6 +5,7 @@ import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.LibReforgePlugin
 import com.willfp.libreforge.triggers.mutators.MutatorLocationToBlock
 import com.willfp.libreforge.triggers.mutators.MutatorLocationToPlayer
+import com.willfp.libreforge.triggers.mutators.MutatorLocationToProjectile
 import com.willfp.libreforge.triggers.mutators.MutatorLocationToVictim
 import com.willfp.libreforge.triggers.mutators.MutatorPlayerAsVictim
 import com.willfp.libreforge.triggers.mutators.MutatorSpinLocation
@@ -26,6 +27,7 @@ object DataMutators {
     val LOCATION_TO_BLOCK: DataMutator = MutatorLocationToBlock()
     val SPIN_VELOCITY: DataMutator = MutatorSpinVelocity()
     val VICTIM_AS_PLAYER: DataMutator = MutatorVictimAsPlayer()
+    val LOCATION_TO_PROJECTILE: DataMutator = MutatorLocationToProjectile()
 
     fun values(): Set<DataMutator> {
         return BY_ID.values.toSet()
