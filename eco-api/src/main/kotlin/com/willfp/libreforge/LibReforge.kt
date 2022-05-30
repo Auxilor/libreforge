@@ -13,6 +13,7 @@ import com.willfp.libreforge.conditions.MovementConditionListener
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.integrations.aureliumskills.AureliumSkillsIntegration
 import com.willfp.libreforge.integrations.ecoarmor.EcoArmorIntegration
+import com.willfp.libreforge.integrations.ecobosses.EcoBossesIntegration
 import com.willfp.libreforge.integrations.ecoskills.EcoSkillsIntegration
 import com.willfp.libreforge.integrations.jobs.JobsIntegration
 import com.willfp.libreforge.integrations.mcmmo.McMMOIntegration
@@ -24,8 +25,7 @@ import com.willfp.libreforge.triggers.triggers.TriggerStatic
 import org.apache.commons.lang.StringUtils
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
-import java.util.UUID
-import java.util.WeakHashMap
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 private val holderProviders = mutableSetOf<HolderProvider>()
@@ -139,7 +139,8 @@ abstract class LibReforgePlugin : EcoPlugin() {
             IntegrationLoader("Jobs", JobsIntegration::load),
             IntegrationLoader("Vault", VaultIntegration::load),
             IntegrationLoader("TMMobcoins", TMMobcoinsIntegration::load),
-            IntegrationLoader("EcoArmor", EcoArmorIntegration::load)
+            IntegrationLoader("EcoArmor", EcoArmorIntegration::load),
+            IntegrationLoader("EcoBosses", EcoBossesIntegration::load)
         )
 
         integrations.addAll(loadAdditionalIntegrations())
