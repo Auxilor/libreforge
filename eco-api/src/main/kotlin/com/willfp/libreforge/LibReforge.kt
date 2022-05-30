@@ -12,12 +12,16 @@ import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.conditions.MovementConditionListener
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.integrations.aureliumskills.AureliumSkillsIntegration
+import com.willfp.libreforge.integrations.boosters.BoostersIntegration
 import com.willfp.libreforge.integrations.ecoarmor.EcoArmorIntegration
 import com.willfp.libreforge.integrations.ecobosses.EcoBossesIntegration
+import com.willfp.libreforge.integrations.ecoitems.EcoItemsIntegration
 import com.willfp.libreforge.integrations.ecoskills.EcoSkillsIntegration
 import com.willfp.libreforge.integrations.jobs.JobsIntegration
 import com.willfp.libreforge.integrations.mcmmo.McMMOIntegration
 import com.willfp.libreforge.integrations.paper.PaperIntegration
+import com.willfp.libreforge.integrations.reforges.ReforgesIntegration
+import com.willfp.libreforge.integrations.talismans.TalismansIntegration
 import com.willfp.libreforge.integrations.tmmobcoins.TMMobcoinsIntegration
 import com.willfp.libreforge.integrations.vault.VaultIntegration
 import com.willfp.libreforge.triggers.Triggers
@@ -140,7 +144,11 @@ abstract class LibReforgePlugin : EcoPlugin() {
             IntegrationLoader("Vault", VaultIntegration::load),
             IntegrationLoader("TMMobcoins", TMMobcoinsIntegration::load),
             IntegrationLoader("EcoArmor", EcoArmorIntegration::load),
-            IntegrationLoader("EcoBosses", EcoBossesIntegration::load)
+            IntegrationLoader("EcoBosses", EcoBossesIntegration::load),
+            IntegrationLoader("Talismans", TalismansIntegration::load),
+            IntegrationLoader("EcoItems", EcoItemsIntegration::load),
+            IntegrationLoader("Reforges", ReforgesIntegration::load),
+            IntegrationLoader("Boosters", BoostersIntegration::load),
         )
 
         integrations.addAll(loadAdditionalIntegrations())
