@@ -8,7 +8,68 @@ import com.willfp.eco.core.placeholder.StaticPlaceholder
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.LibReforgePlugin
 import com.willfp.libreforge.conditions.Conditions
-import com.willfp.libreforge.effects.effects.*
+import com.willfp.libreforge.effects.effects.EffectArmor
+import com.willfp.libreforge.effects.effects.EffectArmorToughness
+import com.willfp.libreforge.effects.effects.EffectArrowRing
+import com.willfp.libreforge.effects.effects.EffectAttackSpeedMultiplier
+import com.willfp.libreforge.effects.effects.EffectAutosmelt
+import com.willfp.libreforge.effects.effects.EffectBleed
+import com.willfp.libreforge.effects.effects.EffectBlockCommands
+import com.willfp.libreforge.effects.effects.EffectBonusHealth
+import com.willfp.libreforge.effects.effects.EffectBreakBlock
+import com.willfp.libreforge.effects.effects.EffectCancelEvent
+import com.willfp.libreforge.effects.effects.EffectCritMultiplier
+import com.willfp.libreforge.effects.effects.EffectDamageArmor
+import com.willfp.libreforge.effects.effects.EffectDamageMultiplier
+import com.willfp.libreforge.effects.effects.EffectDamageNearbyEntities
+import com.willfp.libreforge.effects.effects.EffectDamageVictim
+import com.willfp.libreforge.effects.effects.EffectDrill
+import com.willfp.libreforge.effects.effects.EffectExtinguish
+import com.willfp.libreforge.effects.effects.EffectFeatherStep
+import com.willfp.libreforge.effects.effects.EffectFoodMultiplier
+import com.willfp.libreforge.effects.effects.EffectGiveFood
+import com.willfp.libreforge.effects.effects.EffectGiveHealth
+import com.willfp.libreforge.effects.effects.EffectGiveItem
+import com.willfp.libreforge.effects.effects.EffectGiveMoney
+import com.willfp.libreforge.effects.effects.EffectGiveOxygen
+import com.willfp.libreforge.effects.effects.EffectGivePoints
+import com.willfp.libreforge.effects.effects.EffectGiveXp
+import com.willfp.libreforge.effects.effects.EffectHungerMultiplier
+import com.willfp.libreforge.effects.effects.EffectIgnite
+import com.willfp.libreforge.effects.effects.EffectKeepInventory
+import com.willfp.libreforge.effects.effects.EffectKnockbackMultiplier
+import com.willfp.libreforge.effects.effects.EffectMineRadius
+import com.willfp.libreforge.effects.effects.EffectMineRadiusOneDeep
+import com.willfp.libreforge.effects.effects.EffectMovementSpeedMultiplier
+import com.willfp.libreforge.effects.effects.EffectMultiplyDrops
+import com.willfp.libreforge.effects.effects.EffectMultiplyPoints
+import com.willfp.libreforge.effects.effects.EffectMultiplyVelocity
+import com.willfp.libreforge.effects.effects.EffectParticleAnimation
+import com.willfp.libreforge.effects.effects.EffectParticleLine
+import com.willfp.libreforge.effects.effects.EffectPermanentPotionEffect
+import com.willfp.libreforge.effects.effects.EffectPlaySound
+import com.willfp.libreforge.effects.effects.EffectPotionEffect
+import com.willfp.libreforge.effects.effects.EffectPullToLocation
+import com.willfp.libreforge.effects.effects.EffectRegenMultiplier
+import com.willfp.libreforge.effects.effects.EffectRemoveItem
+import com.willfp.libreforge.effects.effects.EffectRemovePotionEffect
+import com.willfp.libreforge.effects.effects.EffectRunChain
+import com.willfp.libreforge.effects.effects.EffectRunChainInline
+import com.willfp.libreforge.effects.effects.EffectRunCommand
+import com.willfp.libreforge.effects.effects.EffectRunPlayerCommand
+import com.willfp.libreforge.effects.effects.EffectSellMultiplier
+import com.willfp.libreforge.effects.effects.EffectSendMessage
+import com.willfp.libreforge.effects.effects.EffectSendTitle
+import com.willfp.libreforge.effects.effects.EffectSetPoints
+import com.willfp.libreforge.effects.effects.EffectSetVelocity
+import com.willfp.libreforge.effects.effects.EffectShootArrow
+import com.willfp.libreforge.effects.effects.EffectSpawnMobs
+import com.willfp.libreforge.effects.effects.EffectSpawnParticle
+import com.willfp.libreforge.effects.effects.EffectStrikeLightning
+import com.willfp.libreforge.effects.effects.EffectStripAI
+import com.willfp.libreforge.effects.effects.EffectTeleport
+import com.willfp.libreforge.effects.effects.EffectTransmission
+import com.willfp.libreforge.effects.effects.EffectXpMultiplier
 import com.willfp.libreforge.filters.ConfiguredFilter
 import com.willfp.libreforge.filters.EmptyFilter
 import com.willfp.libreforge.triggers.DataMutators
@@ -82,6 +143,7 @@ object Effects {
     val PARTICLE_ANIMATION: Effect = EffectParticleAnimation()
     val KEEP_INVENTORY: Effect = EffectKeepInventory()
     val REMOVE_ITEM: Effect = EffectRemoveItem()
+    val MINE_RADIUS_ONE_DEEP: Effect = EffectMineRadiusOneDeep()
 
     /**
      * Get effect matching id.
