@@ -24,6 +24,7 @@ import com.willfp.libreforge.conditions.conditions.ConditionInAir
 import com.willfp.libreforge.conditions.conditions.ConditionInBiome
 import com.willfp.libreforge.conditions.conditions.ConditionInWater
 import com.willfp.libreforge.conditions.conditions.ConditionInWorld
+import com.willfp.libreforge.conditions.conditions.ConditionIsFrozen
 import com.willfp.libreforge.conditions.conditions.ConditionIsGliding
 import com.willfp.libreforge.conditions.conditions.ConditionIsNight
 import com.willfp.libreforge.conditions.conditions.ConditionIsSneaking
@@ -76,6 +77,7 @@ object Conditions {
     val IS_SPRINTING: Condition = ConditionIsSprinting()
     val ANY_OF: Condition = ConditionAnyOf()
     val PLACEHOLDER_CONTAINS: Condition = ConditionPlaceholderContains()
+    val IS_FROZEN: Condition = ConditionIsFrozen()
 
     /**
      * Get condition matching id.
