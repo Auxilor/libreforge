@@ -10,7 +10,6 @@ import org.bukkit.entity.Player
 
 class EffectBonusHealth : Effect("bonus_health") {
     override fun handleEnable(player: Player, config: Config) {
-        val currentHealth = player.health
         val attribute = player.getAttribute(Attribute.GENERIC_MAX_HEALTH) ?: return
         val uuid = this.getUUID(player.getEffectAmount(this))
         attribute.removeModifier(AttributeModifier(uuid, this.id, 0.0, AttributeModifier.Operation.ADD_NUMBER))
@@ -23,8 +22,6 @@ class EffectBonusHealth : Effect("bonus_health") {
                 AttributeModifier.Operation.ADD_NUMBER
             )
         )
-
-        player.health = currentHealth
     }
 
     override fun handleDisable(player: Player) {
