@@ -6,7 +6,6 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
-import org.bukkit.entity.Player
 
 class EffectSetFreezeTicks : Effect(
     "set_freeze_ticks",
