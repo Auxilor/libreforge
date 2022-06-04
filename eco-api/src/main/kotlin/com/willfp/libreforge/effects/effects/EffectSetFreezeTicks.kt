@@ -15,7 +15,7 @@ class EffectSetFreezeTicks : Effect(
     )
 ) {
     override fun handle(data: TriggerData, config: Config) {
-        val victim = data.victim as? Player ?: return
+        val victim = data.victim ?: return
 
         victim.freezeTicks = config.getIntFromExpression("ticks", data.player)
     }
