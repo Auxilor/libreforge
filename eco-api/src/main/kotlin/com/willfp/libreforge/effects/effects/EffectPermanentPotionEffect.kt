@@ -5,22 +5,49 @@ import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.getEffectAmount
 import org.bukkit.entity.Player
+import org.bukkit.event.EventHandler
+import org.bukkit.event.player.PlayerRespawnEvent
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
-import java.util.UUID
+import java.util.*
 
 @Suppress("UNCHECKED_CAST")
 class EffectPermanentPotionEffect : Effect("permanent_potion_effect") {
     private val metaKey = "${plugin.name}_${this.id}"
 
+    @EventHandler
+    fun onRespawn(event: PlayerRespawnEvent) {
+        val player = event.player
+
+        val meta = player.getMetadata(metaKey).firstOrNull()?.value()
+                as? MutableMap<UUID, Pair<PotionEffectType, Int>> ?: mutableMapOf()
+
+        for ((_, pair) in meta) {
+            val (effectType, level) = pair
+
+            val effect = PotionEffect(
+                effectType,
+                1_500_000_000,
+                level,
+                plugin.configYml.getBool("potions.ambient.permanent"),
+                plugin.configYml.getBool("potions.particles.permanent"),
+                plugin.configYml.getBool("potions.icon.permanent")
+            )
+
+            player.addPotionEffect(effect)
+        }
+    }
+
     override fun handleEnable(player: Player, config: Config) {
         val effectType = PotionEffectType.getByName(config.getString("effect").uppercase())
             ?: PotionEffectType.INCREASE_DAMAGE
 
+        val level = config.getIntFromExpression("level", player) - 1
+
         val effect = PotionEffect(
             effectType,
             1_500_000_000,
-            config.getIntFromExpression("level", player) - 1,
+            level,
             plugin.configYml.getBool("potions.ambient.permanent"),
             plugin.configYml.getBool("potions.particles.permanent"),
             plugin.configYml.getBool("potions.icon.permanent")
@@ -29,18 +56,18 @@ class EffectPermanentPotionEffect : Effect("permanent_potion_effect") {
         player.addPotionEffect(effect)
 
         val meta = player.getMetadata(metaKey).firstOrNull()?.value()
-                as? MutableMap<UUID, PotionEffectType> ?: mutableMapOf()
+                as? MutableMap<UUID, Pair<PotionEffectType, Int>> ?: mutableMapOf()
 
-        meta[this.getUUID(player.getEffectAmount(this))] = effectType
+        meta[this.getUUID(player.getEffectAmount(this))] = Pair(effectType, level)
 
         player.setMetadata(metaKey, plugin.metadataValueFactory.create(meta))
     }
 
     override fun handleDisable(player: Player) {
         val meta = player.getMetadata(metaKey).firstOrNull()?.value()
-                as? MutableMap<UUID, PotionEffectType> ?: mutableMapOf()
+                as? MutableMap<UUID, Pair<PotionEffectType, Int>> ?: mutableMapOf()
 
-        val toRemove = meta[this.getUUID(player.getEffectAmount(this))] ?: return
+        val (toRemove, _) = meta[this.getUUID(player.getEffectAmount(this))] ?: return
 
         val active = player.getPotionEffect(toRemove) ?: return
 
