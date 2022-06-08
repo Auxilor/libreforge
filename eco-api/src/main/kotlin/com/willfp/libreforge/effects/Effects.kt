@@ -63,6 +63,7 @@ import com.willfp.libreforge.effects.effects.EffectSendTitle
 import com.willfp.libreforge.effects.effects.EffectSetFreezeTicks
 import com.willfp.libreforge.effects.effects.EffectSetPoints
 import com.willfp.libreforge.effects.effects.EffectSetVelocity
+import com.willfp.libreforge.effects.effects.EffectShoot
 import com.willfp.libreforge.effects.effects.EffectShootArrow
 import com.willfp.libreforge.effects.effects.EffectSpawnMobs
 import com.willfp.libreforge.effects.effects.EffectSpawnParticle
@@ -146,6 +147,7 @@ object Effects {
     val REMOVE_ITEM: Effect = EffectRemoveItem()
     val MINE_RADIUS_ONE_DEEP: Effect = EffectMineRadiusOneDeep()
     val SET_FREEZE_TICKS: Effect = EffectSetFreezeTicks()
+    val SHOOT: Effect = EffectShoot()
 
     /**
      * Get effect matching id.
