@@ -23,13 +23,13 @@ class EffectShoot : Effect(
         val player = data.player ?: return
         val velocity = data.velocity
         val fire = (data.event as? WrappedShootBowEvent)?.hasFire
-        val projectile = Entities.lookup(config.getString("projectile"))::class.java
+        val projectileClass = Entities.lookup(config.getString("projectile"))::class.java
 
         player.runExempted {
             val projectile = if (velocity == null || !config.getBool("inherit_velocity")) {
-                player.launchProjectile(projectile as Class<out Projectile>)
+                player.launchProjectile(projectileClass as Class<out Projectile>)
             } else {
-                player.launchProjectile(projectile as Class<out Projectile>, velocity)
+                player.launchProjectile(projectileClass as Class<out Projectile>, velocity)
             }
 
             if (projectile is AbstractArrow) {
