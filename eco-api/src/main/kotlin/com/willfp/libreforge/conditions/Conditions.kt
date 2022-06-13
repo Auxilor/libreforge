@@ -39,6 +39,7 @@ import com.willfp.libreforge.conditions.conditions.ConditionPointsEqual
 import com.willfp.libreforge.conditions.conditions.ConditionRidingEntity
 import com.willfp.libreforge.conditions.conditions.ConditionStandingOnBlock
 import com.willfp.libreforge.conditions.conditions.ConditionWithinRadiusOf
+import com.willfp.libreforge.separatorAmbivalent
 
 @Suppress("UNUSED")
 object Conditions {
@@ -111,13 +112,15 @@ object Conditions {
     /**
      * Compile a condition.
      *
-     * @param config The config for the condition.
+     * @param cfg The config for the condition.
      * @param context The context to log violations for.
      *
      * @return The configured condition, or null if invalid.
      */
     @JvmStatic
-    fun compile(config: Config, context: String): ConfiguredCondition? {
+    fun compile(cfg: Config, context: String): ConfiguredCondition? {
+        val config = cfg.separatorAmbivalent()
+
         val condition = config.getString("id").let {
             val found = getByID(it)
             if (found == null) {
