@@ -3,6 +3,7 @@ package com.willfp.libreforge.triggers
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.LibReforgePlugin
+import com.willfp.libreforge.separatorAmbivalent
 import com.willfp.libreforge.triggers.mutators.MutatorLocationToBlock
 import com.willfp.libreforge.triggers.mutators.MutatorLocationToPlayer
 import com.willfp.libreforge.triggers.mutators.MutatorLocationToProjectile
@@ -42,7 +43,17 @@ object DataMutators {
         BY_ID[mutator.id] = mutator
     }
 
-    fun compile(config: Config, context: String): ConfiguredDataMutator? {
+    /**
+     * Compile data mutator.
+     *
+     * @param cfg The config for the mutator.
+     * @param context The context to log violations for.
+     * @return The mutator, or null if invalid.
+     */
+    @JvmStatic
+    fun compile(cfg: Config, context: String): ConfiguredDataMutator? {
+        val config = cfg.separatorAmbivalent()
+
         val mutator = config.getString("id").let {
             val found = getById(it)
             if (found == null) {
