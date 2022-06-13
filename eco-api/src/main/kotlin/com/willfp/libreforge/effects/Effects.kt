@@ -74,11 +74,12 @@ import com.willfp.libreforge.effects.effects.EffectTransmission
 import com.willfp.libreforge.effects.effects.EffectXpMultiplier
 import com.willfp.libreforge.filters.ConfiguredFilter
 import com.willfp.libreforge.filters.EmptyFilter
+import com.willfp.libreforge.separatorAmbivalent
 import com.willfp.libreforge.triggers.DataMutators
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.Triggers
 import com.willfp.libreforge.triggers.triggers.TriggerStatic
-import java.util.*
+import java.util.UUID
 
 @Suppress("UNUSED")
 object Effects {
@@ -181,18 +182,19 @@ object Effects {
     /**
      * Compile an effect.
      *
-     * @param config The config for the effect.
+     * @param cfg The config for the effect.
      * @param context The context to log violations for.
-     *
      * @return The configured effect, or null if invalid.
      */
     @JvmStatic
     @JvmOverloads
     fun compile(
-        config: Config,
+        cfg: Config,
         context: String,
         fromChain: Boolean = false
     ): ConfiguredEffect? {
+        val config = cfg.separatorAmbivalent()
+
         val uuid = UUID.randomUUID()
 
         val repeatData = RepeatData(1, 0.0, 0.0, 0.0)
