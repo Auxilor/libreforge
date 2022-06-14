@@ -5,6 +5,7 @@ import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.FluidCollisionMode
+import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.Tag
 import org.bukkit.entity.Entity
@@ -86,9 +87,15 @@ class TriggerAltClick : Trigger(
                 return
             }
         }
-
-        val result = player.rayTraceBlocks(plugin.configYml.getDoubleFromExpression("raytrace-distance"), FluidCollisionMode.NEVER) ?: return
+        val hitpos: Location?
         val world = player.location.world ?: return
+        val result = player.rayTraceBlocks(plugin.configYml.getDoubleFromExpression("raytrace-distance"), FluidCollisionMode.NEVER)
+        if (result != null){
+            hitpos = result.hitPosition.toLocation(world)
+        } else {
+            val dir = player.location.direction.normalize().multiply(plugin.configYml.getDoubleFromExpression("raytrace-distance"))
+            hitpos = player.location.add(dir)
+        }
 
         val entityResult = world.rayTraceEntities(
             player.eyeLocation,
@@ -100,7 +107,7 @@ class TriggerAltClick : Trigger(
             TriggerData(
                 player = player,
                 victim = entityResult?.hitEntity as? LivingEntity,
-                location = result.hitPosition.toLocation(world),
+                location = hitpos,
                 event = GenericCancellableEvent(event)
             )
         )
