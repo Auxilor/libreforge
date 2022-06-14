@@ -22,7 +22,6 @@ class TriggerConsume : Trigger(
 
         val player = event.player
         this.processTrigger(
-
             player,
             TriggerData(
                 player = player,
