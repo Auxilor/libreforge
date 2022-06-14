@@ -19,8 +19,10 @@ class TriggerConsume : Trigger(
         if (McmmoManager.isFake(event)) {
             return
         }
+
         val player = event.player
         this.processTrigger(
+
             player,
             TriggerData(
                 player = player,

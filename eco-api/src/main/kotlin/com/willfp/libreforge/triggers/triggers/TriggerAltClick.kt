@@ -87,14 +87,16 @@ class TriggerAltClick : Trigger(
                 return
             }
         }
-        val hitpos: Location?
+
+        val location: Location?
         val world = player.location.world ?: return
         val result = player.rayTraceBlocks(plugin.configYml.getDoubleFromExpression("raytrace-distance"), FluidCollisionMode.NEVER)
-        if (result != null){
-            hitpos = result.hitPosition.toLocation(world)
+
+        location = if (result != null){
+            result.hitPosition.toLocation(world)
         } else {
             val dir = player.location.direction.normalize().multiply(plugin.configYml.getDoubleFromExpression("raytrace-distance"))
-            hitpos = player.location.add(dir)
+            player.location.add(dir)
         }
 
         val entityResult = world.rayTraceEntities(
@@ -107,7 +109,7 @@ class TriggerAltClick : Trigger(
             TriggerData(
                 player = player,
                 victim = entityResult?.hitEntity as? LivingEntity,
-                location = hitpos,
+                location = location,
                 event = GenericCancellableEvent(event)
             )
         )
