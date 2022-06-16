@@ -38,6 +38,7 @@ import com.willfp.libreforge.effects.effects.EffectHungerMultiplier
 import com.willfp.libreforge.effects.effects.EffectIgnite
 import com.willfp.libreforge.effects.effects.EffectKeepInventory
 import com.willfp.libreforge.effects.effects.EffectKnockbackMultiplier
+import com.willfp.libreforge.effects.effects.EffectLuckMultiplier
 import com.willfp.libreforge.effects.effects.EffectMineRadius
 import com.willfp.libreforge.effects.effects.EffectMineRadiusOneDeep
 import com.willfp.libreforge.effects.effects.EffectMovementSpeedMultiplier
@@ -79,7 +80,7 @@ import com.willfp.libreforge.triggers.DataMutators
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.Triggers
 import com.willfp.libreforge.triggers.triggers.TriggerStatic
-import java.util.UUID
+import java.util.*
 
 @Suppress("UNUSED")
 object Effects {
@@ -149,6 +150,7 @@ object Effects {
     val MINE_RADIUS_ONE_DEEP: Effect = EffectMineRadiusOneDeep()
     val SET_FREEZE_TICKS: Effect = EffectSetFreezeTicks()
     val SHOOT: Effect = EffectShoot()
+    val LUCK_MULTIPLIER: Effect = EffectLuckMultiplier()
 
     /**
      * Get effect matching id.
