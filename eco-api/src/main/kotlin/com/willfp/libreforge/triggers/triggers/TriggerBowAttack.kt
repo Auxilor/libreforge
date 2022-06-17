@@ -58,7 +58,8 @@ class TriggerBowAttack : Trigger(
                 victim = victim,
                 location = victim.location,
                 event = WrappedDamageEvent(event)
-            )
+            ),
+            event.finalDamage
         )
     }
 }

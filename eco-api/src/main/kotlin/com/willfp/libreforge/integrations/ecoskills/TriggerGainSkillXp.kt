@@ -28,7 +28,8 @@ class TriggerGainSkillXp : Trigger(
                 player = player,
                 location = player.location,
                 event = WrappedSkillXpEvent(event)
-            )
+            ),
+            event.amount
         )
     }
 }

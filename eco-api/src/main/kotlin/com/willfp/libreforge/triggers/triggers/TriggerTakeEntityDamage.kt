@@ -57,7 +57,8 @@ class TriggerTakeEntityDamage : Trigger(
                 victim = attacker,
                 location = attacker.location,
                 event = WrappedDamageEvent(event)
-            )
+            ),
+            event.finalDamage
         )
     }
 }
