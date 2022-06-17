@@ -8,9 +8,9 @@ class MutatorLocationToProjectile : DataMutator(
     "location_to_projectile"
 ) {
     override fun mutate(data: TriggerData, config: Config): TriggerData {
-        val projectile = data.projectile ?: return data
+        val projectile = data.projectile
         return data.copy(
-            location = projectile.location
+            location = projectile?.location
         )
     }
 }
