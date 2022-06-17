@@ -8,8 +8,8 @@ import org.bukkit.entity.Tameable
 
 class MutatorVictimToOwner : DataMutator("victim_to_owner") {
     override fun mutate(data: TriggerData, config: Config): TriggerData {
-        val victim = data.victim as? Tameable ?: return data
-        val owner = victim.owner as? LivingEntity ?: return data
+        val victim = data.victim as? Tameable
+        val owner = victim?.owner as? LivingEntity
 
         return data.copy(
             victim = owner

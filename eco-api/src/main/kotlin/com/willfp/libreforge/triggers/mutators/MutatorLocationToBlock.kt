@@ -8,9 +8,9 @@ class MutatorLocationToBlock : DataMutator(
     "location_to_block"
 ) {
     override fun mutate(data: TriggerData, config: Config): TriggerData {
-        val block = data.block ?: return data
+        val block = data.block
         return data.copy(
-            location = block.location
+            location = block?.location
         )
     }
 }

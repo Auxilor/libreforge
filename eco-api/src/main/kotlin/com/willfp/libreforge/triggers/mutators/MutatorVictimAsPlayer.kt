@@ -9,7 +9,7 @@ class MutatorVictimAsPlayer : DataMutator(
     "victim_as_player"
 ) {
     override fun mutate(data: TriggerData, config: Config): TriggerData {
-        val victim = data.victim as? Player ?: return data
+        val victim = data.victim as? Player
         return data.copy(
             player = victim
         )
