@@ -4,6 +4,7 @@ import com.willfp.libreforge.Holder
 import com.willfp.libreforge.LibReforgePlugin
 import com.willfp.libreforge.effects.CompileData
 import com.willfp.libreforge.events.EffectPreInvokeEvent
+import com.willfp.libreforge.events.TriggerPreProcessEvent
 import com.willfp.libreforge.events.TriggerProcessEvent
 import com.willfp.libreforge.getHolders
 import org.bukkit.Bukkit
@@ -26,6 +27,22 @@ abstract class Trigger(
     }
 
     protected fun processTrigger(player: Player, data: TriggerData, forceHolders: Iterable<Holder>? = null) {
+        processTrigger(player, data, 1.0, forceHolders = forceHolders)
+    }
+
+    protected fun processTrigger(
+        player: Player,
+        data: TriggerData,
+        value: Double,
+        forceHolders: Iterable<Holder>? = null
+    ) {
+        val preProcessEvent = TriggerPreProcessEvent(player, this, value)
+        Bukkit.getPluginManager().callEvent(preProcessEvent)
+
+        if (preProcessEvent.isCancelled) {
+            return
+        }
+
         for (holder in forceHolders ?: player.getHolders()) {
             var areMet = true
             for (condition in holder.conditions) {
@@ -38,16 +55,16 @@ abstract class Trigger(
                 continue
             }
 
-            val event = TriggerProcessEvent(player, holder, this)
+            val event = TriggerProcessEvent(player, holder, this, value)
             Bukkit.getPluginManager().callEvent(event)
 
             if (!event.isCancelled) {
                 for (effect in holder.effects) {
-                    val preInvoke = EffectPreInvokeEvent(player, holder, this, effect.effect)
+                    val preInvoke = EffectPreInvokeEvent(player, holder, this, effect.effect, value)
                     Bukkit.getPluginManager().callEvent(preInvoke)
 
                     if (!preInvoke.isCancelled) {
-                        effect(InvocationData(player, data, holder, this, effect.compileData))
+                        effect(InvocationData(player, data, holder, this, effect.compileData, value))
                     }
                 }
             }
@@ -72,5 +89,6 @@ data class InvocationData internal constructor(
     val data: TriggerData,
     val holder: Holder,
     val trigger: Trigger,
-    val compileData: CompileData?
+    val compileData: CompileData?,
+    val value: Double
 )

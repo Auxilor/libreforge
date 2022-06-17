@@ -27,7 +27,8 @@ class TriggerGainXp : Trigger(
             TriggerData(
                 player = player,
                 event = WrappedXpEvent(event.expChangeEvent)
-            )
+            ),
+            event.expChangeEvent.amount.toDouble()
         )
     }
 }

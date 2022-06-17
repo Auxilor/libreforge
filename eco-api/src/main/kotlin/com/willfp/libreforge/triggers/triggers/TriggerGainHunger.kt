@@ -36,7 +36,8 @@ class TriggerGainHunger : Trigger(
             TriggerData(
                 player = player,
                 event = WrappedHungerEvent(event)
-            )
+            ),
+            event.foodLevel.toDouble() - player.foodLevel
         )
     }
 }

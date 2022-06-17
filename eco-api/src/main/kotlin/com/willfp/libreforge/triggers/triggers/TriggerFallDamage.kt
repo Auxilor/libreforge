@@ -38,7 +38,8 @@ class TriggerFallDamage : Trigger(
                 player = victim,
                 location = victim.location,
                 event = WrappedDamageEvent(event)
-            )
+            ),
+            event.finalDamage
         )
     }
 }

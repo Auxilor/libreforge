@@ -12,7 +12,8 @@ class EffectPreInvokeEvent(
     who: Player,
     val holder: Holder,
     val trigger: Trigger,
-    val effect: Effect
+    val effect: Effect,
+    val value: Double
 ) : PlayerEvent(who), Cancellable {
     /**
      * If the event is cancelled.

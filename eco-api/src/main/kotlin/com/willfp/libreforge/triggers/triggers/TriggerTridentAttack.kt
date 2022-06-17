@@ -62,6 +62,7 @@ class TriggerTridentAttack : Trigger(
                 location = trident.location,
                 event = WrappedDamageEvent(event)
             ),
+            event.finalDamage,
             trident.getAttachedHolders()
         )
     }

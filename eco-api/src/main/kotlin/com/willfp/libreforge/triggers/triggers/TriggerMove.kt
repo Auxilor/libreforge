@@ -30,6 +30,12 @@ class TriggerMove : Trigger(
             }
         }
 
+        val distance = if (event.to.world == event.from.world) {
+            event.to.distance(event.from)
+        } else {
+            0.0
+        }
+
         this.processTrigger(
             player,
             TriggerData(
@@ -37,7 +43,8 @@ class TriggerMove : Trigger(
                 location = player.location,
                 velocity = player.velocity,
                 event = GenericCancellableEvent(event)
-            )
+            ),
+            distance
         )
     }
 }

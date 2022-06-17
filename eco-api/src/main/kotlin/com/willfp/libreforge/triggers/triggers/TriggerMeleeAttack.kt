@@ -48,7 +48,8 @@ class TriggerMeleeAttack : Trigger(
                 victim = victim,
                 location = victim.location,
                 event = WrappedDamageEvent(event)
-            )
+            ),
+            event.finalDamage
         )
     }
 }

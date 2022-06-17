@@ -52,7 +52,8 @@ class TriggerShieldBlock : Trigger(
                 victim = attacker,
                 location = attacker.location,
                 event = WrappedDamageEvent(event)
-            )
+            ),
+            event.damage
         )
     }
 }

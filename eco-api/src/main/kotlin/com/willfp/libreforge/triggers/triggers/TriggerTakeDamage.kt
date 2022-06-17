@@ -34,7 +34,8 @@ class TriggerTakeDamage : Trigger(
                 player = victim,
                 event = WrappedDamageEvent(event),
                 damageCause = event.cause
-            )
+            ),
+            event.finalDamage
         )
     }
 }
