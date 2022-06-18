@@ -10,7 +10,8 @@ import org.bukkit.event.player.PlayerItemBreakEvent
 class TriggerItemBreak : Trigger(
     "item_break", listOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.LOCATION
+        TriggerParameter.LOCATION,
+        TriggerParameter.ITEM
     )
 ) {
     @EventHandler(ignoreCancelled = true)
@@ -25,7 +26,8 @@ class TriggerItemBreak : Trigger(
             player,
             TriggerData(
                 player = player,
-                location = player.location
+                location = player.location,
+                item = event.brokenItem
             )
         )
     }

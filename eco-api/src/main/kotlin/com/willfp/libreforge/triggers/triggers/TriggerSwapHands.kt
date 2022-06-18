@@ -12,7 +12,8 @@ class TriggerSwapHands : Trigger(
     "swap_hands", listOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,
-        TriggerParameter.EVENT
+        TriggerParameter.EVENT,
+        TriggerParameter.ITEM
     )
 ) {
     @EventHandler(ignoreCancelled = true)
@@ -31,7 +32,8 @@ class TriggerSwapHands : Trigger(
             TriggerData(
                 player = player,
                 location = player.location,
-                event = GenericCancellableEvent(event)
+                event = GenericCancellableEvent(event),
+                item = event.mainHandItem
             ),
         )
     }

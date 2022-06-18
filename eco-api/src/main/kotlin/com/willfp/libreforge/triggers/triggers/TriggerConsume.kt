@@ -11,7 +11,8 @@ import org.bukkit.event.player.PlayerItemConsumeEvent
 class TriggerConsume : Trigger(
     "consume", listOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.EVENT
+        TriggerParameter.EVENT,
+        TriggerParameter.ITEM
     )
 ) {
     @EventHandler(ignoreCancelled = true)
@@ -25,7 +26,8 @@ class TriggerConsume : Trigger(
             player,
             TriggerData(
                 player = player,
-                event = GenericCancellableEvent(event)
+                event = GenericCancellableEvent(event),
+                item = event.item
             )
         )
     }

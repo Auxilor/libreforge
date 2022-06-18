@@ -5,6 +5,7 @@ import com.willfp.libreforge.triggers.GenericCancellableEvent
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import org.bukkit.entity.Item
 import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerFishEvent
 
@@ -12,7 +13,8 @@ class TriggerCastRod : Trigger(
     "cast_rod", listOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,
-        TriggerParameter.EVENT
+        TriggerParameter.EVENT,
+        TriggerParameter.ITEM
     )
 ) {
     @EventHandler(ignoreCancelled = true)
@@ -32,7 +34,8 @@ class TriggerCastRod : Trigger(
             TriggerData(
                 player = player,
                 location = event.hook.location,
-                event = GenericCancellableEvent(event)
+                event = GenericCancellableEvent(event),
+                item = (event.caught as? Item)?.itemStack
             )
         )
     }
