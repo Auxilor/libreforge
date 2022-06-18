@@ -11,6 +11,7 @@ import com.willfp.libreforge.triggers.triggers.TriggerCatchFish
 import com.willfp.libreforge.triggers.triggers.TriggerCatchFishFail
 import com.willfp.libreforge.triggers.triggers.TriggerConsume
 import com.willfp.libreforge.triggers.triggers.TriggerCraft
+import com.willfp.libreforge.triggers.triggers.TriggerDamageItem
 import com.willfp.libreforge.triggers.triggers.TriggerDeath
 import com.willfp.libreforge.triggers.triggers.TriggerDeployElytra
 import com.willfp.libreforge.triggers.triggers.TriggerEnchantItem
@@ -90,6 +91,7 @@ object Triggers {
     val CONSUME: Trigger = TriggerConsume()
     val CRAFT: Trigger = TriggerCraft()
     val ENCHANT_ITEM: Trigger = TriggerEnchantItem()
+    val DAMAGE_ITEM: Trigger = TriggerDamageItem()
 
     fun values(): Set<Trigger> {
         return BY_ID.values.toSet()
