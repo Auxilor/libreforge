@@ -12,15 +12,16 @@ import com.willfp.libreforge.triggers.wrappers.WrappedDropEvent
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
+import org.bukkit.entity.Player
 import org.bukkit.inventory.FurnaceRecipe
+import org.bukkit.inventory.ItemStack
 import kotlin.math.ceil
 import kotlin.math.roundToInt
 
 class EffectAutosmelt : Effect(
     "autosmelt",
     applicableTriggers = Triggers.withParameters(
-        TriggerParameter.PLAYER,
-        TriggerParameter.EVENT
+        TriggerParameter.PLAYER
     )
 ) {
     private val recipes = mutableMapOf<Material, Pair<Material, Int>>()
@@ -48,8 +49,19 @@ class EffectAutosmelt : Effect(
 
     override fun handle(data: TriggerData, config: Config) {
         val player = data.player ?: return
-        val event = data.event as? WrappedDropEvent<*> ?: return
+        val event = data.event as? WrappedDropEvent<*>
+        val item = data.item
 
+        if (event != null) {
+            handleEvent(player, event, config)
+        }
+
+        if (item != null) {
+            handleItem(item)
+        }
+    }
+
+    private fun handleEvent(player: Player, event: WrappedDropEvent<*>, config: Config) {
         val fortune = FastItemStack.wrap(player.inventory.itemInMainHand)
             .getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS, false)
 
@@ -68,6 +80,11 @@ class EffectAutosmelt : Effect(
 
             Pair(it, xp)
         }
+    }
+
+    private fun handleItem(item: ItemStack) {
+        val (type, _) = getOutput(item.type)
+        item.type = type
     }
 
     override fun validateConfig(config: Config): List<ConfigViolation> {
