@@ -8,8 +8,12 @@ import com.willfp.libreforge.triggers.wrappers.WrappedDropEvent
 
 class FilterItems : FilterComponent() {
     override fun passes(data: TriggerData, config: Config): Boolean {
-        val event = data.event as? WrappedDropEvent<*> ?: return true
-        val items = event.items
+        val itemList = listOf(data.item)
+        val unfilteredItems = (data.event as? WrappedDropEvent<*>)?.items ?: itemList
+        val items = unfilteredItems.filterNotNull()
+        if (items.isEmpty()) {
+            return true
+        }
 
         return config.withInverse("items", Config::getStringsOrNull) {
             it?.map { lookup -> Items.lookup(lookup) }?.any { testableItem ->
