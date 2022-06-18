@@ -26,7 +26,8 @@ class TriggerLevelUpSkill : Trigger(
             TriggerData(
                 player = player,
                 location = player.location
-            )
+            ),
+            event.level.toDouble()
         )
     }
 }
