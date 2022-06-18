@@ -11,7 +11,7 @@ import com.willfp.libreforge.effects.MultiplierModifier
 import com.willfp.libreforge.effects.getEffectAmount
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
-import java.util.UUID
+import java.util.*
 
 class EffectMcMMOXpMultiplier : Effect("mcmmo_xp_multiplier") {
     private val modifiers = mutableMapOf<UUID, MutableMap<PrimarySkillType, MutableList<MultiplierModifier>>>()
