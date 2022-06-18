@@ -5,7 +5,6 @@ import com.willfp.eco.core.fast.FastItemStack
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
-import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
 import com.willfp.libreforge.triggers.wrappers.WrappedBlockDropEvent
 import com.willfp.libreforge.triggers.wrappers.WrappedDropEvent
@@ -20,9 +19,7 @@ import kotlin.math.roundToInt
 
 class EffectAutosmelt : Effect(
     "autosmelt",
-    applicableTriggers = Triggers.withParameters(
-        TriggerParameter.PLAYER
-    )
+    applicableTriggers = Triggers.values()
 ) {
     private val recipes = mutableMapOf<Material, Pair<Material, Int>>()
     private val fortuneMaterials = mutableSetOf(
@@ -48,11 +45,11 @@ class EffectAutosmelt : Effect(
     }
 
     override fun handle(data: TriggerData, config: Config) {
-        val player = data.player ?: return
+        val player = data.player
         val event = data.event as? WrappedDropEvent<*>
         val item = data.item
 
-        if (event != null) {
+        if (event != null && player != null) {
             handleEvent(player, event, config)
         }
 
