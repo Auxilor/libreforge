@@ -6,6 +6,7 @@ import com.willfp.eco.core.integrations.mcmmo.McmmoManager
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import org.bukkit.attribute.Attribute
 import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
 import org.bukkit.event.EventHandler
@@ -14,7 +15,8 @@ class TriggerKill : Trigger(
     "kill", listOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
-        TriggerParameter.LOCATION
+        TriggerParameter.LOCATION,
+        TriggerParameter.ITEM
     )
 ) {
     @EventHandler(ignoreCancelled = true)
@@ -48,7 +50,8 @@ class TriggerKill : Trigger(
                 player = killer,
                 victim = victim,
                 location = victim.location
-            )
+            ),
+            victim.getAttribute(Attribute.GENERIC_MAX_HEALTH)!!.value
         )
     }
 }

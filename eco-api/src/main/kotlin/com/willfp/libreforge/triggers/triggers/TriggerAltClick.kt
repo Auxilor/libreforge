@@ -19,7 +19,8 @@ class TriggerAltClick : Trigger(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
         TriggerParameter.LOCATION,
-        TriggerParameter.EVENT
+        TriggerParameter.EVENT,
+        TriggerParameter.ITEM
     )
 ) {
     companion object {
@@ -90,12 +91,16 @@ class TriggerAltClick : Trigger(
 
         val location: Location?
         val world = player.location.world ?: return
-        val result = player.rayTraceBlocks(plugin.configYml.getDoubleFromExpression("raytrace-distance"), FluidCollisionMode.NEVER)
+        val result = player.rayTraceBlocks(
+            plugin.configYml.getDoubleFromExpression("raytrace-distance"),
+            FluidCollisionMode.NEVER
+        )
 
-        location = if (result != null){
+        location = if (result != null) {
             result.hitPosition.toLocation(world)
         } else {
-            val dir = player.location.direction.normalize().multiply(plugin.configYml.getDoubleFromExpression("raytrace-distance"))
+            val dir = player.location.direction.normalize()
+                .multiply(plugin.configYml.getDoubleFromExpression("raytrace-distance"))
             player.location.add(dir)
         }
 
@@ -110,7 +115,8 @@ class TriggerAltClick : Trigger(
                 player = player,
                 victim = entityResult?.hitEntity as? LivingEntity,
                 location = location,
-                event = GenericCancellableEvent(event)
+                event = GenericCancellableEvent(event),
+                item = player.inventory.itemInMainHand
             )
         )
     }

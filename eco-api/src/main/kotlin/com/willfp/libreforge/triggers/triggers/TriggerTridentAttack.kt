@@ -19,7 +19,8 @@ class TriggerTridentAttack : Trigger(
         TriggerParameter.VICTIM,
         TriggerParameter.LOCATION,
         TriggerParameter.PROJECTILE,
-        TriggerParameter.EVENT
+        TriggerParameter.EVENT,
+        TriggerParameter.ITEM
     )
 ) {
     @EventHandler(ignoreCancelled = true)
@@ -60,7 +61,8 @@ class TriggerTridentAttack : Trigger(
                 victim = victim,
                 projectile = trident,
                 location = trident.location,
-                event = WrappedDamageEvent(event)
+                event = WrappedDamageEvent(event),
+                item = trident.item
             ),
             event.finalDamage,
             trident.getAttachedHolders()
