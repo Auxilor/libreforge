@@ -16,6 +16,7 @@ import com.willfp.libreforge.integrations.boosters.BoostersIntegration
 import com.willfp.libreforge.integrations.ecoarmor.EcoArmorIntegration
 import com.willfp.libreforge.integrations.ecobosses.EcoBossesIntegration
 import com.willfp.libreforge.integrations.ecoitems.EcoItemsIntegration
+import com.willfp.libreforge.integrations.ecopets.EcoPetsIntegration
 import com.willfp.libreforge.integrations.ecoskills.EcoSkillsIntegration
 import com.willfp.libreforge.integrations.jobs.JobsIntegration
 import com.willfp.libreforge.integrations.mcmmo.McMMOIntegration
@@ -149,6 +150,7 @@ abstract class LibReforgePlugin : EcoPlugin() {
             IntegrationLoader("EcoItems", EcoItemsIntegration::load),
             IntegrationLoader("Reforges", ReforgesIntegration::load),
             IntegrationLoader("Boosters", BoostersIntegration::load),
+            IntegrationLoader("EcoPets", EcoPetsIntegration::load)
         )
 
         integrations.addAll(loadAdditionalIntegrations())
