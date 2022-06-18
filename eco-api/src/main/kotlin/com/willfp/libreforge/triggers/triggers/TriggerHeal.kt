@@ -32,7 +32,8 @@ class TriggerHeal : Trigger(
             TriggerData(
                 player = player,
                 event = WrappedRegenEvent(event)
-            )
+            ),
+            event.amount
         )
     }
 }
