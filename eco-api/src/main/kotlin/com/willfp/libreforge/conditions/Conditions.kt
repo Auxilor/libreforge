@@ -40,6 +40,10 @@ import com.willfp.libreforge.conditions.conditions.ConditionPlaceholderLessThan
 import com.willfp.libreforge.conditions.conditions.ConditionPointsEqual
 import com.willfp.libreforge.conditions.conditions.ConditionRidingEntity
 import com.willfp.libreforge.conditions.conditions.ConditionStandingOnBlock
+import com.willfp.libreforge.conditions.conditions.ConditionWearingBoots
+import com.willfp.libreforge.conditions.conditions.ConditionWearingChestplate
+import com.willfp.libreforge.conditions.conditions.ConditionWearingHelmet
+import com.willfp.libreforge.conditions.conditions.ConditionWearingLeggings
 import com.willfp.libreforge.conditions.conditions.ConditionWithinRadiusOf
 import com.willfp.libreforge.separatorAmbivalent
 
@@ -83,6 +87,10 @@ object Conditions {
     val IS_FROZEN: Condition = ConditionIsFrozen()
     val IN_MAINHAND: Condition = ConditionInMainhand()
     val IN_OFFHAND: Condition = ConditionInOffhand()
+    val WEARING_BOOTS: Condition = ConditionWearingBoots()
+    val WEARING_LEGGINGS: Condition = ConditionWearingLeggings()
+    val WEARING_CHESTPLATE: Condition = ConditionWearingChestplate()
+    val WEARING_HELMET: Condition = ConditionWearingHelmet()
 
     /**
      * Get condition matching id.
