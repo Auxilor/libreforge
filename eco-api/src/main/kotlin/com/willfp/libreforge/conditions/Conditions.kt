@@ -22,6 +22,8 @@ import com.willfp.libreforge.conditions.conditions.ConditionHasPermission
 import com.willfp.libreforge.conditions.conditions.ConditionHasPotionEffect
 import com.willfp.libreforge.conditions.conditions.ConditionInAir
 import com.willfp.libreforge.conditions.conditions.ConditionInBiome
+import com.willfp.libreforge.conditions.conditions.ConditionInMainhand
+import com.willfp.libreforge.conditions.conditions.ConditionInOffhand
 import com.willfp.libreforge.conditions.conditions.ConditionInWater
 import com.willfp.libreforge.conditions.conditions.ConditionInWorld
 import com.willfp.libreforge.conditions.conditions.ConditionIsFrozen
@@ -79,6 +81,8 @@ object Conditions {
     val ANY_OF: Condition = ConditionAnyOf()
     val PLACEHOLDER_CONTAINS: Condition = ConditionPlaceholderContains()
     val IS_FROZEN: Condition = ConditionIsFrozen()
+    val IN_MAINHAND: Condition = ConditionInMainhand()
+    val IN_OFFHAND: Condition = ConditionInOffhand()
 
     /**
      * Get condition matching id.
