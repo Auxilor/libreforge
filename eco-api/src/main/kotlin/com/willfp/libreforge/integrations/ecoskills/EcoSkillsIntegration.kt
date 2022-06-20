@@ -16,6 +16,7 @@ object EcoSkillsIntegration : Integration {
     private lateinit var MULTIPLY_ALL_STATS: Effect
     private lateinit var ADD_STAT_TEMPORARILY: Effect
     private lateinit var MULTIPLY_STAT_TEMPORARILY: Effect
+    private lateinit var SKILL: FilterSkill
 
     fun load() {
         ADD_STAT = EffectAddStat()
@@ -28,6 +29,7 @@ object EcoSkillsIntegration : Integration {
         MULTIPLY_ALL_STATS = EffectMultiplyAllStats()
         ADD_STAT_TEMPORARILY = EffectAddStatTemporarily()
         MULTIPLY_STAT_TEMPORARILY = MultiplyStatTemporarily()
+        SKILL = FilterSkill()
     }
 
     override fun getPluginName(): String {
