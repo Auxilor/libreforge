@@ -25,7 +25,8 @@ class TriggerLevelUpSkill : Trigger(
             player,
             TriggerData(
                 player = player,
-                location = player.location
+                location = player.location,
+                event = WrappedSkillLevelUpEvent(event)
             ),
             event.level.toDouble()
         )
