@@ -44,6 +44,7 @@ import com.willfp.libreforge.triggers.triggers.TriggerToggleFlight
 import com.willfp.libreforge.triggers.triggers.TriggerToggleSneak
 import com.willfp.libreforge.triggers.triggers.TriggerToggleSprint
 import com.willfp.libreforge.triggers.triggers.TriggerTridentAttack
+import com.willfp.libreforge.triggers.triggers.TriggerWinRaid
 
 @Suppress("UNUSED")
 object Triggers {
@@ -92,6 +93,7 @@ object Triggers {
     val CRAFT: Trigger = TriggerCraft()
     val ENCHANT_ITEM: Trigger = TriggerEnchantItem()
     val DAMAGE_ITEM: Trigger = TriggerDamageItem()
+    val WIN_RAID: Trigger = TriggerWinRaid()
 
     fun values(): Set<Trigger> {
         return BY_ID.values.toSet()
