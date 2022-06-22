@@ -12,7 +12,7 @@ class FilterSkill : FilterComponent() {
 
         return config.withInverse("skill", Config::getStringsOrNull) {
             it?.any { skillName ->
-                skillName.equals(skill.name, ignoreCase = true)
+                skillName.equals(skill.id, ignoreCase = true)
             } == true
         }
     }

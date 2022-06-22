@@ -25,7 +25,8 @@ class TriggerLevelUpPet : Trigger(
             player,
             TriggerData(
                 player = player,
-                location = player.location
+                location = player.location,
+                event = WrappedPetLevelUpEvent(event)
             ),
             event.level.toDouble()
         )
