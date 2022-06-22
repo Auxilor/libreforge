@@ -36,7 +36,7 @@ abstract class Trigger(
         value: Double,
         forceHolders: Iterable<Holder>? = null
     ) {
-        val preProcessEvent = TriggerPreProcessEvent(player, this, value)
+        val preProcessEvent = TriggerPreProcessEvent(player, this, data, value)
         Bukkit.getPluginManager().callEvent(preProcessEvent)
 
         if (preProcessEvent.isCancelled) {
@@ -55,7 +55,7 @@ abstract class Trigger(
                 continue
             }
 
-            val event = TriggerProcessEvent(player, holder, this, value)
+            val event = TriggerProcessEvent(player, holder, this, data, value)
             Bukkit.getPluginManager().callEvent(event)
 
             if (!event.isCancelled) {
