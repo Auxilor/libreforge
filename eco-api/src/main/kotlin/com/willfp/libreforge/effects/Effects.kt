@@ -26,6 +26,7 @@ import com.willfp.libreforge.effects.effects.EffectDamageVictim
 import com.willfp.libreforge.effects.effects.EffectDrill
 import com.willfp.libreforge.effects.effects.EffectExtinguish
 import com.willfp.libreforge.effects.effects.EffectFeatherStep
+import com.willfp.libreforge.effects.effects.EffectFlySpeedMultiplier
 import com.willfp.libreforge.effects.effects.EffectFoodMultiplier
 import com.willfp.libreforge.effects.effects.EffectGiveFood
 import com.willfp.libreforge.effects.effects.EffectGiveHealth
@@ -151,6 +152,7 @@ object Effects {
     val SET_FREEZE_TICKS: Effect = EffectSetFreezeTicks()
     val SHOOT: Effect = EffectShoot()
     val LUCK_MULTIPLIER: Effect = EffectLuckMultiplier()
+    val FLY_SPEED_MULTIPLIER: Effect = EffectFlySpeedMultiplier()
 
     /**
      * Get effect matching id.
