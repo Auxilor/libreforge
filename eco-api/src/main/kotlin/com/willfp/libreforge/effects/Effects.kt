@@ -82,7 +82,7 @@ import com.willfp.libreforge.triggers.DataMutators
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.Triggers
 import com.willfp.libreforge.triggers.triggers.TriggerStatic
-import java.util.*
+import java.util.UUID
 
 @Suppress("UNUSED")
 object Effects {
