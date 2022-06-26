@@ -8,6 +8,7 @@ import com.willfp.eco.core.placeholder.StaticPlaceholder
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.LibReforgePlugin
 import com.willfp.libreforge.conditions.Conditions
+import com.willfp.libreforge.effects.effects.EffectAddPoints
 import com.willfp.libreforge.effects.effects.EffectArmor
 import com.willfp.libreforge.effects.effects.EffectArmorToughness
 import com.willfp.libreforge.effects.effects.EffectArrowRing
@@ -153,6 +154,7 @@ object Effects {
     val SHOOT: Effect = EffectShoot()
     val LUCK_MULTIPLIER: Effect = EffectLuckMultiplier()
     val FLY_SPEED_MULTIPLIER: Effect = EffectFlySpeedMultiplier()
+    val ADD_POINTS: Effect = EffectAddPoints()
 
     /**
      * Get effect matching id.

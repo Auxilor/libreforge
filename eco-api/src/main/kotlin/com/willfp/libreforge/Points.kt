@@ -77,6 +77,10 @@ fun Player.givePoints(type: String, points: Double) {
     this.setPoints(type, this.getPoints(type) + points)
 }
 
+fun Player.takePoints(type: String, points: Double) {
+    this.setPoints(type, this.getPoints(type) - points)
+}
+
 private fun String.toFriendlyPointName(): String {
     val config = LibReforgePlugin.instance.configYml.getSubsectionOrNull("point-names") ?: return this
     return config.getStringOrNull(this) ?: return this
