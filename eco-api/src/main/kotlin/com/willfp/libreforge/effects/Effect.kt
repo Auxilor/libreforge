@@ -371,6 +371,18 @@ data class ConfiguredEffect internal constructor(
             invocation = invocation.copy(data = mutators.mutate(rawInvocation.copy(compileData = compileData).data))
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (other !is ConfiguredEffect) {
+            return false
+        }
+
+        return this.uuid == other.uuid
+    }
+
+    override fun hashCode(): Int {
+        return uuid.hashCode()
+    }
 }
 
 data class MultiplierModifier(val uuid: UUID, val multiplier: Double)

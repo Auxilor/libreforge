@@ -7,9 +7,9 @@ import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.PluginProps
 import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.integrations.IntegrationLoader
-import com.willfp.eco.util.ListUtils
 import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.conditions.MovementConditionListener
+import com.willfp.libreforge.effects.ConfiguredEffect
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.integrations.aureliumskills.AureliumSkillsIntegration
 import com.willfp.libreforge.integrations.boosters.BoostersIntegration
@@ -35,13 +35,15 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 private val holderProviders = mutableSetOf<HolderProvider>()
-private val previousStates: MutableMap<UUID, Iterable<Holder>> = WeakHashMap()
+
+private val previousStates: MutableMap<UUID, Iterable<ConfiguredEffect>> = WeakHashMap()
 private val holderCache = Caffeine.newBuilder()
     .expireAfterWrite(4L, TimeUnit.SECONDS)
     .build<UUID, Iterable<Holder>>()
 
 typealias HolderProvider = (Player) -> Iterable<Holder>
 
+@Suppress("UNUSED")
 abstract class LibReforgePlugin : EcoPlugin() {
     private val defaultPackage = StringUtils.join(
         arrayOf("com", "willfp", "libreforge"),
@@ -217,9 +219,30 @@ fun Player.getHolders(respectConditions: Boolean = true): Iterable<Holder> {
     return holders
 }
 
+fun Player.getActiveEffects(): Iterable<ConfiguredEffect> {
+    val holders = this.getHolders(respectConditions = true)
+    val effects = mutableListOf<ConfiguredEffect>()
+
+    for (holder in holders) {
+        if (!holder.conditions.all { it.isMet(this) }) {
+            continue
+        }
+
+        for (effect in holder.effects) {
+            if (!effect.conditions.all { it.isMet(this) }) {
+                continue
+            }
+
+            effects.add(effect)
+        }
+    }
+
+    return effects
+}
+
 @JvmOverloads
 fun Player.updateEffects(noRescan: Boolean = false) {
-    val before = mutableListOf<Holder>()
+    val before = mutableListOf<ConfiguredEffect>()
     if (previousStates.containsKey(this.uniqueId)) {
         before.addAll(previousStates[this.uniqueId] ?: emptyList())
     }
@@ -228,101 +251,43 @@ fun Player.updateEffects(noRescan: Boolean = false) {
         this.clearEffectCache()
     }
 
-    val after = this.getHolders()
+    val after = this.getActiveEffects()
     previousStates[this.uniqueId] = after
 
-    val beforeFreq = ListUtils.listToFrequencyMap(before)
-    val afterFreq = ListUtils.listToFrequencyMap(after.toList())
+    val added = after.toMutableList().apply { removeAll(before.toSet()) }
+    val removed = before.toMutableList().apply { removeAll(after.toSet()) }
 
-    val added = mutableListOf<Holder>()
-    val removed = mutableListOf<Holder>()
-
-    for ((holder, freq) in afterFreq) {
-        var amount = freq
-        amount -= beforeFreq[holder] ?: 0
-        if (amount < 1) {
-            continue
-        }
-
-        for (i in 0 until amount) {
-            added.add(holder)
-        }
-    }
-
-    for ((holder, freq) in beforeFreq) {
-        var amount = freq
-
-        amount -= afterFreq[holder] ?: 0
-        if (amount < 1) {
-            continue
-        }
-        for (i in 0 until amount) {
-            removed.add(holder)
-        }
-    }
-
-    for (holder in added) {
-        var areConditionsMet = true
-        for (condition in holder.conditions) {
+    for ((effect, config, _, _, _, conditions) in added) {
+        var effectConditions = true
+        for (condition in conditions) {
             if (!condition.isMet(this)) {
-                areConditionsMet = false
+                effectConditions = false
                 break
             }
         }
 
-        if (!areConditionsMet) {
+        if (!effectConditions) {
             continue
         }
 
-        for ((effect, config, _, _, _, conditions) in holder.effects) {
-            var effectConditions = true
-            for (condition in conditions) {
-                if (!condition.isMet(this)) {
-                    effectConditions = false
-                    break
-                }
-            }
-
-            if (!effectConditions) {
-                continue
-            }
-
-            effect.enableForPlayer(this, config)
-        }
+        effect.enableForPlayer(this, config)
     }
 
-    for (holder in removed) {
-        for ((effect, _) in holder.effects) {
+    for ((effect) in removed) {
+        effect.disableForPlayer(this)
+    }
+
+    for ((effect, _, _, _, _, conditions) in after) {
+        var effectConditions = true
+        for (condition in conditions) {
+            if (!condition.isMet(this)) {
+                effectConditions = false
+                break
+            }
+        }
+
+        if (!effectConditions) {
             effect.disableForPlayer(this)
-        }
-    }
-
-    for (holder in after) {
-        var areConditionsMet = true
-        for (condition in holder.conditions) {
-            if (!condition.isMet(this)) {
-                areConditionsMet = false
-                break
-            }
-        }
-        if (!areConditionsMet) {
-            for ((effect, _) in holder.effects) {
-                effect.disableForPlayer(this)
-            }
-        }
-
-        for ((effect, _, _, _, _, conditions) in holder.effects) {
-            var effectConditions = true
-            for (condition in conditions) {
-                if (!condition.isMet(this)) {
-                    effectConditions = false
-                    break
-                }
-            }
-
-            if (!effectConditions) {
-                effect.disableForPlayer(this)
-            }
         }
     }
 }
