@@ -132,7 +132,7 @@ abstract class Effect(
     fun getUUID(
         offset: Int
     ): UUID {
-        return UUID.nameUUIDFromBytes("$id$offset".toByteArray())
+        return UUID.nameUUIDFromBytes("${plugin.name.lowercase()}$id$offset".toByteArray())
     }
 
     /**
