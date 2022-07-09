@@ -7,8 +7,8 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
 
-class EffectExplosion : Effect(
-    "explosion",
+class EffectCreateExplosion : Effect(
+    "create_explosion",
     applicableTriggers = Triggers.withParameters(
         TriggerParameter.LOCATION
     )
@@ -21,9 +21,9 @@ class EffectExplosion : Effect(
         val power = config.getDoubleFromExpression("power", data.player)
 
         for (i in 1..amount) {
-            plugin.scheduler.runLater({
-                world.createExplosion(location, power)
-            }, 1)
+            plugin.scheduler.runLater(i.toLong()) {
+                world.createExplosion(location, power.toFloat())
+            }
         }
     }
 
@@ -31,18 +31,18 @@ class EffectExplosion : Effect(
         val violations = mutableListOf<ConfigViolation>()
 
         if (!config.has("amount")) violations.add(
-                ConfigViolation(
-                    "amount",
-                    "You must specify the amount of explosions!"
-                )
+            ConfigViolation(
+                "amount",
+                "You must specify the amount of explosions!"
             )
+        )
 
         if (!config.has("power")) violations.add(
-                ConfigViolation(
-                    "power",
-                    "You must specify the power of the explosion!"
-                )
+            ConfigViolation(
+                "power",
+                "You must specify the explosion power!"
             )
+        )
 
         return violations
     }
