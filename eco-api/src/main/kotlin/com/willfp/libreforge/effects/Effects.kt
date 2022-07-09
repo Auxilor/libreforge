@@ -20,6 +20,7 @@ import com.willfp.libreforge.effects.effects.EffectBlockCommands
 import com.willfp.libreforge.effects.effects.EffectBonusHealth
 import com.willfp.libreforge.effects.effects.EffectBreakBlock
 import com.willfp.libreforge.effects.effects.EffectCancelEvent
+import com.willfp.libreforge.effects.effects.EffectCreateExplosion
 import com.willfp.libreforge.effects.effects.EffectCritMultiplier
 import com.willfp.libreforge.effects.effects.EffectDamageArmor
 import com.willfp.libreforge.effects.effects.EffectDamageMultiplier
@@ -159,6 +160,7 @@ object Effects {
     val ADD_POINTS: Effect = EffectAddPoints()
     val ADD_HOLDER: Effect = EffectAddHolder()
     val SPAWN_POTION_CLOUD: Effect = EffectSpawnPotionCloud()
+    val CREATE_EXPLOSION: Effect = EffectCreateExplosion()
 
     /**
      * Get effect matching id.
