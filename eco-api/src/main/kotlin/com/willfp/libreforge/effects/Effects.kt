@@ -76,6 +76,7 @@ import com.willfp.libreforge.effects.effects.EffectSpawnPotionCloud
 import com.willfp.libreforge.effects.effects.EffectStrikeLightning
 import com.willfp.libreforge.effects.effects.EffectStripAI
 import com.willfp.libreforge.effects.effects.EffectTeleport
+import com.willfp.libreforge.effects.effects.EffectTraceback
 import com.willfp.libreforge.effects.effects.EffectTransmission
 import com.willfp.libreforge.effects.effects.EffectXpMultiplier
 import com.willfp.libreforge.filters.ConfiguredFilter
@@ -161,6 +162,7 @@ object Effects {
     val ADD_HOLDER: Effect = EffectAddHolder()
     val SPAWN_POTION_CLOUD: Effect = EffectSpawnPotionCloud()
     val CREATE_EXPLOSION: Effect = EffectCreateExplosion()
+    val TRACEBACK: Effect = EffectTraceback()
 
     /**
      * Get effect matching id.
