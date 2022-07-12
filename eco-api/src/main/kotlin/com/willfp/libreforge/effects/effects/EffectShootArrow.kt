@@ -33,6 +33,10 @@ class EffectShootArrow : Effect(
             if (fire == true) {
                 arrow.fireTicks = Int.MAX_VALUE
             }
+
+            if (config.getBool("no_source")) {
+                arrow.shooter = null
+            }
         }
     }
 
