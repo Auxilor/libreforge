@@ -38,6 +38,10 @@ class EffectShoot : Effect(
             if (fire == true) {
                 projectile.fireTicks = Int.MAX_VALUE
             }
+
+            if (config.getBool("no_source")) {
+                projectile.shooter = null
+            }
         }
     }
 
