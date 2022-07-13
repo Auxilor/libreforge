@@ -12,7 +12,8 @@ class TriggerToggleFlight : Trigger(
     "toggle_flight", listOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,
-        TriggerParameter.EVENT
+        TriggerParameter.EVENT,
+        TriggerParameter.VELOCITY
     )
 ) {
     @EventHandler(ignoreCancelled = true)
@@ -27,7 +28,8 @@ class TriggerToggleFlight : Trigger(
             TriggerData(
                 player = player,
                 location = player.location,
-                event = GenericCancellableEvent(event)
+                event = GenericCancellableEvent(event),
+                velocity = player.velocity
             )
         )
     }

@@ -13,7 +13,9 @@ class TriggerStatic(interval: Int) : Trigger(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,
         TriggerParameter.VICTIM,
-        TriggerParameter.BLOCK
+        TriggerParameter.BLOCK,
+        TriggerParameter.VELOCITY,
+        TriggerParameter.ITEM
     )
 ) {
     private fun invoke(player: Player) {
@@ -27,7 +29,9 @@ class TriggerStatic(interval: Int) : Trigger(
                 player = player,
                 location = player.location,
                 victim = player,
-                block = block
+                block = block,
+                velocity = player.velocity,
+                item = player.inventory.itemInMainHand
             )
         )
     }

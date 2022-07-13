@@ -17,8 +17,8 @@ data class TriggerData(
     val location: Location? = victim?.location ?: player?.location,
     val projectile: Projectile? = null,
     val damageCause: EntityDamageEvent.DamageCause? = null,
-    val velocity: Vector? = null,
-    val item: ItemStack? = null
+    val velocity: Vector? = player?.velocity ?: victim?.velocity,
+    val item: ItemStack? = player?.inventory?.itemInMainHand ?: victim?.equipment?.itemInMainHand
 )
 
 enum class TriggerParameter {

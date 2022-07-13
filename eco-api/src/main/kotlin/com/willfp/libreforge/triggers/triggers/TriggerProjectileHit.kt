@@ -14,7 +14,8 @@ class TriggerProjectileHit : Trigger(
         TriggerParameter.PLAYER,
         TriggerParameter.PROJECTILE,
         TriggerParameter.LOCATION,
-        TriggerParameter.EVENT
+        TriggerParameter.EVENT,
+        TriggerParameter.VELOCITY
     )
 ) {
     @EventHandler(ignoreCancelled = true)
@@ -36,7 +37,8 @@ class TriggerProjectileHit : Trigger(
                 player = shooter,
                 projectile = projectile,
                 location = projectile.location,
-                event = GenericCancellableEvent(event)
+                event = GenericCancellableEvent(event),
+                velocity = projectile.velocity
             )
         )
     }

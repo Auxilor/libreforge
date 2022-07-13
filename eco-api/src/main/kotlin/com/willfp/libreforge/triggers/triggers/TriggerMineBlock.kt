@@ -14,7 +14,8 @@ class TriggerMineBlock : Trigger(
         TriggerParameter.PLAYER,
         TriggerParameter.BLOCK,
         TriggerParameter.LOCATION,
-        TriggerParameter.EVENT
+        TriggerParameter.EVENT,
+        TriggerParameter.ITEM
     )
 ) {
     @EventHandler(ignoreCancelled = true)
@@ -35,7 +36,8 @@ class TriggerMineBlock : Trigger(
                 player = player,
                 block = block,
                 location = block.location,
-                event = WrappedBlockBreakEvent(event)
+                event = WrappedBlockBreakEvent(event),
+                item = player.inventory.itemInMainHand
             )
         )
     }

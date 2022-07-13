@@ -14,7 +14,8 @@ class TriggerMove : Trigger(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,
         TriggerParameter.VELOCITY,
-        TriggerParameter.EVENT
+        TriggerParameter.EVENT,
+        TriggerParameter.ITEM
     )
 ) {
     @EventHandler(ignoreCancelled = true)
@@ -42,7 +43,8 @@ class TriggerMove : Trigger(
                 player = player,
                 location = player.location,
                 velocity = player.velocity,
-                event = GenericCancellableEvent(event)
+                event = GenericCancellableEvent(event),
+                item = player.inventory.itemInMainHand
             ),
             distance
         )
