@@ -13,7 +13,8 @@ class TriggerMineBlockProgress : Trigger(
         TriggerParameter.PLAYER,
         TriggerParameter.BLOCK,
         TriggerParameter.LOCATION,
-        TriggerParameter.EVENT
+        TriggerParameter.EVENT,
+        TriggerParameter.ITEM
     )
 ) {
     @EventHandler(ignoreCancelled = true)
@@ -31,7 +32,8 @@ class TriggerMineBlockProgress : Trigger(
                 player = player,
                 block = block,
                 location = block.location,
-                event = WrappedBlockBreakProgressEvent(event)
+                event = WrappedBlockBreakProgressEvent(event),
+                item = player.inventory.itemInMainHand
             )
         )
     }

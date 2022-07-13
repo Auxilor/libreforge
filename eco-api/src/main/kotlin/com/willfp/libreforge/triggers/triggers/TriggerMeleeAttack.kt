@@ -17,7 +17,8 @@ class TriggerMeleeAttack : Trigger(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
         TriggerParameter.LOCATION,
-        TriggerParameter.EVENT
+        TriggerParameter.EVENT,
+        TriggerParameter.ITEM
     )
 ) {
     @EventHandler(ignoreCancelled = true)
@@ -47,7 +48,8 @@ class TriggerMeleeAttack : Trigger(
                 player = attacker,
                 victim = victim,
                 location = victim.location,
-                event = WrappedDamageEvent(event)
+                event = WrappedDamageEvent(event),
+                item = attacker.inventory.itemInMainHand
             ),
             event.finalDamage
         )
