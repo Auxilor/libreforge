@@ -24,9 +24,9 @@ class EffectRotate : Effect(
     override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
-        if (!config.has("rotate")) violations.add(
+        if (!config.has("angle")) violations.add(
             ConfigViolation(
-                "rotate",
+                "angle",
                 "You must specify the angle to rotate around!"
             )
         )
