@@ -58,6 +58,7 @@ import com.willfp.libreforge.effects.effects.EffectPullToLocation
 import com.willfp.libreforge.effects.effects.EffectRegenMultiplier
 import com.willfp.libreforge.effects.effects.EffectRemoveItem
 import com.willfp.libreforge.effects.effects.EffectRemovePotionEffect
+import com.willfp.libreforge.effects.effects.EffectRotate
 import com.willfp.libreforge.effects.effects.EffectRunChain
 import com.willfp.libreforge.effects.effects.EffectRunChainInline
 import com.willfp.libreforge.effects.effects.EffectRunCommand
@@ -163,6 +164,7 @@ object Effects {
     val SPAWN_POTION_CLOUD: Effect = EffectSpawnPotionCloud()
     val CREATE_EXPLOSION: Effect = EffectCreateExplosion()
     val TRACEBACK: Effect = EffectTraceback()
+    val ROTATE: Effect = EffectRotate()
 
     /**
      * Get effect matching id.
