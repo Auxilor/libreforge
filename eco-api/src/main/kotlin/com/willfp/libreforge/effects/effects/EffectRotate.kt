@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -18,5 +19,18 @@ class EffectRotate : Effect(
 
 
         player.location.yaw = yaw % 360f
+    }
+
+    override fun validateConfig(config: Config): List<ConfigViolation> {
+        val violations = mutableListOf<ConfigViolation>()
+
+        if (!config.has("rotate")) violations.add(
+            ConfigViolation(
+                "rotate",
+                "You must specify the angle to rotate around!"
+            )
+        )
+
+        return violations
     }
 }
