@@ -20,7 +20,7 @@ import org.bukkit.event.entity.EntityTargetEvent
 
 class EffectSpawnMobs : Effect(
     "spawn_mobs",
-    applicableTriggers = Triggers.withParameters(
+    triggers = Triggers.withParameters(
         TriggerParameter.LOCATION
     )
 ), Listener {

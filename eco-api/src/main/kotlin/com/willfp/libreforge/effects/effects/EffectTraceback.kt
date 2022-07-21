@@ -13,7 +13,7 @@ import kotlin.math.min
 
 class EffectTraceback : Effect(
     "traceback",
-    applicableTriggers = Triggers.withParameters(
+    triggers = Triggers.withParameters(
         TriggerParameter.PLAYER
     )
 ) {

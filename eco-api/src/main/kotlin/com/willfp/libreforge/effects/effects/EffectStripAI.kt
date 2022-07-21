@@ -10,7 +10,7 @@ import org.bukkit.entity.Mob
 
 class EffectStripAI : Effect(
     "strip_ai",
-    applicableTriggers = Triggers.withParameters(
+    triggers = Triggers.withParameters(
         TriggerParameter.VICTIM
     )
 ) {

@@ -19,7 +19,7 @@ import org.bukkit.inventory.meta.Damageable
 
 class EffectDamageArmor : Effect(
     "damage_armor",
-    applicableTriggers = Triggers.withParameters(
+    triggers = Triggers.withParameters(
         TriggerParameter.VICTIM
     )
 ) {

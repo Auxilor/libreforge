@@ -10,7 +10,7 @@ import org.bukkit.Particle
 
 class EffectSpawnParticle : Effect(
     "spawn_particle",
-    applicableTriggers = Triggers.withParameters(
+    triggers = Triggers.withParameters(
         TriggerParameter.LOCATION
     )
 ) {

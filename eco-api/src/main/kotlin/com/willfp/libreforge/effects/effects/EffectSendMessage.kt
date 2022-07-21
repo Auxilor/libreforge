@@ -13,7 +13,7 @@ import com.willfp.libreforge.triggers.Triggers
 
 class EffectSendMessage : Effect(
     "send_message",
-    applicableTriggers = Triggers.withParameters(
+    triggers = Triggers.withParameters(
         TriggerParameter.PLAYER
     )
 ) {

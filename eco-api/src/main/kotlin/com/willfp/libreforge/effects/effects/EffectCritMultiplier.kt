@@ -10,7 +10,7 @@ import com.willfp.libreforge.triggers.wrappers.WrappedDamageEvent
 
 class EffectCritMultiplier : Effect(
     "crit_multiplier",
-    applicableTriggers = Triggers.withParameters(
+    triggers = Triggers.withParameters(
         TriggerParameter.EVENT,
         TriggerParameter.PLAYER
     ),

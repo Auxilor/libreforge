@@ -11,7 +11,7 @@ import com.willfp.libreforge.triggers.Triggers
 
 class EffectGiveItem : Effect(
     "give_item",
-    applicableTriggers = Triggers.withParameters(
+    triggers = Triggers.withParameters(
         TriggerParameter.PLAYER
     )
 ) {

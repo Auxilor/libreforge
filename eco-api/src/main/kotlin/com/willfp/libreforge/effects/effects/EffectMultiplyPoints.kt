@@ -11,7 +11,7 @@ import com.willfp.libreforge.triggers.Triggers
 
 class EffectMultiplyPoints : Effect(
     "multiply_points",
-    applicableTriggers = Triggers.withParameters(
+    triggers = Triggers.withParameters(
         TriggerParameter.PLAYER
     )
 ) {

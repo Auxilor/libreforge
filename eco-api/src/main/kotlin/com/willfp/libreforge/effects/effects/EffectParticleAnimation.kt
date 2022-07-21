@@ -16,7 +16,7 @@ import org.bukkit.entity.LivingEntity
 
 class EffectParticleAnimation : Effect(
     "particle_animation",
-    applicableTriggers = Triggers.withParameters(
+    triggers = Triggers.withParameters(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION
     )

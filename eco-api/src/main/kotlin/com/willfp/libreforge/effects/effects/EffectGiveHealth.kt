@@ -10,7 +10,7 @@ import org.bukkit.attribute.Attribute
 
 class EffectGiveHealth : Effect(
     "give_health",
-    applicableTriggers = Triggers.withParameters(
+    triggers = Triggers.withParameters(
         TriggerParameter.PLAYER
     )
 ) {

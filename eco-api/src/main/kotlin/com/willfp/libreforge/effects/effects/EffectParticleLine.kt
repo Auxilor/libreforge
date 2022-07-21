@@ -11,7 +11,7 @@ import kotlin.math.floor
 
 class EffectParticleLine : Effect(
     "particle_line",
-    applicableTriggers = Triggers.withParameters(
+    triggers = Triggers.withParameters(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION
     )

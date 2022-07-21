@@ -10,7 +10,7 @@ import org.bukkit.util.Vector
 
 class EffectSetVelocity : Effect(
     "multiply_velocity",
-    applicableTriggers = Triggers.withParameters(
+    triggers = Triggers.withParameters(
         TriggerParameter.PLAYER
     )
 ) {

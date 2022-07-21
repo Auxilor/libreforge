@@ -8,7 +8,7 @@ import com.willfp.libreforge.triggers.Triggers
 
 class EffectTeleport : Effect(
     "teleport",
-    applicableTriggers = Triggers.withParameters(
+    triggers = Triggers.withParameters(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION
     )

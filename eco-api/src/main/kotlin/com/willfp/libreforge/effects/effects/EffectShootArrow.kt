@@ -13,7 +13,7 @@ import org.bukkit.entity.Arrow
 
 class EffectShootArrow : Effect(
     "shoot_arrow",
-    applicableTriggers = Triggers.withParameters(
+    triggers = Triggers.withParameters(
         TriggerParameter.PLAYER
     )
 ) {
