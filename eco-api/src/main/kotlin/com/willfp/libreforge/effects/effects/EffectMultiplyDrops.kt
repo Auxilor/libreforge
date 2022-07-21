@@ -12,7 +12,7 @@ import kotlin.math.roundToInt
 
 class EffectMultiplyDrops : Effect(
     "multiply_drops",
-    applicableTriggers = Triggers.withParameters(
+    triggers = Triggers.withParameters(
         TriggerParameter.EVENT
     ),
     noDelay = true

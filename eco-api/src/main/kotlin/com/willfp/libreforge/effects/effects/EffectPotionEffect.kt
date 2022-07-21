@@ -11,7 +11,7 @@ import org.bukkit.potion.PotionEffectType
 
 class EffectPotionEffect : Effect(
     "potion_effect",
-    applicableTriggers = Triggers.withParameters(
+    triggers = Triggers.withParameters(
         TriggerParameter.PLAYER
     )
 ) {

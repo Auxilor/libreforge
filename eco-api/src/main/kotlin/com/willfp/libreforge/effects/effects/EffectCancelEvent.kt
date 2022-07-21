@@ -9,7 +9,7 @@ import com.willfp.libreforge.triggers.WrappedCancellableEvent
 
 class EffectCancelEvent : Effect(
     "cancel_event",
-    applicableTriggers = Triggers.withParameters(
+    triggers = Triggers.withParameters(
         TriggerParameter.EVENT
     ),
     noDelay = true

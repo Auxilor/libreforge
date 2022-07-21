@@ -12,7 +12,7 @@ import org.bukkit.entity.LivingEntity
 
 class EffectDamageNearbyEntities : Effect(
     "damage_nearby_entities",
-    applicableTriggers = Triggers.withParameters(
+    triggers = Triggers.withParameters(
         TriggerParameter.LOCATION,
         TriggerParameter.PLAYER
     )

@@ -9,7 +9,7 @@ import com.willfp.libreforge.triggers.Triggers
 
 class EffectSetFreezeTicks : Effect(
     "set_freeze_ticks",
-    applicableTriggers = Triggers.withParameters(
+    triggers = Triggers.withParameters(
         TriggerParameter.VICTIM
     )
 ) {

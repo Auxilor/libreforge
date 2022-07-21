@@ -11,7 +11,7 @@ import com.willfp.libreforge.triggers.Triggers
 
 class EffectGivePetXp : Effect(
     "give_pet_xp",
-    applicableTriggers = Triggers.withParameters(
+    triggers = Triggers.withParameters(
         TriggerParameter.PLAYER
     )
 ) {

@@ -9,7 +9,7 @@ import com.willfp.libreforge.triggers.Triggers
 
 class EffectCreateExplosion : Effect(
     "create_explosion",
-    applicableTriggers = Triggers.withParameters(
+    triggers = Triggers.withParameters(
         TriggerParameter.LOCATION
     )
 ) {

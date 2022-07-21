@@ -99,16 +99,22 @@ object Triggers {
         return BY_ID.values.toSet()
     }
 
-    fun withParameters(vararg parameters: TriggerParameter): Set<Trigger> {
-        val found = mutableSetOf<Trigger>()
+    fun all(): () -> Set<Trigger> {
+        return { values() }
+    }
 
-        for (trigger in values()) {
-            if (trigger.parameters.containsAll(parameters.toSet())) {
-                found.add(trigger)
+    fun withParameters(vararg parameters: TriggerParameter): () -> Set<Trigger> {
+        return {
+            val found = mutableSetOf<Trigger>()
+
+            for (trigger in values()) {
+                if (trigger.parameters.containsAll(parameters.toSet())) {
+                    found.add(trigger)
+                }
             }
-        }
 
-        return found
+            found
+        }
     }
 
     fun getById(id: String): Trigger? {

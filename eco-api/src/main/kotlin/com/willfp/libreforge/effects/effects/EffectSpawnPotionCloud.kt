@@ -13,7 +13,7 @@ import org.bukkit.potion.PotionEffectType
 
 class EffectSpawnPotionCloud : Effect(
     "spawn_potion_cloud",
-    applicableTriggers = Triggers.withParameters(
+    triggers = Triggers.withParameters(
         TriggerParameter.LOCATION
     )
 ), Listener {

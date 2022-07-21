@@ -14,7 +14,7 @@ import net.kyori.adventure.title.TitlePart
 
 class EffectSendTitle : Effect(
     "send_title",
-    applicableTriggers = Triggers.withParameters(
+    triggers = Triggers.withParameters(
         TriggerParameter.PLAYER
     )
 ) {

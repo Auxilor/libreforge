@@ -15,7 +15,7 @@ import org.bukkit.entity.Projectile
 @Suppress("UNCHECKED_CAST")
 class EffectShoot : Effect(
     "shoot",
-    applicableTriggers = Triggers.withParameters(
+    triggers = Triggers.withParameters(
         TriggerParameter.PLAYER
     )
 ) {

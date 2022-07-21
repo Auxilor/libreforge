@@ -15,7 +15,7 @@ import com.willfp.libreforge.triggers.Triggers
 
 class EffectRunChain : Effect(
     "run_chain",
-    applicableTriggers = Triggers.values()
+    triggers = Triggers.all()
 ) {
     override fun handle(invocation: InvocationData, config: Config) {
         val chain = EffectChains.getByID(config.getString("chain")) ?: return

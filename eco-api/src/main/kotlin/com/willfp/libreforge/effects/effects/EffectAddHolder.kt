@@ -16,7 +16,7 @@ import java.util.*
 
 class EffectAddHolder : Effect(
     "add_holder",
-    applicableTriggers = Triggers.withParameters(
+    triggers = Triggers.withParameters(
         TriggerParameter.PLAYER
     )
 ) {

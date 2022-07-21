@@ -10,7 +10,7 @@ import com.willfp.libreforge.triggers.wrappers.WrappedDamageEvent
 
 class EffectDamageMultiplier : Effect(
     "damage_multiplier",
-    applicableTriggers = Triggers.withParameters(
+    triggers = Triggers.withParameters(
         TriggerParameter.EVENT
     ),
     noDelay = true

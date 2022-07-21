@@ -10,7 +10,7 @@ import org.bukkit.Sound
 
 class EffectPlaySound : Effect(
     "play_sound",
-    applicableTriggers = Triggers.withParameters(
+    triggers = Triggers.withParameters(
         TriggerParameter.PLAYER
     )
 ) {

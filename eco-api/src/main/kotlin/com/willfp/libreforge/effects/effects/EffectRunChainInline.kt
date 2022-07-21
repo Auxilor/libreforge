@@ -17,7 +17,7 @@ import com.willfp.libreforge.triggers.Triggers
 
 class EffectRunChainInline : Effect(
     "run_chain_inline",
-    applicableTriggers = Triggers.values()
+    triggers = Triggers.all()
 ) {
     override fun handle(invocation: InvocationData, config: Config) {
         val compileData = invocation.compileData as? InlineEffectChainCompileData ?: return

@@ -19,7 +19,7 @@ import kotlin.math.roundToInt
 
 class EffectAutosmelt : Effect(
     "autosmelt",
-    applicableTriggers = Triggers.values()
+    triggers = Triggers.all()
 ) {
     private val recipes = mutableMapOf<Material, Pair<Material, Int>>()
     private val fortuneMaterials = mutableSetOf(

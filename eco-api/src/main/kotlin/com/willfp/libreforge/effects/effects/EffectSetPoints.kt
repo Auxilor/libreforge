@@ -10,7 +10,7 @@ import com.willfp.libreforge.triggers.Triggers
 
 class EffectSetPoints : Effect(
     "set_points",
-    applicableTriggers = Triggers.withParameters(
+    triggers = Triggers.withParameters(
         TriggerParameter.PLAYER
     )
 ) {

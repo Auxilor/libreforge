@@ -10,7 +10,7 @@ import org.bukkit.potion.PotionEffectType
 
 class EffectRemovePotionEffect : Effect(
     "remove_potion_effect",
-    applicableTriggers = Triggers.withParameters(
+    triggers = Triggers.withParameters(
         TriggerParameter.PLAYER
     )
 ) {

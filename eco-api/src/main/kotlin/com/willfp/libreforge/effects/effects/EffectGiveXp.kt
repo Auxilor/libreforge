@@ -10,7 +10,7 @@ import com.willfp.libreforge.triggers.Triggers
 
 class EffectGiveXp : Effect(
     "give_xp",
-    applicableTriggers = Triggers.withParameters(
+    triggers = Triggers.withParameters(
         TriggerParameter.PLAYER
     )
 ) {

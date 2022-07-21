@@ -11,7 +11,7 @@ import com.willfp.libreforge.triggers.Triggers
 
 class EffectRemoveItem: Effect(
     "remove_item",
-    applicableTriggers = Triggers.withParameters(TriggerParameter.PLAYER)
+    triggers = Triggers.withParameters(TriggerParameter.PLAYER)
 ) {
     override fun handle(data: TriggerData, config: Config) {
         val player = data.player ?: return

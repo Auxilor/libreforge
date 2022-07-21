@@ -9,7 +9,7 @@ import com.willfp.libreforge.triggers.Triggers
 
 class EffectMultiplyVelocity : Effect(
     "multiply_velocity",
-    applicableTriggers = Triggers.withParameters(
+    triggers = Triggers.withParameters(
         TriggerParameter.PLAYER
     )
 ) {

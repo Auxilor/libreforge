@@ -27,11 +27,15 @@ import kotlin.math.ceil
 @Suppress("UNUSED_PARAMETER")
 abstract class Effect(
     id: String,
-    val applicableTriggers: Collection<Trigger> = emptyList(),
+    private val triggers: () -> Collection<Trigger> = { emptyList() },
     supportsFilters: Boolean = true,
     noDelay: Boolean = false
 ) : ConfigurableProperty(id), Listener {
     private val cooldownTracker = mutableMapOf<UUID, MutableMap<UUID, Long>>()
+
+    val applicableTriggers: Collection<Trigger>
+        get() = triggers()
+
     val supportsFilters = applicableTriggers.isNotEmpty()
     val noDelay: Boolean
 
@@ -238,7 +242,7 @@ data class ConfiguredEffect internal constructor(
                 return
             }
         }
-        
+
         var invocation = rawInvocation.copy(compileData = compileData)
 
         args.addInjectablePlaceholder(namedArguments.map { it.placeholder })

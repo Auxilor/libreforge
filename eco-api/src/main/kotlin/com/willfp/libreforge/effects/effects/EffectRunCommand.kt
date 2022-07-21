@@ -12,7 +12,7 @@ import org.bukkit.entity.Player
 
 class EffectRunCommand : Effect(
     "run_command",
-    applicableTriggers = Triggers.withParameters(
+    triggers = Triggers.withParameters(
         TriggerParameter.PLAYER
     )
 ) {

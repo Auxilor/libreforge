@@ -9,7 +9,7 @@ import com.willfp.libreforge.triggers.Triggers
 
 class EffectGiveOxygen : Effect(
     "give_oxygen",
-    applicableTriggers = Triggers.withParameters(
+    triggers = Triggers.withParameters(
         TriggerParameter.PLAYER
     )
 ) {
