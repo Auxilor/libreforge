@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
@@ -27,6 +28,12 @@ class EffectArrowRing : Effect(
         val radius = config.getDoubleFromExpression("radius", data.player)
         val damage = config.getDoubleFromExpression("arrow_damage", data.player)
         val flameTicks = config.getIntFromExpression("fire_ticks", data.player)
+
+        if (data.player != null) {
+            if (!location.getNearbyPlayers(radius + 0.5f).all { AntigriefManager.canInjure(data.player, it) }) {
+                return
+            }
+        }
 
         val apex = location.clone().add(0.0, height, 0.0)
 
