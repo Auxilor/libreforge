@@ -254,8 +254,15 @@ fun Player.updateEffects(noRescan: Boolean = false) {
     val after = this.getActiveEffects()
     previousStates[this.uniqueId] = after
 
-    val added = after.toMutableList().apply { removeAll(before.toSet()) }
-    val removed = before.toMutableList().apply { removeAll(after.toSet()) }
+    val added = after.toMutableList()
+    for (effect in before) {
+        added.remove(effect)
+    }
+
+    val removed = before.toMutableList()
+    for (effect in after) {
+        removed.remove(effect)
+    }
 
     for ((effect, config, _, _, _, conditions) in added) {
         var effectConditions = true
