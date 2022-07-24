@@ -3,7 +3,7 @@ package com.willfp.libreforge.effects.effects
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
-import com.willfp.libreforge.effects.getEffectAmount
+import com.willfp.libreforge.effects.Identifiers
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.PlayerDeathEvent
@@ -12,15 +12,22 @@ import java.util.*
 class EffectKeepInventory : Effect("keep_inventory") {
     private val players = mutableMapOf<UUID, MutableList<UUID>>()
 
-    override fun handleEnable(player: Player, config: Config) {
+    override fun handleEnable(
+        player: Player,
+        config: Config,
+        identifiers: Identifiers
+    ) {
         val existing = players[player.uniqueId] ?: mutableListOf()
-        existing.add(this.getUUID(player.getEffectAmount(this)))
+        existing.add(identifiers.uuid)
         players[player.uniqueId] = existing
     }
 
-    override fun handleDisable(player: Player) {
+    override fun handleDisable(
+        player: Player,
+        identifiers: Identifiers
+    ) {
         val existing = players[player.uniqueId] ?: mutableListOf()
-        existing.remove(this.getUUID(player.getEffectAmount(this)))
+        existing.remove(identifiers.uuid)
         players[player.uniqueId] = existing
     }
 

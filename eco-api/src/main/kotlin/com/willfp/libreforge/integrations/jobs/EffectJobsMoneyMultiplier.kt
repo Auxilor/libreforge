@@ -6,18 +6,22 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.mcmmo.McmmoManager
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.effects.MultiplierModifier
-import com.willfp.libreforge.effects.getEffectAmount
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
-import java.util.UUID
+import java.util.*
 
 class EffectJobsMoneyMultiplier : Effect("jobs_money_multiplier") {
     private val globalModifiers = mutableMapOf<UUID, MutableList<MultiplierModifier>>()
 
-    override fun handleEnable(player: Player, config: Config) {
+    override fun handleEnable(
+        player: Player,
+        config: Config,
+        identifiers: Identifiers
+    ) {
         val registeredModifiers = globalModifiers[player.uniqueId] ?: mutableListOf()
-        val uuid = this.getUUID(player.getEffectAmount(this))
+        val uuid = identifiers.uuid
         registeredModifiers.removeIf { it.uuid == uuid }
         registeredModifiers.add(
             MultiplierModifier(
@@ -28,9 +32,12 @@ class EffectJobsMoneyMultiplier : Effect("jobs_money_multiplier") {
         globalModifiers[player.uniqueId] = registeredModifiers
     }
 
-    override fun handleDisable(player: Player) {
+    override fun handleDisable(
+        player: Player,
+        identifiers: Identifiers
+    ) {
         val registeredModifiers = globalModifiers[player.uniqueId] ?: mutableListOf()
-        val uuid = this.getUUID(player.getEffectAmount(this))
+        val uuid = identifiers.uuid
         registeredModifiers.removeIf { it.uuid == uuid }
         globalModifiers[player.uniqueId] = registeredModifiers
     }

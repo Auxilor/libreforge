@@ -7,8 +7,8 @@ import com.willfp.ecopets.pets.Pet
 import com.willfp.ecopets.pets.Pets
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.effects.MultiplierModifier
-import com.willfp.libreforge.effects.getEffectAmount
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import java.util.*
@@ -17,13 +17,17 @@ class EffectPetXpMultiplier : Effect("pet_xp_multiplier") {
     private val modifiers = mutableMapOf<UUID, MutableMap<Pet, MutableList<MultiplierModifier>>>()
     private val globalModifiers = mutableMapOf<UUID, MutableList<MultiplierModifier>>()
 
-    override fun handleEnable(player: Player, config: Config) {
+    override fun handleEnable(
+        player: Player,
+        config: Config,
+        identifiers: Identifiers
+    ) {
         if (config.has("pets")) {
             val pets = config.getStrings("pets").mapNotNull { Pets.getByID(it) }
             for (pet in pets) {
                 val petModifiers = modifiers[player.uniqueId] ?: mutableMapOf()
                 val registeredModifiers = petModifiers[pet] ?: mutableListOf()
-                val uuid = this.getUUID(player.getEffectAmount(this))
+                val uuid = identifiers.uuid
                 registeredModifiers.removeIf { it.uuid == uuid }
                 registeredModifiers.add(
                     MultiplierModifier(
@@ -36,7 +40,7 @@ class EffectPetXpMultiplier : Effect("pet_xp_multiplier") {
             }
         } else {
             val registeredModifiers = globalModifiers[player.uniqueId] ?: mutableListOf()
-            val uuid = this.getUUID(player.getEffectAmount(this))
+            val uuid = identifiers.uuid
             registeredModifiers.removeIf { it.uuid == uuid }
             registeredModifiers.add(
                 MultiplierModifier(
@@ -50,9 +54,12 @@ class EffectPetXpMultiplier : Effect("pet_xp_multiplier") {
 
     }
 
-    override fun handleDisable(player: Player) {
+    override fun handleDisable(
+        player: Player,
+        identifiers: Identifiers
+    ) {
         val registeredModifiers = globalModifiers[player.uniqueId] ?: mutableListOf()
-        val uuid = this.getUUID(player.getEffectAmount(this))
+        val uuid = identifiers.uuid
         registeredModifiers.removeIf { it.uuid == uuid }
         globalModifiers[player.uniqueId] = registeredModifiers
 

@@ -3,7 +3,7 @@ package com.willfp.libreforge.effects.effects
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
-import com.willfp.libreforge.effects.getEffectAmount
+import com.willfp.libreforge.effects.Identifiers
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerRespawnEvent
@@ -38,7 +38,11 @@ class EffectPermanentPotionEffect : Effect("permanent_potion_effect") {
         }
     }
 
-    override fun handleEnable(player: Player, config: Config) {
+    override fun handleEnable(
+        player: Player,
+        config: Config,
+        identifiers: Identifiers
+    ) {
         val effectType = PotionEffectType.getByName(config.getString("effect").uppercase())
             ?: PotionEffectType.INCREASE_DAMAGE
 
@@ -58,16 +62,19 @@ class EffectPermanentPotionEffect : Effect("permanent_potion_effect") {
         val meta = player.getMetadata(metaKey).firstOrNull()?.value()
                 as? MutableMap<UUID, Pair<PotionEffectType, Int>> ?: mutableMapOf()
 
-        meta[this.getUUID(player.getEffectAmount(this))] = Pair(effectType, level)
+        meta[identifiers.uuid] = Pair(effectType, level)
 
         player.setMetadata(metaKey, plugin.metadataValueFactory.create(meta))
     }
 
-    override fun handleDisable(player: Player) {
+    override fun handleDisable(
+        player: Player,
+        identifiers: Identifiers
+    ) {
         val meta = player.getMetadata(metaKey).firstOrNull()?.value()
                 as? MutableMap<UUID, Pair<PotionEffectType, Int>> ?: mutableMapOf()
 
-        val (toRemove, _) = meta[this.getUUID(player.getEffectAmount(this))] ?: return
+        val (toRemove, _) = meta[identifiers.uuid] ?: return
 
         val active = player.getPotionEffect(toRemove) ?: return
 
@@ -75,7 +82,7 @@ class EffectPermanentPotionEffect : Effect("permanent_potion_effect") {
             return
         }
 
-        meta.remove(this.getUUID(player.getEffectAmount(this)))
+        meta.remove(identifiers.uuid)
         player.setMetadata(metaKey, plugin.metadataValueFactory.create(meta))
 
         player.removePotionEffect(toRemove)
