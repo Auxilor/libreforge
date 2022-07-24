@@ -7,7 +7,7 @@ import com.willfp.ecoskills.api.modifier.PlayerStatModifier
 import com.willfp.ecoskills.stats.Stats
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
-import com.willfp.libreforge.effects.getEffectAmount
+import com.willfp.libreforge.effects.Identifiers
 import org.bukkit.entity.Player
 
 class EffectMultiplyStat : Effect("multiply_stat") {
@@ -15,12 +15,13 @@ class EffectMultiplyStat : Effect("multiply_stat") {
 
     override fun handleEnable(
         player: Player,
-        config: Config
+        config: Config,
+        identifiers: Identifiers
     ) {
         api.addStatModifier(
             player,
             PlayerStatModifier(
-                this.getNamespacedKey(player.getEffectAmount(this)),
+                identifiers.key,
                 Stats.getByID(config.getString("stat")) ?: Stats.STRENGTH,
                 config.getDoubleFromExpression("multiplier", player),
                 ModifierOperation.MULTIPLY
@@ -28,10 +29,13 @@ class EffectMultiplyStat : Effect("multiply_stat") {
         )
     }
 
-    override fun handleDisable(player: Player) {
+    override fun handleDisable(
+        player: Player,
+        identifiers: Identifiers
+    ) {
         api.removeStatModifier(
             player,
-            this.getNamespacedKey(player.getEffectAmount(this))
+            identifiers.key
         )
     }
 

@@ -3,26 +3,33 @@ package com.willfp.libreforge.effects.effects
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
-import com.willfp.libreforge.effects.getEffectAmount
+import com.willfp.libreforge.effects.Identifiers
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerCommandPreprocessEvent
-import java.util.UUID
+import java.util.*
 
 class EffectBlockCommands : Effect(
     "block_commands"
 ) {
     private val players = mutableMapOf<UUID, MutableMap<UUID, List<String>>>()
 
-    override fun handleEnable(player: Player, config: Config) {
+    override fun handleEnable(
+        player: Player,
+        config: Config,
+        identifiers: Identifiers
+    ) {
         val commands = players[player.uniqueId] ?: mutableMapOf()
-        commands[this.getUUID(player.getEffectAmount(this))] = config.getStrings("commands")
+        commands[identifiers.uuid] = config.getStrings("commands")
         players[player.uniqueId] = commands
     }
 
-    override fun handleDisable(player: Player) {
+    override fun handleDisable(
+        player: Player,
+        identifiers: Identifiers
+    ) {
         val existing = players[player.uniqueId] ?: mutableMapOf()
-        existing.remove(this.getUUID(player.getEffectAmount(this)))
+        existing.remove(identifiers.uuid)
         players[player.uniqueId] = existing
     }
 

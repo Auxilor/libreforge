@@ -3,12 +3,12 @@ package com.willfp.libreforge.effects.effects
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
-import com.willfp.libreforge.effects.getEffectAmount
+import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.givePoints
 import com.willfp.libreforge.takePoints
 import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.entity.Player
-import java.util.UUID
+import java.util.*
 
 class EffectAddPoints : Effect("add_points") {
     private val tracker = mutableMapOf<UUID, MutableMap<UUID, AddedPoint>>()
@@ -21,10 +21,11 @@ class EffectAddPoints : Effect("add_points") {
 
     override fun handleEnable(
         player: Player,
-        config: Config
+        config: Config,
+        identifiers: Identifiers
     ) {
         val added = tracker[player.uniqueId] ?: mutableMapOf()
-        val uuid = this.getUUID(player.getEffectAmount(this))
+        val uuid = identifiers.uuid
         val point = config.getString("type")
         val amount = config.getDoubleFromExpression("amount", player)
 
@@ -38,9 +39,12 @@ class EffectAddPoints : Effect("add_points") {
         tracker[player.uniqueId] = added
     }
 
-    override fun handleDisable(player: Player) {
+    override fun handleDisable(
+        player: Player,
+        identifiers: Identifiers
+    ) {
         val added = tracker[player.uniqueId] ?: mutableMapOf()
-        val uuid = this.getUUID(player.getEffectAmount(this))
+        val uuid = identifiers.uuid
         val addedPoint = added[uuid] ?: return
         added.remove(uuid)
 

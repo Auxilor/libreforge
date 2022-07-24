@@ -116,8 +116,8 @@ abstract class LibReforgePlugin : EcoPlugin() {
         for (player in Bukkit.getOnlinePlayers()) {
             try {
                 for (holder in player.getHolders()) {
-                    for ((effect) in holder.effects) {
-                        effect.disableForPlayer(player)
+                    for (effect in holder.effects) {
+                        effect.disableFor(player)
                     }
                 }
             } catch (e: Exception) {
@@ -182,73 +182,29 @@ abstract class LibReforgePlugin : EcoPlugin() {
     }
 }
 
-private fun Player.clearEffectCache() {
-    holderCache.invalidate(this.uniqueId)
-}
-
 private fun Player.getPureHolders(): Iterable<Holder> {
     return holderCache.get(this.uniqueId) {
-        val holders = mutableListOf<Holder>()
-        for (provider in holderProviders) {
-            holders.addAll(provider(this))
-        }
-        holders
+        holderProviders.flatMap { it(this) }
     }
 }
 
 @JvmOverloads
-fun Player.getHolders(respectConditions: Boolean = true): Iterable<Holder> {
-    val holders = this.getPureHolders().toMutableList()
+fun Player.getHolders(respectConditions: Boolean = true): Iterable<Holder> =
+    this.getPureHolders()
+        .filter { if (respectConditions) it.conditions.all { cond -> cond.isMet(this) } else true }
 
-    if (respectConditions) {
-        for (holder in holders.toList()) {
-            var isMet = true
-            for (condition in holder.conditions) {
-                if (!condition.isMet(this)) {
-                    isMet = false
-                    break
-                }
-            }
-
-            if (!isMet) {
-                holders.remove(holder)
-            }
-        }
-    }
-
-    return holders
-}
-
-fun Player.getActiveEffects(): Iterable<ConfiguredEffect> {
-    val holders = this.getHolders(respectConditions = true)
-    val effects = mutableListOf<ConfiguredEffect>()
-
-    for (holder in holders) {
-        if (!holder.conditions.all { it.isMet(this) }) {
-            continue
-        }
-
-        for (effect in holder.effects) {
-            if (!effect.conditions.all { it.isMet(this) }) {
-                continue
-            }
-
-            effects.add(effect)
-        }
-    }
-
-    return effects
-}
+fun Player.getActiveEffects(): Iterable<ConfiguredEffect> =
+    this.getHolders(respectConditions = true)
+        .flatMap { it.effects }
+        .filter { it.conditions.all { cond -> cond.isMet(this) } }
 
 @JvmOverloads
 fun Player.updateEffects(noRescan: Boolean = false) {
     val before = mutableListOf<ConfiguredEffect>()
-    if (previousStates.containsKey(this.uniqueId)) {
-        before.addAll(previousStates[this.uniqueId] ?: emptyList())
-    }
+    before.addAll(previousStates[this.uniqueId] ?: emptyList())
 
     if (!noRescan) {
-        this.clearEffectCache()
+        holderCache.invalidate(this.uniqueId)
     }
 
     val after = this.getActiveEffects()
@@ -264,37 +220,22 @@ fun Player.updateEffects(noRescan: Boolean = false) {
         removed.remove(effect)
     }
 
-    for ((effect, config, _, _, _, conditions) in added) {
-        var effectConditions = true
-        for (condition in conditions) {
-            if (!condition.isMet(this)) {
-                effectConditions = false
-                break
-            }
-        }
-
-        if (!effectConditions) {
+    for (effect in added) {
+        if (!effect.conditions.all { it.isMet(this) }) {
             continue
         }
 
-        effect.enableForPlayer(this, config)
+
+        effect.enableFor(this)
     }
 
-    for ((effect) in removed) {
-        effect.disableForPlayer(this)
+    for (effect in removed) {
+        effect.disableFor(this)
     }
 
-    for ((effect, _, _, _, _, conditions) in after) {
-        var effectConditions = true
-        for (condition in conditions) {
-            if (!condition.isMet(this)) {
-                effectConditions = false
-                break
-            }
-        }
-
-        if (!effectConditions) {
-            effect.disableForPlayer(this)
+    for (effect in after) {
+        if (!effect.conditions.all { it.isMet(this) }) {
+            effect.disableFor(this)
         }
     }
 }
