@@ -34,7 +34,7 @@ import org.bukkit.entity.Player
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-private val holderProviders = mutableSetOf<HolderProvider>()
+private val holderProviders = mutableListOf<HolderProvider>()
 
 private val previousStates: MutableMap<UUID, Iterable<ConfiguredEffect>> = WeakHashMap()
 private val holderCache = Caffeine.newBuilder()
