@@ -225,7 +225,6 @@ fun Player.updateEffects(noRescan: Boolean = false) {
             continue
         }
 
-
         effect.enableFor(this)
     }
 
