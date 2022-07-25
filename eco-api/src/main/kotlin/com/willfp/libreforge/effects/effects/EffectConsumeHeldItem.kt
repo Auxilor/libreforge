@@ -29,6 +29,8 @@ class EffectConsumeHeldItem : Effect(
             item.amount = newAmount
         }
 
+        player.inventory.setItemInMainHand(item)
+
         player.updateEffects()
     }
 
