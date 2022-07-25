@@ -20,6 +20,7 @@ import com.willfp.libreforge.effects.effects.EffectBlockCommands
 import com.willfp.libreforge.effects.effects.EffectBonusHealth
 import com.willfp.libreforge.effects.effects.EffectBreakBlock
 import com.willfp.libreforge.effects.effects.EffectCancelEvent
+import com.willfp.libreforge.effects.effects.EffectConsumeHeldItem
 import com.willfp.libreforge.effects.effects.EffectCreateExplosion
 import com.willfp.libreforge.effects.effects.EffectCritMultiplier
 import com.willfp.libreforge.effects.effects.EffectDamageArmor
@@ -165,6 +166,7 @@ object Effects {
     val CREATE_EXPLOSION: Effect = EffectCreateExplosion()
     val TRACEBACK: Effect = EffectTraceback()
     val ROTATE: Effect = EffectRotate()
+    val CONSUME_HELD_ITEM: Effect = EffectConsumeHeldItem()
 
     /**
      * Get effect matching id.
