@@ -78,6 +78,7 @@ import com.willfp.libreforge.effects.effects.EffectSpawnPotionCloud
 import com.willfp.libreforge.effects.effects.EffectStrikeLightning
 import com.willfp.libreforge.effects.effects.EffectStripAI
 import com.willfp.libreforge.effects.effects.EffectTeleport
+import com.willfp.libreforge.effects.effects.EffectTeleportTo
 import com.willfp.libreforge.effects.effects.EffectTraceback
 import com.willfp.libreforge.effects.effects.EffectTransmission
 import com.willfp.libreforge.effects.effects.EffectXpMultiplier
@@ -167,6 +168,7 @@ object Effects {
     val TRACEBACK: Effect = EffectTraceback()
     val ROTATE: Effect = EffectRotate()
     val CONSUME_HELD_ITEM: Effect = EffectConsumeHeldItem()
+    val TELEPORT_TO: Effect = EffectTeleportTo()
 
     /**
      * Get effect matching id.
