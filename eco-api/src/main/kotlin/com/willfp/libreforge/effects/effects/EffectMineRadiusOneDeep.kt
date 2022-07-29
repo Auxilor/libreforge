@@ -12,7 +12,7 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
 import org.bukkit.Material
 import org.bukkit.block.Block
-
+import kotlin.math.abs
 
 class EffectMineRadiusOneDeep : Effect(
     "mine_radius_one_deep",
@@ -60,6 +60,18 @@ class EffectMineRadiusOneDeep : Effect(
 
                     if (x == 0 && y == 0 && z == 0) {
                         continue
+                    }
+
+                    if (config.getBool("no_corners")) {
+                        val atXCorner = abs(x) == radius
+                        val atYCorner = abs(y) == radius
+                        val atZCorner = abs(z) == radius
+
+                        if (atXCorner && atYCorner
+                            || atXCorner && atZCorner
+                            || atYCorner && atZCorner) {
+                            continue
+                        }
                     }
 
                     val toBreak = block.world.getBlockAt(
