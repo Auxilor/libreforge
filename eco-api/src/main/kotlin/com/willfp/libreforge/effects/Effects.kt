@@ -81,6 +81,7 @@ import com.willfp.libreforge.effects.effects.EffectTeleport
 import com.willfp.libreforge.effects.effects.EffectTeleportTo
 import com.willfp.libreforge.effects.effects.EffectTraceback
 import com.willfp.libreforge.effects.effects.EffectTransmission
+import com.willfp.libreforge.effects.effects.EffectTriggerCustom
 import com.willfp.libreforge.effects.effects.EffectXpMultiplier
 import com.willfp.libreforge.filters.ConfiguredFilter
 import com.willfp.libreforge.filters.EmptyFilter
@@ -169,6 +170,7 @@ object Effects {
     val ROTATE: Effect = EffectRotate()
     val CONSUME_HELD_ITEM: Effect = EffectConsumeHeldItem()
     val TELEPORT_TO: Effect = EffectTeleportTo()
+    val TRIGGER_CUSTOM: Effect = EffectTriggerCustom()
 
     /**
      * Get effect matching id.
