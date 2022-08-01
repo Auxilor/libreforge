@@ -11,6 +11,7 @@ import com.willfp.libreforge.triggers.triggers.TriggerCatchFish
 import com.willfp.libreforge.triggers.triggers.TriggerCatchFishFail
 import com.willfp.libreforge.triggers.triggers.TriggerConsume
 import com.willfp.libreforge.triggers.triggers.TriggerCraft
+import com.willfp.libreforge.triggers.triggers.TriggerCustom
 import com.willfp.libreforge.triggers.triggers.TriggerDamageItem
 import com.willfp.libreforge.triggers.triggers.TriggerDeath
 import com.willfp.libreforge.triggers.triggers.TriggerDeployElytra
@@ -121,6 +122,11 @@ object Triggers {
         if (id.startsWith("static_")) {
             val interval = id.removePrefix("static_").toIntOrNull() ?: return null
             return TriggerStatic.getWithInterval(interval)
+        }
+
+        if (id.startsWith("custom_")) {
+            val customId = id.removePrefix("custom_")
+            return TriggerCustom.getWithID(customId)
         }
 
         return BY_ID[id.lowercase()]
