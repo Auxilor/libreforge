@@ -187,6 +187,11 @@ private fun Player.getPureHolders(): Iterable<Holder> {
     }
 }
 
+fun Player.purgeHolders() {
+    holderCache.invalidate(this.uniqueId)
+    previousStates.remove(this.uniqueId)
+}
+
 @JvmOverloads
 fun Player.getHolders(respectConditions: Boolean = true): Iterable<Holder> =
     this.getPureHolders()

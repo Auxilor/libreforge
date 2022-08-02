@@ -15,6 +15,8 @@ class EffectCollisionFixer(
         for (effect in player.getActiveEffects()) {
             effect.disableFor(player)
         }
+
+        player.purgeHolders()
     }
 
     @EventHandler
