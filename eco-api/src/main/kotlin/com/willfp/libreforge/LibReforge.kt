@@ -99,7 +99,7 @@ abstract class LibReforgePlugin : EcoPlugin() {
         this.eventManager.registerListener(TridentHolderDataAttacher(this))
         this.eventManager.registerListener(MovementConditionListener())
         this.eventManager.registerListener(PointCostHandler())
-        this.eventManager.registerListener(EffectCollisionFixer)
+        this.eventManager.registerListener(EffectCollisionFixer(this))
         for (condition in Conditions.values()) {
             this.eventManager.registerListener(condition)
         }
