@@ -99,6 +99,7 @@ abstract class LibReforgePlugin : EcoPlugin() {
         this.eventManager.registerListener(TridentHolderDataAttacher(this))
         this.eventManager.registerListener(MovementConditionListener())
         this.eventManager.registerListener(PointCostHandler())
+        this.eventManager.registerListener(EffectCollisionFixer)
         for (condition in Conditions.values()) {
             this.eventManager.registerListener(condition)
         }
@@ -115,10 +116,8 @@ abstract class LibReforgePlugin : EcoPlugin() {
     final override fun handleDisable() {
         for (player in Bukkit.getOnlinePlayers()) {
             try {
-                for (holder in player.getHolders()) {
-                    for (effect in holder.effects) {
-                        effect.disableFor(player)
-                    }
+                for (effect in player.getActiveEffects()) {
+                    effect.disableFor(player)
                 }
             } catch (e: Exception) {
                 Bukkit.getLogger().warning("Error disabling effects, not important - do not report this")
