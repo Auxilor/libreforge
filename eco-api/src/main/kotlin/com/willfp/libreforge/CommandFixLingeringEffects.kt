@@ -40,6 +40,6 @@ class CommandFixLingeringEffects(
         @Suppress("DEPRECATION")
         player.kickPlayer("Effects repaired! You can re-log.")
 
-        sender.sendMessage(plugin.langYml.getMessage("repaired-effects"))
+        sender.sendMessage(plugin.langYml.getMessage("repaired-effects").replace("%player%", player.name))
     }
 }
