@@ -5,6 +5,7 @@ import com.willfp.libreforge.effects.Effects
 import org.bukkit.Bukkit
 import org.bukkit.attribute.Attribute
 import org.bukkit.command.CommandSender
+import org.bukkit.util.StringUtil
 
 class CommandFixLingeringEffects(
     plugin: LibReforgePlugin,
@@ -41,5 +42,25 @@ class CommandFixLingeringEffects(
         player.kickPlayer("Effects repaired! You can re-log.")
 
         sender.sendMessage(plugin.langYml.getMessage("repaired-effects").replace("%player%", player.name))
+    }
+
+    override fun tabComplete(sender: CommandSender, args: List<String>): List<String> {
+        val completions = mutableListOf<String>()
+
+        if (args.isEmpty()) {
+            // Currently, this case is not ever reached
+            return Bukkit.getOnlinePlayers().map { it.name }
+        }
+
+        if (args.size == 1) {
+            StringUtil.copyPartialMatches(
+                args[0],
+                Bukkit.getOnlinePlayers().map { it.name },
+                completions
+            )
+            return completions
+        }
+
+        return emptyList()
     }
 }
