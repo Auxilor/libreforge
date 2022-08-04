@@ -43,6 +43,7 @@ import com.willfp.libreforge.effects.effects.EffectHungerMultiplier
 import com.willfp.libreforge.effects.effects.EffectIgnite
 import com.willfp.libreforge.effects.effects.EffectKeepInventory
 import com.willfp.libreforge.effects.effects.EffectKnockbackMultiplier
+import com.willfp.libreforge.effects.effects.EffectKnockbackResistanceMultiplier
 import com.willfp.libreforge.effects.effects.EffectLuckMultiplier
 import com.willfp.libreforge.effects.effects.EffectMineRadius
 import com.willfp.libreforge.effects.effects.EffectMineRadiusOneDeep
@@ -171,6 +172,7 @@ object Effects {
     val CONSUME_HELD_ITEM: Effect = EffectConsumeHeldItem()
     val TELEPORT_TO: Effect = EffectTeleportTo()
     val TRIGGER_CUSTOM: Effect = EffectTriggerCustom()
+    val KNOCKBACK_RESISTANCE_MULTIPLIER: Effect = EffectKnockbackResistanceMultiplier()
 
     /**
      * Get effect matching id.
