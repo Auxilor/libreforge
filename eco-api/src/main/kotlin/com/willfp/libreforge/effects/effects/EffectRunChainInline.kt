@@ -52,7 +52,7 @@ class EffectRunChainInline : Effect(
     }
 
     override fun makeCompileData(config: Config, context: String): CompileData? {
-        val child = when (config.getString("run-type").lowercase()) {
+        val invocator = when (config.getString("run-type").lowercase()) {
             "cycle" -> CycleChainCompileData()
             "random" -> RandomChainCompileData()
             else -> NormalChainCompileData
@@ -72,7 +72,7 @@ class EffectRunChainInline : Effect(
             )
         } ?: return null
 
-        return InlineEffectChainCompileData(chain, child)
+        return InlineEffectChainCompileData(chain, invocator)
     }
 
     private class InlineEffectChainCompileData(
