@@ -41,10 +41,10 @@ class EffectRunChainInline : Effect(
     override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
-        if (!config.has("chain")) violations.add(
+        if (!config.has("chain") && !config.has("effects")) violations.add(
             ConfigViolation(
-                "chain",
-                "You must create a chain!"
+                "chain / effects",
+                "You must create a chain or specify effects directly!"
             )
         )
 
@@ -58,11 +58,19 @@ class EffectRunChainInline : Effect(
             else -> NormalChainCompileData
         }
 
-        val chain = EffectChains.compile(
-            config.getSubsection("chain"),
-            "$context Inline Chain",
-            anonymous = true
-        ) ?: return null
+        val chain = if (config.has("chain")) {
+            EffectChains.compile(
+                config.getSubsection("chain"),
+                "$context Inline Chain",
+                anonymous = true
+            )
+        } else {
+            EffectChains.compile(
+                config,
+                "$context Inline Chain",
+                anonymous = true
+            )
+        } ?: return null
 
         return InlineEffectChainCompileData(chain, child)
     }
