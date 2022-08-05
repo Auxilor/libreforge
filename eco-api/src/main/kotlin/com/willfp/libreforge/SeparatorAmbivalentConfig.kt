@@ -5,15 +5,39 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.placeholder.InjectablePlaceholder
 import com.willfp.eco.core.placeholder.StaticPlaceholder
 import com.willfp.eco.util.StringUtils
+import java.util.*
 
 private class SeparatorAmbivalentConfig(
     private val config: Config
 ) : Config {
-    private inline fun <reified T> preprocess(path: String, getter: (String) -> T): T {
+    private inline fun <reified T> preprocess(path: String, getter: (String) -> T): T? {
+        return preprocess(path, getter, { it == null }, null)
+    }
+
+    private inline fun <reified T> preprocess(
+        path: String,
+        getter: (String) -> T,
+        invalidator: (T) -> Boolean,
+        invalid: T?
+    ): T? {
         val hyphen = path.replace('_', '-')
+
         val underscore = path.replace('-', '_')
 
-        return getter(hyphen) ?: getter(underscore)
+        val unspaced = path.replace("-", "")
+            .replace("_", "")
+
+        val camelcase = underscore.toCamelCase()
+
+        for (formattedPath in arrayOf(hyphen, underscore, unspaced, camelcase)) {
+            val found = getter(formattedPath)
+
+            if (!invalidator(found)) {
+                return found
+            }
+        }
+
+        return invalid
     }
 
     override fun clone(): Config = SeparatorAmbivalentConfig(config.clone())
@@ -21,10 +45,7 @@ private class SeparatorAmbivalentConfig(
     override fun toPlaintext(): String = config.toPlaintext()
 
     override fun has(path: String): Boolean {
-        val hyphen = path.replace('_', '-')
-        val underscore = path.replace('-', '_')
-
-        return config.has(hyphen) || config.has(underscore)
+        return preprocess(path, { config.has(it) }, { !it }, false) ?: false
     }
 
     override fun getKeys(deep: Boolean): List<String> =
@@ -91,3 +112,15 @@ private class SeparatorAmbivalentConfig(
 }
 
 fun Config.separatorAmbivalent(): Config = SeparatorAmbivalentConfig(this)
+
+// Seamlessly stolen from: https://stackoverflow.com/a/1144014/11427550
+private fun String.toCamelCase(): String {
+    val builder = StringBuilder()
+
+    for (oneString in this.lowercase().split("_")) {
+        builder.append(oneString.substring(0, 1).uppercase(Locale.getDefault()))
+        builder.append(oneString.substring(1))
+    }
+
+    return builder.toString()
+}
