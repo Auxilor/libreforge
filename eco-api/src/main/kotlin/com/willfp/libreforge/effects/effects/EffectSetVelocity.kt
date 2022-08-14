@@ -9,7 +9,7 @@ import com.willfp.libreforge.triggers.Triggers
 import org.bukkit.util.Vector
 
 class EffectSetVelocity : Effect(
-    "multiply_velocity",
+    "set_velocity",
     triggers = Triggers.withParameters(
         TriggerParameter.PLAYER
     )
