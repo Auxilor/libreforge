@@ -72,6 +72,7 @@ import com.willfp.libreforge.effects.effects.EffectSetPoints
 import com.willfp.libreforge.effects.effects.EffectSetVelocity
 import com.willfp.libreforge.effects.effects.EffectShoot
 import com.willfp.libreforge.effects.effects.EffectShootArrow
+import com.willfp.libreforge.effects.effects.EffectSmite
 import com.willfp.libreforge.effects.effects.EffectSpawnMobs
 import com.willfp.libreforge.effects.effects.EffectSpawnParticle
 import com.willfp.libreforge.effects.effects.EffectSpawnPotionCloud
@@ -171,6 +172,7 @@ object Effects {
     val TELEPORT_TO: Effect = EffectTeleportTo()
     val TRIGGER_CUSTOM: Effect = EffectTriggerCustom()
     val KNOCKBACK_RESISTANCE_MULTIPLIER: Effect = EffectKnockbackResistanceMultiplier()
+    val SMITE: Effect = EffectSmite()
 
     /**
      * Get effect matching id.
