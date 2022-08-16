@@ -215,7 +215,7 @@ object Effects {
     fun compile(
         cfg: Config,
         context: String,
-        fromChain: Boolean = false
+        chainLike: Boolean = false
     ): ConfiguredEffect? {
         val config = cfg.separatorAmbivalent()
 
@@ -278,13 +278,13 @@ object Effects {
                 return@let null
             }
 
-            if (fromChain) {
+            if (chainLike) {
                 if (effect.applicableTriggers.isEmpty()) {
                     LibReforgePlugin.instance.logViolation(
                         effect.id,
                         context,
                         ConfigViolation(
-                            "triggers", "Permanent effects are not allowed in chains"
+                            "triggers", "Permanent effects are not allowed here!"
                         )
                     )
 
@@ -292,7 +292,7 @@ object Effects {
                 }
             }
 
-            if (!fromChain) {
+            if (!chainLike) {
                 if (effect.applicableTriggers.isNotEmpty() && it.isEmpty()) {
                     LibReforgePlugin.instance.logViolation(
                         effect.id,
