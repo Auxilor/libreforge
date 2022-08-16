@@ -45,6 +45,7 @@ import com.willfp.libreforge.conditions.conditions.ConditionWearingChestplate
 import com.willfp.libreforge.conditions.conditions.ConditionWearingHelmet
 import com.willfp.libreforge.conditions.conditions.ConditionWearingLeggings
 import com.willfp.libreforge.conditions.conditions.ConditionWithinRadiusOf
+import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.separatorAmbivalent
 
 @Suppress("UNUSED")
@@ -126,7 +127,6 @@ object Conditions {
      *
      * @param cfg The config for the condition.
      * @param context The context to log violations for.
-     *
      * @return The configured condition, or null if invalid.
      */
     @JvmStatic
@@ -157,6 +157,10 @@ object Conditions {
 
         val inverse = args.getBool("inverse")
 
-        return ConfiguredCondition(condition, args, notMetLines, compileData, inverse)
+        val notMetEffects = config.getSubsections("not-met-effects").mapNotNull {
+            Effects.compile(it, "$context (not met effects)")
+        }
+
+        return ConfiguredCondition(condition, args, notMetLines, notMetEffects, compileData, inverse)
     }
 }

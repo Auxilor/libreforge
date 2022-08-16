@@ -14,7 +14,7 @@ import com.willfp.libreforge.triggers.InvocationData
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.mutate
 import org.bukkit.entity.Player
-import java.util.*
+import java.util.UUID
 import kotlin.math.max
 
 private val everyHandler = mutableMapOf<UUID, Int>()
@@ -74,16 +74,14 @@ data class ConfiguredEffect internal constructor(
             data = mutators.mutate(invocation.data)
         )
 
-        var effectAreMet = true
+        val unmetConditions = mutableListOf<ConfiguredCondition>()
         for (condition in conditions) {
             if (!condition.isMet(invocation.player)) {
-                effectAreMet = false
+                unmetConditions.add(condition)
             }
         }
 
-        if (!effectAreMet) {
-            return
-        }
+        val conditionsAreMet = unmetConditions.isEmpty()
 
         val (player, data, holder, _) = invocation
 
@@ -117,7 +115,10 @@ data class ConfiguredEffect internal constructor(
             var current = everyHandler[uuid] ?: 0
             val prev = current
 
-            current++
+            // Don't increment every if conditions aren't met
+            if (conditionsAreMet) {
+                current++
+            }
 
             if (current >= every) {
                 current = 0
@@ -130,16 +131,23 @@ data class ConfiguredEffect internal constructor(
             }
         }
 
-        val preActivateEvent = EffectPreActivateEvent(player, holder, effect, args)
-        LibReforgePlugin.instance.server.pluginManager.callEvent(preActivateEvent)
+        // Don't bother with events if the condition is not met
+        if (conditionsAreMet) {
+            val preActivateEvent = EffectPreActivateEvent(player, holder, effect, args)
+            LibReforgePlugin.instance.server.pluginManager.callEvent(preActivateEvent)
 
-        if (preActivateEvent.isCancelled) {
-            return
+            if (preActivateEvent.isCancelled) {
+                return
+            }
         }
 
         if (effect.getCooldown(player, uuid) > 0) {
             if (args.getBoolOrNull("send_cooldown_message") != false) {
-                effect.sendCooldownMessage(player, uuid)
+                // Don't send message if conditions aren't met
+
+                if (conditionsAreMet) {
+                    effect.sendCooldownMessage(player, uuid)
+                }
             }
             return
         }
@@ -151,7 +159,25 @@ data class ConfiguredEffect internal constructor(
                 return
             }
 
-            EconomyManager.removeMoney(player, cost)
+            // Don't remove money if conditions aren't met
+            if (conditionsAreMet) {
+                EconomyManager.removeMoney(player, cost)
+            }
+        }
+
+
+        if (!conditionsAreMet) {
+            for (condition in unmetConditions) {
+                for (notMetEffect in condition.notMetEffects) {
+                    notMetEffect(
+                        invocation,
+                        ignoreTriggerList = true,
+                        namedArguments = namedArguments
+                    )
+                }
+            }
+
+            return
         }
 
         val activateEvent = EffectActivateEvent(player, holder, effect, args)
