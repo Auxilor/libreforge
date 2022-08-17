@@ -158,7 +158,7 @@ object Conditions {
         val inverse = args.getBool("inverse")
 
         val notMetEffects = config.getSubsections("not-met-effects").mapNotNull {
-            Effects.compile(it, "$context (not met effects)", chainLike = true)
+            Effects.compile(it, "$context -> Not Met Effects)", chainLike = true)
         }
 
         return ConfiguredCondition(condition, args, notMetLines, notMetEffects, compileData, inverse)

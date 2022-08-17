@@ -61,13 +61,13 @@ class EffectRunChainInline : Effect(
         val chain = if (config.has("chain")) {
             EffectChains.compile(
                 config.getSubsection("chain"),
-                "$context Inline Chain",
+                "$context -> Inline Chain",
                 anonymous = true
             )
         } else {
             EffectChains.compile(
                 config,
-                "$context Inline Chain",
+                "$context -> Inline Chain",
                 anonymous = true
             )
         } ?: return null
