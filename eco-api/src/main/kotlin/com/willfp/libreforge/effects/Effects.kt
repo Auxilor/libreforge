@@ -338,11 +338,11 @@ object Effects {
         } ?: return null
 
         val conditions = config.getSubsections("conditions").mapNotNull {
-            Conditions.compile(it, "$context (effect-specific conditions)")
+            Conditions.compile(it, "$context -> Effect-Specific Conditions")
         }
 
         val mutators = config.getSubsections("mutators").mapNotNull {
-            DataMutators.compile(it, "$context (mutators)")
+            DataMutators.compile(it, "$context -> Mutators")
         }
 
         val compileData = effect.makeCompileData(args, context)

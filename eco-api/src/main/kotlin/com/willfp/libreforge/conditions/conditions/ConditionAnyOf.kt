@@ -17,7 +17,7 @@ class ConditionAnyOf : Condition("any_of") {
 
     override fun makeCompileData(config: Config, context: String): CompileData {
         return AnyOfCompileData(config.getSubsections("conditions").mapNotNull {
-            Conditions.compile(it, "$context (Any of conditions)")
+            Conditions.compile(it, "$context -> any_of Conditions)")
         })
     }
 
