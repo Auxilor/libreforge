@@ -252,8 +252,10 @@ object Effects {
 
         val args = config.getSubsection("args")
 
-        if (effect.checkConfig(args, context)) {
-            return null
+        if (!isShorthandInlineChain) {
+            if (effect.checkConfig(args, context)) {
+                return null
+            }
         }
 
         val filter = config.getSubsectionOrNull("filters").let {
