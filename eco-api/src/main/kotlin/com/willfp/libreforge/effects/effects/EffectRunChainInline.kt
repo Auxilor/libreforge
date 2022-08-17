@@ -52,12 +52,6 @@ class EffectRunChainInline : Effect(
     }
 
     override fun makeCompileData(config: Config, context: String): CompileData? {
-        val invocator = when (config.getString("run-type").lowercase()) {
-            "cycle" -> CycleChainCompileData()
-            "random" -> RandomChainCompileData()
-            else -> NormalChainCompileData
-        }
-
         val chain = if (config.has("chain")) {
             EffectChains.compile(
                 config.getSubsection("chain"),
@@ -71,6 +65,20 @@ class EffectRunChainInline : Effect(
                 anonymous = true
             )
         } ?: return null
+
+        return makeCompileData(config, context, chain)
+    }
+
+    fun makeCompileData(config: Config, context: String, chain: EffectChain?): CompileData? {
+        val invocator = when (config.getString("run-type").lowercase()) {
+            "cycle" -> CycleChainCompileData()
+            "random" -> RandomChainCompileData()
+            else -> NormalChainCompileData
+        }
+
+        if (chain == null) {
+            return null
+        }
 
         return InlineEffectChainCompileData(chain, invocator)
     }
