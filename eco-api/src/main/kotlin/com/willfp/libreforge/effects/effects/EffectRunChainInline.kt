@@ -66,10 +66,10 @@ class EffectRunChainInline : Effect(
             )
         } ?: return null
 
-        return makeCompileData(config, context, chain)
+        return makeCompileData(config, chain)
     }
 
-    fun makeCompileData(config: Config, context: String, chain: EffectChain?): CompileData? {
+    fun makeCompileData(config: Config, chain: EffectChain?): CompileData? {
         val invocator = when (config.getString("run-type").lowercase()) {
             "cycle" -> CycleChainCompileData()
             "random" -> RandomChainCompileData()

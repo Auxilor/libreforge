@@ -359,7 +359,7 @@ object Effects {
                 anonymous = true
             )
 
-            RUN_CHAIN_INLINE.makeCompileData(args, context, chain)
+            RUN_CHAIN_INLINE.makeCompileData(args, chain)
         } else {
             effect.makeCompileData(args, context)
         }
