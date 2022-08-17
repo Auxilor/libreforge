@@ -7,6 +7,7 @@ import com.willfp.eco.core.placeholder.InjectablePlaceholder
 import com.willfp.eco.core.placeholder.StaticPlaceholder
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.LibReforgePlugin
+import com.willfp.libreforge.chains.EffectChains
 import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.effects.effects.EffectAddHolder
 import com.willfp.libreforge.effects.effects.EffectAddPoints
@@ -145,7 +146,7 @@ object Effects {
     val SEND_TITLE: Effect = EffectSendTitle()
     val RUN_CHAIN: Effect = EffectRunChain()
     val DAMAGE_VICTIM: Effect = EffectDamageVictim()
-    val RUN_CHAIN_INLINE: Effect = EffectRunChainInline()
+    val RUN_CHAIN_INLINE: EffectRunChainInline = EffectRunChainInline() // Explicit type for compile data
     val SELL_MULTIPLIER: EffectSellMultiplier = EffectSellMultiplier() // Explicit type for hooks
     val BLOCK_COMMANDS: Effect = EffectBlockCommands()
     val GIVE_ITEM: Effect = EffectGiveItem()
@@ -230,17 +231,23 @@ object Effects {
         )
         config.addInjectablePlaceholder(injections)
 
-        val effect = config.getString("id").let {
-            val found = getByID(it)
-            if (found == null) {
-                LibReforgePlugin.instance.logViolation(
-                    it,
-                    context,
-                    ConfigViolation("id", "Invalid effect ID specified!")
-                )
-            }
+        val isShorthandInlineChain = config.has("effects")
 
-            found
+        val effect = if (isShorthandInlineChain) {
+            RUN_CHAIN_INLINE // Shorthand inline chains
+        } else {
+            config.getString("id").let {
+                val found = getByID(it)
+                if (found == null) {
+                    LibReforgePlugin.instance.logViolation(
+                        it,
+                        context,
+                        ConfigViolation("id", "Invalid effect ID specified!")
+                    )
+                }
+
+                found
+            }
         } ?: return null
 
         val args = config.getSubsection("args")
@@ -345,7 +352,17 @@ object Effects {
             DataMutators.compile(it, "$context -> Mutators")
         }
 
-        val compileData = effect.makeCompileData(args, context)
+        val compileData = if (isShorthandInlineChain) {
+            val chain = EffectChains.compile(
+                config,
+                "$context -> Effects",
+                anonymous = true
+            )
+
+            RUN_CHAIN_INLINE.makeCompileData(args, context, chain)
+        } else {
+            effect.makeCompileData(args, context)
+        }
 
         return ConfiguredEffect(
             effect,
