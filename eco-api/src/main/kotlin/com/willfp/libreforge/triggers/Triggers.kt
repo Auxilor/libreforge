@@ -5,6 +5,7 @@ import com.willfp.libreforge.triggers.triggers.TriggerAltClick
 import com.willfp.libreforge.triggers.triggers.TriggerBite
 import com.willfp.libreforge.triggers.triggers.TriggerBlockItemDrop
 import com.willfp.libreforge.triggers.triggers.TriggerBowAttack
+import com.willfp.libreforge.triggers.triggers.TriggerBrew
 import com.willfp.libreforge.triggers.triggers.TriggerCastRod
 import com.willfp.libreforge.triggers.triggers.TriggerCatchEntity
 import com.willfp.libreforge.triggers.triggers.TriggerCatchFish
@@ -37,6 +38,7 @@ import com.willfp.libreforge.triggers.triggers.TriggerProjectileLaunch
 import com.willfp.libreforge.triggers.triggers.TriggerReelIn
 import com.willfp.libreforge.triggers.triggers.TriggerShieldBlock
 import com.willfp.libreforge.triggers.triggers.TriggerShootBow
+import com.willfp.libreforge.triggers.triggers.TriggerSmelt
 import com.willfp.libreforge.triggers.triggers.TriggerStatic
 import com.willfp.libreforge.triggers.triggers.TriggerSwapHands
 import com.willfp.libreforge.triggers.triggers.TriggerTakeDamage
@@ -95,6 +97,8 @@ object Triggers {
     val ENCHANT_ITEM: Trigger = TriggerEnchantItem()
     val DAMAGE_ITEM: Trigger = TriggerDamageItem()
     val WIN_RAID: Trigger = TriggerWinRaid()
+    val SMELT: Trigger = TriggerSmelt()
+    val BREW: Trigger = TriggerBrew()
 
     fun values(): Set<Trigger> {
         return BY_ID.values.toSet()
