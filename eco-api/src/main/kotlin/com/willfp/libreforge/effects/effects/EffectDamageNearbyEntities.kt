@@ -19,6 +19,7 @@ class EffectDamageNearbyEntities : Effect(
 ) {
     override fun handle(data: TriggerData, config: Config) {
         val location = data.location ?: return
+        val world = location.world ?: return
         val player = data.player ?: return
 
         val radius = config.getDoubleFromExpression("radius", player)
@@ -27,7 +28,7 @@ class EffectDamageNearbyEntities : Effect(
         val damage = config.getDoubleFromExpression("damage", player)
         val damageSelf = config.getBoolOrNull("damage_self") ?: true
 
-        for (entity in location.getNearbyEntities(radius, radius, radius)) {
+        for (entity in world.getNearbyEntities(location, radius, radius, radius)) {
             if (entity.hasMetadata("ignore-nearby-damage")) {
                 continue
             }
