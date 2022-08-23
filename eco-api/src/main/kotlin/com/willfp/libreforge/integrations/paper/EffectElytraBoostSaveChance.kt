@@ -50,10 +50,6 @@ class EffectElytraBoostSaveChance : Effect("elytra_boost_save_chance") {
 
         val player = event.player
 
-        if (player !is Player) {
-            return
-        }
-
         var chance = 1.0
 
         for (modifier in (modifiers[player.uniqueId] ?: emptyList())) {
