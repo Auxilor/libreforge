@@ -19,18 +19,6 @@ class EffectTraceback : Effect(
 ) {
     private val key = "${plugin.name}_tracekabck"
 
-    init {
-        plugin.scheduler.runTimer(20, 20) {
-            for (player in Bukkit.getOnlinePlayers()) {
-                @Suppress("UNCHECKED_CAST")
-                val times = player.getMetadata(key).getOrNull(0) as? List<Location> ?: emptyList()
-                val newTimes = listOf(player.location) + times.chunked(29)[0]
-                player.removeMetadata(key, plugin)
-                player.setMetadata(key, plugin.metadataValueFactory.create(newTimes))
-            }
-        }
-    }
-
     override fun handle(data: TriggerData, config: Config) {
         val player = data.player ?: return
 
@@ -55,5 +43,17 @@ class EffectTraceback : Effect(
         )
 
         return violations
+    }
+
+    fun init() {
+        plugin.scheduler.runTimer(20, 20) {
+            for (player in Bukkit.getOnlinePlayers()) {
+                @Suppress("UNCHECKED_CAST")
+                val times = player.getMetadata(key).getOrNull(0) as? List<Location> ?: emptyList()
+                val newTimes = listOf(player.location) + times.chunked(29)[0]
+                player.removeMetadata(key, plugin)
+                player.setMetadata(key, plugin.metadataValueFactory.create(newTimes))
+            }
+        }
     }
 }
