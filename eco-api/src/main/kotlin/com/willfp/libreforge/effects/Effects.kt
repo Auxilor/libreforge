@@ -167,7 +167,7 @@ object Effects {
     val ADD_HOLDER: Effect = EffectAddHolder()
     val SPAWN_POTION_CLOUD: Effect = EffectSpawnPotionCloud()
     val CREATE_EXPLOSION: Effect = EffectCreateExplosion()
-    val TRACEBACK: Effect = EffectTraceback()
+    val TRACEBACK: EffectTraceback = EffectTraceback() // Explicit type for init()
     val ROTATE: Effect = EffectRotate()
     val CONSUME_HELD_ITEM: Effect = EffectConsumeHeldItem()
     val TELEPORT_TO: Effect = EffectTeleportTo()

@@ -11,6 +11,7 @@ import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.conditions.MovementConditionListener
 import com.willfp.libreforge.effects.ConfiguredEffect
 import com.willfp.libreforge.effects.Effects
+import com.willfp.libreforge.effects.effects.EffectTraceback
 import com.willfp.libreforge.integrations.aureliumskills.AureliumSkillsIntegration
 import com.willfp.libreforge.integrations.boosters.BoostersIntegration
 import com.willfp.libreforge.integrations.ecoarmor.EcoArmorIntegration
@@ -134,6 +135,7 @@ abstract class LibReforgePlugin : EcoPlugin() {
             }
         }, 30, 30)
         TriggerStatic.beginTiming(this)
+        Effects.TRACEBACK.init()
 
         handleReloadAdditional()
     }
