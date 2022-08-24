@@ -1,7 +1,5 @@
 package com.willfp.libreforge.integrations.tmmobcoins
 
-import com.gamingmesh.jobs.Jobs
-import com.gamingmesh.jobs.container.Job
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.mcmmo.McmmoManager
 import com.willfp.libreforge.ConfigViolation
@@ -11,18 +9,17 @@ import com.willfp.libreforge.effects.MultiplierModifier
 import net.devtm.tmmobcoins.API.MobCoinReceiveEvent
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
-import java.util.*
+import java.util.UUID
 
 class EffectMobCoinsMultiplier : Effect("mob_coins_multiplier") {
-    private val modifiers = mutableMapOf<UUID, MutableMap<Job, MutableList<MultiplierModifier>>>()
-    private val globalModifiers = mutableMapOf<UUID, MutableList<MultiplierModifier>>()
+    private val modifiers = mutableMapOf<UUID, MutableList<MultiplierModifier>>()
 
     override fun handleEnable(
         player: Player,
         config: Config,
         identifiers: Identifiers
     ) {
-        val registeredModifiers = globalModifiers[player.uniqueId] ?: mutableListOf()
+        val registeredModifiers = modifiers[player.uniqueId] ?: mutableListOf()
         val uuid = identifiers.uuid
         registeredModifiers.removeIf { it.uuid == uuid }
         registeredModifiers.add(
@@ -31,26 +28,17 @@ class EffectMobCoinsMultiplier : Effect("mob_coins_multiplier") {
                 config.getDoubleFromExpression("multiplier", player)
             )
         )
-        globalModifiers[player.uniqueId] = registeredModifiers
+        modifiers[player.uniqueId] = registeredModifiers
     }
 
     override fun handleDisable(
         player: Player,
         identifiers: Identifiers
     ) {
-        val registeredModifiers = globalModifiers[player.uniqueId] ?: mutableListOf()
+        val registeredModifiers = modifiers[player.uniqueId] ?: mutableListOf()
         val uuid = identifiers.uuid
         registeredModifiers.removeIf { it.uuid == uuid }
-        globalModifiers[player.uniqueId] = registeredModifiers
-
-
-        for (skill in Jobs.getJobs()) {
-            val skillModifierMap = modifiers[player.uniqueId] ?: mutableMapOf()
-            val registeredSkillModifiers = skillModifierMap[skill] ?: mutableListOf()
-            registeredSkillModifiers.removeIf { it.uuid == uuid }
-            skillModifierMap[skill] = registeredSkillModifiers
-            modifiers[player.uniqueId] = skillModifierMap
-        }
+        modifiers[player.uniqueId] = registeredModifiers
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -63,7 +51,7 @@ class EffectMobCoinsMultiplier : Effect("mob_coins_multiplier") {
 
         var multiplier = 1.0
 
-        for (modifier in (globalModifiers[player.uniqueId] ?: emptyList())) {
+        for (modifier in (modifiers[player.uniqueId] ?: emptyList())) {
             multiplier *= modifier.multiplier
         }
 
