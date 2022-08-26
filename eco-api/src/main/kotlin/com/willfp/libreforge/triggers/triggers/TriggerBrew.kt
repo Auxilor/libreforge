@@ -22,7 +22,7 @@ class TriggerBrew : Trigger(
             return
         }
 
-        val player = event.contents.viewers[0] as? Player ?: return
+        val player = event.contents.viewers.firstOrNull() as? Player ?: return
         val item = (0..2).map { event.contents.getItem(it) }
             .filterNot { EmptyTestableItem().matches(it) }
             .firstOrNull()
