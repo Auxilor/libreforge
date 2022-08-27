@@ -50,7 +50,10 @@ class EffectTraceback : Effect(
             for (player in Bukkit.getOnlinePlayers()) {
                 @Suppress("UNCHECKED_CAST")
                 val times = player.getMetadata(key).getOrNull(0) as? List<Location> ?: emptyList()
-                val newTimes = listOf(player.location) + times.chunked(29)[0]
+                val newTimes = mutableListOf(player.location)
+                times.chunked(29).getOrNull(0)?.let {
+                    newTimes += it
+                }
                 player.removeMetadata(key, plugin)
                 player.setMetadata(key, plugin.metadataValueFactory.create(newTimes))
             }
