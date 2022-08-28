@@ -73,6 +73,7 @@ import com.willfp.libreforge.effects.effects.EffectSetPoints
 import com.willfp.libreforge.effects.effects.EffectSetVelocity
 import com.willfp.libreforge.effects.effects.EffectShoot
 import com.willfp.libreforge.effects.effects.EffectShootArrow
+import com.willfp.libreforge.effects.effects.EffectShuffleHotbar
 import com.willfp.libreforge.effects.effects.EffectSmite
 import com.willfp.libreforge.effects.effects.EffectSpawnMobs
 import com.willfp.libreforge.effects.effects.EffectSpawnParticle
@@ -92,7 +93,7 @@ import com.willfp.libreforge.triggers.DataMutators
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.Triggers
 import com.willfp.libreforge.triggers.triggers.TriggerStatic
-import java.util.UUID
+import java.util.*
 
 @Suppress("UNUSED")
 object Effects {
@@ -174,6 +175,7 @@ object Effects {
     val TRIGGER_CUSTOM: Effect = EffectTriggerCustom()
     val KNOCKBACK_RESISTANCE_MULTIPLIER: Effect = EffectKnockbackResistanceMultiplier()
     val SMITE: Effect = EffectSmite()
+    val SHUFFLE_HOTBAR: Effect = EffectShuffleHotbar()
 
     /**
      * Get effect matching id.
