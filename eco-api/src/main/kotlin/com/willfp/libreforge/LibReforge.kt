@@ -84,7 +84,7 @@ abstract class LibReforgePlugin : EcoPlugin() {
         return emptyList()
     }
 
-    fun copyHolderConfigs(directory: String) {
+    fun copyConfigs(directory: String) {
         val folder = File(this.dataFolder, directory)
         if (!folder.exists()) {
             val files = mutableListOf<String>()
@@ -99,12 +99,12 @@ abstract class LibReforgePlugin : EcoPlugin() {
             files.replaceAll { it.replace(".yml", "") }
 
             for (configName in files) {
-                HolderConfig(configName, directory, this)
+                UsermadeConfig(configName, directory, this)
             }
         }
     }
 
-    fun getHolderConfigs(directory: String): Collection<Config> {
+    fun fetchConfigs(directory: String): Collection<Config> {
         val configs = mutableListOf<Config>()
 
         for (file in File(this.dataFolder, directory).walk()) {
