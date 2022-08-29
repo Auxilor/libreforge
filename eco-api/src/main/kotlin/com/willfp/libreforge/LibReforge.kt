@@ -104,15 +104,15 @@ abstract class LibReforgePlugin : EcoPlugin() {
         }
     }
 
-    fun fetchConfigs(directory: String): Collection<Config> {
-        val configs = mutableListOf<Config>()
+    fun fetchConfigs(directory: String): Map<String, Config> {
+        val configs = mutableMapOf<String, Config>()
 
         for (file in File(this.dataFolder, directory).walk()) {
             if (file.nameWithoutExtension == "_example") {
                 continue
             }
 
-            configs.add(TransientConfig(file, ConfigType.YAML))
+            configs[file.nameWithoutExtension] = TransientConfig(file, ConfigType.YAML)
         }
 
         return configs
