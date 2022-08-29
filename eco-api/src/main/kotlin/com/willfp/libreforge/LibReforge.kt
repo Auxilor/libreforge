@@ -11,7 +11,7 @@ import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.conditions.MovementConditionListener
 import com.willfp.libreforge.effects.ConfiguredEffect
 import com.willfp.libreforge.effects.Effects
-import com.willfp.libreforge.effects.effects.EffectTraceback
+import com.willfp.libreforge.events.HolderProvideEvent
 import com.willfp.libreforge.integrations.aureliumskills.AureliumSkillsIntegration
 import com.willfp.libreforge.integrations.boosters.BoostersIntegration
 import com.willfp.libreforge.integrations.ecoarmor.EcoArmorIntegration
@@ -185,7 +185,11 @@ abstract class LibReforgePlugin : EcoPlugin() {
 
 private fun Player.getPureHolders(): Iterable<Holder> {
     return holderCache.get(this.uniqueId) {
-        holderProviders.flatMap { it(this) }
+        val holders = holderProviders.flatMap { it(this) }
+
+        val event = HolderProvideEvent(this, holders.toMutableList())
+        Bukkit.getPluginManager().callEvent(event)
+        event.holders
     }
 }
 
