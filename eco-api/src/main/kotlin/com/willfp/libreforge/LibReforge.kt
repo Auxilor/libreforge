@@ -6,6 +6,9 @@ import com.github.benmanes.caffeine.cache.Caffeine
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.PluginProps
 import com.willfp.eco.core.Prerequisite
+import com.willfp.eco.core.config.ConfigType
+import com.willfp.eco.core.config.TransientConfig
+import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.IntegrationLoader
 import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.conditions.MovementConditionListener
@@ -32,8 +35,10 @@ import com.willfp.libreforge.triggers.triggers.TriggerStatic
 import org.apache.commons.lang.StringUtils
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import java.io.File
 import java.util.*
 import java.util.concurrent.TimeUnit
+import java.util.zip.ZipFile
 
 private val holderProviders = mutableListOf<HolderProvider>()
 
@@ -77,6 +82,40 @@ abstract class LibReforgePlugin : EcoPlugin() {
 
     open fun loadAdditionalIntegrations(): List<IntegrationLoader> {
         return emptyList()
+    }
+
+    fun copyHolderConfigs(directory: String) {
+        val folder = File(this.dataFolder, directory)
+        if (!folder.exists()) {
+            val files = mutableListOf<String>()
+
+            for (entry in ZipFile(this.file).entries().asIterator()) {
+                if (entry.name.startsWith("$directory/")) {
+                    files.add(entry.name.removePrefix("$directory/"))
+                }
+            }
+
+            files.removeIf { !it.endsWith(".yml") }
+            files.replaceAll { it.replace(".yml", "") }
+
+            for (configName in files) {
+                HolderConfig(configName, directory, this)
+            }
+        }
+    }
+
+    fun getHolderConfigs(directory: String): Collection<Config> {
+        val configs = mutableListOf<Config>()
+
+        for (file in File(this.dataFolder, directory).walk()) {
+            if (file.nameWithoutExtension == "_example") {
+                continue
+            }
+
+            configs.add(TransientConfig(file, ConfigType.YAML))
+        }
+
+        return configs
     }
 
     fun registerHolderProvider(provider: HolderProvider) {
