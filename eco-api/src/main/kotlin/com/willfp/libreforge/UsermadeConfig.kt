@@ -3,7 +3,7 @@ package com.willfp.libreforge
 import com.willfp.eco.core.config.ConfigType
 import com.willfp.eco.core.config.ExtendableConfig
 
-class HolderConfig(
+class UsermadeConfig(
     name: String,
     directory: String,
     plugin: LibReforgePlugin
