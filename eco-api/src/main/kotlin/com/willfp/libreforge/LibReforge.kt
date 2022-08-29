@@ -112,6 +112,10 @@ abstract class LibReforgePlugin : EcoPlugin() {
                 continue
             }
 
+            if (!file.endsWith(".yml")) {
+                continue
+            }
+
             configs[file.nameWithoutExtension] = TransientConfig(file, ConfigType.YAML)
         }
 
