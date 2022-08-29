@@ -112,7 +112,7 @@ abstract class LibReforgePlugin : EcoPlugin() {
                 continue
             }
 
-            if (!file.endsWith(".yml")) {
+            if (!file.name.endsWith(".yml")) {
                 continue
             }
 
