@@ -1,11 +1,11 @@
 package com.willfp.libreforge.integrations.ecoenchants
 
-import com.willfp.libreforge.triggers.Trigger
+import com.willfp.ecoenchants.type.EnchantmentTypes
 
 object EcoEnchantsIntegration {
-    private lateinit var ENCHANT_SPECIAL: Trigger
-
     fun load() {
-        ENCHANT_SPECIAL = TriggerEnchantSpecial()
+        for (type in EnchantmentTypes.values()) {
+            TriggerEnchantType(type.id.lowercase())
+        }
     }
 }
