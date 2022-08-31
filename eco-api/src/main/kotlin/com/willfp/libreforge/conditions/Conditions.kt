@@ -18,6 +18,7 @@ import com.willfp.libreforge.conditions.conditions.ConditionBelowHungerPercent
 import com.willfp.libreforge.conditions.conditions.ConditionBelowPoints
 import com.willfp.libreforge.conditions.conditions.ConditionBelowXPLevel
 import com.willfp.libreforge.conditions.conditions.ConditionBelowY
+import com.willfp.libreforge.conditions.conditions.ConditionHasItem
 import com.willfp.libreforge.conditions.conditions.ConditionHasPermission
 import com.willfp.libreforge.conditions.conditions.ConditionHasPotionEffect
 import com.willfp.libreforge.conditions.conditions.ConditionInAir
@@ -92,6 +93,7 @@ object Conditions {
     val WEARING_LEGGINGS: Condition = ConditionWearingLeggings()
     val WEARING_CHESTPLATE: Condition = ConditionWearingChestplate()
     val WEARING_HELMET: Condition = ConditionWearingHelmet()
+    val HAS_ITEM: Condition = ConditionHasItem()
 
     /**
      * Get condition matching id.
