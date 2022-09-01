@@ -4,7 +4,9 @@ import com.willfp.eco.core.Prerequisite
 import com.willfp.libreforge.LibReforgePlugin
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
+import com.willfp.libreforge.triggers.TriggerGroup
 import com.willfp.libreforge.triggers.TriggerParameter
+import com.willfp.libreforge.triggers.Triggers
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
@@ -39,7 +41,20 @@ class TriggerStatic(interval: Int) : Trigger(
     companion object {
         private val intervals = mutableMapOf<Int, TriggerStatic>()
 
-        fun getWithInterval(interval: Int): Trigger {
+        internal fun registerGroup() {
+            Triggers.addNewTriggerGroup(
+                object : TriggerGroup(
+                    "static"
+                ) {
+                    override fun create(value: String): Trigger? {
+                        val interval = value.toIntOrNull() ?: return null
+                        return getWithInterval(interval)
+                    }
+                }
+            )
+        }
+
+        private fun getWithInterval(interval: Int): Trigger {
             if (intervals.containsKey(interval)) {
                 return intervals[interval]!!
             }

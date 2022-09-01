@@ -52,6 +52,7 @@ import com.willfp.libreforge.triggers.triggers.TriggerWinRaid
 @Suppress("UNUSED")
 object Triggers {
     private val BY_ID = mutableMapOf<String, Trigger>()
+    private val TRIGGER_GROUPS = mutableMapOf<String, TriggerGroup>()
 
     val MELEE_ATTACK: Trigger = TriggerMeleeAttack()
     val BOW_ATTACK: Trigger = TriggerBowAttack()
@@ -123,14 +124,10 @@ object Triggers {
     }
 
     fun getById(id: String): Trigger? {
-        if (id.startsWith("static_")) {
-            val interval = id.removePrefix("static_").toIntOrNull() ?: return null
-            return TriggerStatic.getWithInterval(interval)
-        }
-
-        if (id.startsWith("custom_")) {
-            val customId = id.removePrefix("custom_")
-            return TriggerCustom.getWithID(customId)
+        for ((prefix, group) in TRIGGER_GROUPS) {
+            if (id.startsWith("${prefix}_")) {
+                return group.create(id.removePrefix("${prefix}_"))
+            }
         }
 
         return BY_ID[id.lowercase()]
@@ -144,5 +141,20 @@ object Triggers {
     fun addNewTrigger(trigger: Trigger) {
         BY_ID.remove(trigger.id)
         BY_ID[trigger.id] = trigger
+    }
+
+    /**
+     * Add new trigger group.
+     *
+     * @param group The trigger group to add.
+     */
+    fun addNewTriggerGroup(group: TriggerGroup) {
+        TRIGGER_GROUPS.remove(group.prefix)
+        TRIGGER_GROUPS[group.prefix] = group
+    }
+
+    init {
+        TriggerStatic.registerGroup()
+        TriggerCustom.registerGroup()
     }
 }

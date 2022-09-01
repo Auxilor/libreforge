@@ -2,7 +2,9 @@ package com.willfp.libreforge.triggers.triggers
 
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
+import com.willfp.libreforge.triggers.TriggerGroup
 import com.willfp.libreforge.triggers.TriggerParameter
+import com.willfp.libreforge.triggers.Triggers
 import org.bukkit.entity.Player
 
 class TriggerCustom(id: String) : Trigger(
@@ -20,7 +22,19 @@ class TriggerCustom(id: String) : Trigger(
     companion object {
         private val intervals = mutableMapOf<String, TriggerCustom>()
 
-        fun getWithID(id: String): TriggerCustom {
+        internal fun registerGroup() {
+            Triggers.addNewTriggerGroup(
+                object : TriggerGroup(
+                    "custom"
+                ) {
+                    override fun create(value: String): Trigger {
+                        return getWithID(value)
+                    }
+                }
+            )
+        }
+
+        private fun getWithID(id: String): TriggerCustom {
             if (intervals.containsKey(id)) {
                 return intervals[id]!!
             }
