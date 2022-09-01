@@ -34,7 +34,7 @@ class TriggerCustom(id: String) : Trigger(
             )
         }
 
-        private fun getWithID(id: String): TriggerCustom {
+        fun getWithID(id: String): TriggerCustom {
             if (intervals.containsKey(id)) {
                 return intervals[id]!!
             }
