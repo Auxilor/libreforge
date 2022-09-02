@@ -46,3 +46,6 @@ data class ConfiguredCondition internal constructor(
         override val effects = emptySet<ConfiguredEffect>()
     }
 }
+
+fun Iterable<ConfiguredCondition>.isMet(player: Player): Boolean =
+    this.all { it.isMet(player) }
