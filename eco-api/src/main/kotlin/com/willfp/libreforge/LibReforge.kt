@@ -12,6 +12,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.IntegrationLoader
 import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.conditions.MovementConditionListener
+import com.willfp.libreforge.conditions.isMet
 import com.willfp.libreforge.effects.ConfiguredEffect
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.events.HolderProvideEvent
@@ -274,7 +275,7 @@ fun Player.updateEffects(noRescan: Boolean = false) {
     }
 
     for (effect in added) {
-        if (!effect.conditions.all { it.isMet(this) }) {
+        if (!effect.conditions.isMet(this)) {
             continue
         }
 
@@ -286,7 +287,7 @@ fun Player.updateEffects(noRescan: Boolean = false) {
     }
 
     for (effect in after) {
-        if (!effect.conditions.all { it.isMet(this) }) {
+        if (!effect.conditions.isMet(this)) {
             effect.disableFor(this)
         }
     }
