@@ -6,7 +6,7 @@ import org.bukkit.entity.Player
 
 class ConditionIsNight : Condition("is_night") {
     override fun isConditionMet(player: Player, config: Config): Boolean {
-        val isNight = player.world.time < 12300 || player.world.time > 23850
+        val isNight = player.world.time in 12301..23849
 
         return isNight == (config.getBoolOrNull("is_night") ?: true)
     }
