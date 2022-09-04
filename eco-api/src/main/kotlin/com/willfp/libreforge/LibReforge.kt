@@ -10,6 +10,7 @@ import com.willfp.eco.core.config.ConfigType
 import com.willfp.eco.core.config.TransientConfig
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.IntegrationLoader
+import com.willfp.libreforge.chains.EffectChains
 import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.conditions.MovementConditionListener
 import com.willfp.libreforge.conditions.isMet
@@ -56,6 +57,9 @@ abstract class LibReforgePlugin : EcoPlugin() {
         arrayOf("com", "willfp", "libreforge"),
         "."
     )
+
+    @Suppress("MemberVisibilityCanBePrivate")
+    val chainsYml: ChainsYml by lazy { ChainsYml(this) }
 
     init {
         setInstance()
@@ -173,13 +177,17 @@ abstract class LibReforgePlugin : EcoPlugin() {
     }
 
     final override fun handleReload() {
-        this.scheduler.runTimer({
+        this.scheduler.runTimer(30, 30) {
             for (player in Bukkit.getOnlinePlayers()) {
                 player.updateEffects()
             }
-        }, 30, 30)
+        }
         TriggerStatic.beginTiming(this)
         Effects.TRACEBACK.init()
+
+        for (config in chainsYml.getSubsections("chains")) {
+            EffectChains.compile(config, "chains.yml")
+        }
 
         handleReloadAdditional()
     }
