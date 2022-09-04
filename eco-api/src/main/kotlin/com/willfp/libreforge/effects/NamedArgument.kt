@@ -3,10 +3,21 @@ package com.willfp.libreforge.effects
 import com.willfp.eco.core.placeholder.StaticPlaceholder
 
 class NamedArgument internal constructor(
-    identifier: String,
+    identifiers: Collection<String>,
     value: String
 ) {
-    val placeholder = StaticPlaceholder(
-        identifier
-    ) { value }
+    @Suppress("UNUSED")
+    internal constructor(
+        identifier: String,
+        value: String
+    ) : this(listOf(identifier), value)
+
+    val placeholders = identifiers.map {
+        StaticPlaceholder(
+            it
+        ) { value }
+    }
+
+    @Deprecated(message = "Use placeholders instead, this doesn't include additional names")
+    val placeholder = placeholders[0]
 }
