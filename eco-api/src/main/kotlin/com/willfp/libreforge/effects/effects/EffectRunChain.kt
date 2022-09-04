@@ -25,7 +25,7 @@ class EffectRunChain : Effect(
         for (key in args.getKeys(false)) {
             namedArgs.add(
                 NamedArgument(
-                    key,
+                    listOf(key, key.replace("_", "")),
                     PlaceholderManager.translatePlaceholders(args.getString(key), invocation.player)
                 )
             )

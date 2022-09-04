@@ -14,7 +14,7 @@ import com.willfp.libreforge.triggers.InvocationData
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.mutate
 import org.bukkit.entity.Player
-import java.util.UUID
+import java.util.*
 import kotlin.math.max
 
 private val everyHandler = mutableMapOf<UUID, Int>()
@@ -58,9 +58,15 @@ data class ConfiguredEffect internal constructor(
 
         var invocation = rawInvocation.copy(compileData = compileData)
 
-        args.addInjectablePlaceholder(namedArguments.map { it.placeholder })
-        mutators.forEach { it.config.addInjectablePlaceholder(namedArguments.map { a -> a.placeholder }) }
-        conditions.forEach { it.config.addInjectablePlaceholder(namedArguments.map { a -> a.placeholder }) }
+        val allArguments = namedArguments +
+                NamedArgument(
+                    listOf("trigger_value", "triggervalue", "trigger", "value", "tv", "v", "t"),
+                    rawInvocation.value.toString()
+                )
+
+        args.addInjectablePlaceholder(allArguments.flatMap { it.placeholders })
+        mutators.forEach { it.config.addInjectablePlaceholder(allArguments.flatMap { a -> a.placeholders }) }
+        conditions.forEach { it.config.addInjectablePlaceholder(allArguments.flatMap { a -> a.placeholders }) }
 
         if (args.getBool("self_as_victim")) {
             invocation = invocation.copy(
