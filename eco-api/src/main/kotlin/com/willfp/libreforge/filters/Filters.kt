@@ -5,6 +5,7 @@ import com.willfp.libreforge.filters.filters.FilterDamageCause
 import com.willfp.libreforge.filters.filters.FilterEntityType
 import com.willfp.libreforge.filters.filters.FilterFromSpawner
 import com.willfp.libreforge.filters.filters.FilterItems
+import com.willfp.libreforge.filters.filters.FilterOnMaxHealth
 import com.willfp.libreforge.filters.filters.FilterOnlyBosses
 import com.willfp.libreforge.filters.filters.FilterOnlyNonBosses
 import com.willfp.libreforge.filters.filters.FilterProjectiles
@@ -21,6 +22,7 @@ object Filters {
     val ITEMS: FilterComponent = FilterItems()
     val PROJECTILES: FilterComponent = FilterProjectiles()
     val FROM_SPAWNER: FilterComponent = FilterFromSpawner()
+    val ON_MAX_HEALTH: FilterComponent = FilterOnMaxHealth()
 
     /**
      * List of all registered filters.
