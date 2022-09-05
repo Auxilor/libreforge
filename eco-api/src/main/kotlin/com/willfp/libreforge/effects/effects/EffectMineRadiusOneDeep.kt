@@ -10,6 +10,7 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
+import com.willfp.libreforge.triggers.triggers.TriggerMineBlock.Companion.preventMineBlockTrigger
 import org.bukkit.Material
 import org.bukkit.block.Block
 import kotlin.math.abs
@@ -110,6 +111,11 @@ class EffectMineRadiusOneDeep : Effect(
         player.runExempted {
             for (toBreak in blocks) {
                 toBreak.setMetadata("block-ignore", plugin.metadataValueFactory.create(true))
+
+                if (config.getBool("prevent_trigger")) {
+                    toBreak.preventMineBlockTrigger()
+                }
+
                 player.breakBlock(toBreak)
                 toBreak.removeMetadata("block-ignore", plugin)
             }
