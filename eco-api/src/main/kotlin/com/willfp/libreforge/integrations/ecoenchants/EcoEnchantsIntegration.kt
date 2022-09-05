@@ -5,7 +5,7 @@ import org.bukkit.Bukkit
 
 object EcoEnchantsIntegration {
     fun load() {
-        if (Bukkit.getPluginManager().getPlugin("EcoEnchants")?.description?.version?.startsWith("9") == true) {
+        if (Bukkit.getPluginManager().getPlugin("EcoEnchants")?.description?.version?.startsWith("9") == false) {
             return
         }
 
