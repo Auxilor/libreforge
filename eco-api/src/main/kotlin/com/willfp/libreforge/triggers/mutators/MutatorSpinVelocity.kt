@@ -2,6 +2,7 @@ package com.willfp.libreforge.triggers.mutators
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.DataMutator
 import com.willfp.libreforge.triggers.TriggerData
 
@@ -10,7 +11,7 @@ class MutatorSpinVelocity : DataMutator("spin_velocity") {
         val velocity = data.velocity?.clone() ?: return data
 
         val newVelocity = velocity
-            .rotateAroundY(Math.toRadians(config.getDoubleFromExpression("angle", data.player)))
+            .rotateAroundY(Math.toRadians(config.getDoubleFromExpression("angle", data)))
 
         return data.copy(
             velocity = newVelocity

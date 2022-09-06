@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.effects
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
@@ -18,9 +19,9 @@ class EffectSetVelocity : Effect(
         val player = data.player ?: return
 
         player.velocity = Vector(
-            config.getDoubleFromExpression("x", player),
-            config.getDoubleFromExpression("y", player),
-            config.getDoubleFromExpression("z", player)
+            config.getDoubleFromExpression("x", data),
+            config.getDoubleFromExpression("y", data),
+            config.getDoubleFromExpression("z", data)
         )
     }
 

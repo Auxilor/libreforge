@@ -8,6 +8,7 @@ import com.willfp.libreforge.effects.effects.particles.copy
 import com.willfp.libreforge.effects.effects.particles.toDirectionVector
 import com.willfp.libreforge.effects.effects.particles.toLocation
 import com.willfp.libreforge.effects.effects.particles.toVector3f
+import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
@@ -52,7 +53,7 @@ class EffectParticleAnimation : Effect(
             val locationVector = location.toVector3f()
 
             val vectors = if (args.has("tick-multiplier")) {
-                val mult = args.getIntFromExpression("tick-multiplier", player)
+                val mult = args.getIntFromExpression("tick-multiplier", data)
 
                 val mockTicks = (tick * mult until (tick * mult) + mult)
 
@@ -81,7 +82,7 @@ class EffectParticleAnimation : Effect(
                 world.spawnParticle(
                     particle,
                     vector.toLocation(world),
-                    config.getIntFromExpression("particle-amount", player),
+                    config.getIntFromExpression("particle-amount", data),
                     0.0, 0.0, 0.0, 0.0, null
                 )
             }

@@ -4,6 +4,8 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getDoubleFromExpression
+import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
@@ -23,11 +25,11 @@ class EffectArrowRing : Effect(
         val location = data.location ?: return
         val world = location.world ?: return
 
-        val amount = config.getIntFromExpression("amount", data.player)
-        val height = config.getDoubleFromExpression("height", data.player)
-        val radius = config.getDoubleFromExpression("radius", data.player)
-        val damage = config.getDoubleFromExpression("arrow_damage", data.player)
-        val flameTicks = config.getIntFromExpression("fire_ticks", data.player)
+        val amount = config.getIntFromExpression("amount", data)
+        val height = config.getDoubleFromExpression("height", data)
+        val radius = config.getDoubleFromExpression("radius", data)
+        val damage = config.getDoubleFromExpression("arrow_damage", data)
+        val flameTicks = config.getIntFromExpression("fire_ticks", data)
 
         if (data.player != null) {
             if (!location.getNearbyPlayers(radius + 0.5f).all { AntigriefManager.canInjure(data.player, it) }) {

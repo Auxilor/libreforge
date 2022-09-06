@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.effects
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
@@ -18,7 +19,7 @@ class EffectDamageMultiplier : Effect(
     override fun handle(data: TriggerData, config: Config) {
         val event = data.event as? WrappedDamageEvent ?: return
 
-        event.damage *= config.getDoubleFromExpression("multiplier", data.player)
+        event.damage *= config.getDoubleFromExpression("multiplier", data)
 
         if (event.damage < 0.01) {
             event.isCancelled = true

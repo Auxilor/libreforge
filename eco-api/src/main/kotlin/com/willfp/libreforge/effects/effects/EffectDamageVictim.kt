@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.effects
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
@@ -18,7 +19,7 @@ class EffectDamageVictim : Effect(
         val victim = data.victim ?: return
         val player = data.player
 
-        val damage = config.getDoubleFromExpression("damage", player)
+        val damage = config.getDoubleFromExpression("damage", data)
 
         if (config.getBool("use_source")) {
             victim.damage(damage, player)

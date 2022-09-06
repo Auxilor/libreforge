@@ -6,6 +6,7 @@ import com.willfp.eco.util.containsIgnoreCase
 import com.willfp.eco.util.runExempted
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
@@ -28,7 +29,7 @@ class EffectMineRadius : Effect(
 
         val player = data.player ?: return
 
-        val radius = config.getIntFromExpression("radius", player)
+        val radius = config.getIntFromExpression("radius", data)
 
         if (player.isSneaking && config.getBool("disable_on_sneak")) {
             return

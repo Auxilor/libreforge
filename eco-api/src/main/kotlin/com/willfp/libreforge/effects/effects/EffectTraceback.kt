@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.effects
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
@@ -22,7 +23,7 @@ class EffectTraceback : Effect(
     override fun handle(data: TriggerData, config: Config) {
         val player = data.player ?: return
 
-        val time = max(1.0, min(30.0, config.getDoubleFromExpression("seconds", player)))
+        val time = max(1.0, min(30.0, config.getDoubleFromExpression("seconds", data)))
         val index = time.toInt() - 1
 
         @Suppress("UNCHECKED_CAST")

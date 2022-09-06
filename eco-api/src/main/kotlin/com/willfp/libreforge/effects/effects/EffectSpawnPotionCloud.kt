@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.effects
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
@@ -22,8 +23,8 @@ class EffectSpawnPotionCloud : Effect(
         val world = location.world ?: return
 
         val effect = PotionEffectType.getByName(config.getString("effect").uppercase()) ?: return
-        val level = config.getIntFromExpression("level", data.player)
-        val duration = config.getIntFromExpression("duration", data.player)
+        val level = config.getIntFromExpression("level", data)
+        val duration = config.getIntFromExpression("duration", data)
 
         val cloud = world.spawn(location, AreaEffectCloud::class.java)
         cloud.addCustomEffect(

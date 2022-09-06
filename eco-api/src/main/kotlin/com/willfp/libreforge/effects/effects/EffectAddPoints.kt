@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
+import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.givePoints
 import com.willfp.libreforge.takePoints
 import com.willfp.libreforge.triggers.TriggerData
@@ -16,7 +17,7 @@ class EffectAddPoints : Effect("add_points") {
     override fun handle(data: TriggerData, config: Config) {
         val player = data.player ?: return
 
-        player.givePoints(config.getString("type"), config.getDoubleFromExpression("amount", player))
+        player.givePoints(config.getString("type"), config.getDoubleFromExpression("amount", data))
     }
 
     override fun handleEnable(

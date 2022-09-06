@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.entities.Entities
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
@@ -22,10 +23,10 @@ class EffectDamageNearbyEntities : Effect(
         val world = location.world ?: return
         val player = data.player ?: return
 
-        val radius = config.getDoubleFromExpression("radius", player)
+        val radius = config.getDoubleFromExpression("radius", data)
         val damageAsPlayer = config.getBool("damage_as_player")
         val entities = config.getStrings("entities").map { Entities.lookup(it) }
-        val damage = config.getDoubleFromExpression("damage", player)
+        val damage = config.getDoubleFromExpression("damage", data)
         val damageSelf = config.getBoolOrNull("damage_self") ?: true
 
         for (entity in world.getNearbyEntities(location, radius, radius, radius)) {

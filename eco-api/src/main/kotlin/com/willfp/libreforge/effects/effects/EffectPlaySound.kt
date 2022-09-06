@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.effects
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
@@ -18,8 +19,8 @@ class EffectPlaySound : Effect(
         val player = data.player ?: return
 
         val sound = Sound.valueOf(config.getString("sound").uppercase())
-        val pitch = config.getDoubleFromExpression("pitch", player)
-        val volume = config.getDoubleFromExpression("volume", player)
+        val pitch = config.getDoubleFromExpression("pitch", data)
+        val volume = config.getDoubleFromExpression("volume", data)
 
         player.playSound(player.location, sound, volume.toFloat(), pitch.toFloat())
     }

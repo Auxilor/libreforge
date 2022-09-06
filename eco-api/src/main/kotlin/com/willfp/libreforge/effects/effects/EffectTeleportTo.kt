@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.effects
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
@@ -21,9 +22,9 @@ class EffectTeleportTo : Effect(
         val world = Bukkit.getWorld(config.getString("world")) ?: return
         val loc = Location(
             world,
-            config.getDoubleFromExpression("x", player),
-            config.getDoubleFromExpression("y", player),
-            config.getDoubleFromExpression("z", player)
+            config.getDoubleFromExpression("x", data),
+            config.getDoubleFromExpression("y", data),
+            config.getDoubleFromExpression("z", data)
         )
 
         player.teleport(loc)
