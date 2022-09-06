@@ -58,11 +58,7 @@ data class ConfiguredEffect internal constructor(
 
         var invocation = rawInvocation.copy(compileData = compileData)
 
-        val allArguments = namedArguments +
-                NamedArgument(
-                    listOf("trigger_value", "triggervalue", "trigger", "value", "tv", "v", "t"),
-                    rawInvocation.value.toString()
-                )
+        val allArguments = namedArguments + rawInvocation.createPlaceholders()
 
         args.addInjectablePlaceholder(allArguments.flatMap { it.placeholders })
         mutators.forEach { it.config.addInjectablePlaceholder(allArguments.flatMap { a -> a.placeholders }) }
