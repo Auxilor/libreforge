@@ -12,6 +12,12 @@ class NamedArgument internal constructor(
         value: String
     ) : this(listOf(identifier), value)
 
+    @Suppress("UNUSED")
+    internal constructor(
+        identifier: String,
+        value: Any
+    ) : this(listOf(identifier), value.toString())
+
     val placeholders = identifiers.map {
         StaticPlaceholder(
             it
