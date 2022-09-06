@@ -1,5 +1,6 @@
 package com.willfp.libreforge.filters
 
+import com.willfp.libreforge.filters.filters.FilterAboveHealthPercent
 import com.willfp.libreforge.filters.filters.FilterBlocks
 import com.willfp.libreforge.filters.filters.FilterDamageCause
 import com.willfp.libreforge.filters.filters.FilterEntityType
@@ -23,6 +24,7 @@ object Filters {
     val PROJECTILES: FilterComponent = FilterProjectiles()
     val FROM_SPAWNER: FilterComponent = FilterFromSpawner()
     val ON_MAX_HEALTH: FilterComponent = FilterOnMaxHealth()
+    val ABOVE_HEALTH_PERCENT: FilterComponent = FilterAboveHealthPercent()
 
     /**
      * List of all registered filters.
