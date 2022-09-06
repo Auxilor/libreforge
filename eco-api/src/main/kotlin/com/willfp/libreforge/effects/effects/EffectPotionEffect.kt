@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.effects
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
@@ -26,8 +27,8 @@ class EffectPotionEffect : Effect(
             PotionEffect(
                 PotionEffectType.getByName(config.getString("effect").uppercase())
                     ?: PotionEffectType.INCREASE_DAMAGE,
-                config.getIntFromExpression("duration", data.player),
-                config.getIntFromExpression("level", data.player) - 1,
+                config.getIntFromExpression("duration", data),
+                config.getIntFromExpression("level", data) - 1,
                 plugin.configYml.getBool("potions.ambient.triggered"),
                 plugin.configYml.getBool("potions.particles.triggered"),
                 plugin.configYml.getBool("potions.icon.triggered")

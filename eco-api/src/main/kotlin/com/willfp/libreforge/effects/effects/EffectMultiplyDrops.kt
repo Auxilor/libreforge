@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.items.Items
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
@@ -21,7 +22,7 @@ class EffectMultiplyDrops : Effect(
         val event = data.event as? WrappedDropEvent<*> ?: return
 
         event.modifier = {
-            val fortune = config.getIntFromExpression("fortune", data.player)
+            val fortune = config.getIntFromExpression("fortune", data)
 
             val items = config.getStrings("on_items").map { string -> Items.lookup(string) }
             val matches = items.any { test -> test.matches(it) }

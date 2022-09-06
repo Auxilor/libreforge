@@ -2,9 +2,12 @@ package com.willfp.libreforge
 
 import com.willfp.eco.core.config.ConfigType
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.placeholder.AdditionalPlayer
 import com.willfp.eco.core.placeholder.InjectablePlaceholder
 import com.willfp.eco.core.placeholder.StaticPlaceholder
 import com.willfp.eco.util.StringUtils
+import com.willfp.libreforge.triggers.TriggerData
+import org.bukkit.entity.Player
 import java.util.*
 
 private class SeparatorAmbivalentConfig(
@@ -112,6 +115,26 @@ private class SeparatorAmbivalentConfig(
 }
 
 fun Config.separatorAmbivalent(): Config = SeparatorAmbivalentConfig(this)
+
+fun Config.getIntFromExpression(path: String, data: TriggerData): Int {
+    val player = data.player
+    val additional = mutableListOf<AdditionalPlayer>()
+
+    if (data.victim is Player) {
+        additional += AdditionalPlayer(data.victim, "victim")
+    }
+    return getIntFromExpression(path, player, additional)
+}
+
+fun Config.getDoubleFromExpression(path: String, data: TriggerData): Double {
+    val player = data.player
+    val additional = mutableListOf<AdditionalPlayer>()
+
+    if (data.victim is Player) {
+        additional += AdditionalPlayer(data.victim, "victim")
+    }
+    return getDoubleFromExpression(path, player, additional)
+}
 
 // Seamlessly stolen from: https://stackoverflow.com/a/1144014/11427550
 private fun String.toCamelCase(): String {

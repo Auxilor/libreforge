@@ -3,6 +3,8 @@ package com.willfp.libreforge.effects.effects
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getDoubleFromExpression
+import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
@@ -17,9 +19,9 @@ class EffectBleed : Effect(
     override fun handle(data: TriggerData, config: Config) {
         val victim = data.victim ?: return
 
-        val damage = config.getDoubleFromExpression("damage", data.player)
-        val interval = config.getIntFromExpression("interval", data.player)
-        val amount = config.getIntFromExpression("amount", data.player)
+        val damage = config.getDoubleFromExpression("damage", data)
+        val interval = config.getIntFromExpression("interval", data)
+        val amount = config.getIntFromExpression("amount", data)
 
         var current = 0
 

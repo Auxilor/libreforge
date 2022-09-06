@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.effects
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
@@ -26,7 +27,7 @@ class EffectDamageArmor : Effect(
     override fun handle(data: TriggerData, config: Config) {
         val victim = data.victim ?: return
 
-        val damage = config.getIntFromExpression("damage", data.player)
+        val damage = config.getIntFromExpression("damage", data)
 
         val equipment = victim.equipment ?: return
         for (item in equipment.armorContents) {

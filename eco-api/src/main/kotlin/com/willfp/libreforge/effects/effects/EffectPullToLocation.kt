@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.effects
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
@@ -23,7 +24,7 @@ class EffectPullToLocation : Effect(
         }
 
         val vector = location.toVector().subtract(player.location.toVector()).normalize()
-            .multiply(config.getDoubleFromExpression("velocity", player))
+            .multiply(config.getDoubleFromExpression("velocity", data))
 
         player.velocity = vector
     }

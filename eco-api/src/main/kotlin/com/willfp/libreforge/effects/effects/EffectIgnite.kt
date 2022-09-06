@@ -3,6 +3,8 @@ package com.willfp.libreforge.effects.effects
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getDoubleFromExpression
+import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
@@ -19,8 +21,8 @@ class EffectIgnite: Effect(
 ) {
     override fun handle(data: TriggerData, config: Config) {
         val victim = data.victim ?: return
-        val damage = config.getDoubleFromExpression("damage_per_tick", data.player)
-        val duration = config.getIntFromExpression("ticks", data.player)
+        val damage = config.getDoubleFromExpression("damage_per_tick", data)
+        val duration = config.getIntFromExpression("ticks", data)
 
         victim.fireTicks = duration
         victim.setMetadata("ignitedMob", FixedMetadataValue(plugin, damage))

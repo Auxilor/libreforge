@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.effects
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.getPoints
 import com.willfp.libreforge.setPoints
 import com.willfp.libreforge.triggers.TriggerData
@@ -20,7 +21,7 @@ class EffectMultiplyPoints : Effect(
 
         val type = config.getString("type")
 
-        player.setPoints(type, player.getPoints(type) * config.getDoubleFromExpression("multiplier", player))
+        player.setPoints(type, player.getPoints(type) * config.getDoubleFromExpression("multiplier", data))
     }
 
     override fun validateConfig(config: Config): List<ConfigViolation> {

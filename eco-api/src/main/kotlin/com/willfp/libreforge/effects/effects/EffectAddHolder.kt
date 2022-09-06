@@ -9,6 +9,7 @@ import com.willfp.libreforge.effects.CompileData
 import com.willfp.libreforge.effects.ConfiguredEffect
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Effects
+import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.InvocationData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
@@ -42,7 +43,7 @@ class EffectAddHolder : Effect(
             "add_holder:$uuid"
         )
 
-        val duration = config.getIntFromExpression("duration", player)
+        val duration = config.getIntFromExpression("duration", invocation.data)
 
         val current = holders[player.uniqueId] ?: mutableMapOf()
         current[uuid] = holder

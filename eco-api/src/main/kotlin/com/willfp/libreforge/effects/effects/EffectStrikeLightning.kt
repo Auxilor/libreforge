@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.effects
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
@@ -17,7 +18,7 @@ class EffectStrikeLightning : Effect(
         val location = data.location ?: return
         val world = location.world ?: return
 
-        for (i in 1..config.getIntFromExpression("amount", data.player)) {
+        for (i in 1..config.getIntFromExpression("amount", data)) {
             plugin.scheduler.runLater({
                 world.strikeLightning(location)
             }, 1)

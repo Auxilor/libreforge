@@ -4,6 +4,7 @@ import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
@@ -18,9 +19,9 @@ class EffectGiveXp : Effect(
         val player = data.player ?: return
 
         if (Prerequisite.HAS_PAPER.isMet) {
-            player.giveExp(config.getIntFromExpression("amount", player), config.getBool("apply_mending"))
+            player.giveExp(config.getIntFromExpression("amount", data), config.getBool("apply_mending"))
         } else {
-            player.giveExp(config.getIntFromExpression("amount", player))
+            player.giveExp(config.getIntFromExpression("amount", data))
         }
     }
 

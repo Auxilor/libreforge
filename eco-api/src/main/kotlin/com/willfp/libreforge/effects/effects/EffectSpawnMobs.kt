@@ -5,6 +5,8 @@ import com.willfp.eco.core.entities.Entities
 import com.willfp.eco.util.NumberUtils
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getDoubleFromExpression
+import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
@@ -35,10 +37,10 @@ class EffectSpawnMobs : Effect(
             }
         }
 
-        val amount = config.getIntFromExpression("amount", data.player)
-        val ticksToLive = config.getIntFromExpression("ticks_to_live", data.player)
-        val health = config.getDoubleFromExpression("health", data.player)
-        val range = config.getDoubleFromExpression("range", data.player)
+        val amount = config.getIntFromExpression("amount", data)
+        val ticksToLive = config.getIntFromExpression("ticks_to_live", data)
+        val health = config.getDoubleFromExpression("health", data)
+        val range = config.getDoubleFromExpression("range", data)
 
         val entityType = Entities.lookup(config.getString("entity"))
 
