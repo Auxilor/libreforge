@@ -22,7 +22,7 @@ private val everyHandler = mutableMapOf<UUID, Int>()
 data class ConfiguredEffect internal constructor(
     val effect: Effect,
     val args: Config,
-    val filter: Filter,
+    val filter: Config,
     val triggers: Collection<Trigger>,
     val uuid: UUID,
     val conditions: Collection<ConfiguredCondition>,
@@ -63,6 +63,7 @@ data class ConfiguredEffect internal constructor(
         args.addInjectablePlaceholder(allArguments.flatMap { it.placeholders })
         mutators.forEach { it.config.addInjectablePlaceholder(allArguments.flatMap { a -> a.placeholders }) }
         conditions.forEach { it.config.addInjectablePlaceholder(allArguments.flatMap { a -> a.placeholders }) }
+        filter.addInjectablePlaceholder(allArguments.flatMap { a -> a.placeholders })
 
         if (args.getBool("self_as_victim")) {
             invocation = invocation.copy(
@@ -102,11 +103,11 @@ data class ConfiguredEffect internal constructor(
         }
 
         if (args.getBool("filters_before_mutation")) {
-            if (!filter.matches(rawInvocation.data)) {
+            if (!Filter.matches(rawInvocation.data, filter)) {
                 return
             }
         } else {
-            if (!filter.matches(data)) {
+            if (!Filter.matches(data, filter)) {
                 return
             }
         }

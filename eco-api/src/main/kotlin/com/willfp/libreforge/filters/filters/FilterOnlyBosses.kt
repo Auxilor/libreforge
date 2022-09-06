@@ -12,7 +12,7 @@ class FilterOnlyBosses : FilterComponent() {
     override fun passes(data: TriggerData, config: Config): Boolean {
         val entity = data.victim ?: return true
 
-        return config.withInverse("onlyBosses", Config::getBoolOrNull) {
+        return config.withInverse("only_bosses", Config::getBoolOrNull) {
             (entity is Boss || entity is ElderGuardian || entity.persistentDataContainer
                 .has(NamespacedKeyUtils.create("ecobosses", "boss"), PersistentDataType.STRING)) == it
         }
