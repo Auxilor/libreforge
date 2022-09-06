@@ -11,7 +11,7 @@ class FilterAboveHealthPercent : FilterComponent() {
         val entity = data.victim ?: return true
         val player = data.player
 
-        return config.withInverse("aboveHealthPercent", Config::getStringOrNull) {
+        return config.withInverse("above_health_percent", Config::getStringOrNull) {
             if (it == null) {
                 return@withInverse true
             }

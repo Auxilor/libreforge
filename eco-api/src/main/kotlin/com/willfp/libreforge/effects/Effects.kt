@@ -2,6 +2,7 @@ package com.willfp.libreforge.effects
 
 import com.google.common.collect.HashBiMap
 import com.google.common.collect.ImmutableList
+import com.willfp.eco.core.config.TransientConfig
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.placeholder.InjectablePlaceholder
 import com.willfp.eco.core.placeholder.StaticPlaceholder
@@ -86,8 +87,6 @@ import com.willfp.libreforge.effects.effects.EffectTraceback
 import com.willfp.libreforge.effects.effects.EffectTransmission
 import com.willfp.libreforge.effects.effects.EffectTriggerCustom
 import com.willfp.libreforge.effects.effects.EffectXpMultiplier
-import com.willfp.libreforge.filters.ConfiguredFilter
-import com.willfp.libreforge.filters.EmptyFilter
 import com.willfp.libreforge.separatorAmbivalent
 import com.willfp.libreforge.triggers.DataMutators
 import com.willfp.libreforge.triggers.Trigger
@@ -271,8 +270,8 @@ object Effects {
                 return@let null
             }
 
-            if (it == null) EmptyFilter() else ConfiguredFilter(it)
-        } ?: EmptyFilter()
+            it
+        } ?: TransientConfig()
 
         val triggers = config.getStrings("triggers").let {
             val triggers = mutableListOf<Trigger>()
