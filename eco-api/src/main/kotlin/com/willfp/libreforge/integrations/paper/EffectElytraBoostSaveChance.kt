@@ -10,7 +10,7 @@ import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.effects.MultiplierModifier
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
-import java.util.UUID
+import java.util.*
 
 class EffectElytraBoostSaveChance : Effect("elytra_boost_save_chance") {
     private val modifiers = mutableMapOf<UUID, MutableList<MultiplierModifier>>()
@@ -50,13 +50,13 @@ class EffectElytraBoostSaveChance : Effect("elytra_boost_save_chance") {
 
         val player = event.player
 
-        var chance = 1.0
+        var chance = 100.0
 
         for (modifier in (modifiers[player.uniqueId] ?: emptyList())) {
-            chance *= (1 - modifier.multiplier)
+            chance *= (100 - modifier.multiplier)
         }
 
-        if (NumberUtils.randFloat(0.0, 1.0) > chance) {
+        if (NumberUtils.randFloat(0.0, 100.0) > chance) {
             event.setShouldConsume(false)
         }
     }
