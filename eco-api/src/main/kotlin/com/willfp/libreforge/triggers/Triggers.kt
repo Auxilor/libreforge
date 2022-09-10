@@ -32,6 +32,7 @@ import com.willfp.libreforge.triggers.triggers.TriggerMeleeAttack
 import com.willfp.libreforge.triggers.triggers.TriggerMineBlock
 import com.willfp.libreforge.triggers.triggers.TriggerMineBlockProgress
 import com.willfp.libreforge.triggers.triggers.TriggerMove
+import com.willfp.libreforge.triggers.triggers.TriggerPlaceBlock
 import com.willfp.libreforge.triggers.triggers.TriggerPotionEffect
 import com.willfp.libreforge.triggers.triggers.TriggerProjectileHit
 import com.willfp.libreforge.triggers.triggers.TriggerProjectileLaunch
@@ -100,6 +101,7 @@ object Triggers {
     val WIN_RAID: Trigger = TriggerWinRaid()
     val SMELT: Trigger = TriggerSmelt()
     val BREW: Trigger = TriggerBrew()
+    val PLACE_BLOCK: Trigger = TriggerPlaceBlock()
 
     fun values(): Set<Trigger> {
         return BY_ID.values.toSet()

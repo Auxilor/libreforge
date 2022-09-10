@@ -207,7 +207,8 @@ abstract class LibReforgePlugin : EcoPlugin() {
             IntegrationLoader("Reforges", ReforgesIntegration::load),
             IntegrationLoader("Boosters", BoostersIntegration::load),
             IntegrationLoader("EcoEnchants", EcoEnchantsIntegration::load),
-            IntegrationLoader("EcoPets", EcoPetsIntegration::load)
+            IntegrationLoader("EcoPets", EcoPetsIntegration::load),
+            IntegrationLoader("EcoJobs", EcoPetsIntegration::load)
         )
 
         integrations.addAll(loadAdditionalIntegrations())
