@@ -8,13 +8,16 @@ import com.willfp.libreforge.filters.Filter
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 
-class Counter(
+class Counter internal constructor(
     val trigger: Trigger,
     val multiplier: Double,
     val conditions: Iterable<ConfiguredCondition>,
     val filters: Config
 ) {
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(
+        priority = EventPriority.HIGH,
+        ignoreCancelled = true
+    )
     fun getCount(event: TriggerPreProcessEvent): Double {
         val player = event.player
         val value = event.value
