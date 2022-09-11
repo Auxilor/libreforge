@@ -71,6 +71,7 @@ class EffectGlowNearbyBlocks : Effect(
             shulker.isGlowing = true
             shulker.isInvisible = true
             shulker.setMetadata("gnb-shulker", this.plugin.metadataValueFactory.create(true))
+            team.addEntry(shulker.uniqueId.toString())
             block.setMetadata("gnb-uuid", this.plugin.metadataValueFactory.create(shulker.uniqueId))
 
             this.plugin.scheduler.runLater(duration.toLong()) {
