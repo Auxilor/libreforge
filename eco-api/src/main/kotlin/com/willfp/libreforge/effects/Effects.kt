@@ -21,6 +21,7 @@ import com.willfp.libreforge.effects.effects.EffectBleed
 import com.willfp.libreforge.effects.effects.EffectBlockCommands
 import com.willfp.libreforge.effects.effects.EffectBonusHealth
 import com.willfp.libreforge.effects.effects.EffectBreakBlock
+import com.willfp.libreforge.effects.effects.EffectBroadcast
 import com.willfp.libreforge.effects.effects.EffectCancelEvent
 import com.willfp.libreforge.effects.effects.EffectConsumeHeldItem
 import com.willfp.libreforge.effects.effects.EffectCreateExplosion
@@ -175,6 +176,7 @@ object Effects {
     val KNOCKBACK_RESISTANCE_MULTIPLIER: Effect = EffectKnockbackResistanceMultiplier()
     val SMITE: Effect = EffectSmite()
     val SHUFFLE_HOTBAR: Effect = EffectShuffleHotbar()
+    val BROADCAST: Effect = EffectBroadcast()
 
     /**
      * Get effect matching id.
