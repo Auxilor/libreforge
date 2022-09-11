@@ -41,6 +41,7 @@ import com.willfp.libreforge.effects.effects.EffectGiveMoney
 import com.willfp.libreforge.effects.effects.EffectGiveOxygen
 import com.willfp.libreforge.effects.effects.EffectGivePoints
 import com.willfp.libreforge.effects.effects.EffectGiveXp
+import com.willfp.libreforge.effects.effects.EffectGlowNearbyBlocks
 import com.willfp.libreforge.effects.effects.EffectHungerMultiplier
 import com.willfp.libreforge.effects.effects.EffectIgnite
 import com.willfp.libreforge.effects.effects.EffectKeepInventory
@@ -177,6 +178,7 @@ object Effects {
     val SMITE: Effect = EffectSmite()
     val SHUFFLE_HOTBAR: Effect = EffectShuffleHotbar()
     val BROADCAST: Effect = EffectBroadcast()
+    val GLOW_NEARBY_BLOCKS: Effect = EffectGlowNearbyBlocks()
 
     /**
      * Get effect matching id.
