@@ -10,10 +10,10 @@ class FilterFullyGrown : FilterComponent() {
         val block = data.block ?: return true
 
         return config.withInverse("fully_grown", Config::getBoolOrNull) {
-            val data = block.blockData
+            val blockData = block.blockData
 
-            val isFullyGrown = if (data is Ageable) {
-                data.age == data.maximumAge
+            val isFullyGrown = if (blockData is Ageable) {
+                blockData.age == blockData.maximumAge
             } else {
                 true
             }
