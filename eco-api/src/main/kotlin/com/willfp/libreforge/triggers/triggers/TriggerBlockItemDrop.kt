@@ -63,7 +63,8 @@ class TriggerBlockItemDrop : Trigger(
                 block = block,
                 location = block.location,
                 event = wrapped
-            )
+            ),
+            originalDrops.sumOf { it.amount }.toDouble()
         )
 
         val newDrops = originalDrops.map(wrapped.modifier)

@@ -45,7 +45,8 @@ class TriggerEntityItemDrop : Trigger(
                 victim = entity,
                 location = entity.location,
                 event = wrapped
-            )
+            ),
+            originalDrops.sumOf { it.amount }.toDouble()
         )
 
         val newDrops = originalDrops.map(wrapped.modifier)
