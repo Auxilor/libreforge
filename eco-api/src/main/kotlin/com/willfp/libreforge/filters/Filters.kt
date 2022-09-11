@@ -5,6 +5,7 @@ import com.willfp.libreforge.filters.filters.FilterBlocks
 import com.willfp.libreforge.filters.filters.FilterDamageCause
 import com.willfp.libreforge.filters.filters.FilterEntityType
 import com.willfp.libreforge.filters.filters.FilterFromSpawner
+import com.willfp.libreforge.filters.filters.FilterFullyGrown
 import com.willfp.libreforge.filters.filters.FilterItems
 import com.willfp.libreforge.filters.filters.FilterOnMaxHealth
 import com.willfp.libreforge.filters.filters.FilterOnlyBosses
@@ -25,6 +26,7 @@ object Filters {
     val FROM_SPAWNER: FilterComponent = FilterFromSpawner()
     val ON_MAX_HEALTH: FilterComponent = FilterOnMaxHealth()
     val ABOVE_HEALTH_PERCENT: FilterComponent = FilterAboveHealthPercent()
+    val FULLY_GROWN: FilterComponent = FilterFullyGrown()
 
     /**
      * List of all registered filters.
