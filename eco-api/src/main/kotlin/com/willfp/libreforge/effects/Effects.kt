@@ -50,6 +50,7 @@ import com.willfp.libreforge.effects.effects.EffectKnockbackResistanceMultiplier
 import com.willfp.libreforge.effects.effects.EffectLuckMultiplier
 import com.willfp.libreforge.effects.effects.EffectMineRadius
 import com.willfp.libreforge.effects.effects.EffectMineRadiusOneDeep
+import com.willfp.libreforge.effects.effects.EffectMineVein
 import com.willfp.libreforge.effects.effects.EffectMovementSpeedMultiplier
 import com.willfp.libreforge.effects.effects.EffectMultiplyDrops
 import com.willfp.libreforge.effects.effects.EffectMultiplyPoints
@@ -179,6 +180,7 @@ object Effects {
     val SHUFFLE_HOTBAR: Effect = EffectShuffleHotbar()
     val BROADCAST: Effect = EffectBroadcast()
     val GLOW_NEARBY_BLOCKS: Effect = EffectGlowNearbyBlocks()
+    val MINE_VEIN: Effect = EffectMineVein()
 
     /**
      * Get effect matching id.
