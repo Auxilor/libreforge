@@ -117,7 +117,7 @@ abstract class LibReforgePlugin : EcoPlugin() {
         return files
     }
 
-    fun fetchConfigs(directory: String): Map<String, Config> {
+    private fun doFetchConfigs(directory: String): Map<String, Config> {
         val configs = mutableMapOf<String, Config>()
 
         for (file in File(this.dataFolder, directory).walk()) {
@@ -134,13 +134,22 @@ abstract class LibReforgePlugin : EcoPlugin() {
             configs[id] = config
         }
 
-        this.shareConfigs(directory)
-
         return configs
     }
 
+    fun fetchConfigs(directory: String): Map<String, Config> {
+        // Share configs on fetch
+        try {
+            this.shareConfigs(directory)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        return doFetchConfigs(directory)
+    }
+
     fun getUsermadeConfigs(directory: String): Map<String, Config> {
-        val all = fetchConfigs(directory).toMutableMap()
+        val all = doFetchConfigs(directory).toMutableMap()
 
         for (name in getDefaultConfigNames(directory)) {
             all.remove(name)
