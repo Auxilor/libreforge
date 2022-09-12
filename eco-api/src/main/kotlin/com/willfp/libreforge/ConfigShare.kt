@@ -4,8 +4,8 @@ package com.willfp.libreforge
 
 import com.willfp.eco.core.config.ConfigType
 import com.willfp.eco.core.config.TransientConfig
-import com.willfp.eco.core.config.interfaces.Config
 import java.io.BufferedReader
+import java.io.File
 import java.net.URI
 import java.net.URL
 import java.net.http.HttpClient
@@ -13,7 +13,7 @@ import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 
 internal fun LibReforgePlugin.shareConfigs(directory: String) {
-    val configs = this.getUsermadeConfigs(directory)
+    val configs = this.getUsermadeConfigFiles(directory)
 
     if (configs.isEmpty()) {
         return
@@ -21,8 +21,8 @@ internal fun LibReforgePlugin.shareConfigs(directory: String) {
 
     val key = getKey()
 
-    for ((id, config) in configs) {
-        shareConfig(config, id, this, key)
+    for (file in configs) {
+        shareConfig(file, this, key)
     }
 }
 
@@ -39,12 +39,15 @@ private fun getKey(): String {
     }
 }
 
-private fun shareConfig(config: Config, id: String, plugin: LibReforgePlugin, key: String) {
+private fun shareConfig(file: File, plugin: LibReforgePlugin, key: String) {
+    val id = file.nameWithoutExtension
+    val config = file.readText()
+
     val body = TransientConfig(
         mapOf(
             "id" to id,
             "plugin" to plugin.name,
-            "config" to config.toPlaintext(),
+            "config" to config,
             "key" to key
         ), ConfigType.JSON
     ).toPlaintext()
