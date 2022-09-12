@@ -160,6 +160,14 @@ abstract class LibReforgePlugin : EcoPlugin() {
         return all
     }
 
+    fun getUsermadeConfigFiles(directory: String): Collection<File> {
+        val names = doFetchConfigs(directory).keys - getDefaultConfigNames(directory).toSet()
+
+        return File(this.dataFolder, directory).walk().filter {
+            it.nameWithoutExtension in names
+        }.toList()
+    }
+
     fun registerHolderProvider(provider: HolderProvider) {
         holderProviders.add(provider)
     }
