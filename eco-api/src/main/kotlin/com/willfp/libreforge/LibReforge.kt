@@ -93,21 +93,28 @@ abstract class LibReforgePlugin : EcoPlugin() {
     fun copyConfigs(directory: String) {
         val folder = File(this.dataFolder, directory)
         if (!folder.exists()) {
-            val files = mutableListOf<String>()
-
-            for (entry in ZipFile(this.file).entries().asIterator()) {
-                if (entry.name.startsWith("$directory/")) {
-                    files.add(entry.name.removePrefix("$directory/"))
-                }
-            }
-
-            files.removeIf { !it.endsWith(".yml") }
-            files.replaceAll { it.replace(".yml", "") }
+            val files = getDefaultConfigNames(directory)
 
             for (configName in files) {
                 UsermadeConfig(configName, directory, this)
             }
         }
+    }
+
+    @Suppress("MemberVisibilityCanBePrivate")
+    fun getDefaultConfigNames(directory: String): Collection<String> {
+        val files = mutableListOf<String>()
+
+        for (entry in ZipFile(this.file).entries().asIterator()) {
+            if (entry.name.startsWith("$directory/")) {
+                files.add(entry.name.removePrefix("$directory/"))
+            }
+        }
+
+        files.removeIf { !it.endsWith(".yml") }
+        files.replaceAll { it.replace(".yml", "") }
+
+        return files
     }
 
     fun fetchConfigs(directory: String): Map<String, Config> {
@@ -122,10 +129,22 @@ abstract class LibReforgePlugin : EcoPlugin() {
                 continue
             }
 
-            configs[file.nameWithoutExtension] = TransientConfig(file, ConfigType.YAML)
+            val id = file.nameWithoutExtension
+            val config = TransientConfig(file, ConfigType.YAML)
+            configs[id] = config
         }
 
         return configs
+    }
+
+    fun getUsermadeConfigs(directory: String): Map<String, Config> {
+        val all = fetchConfigs(directory).toMutableMap()
+
+        for (name in getDefaultConfigNames(directory)) {
+            all.remove(name)
+        }
+
+        return all
     }
 
     fun registerHolderProvider(provider: HolderProvider) {
