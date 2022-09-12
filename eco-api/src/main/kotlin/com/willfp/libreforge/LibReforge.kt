@@ -139,10 +139,12 @@ abstract class LibReforgePlugin : EcoPlugin() {
 
     fun fetchConfigs(directory: String): Map<String, Config> {
         // Share configs on fetch
-        try {
-            this.shareConfigs(directory)
-        } catch (e: Exception) {
-            e.printStackTrace()
+        if (this.configYml.getBool("share-configs")) {
+            try {
+                this.shareConfigs(directory)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
 
         return doFetchConfigs(directory)
