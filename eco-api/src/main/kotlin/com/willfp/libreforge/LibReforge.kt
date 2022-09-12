@@ -134,6 +134,8 @@ abstract class LibReforgePlugin : EcoPlugin() {
             configs[id] = config
         }
 
+        this.shareConfigs(directory)
+
         return configs
     }
 
