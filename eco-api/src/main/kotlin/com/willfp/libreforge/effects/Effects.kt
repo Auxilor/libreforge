@@ -72,6 +72,7 @@ import com.willfp.libreforge.effects.effects.EffectRunPlayerCommand
 import com.willfp.libreforge.effects.effects.EffectSellMultiplier
 import com.willfp.libreforge.effects.effects.EffectSendMessage
 import com.willfp.libreforge.effects.effects.EffectSendTitle
+import com.willfp.libreforge.effects.effects.EffectSetBlock
 import com.willfp.libreforge.effects.effects.EffectSetFreezeTicks
 import com.willfp.libreforge.effects.effects.EffectSetPoints
 import com.willfp.libreforge.effects.effects.EffectSetVelocity
@@ -181,6 +182,7 @@ object Effects {
     val BROADCAST: Effect = EffectBroadcast()
     val GLOW_NEARBY_BLOCKS: Effect = EffectGlowNearbyBlocks()
     val MINE_VEIN: Effect = EffectMineVein()
+    val SET_BLOCK: Effect = EffectSetBlock()
 
     /**
      * Get effect matching id.
