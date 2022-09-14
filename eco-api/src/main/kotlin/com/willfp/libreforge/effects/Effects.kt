@@ -228,7 +228,7 @@ object Effects {
     fun compile(
         configs: Iterable<Config>,
         context: String
-    ): Set<ConfiguredEffect> = configs.mapNotNull { compile(it, context) }.inRunOrder().toSet()
+    ): Set<ConfiguredEffect> = configs.mapNotNull { compile(it, context) }.inRunOrder()
 
     /**
      * Compile an effect.
