@@ -272,7 +272,7 @@ abstract class LibReforgePlugin : EcoPlugin() {
     }
 
     override fun getMinimumEcoVersion(): String {
-        return "6.39.1"
+        return "6.41.0"
     }
 
     companion object {
