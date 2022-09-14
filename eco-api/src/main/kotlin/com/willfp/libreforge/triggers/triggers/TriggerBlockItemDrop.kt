@@ -13,7 +13,6 @@ import org.bukkit.block.Container
 import org.bukkit.event.EventHandler
 import org.bukkit.event.block.BlockDropItemEvent
 
-
 class TriggerBlockItemDrop : Trigger(
     "block_item_drop", listOf(
         TriggerParameter.PLAYER,
@@ -22,7 +21,9 @@ class TriggerBlockItemDrop : Trigger(
         TriggerParameter.LOCATION
     )
 ) {
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(
+        ignoreCancelled = true
+    )
     fun handle(event: BlockDropItemEvent) {
         if (McmmoManager.isFake(event)) {
             return
@@ -36,10 +37,6 @@ class TriggerBlockItemDrop : Trigger(
         }
 
         if (event.blockState is Container) {
-            return
-        }
-
-        if (event.isCancelled) {
             return
         }
 

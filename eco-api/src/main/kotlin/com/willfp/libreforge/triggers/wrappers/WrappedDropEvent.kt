@@ -12,6 +12,8 @@ interface WrappedDropEvent<out T> : WrappedCancellableEvent<T> where T : Event, 
 
     val items: Collection<ItemStack>
 
+    val finalItems: Collection<ItemStack>
+
     fun removeItem(itemStack: ItemStack)
 }
 
@@ -30,6 +32,9 @@ class WrappedBlockDropEvent(
 
     override val items: Collection<ItemStack>
         get() = event.items.map { it.itemStack }
+
+    override val finalItems: Collection<ItemStack>
+        get() = items.map { modifier(it).first }
 
     override fun removeItem(itemStack: ItemStack) {
         event.items.removeIf { it.itemStack == itemStack }
@@ -51,6 +56,9 @@ class WrappedEntityDropEvent(
 
     override val items: Collection<ItemStack>
         get() = event.drops
+
+    override val finalItems: Collection<ItemStack>
+        get() = items
 
     override fun removeItem(itemStack: ItemStack) {
         event.drops.remove(itemStack)

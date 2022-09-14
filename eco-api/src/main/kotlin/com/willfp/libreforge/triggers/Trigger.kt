@@ -58,7 +58,10 @@ abstract class Trigger(
             Bukkit.getPluginManager().callEvent(event)
 
             if (!event.isCancelled) {
-                for (effect in holder.effects) {
+                val effects = holder.effects.filter { !it.effect.runsLast } +
+                        holder.effects.filter { it.effect.runsLast }
+
+                for (effect in effects) {
                     val preInvoke = EffectPreInvokeEvent(player, holder, this, effect.effect, value)
                     Bukkit.getPluginManager().callEvent(preInvoke)
 
