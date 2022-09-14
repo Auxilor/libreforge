@@ -105,10 +105,14 @@ abstract class LibReforgePlugin : EcoPlugin() {
     fun getDefaultConfigNames(directory: String): Collection<String> {
         val files = mutableListOf<String>()
 
-        for (entry in ZipFile(this.file).entries().asIterator()) {
-            if (entry.name.startsWith("$directory/")) {
-                files.add(entry.name.removePrefix("$directory/"))
+        try {
+            for (entry in ZipFile(this.file).entries().asIterator()) {
+                if (entry.name.startsWith("$directory/")) {
+                    files.add(entry.name.removePrefix("$directory/"))
+                }
             }
+        } catch (_: Exception) {
+            // Sometimes, ZipFile likes to completely fail. No idea why, but here's the 'solution'!
         }
 
         files.removeIf { !it.endsWith(".yml") }
