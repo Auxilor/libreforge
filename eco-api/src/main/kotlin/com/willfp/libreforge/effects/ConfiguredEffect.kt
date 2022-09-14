@@ -251,6 +251,8 @@ internal data class RepeatData(
     }
 }
 
-fun Iterable<ConfiguredEffect>.inRunOrder(): List<ConfiguredEffect> =
-    this.filter { !it.effect.runsLast } +
-            this.filter { it.effect.runsLast }
+private class EffectSet(effects: Collection<ConfiguredEffect>) : HashSet<ConfiguredEffect>(effects)
+
+fun Iterable<ConfiguredEffect>.inRunOrder(): Set<ConfiguredEffect> =
+    if (this is EffectSet) this else EffectSet(this.filter { !it.effect.runsLast } +
+            this.filter { it.effect.runsLast })
