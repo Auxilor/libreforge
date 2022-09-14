@@ -2,18 +2,18 @@ package com.willfp.libreforge.effects
 
 import com.willfp.eco.core.placeholder.StaticPlaceholder
 
-class NamedArgument internal constructor(
-    identifiers: Collection<String>,
+class NamedArgument constructor(
+    val identifiers: Collection<String>,
     value: String
 ) {
     @Suppress("UNUSED")
-    internal constructor(
+    constructor(
         identifier: String,
         value: String
     ) : this(listOf(identifier), value)
 
     @Suppress("UNUSED")
-    internal constructor(
+    constructor(
         identifier: String,
         value: Any
     ) : this(listOf(identifier), value.toString())

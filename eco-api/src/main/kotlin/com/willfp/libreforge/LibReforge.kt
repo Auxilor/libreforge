@@ -27,12 +27,14 @@ import com.willfp.libreforge.integrations.ecojobs.EcoJobsIntegration
 import com.willfp.libreforge.integrations.ecopets.EcoPetsIntegration
 import com.willfp.libreforge.integrations.ecoskills.EcoSkillsIntegration
 import com.willfp.libreforge.integrations.jobs.JobsIntegration
+import com.willfp.libreforge.integrations.levelledmobs.LevelledMobsIntegration
 import com.willfp.libreforge.integrations.mcmmo.McMMOIntegration
 import com.willfp.libreforge.integrations.paper.PaperIntegration
 import com.willfp.libreforge.integrations.reforges.ReforgesIntegration
 import com.willfp.libreforge.integrations.talismans.TalismansIntegration
 import com.willfp.libreforge.integrations.tmmobcoins.TMMobcoinsIntegration
 import com.willfp.libreforge.integrations.vault.VaultIntegration
+import com.willfp.libreforge.triggers.InvocationPlaceholderListener
 import com.willfp.libreforge.triggers.Triggers
 import com.willfp.libreforge.triggers.triggers.TriggerStatic
 import org.apache.commons.lang.StringUtils
@@ -194,6 +196,7 @@ abstract class LibReforgePlugin : EcoPlugin() {
         this.eventManager.registerListener(MovementConditionListener())
         this.eventManager.registerListener(PointCostHandler())
         this.eventManager.registerListener(EffectCollisionFixer(this))
+        this.eventManager.registerListener(InvocationPlaceholderListener)
         for (condition in Conditions.values()) {
             this.eventManager.registerListener(condition)
         }
@@ -253,7 +256,8 @@ abstract class LibReforgePlugin : EcoPlugin() {
             IntegrationLoader("Boosters", BoostersIntegration::load),
             IntegrationLoader("EcoEnchants", EcoEnchantsIntegration::load),
             IntegrationLoader("EcoPets", EcoPetsIntegration::load),
-            IntegrationLoader("EcoJobs", EcoJobsIntegration::load)
+            IntegrationLoader("EcoJobs", EcoJobsIntegration::load),
+            IntegrationLoader("LevelledMobs") { LevelledMobsIntegration.load(this) }
         )
 
         integrations.addAll(loadAdditionalIntegrations())
