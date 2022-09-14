@@ -15,7 +15,7 @@ object InvocationPlaceholderListener : Listener {
         event.addPlaceholder(
             NamedArgument(
                 listOf("trigger_value", "triggervalue", "trigger", "value", "tv", "v", "t"),
-                value.toString()
+                value
             )
         )
 

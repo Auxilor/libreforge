@@ -18,6 +18,12 @@ class NamedArgument constructor(
         value: Any
     ) : this(listOf(identifier), value.toString())
 
+    @Suppress("UNUSED")
+    constructor(
+        identifiers: Collection<String>,
+        value: Any
+    ) : this(identifiers, value.toString())
+
     val placeholders = identifiers.map {
         StaticPlaceholder(
             it
