@@ -14,6 +14,8 @@ object EcoJobsIntegration : Integration {
     private lateinit var GIVE_JOB_XP: Effect
     private lateinit var LEVEL_UP_JOB: Trigger
     private lateinit var JOB: FilterComponent
+    private lateinit var JOIN_JOB: Trigger
+    private lateinit var LEAVE_JOB: Trigger
 
     fun load() {
         HAS_JOB_LEVEL = ConditionHasJobLevel()
@@ -23,6 +25,8 @@ object EcoJobsIntegration : Integration {
         GIVE_JOB_XP = EffectGiveJobXp()
         LEVEL_UP_JOB = TriggerLevelUpJob()
         JOB = FilterJob()
+        JOIN_JOB = TriggerJoinJob()
+        LEAVE_JOB = TriggerLeaveJob()
     }
 
     override fun getPluginName(): String {
