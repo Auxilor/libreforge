@@ -218,6 +218,19 @@ object Effects {
     }
 
     /**
+     * Compile a group of effects.
+     *
+     * @param configs The effect configs.
+     * @param context The context to log violations for.
+     * @return The compiled effects.
+     */
+    @JvmStatic
+    fun compile(
+        configs: Iterable<Config>,
+        context: String
+    ): Set<ConfiguredEffect> = configs.mapNotNull { compile(it, context) }.inRunOrder().toSet()
+
+    /**
      * Compile an effect.
      *
      * @param cfg The config for the effect.

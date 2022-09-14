@@ -4,6 +4,7 @@ import com.google.common.collect.HashBiMap
 import com.google.common.collect.ImmutableList
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.effects.Effects
+import com.willfp.libreforge.effects.inRunOrder
 import com.willfp.libreforge.separatorAmbivalent
 
 @Suppress("UNUSED")
@@ -47,7 +48,7 @@ object EffectChains {
 
         config.getSubsections("effects").mapNotNull {
             Effects.compile(it, "$context -> Chain ID $id", chainLike = true)
-        }.mapTo(components) { ChainComponentEffect(it) }
+        }.inRunOrder().mapTo(components) { ChainComponentEffect(it) }
 
         if (components.isEmpty()) {
             return null
