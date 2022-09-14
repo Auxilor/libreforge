@@ -5,6 +5,7 @@ import com.willfp.libreforge.triggers.triggers.TriggerAltClick
 import com.willfp.libreforge.triggers.triggers.TriggerBite
 import com.willfp.libreforge.triggers.triggers.TriggerBlockItemDrop
 import com.willfp.libreforge.triggers.triggers.TriggerBowAttack
+import com.willfp.libreforge.triggers.triggers.TriggerBreed
 import com.willfp.libreforge.triggers.triggers.TriggerBrew
 import com.willfp.libreforge.triggers.triggers.TriggerCastRod
 import com.willfp.libreforge.triggers.triggers.TriggerCatchEntity
@@ -102,6 +103,7 @@ object Triggers {
     val SMELT: Trigger = TriggerSmelt()
     val BREW: Trigger = TriggerBrew()
     val PLACE_BLOCK: Trigger = TriggerPlaceBlock()
+    val BREED: Trigger = TriggerBreed()
 
     fun values(): Set<Trigger> {
         return BY_ID.values.toSet()
