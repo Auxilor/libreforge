@@ -16,7 +16,6 @@ import com.willfp.libreforge.effects.effects.EffectArmor
 import com.willfp.libreforge.effects.effects.EffectArmorToughness
 import com.willfp.libreforge.effects.effects.EffectArrowRing
 import com.willfp.libreforge.effects.effects.EffectAttackSpeedMultiplier
-import com.willfp.libreforge.effects.effects.EffectAutosell
 import com.willfp.libreforge.effects.effects.EffectAutosmelt
 import com.willfp.libreforge.effects.effects.EffectBleed
 import com.willfp.libreforge.effects.effects.EffectBlockCommands
@@ -70,7 +69,7 @@ import com.willfp.libreforge.effects.effects.EffectRunChain
 import com.willfp.libreforge.effects.effects.EffectRunChainInline
 import com.willfp.libreforge.effects.effects.EffectRunCommand
 import com.willfp.libreforge.effects.effects.EffectRunPlayerCommand
-import com.willfp.libreforge.effects.effects.EffectSellItem
+import com.willfp.libreforge.effects.effects.EffectSellItems
 import com.willfp.libreforge.effects.effects.EffectSellMultiplier
 import com.willfp.libreforge.effects.effects.EffectSendMessage
 import com.willfp.libreforge.effects.effects.EffectSendTitle
@@ -185,8 +184,7 @@ object Effects {
     val GLOW_NEARBY_BLOCKS: Effect = EffectGlowNearbyBlocks()
     val MINE_VEIN: Effect = EffectMineVein()
     val SET_BLOCK: Effect = EffectSetBlock()
-    val AUTOSELL: Effect = EffectAutosell()
-    val SELL_ITEM: Effect = EffectSellItem()
+    val SELL_ITEMS: Effect = EffectSellItems()
 
     /**
      * Get effect matching id.

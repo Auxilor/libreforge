@@ -16,8 +16,8 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
 @RunLast
-class EffectAutosell : Effect(
-    "autosell",
+class EffectSellItems : Effect(
+    "sell_items",
     triggers = Triggers.withParameters(
         TriggerParameter.PLAYER
     )
