@@ -3,7 +3,6 @@ package com.willfp.libreforge.triggers.triggers
 import com.willfp.eco.core.drops.DropQueue
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.eco.core.integrations.mcmmo.McmmoManager
-import com.willfp.eco.util.BlockUtils
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -42,12 +41,6 @@ class TriggerBlockItemDrop : Trigger(
 
         if (!AntigriefManager.canBreakBlock(player, block)) {
             return
-        }
-
-        if (plugin.configYml.getBool("block-item-drop-place-check")) {
-            if (BlockUtils.isPlayerPlaced(block)) {
-                return
-            }
         }
 
         val originalDrops = event.items.map { it.itemStack }
