@@ -250,3 +250,7 @@ internal data class RepeatData(
         if (times < 1) times = 1
     }
 }
+
+fun Iterable<ConfiguredEffect>.inRunOrder(): List<ConfiguredEffect> =
+    this.filter { !it.effect.runsLast } +
+            this.filter { it.effect.runsLast }

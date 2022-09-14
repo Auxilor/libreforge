@@ -2,6 +2,7 @@ package com.willfp.libreforge.triggers
 
 import com.willfp.libreforge.Holder
 import com.willfp.libreforge.LibReforgePlugin
+import com.willfp.libreforge.effects.inRunOrder
 import com.willfp.libreforge.events.EffectPreInvokeEvent
 import com.willfp.libreforge.events.TriggerPreProcessEvent
 import com.willfp.libreforge.events.TriggerProcessEvent
@@ -58,10 +59,7 @@ abstract class Trigger(
             Bukkit.getPluginManager().callEvent(event)
 
             if (!event.isCancelled) {
-                val effects = holder.effects.filter { !it.effect.runsLast } +
-                        holder.effects.filter { it.effect.runsLast }
-
-                for (effect in effects) {
+                for (effect in holder.effects.inRunOrder()) {
                     val preInvoke = EffectPreInvokeEvent(player, holder, this, effect.effect, value)
                     Bukkit.getPluginManager().callEvent(preInvoke)
 

@@ -31,7 +31,6 @@ interface Holder {
     }
 }
 
-
 private data class LineCacheEntry(
     val uuid: UUID,
     val holderID: String

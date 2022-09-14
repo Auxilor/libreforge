@@ -127,6 +127,19 @@ object Conditions {
     }
 
     /**
+     * Compile a group of conditions.
+     *
+     * @param configs The condition configs.
+     * @param context The context to log violations for.
+     * @return The compiled conditions.
+     */
+    @JvmStatic
+    fun compile(
+        configs: Iterable<Config>,
+        context: String
+    ): Set<ConfiguredCondition> = configs.mapNotNull { compile(it, context) }.toSet()
+
+    /**
      * Compile a condition.
      *
      * @param cfg The config for the condition.
