@@ -5,7 +5,6 @@ import com.willfp.libreforge.events.TriggerCreatePlaceholdersEvent
 import org.bukkit.attribute.Attribute
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
-import sun.jvm.hotspot.oops.CellTypeState.value
 
 object InvocationPlaceholderListener : Listener {
     @EventHandler
@@ -15,7 +14,7 @@ object InvocationPlaceholderListener : Listener {
         event.addPlaceholder(
             NamedArgument(
                 listOf("trigger_value", "triggervalue", "trigger", "value", "tv", "v", "t"),
-                value
+                event.value
             )
         )
 
