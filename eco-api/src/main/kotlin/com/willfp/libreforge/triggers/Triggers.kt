@@ -22,6 +22,7 @@ import com.willfp.libreforge.triggers.triggers.TriggerEntityItemDrop
 import com.willfp.libreforge.triggers.triggers.TriggerFallDamage
 import com.willfp.libreforge.triggers.triggers.TriggerGainHunger
 import com.willfp.libreforge.triggers.triggers.TriggerGainXp
+import com.willfp.libreforge.triggers.triggers.TriggerHeadshot
 import com.willfp.libreforge.triggers.triggers.TriggerHeal
 import com.willfp.libreforge.triggers.triggers.TriggerHookInGround
 import com.willfp.libreforge.triggers.triggers.TriggerItemBreak
@@ -104,6 +105,7 @@ object Triggers {
     val BREW: Trigger = TriggerBrew()
     val PLACE_BLOCK: Trigger = TriggerPlaceBlock()
     val BREED: Trigger = TriggerBreed()
+    val HEADSHOT: Trigger = TriggerHeadshot()
 
     fun values(): Set<Trigger> {
         return BY_ID.values.toSet()
