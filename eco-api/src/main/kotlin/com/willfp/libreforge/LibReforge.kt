@@ -259,7 +259,7 @@ abstract class LibReforgePlugin : EcoPlugin() {
             IntegrationLoader("EcoPets", EcoPetsIntegration::load),
             IntegrationLoader("EcoJobs", EcoJobsIntegration::load),
             IntegrationLoader("LevelledMobs") { LevelledMobsIntegration.load(this) },
-            IntegrationLoader("Scyther") { ScytherIntegration.load() },
+            IntegrationLoader("Scyther", ScytherIntegration::load),
         )
 
         integrations.addAll(loadAdditionalIntegrations())
