@@ -31,6 +31,7 @@ import com.willfp.libreforge.integrations.levelledmobs.LevelledMobsIntegration
 import com.willfp.libreforge.integrations.mcmmo.McMMOIntegration
 import com.willfp.libreforge.integrations.paper.PaperIntegration
 import com.willfp.libreforge.integrations.reforges.ReforgesIntegration
+import com.willfp.libreforge.integrations.scyther.ScytherIntegration
 import com.willfp.libreforge.integrations.talismans.TalismansIntegration
 import com.willfp.libreforge.integrations.tmmobcoins.TMMobcoinsIntegration
 import com.willfp.libreforge.integrations.vault.VaultIntegration
@@ -257,7 +258,8 @@ abstract class LibReforgePlugin : EcoPlugin() {
             IntegrationLoader("EcoEnchants", EcoEnchantsIntegration::load),
             IntegrationLoader("EcoPets", EcoPetsIntegration::load),
             IntegrationLoader("EcoJobs", EcoJobsIntegration::load),
-            IntegrationLoader("LevelledMobs") { LevelledMobsIntegration.load(this) }
+            IntegrationLoader("LevelledMobs") { LevelledMobsIntegration.load(this) },
+            IntegrationLoader("Scyther") { ScytherIntegration.load() },
         )
 
         integrations.addAll(loadAdditionalIntegrations())
