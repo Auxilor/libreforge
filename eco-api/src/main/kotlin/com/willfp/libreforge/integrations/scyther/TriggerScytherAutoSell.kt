@@ -8,9 +8,13 @@ import dev.norska.scyther.api.ScytherAutosellEvent
 import org.bukkit.event.EventHandler
 import org.bukkit.inventory.ItemStack
 
-class TriggerScytherAutoSell: Trigger("scyther_auto_sell", parameters = listOf(TriggerParameter.PLAYER,
-    TriggerParameter.BLOCK, TriggerParameter.ITEM)) {
-
+class TriggerScytherAutoSell : Trigger(
+    "scyther_auto_sell", listOf(
+        TriggerParameter.PLAYER,
+        TriggerParameter.BLOCK,
+        TriggerParameter.ITEM
+    )
+) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: ScytherAutosellEvent) {
         if (McmmoManager.isFake(event)) {
