@@ -8,7 +8,7 @@ object ScytherIntegration: Integration {
     private lateinit var SCYTHER_AUTO_SELL: Trigger
 
     fun load() {
-        SCYTHER_AUTO_COLLECT = TriggerScytherAutoSell()
+        SCYTHER_AUTO_COLLECT = TriggerScytherAutoCollect()
         SCYTHER_AUTO_SELL = TriggerScytherAutoSell()
     }
 
