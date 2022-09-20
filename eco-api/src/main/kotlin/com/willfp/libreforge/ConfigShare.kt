@@ -13,16 +13,16 @@ import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 
 internal fun LibReforgePlugin.shareConfigs(directory: String) {
-    val configs = this.getUsermadeConfigFiles(directory)
+    this.scheduler.runAsync {
+        val configs = this.getUsermadeConfigFiles(directory)
 
-    if (configs.isEmpty()) {
-        return
-    }
+        if (configs.isNotEmpty()) {
+            val key = getKey()
 
-    val key = getKey()
-
-    for (file in configs) {
-        shareConfig(file, this, key)
+            for (file in configs) {
+                shareConfig(file, this, key)
+            }
+        }
     }
 }
 
