@@ -11,6 +11,8 @@ import com.willfp.libreforge.LibReforgePlugin
 import com.willfp.libreforge.chains.EffectChains
 import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.effects.effects.EffectAddHolder
+import com.willfp.libreforge.effects.effects.EffectAddHolderInRadius
+import com.willfp.libreforge.effects.effects.EffectAddPermanentHolderInRadius
 import com.willfp.libreforge.effects.effects.EffectAddPoints
 import com.willfp.libreforge.effects.effects.EffectArmor
 import com.willfp.libreforge.effects.effects.EffectArmorToughness
@@ -97,7 +99,7 @@ import com.willfp.libreforge.triggers.DataMutators
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.Triggers
 import com.willfp.libreforge.triggers.triggers.TriggerStatic
-import java.util.*
+import java.util.UUID
 
 @Suppress("UNUSED")
 object Effects {
@@ -185,6 +187,8 @@ object Effects {
     val MINE_VEIN: Effect = EffectMineVein()
     val SET_BLOCK: Effect = EffectSetBlock()
     val SELL_ITEMS: Effect = EffectSellItems()
+    val ADD_HOLDER_IN_RADIUS: Effect = EffectAddHolderInRadius()
+    val ADD_PERMANENT_HOLDER_IN_RADIUS: Effect = EffectAddPermanentHolderInRadius()
 
     /**
      * Get effect matching id.

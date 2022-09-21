@@ -14,7 +14,7 @@ import com.willfp.libreforge.triggers.InvocationData
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.mutate
 import org.bukkit.entity.Player
-import java.util.*
+import java.util.UUID
 import kotlin.math.max
 
 private val everyHandler = mutableMapOf<UUID, Int>()
@@ -36,7 +36,9 @@ data class ConfiguredEffect internal constructor(
     fun enableFor(player: Player) {
         val offset = (effectStack[player.uniqueId] ?: 0) + 1
         effectStack[player.uniqueId] = offset
-        effect.handleEnable(player, args, generator.makeIdentifiers(offset))
+        val identifiers = generator.makeIdentifiers(offset)
+        effect.handleEnable(player, args, identifiers)
+        effect.handleEnable(player, args, identifiers, compileData)
     }
 
     fun disableFor(player: Player) {

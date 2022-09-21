@@ -11,6 +11,7 @@ import com.willfp.libreforge.triggers.triggers.TriggerCastRod
 import com.willfp.libreforge.triggers.triggers.TriggerCatchEntity
 import com.willfp.libreforge.triggers.triggers.TriggerCatchFish
 import com.willfp.libreforge.triggers.triggers.TriggerCatchFishFail
+import com.willfp.libreforge.triggers.triggers.TriggerChangeArmor
 import com.willfp.libreforge.triggers.triggers.TriggerChangeWorld
 import com.willfp.libreforge.triggers.triggers.TriggerConsume
 import com.willfp.libreforge.triggers.triggers.TriggerCraft
@@ -25,6 +26,7 @@ import com.willfp.libreforge.triggers.triggers.TriggerGainHunger
 import com.willfp.libreforge.triggers.triggers.TriggerGainXp
 import com.willfp.libreforge.triggers.triggers.TriggerHeadshot
 import com.willfp.libreforge.triggers.triggers.TriggerHeal
+import com.willfp.libreforge.triggers.triggers.TriggerHoldItem
 import com.willfp.libreforge.triggers.triggers.TriggerHookInGround
 import com.willfp.libreforge.triggers.triggers.TriggerItemBreak
 import com.willfp.libreforge.triggers.triggers.TriggerJoin
@@ -44,6 +46,8 @@ import com.willfp.libreforge.triggers.triggers.TriggerProjectileHit
 import com.willfp.libreforge.triggers.triggers.TriggerProjectileLaunch
 import com.willfp.libreforge.triggers.triggers.TriggerReelIn
 import com.willfp.libreforge.triggers.triggers.TriggerRespawn
+import com.willfp.libreforge.triggers.triggers.TriggerSendMessage
+import com.willfp.libreforge.triggers.triggers.TriggerSendMessageAsync
 import com.willfp.libreforge.triggers.triggers.TriggerShieldBlock
 import com.willfp.libreforge.triggers.triggers.TriggerShootBow
 import com.willfp.libreforge.triggers.triggers.TriggerSmelt
@@ -116,6 +120,10 @@ object Triggers {
     val LEVEL_UP_XP: Trigger = TriggerLevelUpXp()
     val CHANGE_WORLD: Trigger = TriggerChangeWorld()
     val RESPAWN: Trigger = TriggerRespawn()
+    val HOLD_ITEM: Trigger = TriggerHoldItem()
+    val SEND_MESSAGE: Trigger = TriggerSendMessage()
+    val SEND_MESSAGE_ASYNC: Trigger = TriggerSendMessageAsync()
+    val CHANGE_ARMOR: Trigger = TriggerChangeArmor()
 
     fun values(): Set<Trigger> {
         return BY_ID.values.toSet()
