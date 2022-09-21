@@ -12,6 +12,7 @@ import com.willfp.libreforge.filters.filters.FilterOnlyBosses
 import com.willfp.libreforge.filters.filters.FilterOnlyNonBosses
 import com.willfp.libreforge.filters.filters.FilterPlayerPlaced
 import com.willfp.libreforge.filters.filters.FilterProjectiles
+import com.willfp.libreforge.filters.filters.FilterText
 
 @Suppress("UNUSED")
 object Filters {
@@ -29,6 +30,7 @@ object Filters {
     val ABOVE_HEALTH_PERCENT: FilterComponent = FilterAboveHealthPercent()
     val FULLY_GROWN: FilterComponent = FilterFullyGrown()
     val PLAYER_PLACED: FilterComponent = FilterPlayerPlaced()
+    val TEXT: FilterComponent = FilterText()
 
     /**
      * List of all registered filters.

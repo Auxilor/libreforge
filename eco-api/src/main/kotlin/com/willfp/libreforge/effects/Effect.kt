@@ -10,7 +10,7 @@ import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
-import java.util.*
+import java.util.UUID
 import kotlin.math.ceil
 
 @Suppress("UNUSED_PARAMETER")
@@ -129,6 +129,23 @@ abstract class Effect(
         player: Player,
         config: Config,
         identifiers: Identifiers
+    ) {
+        // Override when needed.
+    }
+
+    /**
+     * Enable this effect for a player (for permanent effects).
+     *
+     * @param player The player.
+     * @param config The config.
+     * @param identifiers The identifiers (keys / UUIDs).
+     * @param compileData The compile data.
+     */
+    open fun handleEnable(
+        player: Player,
+        config: Config,
+        identifiers: Identifiers,
+        compileData: CompileData?
     ) {
         // Override when needed.
     }
