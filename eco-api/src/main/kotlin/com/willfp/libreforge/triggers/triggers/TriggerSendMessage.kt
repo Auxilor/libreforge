@@ -1,7 +1,8 @@
+@file:Suppress("DEPRECATION")
+
 package com.willfp.libreforge.triggers.triggers
 
 import com.willfp.eco.core.integrations.mcmmo.McmmoManager
-import com.willfp.libreforge.triggers.GenericCancellableEvent
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -16,7 +17,6 @@ class TriggerSendMessage : Trigger(
     )
 ) {
     @EventHandler(ignoreCancelled = true)
-    @Suppress("DEPRECATION")
     fun handle(event: AsyncPlayerChatEvent) {
         if (McmmoManager.isFake(event)) {
             return
