@@ -13,6 +13,7 @@ import com.willfp.libreforge.filters.filters.FilterOnlyNonBosses
 import com.willfp.libreforge.filters.filters.FilterPlayerPlaced
 import com.willfp.libreforge.filters.filters.FilterProjectiles
 import com.willfp.libreforge.filters.filters.FilterText
+import com.willfp.libreforge.filters.filters.FilterTextContains
 
 @Suppress("UNUSED")
 object Filters {
@@ -31,6 +32,7 @@ object Filters {
     val FULLY_GROWN: FilterComponent = FilterFullyGrown()
     val PLAYER_PLACED: FilterComponent = FilterPlayerPlaced()
     val TEXT: FilterComponent = FilterText()
+    val TEXT_CONTAINS: FilterComponent = FilterTextContains()
 
     /**
      * List of all registered filters.
