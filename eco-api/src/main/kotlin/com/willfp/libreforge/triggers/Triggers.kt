@@ -47,7 +47,6 @@ import com.willfp.libreforge.triggers.triggers.TriggerProjectileLaunch
 import com.willfp.libreforge.triggers.triggers.TriggerReelIn
 import com.willfp.libreforge.triggers.triggers.TriggerRespawn
 import com.willfp.libreforge.triggers.triggers.TriggerSendMessage
-import com.willfp.libreforge.triggers.triggers.TriggerSendMessageAsync
 import com.willfp.libreforge.triggers.triggers.TriggerShieldBlock
 import com.willfp.libreforge.triggers.triggers.TriggerShootBow
 import com.willfp.libreforge.triggers.triggers.TriggerSmelt
@@ -122,7 +121,6 @@ object Triggers {
     val RESPAWN: Trigger = TriggerRespawn()
     val HOLD_ITEM: Trigger = TriggerHoldItem()
     val SEND_MESSAGE: Trigger = TriggerSendMessage()
-    val SEND_MESSAGE_ASYNC: Trigger = TriggerSendMessageAsync()
     val CHANGE_ARMOR: Trigger = TriggerChangeArmor()
 
     fun values(): Set<Trigger> {
