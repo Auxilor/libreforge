@@ -28,7 +28,11 @@ abstract class Effect(
     val supportsFilters = applicableTriggers.isNotEmpty()
     val noDelay: Boolean
 
-    val runsLast by lazy { this::class.java.annotations.any { it is RunLast } }
+    val runOrder by lazy {
+        this::class.java.annotations
+            .filterIsInstance<RunsAt>()
+            .firstOrNull()?.at ?: RunOrder.NORMAL
+    }
 
     init {
         if (applicableTriggers.isEmpty()) {

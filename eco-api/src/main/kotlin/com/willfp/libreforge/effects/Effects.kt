@@ -10,6 +10,7 @@ import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.LibReforgePlugin
 import com.willfp.libreforge.chains.EffectChains
 import com.willfp.libreforge.conditions.Conditions
+import com.willfp.libreforge.effects.effects.EffectAddDamage
 import com.willfp.libreforge.effects.effects.EffectAddHolder
 import com.willfp.libreforge.effects.effects.EffectAddHolderInRadius
 import com.willfp.libreforge.effects.effects.EffectAddPermanentHolderInRadius
@@ -189,6 +190,7 @@ object Effects {
     val SELL_ITEMS: Effect = EffectSellItems()
     val ADD_HOLDER_IN_RADIUS: Effect = EffectAddHolderInRadius()
     val ADD_PERMANENT_HOLDER_IN_RADIUS: Effect = EffectAddPermanentHolderInRadius()
+    val ADD_DAMAGE: Effect = EffectAddDamage()
 
     /**
      * Get effect matching id.
