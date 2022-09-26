@@ -35,9 +35,9 @@ class EffectGiveJobXp : Effect(
             )
         )
 
-        if (!config.has("Job")) violations.add(
+        if (!config.has("job")) violations.add(
             ConfigViolation(
-                "Job",
+                "job",
                 "You must specify the job to give xp for!"
             )
         )
