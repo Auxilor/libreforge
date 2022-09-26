@@ -11,20 +11,13 @@ import com.willfp.libreforge.effects.ConfiguredEffect
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.Identifiers
-import com.willfp.libreforge.triggers.TriggerParameter
-import com.willfp.libreforge.triggers.Triggers
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.util.Objects
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 
-class EffectAddPermanentHolderInRadius : Effect(
-    "add_permanent_holder_in_radius",
-    triggers = Triggers.withParameters(
-        TriggerParameter.PLAYER
-    )
-) {
+class EffectAddPermanentHolderInRadius : Effect("add_permanent_holder_in_radius") {
     private val holders = mutableMapOf<UUID, NearbyHolder>()
     private val nearbyCache = Caffeine.newBuilder()
         .expireAfterWrite(250L, TimeUnit.MILLISECONDS)
