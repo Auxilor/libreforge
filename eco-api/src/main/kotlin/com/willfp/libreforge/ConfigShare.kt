@@ -11,9 +11,12 @@ import java.net.URL
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
+import java.util.concurrent.Executors
+
+private val executor = Executors.newSingleThreadExecutor()
 
 internal fun LibReforgePlugin.shareConfigs(directory: String) {
-    this.scheduler.runAsync {
+    executor.submit {
         val configs = this.getUsermadeConfigFiles(directory)
 
         if (configs.isNotEmpty()) {
