@@ -10,8 +10,8 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
 
-class EffectGiveMoney : Effect(
-    "give_money",
+class EffectTakeMoney : Effect(
+    "take_money",
     triggers = Triggers.withParameters(
         TriggerParameter.PLAYER
     )
@@ -19,7 +19,7 @@ class EffectGiveMoney : Effect(
     override fun handle(data: TriggerData, config: Config) {
         val player = data.player ?: return
 
-        player.balance += config.getDoubleFromExpression("amount", data)
+        player.balance -= config.getDoubleFromExpression("amount", data)
     }
 
     override fun validateConfig(config: Config): List<ConfigViolation> {
@@ -28,7 +28,7 @@ class EffectGiveMoney : Effect(
         if (!config.has("amount")) violations.add(
             ConfigViolation(
                 "amount",
-                "You must specify the amount of money to give!"
+                "You must specify the amount of money to take!"
             )
         )
 

@@ -89,6 +89,7 @@ import com.willfp.libreforge.effects.effects.EffectSpawnParticle
 import com.willfp.libreforge.effects.effects.EffectSpawnPotionCloud
 import com.willfp.libreforge.effects.effects.EffectStrikeLightning
 import com.willfp.libreforge.effects.effects.EffectStripAI
+import com.willfp.libreforge.effects.effects.EffectTakeMoney
 import com.willfp.libreforge.effects.effects.EffectTeleport
 import com.willfp.libreforge.effects.effects.EffectTeleportTo
 import com.willfp.libreforge.effects.effects.EffectTraceback
@@ -191,6 +192,7 @@ object Effects {
     val ADD_HOLDER_IN_RADIUS: Effect = EffectAddHolderInRadius()
     val ADD_PERMANENT_HOLDER_IN_RADIUS: Effect = EffectAddPermanentHolderInRadius()
     val ADD_DAMAGE: Effect = EffectAddDamage()
+    val TAKE_MONEY: Effect = EffectTakeMoney()
 
     /**
      * Get effect matching id.
