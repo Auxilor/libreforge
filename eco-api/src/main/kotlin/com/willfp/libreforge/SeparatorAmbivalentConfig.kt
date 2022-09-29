@@ -23,11 +23,11 @@ private class SeparatorAmbivalentConfig(
         invalidator: (T) -> Boolean,
         invalid: T?
     ): T? {
-        val hyphen = path.replace('_', '-')
+        val hyphen = path.lowercase().replace('_', '-')
 
-        val underscore = path.replace('-', '_')
+        val underscore = path.lowercase().replace('-', '_')
 
-        val unspaced = path.replace("-", "")
+        val unspaced = path.lowercase().replace("-", "")
             .replace("_", "")
 
         val camelcase = underscore.toCamelCase()
