@@ -1,4 +1,4 @@
-package com.willfp.libreforge.effects;
+package com.willfp.libreforge.effects
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
