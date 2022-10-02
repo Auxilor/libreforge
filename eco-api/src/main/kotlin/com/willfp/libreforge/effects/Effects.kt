@@ -84,6 +84,7 @@ import com.willfp.libreforge.effects.effects.EffectShoot
 import com.willfp.libreforge.effects.effects.EffectShootArrow
 import com.willfp.libreforge.effects.effects.EffectShuffleHotbar
 import com.willfp.libreforge.effects.effects.EffectSmite
+import com.willfp.libreforge.effects.effects.EffectSpawnEntity
 import com.willfp.libreforge.effects.effects.EffectSpawnMobs
 import com.willfp.libreforge.effects.effects.EffectSpawnParticle
 import com.willfp.libreforge.effects.effects.EffectSpawnPotionCloud
@@ -193,6 +194,7 @@ object Effects {
     val ADD_PERMANENT_HOLDER_IN_RADIUS: Effect = EffectAddPermanentHolderInRadius()
     val ADD_DAMAGE: Effect = EffectAddDamage()
     val TAKE_MONEY: Effect = EffectTakeMoney()
+    val SPAWN_ENTITY: Effect = EffectSpawnEntity()
 
     /**
      * Get effect matching id.
