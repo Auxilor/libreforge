@@ -48,6 +48,7 @@ import com.willfp.libreforge.effects.effects.EffectGlowNearbyBlocks
 import com.willfp.libreforge.effects.effects.EffectHungerMultiplier
 import com.willfp.libreforge.effects.effects.EffectIgnite
 import com.willfp.libreforge.effects.effects.EffectKeepInventory
+import com.willfp.libreforge.effects.effects.EffectKnockAway
 import com.willfp.libreforge.effects.effects.EffectKnockbackMultiplier
 import com.willfp.libreforge.effects.effects.EffectKnockbackResistanceMultiplier
 import com.willfp.libreforge.effects.effects.EffectLuckMultiplier
@@ -63,6 +64,7 @@ import com.willfp.libreforge.effects.effects.EffectParticleLine
 import com.willfp.libreforge.effects.effects.EffectPermanentPotionEffect
 import com.willfp.libreforge.effects.effects.EffectPlaySound
 import com.willfp.libreforge.effects.effects.EffectPotionEffect
+import com.willfp.libreforge.effects.effects.EffectPullIn
 import com.willfp.libreforge.effects.effects.EffectPullToLocation
 import com.willfp.libreforge.effects.effects.EffectRegenMultiplier
 import com.willfp.libreforge.effects.effects.EffectRemoveItem
@@ -195,6 +197,8 @@ object Effects {
     val ADD_DAMAGE: Effect = EffectAddDamage()
     val TAKE_MONEY: Effect = EffectTakeMoney()
     val SPAWN_ENTITY: Effect = EffectSpawnEntity()
+    val KNOCK_AWAY: Effect = EffectKnockAway()
+    val PULL_IN: Effect = EffectPullIn()
 
     /**
      * Get effect matching id.
