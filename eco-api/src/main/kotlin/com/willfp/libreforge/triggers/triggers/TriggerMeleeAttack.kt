@@ -6,6 +6,7 @@ import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.wrappers.WrappedDamageEvent
+import com.willfp.libreforge.triggers.wrappers.WrappedMeleeDamageEvent
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -48,7 +49,7 @@ class TriggerMeleeAttack : Trigger(
                 player = attacker,
                 victim = victim,
                 location = victim.location,
-                event = WrappedDamageEvent(event),
+                event = WrappedMeleeDamageEvent(event),
                 item = attacker.inventory.itemInMainHand
             ),
             event.finalDamage
