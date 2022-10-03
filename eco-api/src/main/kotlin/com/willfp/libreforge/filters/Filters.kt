@@ -5,6 +5,7 @@ import com.willfp.libreforge.filters.filters.FilterBlocks
 import com.willfp.libreforge.filters.filters.FilterDamageCause
 import com.willfp.libreforge.filters.filters.FilterEntityType
 import com.willfp.libreforge.filters.filters.FilterFromSpawner
+import com.willfp.libreforge.filters.filters.FilterFullyCharged
 import com.willfp.libreforge.filters.filters.FilterFullyGrown
 import com.willfp.libreforge.filters.filters.FilterItems
 import com.willfp.libreforge.filters.filters.FilterOnMaxHealth
@@ -33,6 +34,7 @@ object Filters {
     val PLAYER_PLACED: FilterComponent = FilterPlayerPlaced()
     val TEXT: FilterComponent = FilterText()
     val TEXT_CONTAINS: FilterComponent = FilterTextContains()
+    val FULLY_CHARGED: FilterComponent = FilterFullyCharged()
 
     /**
      * List of all registered filters.

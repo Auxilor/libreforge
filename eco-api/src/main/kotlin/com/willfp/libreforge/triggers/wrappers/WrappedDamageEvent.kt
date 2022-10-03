@@ -3,7 +3,7 @@ package com.willfp.libreforge.triggers.wrappers
 import com.willfp.libreforge.triggers.WrappedCancellableEvent
 import org.bukkit.event.entity.EntityDamageEvent
 
-class WrappedDamageEvent(
+open class WrappedDamageEvent(
     private val event: EntityDamageEvent
 ) : WrappedCancellableEvent<EntityDamageEvent> {
     var damage: Double
