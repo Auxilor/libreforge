@@ -4,6 +4,8 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.fast.FastItemStack
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.effects.RunOrder
+import com.willfp.libreforge.effects.RunsAt
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.Triggers
 import com.willfp.libreforge.triggers.wrappers.WrappedBlockDropEvent
@@ -17,6 +19,7 @@ import org.bukkit.inventory.ItemStack
 import kotlin.math.ceil
 import kotlin.math.roundToInt
 
+@RunsAt(RunOrder.LATE)
 class EffectAutosmelt : Effect(
     "autosmelt",
     triggers = Triggers.all()
