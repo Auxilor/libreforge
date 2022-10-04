@@ -21,7 +21,7 @@ class EffectMultiplyDrops : Effect(
     override fun handle(data: TriggerData, config: Config) {
         val event = data.event as? WrappedDropEvent<*> ?: return
 
-        event.modifier = {
+        event.modifiers += {
             val fortune = config.getIntFromExpression("fortune", data)
 
             val items = config.getStrings("on_items").map { string -> Items.lookup(string) }

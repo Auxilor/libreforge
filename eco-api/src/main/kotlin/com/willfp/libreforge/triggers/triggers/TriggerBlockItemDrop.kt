@@ -57,7 +57,7 @@ class TriggerBlockItemDrop : Trigger(
             originalDrops.sumOf { it.amount }.toDouble()
         )
 
-        val newDrops = originalDrops.map(wrapped.modifier)
+        val newDrops = originalDrops.map(wrapped::modify)
         var xp = 0
         for ((_, i) in newDrops) {
             xp += i

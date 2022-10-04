@@ -65,7 +65,7 @@ class EffectAutosmelt : Effect(
         val fortune = FastItemStack.wrap(player.inventory.itemInMainHand)
             .getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS, false)
 
-        event.modifier = {
+        event.modifiers += {
             var (type, xp) = getOutput(it.type)
             it.type = type
 

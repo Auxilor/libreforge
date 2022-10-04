@@ -7,20 +7,33 @@ import org.bukkit.event.block.BlockDropItemEvent
 import org.bukkit.event.entity.EntityDeathEvent
 import org.bukkit.inventory.ItemStack
 
+typealias DropModifier = (ItemStack) -> Pair<ItemStack, Int>
+
 interface WrappedDropEvent<out T> : WrappedCancellableEvent<T> where T : Event, T : Cancellable {
-    var modifier: (ItemStack) -> Pair<ItemStack, Int>
+    val modifiers: MutableList<DropModifier>
 
     val items: Collection<ItemStack>
 
     val finalItems: Collection<ItemStack>
 
     fun removeItem(itemStack: ItemStack)
+
+    fun modify(itemStack: ItemStack): Pair<ItemStack, Int> {
+        var xp = 0
+
+        for (modifier in modifiers) {
+            val out = modifier(itemStack)
+            xp += out.second
+        }
+
+        return Pair(itemStack, xp)
+    }
 }
 
 class WrappedBlockDropEvent(
     private val event: BlockDropItemEvent
 ) : WrappedDropEvent<BlockDropItemEvent> {
-    override var modifier: (ItemStack) -> Pair<ItemStack, Int> = { Pair(it, 0) }
+    override val modifiers = mutableListOf<DropModifier>()
 
     override var isCancelled: Boolean
         get() {
@@ -34,7 +47,7 @@ class WrappedBlockDropEvent(
         get() = event.items.map { it.itemStack }
 
     override val finalItems: Collection<ItemStack>
-        get() = items.map { modifier(it).first }
+        get() = items.map { modify(it).first }
 
     override fun removeItem(itemStack: ItemStack) {
         event.items.removeIf { it.itemStack == itemStack }
@@ -44,7 +57,7 @@ class WrappedBlockDropEvent(
 class WrappedEntityDropEvent(
     private val event: EntityDeathEvent
 ) : WrappedDropEvent<EntityDeathEvent> {
-    override var modifier: (ItemStack) -> Pair<ItemStack, Int> = { Pair(it, 0) }
+    override val modifiers = mutableListOf<DropModifier>()
 
     override var isCancelled: Boolean
         get() {
