@@ -39,10 +39,6 @@ class TriggerMeleeAttack : Trigger(
             return
         }
 
-        if (!AntigriefManager.canInjure(attacker, victim)) {
-            return
-        }
-
         this.processTrigger(
             attacker,
             TriggerData(

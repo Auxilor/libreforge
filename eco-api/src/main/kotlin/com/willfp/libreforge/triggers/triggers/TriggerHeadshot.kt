@@ -31,10 +31,6 @@ class TriggerHeadshot : Trigger(
         val victim = event.entity as? LivingEntity ?: return
         val shooter = projectile.shooter as? Player ?: return
 
-        if (!AntigriefManager.canInjure(shooter, victim)) {
-            return
-        }
-
         // Filter out non-headshots
         if (projectile.location.y < victim.location.y + victim.eyeHeight - 0.22) {
             return

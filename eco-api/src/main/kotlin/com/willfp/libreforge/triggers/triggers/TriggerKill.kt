@@ -40,10 +40,6 @@ class TriggerKill : Trigger(
 
         val victim = event.victim
 
-        if (!AntigriefManager.canInjure(killer, victim)) {
-            return
-        }
-
         this.processTrigger(
             killer,
             TriggerData(
