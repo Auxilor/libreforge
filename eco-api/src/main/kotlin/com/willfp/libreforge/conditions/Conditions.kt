@@ -23,6 +23,7 @@ import com.willfp.libreforge.conditions.conditions.ConditionHasPermission
 import com.willfp.libreforge.conditions.conditions.ConditionHasPotionEffect
 import com.willfp.libreforge.conditions.conditions.ConditionInAir
 import com.willfp.libreforge.conditions.conditions.ConditionInBiome
+import com.willfp.libreforge.conditions.conditions.ConditionInBlock
 import com.willfp.libreforge.conditions.conditions.ConditionInMainhand
 import com.willfp.libreforge.conditions.conditions.ConditionInOffhand
 import com.willfp.libreforge.conditions.conditions.ConditionInWater
@@ -96,6 +97,7 @@ object Conditions {
     val WEARING_HELMET: Condition = ConditionWearingHelmet()
     val HAS_ITEM: Condition = ConditionHasItem()
     val IS_EXPRESSION_TRUE: Condition = ConditionIsExpressionTrue()
+    val IN_BLOCK: Condition = ConditionInBlock()
 
     /**
      * Get condition matching id.
