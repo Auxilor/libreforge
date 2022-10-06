@@ -41,10 +41,6 @@ class TriggerShieldBlock : Trigger(
             return
         }
 
-        if (!AntigriefManager.canInjure(victim, attacker)) {
-            return
-        }
-
         this.processTrigger(
             victim,
             TriggerData(

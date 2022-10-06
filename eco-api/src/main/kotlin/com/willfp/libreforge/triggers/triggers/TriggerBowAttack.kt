@@ -44,10 +44,6 @@ class TriggerBowAttack : Trigger(
             return
         }
 
-        if (!AntigriefManager.canInjure(shooter, victim)) {
-            return
-        }
-
         if (event.isCancelled) {
             return
         }
