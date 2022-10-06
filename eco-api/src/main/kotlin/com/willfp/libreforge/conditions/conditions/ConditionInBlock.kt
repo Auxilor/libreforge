@@ -5,7 +5,7 @@ import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.conditions.Condition
 import org.bukkit.entity.Player
 
-class ConditionInBlock : Condition("in_world") {
+class ConditionInBlock : Condition("in_block") {
     override fun isConditionMet(player: Player, config: Config): Boolean {
         val world = player.world
         val head = world.getBlockAt(player.eyeLocation).type
