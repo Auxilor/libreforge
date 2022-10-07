@@ -40,6 +40,7 @@ import com.willfp.libreforge.triggers.triggers.TriggerMeleeAttack
 import com.willfp.libreforge.triggers.triggers.TriggerMineBlock
 import com.willfp.libreforge.triggers.triggers.TriggerMineBlockProgress
 import com.willfp.libreforge.triggers.triggers.TriggerMove
+import com.willfp.libreforge.triggers.triggers.TriggerPickUpItem
 import com.willfp.libreforge.triggers.triggers.TriggerPlaceBlock
 import com.willfp.libreforge.triggers.triggers.TriggerPotionEffect
 import com.willfp.libreforge.triggers.triggers.TriggerProjectileHit
@@ -122,6 +123,7 @@ object Triggers {
     val HOLD_ITEM: Trigger = TriggerHoldItem()
     val SEND_MESSAGE: Trigger = TriggerSendMessage()
     val CHANGE_ARMOR: Trigger = TriggerChangeArmor()
+    val PICK_UP_ITEM: Trigger = TriggerPickUpItem()
 
     fun values(): Set<Trigger> {
         return BY_ID.values.toSet()
