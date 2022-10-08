@@ -5,11 +5,9 @@ import com.willfp.libreforge.triggers.GenericCancellableEvent
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import org.bukkit.entity.Item
 import org.bukkit.entity.LivingEntity
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.PlayerLeashEntityEvent
-import org.bukkit.event.player.PlayerFishEvent
 
 class TriggerLeashEntity : Trigger(
     "leash_entity", listOf(
