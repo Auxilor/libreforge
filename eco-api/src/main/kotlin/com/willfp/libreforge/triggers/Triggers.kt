@@ -28,10 +28,12 @@ import com.willfp.libreforge.triggers.triggers.TriggerHeadshot
 import com.willfp.libreforge.triggers.triggers.TriggerHeal
 import com.willfp.libreforge.triggers.triggers.TriggerHoldItem
 import com.willfp.libreforge.triggers.triggers.TriggerHookInGround
+import com.willfp.libreforge.triggers.triggers.TriggerInventoryDropItem
 import com.willfp.libreforge.triggers.triggers.TriggerItemBreak
 import com.willfp.libreforge.triggers.triggers.TriggerJoin
 import com.willfp.libreforge.triggers.triggers.TriggerJump
 import com.willfp.libreforge.triggers.triggers.TriggerKill
+import com.willfp.libreforge.triggers.triggers.TriggerLeashEntity
 import com.willfp.libreforge.triggers.triggers.TriggerLeave
 import com.willfp.libreforge.triggers.triggers.TriggerLevelUpXp
 import com.willfp.libreforge.triggers.triggers.TriggerLoseHunger
@@ -124,6 +126,9 @@ object Triggers {
     val SEND_MESSAGE: Trigger = TriggerSendMessage()
     val CHANGE_ARMOR: Trigger = TriggerChangeArmor()
     val PICK_UP_ITEM: Trigger = TriggerPickUpItem()
+    val INVENTORY_DROP_ITEM: Trigger = TriggerInventoryDropItem()
+    val LEASH_ENTITY: Trigger = TriggerLeashEntity()
+
 
     fun values(): Set<Trigger> {
         return BY_ID.values.toSet()
