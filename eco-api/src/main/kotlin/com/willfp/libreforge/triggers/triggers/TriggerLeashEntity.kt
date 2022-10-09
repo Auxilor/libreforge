@@ -29,7 +29,7 @@ class TriggerLeashEntity : Trigger(
             player,
             TriggerData(
                 player = player,
-                location = event.entity?.location ?: player.location,
+                location = event.entity.location,
                 victim = event.entity as? LivingEntity,
                 event = GenericCancellableEvent(event)
             )
