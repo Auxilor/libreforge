@@ -35,6 +35,7 @@ import com.willfp.libreforge.conditions.conditions.ConditionIsNight
 import com.willfp.libreforge.conditions.conditions.ConditionIsSneaking
 import com.willfp.libreforge.conditions.conditions.ConditionIsSprinting
 import com.willfp.libreforge.conditions.conditions.ConditionIsStorm
+import com.willfp.libreforge.conditions.conditions.ConditionIsSwimming
 import com.willfp.libreforge.conditions.conditions.ConditionOnFire
 import com.willfp.libreforge.conditions.conditions.ConditionPlaceholderContains
 import com.willfp.libreforge.conditions.conditions.ConditionPlaceholderEquals
@@ -98,6 +99,7 @@ object Conditions {
     val HAS_ITEM: Condition = ConditionHasItem()
     val IS_EXPRESSION_TRUE: Condition = ConditionIsExpressionTrue()
     val IN_BLOCK: Condition = ConditionInBlock()
+    val IS_SWIMMING: Condition = ConditionIsSwimming()
 
     /**
      * Get condition matching id.
