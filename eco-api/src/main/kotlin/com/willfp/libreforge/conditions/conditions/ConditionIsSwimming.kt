@@ -13,14 +13,13 @@ class ConditionIsSwimming : Condition("is_swimming") {
         priority = EventPriority.MONITOR,
         ignoreCancelled = true
     )
-    //
     fun handle(event: EntityToggleSwimEvent) {
-        val player = event.entity as? Player ?: return      //This could also track entities, I only track players
+        val player = event.entity as? Player ?: return
 
         player.updateEffects(noRescan = true)
     }
 
     override fun isConditionMet(player: Player, config: Config): Boolean {
-        return player.isSwimming == (config.getBoolOrNull("is_swimming") ?: true)
+        return player.isSwimming
     }
 }

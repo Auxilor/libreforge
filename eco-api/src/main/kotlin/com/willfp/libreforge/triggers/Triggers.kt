@@ -28,7 +28,7 @@ import com.willfp.libreforge.triggers.triggers.TriggerHeadshot
 import com.willfp.libreforge.triggers.triggers.TriggerHeal
 import com.willfp.libreforge.triggers.triggers.TriggerHoldItem
 import com.willfp.libreforge.triggers.triggers.TriggerHookInGround
-import com.willfp.libreforge.triggers.triggers.TriggerInventoryDropItem
+import com.willfp.libreforge.triggers.triggers.TriggerDropItem
 import com.willfp.libreforge.triggers.triggers.TriggerItemBreak
 import com.willfp.libreforge.triggers.triggers.TriggerJoin
 import com.willfp.libreforge.triggers.triggers.TriggerJump
@@ -126,7 +126,7 @@ object Triggers {
     val SEND_MESSAGE: Trigger = TriggerSendMessage()
     val CHANGE_ARMOR: Trigger = TriggerChangeArmor()
     val PICK_UP_ITEM: Trigger = TriggerPickUpItem()
-    val INVENTORY_DROP_ITEM: Trigger = TriggerInventoryDropItem()
+    val INVENTORY_DROP_ITEM: Trigger = TriggerDropItem()
     val LEASH_ENTITY: Trigger = TriggerLeashEntity()
 
 

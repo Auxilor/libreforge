@@ -8,8 +8,8 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDropItemEvent
 
-class TriggerInventoryDropItem : Trigger(
-    "inventory_drop_item", listOf(
+class TriggerDropItem : Trigger(
+    "drop_item", listOf(
         TriggerParameter.PLAYER,
         TriggerParameter.ITEM
     )

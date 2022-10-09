@@ -14,7 +14,7 @@ import java.util.UUID
 import kotlin.math.ceil
 
 @Suppress("UNUSED_PARAMETER")
-abstract class Effect(
+abstract class Effect @JvmOverloads constructor(
     id: String,
     private val triggers: () -> Collection<Trigger> = { emptyList() },
     supportsFilters: Boolean = true,
