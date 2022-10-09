@@ -126,7 +126,7 @@ object Triggers {
     val SEND_MESSAGE: Trigger = TriggerSendMessage()
     val CHANGE_ARMOR: Trigger = TriggerChangeArmor()
     val PICK_UP_ITEM: Trigger = TriggerPickUpItem()
-    val INVENTORY_DROP_ITEM: Trigger = TriggerDropItem()
+    val DROP_ITEM: Trigger = TriggerDropItem()
     val LEASH_ENTITY: Trigger = TriggerLeashEntity()
 
 
