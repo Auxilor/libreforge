@@ -8,7 +8,6 @@ import com.willfp.eco.core.placeholder.StaticPlaceholder
 import com.willfp.eco.util.StringUtils
 import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.entity.Player
-import java.util.*
 
 private class SeparatorAmbivalentConfig(
     private val config: Config
@@ -23,11 +22,14 @@ private class SeparatorAmbivalentConfig(
         invalidator: (T) -> Boolean,
         invalid: T?
     ): T? {
-        val hyphen = path.lowercase().replace('_', '-')
+        val hyphen = path.lowercase()
+            .replace('_', '-')
 
-        val underscore = path.lowercase().replace('-', '_')
+        val underscore = path.lowercase()
+            .replace('-', '_')
 
-        val unspaced = path.lowercase().replace("-", "")
+        val unspaced = path.lowercase()
+            .replace("-", "")
             .replace("_", "")
 
         val camelcase = underscore.toCamelCase()
@@ -43,7 +45,7 @@ private class SeparatorAmbivalentConfig(
         return invalid
     }
 
-    override fun clone(): Config = SeparatorAmbivalentConfig(config.clone())
+    override fun clone(): Config = config.clone().separatorAmbivalent()
 
     override fun toPlaintext(): String = config.toPlaintext()
 
@@ -62,8 +64,7 @@ private class SeparatorAmbivalentConfig(
 
     override fun getSubsectionOrNull(path: String): Config? =
         preprocess(path) {
-            val cfg = config.getSubsectionOrNull(it)
-            if (cfg == null) null else SeparatorAmbivalentConfig(cfg)
+            config.getSubsectionOrNull(it)?.separatorAmbivalent()
         }
 
     override fun getIntOrNull(path: String): Int? =
@@ -94,7 +95,7 @@ private class SeparatorAmbivalentConfig(
         preprocess(path) { config.getDoublesOrNull(it) }
 
     override fun getSubsectionsOrNull(path: String): List<Config>? =
-        preprocess(path) { config.getSubsectionsOrNull(it)?.map { cfg -> SeparatorAmbivalentConfig(cfg) } }
+        preprocess(path) { config.getSubsectionsOrNull(it)?.map { cfg -> cfg.separatorAmbivalent() } }
 
     override fun getType(): ConfigType = config.type
 
@@ -114,7 +115,8 @@ private class SeparatorAmbivalentConfig(
         config.injectPlaceholders(*placeholders)
 }
 
-fun Config.separatorAmbivalent(): Config = SeparatorAmbivalentConfig(this)
+fun Config.separatorAmbivalent(): Config =
+    if (this is SeparatorAmbivalentConfig) this else SeparatorAmbivalentConfig(this)
 
 fun Config.getIntFromExpression(path: String, data: TriggerData): Int {
     val player = data.player
@@ -136,14 +138,8 @@ fun Config.getDoubleFromExpression(path: String, data: TriggerData): Double {
     return getDoubleFromExpression(path, player, additional)
 }
 
-// Seamlessly stolen from: https://stackoverflow.com/a/1144014/11427550
 private fun String.toCamelCase(): String {
-    val builder = StringBuilder()
-
-    for (oneString in this.lowercase().split("_")) {
-        builder.append(oneString.substring(0, 1).uppercase(Locale.getDefault()))
-        builder.append(oneString.substring(1))
-    }
-
-    return builder.toString()
+    val words = this.lowercase().split("_")
+    val camelCaseWorlds = words.map { it.substring(0, 1).uppercase() + it.substring(1) }
+    return camelCaseWorlds.joinToString("")
 }
