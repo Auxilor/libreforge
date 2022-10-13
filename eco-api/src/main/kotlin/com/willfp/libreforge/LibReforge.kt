@@ -156,14 +156,14 @@ abstract class LibReforgePlugin @JvmOverloads constructor(
         return configs
     }
 
-    fun fetchConfigs(directory: String): Map<String, Config> {
+    fun fetchConfigs(directory: String, dontShare: Boolean = false): Map<String, Config> {
         // Share configs on fetch
         val fetched = doFetchConfigs(directory)
 
         val isSharing = this.lrcdbYml.getBool("share-configs.enabled")
         val isPublic = this.lrcdbYml.getBool("share-configs.publicly")
 
-        if (isSharing) {
+        if (isSharing && !dontShare) {
             onLrcdbThread {
                 for ((name, config) in fetched) {
                     ExportableConfig(name, config)
