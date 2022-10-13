@@ -35,6 +35,9 @@ import com.willfp.libreforge.integrations.scyther.ScytherIntegration
 import com.willfp.libreforge.integrations.talismans.TalismansIntegration
 import com.willfp.libreforge.integrations.tmmobcoins.TMMobcoinsIntegration
 import com.willfp.libreforge.integrations.vault.VaultIntegration
+import com.willfp.libreforge.lrcdb.ExportableConfig
+import com.willfp.libreforge.lrcdb.LrcdbYml
+import com.willfp.libreforge.lrcdb.onLrcdbThread
 import com.willfp.libreforge.triggers.InvocationPlaceholderListener
 import com.willfp.libreforge.triggers.Triggers
 import com.willfp.libreforge.triggers.triggers.TriggerStatic
@@ -42,7 +45,8 @@ import org.apache.commons.lang.StringUtils
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.io.File
-import java.util.*
+import java.util.UUID
+import java.util.WeakHashMap
 import java.util.concurrent.TimeUnit
 import java.util.zip.ZipFile
 
@@ -56,7 +60,9 @@ private val holderCache = Caffeine.newBuilder()
 typealias HolderProvider = (Player) -> Iterable<Holder>
 
 @Suppress("UNUSED")
-abstract class LibReforgePlugin : EcoPlugin() {
+abstract class LibReforgePlugin @JvmOverloads constructor(
+    supportsLrcdb: Boolean = true
+) : EcoPlugin() {
     private val defaultPackage = StringUtils.join(
         arrayOf("com", "willfp", "libreforge"),
         "."
@@ -64,6 +70,12 @@ abstract class LibReforgePlugin : EcoPlugin() {
 
     @Suppress("MemberVisibilityCanBePrivate")
     val chainsYml: ChainsYml by lazy { ChainsYml(this) }
+
+    val lrcdbYml: Config by lazy {
+        if (supportsLrcdb) {
+            LrcdbYml(this)
+        } else TransientConfig()
+    }
 
     init {
         setInstance()
@@ -146,15 +158,21 @@ abstract class LibReforgePlugin : EcoPlugin() {
 
     fun fetchConfigs(directory: String): Map<String, Config> {
         // Share configs on fetch
-        if (this.configYml.getBool("share-configs")) {
-            try {
-                this.shareConfigs(directory)
-            } catch (e: Exception) {
-                e.printStackTrace()
+        val fetched = doFetchConfigs(directory)
+
+        val isSharing = this.lrcdbYml.getBool("share-configs.enabled")
+        val isPublic = this.lrcdbYml.getBool("share-configs.publicly")
+
+        if (isSharing) {
+            onLrcdbThread {
+                for ((name, config) in fetched) {
+                    ExportableConfig(name, config)
+                        .export(this, !isPublic)
+                }
             }
         }
 
-        return doFetchConfigs(directory)
+        return fetched
     }
 
     fun getUsermadeConfigs(directory: String): Map<String, Config> {
