@@ -9,7 +9,7 @@ class FilterOnMaxHealth : FilterComponent() {
     override fun passes(data: TriggerData, config: Config): Boolean {
         val entity = data.victim ?: return true
 
-        return config.withInverse("on_max_health", Config::getBoolOrNull) {
+        return config.withInverse("on_max_health", Config::getBool) {
             val maxHealth = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.value
             val onMaxHealth = entity.health == maxHealth
 

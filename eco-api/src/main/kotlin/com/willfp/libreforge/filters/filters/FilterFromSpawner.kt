@@ -13,7 +13,7 @@ class FilterFromSpawner : FilterComponent() {
             return true
         }
 
-        return config.withInverse("from_spawner", Config::getBoolOrNull) {
+        return config.withInverse("from_spawner", Config::getBool) {
             it == entity.fromMobSpawner()
         }
     }

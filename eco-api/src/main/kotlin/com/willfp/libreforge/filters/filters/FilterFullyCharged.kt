@@ -9,7 +9,7 @@ class FilterFullyCharged : FilterComponent() {
     override fun passes(data: TriggerData, config: Config): Boolean {
         val event = data.event as? WrappedMeleeDamageEvent ?: return true
 
-        return config.withInverse("fully_charged", Config::getBoolOrNull) {
+        return config.withInverse("fully_charged", Config::getBool) {
             event.isFullyCharged == it
         }
     }

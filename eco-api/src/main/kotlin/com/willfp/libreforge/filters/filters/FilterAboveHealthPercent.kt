@@ -11,11 +11,7 @@ class FilterAboveHealthPercent : FilterComponent() {
         val entity = data.victim ?: return true
         val player = data.player
 
-        return config.withInverse("above_health_percent", Config::getStringOrNull) {
-            if (it == null) {
-                return@withInverse true
-            }
-
+        return config.withInverse("above_health_percent", Config::getString) {
             val maxHealth = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.value ?: 20.0
             val percent = (entity.health / maxHealth) * 100
 

@@ -8,8 +8,8 @@ class FilterTextContains : FilterComponent() {
     override fun passes(data: TriggerData, config: Config): Boolean {
         val text = data.text ?: return true
 
-        return config.withInverse("text_contains", Config::getStringsOrNull) {
-            it?.any { test -> text.lowercase().contains(test.lowercase()) } == true
+        return config.withInverse("text_contains", Config::getStrings) {
+            it.any { test -> text.lowercase().contains(test.lowercase()) }
         }
     }
 }

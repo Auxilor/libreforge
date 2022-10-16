@@ -9,7 +9,7 @@ class FilterPlayerPlaced : FilterComponent() {
     override fun passes(data: TriggerData, config: Config): Boolean {
         val block = data.block ?: return true
 
-        return config.withInverse("player_placed", Config::getBoolOrNull) {
+        return config.withInverse("player_placed", Config::getBool) {
             block.isPlayerPlaced == it
         }
     }

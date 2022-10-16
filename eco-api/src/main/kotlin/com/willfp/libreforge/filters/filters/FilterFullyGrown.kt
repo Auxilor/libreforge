@@ -9,7 +9,7 @@ class FilterFullyGrown : FilterComponent() {
     override fun passes(data: TriggerData, config: Config): Boolean {
         val block = data.block ?: return true
 
-        return config.withInverse("fully_grown", Config::getBoolOrNull) {
+        return config.withInverse("fully_grown", Config::getBool) {
             val blockData = block.blockData
 
             val isFullyGrown = if (blockData is Ageable) {
