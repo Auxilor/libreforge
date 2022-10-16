@@ -10,10 +10,10 @@ class FilterJob : FilterComponent() {
             ?: (data.event as? WrappedJobLevelUpEvent)?.job
             ?: return true
 
-        return config.withInverse("job", Config::getStringsOrNull) {
-            it?.any { jobName ->
+        return config.withInverse("job", Config::getStrings) {
+            it.any { jobName ->
                 jobName.equals(job.id, ignoreCase = true)
-            } == true
+            }
         }
     }
 }

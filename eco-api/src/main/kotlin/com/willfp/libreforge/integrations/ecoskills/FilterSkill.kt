@@ -10,10 +10,10 @@ class FilterSkill : FilterComponent() {
             ?: (data.event as? WrappedSkillLevelUpEvent)?.skill
             ?: return true
 
-        return config.withInverse("skill", Config::getStringsOrNull) {
-            it?.any { skillName ->
+        return config.withInverse("skill", Config::getStrings) {
+            it.any { skillName ->
                 skillName.equals(skill.id, ignoreCase = true)
-            } == true
+            }
         }
     }
 }

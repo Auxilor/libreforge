@@ -9,8 +9,8 @@ class FilterText : FilterComponent() {
     override fun passes(data: TriggerData, config: Config): Boolean {
         val text = data.text ?: return true
 
-        return config.withInverse("text", Config::getStringsOrNull) {
-            it?.containsIgnoreCase(text) == true
+        return config.withInverse("text", Config::getStrings) {
+            it.containsIgnoreCase(text)
         }
     }
 }

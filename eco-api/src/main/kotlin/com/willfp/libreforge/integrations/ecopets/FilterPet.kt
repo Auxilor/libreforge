@@ -10,10 +10,10 @@ class FilterPet : FilterComponent() {
             ?: (data.event as? WrappedPetLevelUpEvent)?.pet
             ?: return true
 
-        return config.withInverse("pet", Config::getStringsOrNull) {
-            it?.any { petName ->
+        return config.withInverse("pet", Config::getStrings) {
+            it.any { petName ->
                 petName.equals(pet.id, ignoreCase = true)
-            } == true
+            }
         }
     }
 }
