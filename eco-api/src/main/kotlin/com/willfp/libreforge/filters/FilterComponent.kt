@@ -15,7 +15,7 @@ abstract class FilterComponent {
 
     abstract fun passes(data: TriggerData, config: Config): Boolean
 
-    protected fun <T : Any?> Config.withInverse(
+    protected fun <T : Any> Config.withInverse(
         key: String,
         getter: Config.(String) -> T,
         predicate: (T) -> Boolean
