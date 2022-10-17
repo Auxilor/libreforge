@@ -1,7 +1,5 @@
 # libreforge
-libreforge is a library to generalize functionality between several projects, notably
-[EcoArmor](https://github.com/Auxilor/EcoArmor), [EcoWeapons](https://github.com/Auxilor/EcoWeapons),
-and [Reforges](https://github.com/Auxilor/Reforges).
+libreforge is a powerful yaml-based 'scripting' language to create powerful config-driven automations and effects
 
 <p>
     <a href="https://github.com/Auxilor/libreforge/releases">
