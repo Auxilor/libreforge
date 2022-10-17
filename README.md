@@ -32,7 +32,7 @@ dependencies {
 }
 ```
 
-Replace `Tag` with a release tag for libreforge, eg `1.0.0`.
+Replace `Tag` with a release tag for libreforge, eg `3.112.0`.
 
 ## License
 
