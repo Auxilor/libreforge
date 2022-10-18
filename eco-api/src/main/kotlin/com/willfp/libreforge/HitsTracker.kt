@@ -2,6 +2,7 @@ package com.willfp.libreforge
 
 import com.willfp.libreforge.events.TriggerPreProcessEvent
 import com.willfp.libreforge.triggers.Triggers
+import org.bukkit.attribute.Attribute
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -34,7 +35,11 @@ class HitsTracker(
         @Suppress("UNCHECKED_CAST")
         val map = entity.getMetadata(key).firstOrNull() as? MutableMap<UUID, Int> ?: mutableMapOf()
         val hits = entity.getHits(player)
-        map[player.uniqueId] = hits + 1
+        if (entity.health >= entity.getAttribute(Attribute.GENERIC_MAX_HEALTH)!!.value) {
+            map[player.uniqueId] = 1
+        } else {
+            map[player.uniqueId] = hits + 1
+        }
 
         entity.removeMetadata(key, plugin)
         entity.setMetadata(key, plugin.createMetadataValue(map))
