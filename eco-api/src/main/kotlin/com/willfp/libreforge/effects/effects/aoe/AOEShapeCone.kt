@@ -45,7 +45,7 @@ object AOEShapeCone: AOEShape("cone") {
 
                 val angle = Math.toDegrees(direction2.angle(toEntityVector).toDouble())
 
-                abs(angle) <= maxAngle
+                abs(angle) <= maxAngle / 2
             }
     }
 
