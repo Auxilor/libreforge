@@ -1,5 +1,6 @@
 package com.willfp.libreforge.effects.effects
 
+import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
@@ -21,10 +22,21 @@ class EffectDamageVictim : Effect(
 
         val damage = config.getDoubleFromExpression("damage", data)
 
-        if (config.getBool("use_source")) {
-            victim.damage(damage, player)
+        if (config.getBool("true_damage")) {
+            if (damage >= victim.health) {
+                victim.health = 0.0
+                if (Prerequisite.HAS_PAPER.isMet) {
+                    victim.killer = player
+                }
+            } else {
+                victim.health -= damage
+            }
         } else {
-            victim.damage(damage)
+            if (config.getBool("use_source")) {
+                victim.damage(damage, player)
+            } else {
+                victim.damage(damage)
+            }
         }
     }
 
@@ -35,13 +47,6 @@ class EffectDamageVictim : Effect(
             ConfigViolation(
                 "damage",
                 "You must specify the damage to deal!"
-            )
-        )
-
-        if (!config.has("use_source")) violations.add(
-            ConfigViolation(
-                "use_source",
-                "You must specify if the player should be marked as the damage source!"
             )
         )
 
