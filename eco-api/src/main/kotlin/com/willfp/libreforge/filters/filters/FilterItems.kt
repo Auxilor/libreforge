@@ -2,11 +2,11 @@ package com.willfp.libreforge.filters.filters
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.items.Items
-import com.willfp.libreforge.filters.FilterComponent
+import com.willfp.libreforge.filters.Filter
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.wrappers.WrappedDropEvent
 
-class FilterItems : FilterComponent() {
+object FilterItems : Filter() {
     override fun passes(data: TriggerData, config: Config): Boolean {
         val itemList = listOf(data.item)
         val unfilteredItems = (data.event as? WrappedDropEvent<*>)?.items ?: itemList

@@ -1,20 +1,39 @@
 package com.willfp.libreforge.filters
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.separatorAmbivalent
 import com.willfp.libreforge.triggers.TriggerData
 
-interface Filter {
-    fun matches(data: TriggerData): Boolean
+abstract class Filter {
+    init {
+        register()
+    }
 
-    companion object {
-        fun matches(data: TriggerData, config: Config): Boolean {
-            val testResults = mutableListOf<Boolean>()
+    private fun register() {
+        Filters.addNewFilter(this)
+    }
 
-            for (filter in Filters.values()) {
-                testResults.add(filter.passes(data, config))
-            }
+    abstract fun passes(data: TriggerData, config: Config): Boolean
 
-            return testResults.isEmpty() || testResults.stream().allMatch { it }
+    protected fun <T : Any> Config.withInverse(
+        key: String,
+        getter: Config.(String) -> T,
+        predicate: (T) -> Boolean
+    ): Boolean {
+        // Extra ambivalence here just to make sure
+        val ambivalent = this.separatorAmbivalent()
+
+        val regularPresent = ambivalent.has(key)
+        val inversePresent = ambivalent.has("not_$key")
+
+        if (!regularPresent && !inversePresent) {
+            return true
         }
+
+        if (inversePresent) {
+            return !predicate(ambivalent.getter("not_$key"))
+        }
+
+        return predicate(ambivalent.getter(key))
     }
 }

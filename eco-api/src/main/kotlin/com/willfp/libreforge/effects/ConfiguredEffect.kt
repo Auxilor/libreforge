@@ -7,7 +7,7 @@ import com.willfp.libreforge.LibReforgePlugin
 import com.willfp.libreforge.conditions.ConfiguredCondition
 import com.willfp.libreforge.events.EffectActivateEvent
 import com.willfp.libreforge.events.EffectPreActivateEvent
-import com.willfp.libreforge.filters.Filter
+import com.willfp.libreforge.filters.Filters
 import com.willfp.libreforge.triggers.ConfiguredDataMutator
 import com.willfp.libreforge.triggers.InvocationData
 import com.willfp.libreforge.triggers.Trigger
@@ -108,11 +108,12 @@ data class ConfiguredEffect internal constructor(
         }
 
         if (args.getBool("filters_before_mutation")) {
-            if (!Filter.matches(rawInvocation.data, filter)) {
+            if (!Filters.passes(rawInvocation.data, filter)) {
                 return
             }
+
         } else {
-            if (!Filter.matches(data, filter)) {
+            if (!Filters.passes(data, filter)) {
                 return
             }
         }

@@ -3,7 +3,7 @@ package com.willfp.libreforge.integrations.ecoskills
 import com.willfp.eco.core.integrations.Integration
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.effects.Effect
-import com.willfp.libreforge.filters.FilterComponent
+import com.willfp.libreforge.filters.Filter
 import com.willfp.libreforge.triggers.Trigger
 
 object EcoSkillsIntegration : Integration {
@@ -17,7 +17,7 @@ object EcoSkillsIntegration : Integration {
     private lateinit var MULTIPLY_ALL_STATS: Effect
     private lateinit var ADD_STAT_TEMPORARILY: Effect
     private lateinit var MULTIPLY_STAT_TEMPORARILY: Effect
-    private lateinit var SKILL: FilterComponent
+    private lateinit var SKILL: Filter
 
     fun load() {
         ADD_STAT = EffectAddStat()

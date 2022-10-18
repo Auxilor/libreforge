@@ -3,7 +3,7 @@ package com.willfp.libreforge.integrations.ecojobs
 import com.willfp.eco.core.integrations.Integration
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.effects.Effect
-import com.willfp.libreforge.filters.FilterComponent
+import com.willfp.libreforge.filters.Filter
 import com.willfp.libreforge.triggers.Trigger
 
 object EcoJobsIntegration : Integration {
@@ -13,7 +13,7 @@ object EcoJobsIntegration : Integration {
     private lateinit var GAIN_JOB_XP: Trigger
     private lateinit var GIVE_JOB_XP: Effect
     private lateinit var LEVEL_UP_JOB: Trigger
-    private lateinit var JOB: FilterComponent
+    private lateinit var JOB: Filter
     private lateinit var JOIN_JOB: Trigger
     private lateinit var LEAVE_JOB: Trigger
 

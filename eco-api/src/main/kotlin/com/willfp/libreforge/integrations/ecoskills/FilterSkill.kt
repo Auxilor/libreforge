@@ -1,10 +1,10 @@
 package com.willfp.libreforge.integrations.ecoskills
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.filters.FilterComponent
+import com.willfp.libreforge.filters.Filter
 import com.willfp.libreforge.triggers.TriggerData
 
-class FilterSkill : FilterComponent() {
+class FilterSkill : Filter() {
     override fun passes(data: TriggerData, config: Config): Boolean {
         val skill = (data.event as? WrappedSkillXpEvent)?.skill
             ?: (data.event as? WrappedSkillLevelUpEvent)?.skill

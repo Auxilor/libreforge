@@ -4,7 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.conditions.ConfiguredCondition
 import com.willfp.libreforge.conditions.isMet
 import com.willfp.libreforge.events.TriggerPreProcessEvent
-import com.willfp.libreforge.filters.Filter
+import com.willfp.libreforge.filters.Filters
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 
@@ -27,7 +27,7 @@ class Counter internal constructor(
             return 0.0
         }
 
-        if (!Filter.matches(data, filters)) {
+        if (!Filters.passes(data, filters)) {
             return 0.0
         }
 
