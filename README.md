@@ -1,14 +1,12 @@
 # libreforge
-libreforge is a library to generalize functionality between several projects, notably
-[EcoArmor](https://github.com/Auxilor/EcoArmor), [EcoWeapons](https://github.com/Auxilor/EcoWeapons),
-and [Reforges](https://github.com/Auxilor/Reforges).
+libreforge is a powerful yaml-based 'scripting' language to create powerful config-driven automations and effects
 
 <p>
     <a href="https://github.com/Auxilor/libreforge/releases">
         <img alt="spigot" src="https://img.shields.io/github/v/release/Auxilor/libreforge?color=informational"/>
     </a>
-    <a href="https://plugins.auxilor.io/" alt="Docs (gitbook)">
-        <img src="https://img.shields.io/badge/docs-gitbook-informational"/>
+    <a href="https://plugins.auxilor.io/" alt="Docs">
+        <img src="https://img.shields.io/badge/docs-docusaurus-informational"/>
     </a>
     <a href="https://discord.gg/ZcwpSsE/" alt="Discord">
         <img src="https://img.shields.io/discord/452518336627081236?label=discord&color=informational"/>
@@ -32,7 +30,7 @@ dependencies {
 }
 ```
 
-Replace `Tag` with a release tag for libreforge, eg `1.0.0`.
+Replace `Tag` with a release tag for libreforge, eg `3.112.0`.
 
 ## License
 
