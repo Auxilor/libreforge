@@ -15,6 +15,7 @@ import com.willfp.libreforge.effects.effects.EffectAddHolder
 import com.willfp.libreforge.effects.effects.EffectAddHolderInRadius
 import com.willfp.libreforge.effects.effects.EffectAddPermanentHolderInRadius
 import com.willfp.libreforge.effects.effects.EffectAddPoints
+import com.willfp.libreforge.effects.effects.EffectAOE
 import com.willfp.libreforge.effects.effects.EffectArmor
 import com.willfp.libreforge.effects.effects.EffectArmorToughness
 import com.willfp.libreforge.effects.effects.EffectArrowRing
@@ -205,6 +206,7 @@ object Effects {
     val TELEPORT_TO_GROUND: Effect = EffectTeleportToGround()
     val DROP_ITEM: Effect = EffectDropItem()
     val DROP_ITEM_FOR_PLAYER: Effect = EffectDropItemForPlayer()
+    val AOE: Effect = EffectAOE()
 
     /**
      * Get effect matching id.

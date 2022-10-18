@@ -38,7 +38,7 @@ object ParticleAnimations {
      *
      * @param animation The ParticleAnimation to add.
      */
-    fun addNewCondition(animation: ParticleAnimation) {
+    fun addNewAnimation(animation: ParticleAnimation) {
         BY_ID.remove(animation.id)
         BY_ID[animation.id] = animation
     }

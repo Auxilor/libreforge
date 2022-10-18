@@ -2,6 +2,8 @@ package com.willfp.libreforge.effects.effects.particles
 
 import org.bukkit.Location
 import org.bukkit.World
+import org.bukkit.util.Vector
+import org.joml.Vector2d
 import org.joml.Vector2f
 import org.joml.Vector3f
 
@@ -9,6 +11,11 @@ fun Vector3f.copy() = Vector3f(
     this.x,
     this.y,
     this.z
+)
+
+fun Vector2f.copy() = Vector2f(
+    this.x,
+    this.y
 )
 
 fun DirectionVector.copy() = DirectionVector(
@@ -46,6 +53,12 @@ fun Vector3f.toLocation(world: World) = Location(
 )
 
 fun Location.toVector3f() = Vector3f(
+    this.x.toFloat(),
+    this.y.toFloat(),
+    this.z.toFloat()
+)
+
+fun Vector.toVector3f() = Vector3f(
     this.x.toFloat(),
     this.y.toFloat(),
     this.z.toFloat()
