@@ -1,7 +1,6 @@
 package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.BlankHolder
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.CompileData
 import com.willfp.libreforge.effects.ConfiguredEffect
@@ -11,7 +10,6 @@ import com.willfp.libreforge.effects.effects.aoe.AOEShapes
 import com.willfp.libreforge.effects.effects.particles.toVector3f
 import com.willfp.libreforge.effects.invoke
 import com.willfp.libreforge.triggers.InvocationData
-import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers

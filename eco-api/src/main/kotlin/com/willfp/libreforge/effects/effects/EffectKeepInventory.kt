@@ -7,7 +7,7 @@ import com.willfp.libreforge.effects.Identifiers
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.PlayerDeathEvent
-import java.util.*
+import java.util.UUID
 
 class EffectKeepInventory : Effect("keep_inventory") {
     private val players = mutableMapOf<UUID, MutableList<UUID>>()

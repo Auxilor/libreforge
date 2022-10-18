@@ -10,7 +10,7 @@ import com.willfp.libreforge.triggers.wrappers.WrappedHungerEvent
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.FoodLevelChangeEvent
-import java.util.*
+import java.util.UUID
 import kotlin.math.ceil
 
 class EffectFoodMultiplier : Effect("food_multiplier") {

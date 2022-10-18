@@ -16,7 +16,6 @@ import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.mutate
-import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import java.util.UUID
 import kotlin.math.max
@@ -103,6 +102,12 @@ data class ConfiguredEffect internal constructor(
         val conditionsAreMet = unmetConditions.isEmpty()
 
         val (player, data, holder, _) = invocation
+
+        if (args.has("require")) {
+            if (args.getDoubleFromExpression("require") != 1.0) {
+                return
+            }
+        }
 
         if (args.has("chance")) {
             if (NumberUtils.randFloat(0.0, 100.0) > args.getDoubleFromExpression("chance", player)) {

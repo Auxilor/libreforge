@@ -1,11 +1,9 @@
 package com.willfp.libreforge.triggers.triggers
 
-import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.eco.core.integrations.mcmmo.McmmoManager
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import com.willfp.libreforge.triggers.wrappers.WrappedDamageEvent
 import com.willfp.libreforge.triggers.wrappers.WrappedMeleeDamageEvent
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player

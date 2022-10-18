@@ -6,7 +6,7 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
 import net.milkbowl.vault.permission.Permission
 import org.bukkit.entity.Player
-import java.util.*
+import java.util.UUID
 
 class EffectGivePermission(
     private val handler: Permission

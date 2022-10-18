@@ -10,7 +10,7 @@ import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.effects.MultiplierModifier
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
-import java.util.*
+import java.util.UUID
 
 class EffectJobsMoneyMultiplier : Effect("jobs_money_multiplier") {
     private val globalModifiers = mutableMapOf<UUID, MutableList<MultiplierModifier>>()

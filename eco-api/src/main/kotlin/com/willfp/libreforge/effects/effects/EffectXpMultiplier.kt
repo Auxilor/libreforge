@@ -10,7 +10,7 @@ import com.willfp.libreforge.effects.MultiplierModifier
 import com.willfp.libreforge.triggers.wrappers.WrappedXpEvent
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
-import java.util.*
+import java.util.UUID
 import kotlin.math.ceil
 
 class EffectXpMultiplier : Effect("xp_multiplier") {

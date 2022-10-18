@@ -17,7 +17,7 @@ import org.bukkit.entity.Shulker
 import org.bukkit.event.EventHandler
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.scoreboard.Team
-import java.util.*
+import java.util.UUID
 
 class EffectGlowNearbyBlocks : Effect(
     "glow_nearby_blocks",

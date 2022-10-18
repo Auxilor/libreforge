@@ -8,7 +8,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
-import java.util.*
+import java.util.UUID
 
 class EffectFeatherStep : Effect("feather_step") {
     private val players = mutableMapOf<UUID, MutableList<UUID>>()

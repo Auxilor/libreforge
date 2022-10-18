@@ -13,7 +13,7 @@ import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.InvocationData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
-import java.util.*
+import java.util.UUID
 
 class EffectAddHolder : Effect(
     "add_holder",

@@ -10,7 +10,7 @@ import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.effects.MultiplierModifier
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
-import java.util.*
+import java.util.UUID
 
 class EffectBossDropChanceMultiplier : Effect("boss_drop_chance_multiplier") {
     private val modifiers = mutableMapOf<UUID, MutableMap<String, MutableList<MultiplierModifier>>>()

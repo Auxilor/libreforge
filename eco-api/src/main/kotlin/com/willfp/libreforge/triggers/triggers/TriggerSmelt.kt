@@ -7,7 +7,6 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.block.Furnace
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
-import org.bukkit.event.inventory.CraftItemEvent
 import org.bukkit.event.inventory.FurnaceSmeltEvent
 
 class TriggerSmelt : Trigger(

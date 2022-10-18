@@ -8,8 +8,6 @@ import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.World
 import org.bukkit.entity.LivingEntity
-import org.bukkit.entity.Player
-import org.joml.Vector2d
 import org.joml.Vector2f
 import org.joml.Vector3f
 

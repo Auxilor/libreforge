@@ -7,8 +7,6 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
-import org.bukkit.attribute.Attribute
-import org.bukkit.entity.Mob
 import org.bukkit.event.Listener
 
 class EffectSpawnEntity : Effect(

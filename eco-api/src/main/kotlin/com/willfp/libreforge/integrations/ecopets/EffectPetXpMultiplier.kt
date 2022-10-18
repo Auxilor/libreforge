@@ -11,7 +11,7 @@ import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.effects.MultiplierModifier
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
-import java.util.*
+import java.util.UUID
 
 class EffectPetXpMultiplier : Effect("pet_xp_multiplier") {
     private val modifiers = mutableMapOf<UUID, MutableMap<Pet, MutableList<MultiplierModifier>>>()

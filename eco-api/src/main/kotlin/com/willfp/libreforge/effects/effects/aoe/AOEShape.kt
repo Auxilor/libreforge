@@ -5,7 +5,6 @@ import com.willfp.libreforge.ConfigurableProperty
 import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.World
 import org.bukkit.entity.LivingEntity
-import org.bukkit.entity.Player
 import org.joml.Vector3f
 
 abstract class AOEShape(id: String) : ConfigurableProperty(id) {
