@@ -3,7 +3,6 @@ package com.willfp.libreforge.effects.effects.particles
 import org.bukkit.Location
 import org.bukkit.World
 import org.bukkit.util.Vector
-import org.joml.Vector2d
 import org.joml.Vector2f
 import org.joml.Vector3f
 

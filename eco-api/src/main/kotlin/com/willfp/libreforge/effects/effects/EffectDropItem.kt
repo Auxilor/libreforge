@@ -1,7 +1,6 @@
 package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.drops.DropQueue
 import com.willfp.eco.core.items.Items
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect

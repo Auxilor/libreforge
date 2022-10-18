@@ -7,7 +7,7 @@ import com.willfp.libreforge.effects.Identifiers
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerCommandPreprocessEvent
-import java.util.*
+import java.util.UUID
 
 class EffectBlockCommands : Effect(
     "block_commands"

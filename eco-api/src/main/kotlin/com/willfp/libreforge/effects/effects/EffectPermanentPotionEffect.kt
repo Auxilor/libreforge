@@ -9,7 +9,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerRespawnEvent
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
-import java.util.*
+import java.util.UUID
 
 @Suppress("UNCHECKED_CAST")
 class EffectPermanentPotionEffect : Effect("permanent_potion_effect") {

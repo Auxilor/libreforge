@@ -9,7 +9,7 @@ import com.willfp.libreforge.givePoints
 import com.willfp.libreforge.takePoints
 import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.entity.Player
-import java.util.*
+import java.util.UUID
 
 class EffectAddPoints : Effect("add_points") {
     private val tracker = mutableMapOf<UUID, MutableMap<UUID, AddedPoint>>()

@@ -10,7 +10,7 @@ import com.willfp.libreforge.triggers.wrappers.WrappedRegenEvent
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityRegainHealthEvent
-import java.util.*
+import java.util.UUID
 
 class EffectRegenMultiplier : Effect("regen_multiplier") {
     private val modifiers = mutableMapOf<UUID, MutableList<MultiplierModifier>>()

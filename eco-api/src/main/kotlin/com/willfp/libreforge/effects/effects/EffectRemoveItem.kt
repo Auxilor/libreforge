@@ -9,7 +9,6 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
 import org.bukkit.Material
-import kotlin.math.max
 import kotlin.math.min
 
 class EffectRemoveItem: Effect(

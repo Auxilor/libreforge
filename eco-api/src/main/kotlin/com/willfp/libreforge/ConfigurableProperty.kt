@@ -2,7 +2,7 @@ package com.willfp.libreforge
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.effects.Effect
-import java.util.*
+import java.util.Objects
 
 abstract class ConfigurableProperty(
     val id: String

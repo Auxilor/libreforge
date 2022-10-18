@@ -2,7 +2,7 @@ package com.willfp.libreforge.effects
 
 import com.willfp.libreforge.LibReforgePlugin
 import org.bukkit.NamespacedKey
-import java.util.*
+import java.util.UUID
 
 class IDGenerator(
     private val uuid: UUID

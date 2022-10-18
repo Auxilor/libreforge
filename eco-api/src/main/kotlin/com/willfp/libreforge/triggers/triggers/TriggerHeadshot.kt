@@ -1,6 +1,5 @@
 package com.willfp.libreforge.triggers.triggers
 
-import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.eco.core.integrations.mcmmo.McmmoManager
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData

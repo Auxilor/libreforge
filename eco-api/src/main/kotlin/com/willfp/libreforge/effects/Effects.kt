@@ -10,12 +10,12 @@ import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.LibReforgePlugin
 import com.willfp.libreforge.chains.EffectChains
 import com.willfp.libreforge.conditions.Conditions
+import com.willfp.libreforge.effects.effects.EffectAOE
 import com.willfp.libreforge.effects.effects.EffectAddDamage
 import com.willfp.libreforge.effects.effects.EffectAddHolder
 import com.willfp.libreforge.effects.effects.EffectAddHolderInRadius
 import com.willfp.libreforge.effects.effects.EffectAddPermanentHolderInRadius
 import com.willfp.libreforge.effects.effects.EffectAddPoints
-import com.willfp.libreforge.effects.effects.EffectAOE
 import com.willfp.libreforge.effects.effects.EffectArmor
 import com.willfp.libreforge.effects.effects.EffectArmorToughness
 import com.willfp.libreforge.effects.effects.EffectArrowRing

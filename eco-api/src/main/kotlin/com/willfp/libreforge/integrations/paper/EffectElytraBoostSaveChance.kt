@@ -10,7 +10,7 @@ import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.effects.MultiplierModifier
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
-import java.util.*
+import java.util.UUID
 
 class EffectElytraBoostSaveChance : Effect("elytra_boost_save_chance") {
     private val modifiers = mutableMapOf<UUID, MutableList<MultiplierModifier>>()

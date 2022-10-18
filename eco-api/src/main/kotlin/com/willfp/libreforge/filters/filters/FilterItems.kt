@@ -5,8 +5,6 @@ import com.willfp.eco.core.items.Items
 import com.willfp.libreforge.filters.FilterComponent
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.wrappers.WrappedDropEvent
-import org.bukkit.entity.Item
-import org.checkerframework.checker.units.qual.t
 
 class FilterItems : FilterComponent() {
     override fun passes(data: TriggerData, config: Config): Boolean {

@@ -2,16 +2,11 @@ package com.willfp.libreforge.effects.effects.aoe
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
-import com.willfp.libreforge.effects.effects.particles.DirectionVector
-import com.willfp.libreforge.effects.effects.particles.copy
 import com.willfp.libreforge.effects.effects.particles.toLocation
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.World
 import org.bukkit.entity.LivingEntity
-import org.bukkit.entity.Player
-import org.joml.Vector2d
-import org.joml.Vector2f
 import org.joml.Vector3f
 
 object AOEShapeOffsetCircle: AOEShape("offset_circle") {
