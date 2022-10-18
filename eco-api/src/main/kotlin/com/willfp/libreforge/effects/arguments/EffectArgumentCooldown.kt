@@ -5,14 +5,14 @@ import com.willfp.eco.util.PlayerUtils
 import com.willfp.eco.util.StringUtils
 import com.willfp.libreforge.LibReforgePlugin
 import com.willfp.libreforge.effects.ConfiguredEffect
-import com.willfp.libreforge.effects.GenericEffectArgument
+import com.willfp.libreforge.effects.EffectArgument
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.InvocationData
 import org.bukkit.Sound
 import java.util.UUID
 import kotlin.math.ceil
 
-object EffectArgumentCooldown : GenericEffectArgument {
+object EffectArgumentCooldown : EffectArgument {
     // Maps ConfiguredEffect UUIDs to Player UUIDs mapped to expiry time
     private val cooldownTracker = mutableMapOf<UUID, MutableMap<UUID, Long>>()
 

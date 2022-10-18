@@ -6,7 +6,7 @@ import com.willfp.eco.util.PlayerUtils
 import com.willfp.eco.util.StringUtils
 import com.willfp.libreforge.LibReforgePlugin
 import com.willfp.libreforge.effects.ConfiguredEffect
-import com.willfp.libreforge.effects.GenericEffectArgument
+import com.willfp.libreforge.effects.EffectArgument
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.getPoints
 import com.willfp.libreforge.setPoints
@@ -14,7 +14,7 @@ import com.willfp.libreforge.toFriendlyPointName
 import com.willfp.libreforge.triggers.InvocationData
 import org.bukkit.Sound
 
-object EffectArgumentPointCost : GenericEffectArgument {
+object EffectArgumentPointCost : EffectArgument {
     private val plugin = LibReforgePlugin.instance
 
     override fun isPresent(config: Config): Boolean =
