@@ -13,6 +13,7 @@ import com.willfp.libreforge.effects.arguments.EffectArgumentChance
 import com.willfp.libreforge.effects.arguments.EffectArgumentCooldown
 import com.willfp.libreforge.effects.arguments.EffectArgumentCost
 import com.willfp.libreforge.effects.arguments.EffectArgumentEvery
+import com.willfp.libreforge.effects.arguments.EffectArgumentPointCost
 import com.willfp.libreforge.effects.arguments.EffectArgumentRequire
 import com.willfp.libreforge.effects.effects.EffectAOE
 import com.willfp.libreforge.effects.effects.EffectAddDamage
@@ -111,7 +112,6 @@ import com.willfp.libreforge.separatorAmbivalent
 import com.willfp.libreforge.triggers.DataMutators
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.Triggers
-import com.willfp.libreforge.triggers.triggers.TriggerStatic
 import java.util.UUID
 
 @Suppress("UNUSED")
@@ -218,6 +218,7 @@ object Effects {
         addNewGenericArgument(EffectArgumentCooldown)
         addNewGenericArgument(EffectArgumentCost)
         addNewGenericArgument(EffectArgumentEvery)
+        addNewGenericArgument(EffectArgumentPointCost)
         addNewGenericArgument(EffectArgumentRequire)
     }
 
@@ -336,7 +337,7 @@ object Effects {
         }
 
         val filter = config.getSubsectionOrNull("filters").let {
-            if (!effect.supportsFilters && it != null) {
+            if (effect.isPermanent && it != null) {
                 LibReforgePlugin.instance.logViolation(
                     effect.id,
                     context,
@@ -352,7 +353,7 @@ object Effects {
         val triggers = config.getStrings("triggers").let {
             val triggers = mutableListOf<Trigger>()
 
-            if (it.isNotEmpty() && effect.applicableTriggers.isEmpty()) {
+            if (it.isNotEmpty() && effect.isPermanent) {
                 LibReforgePlugin.instance.logViolation(
                     effect.id,
                     context,
@@ -365,7 +366,7 @@ object Effects {
             }
 
             if (chainLike) {
-                if (effect.applicableTriggers.isEmpty()) {
+                if (effect.isPermanent) {
                     LibReforgePlugin.instance.logViolation(
                         effect.id,
                         context,
@@ -379,7 +380,7 @@ object Effects {
             }
 
             if (!chainLike) {
-                if (effect.applicableTriggers.isNotEmpty() && it.isEmpty()) {
+                if (!effect.isPermanent && it.isEmpty()) {
                     LibReforgePlugin.instance.logViolation(
                         effect.id,
                         context,
@@ -407,7 +408,7 @@ object Effects {
                     return@let null
                 }
 
-                if (!effect.applicableTriggers.contains(trigger) && trigger !is TriggerStatic) {
+                if (!effect.supportsTrigger(trigger)) {
                     LibReforgePlugin.instance.logViolation(
                         effect.id,
                         context,

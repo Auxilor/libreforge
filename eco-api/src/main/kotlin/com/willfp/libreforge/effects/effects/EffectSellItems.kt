@@ -6,7 +6,6 @@ import com.willfp.eco.core.integrations.shop.getPrice
 import com.willfp.eco.core.items.Items
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.RunOrder
-import com.willfp.libreforge.effects.RunsAt
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -16,12 +15,12 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
-@RunsAt(RunOrder.END)
 class EffectSellItems : Effect(
     "sell_items",
     triggers = Triggers.withParameters(
         TriggerParameter.PLAYER
-    )
+    ),
+    runOrder = RunOrder.END
 ) {
     override fun handle(data: TriggerData, config: Config) {
         val player = data.player ?: return

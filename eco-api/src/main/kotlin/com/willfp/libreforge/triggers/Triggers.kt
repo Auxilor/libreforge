@@ -134,22 +134,12 @@ object Triggers {
         return BY_ID.values.toSet()
     }
 
-    fun all(): () -> Set<Trigger> {
-        return { values() }
+    fun all(): (Trigger) -> Boolean {
+        return { true }
     }
 
-    fun withParameters(vararg parameters: TriggerParameter): () -> Set<Trigger> {
-        return {
-            val found = mutableSetOf<Trigger>()
-
-            for (trigger in values()) {
-                if (trigger.parameters.containsAll(parameters.toSet())) {
-                    found.add(trigger)
-                }
-            }
-
-            found
-        }
+    fun withParameters(vararg parameters: TriggerParameter): (Trigger) -> Boolean {
+        return { it.parameters.containsAll(parameters.toSet()) }
     }
 
     fun getById(id: String): Trigger? {

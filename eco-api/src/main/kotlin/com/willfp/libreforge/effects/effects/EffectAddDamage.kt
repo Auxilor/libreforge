@@ -4,20 +4,19 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.RunOrder
-import com.willfp.libreforge.effects.RunsAt
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
 import com.willfp.libreforge.triggers.wrappers.WrappedDamageEvent
 
-@RunsAt(RunOrder.LATE)
 class EffectAddDamage : Effect(
     "add_damage",
     triggers = Triggers.withParameters(
         TriggerParameter.EVENT
     ),
-    noDelay = true
+    noDelay = true,
+    runOrder = RunOrder.LATE
 ) {
     override fun handle(data: TriggerData, config: Config) {
         val event = data.event as? WrappedDamageEvent ?: return
