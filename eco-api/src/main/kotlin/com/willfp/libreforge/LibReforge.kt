@@ -213,6 +213,7 @@ abstract class LibReforgePlugin @JvmOverloads constructor(
         initPointPlaceholders()
         this.eventManager.registerListener(TridentHolderDataAttacher(this))
         this.eventManager.registerListener(MovementConditionListener())
+        this.eventManager.registerListener(HitsTracker(this))
         this.eventManager.registerListener(EffectCollisionFixer(this))
         this.eventManager.registerListener(InvocationPlaceholderListener)
         for (condition in Conditions.values()) {
