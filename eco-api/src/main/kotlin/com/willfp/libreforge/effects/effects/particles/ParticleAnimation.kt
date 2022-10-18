@@ -14,7 +14,7 @@ abstract class ParticleAnimation(
     }
 
     private fun register() {
-        ParticleAnimations.addNewCondition(this)
+        ParticleAnimations.addNewAnimation(this)
     }
 
     abstract fun getParticleLocations(

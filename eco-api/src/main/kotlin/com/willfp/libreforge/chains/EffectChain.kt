@@ -31,6 +31,6 @@ class ChainComponentEffect(
         data: InvocationData,
         namedArgs: Iterable<NamedArgument>
     ) {
-        effect(data, ignoreTriggerList = true, namedArguments = namedArgs)
+        effect(data, acceptAllTriggers = true, namedArguments = namedArgs)
     }
 }

@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.eco.core.integrations.economy.EconomyManager
 import com.willfp.eco.util.NumberUtils
+import com.willfp.libreforge.BlankHolder
 import com.willfp.libreforge.LibReforgePlugin
 import com.willfp.libreforge.conditions.ConfiguredCondition
 import com.willfp.libreforge.events.EffectActivateEvent
@@ -12,7 +13,10 @@ import com.willfp.libreforge.filters.Filter
 import com.willfp.libreforge.triggers.ConfiguredDataMutator
 import com.willfp.libreforge.triggers.InvocationData
 import com.willfp.libreforge.triggers.Trigger
+import com.willfp.libreforge.triggers.TriggerData
+import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.mutate
+import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import java.util.UUID
 import kotlin.math.max
@@ -49,10 +53,11 @@ data class ConfiguredEffect internal constructor(
 
     internal operator fun invoke(
         rawInvocation: InvocationData,
-        ignoreTriggerList: Boolean = false,
+        acceptAllTriggers: Boolean = false,
         namedArguments: Iterable<NamedArgument> = emptyList(),
+        useTriggerPlayerForConditions: Boolean = false
     ) {
-        if (!ignoreTriggerList) {
+        if (!acceptAllTriggers) {
             if (!triggers.contains(rawInvocation.trigger)) {
                 return
             }
@@ -81,8 +86,17 @@ data class ConfiguredEffect internal constructor(
 
         val unmetConditions = mutableListOf<ConfiguredCondition>()
         for (condition in conditions) {
-            if (!condition.isMet(invocation.player)) {
-                unmetConditions.add(condition)
+            if (useTriggerPlayerForConditions) {
+                val player = invocation.data.player
+                if (player != null) {
+                    if (!condition.isMet(player)) {
+                        unmetConditions.add(condition)
+                    }
+                }
+            } else {
+                if (!condition.isMet(invocation.player)) {
+                    unmetConditions.add(condition)
+                }
             }
         }
 
@@ -176,7 +190,7 @@ data class ConfiguredEffect internal constructor(
                 for (notMetEffect in condition.notMetEffects) {
                     notMetEffect(
                         invocation,
-                        ignoreTriggerList = true,
+                        acceptAllTriggers = true,
                         namedArguments = namedArguments
                     )
                 }
@@ -268,3 +282,31 @@ fun Iterable<ConfiguredEffect>.inRunOrder(): Set<ConfiguredEffect> =
 
         EffectSet(list)
     }
+
+operator fun Iterable<ConfiguredEffect>.invoke(
+    player: Player,
+    data: TriggerData,
+    namedArguments: Iterable<NamedArgument> = emptyList(),
+    useTriggerPlayerForConditions: Boolean = false
+) = this.forEach { it(
+    BlankTrigger.createInvocation(player, data),
+    acceptAllTriggers = true,
+    namedArguments = namedArguments,
+    useTriggerPlayerForConditions = useTriggerPlayerForConditions
+) }
+
+private object BlankTrigger : Trigger(
+    "blank",
+    TriggerParameter.values().toList()
+) {
+    fun createInvocation(player: Player, data: TriggerData): InvocationData {
+        return InvocationData(
+            player,
+            data,
+            BlankHolder,
+            this,
+            null,
+            1.0
+        )
+    }
+}

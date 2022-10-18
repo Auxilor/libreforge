@@ -11,6 +11,12 @@ private val lineCache = Caffeine.newBuilder()
     .expireAfterWrite(1, TimeUnit.SECONDS)
     .build<Int, List<String>>()
 
+internal object BlankHolder : Holder {
+    override val id = "internal:blank"
+    override val conditions = emptySet<ConfiguredCondition>()
+    override val effects = emptySet<ConfiguredEffect>()
+}
+
 interface Holder {
     val id: String
     val effects: Set<ConfiguredEffect>
