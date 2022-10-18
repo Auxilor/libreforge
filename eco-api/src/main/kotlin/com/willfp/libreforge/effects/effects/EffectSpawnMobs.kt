@@ -18,6 +18,7 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDeathEvent
 import org.bukkit.event.entity.EntityTargetEvent
+import java.util.UUID
 
 
 class EffectSpawnMobs : Effect(
@@ -30,9 +31,10 @@ class EffectSpawnMobs : Effect(
         val location = data.location ?: return
         location.world ?: return
         val victim = data.victim
+        val player = data.player
 
         if (victim != null) {
-            if (victim.getMetadata("eco-target").isNotEmpty()) {
+            if (victim.getMetadata("spawn-mobs-target").isNotEmpty()) {
                 return
             }
         }
@@ -56,7 +58,11 @@ class EffectSpawnMobs : Effect(
 
             if (victim != null) {
                 mob.target = victim
-                mob.setMetadata("eco-target", plugin.metadataValueFactory.create(victim))
+                mob.setMetadata("spawn-mobs-target", plugin.createMetadataValue(victim))
+            }
+
+            if (player != null) {
+                mob.setMetadata("spawn-mobs-avoid", plugin.createMetadataValue(player.uniqueId))
             }
 
             mob.health = health
@@ -101,19 +107,27 @@ class EffectSpawnMobs : Effect(
 
     @EventHandler
     fun onSwitchTarget(event: EntityTargetEvent) {
-        if (event.entity.getMetadata("eco-target").isEmpty()) {
-            return
+        if (event.entity.getMetadata("spawn-mobs-target").isNotEmpty()) {
+            val target = event.entity.getMetadata("spawn-mobs-target")[0].value() as? LivingEntity ?: return
+            event.target = target
         }
-        val target = event.entity.getMetadata("eco-target")[0].value() as LivingEntity?
-        event.target = target
+
+        if (event.entity.getMetadata("spawn-mobs-avoid").isNotEmpty()) {
+            val uuid = event.entity.getMetadata("spawn-mobs-avoid")[0].value() as? UUID ?: return
+            if (event.target?.uniqueId == uuid) {
+                event.isCancelled = true
+            }
+        }
     }
 
     @EventHandler(priority = EventPriority.LOW)
     fun onDropItem(event: EntityDeathEvent) {
-        if (event.entity.getMetadata("eco-target").isEmpty()) {
+        if (event.entity.getMetadata("spawn-mobs-target").isEmpty()) {
             return
         }
+
         event.drops.clear()
+
         event.droppedExp = 0
     }
 }

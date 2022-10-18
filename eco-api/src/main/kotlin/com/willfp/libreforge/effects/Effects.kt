@@ -34,6 +34,8 @@ import com.willfp.libreforge.effects.effects.EffectDamageMultiplier
 import com.willfp.libreforge.effects.effects.EffectDamageNearbyEntities
 import com.willfp.libreforge.effects.effects.EffectDamageVictim
 import com.willfp.libreforge.effects.effects.EffectDrill
+import com.willfp.libreforge.effects.effects.EffectDropItem
+import com.willfp.libreforge.effects.effects.EffectDropItemForPlayer
 import com.willfp.libreforge.effects.effects.EffectExtinguish
 import com.willfp.libreforge.effects.effects.EffectFeatherStep
 import com.willfp.libreforge.effects.effects.EffectFoodMultiplier
@@ -201,6 +203,8 @@ object Effects {
     val KNOCK_AWAY: Effect = EffectKnockAway()
     val PULL_IN: Effect = EffectPullIn()
     val TELEPORT_TO_GROUND: Effect = EffectTeleportToGround()
+    val DROP_ITEM: Effect = EffectDropItem()
+    val DROP_ITEM_FOR_PLAYER: Effect = EffectDropItemForPlayer()
 
     /**
      * Get effect matching id.
