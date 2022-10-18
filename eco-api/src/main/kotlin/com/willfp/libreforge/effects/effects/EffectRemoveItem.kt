@@ -8,6 +8,9 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
+import org.bukkit.Material
+import kotlin.math.max
+import kotlin.math.min
 
 class EffectRemoveItem: Effect(
     "remove_item",
@@ -16,13 +19,31 @@ class EffectRemoveItem: Effect(
     override fun handle(data: TriggerData, config: Config) {
         val player = data.player ?: return
 
-        val item = Items.lookup(config.getString("item"))
+        val test = Items.lookup(config.getString("item"))
+        val amount = test.item.amount
 
-        if (item is EmptyTestableItem) {
+        if (test is EmptyTestableItem) {
             return
         }
 
-        player.inventory.remove(item.item)
+        var toRemove = amount
+
+        for (itemStack in player.inventory) {
+            if (test.matches(itemStack)) {
+                val removed = min(toRemove, itemStack.amount)
+
+                if (removed == itemStack.amount) {
+                    itemStack.type = Material.AIR
+                }
+
+                itemStack.amount -= removed
+                toRemove -= removed
+
+                if (toRemove <= 0) {
+                    return
+                }
+            }
+        }
     }
 
     override fun validateConfig(config: Config): List<ConfigViolation> {
