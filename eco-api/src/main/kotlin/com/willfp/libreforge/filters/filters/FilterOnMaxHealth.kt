@@ -1,11 +1,11 @@
 package com.willfp.libreforge.filters.filters
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.filters.FilterComponent
+import com.willfp.libreforge.filters.Filter
 import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.attribute.Attribute
 
-class FilterOnMaxHealth : FilterComponent() {
+object FilterOnMaxHealth : Filter() {
     override fun passes(data: TriggerData, config: Config): Boolean {
         val entity = data.victim ?: return true
 
