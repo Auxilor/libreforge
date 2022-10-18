@@ -10,6 +10,7 @@ import org.bukkit.World
 import org.bukkit.entity.LivingEntity
 import org.joml.Vector2f
 import org.joml.Vector3f
+import kotlin.math.abs
 
 object AOEShapeCone: AOEShape("cone") {
     override fun getEntities(
@@ -44,7 +45,7 @@ object AOEShapeCone: AOEShape("cone") {
 
                 val angle = Math.toDegrees(direction2.angle(toEntityVector).toDouble())
 
-                angle <= maxAngle
+                abs(angle) <= maxAngle
             }
     }
 
