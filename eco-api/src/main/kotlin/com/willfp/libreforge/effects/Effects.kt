@@ -1,7 +1,6 @@
 package com.willfp.libreforge.effects
 
 import com.google.common.collect.HashBiMap
-import com.google.common.collect.ImmutableList
 import com.willfp.eco.core.config.TransientConfig
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.placeholder.InjectablePlaceholder
@@ -10,6 +9,11 @@ import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.LibReforgePlugin
 import com.willfp.libreforge.chains.EffectChains
 import com.willfp.libreforge.conditions.Conditions
+import com.willfp.libreforge.effects.arguments.EffectArgumentChance
+import com.willfp.libreforge.effects.arguments.EffectArgumentCooldown
+import com.willfp.libreforge.effects.arguments.EffectArgumentCost
+import com.willfp.libreforge.effects.arguments.EffectArgumentEvery
+import com.willfp.libreforge.effects.arguments.EffectArgumentRequire
 import com.willfp.libreforge.effects.effects.EffectAOE
 import com.willfp.libreforge.effects.effects.EffectAddDamage
 import com.willfp.libreforge.effects.effects.EffectAddHolder
@@ -113,6 +117,7 @@ import java.util.UUID
 @Suppress("UNUSED")
 object Effects {
     private val BY_ID = HashBiMap.create<String, Effect>()
+    private val GENERIC_ARGUMENTS = mutableSetOf<GenericEffectArgument>()
 
     val DAMAGE_MULTIPLIER: Effect = EffectDamageMultiplier()
     val CRIT_MULTIPLIER: Effect = EffectCritMultiplier()
@@ -208,6 +213,14 @@ object Effects {
     val DROP_ITEM_FOR_PLAYER: Effect = EffectDropItemForPlayer()
     val AOE: Effect = EffectAOE()
 
+    init {
+        addNewGenericArgument(EffectArgumentChance)
+        addNewGenericArgument(EffectArgumentCooldown)
+        addNewGenericArgument(EffectArgumentCost)
+        addNewGenericArgument(EffectArgumentEvery)
+        addNewGenericArgument(EffectArgumentRequire)
+    }
+
     /**
      * Get effect matching id.
      *
@@ -224,7 +237,7 @@ object Effects {
      * @return The effects.
      */
     fun values(): List<Effect> {
-        return ImmutableList.copyOf(BY_ID.values)
+        return BY_ID.values.toList()
     }
 
     /**
@@ -235,6 +248,24 @@ object Effects {
     fun addNewEffect(effect: Effect) {
         BY_ID.remove(effect.id)
         BY_ID[effect.id] = effect
+    }
+
+    /**
+     * Add new generic argument.
+     *
+     * @param argument The argument.
+     */
+    fun addNewGenericArgument(argument: GenericEffectArgument) {
+        GENERIC_ARGUMENTS += argument
+    }
+
+    /**
+     * List of all generic arguments.
+     *
+     * @return The arguments.
+     */
+    fun genericArguments(): List<GenericEffectArgument> {
+        return GENERIC_ARGUMENTS.toList()
     }
 
     /**
