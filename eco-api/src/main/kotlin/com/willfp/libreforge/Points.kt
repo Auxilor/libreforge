@@ -9,12 +9,9 @@ import com.willfp.eco.core.integrations.placeholder.PlaceholderManager
 import com.willfp.eco.core.placeholder.PlayerPlaceholder
 import com.willfp.eco.util.NamespacedKeyUtils
 import com.willfp.eco.util.NumberUtils
-import com.willfp.libreforge.events.EffectActivateEvent
 import com.willfp.libreforge.events.PointsChangeEvent
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
-import org.bukkit.event.EventHandler
-import org.bukkit.event.Listener
 
 private val keys = mutableMapOf<String, PersistentDataKey<Double>>()
 
@@ -81,29 +78,7 @@ fun Player.takePoints(type: String, points: Double) {
     this.setPoints(type, this.getPoints(type) - points)
 }
 
-private fun String.toFriendlyPointName(): String {
+fun String.toFriendlyPointName(): String {
     val config = LibReforgePlugin.instance.configYml.getSubsectionOrNull("point-names") ?: return this
     return config.getStringOrNull(this) ?: return this
-}
-
-class PointCostHandler : Listener {
-    @EventHandler
-    fun onTrigger(event: EffectActivateEvent) {
-        val player = event.player
-        val config = event.config
-        val effect = event.effect
-
-        if (config.has("point_cost")) {
-            val cost = config.getDoubleFromExpression("point_cost.cost", player)
-            val type = config.getString("point_cost.type")
-
-            if (player.getPoints(type) < cost) {
-                effect.sendCannotAffordTypeMessage(player, cost, type.toFriendlyPointName())
-                event.isCancelled = true
-                return
-            }
-
-            player.setPoints(type, player.getPoints(type) - cost)
-        }
-    }
 }
