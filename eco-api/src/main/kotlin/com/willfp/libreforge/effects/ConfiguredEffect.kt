@@ -2,8 +2,6 @@ package com.willfp.libreforge.effects
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
-import com.willfp.eco.core.integrations.economy.EconomyManager
-import com.willfp.eco.util.NumberUtils
 import com.willfp.libreforge.BlankHolder
 import com.willfp.libreforge.LibReforgePlugin
 import com.willfp.libreforge.conditions.ConfiguredCondition
@@ -19,8 +17,6 @@ import com.willfp.libreforge.triggers.mutate
 import org.bukkit.entity.Player
 import java.util.UUID
 import kotlin.math.max
-
-private val everyHandler = mutableMapOf<UUID, Int>()
 
 data class ConfiguredEffect internal constructor(
     val effect: Effect,
@@ -103,18 +99,6 @@ data class ConfiguredEffect internal constructor(
 
         val (player, data, holder, _) = invocation
 
-        if (args.has("require")) {
-            if (args.getDoubleFromExpression("require") != 1.0) {
-                return
-            }
-        }
-
-        if (args.has("chance")) {
-            if (NumberUtils.randFloat(0.0, 100.0) > args.getDoubleFromExpression("chance", player)) {
-                return
-            }
-        }
-
         if (data.player != null && data.victim != null) {
             if (!args.getBool("disable_antigrief_check")) {
                 if (!AntigriefManager.canInjure(data.player, data.victim)) {
@@ -133,63 +117,31 @@ data class ConfiguredEffect internal constructor(
             }
         }
 
-        val every = if (args.has("every")) args.getIntFromExpression("every", player) else 0
+        val metArguments = mutableListOf<GenericEffectArgument>()
+        val notMetArguments = mutableListOf<GenericEffectArgument>()
+        val presentArguments = mutableListOf<GenericEffectArgument>()
 
-        if (every > 0) {
-            var current = everyHandler[uuid] ?: 0
-            val prev = current
+        for (argument in Effects.genericArguments()) {
+            if (argument.isPresent(args)) {
+                presentArguments += argument
 
-            // Don't increment every if conditions aren't met
-            if (conditionsAreMet) {
-                current++
-            }
-
-            if (current >= every) {
-                current = 0
-            }
-
-            everyHandler[uuid] = current
-
-            if (prev != 0) {
-                return
-            }
-        }
-
-        // Don't bother with events if the condition is not met
-        if (conditionsAreMet) {
-            val preActivateEvent = EffectPreActivateEvent(player, holder, effect, args)
-            LibReforgePlugin.instance.server.pluginManager.callEvent(preActivateEvent)
-
-            if (preActivateEvent.isCancelled) {
-                return
-            }
-        }
-
-        if (effect.getCooldown(player, uuid) > 0) {
-            if (args.getBoolOrNull("send_cooldown_message") != false) {
-                // Don't send message if conditions aren't met
-
-                if (conditionsAreMet) {
-                    effect.sendCooldownMessage(player, uuid)
+                val met = argument.isMet(this, invocation, args)
+                if (met) {
+                    metArguments += argument
+                } else {
+                    notMetArguments += argument
                 }
             }
+        }
+
+        if (notMetArguments.isNotEmpty()) {
             return
         }
 
-        if (args.has("cost")) {
-            val cost = args.getDoubleFromExpression("cost", player)
-            if (!EconomyManager.hasAmount(player, cost)) {
-                effect.sendCannotAffordMessage(player, cost)
-                return
-            }
+        val preActivateEvent = EffectPreActivateEvent(player, holder, effect, args)
+        LibReforgePlugin.instance.server.pluginManager.callEvent(preActivateEvent)
 
-            // Don't remove money if conditions aren't met
-            if (conditionsAreMet) {
-                EconomyManager.removeMoney(player, cost)
-            }
-        }
-
-
+        // Not met effects should only run if the effect was already going to run
         if (!conditionsAreMet) {
             for (condition in unmetConditions) {
                 for (notMetEffect in condition.notMetEffects) {
@@ -204,14 +156,28 @@ data class ConfiguredEffect internal constructor(
             return
         }
 
+        if (preActivateEvent.isCancelled) {
+            return
+        }
+
+        for (argument in notMetArguments) {
+            argument.ifNotMet(this, invocation, args)
+        }
+
+        for (argument in metArguments) {
+            argument.ifMet(this, invocation, args)
+        }
+
+        for (argument in presentArguments) {
+            argument.always(this, invocation, args)
+        }
+
         val activateEvent = EffectActivateEvent(player, holder, effect, args)
         LibReforgePlugin.instance.server.pluginManager.callEvent(activateEvent)
 
         if (activateEvent.isCancelled) {
             return
         }
-
-        effect.resetCooldown(player, args, uuid)
 
         for (i in 0 until repeatData.times) {
             /*
@@ -293,12 +259,14 @@ operator fun Iterable<ConfiguredEffect>.invoke(
     data: TriggerData,
     namedArguments: Iterable<NamedArgument> = emptyList(),
     useTriggerPlayerForConditions: Boolean = false
-) = this.forEach { it(
-    BlankTrigger.createInvocation(player, data),
-    acceptAllTriggers = true,
-    namedArguments = namedArguments,
-    useTriggerPlayerForConditions = useTriggerPlayerForConditions
-) }
+) = this.forEach {
+    it(
+        BlankTrigger.createInvocation(player, data),
+        acceptAllTriggers = true,
+        namedArguments = namedArguments,
+        useTriggerPlayerForConditions = useTriggerPlayerForConditions
+    )
+}
 
 private object BlankTrigger : Trigger(
     "blank",
