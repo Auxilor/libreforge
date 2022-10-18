@@ -118,11 +118,11 @@ data class ConfiguredEffect internal constructor(
             }
         }
 
-        val metArguments = mutableListOf<GenericEffectArgument>()
-        val notMetArguments = mutableListOf<GenericEffectArgument>()
-        val presentArguments = mutableListOf<GenericEffectArgument>()
+        val metArguments = mutableListOf<EffectArgument>()
+        val notMetArguments = mutableListOf<EffectArgument>()
+        val presentArguments = mutableListOf<EffectArgument>()
 
-        for (argument in Effects.genericArguments()) {
+        for (argument in Effects.effectArguments()) {
             if (argument.isPresent(args)) {
                 presentArguments += argument
 

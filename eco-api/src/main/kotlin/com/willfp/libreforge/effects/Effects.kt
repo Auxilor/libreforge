@@ -117,7 +117,7 @@ import java.util.UUID
 @Suppress("UNUSED")
 object Effects {
     private val BY_ID = HashBiMap.create<String, Effect>()
-    private val GENERIC_ARGUMENTS = mutableSetOf<GenericEffectArgument>()
+    private val EFFECT_ARGUMENTS = mutableSetOf<EffectArgument>()
 
     val DAMAGE_MULTIPLIER: Effect = EffectDamageMultiplier()
     val CRIT_MULTIPLIER: Effect = EffectCritMultiplier()
@@ -214,12 +214,12 @@ object Effects {
     val AOE: Effect = EffectAOE()
 
     init {
-        addNewGenericArgument(EffectArgumentChance)
-        addNewGenericArgument(EffectArgumentCooldown)
-        addNewGenericArgument(EffectArgumentCost)
-        addNewGenericArgument(EffectArgumentEvery)
-        addNewGenericArgument(EffectArgumentPointCost)
-        addNewGenericArgument(EffectArgumentRequire)
+        addNewEffectArgument(EffectArgumentChance)
+        addNewEffectArgument(EffectArgumentCooldown)
+        addNewEffectArgument(EffectArgumentCost)
+        addNewEffectArgument(EffectArgumentEvery)
+        addNewEffectArgument(EffectArgumentPointCost)
+        addNewEffectArgument(EffectArgumentRequire)
     }
 
     /**
@@ -252,21 +252,21 @@ object Effects {
     }
 
     /**
-     * Add new generic argument.
+     * Add new effect argument.
      *
      * @param argument The argument.
      */
-    fun addNewGenericArgument(argument: GenericEffectArgument) {
-        GENERIC_ARGUMENTS += argument
+    fun addNewEffectArgument(argument: EffectArgument) {
+        EFFECT_ARGUMENTS += argument
     }
 
     /**
-     * List of all generic arguments.
+     * List of all effect arguments.
      *
      * @return The arguments.
      */
-    fun genericArguments(): List<GenericEffectArgument> {
-        return GENERIC_ARGUMENTS.toList()
+    fun effectArguments(): List<EffectArgument> {
+        return EFFECT_ARGUMENTS.toList()
     }
 
     /**

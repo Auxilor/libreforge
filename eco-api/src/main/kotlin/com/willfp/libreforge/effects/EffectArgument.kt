@@ -3,7 +3,7 @@ package com.willfp.libreforge.effects
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.triggers.InvocationData
 
-interface GenericEffectArgument {
+interface EffectArgument {
     fun isPresent(
         config: Config
     ): Boolean

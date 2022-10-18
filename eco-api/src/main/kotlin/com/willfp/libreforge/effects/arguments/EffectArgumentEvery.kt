@@ -1,15 +1,13 @@
 package com.willfp.libreforge.effects.arguments
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.integrations.economy.balance
 import com.willfp.libreforge.effects.ConfiguredEffect
-import com.willfp.libreforge.effects.GenericEffectArgument
-import com.willfp.libreforge.getDoubleFromExpression
+import com.willfp.libreforge.effects.EffectArgument
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.InvocationData
 import java.util.UUID
 
-object EffectArgumentEvery: GenericEffectArgument {
+object EffectArgumentEvery: EffectArgument {
     private val everyHandler = mutableMapOf<UUID, MutableMap<UUID, Int>>()
 
     override fun isPresent(config: Config): Boolean =
