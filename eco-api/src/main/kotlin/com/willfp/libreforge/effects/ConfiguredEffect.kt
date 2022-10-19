@@ -136,15 +136,11 @@ data class ConfiguredEffect internal constructor(
             }
         }
 
-        if (notMetArguments.isNotEmpty()) {
-            return
-        }
-
         val preActivateEvent = EffectPreActivateEvent(player, holder, effect, args)
         LibReforgePlugin.instance.server.pluginManager.callEvent(preActivateEvent)
 
         // Not met effects should only run if the effect was already going to run
-        if (!conditionsAreMet) {
+        if (!conditionsAreMet && notMetArguments.isEmpty()) {
             for (condition in unmetConditions) {
                 for (notMetEffect in condition.notMetEffects) {
                     notMetEffect(
@@ -166,12 +162,13 @@ data class ConfiguredEffect internal constructor(
             argument.ifNotMet(this, invocation, args)
         }
 
-        for (argument in metArguments) {
-            argument.ifMet(this, invocation, args)
+        if (notMetArguments.isNotEmpty()) {
+            return
         }
 
-        for (argument in presentArguments) {
-            argument.always(this, invocation, args)
+        // Only take money / points / etc. if the effect is going to run
+        for (argument in metArguments) {
+            argument.ifMet(this, invocation, args)
         }
 
         val activateEvent = EffectActivateEvent(player, holder, effect, args)

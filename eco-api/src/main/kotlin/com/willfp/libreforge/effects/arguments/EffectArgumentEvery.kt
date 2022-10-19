@@ -19,7 +19,15 @@ object EffectArgumentEvery: EffectArgument {
         return current == 0
     }
 
-    override fun always(effect: ConfiguredEffect, data: InvocationData, config: Config) {
+    override fun ifMet(effect: ConfiguredEffect, data: InvocationData, config: Config) {
+        increment(effect, data, config)
+    }
+
+    override fun ifNotMet(effect: ConfiguredEffect, data: InvocationData, config: Config) {
+        increment(effect, data, config)
+    }
+
+    private fun increment(effect: ConfiguredEffect, data: InvocationData, config: Config) {
         val every = config.getIntFromExpression("every", data.data)
 
         var current = everyHandler.getOrPut(effect.uuid) { mutableMapOf() }[data.player.uniqueId] ?: 0

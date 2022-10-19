@@ -29,12 +29,4 @@ interface EffectArgument {
     ) {
 
     }
-
-    fun always(
-        effect: ConfiguredEffect,
-        data: InvocationData,
-        config: Config
-    ) {
-
-    }
 }
