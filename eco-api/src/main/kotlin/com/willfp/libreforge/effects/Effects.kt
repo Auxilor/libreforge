@@ -277,10 +277,12 @@ object Effects {
      * @return The compiled effects.
      */
     @JvmStatic
+    @JvmOverloads
     fun compile(
         configs: Iterable<Config>,
-        context: String
-    ): Set<ConfiguredEffect> = configs.mapNotNull { compile(it, context) }.inRunOrder()
+        context: String,
+        chainLike: Boolean = false
+    ): Set<ConfiguredEffect> = configs.mapNotNull { compile(it, context, chainLike = chainLike) }.inRunOrder()
 
     /**
      * Compile an effect.
@@ -424,9 +426,10 @@ object Effects {
             triggers
         } ?: return null
 
-        val conditions = config.getSubsections("conditions").mapNotNull {
-            Conditions.compile(it, "$context -> Effect-Specific Conditions")
-        }
+        val conditions = Conditions.compile(
+            config.getSubsections("conditions"),
+            "$context -> Effect-Specific Conditions"
+        )
 
         val mutators = config.getSubsections("mutators").mapNotNull {
             DataMutators.compile(it, "$context -> Mutators")

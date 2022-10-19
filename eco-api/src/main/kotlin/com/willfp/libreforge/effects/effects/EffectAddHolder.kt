@@ -84,13 +84,15 @@ class EffectAddHolder : Effect(
     }
 
     override fun makeCompileData(config: Config, context: String): CompileData {
-        val effects = config.getSubsections("effects").mapNotNull {
-            Effects.compile(it, "$context -> add_holder Effects")
-        }.toSet()
+        val effects = Effects.compile(
+            config.getSubsections("effects"),
+            "$context -> add_holder Effects"
+        )
 
-        val conditions = config.getSubsections("conditions").mapNotNull {
-            Conditions.compile(it, "$context -> add_holder Conditions")
-        }.toSet()
+        val conditions = Conditions.compile(
+            config.getSubsections("conditions"),
+            "$context -> add_holder Conditions"
+        )
 
         return HolderCompileData(
             HolderCompileData.UnfinishedHolder(

@@ -40,9 +40,10 @@ object Counters {
             1.0
         }
 
-        val conditions = config.getSubsections("conditions").mapNotNull {
-            Conditions.compile(it, "$context -> Conditions")
-        }
+        val conditions = Conditions.compile(
+            config.getSubsections("conditions"),
+            "$context -> Conditions"
+        )
 
         val filters = config.getSubsection("filters")
 
