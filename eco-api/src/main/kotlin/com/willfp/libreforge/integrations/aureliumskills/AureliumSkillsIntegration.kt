@@ -4,6 +4,7 @@ import com.willfp.eco.core.integrations.Integration
 import com.willfp.libreforge.LibReforgePlugin
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.effects.Effects
 
 object AureliumSkillsIntegration : Integration {
     private lateinit var ADD_STAT: Effect
@@ -14,7 +15,7 @@ object AureliumSkillsIntegration : Integration {
         ADD_STAT = EffectAddStat()
         HAS_MANA = ConditionHasMana()
         SKILL_XP_MULTIPLIER = EffectSkillXpMultiplier()
-        LibReforgePlugin.instance.eventManager.registerListener(UseManaHandler())
+        Effects.addNewEffectArgument(EffectArgumentManaCost)
     }
 
     override fun getPluginName(): String {
