@@ -3,6 +3,7 @@ package com.willfp.libreforge.conditions
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.items.Items
 import com.willfp.eco.core.items.TestableItem
+import com.willfp.eco.core.recipe.parts.EmptyTestableItem
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.CompileData
 import org.bukkit.entity.Player
@@ -23,10 +24,10 @@ abstract class GenericItemCondition(
     final override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()
 
-        if (!config.has("items")) violations.add(
+        if (!config.has("items") && !config.has("item")) violations.add(
             ConfigViolation(
-                "items",
-                "You must specify the list of items!"
+                "items / item",
+                "You must specify the item / list of items!"
             )
         )
 
@@ -34,9 +35,9 @@ abstract class GenericItemCondition(
     }
 
     final override fun makeCompileData(config: Config, context: String): CompileData {
-        return ItemCompileData(config.getStrings("items").map {
+        return ItemCompileData((config.getStrings("items").map {
             Items.lookup(it)
-        })
+        } + Items.lookup(config.getString("item"))).filterNot { it is EmptyTestableItem })
     }
 
     private class ItemCompileData(
