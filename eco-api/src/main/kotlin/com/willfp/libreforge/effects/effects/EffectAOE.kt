@@ -73,9 +73,11 @@ class EffectAOE : Effect(
     }
 
     override fun makeCompileData(config: Config, context: String): CompileData {
-        val effects = config.getSubsections("effects").mapNotNull {
-            Effects.compile(it, "$context -> aoe Effects")
-        }.toSet()
+        val effects = Effects.compile(
+            config.getSubsections("effects"),
+            "$context -> aoe Effects",
+            chainLike = true
+        )
 
         return AOECompileData(
             AOEEffects(

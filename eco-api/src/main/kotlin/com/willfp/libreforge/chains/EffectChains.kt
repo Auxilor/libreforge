@@ -46,9 +46,11 @@ object EffectChains {
 
         val components = mutableListOf<ChainComponent>()
 
-        config.getSubsections("effects").mapNotNull {
-            Effects.compile(it, "$context -> Chain ID $id", chainLike = true)
-        }.inRunOrder().mapTo(components) { ChainComponentEffect(it) }
+        Effects.compile(
+            config.getSubsections("effects"),
+            "$context -> Chain ID $id",
+            chainLike = true
+        ).mapTo(components) { ChainComponentEffect(it) }
 
         if (components.isEmpty()) {
             return null

@@ -121,13 +121,15 @@ class EffectAddHolderInRadius : Effect(
     }
 
     override fun makeCompileData(config: Config, context: String): CompileData {
-        val effects = config.getSubsections("effects").mapNotNull {
-            Effects.compile(it, "$context -> add_holder_in_radius Effects")
-        }.toSet()
+        val effects = Effects.compile(
+            config.getSubsections("effects"),
+            "$context -> add_holder_in_radius Effects"
+        )
 
-        val conditions = config.getSubsections("conditions").mapNotNull {
-            Conditions.compile(it, "$context -> add_holder_in_radius Conditions")
-        }.toSet()
+        val conditions = Conditions.compile(
+            config.getSubsections("conditions"),
+            "$context -> add_holder_in_radius Conditions"
+        )
 
         return HolderCompileData(
             HolderCompileData.UnfinishedHolder(

@@ -8,6 +8,7 @@ import com.willfp.libreforge.conditions.ConfiguredCondition
 import com.willfp.libreforge.events.EffectActivateEvent
 import com.willfp.libreforge.events.EffectPreActivateEvent
 import com.willfp.libreforge.filters.Filters
+import com.willfp.libreforge.triggers.BlankTrigger
 import com.willfp.libreforge.triggers.ConfiguredDataMutator
 import com.willfp.libreforge.triggers.InvocationData
 import com.willfp.libreforge.triggers.Trigger
@@ -267,20 +268,4 @@ operator fun Iterable<ConfiguredEffect>.invoke(
         namedArguments = namedArguments,
         useTriggerPlayerForConditions = useTriggerPlayerForConditions
     )
-}
-
-private object BlankTrigger : Trigger(
-    "blank",
-    TriggerParameter.values().toList()
-) {
-    fun createInvocation(player: Player, data: TriggerData): InvocationData {
-        return InvocationData(
-            player,
-            data,
-            BlankHolder,
-            this,
-            null,
-            1.0
-        )
-    }
 }
