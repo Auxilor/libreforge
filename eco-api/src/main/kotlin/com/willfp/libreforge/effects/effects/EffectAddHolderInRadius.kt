@@ -58,8 +58,7 @@ class EffectAddHolderInRadius : Effect(
     override fun handle(invocation: InvocationData, config: Config) {
         val player = invocation.data.player ?: return
         val location = invocation.data.location ?: return
-        val data = invocation.compileData as? HolderCompileData ?: return
-        val unfinished = data.data
+        val unfinished = invocation.compileData as? UnfinishedHolder ?: return
 
         val uuid = UUID.randomUUID()
 
@@ -131,22 +130,17 @@ class EffectAddHolderInRadius : Effect(
             "$context -> add_holder_in_radius Conditions"
         )
 
-        return HolderCompileData(
-            HolderCompileData.UnfinishedHolder(
-                effects,
-                conditions
-            )
+        return UnfinishedHolder(
+            effects,
+            conditions
         )
     }
 
-    private class HolderCompileData(
-        override val data: UnfinishedHolder
-    ) : CompileData {
-        data class UnfinishedHolder(
-            val effects: Set<ConfiguredEffect>,
-            val conditions: Set<ConfiguredCondition>
-        )
-    }
+    private data class UnfinishedHolder(
+        val effects: Set<ConfiguredEffect>,
+        val conditions: Set<ConfiguredCondition>
+    ) : CompileData
+
 
     private class AddedHolder(
         override val effects: Set<ConfiguredEffect>,

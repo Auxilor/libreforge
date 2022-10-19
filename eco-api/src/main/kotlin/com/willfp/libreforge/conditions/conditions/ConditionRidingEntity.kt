@@ -61,10 +61,10 @@ class ConditionRidingEntity : Condition("riding_entity") {
     }
 
     private class RidingEntityCompileData(
-        override val data: Iterable<TestableEntity>
+        private val entities: Iterable<TestableEntity>
     ) : CompileData {
         fun isMet(entity: Entity?): Boolean {
-            val list = data.toList()
+            val list = entities.toList()
 
             if (list.isEmpty()) {
                 return true

@@ -220,9 +220,7 @@ data class ConfiguredEffect internal constructor(
     }
 }
 
-interface CompileData {
-    val data: Any
-}
+interface CompileData
 
 internal data class RepeatData(
     var times: Int,

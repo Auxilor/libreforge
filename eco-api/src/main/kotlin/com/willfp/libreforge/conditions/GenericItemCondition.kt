@@ -10,14 +10,14 @@ import org.bukkit.inventory.ItemStack
 
 abstract class GenericItemCondition(
     id: String,
-    private val getItem: (Player) -> ItemStack?
+    private val getItems: (Player) -> Collection<ItemStack?>
 ): Condition(id) {
     final override fun isConditionMet(player: Player, config: Config, data: CompileData?): Boolean {
         if (data !is ItemCompileData) {
             return true
         }
 
-        return data.isMet(getItem(player))
+        return getItems(player).any { data.isMet(it) }
     }
 
     final override fun validateConfig(config: Config): List<ConfigViolation> {
@@ -40,14 +40,14 @@ abstract class GenericItemCondition(
     }
 
     private class ItemCompileData(
-        override val data: List<TestableItem>
+        private val items: List<TestableItem>
     ) : CompileData {
         fun isMet(itemStack: ItemStack?): Boolean {
-            if (data.isEmpty()) {
+            if (items.isEmpty()) {
                 return true
             }
 
-            return data.any { it.matches(itemStack) }
+            return items.any { it.matches(itemStack) }
         }
     }
 }

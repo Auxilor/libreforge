@@ -3,6 +3,9 @@ package com.willfp.libreforge.triggers
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.LibReforgePlugin
+import com.willfp.libreforge.effects.ConfiguredEffect
+import com.willfp.libreforge.effects.Effects
+import com.willfp.libreforge.effects.inRunOrder
 import com.willfp.libreforge.separatorAmbivalent
 import com.willfp.libreforge.triggers.mutators.MutatorLocationToBlock
 import com.willfp.libreforge.triggers.mutators.MutatorLocationToPlayer
@@ -42,6 +45,20 @@ object DataMutators {
         BY_ID.remove(mutator.id)
         BY_ID[mutator.id] = mutator
     }
+
+    /**
+     * Compile a group of data mutators.
+     *
+     * @param configs The mutator configs.
+     * @param context The context to log violations for.
+     * @return The compiled mutators.
+     */
+    @JvmStatic
+    fun compile(
+        configs: Iterable<Config>,
+        context: String
+    ): List<ConfiguredDataMutator> = configs.mapNotNull { compile(it, context) }
+
 
     /**
      * Compile data mutator.

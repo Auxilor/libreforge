@@ -13,7 +13,7 @@ class EffectChain internal constructor(
         namedArgs: Iterable<NamedArgument>
     ) {
         val chainCompileData = invocationData.compileData as? ChainCompileData ?: return
-        chainCompileData.data(invocationData, namedArgs, components)
+        chainCompileData.invoker(invocationData, namedArgs, components)
     }
 }
 

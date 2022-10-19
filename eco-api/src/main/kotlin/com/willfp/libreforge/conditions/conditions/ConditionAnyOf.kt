@@ -38,16 +38,8 @@ class ConditionAnyOf : Condition("any_of") {
     }
 
     private class AnyOfCompileData(
-        override val data: Iterable<ConfiguredCondition>
+        private val conditions: Set<ConfiguredCondition>
     ) : CompileData {
-        fun isMet(player: Player): Boolean {
-            val list = data.toList()
-
-            if (list.isEmpty()) {
-                return true
-            }
-
-            return list.any { it.isMet(player) }
-        }
+        fun isMet(player: Player) = conditions.any { it.isMet(player) }
     }
 }

@@ -52,8 +52,7 @@ class EffectAddPermanentHolderInRadius : Effect("add_permanent_holder_in_radius"
     }
 
     override fun handleEnable(player: Player, config: Config, identifiers: Identifiers, compileData: CompileData?) {
-        val data = compileData as? HolderCompileData ?: return
-        val unfinished = data.data
+        val unfinished = compileData as? UnfinishedHolder ?: return
 
         val uuid = identifiers.uuid
 
@@ -91,11 +90,9 @@ class EffectAddPermanentHolderInRadius : Effect("add_permanent_holder_in_radius"
             "$context -> add_permanent_holder_in_radius Conditions"
         )
 
-        return HolderCompileData(
-            HolderCompileData.UnfinishedHolder(
-                effects,
-                conditions
-            )
+        return UnfinishedHolder(
+            effects,
+            conditions
         )
     }
 
@@ -126,14 +123,10 @@ class EffectAddPermanentHolderInRadius : Effect("add_permanent_holder_in_radius"
         return violations
     }
 
-    private class HolderCompileData(
-        override val data: UnfinishedHolder
-    ) : CompileData {
-        data class UnfinishedHolder(
-            val effects: Set<ConfiguredEffect>,
-            val conditions: Set<ConfiguredCondition>
-        )
-    }
+    private data class UnfinishedHolder(
+        val effects: Set<ConfiguredEffect>,
+        val conditions: Set<ConfiguredCondition>
+    ) : CompileData
 
     private class AddedHolder(
         override val effects: Set<ConfiguredEffect>,
