@@ -21,7 +21,7 @@ class EffectRunChainInline : Effect(
 ) {
     override fun handle(invocation: InvocationData, config: Config) {
         val compileData = invocation.compileData as? InlineEffectChainCompileData ?: return
-        val chain = compileData.data
+        val chain = compileData.chain
         val namedArgs = mutableListOf<NamedArgument>()
         val args = config.getSubsection("chain_args")
 
@@ -84,7 +84,7 @@ class EffectRunChainInline : Effect(
     }
 
     private class InlineEffectChainCompileData(
-        override val data: EffectChain,
+        val chain: EffectChain,
         val child: ChainCompileData
     ) : CompileData
 }

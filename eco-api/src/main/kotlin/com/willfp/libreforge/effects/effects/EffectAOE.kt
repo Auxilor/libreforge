@@ -24,7 +24,7 @@ class EffectAOE : Effect(
 ) {
     override fun handle(invocation: InvocationData, config: Config) {
         val player = invocation.data.player ?: return
-        val effects = invocation.compileData?.data as? AOEEffects ?: return
+        val effects = invocation.compileData as? AOEEffects ?: return
 
         val shape = AOEShapes.getByID(config.getString("shape")) ?: return
 
@@ -79,20 +79,14 @@ class EffectAOE : Effect(
             chainLike = true
         )
 
-        return AOECompileData(
-            AOEEffects(
-                effects
-            )
+        return AOEEffects(
+            effects
         )
     }
 
-    private class AOECompileData(
-        override val data: AOEEffects
-    ) : CompileData
-
     private data class AOEEffects(
         val effects: Set<ConfiguredEffect>
-    ) {
+    ) : CompileData {
         operator fun invoke(player: Player, victim: LivingEntity) {
             effects(
                 player,
