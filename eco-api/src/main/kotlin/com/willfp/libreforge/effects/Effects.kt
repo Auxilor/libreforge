@@ -274,6 +274,8 @@ object Effects {
      *
      * @param configs The effect configs.
      * @param context The context to log violations for.
+     * @param chainLike If effects should allow all triggers and prevent
+     *     permanent effects.
      * @return The compiled effects.
      */
     @JvmStatic
@@ -289,6 +291,8 @@ object Effects {
      *
      * @param cfg The config for the effect.
      * @param context The context to log violations for.
+     * @param chainLike If effects should allow all triggers and prevent
+     *     permanent effects.
      * @return The configured effect, or null if invalid.
      */
     @JvmStatic

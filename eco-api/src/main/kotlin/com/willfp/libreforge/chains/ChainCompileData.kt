@@ -3,17 +3,17 @@ package com.willfp.libreforge.chains
 import com.willfp.libreforge.effects.CompileData
 
 interface ChainCompileData : CompileData {
-    override val data: ChainInvoker
+    val invoker: ChainInvoker
 }
 
 object NormalChainCompileData : ChainCompileData {
-    override val data = NormalChainInvoker
+    override val invoker = NormalChainInvoker
 }
 
 class CycleChainCompileData : ChainCompileData {
-    override val data = CycleChainInvoker()
+    override val invoker = CycleChainInvoker()
 }
 
 class RandomChainCompileData : ChainCompileData {
-    override val data = RandomChainInvoker
+    override val invoker = RandomChainInvoker
 }

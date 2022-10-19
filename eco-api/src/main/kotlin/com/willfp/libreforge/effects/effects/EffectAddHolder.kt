@@ -32,8 +32,7 @@ class EffectAddHolder : Effect(
 
     override fun handle(invocation: InvocationData, config: Config) {
         val player = invocation.data.player ?: return
-        val data = invocation.compileData as? HolderCompileData ?: return
-        val unfinished = data.data
+        val unfinished = invocation.compileData as? UnfinishedHolder ?: return
 
         val uuid = UUID.randomUUID()
 
@@ -94,22 +93,16 @@ class EffectAddHolder : Effect(
             "$context -> add_holder Conditions"
         )
 
-        return HolderCompileData(
-            HolderCompileData.UnfinishedHolder(
-                effects,
-                conditions
-            )
+        return UnfinishedHolder(
+            effects,
+            conditions
         )
     }
 
-    private class HolderCompileData(
-        override val data: UnfinishedHolder
-    ) : CompileData {
-        data class UnfinishedHolder(
-            val effects: Set<ConfiguredEffect>,
-            val conditions: Set<ConfiguredCondition>
-        )
-    }
+    private data class UnfinishedHolder(
+        val effects: Set<ConfiguredEffect>,
+        val conditions: Set<ConfiguredCondition>
+    ) : CompileData
 
     private class AddedHolder(
         override val effects: Set<ConfiguredEffect>,
