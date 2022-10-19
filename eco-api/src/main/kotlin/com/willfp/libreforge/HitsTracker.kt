@@ -33,7 +33,7 @@ class HitsTracker(
         val entity = event.data.victim ?: return
 
         @Suppress("UNCHECKED_CAST")
-        val map = entity.getMetadata(key).firstOrNull() as? MutableMap<UUID, Int> ?: mutableMapOf()
+        val map = entity.getMetadata(key).firstOrNull()?.value() as? MutableMap<UUID, Int> ?: mutableMapOf()
         val hits = entity.getHits(player)
         if (entity.health >= entity.getAttribute(Attribute.GENERIC_MAX_HEALTH)!!.value) {
             map[player.uniqueId] = 1
@@ -48,6 +48,6 @@ class HitsTracker(
 
 fun LivingEntity.getHits(player: Player): Int {
     @Suppress("UNCHECKED_CAST")
-    val map = this.getMetadata(key).firstOrNull() as? MutableMap<UUID, Int> ?: mutableMapOf()
+    val map = this.getMetadata(key).firstOrNull()?.value() as? MutableMap<UUID, Int> ?: mutableMapOf()
     return map[player.uniqueId] ?: 0
 }
