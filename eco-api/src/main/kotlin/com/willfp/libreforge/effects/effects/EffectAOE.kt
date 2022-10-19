@@ -34,7 +34,7 @@ class EffectAOE : Effect(
             player.location.world,
             config,
             invocation.data
-        )) {
+        ).filter { it != player }) {
             effects(player, entity)
         }
     }
