@@ -21,8 +21,6 @@ object EffectArgumentCooldown : EffectArgument {
     override fun isPresent(config: Config): Boolean = config.has("cooldown")
 
     override fun isMet(effect: ConfiguredEffect, data: InvocationData, config: Config): Boolean {
-        println("Cooldown: ${getCooldown(effect, data)}")
-        println("Tracker: $cooldownTracker")
         return getCooldown(effect, data) <= 0
     }
 
