@@ -2,45 +2,18 @@ package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
-import com.willfp.libreforge.effects.Effect
-import com.willfp.libreforge.effects.Identifiers
+import com.willfp.libreforge.effects.GenericAttributeMultiplierEffect
 import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeModifier
 import org.bukkit.entity.Player
 
-class EffectKnockbackMultiplier : Effect("knockback_multiplier") {
-    override fun handleEnable(
-        player: Player,
-        config: Config,
-        identifiers: Identifiers
-    ) {
-        val attribute = player.getAttribute(Attribute.GENERIC_ATTACK_KNOCKBACK) ?: return
-        val uuid = identifiers.uuid
-        attribute.removeModifier(AttributeModifier(uuid, this.id, 0.0, AttributeModifier.Operation.MULTIPLY_SCALAR_1))
-        attribute.addModifier(
-            AttributeModifier(
-                uuid,
-                this.id,
-                config.getDoubleFromExpression("multiplier", player) - 1,
-                AttributeModifier.Operation.MULTIPLY_SCALAR_1
-            )
-        )
-    }
-
-    override fun handleDisable(
-        player: Player,
-        identifiers: Identifiers
-    ) {
-        val attribute = player.getAttribute(Attribute.GENERIC_ATTACK_KNOCKBACK) ?: return
-        attribute.removeModifier(
-            AttributeModifier(
-                identifiers.uuid,
-                this.id,
-                0.0,
-                AttributeModifier.Operation.MULTIPLY_SCALAR_1
-            )
-        )
-    }
+class EffectKnockbackMultiplier : GenericAttributeMultiplierEffect(
+    "knockback_multiplier",
+    Attribute.GENERIC_ATTACK_KNOCKBACK,
+    AttributeModifier.Operation.MULTIPLY_SCALAR_1
+) {
+    override fun getValue(config: Config, player: Player) =
+        config.getDoubleFromExpression("multiplier", player) - 1
 
     override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()

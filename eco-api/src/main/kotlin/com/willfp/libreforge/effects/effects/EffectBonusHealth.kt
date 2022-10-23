@@ -2,46 +2,18 @@ package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
-import com.willfp.libreforge.effects.Effect
-import com.willfp.libreforge.effects.Identifiers
+import com.willfp.libreforge.effects.GenericAttributeMultiplierEffect
 import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeModifier
 import org.bukkit.entity.Player
 
-class EffectBonusHealth : Effect("bonus_health") {
-    override fun handleEnable(
-        player: Player,
-        config: Config,
-        identifiers: Identifiers
-    ) {
-        val attribute = player.getAttribute(Attribute.GENERIC_MAX_HEALTH) ?: return
-        val uuid = identifiers.uuid
-        attribute.removeModifier(AttributeModifier(uuid, this.id, 0.0, AttributeModifier.Operation.ADD_NUMBER))
-
-        attribute.addModifier(
-            AttributeModifier(
-                uuid,
-                this.id,
-                config.getIntFromExpression("health", player).toDouble(),
-                AttributeModifier.Operation.ADD_NUMBER
-            )
-        )
-    }
-
-    override fun handleDisable(
-        player: Player,
-        identifiers: Identifiers
-    ) {
-        val attribute = player.getAttribute(Attribute.GENERIC_MAX_HEALTH) ?: return
-        attribute.removeModifier(
-            AttributeModifier(
-                identifiers.uuid,
-                this.id,
-                0.0,
-                AttributeModifier.Operation.ADD_NUMBER
-            )
-        )
-    }
+class EffectBonusHealth : GenericAttributeMultiplierEffect(
+    "bonus_health",
+    Attribute.GENERIC_MAX_HEALTH,
+    AttributeModifier.Operation.ADD_NUMBER
+) {
+    override fun getValue(config: Config, player: Player) =
+        config.getIntFromExpression("health", player).toDouble()
 
     override fun validateConfig(config: Config): List<ConfigViolation> {
         val violations = mutableListOf<ConfigViolation>()

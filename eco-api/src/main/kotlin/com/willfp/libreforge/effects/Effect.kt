@@ -100,4 +100,3 @@ abstract class Effect @JvmOverloads constructor(
     }
 }
 
-data class MultiplierModifier(val uuid: UUID, val multiplier: Double)
