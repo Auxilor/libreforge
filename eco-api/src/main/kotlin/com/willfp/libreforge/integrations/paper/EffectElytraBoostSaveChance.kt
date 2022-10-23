@@ -25,9 +25,8 @@ class EffectElytraBoostSaveChance : Effect("elytra_boost_save_chance") {
         registeredModifiers.removeIf { it.uuid == uuid }
         registeredModifiers.add(
             MultiplierModifier(
-                uuid,
-                config.getDoubleFromExpression("chance", player)
-            )
+                uuid
+            ) { config.getDoubleFromExpression("chance", player) }
         )
         modifiers[player.uniqueId] = registeredModifiers
     }
@@ -53,7 +52,7 @@ class EffectElytraBoostSaveChance : Effect("elytra_boost_save_chance") {
         var chance = 100.0
 
         for (modifier in (modifiers[player.uniqueId] ?: emptyList())) {
-            chance *= (100 - modifier.multiplier)
+            chance *= (100 - modifier.multiplier())
         }
 
         if (NumberUtils.randFloat(0.0, 100.0) > chance) {

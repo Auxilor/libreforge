@@ -24,9 +24,8 @@ class EffectMobCoinsMultiplier : Effect("mob_coins_multiplier") {
         registeredModifiers.removeIf { it.uuid == uuid }
         registeredModifiers.add(
             MultiplierModifier(
-                uuid,
-                config.getDoubleFromExpression("multiplier", player)
-            )
+                uuid
+            ) { config.getDoubleFromExpression("multiplier", player) }
         )
         modifiers[player.uniqueId] = registeredModifiers
     }
@@ -52,7 +51,7 @@ class EffectMobCoinsMultiplier : Effect("mob_coins_multiplier") {
         var multiplier = 1.0
 
         for (modifier in (modifiers[player.uniqueId] ?: emptyList())) {
-            multiplier *= modifier.multiplier
+            multiplier *= modifier.multiplier()
         }
 
         event.setDropAmount(event.obtainedAmount * multiplier)

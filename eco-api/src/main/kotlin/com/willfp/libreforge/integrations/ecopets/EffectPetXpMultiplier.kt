@@ -31,9 +31,8 @@ class EffectPetXpMultiplier : Effect("pet_xp_multiplier") {
                 registeredModifiers.removeIf { it.uuid == uuid }
                 registeredModifiers.add(
                     MultiplierModifier(
-                        uuid,
-                        config.getDoubleFromExpression("multiplier", player)
-                    )
+                        uuid
+                    ) { config.getDoubleFromExpression("multiplier", player) }
                 )
                 petModifiers[pet] = registeredModifiers
                 modifiers[player.uniqueId] = petModifiers
@@ -44,9 +43,8 @@ class EffectPetXpMultiplier : Effect("pet_xp_multiplier") {
             registeredModifiers.removeIf { it.uuid == uuid }
             registeredModifiers.add(
                 MultiplierModifier(
-                    uuid,
-                    config.getDoubleFromExpression("multiplier", player)
-                )
+                    uuid
+                ) { config.getDoubleFromExpression("multiplier", player) }
             )
             globalModifiers[player.uniqueId] = registeredModifiers
         }
@@ -84,12 +82,12 @@ class EffectPetXpMultiplier : Effect("pet_xp_multiplier") {
         var multiplier = 1.0
 
         for (modifier in (globalModifiers[player.uniqueId] ?: emptyList())) {
-            multiplier *= modifier.multiplier
+            multiplier *= modifier.multiplier()
         }
 
 
         for (modifier in (modifiers[player.uniqueId]?.get(event.pet) ?: emptyList())) {
-            multiplier *= modifier.multiplier
+            multiplier *= modifier.multiplier()
         }
 
         val wrapped = WrappedPetXpEvent(event)

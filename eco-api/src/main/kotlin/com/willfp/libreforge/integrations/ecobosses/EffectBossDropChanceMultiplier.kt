@@ -30,9 +30,8 @@ class EffectBossDropChanceMultiplier : Effect("boss_drop_chance_multiplier") {
                 registeredModifiers.removeIf { it.uuid == uuid }
                 registeredModifiers.add(
                     MultiplierModifier(
-                        uuid,
-                        config.getDoubleFromExpression("multiplier", player)
-                    )
+                        uuid
+                    ) { config.getDoubleFromExpression("multiplier", player) }
                 )
                 bossMultipliers[boss] = registeredModifiers
                 modifiers[player.uniqueId] = bossMultipliers
@@ -43,9 +42,8 @@ class EffectBossDropChanceMultiplier : Effect("boss_drop_chance_multiplier") {
             registeredModifiers.removeIf { it.uuid == uuid }
             registeredModifiers.add(
                 MultiplierModifier(
-                    uuid,
-                    config.getDoubleFromExpression("multiplier", player)
-                )
+                    uuid
+                ) { config.getDoubleFromExpression("multiplier", player) }
             )
             globalModifiers[player.uniqueId] = registeredModifiers
         }
@@ -81,11 +79,11 @@ class EffectBossDropChanceMultiplier : Effect("boss_drop_chance_multiplier") {
         var multiplier = 1.0
 
         for (modifier in (globalModifiers[player.uniqueId] ?: emptyList())) {
-            multiplier *= modifier.multiplier
+            multiplier *= modifier.multiplier()
         }
 
         for (modifier in (modifiers[player.uniqueId]?.get(event.boss.id) ?: emptyList())) {
-            multiplier *= modifier.multiplier
+            multiplier *= modifier.multiplier()
         }
 
         event.chance *= multiplier

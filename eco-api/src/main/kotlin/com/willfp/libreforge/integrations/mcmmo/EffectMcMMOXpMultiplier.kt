@@ -31,9 +31,8 @@ class EffectMcMMOXpMultiplier : Effect("mcmmo_xp_multiplier") {
                 registeredModifiers.removeIf { it.uuid == uuid }
                 registeredModifiers.add(
                     MultiplierModifier(
-                        uuid,
-                        config.getDoubleFromExpression("multiplier", player)
-                    )
+                        uuid
+                    ) { config.getDoubleFromExpression("multiplier", player) }
                 )
                 skillModifiers[skill] = registeredModifiers
                 modifiers[player.uniqueId] = skillModifiers
@@ -44,9 +43,8 @@ class EffectMcMMOXpMultiplier : Effect("mcmmo_xp_multiplier") {
             registeredModifiers.removeIf { it.uuid == uuid }
             registeredModifiers.add(
                 MultiplierModifier(
-                    uuid,
-                    config.getDoubleFromExpression("multiplier", player)
-                )
+                    uuid
+                ) { config.getDoubleFromExpression("multiplier", player) }
             )
             globalModifiers[player.uniqueId] = registeredModifiers
         }
@@ -82,12 +80,12 @@ class EffectMcMMOXpMultiplier : Effect("mcmmo_xp_multiplier") {
         var multiplier = 1.0
 
         for (modifier in (globalModifiers[player.uniqueId] ?: emptyList())) {
-            multiplier *= modifier.multiplier
+            multiplier *= modifier.multiplier()
         }
 
 
         for (modifier in (modifiers[player.uniqueId]?.get(event.skill) ?: emptyList())) {
-            multiplier *= modifier.multiplier
+            multiplier *= modifier.multiplier()
         }
 
         event.rawXpGained = (event.rawXpGained * multiplier).toFloat()

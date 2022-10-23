@@ -27,9 +27,8 @@ class EffectHungerMultiplier : Effect("hunger_multiplier") {
         registeredModifiers.removeIf { it.uuid == uuid }
         registeredModifiers.add(
             MultiplierModifier(
-                uuid,
-                config.getDoubleFromExpression("multiplier", player)
-            )
+                uuid
+            ) { config.getDoubleFromExpression("multiplier", player) }
         )
         modifiers[player.uniqueId] = registeredModifiers
     }
@@ -59,7 +58,7 @@ class EffectHungerMultiplier : Effect("hunger_multiplier") {
         var multiplier = 1.0
 
         for (modifier in (modifiers[player.uniqueId] ?: emptyList())) {
-            multiplier *= modifier.multiplier
+            multiplier *= modifier.multiplier()
         }
 
         val wrapped = WrappedHungerEvent(event)
