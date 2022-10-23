@@ -2,7 +2,6 @@ package com.willfp.libreforge.effects
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
-import com.willfp.libreforge.BlankHolder
 import com.willfp.libreforge.LibReforgePlugin
 import com.willfp.libreforge.conditions.ConfiguredCondition
 import com.willfp.libreforge.events.EffectActivateEvent
@@ -13,7 +12,6 @@ import com.willfp.libreforge.triggers.ConfiguredDataMutator
 import com.willfp.libreforge.triggers.InvocationData
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
-import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.mutate
 import org.bukkit.entity.Player
 import java.util.UUID
@@ -32,6 +30,18 @@ data class ConfiguredEffect internal constructor(
 ) {
     private val generator = IDGenerator(uuid)
     private val effectStack = mutableMapOf<UUID, Int>()
+
+    fun refreshFor(player: Player) {
+        if (!effect.shouldRefresh) {
+            return
+        }
+
+        val offset = effectStack[player.uniqueId] ?: 0
+        val identifiers = generator.makeIdentifiers(offset)
+        effect.handleDisable(player, generator.makeIdentifiers(offset))
+        effect.handleEnable(player, args, identifiers)
+        effect.handleEnable(player, args, identifiers, compileData)
+    }
 
     fun enableFor(player: Player) {
         val offset = (effectStack[player.uniqueId] ?: 0) + 1

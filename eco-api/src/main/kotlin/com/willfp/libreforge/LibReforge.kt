@@ -368,5 +368,6 @@ fun Player.updateEffects(noRescan: Boolean = false) {
         if (!effect.conditions.isMet(this)) {
             effect.disableFor(this)
         }
+        effect.refreshFor(this)
     }
 }

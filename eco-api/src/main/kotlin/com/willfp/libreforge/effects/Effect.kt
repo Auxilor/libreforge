@@ -1,17 +1,12 @@
 package com.willfp.libreforge.effects
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.util.PlayerUtils
-import com.willfp.eco.util.StringUtils
 import com.willfp.libreforge.ConfigurableProperty
 import com.willfp.libreforge.triggers.InvocationData
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
-import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
-import java.util.UUID
-import kotlin.math.ceil
 
 private val noTriggers: (Trigger) -> Boolean = { false }
 
@@ -21,7 +16,8 @@ abstract class Effect @JvmOverloads constructor(
     private val triggers: (Trigger) -> Boolean = noTriggers,
     supportsFilters: Boolean = true,
     noDelay: Boolean = false,
-    val runOrder: RunOrder = RunOrder.NORMAL
+    val runOrder: RunOrder = RunOrder.NORMAL,
+    val shouldRefresh: Boolean = false
 ) : ConfigurableProperty(id), Listener {
     val isPermanent = triggers === noTriggers // Identity equals thanks to default constructor parameter
     val noDelay: Boolean

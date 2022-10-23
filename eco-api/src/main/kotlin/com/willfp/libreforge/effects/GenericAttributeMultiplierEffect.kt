@@ -9,7 +9,7 @@ abstract class GenericAttributeMultiplierEffect(
     id: String,
     private val attribute: Attribute,
     private val operation: AttributeModifier.Operation
-) : Effect(id) {
+) : Effect(id, shouldRefresh = true) {
     protected abstract fun getValue(config: Config, player: Player): Double
 
     override fun handleEnable(
