@@ -90,6 +90,7 @@ import com.willfp.libreforge.effects.effects.EffectSetBlock
 import com.willfp.libreforge.effects.effects.EffectSetFreezeTicks
 import com.willfp.libreforge.effects.effects.EffectSetPoints
 import com.willfp.libreforge.effects.effects.EffectSetVelocity
+import com.willfp.libreforge.effects.effects.EffectSetVictimVelocity
 import com.willfp.libreforge.effects.effects.EffectShoot
 import com.willfp.libreforge.effects.effects.EffectShootArrow
 import com.willfp.libreforge.effects.effects.EffectShuffleHotbar
@@ -212,6 +213,7 @@ object Effects {
     val DROP_ITEM: Effect = EffectDropItem()
     val DROP_ITEM_FOR_PLAYER: Effect = EffectDropItemForPlayer()
     val AOE: Effect = EffectAOE()
+    val SET_VICTIM_VELOCITY: Effect = EffectSetVictimVelocity()
 
     init {
         addNewEffectArgument(EffectArgumentChance)
