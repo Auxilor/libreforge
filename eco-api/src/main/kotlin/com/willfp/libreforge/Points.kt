@@ -15,10 +15,10 @@ import org.bukkit.entity.Player
 
 private val keys = mutableMapOf<String, PersistentDataKey<Double>>()
 
-private val knownPointsKey = PersistentDataKey(
-    LibReforgePlugin.instance.namespacedKeyFactory.create("known_points"),
-    PersistentDataKeyType.STRING,
-    ""
+private val registeredPointsKey = PersistentDataKey(
+    LibReforgePlugin.instance.namespacedKeyFactory.create("registered_points"),
+    PersistentDataKeyType.STRING_LIST,
+    emptyList()
 )
 
 private fun getKeyForType(type: String): PersistentDataKey<Double> {
@@ -44,9 +44,9 @@ private fun getKeyForType(type: String): PersistentDataKey<Double> {
             ) { NumberUtils.format(it.getPoints(type)) }
         )
 
-        val knownPoints = Bukkit.getServer().profile.read(knownPointsKey).split(";").toMutableSet()
+        val knownPoints = Bukkit.getServer().profile.read(registeredPointsKey).toMutableSet()
         knownPoints.add(type)
-        Bukkit.getServer().profile.write(knownPointsKey, knownPoints.joinToString(";"))
+        Bukkit.getServer().profile.write(registeredPointsKey, knownPoints.toList())
 
         getKeyForType(type)
     } else {
@@ -55,7 +55,7 @@ private fun getKeyForType(type: String): PersistentDataKey<Double> {
 }
 
 fun initPointPlaceholders() {
-    Bukkit.getServer().profile.read(knownPointsKey).split(";").forEach { getKeyForType(it) }
+    Bukkit.getServer().profile.read(registeredPointsKey).forEach { getKeyForType(it) }
 }
 
 fun Player.getPoints(type: String): Double {
