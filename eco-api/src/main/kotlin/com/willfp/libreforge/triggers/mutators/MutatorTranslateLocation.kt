@@ -6,7 +6,7 @@ import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.DataMutator
 import com.willfp.libreforge.triggers.TriggerData
 
-class MutatorTranslateLocation : DataMutator("translate_location") {
+object MutatorTranslateLocation : DataMutator("translate_location") {
     override fun mutate(data: TriggerData, config: Config): TriggerData {
         val location = data.location?.clone()?.apply {
             this.x += config.getDoubleFromExpression("add_x", data)

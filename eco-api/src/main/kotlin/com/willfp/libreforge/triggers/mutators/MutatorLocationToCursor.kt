@@ -7,7 +7,7 @@ import com.willfp.libreforge.triggers.DataMutator
 import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.FluidCollisionMode
 
-class MutatorLocationToCursor : DataMutator(
+object MutatorLocationToCursor : DataMutator(
     "location_to_cursor"
 ) {
     override fun mutate(data: TriggerData, config: Config): TriggerData {

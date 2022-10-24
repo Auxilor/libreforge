@@ -6,7 +6,7 @@ import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.DataMutator
 import com.willfp.libreforge.triggers.TriggerData
 
-class MutatorSpinLocation : DataMutator("spin_location") {
+object MutatorSpinLocation : DataMutator("spin_location") {
     override fun mutate(data: TriggerData, config: Config): TriggerData {
         val location = data.location?.clone() ?: return data
         val world = location.world ?: return data
