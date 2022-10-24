@@ -5,7 +5,7 @@ import com.willfp.libreforge.triggers.DataMutator
 import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.entity.Player
 
-class MutatorVictimAsPlayer : DataMutator(
+object MutatorVictimAsPlayer : DataMutator(
     "victim_as_player"
 ) {
     override fun mutate(data: TriggerData, config: Config): TriggerData {

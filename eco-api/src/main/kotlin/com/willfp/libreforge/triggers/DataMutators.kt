@@ -3,27 +3,34 @@ package com.willfp.libreforge.triggers
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.LibReforgePlugin
-import com.willfp.libreforge.effects.ConfiguredEffect
-import com.willfp.libreforge.effects.Effects
-import com.willfp.libreforge.effects.inRunOrder
 import com.willfp.libreforge.separatorAmbivalent
-import com.willfp.libreforge.triggers.mutators.*
+import com.willfp.libreforge.triggers.mutators.MutatorLocationToBlock
+import com.willfp.libreforge.triggers.mutators.MutatorLocationToCursor
+import com.willfp.libreforge.triggers.mutators.MutatorLocationToPlayer
+import com.willfp.libreforge.triggers.mutators.MutatorLocationToProjectile
+import com.willfp.libreforge.triggers.mutators.MutatorLocationToVictim
+import com.willfp.libreforge.triggers.mutators.MutatorPlayerAsVictim
+import com.willfp.libreforge.triggers.mutators.MutatorSpinLocation
+import com.willfp.libreforge.triggers.mutators.MutatorSpinVelocity
+import com.willfp.libreforge.triggers.mutators.MutatorTranslateLocation
+import com.willfp.libreforge.triggers.mutators.MutatorVictimAsPlayer
+import com.willfp.libreforge.triggers.mutators.MutatorVictimToOwner
 
 @Suppress("UNUSED")
 object DataMutators {
     private val BY_ID = mutableMapOf<String, DataMutator>()
 
-    val TRANSLATE_LOCATION: DataMutator = MutatorTranslateLocation()
-    val SPIN_LOCATION: DataMutator = MutatorSpinLocation()
-    val PLAYER_AS_VICTIM: DataMutator = MutatorPlayerAsVictim()
-    val VICTIM_TO_OWNER: DataMutator = MutatorVictimToOwner()
-    val LOCATION_TO_PLAYER: DataMutator = MutatorLocationToPlayer()
-    val LOCATION_TO_VICTIM: DataMutator = MutatorLocationToVictim()
-    val LOCATION_TO_BLOCK: DataMutator = MutatorLocationToBlock()
-    val SPIN_VELOCITY: DataMutator = MutatorSpinVelocity()
-    val VICTIM_AS_PLAYER: DataMutator = MutatorVictimAsPlayer()
-    val LOCATION_TO_PROJECTILE: DataMutator = MutatorLocationToProjectile()
-    val LOCATION_TO_CURSOR: DataMutator = MutatorLocationToCursor()
+    val TRANSLATE_LOCATION: DataMutator = MutatorTranslateLocation
+    val SPIN_LOCATION: DataMutator = MutatorSpinLocation
+    val PLAYER_AS_VICTIM: DataMutator = MutatorPlayerAsVictim
+    val VICTIM_TO_OWNER: DataMutator = MutatorVictimToOwner
+    val LOCATION_TO_PLAYER: DataMutator = MutatorLocationToPlayer
+    val LOCATION_TO_VICTIM: DataMutator = MutatorLocationToVictim
+    val LOCATION_TO_BLOCK: DataMutator = MutatorLocationToBlock
+    val SPIN_VELOCITY: DataMutator = MutatorSpinVelocity
+    val VICTIM_AS_PLAYER: DataMutator = MutatorVictimAsPlayer
+    val LOCATION_TO_PROJECTILE: DataMutator = MutatorLocationToProjectile
+    val LOCATION_TO_CURSOR: DataMutator = MutatorLocationToCursor
 
     fun values(): Set<DataMutator> {
         return BY_ID.values.toSet()

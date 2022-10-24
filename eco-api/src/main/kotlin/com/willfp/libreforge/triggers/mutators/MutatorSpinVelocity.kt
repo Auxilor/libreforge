@@ -6,7 +6,7 @@ import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.DataMutator
 import com.willfp.libreforge.triggers.TriggerData
 
-class MutatorSpinVelocity : DataMutator("spin_velocity") {
+object MutatorSpinVelocity : DataMutator("spin_velocity") {
     override fun mutate(data: TriggerData, config: Config): TriggerData {
         val velocity = data.velocity?.clone() ?: return data
 
