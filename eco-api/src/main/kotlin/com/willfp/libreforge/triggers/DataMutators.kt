@@ -7,16 +7,7 @@ import com.willfp.libreforge.effects.ConfiguredEffect
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.inRunOrder
 import com.willfp.libreforge.separatorAmbivalent
-import com.willfp.libreforge.triggers.mutators.MutatorLocationToBlock
-import com.willfp.libreforge.triggers.mutators.MutatorLocationToPlayer
-import com.willfp.libreforge.triggers.mutators.MutatorLocationToProjectile
-import com.willfp.libreforge.triggers.mutators.MutatorLocationToVictim
-import com.willfp.libreforge.triggers.mutators.MutatorPlayerAsVictim
-import com.willfp.libreforge.triggers.mutators.MutatorSpinLocation
-import com.willfp.libreforge.triggers.mutators.MutatorSpinVelocity
-import com.willfp.libreforge.triggers.mutators.MutatorTranslateLocation
-import com.willfp.libreforge.triggers.mutators.MutatorVictimAsPlayer
-import com.willfp.libreforge.triggers.mutators.MutatorVictimToOwner
+import com.willfp.libreforge.triggers.mutators.*
 
 @Suppress("UNUSED")
 object DataMutators {
@@ -32,6 +23,7 @@ object DataMutators {
     val SPIN_VELOCITY: DataMutator = MutatorSpinVelocity()
     val VICTIM_AS_PLAYER: DataMutator = MutatorVictimAsPlayer()
     val LOCATION_TO_PROJECTILE: DataMutator = MutatorLocationToProjectile()
+    val LOCATION_TO_CURSOR: DataMutator = MutatorLocationToCursor()
 
     fun values(): Set<DataMutator> {
         return BY_ID.values.toSet()
