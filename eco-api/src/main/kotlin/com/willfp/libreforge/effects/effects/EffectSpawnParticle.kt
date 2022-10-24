@@ -1,13 +1,13 @@
 package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.particle.Particles
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
-import org.bukkit.Particle
 
 class EffectSpawnParticle : Effect(
     "spawn_particle",
@@ -17,10 +17,9 @@ class EffectSpawnParticle : Effect(
 ) {
     override fun handle(data: TriggerData, config: Config) {
         val location = data.location ?: return
-        val world = location.world ?: return
-        val particle = Particle.valueOf(config.getString("particle").uppercase())
+        val particle = Particles.lookup(config.getString("particle"))
         val amount = config.getIntFromExpression("amount", data)
-        world.spawnParticle(particle, location, amount, 0.0, 0.0, 0.0, 0.0, null)
+        particle.spawn(location, amount)
     }
 
     override fun validateConfig(config: Config): List<ConfigViolation> {
