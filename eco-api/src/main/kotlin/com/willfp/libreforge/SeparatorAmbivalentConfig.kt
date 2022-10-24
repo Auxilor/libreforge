@@ -2,6 +2,7 @@ package com.willfp.libreforge
 
 import com.willfp.eco.core.config.ConfigType
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.math.MathContext
 import com.willfp.eco.core.placeholder.AdditionalPlayer
 import com.willfp.eco.core.placeholder.InjectablePlaceholder
 import com.willfp.eco.core.placeholder.StaticPlaceholder
@@ -126,6 +127,20 @@ fun Config.getIntFromExpression(path: String, data: TriggerData): Int {
         additional += AdditionalPlayer(data.victim, "victim")
     }
     return getIntFromExpression(path, player, additional)
+}
+
+fun Config.toMathContext(data: TriggerData): MathContext {
+    val player = data.player
+    val additional = mutableListOf<AdditionalPlayer>()
+
+    if (data.victim is Player) {
+        additional += AdditionalPlayer(data.victim, "victim")
+    }
+    return MathContext(
+        this,
+        player,
+        additional
+    )
 }
 
 fun Config.getDoubleFromExpression(path: String, data: TriggerData): Double {

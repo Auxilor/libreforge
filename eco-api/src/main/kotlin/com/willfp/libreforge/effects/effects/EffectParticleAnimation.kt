@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.particle.Particles
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.effects.particles.ParticleAnimations
@@ -12,7 +13,6 @@ import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
-import org.bukkit.Particle
 import org.bukkit.entity.LivingEntity
 
 class EffectParticleAnimation : Effect(
@@ -35,7 +35,7 @@ class EffectParticleAnimation : Effect(
         val world = location.world ?: return
 
         val animation = ParticleAnimations.getByID(config.getString("animation")) ?: return
-        val particle = Particle.valueOf(config.getString("particle").uppercase())
+        val particle = Particles.lookup(config.getString("particle"))
 
         var tick = 0
 
@@ -79,11 +79,9 @@ class EffectParticleAnimation : Effect(
             }
 
             for (vector in vectors) {
-                world.spawnParticle(
-                    particle,
+                particle.spawn(
                     vector.toLocation(world),
-                    config.getIntFromExpression("particle-amount", data),
-                    0.0, 0.0, 0.0, 0.0, null
+                    config.getIntFromExpression("particle-amount", data)
                 )
             }
 

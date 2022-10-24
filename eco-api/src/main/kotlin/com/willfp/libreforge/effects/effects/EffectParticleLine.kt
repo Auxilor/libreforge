@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.particle.Particles
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
@@ -8,7 +9,6 @@ import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
-import org.bukkit.Particle
 import kotlin.math.floor
 
 class EffectParticleLine : Effect(
@@ -32,13 +32,13 @@ class EffectParticleLine : Effect(
         val particles = floor(distance / spacing).toInt()
         val addVector = endPos.clone().subtract(startPos).normalize().multiply(spacing)
 
-        val particle = Particle.valueOf(config.getString("particle").uppercase())
+        val particle = Particles.lookup(config.getString("particle"))
         val amount = config.getIntFromExpression("amount", data)
 
         var currentVector = startPos
 
         repeat(particles) {
-            world.spawnParticle(particle, currentVector.toLocation(world), amount, 0.0, 0.0, 0.0, 0.0, null)
+            particle.spawn(currentVector.toLocation(world), amount)
             currentVector = currentVector.add(addVector)
         }
     }
