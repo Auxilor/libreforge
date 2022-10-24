@@ -92,7 +92,7 @@ class TriggerAltClick : Trigger(
         val location: Location?
         val world = player.location.world ?: return
         val result = player.rayTraceBlocks(
-            plugin.configYml.getDoubleFromExpression("raytrace-distance"),
+            plugin.configYml.getDoubleFromExpression("raytrace-distance", player),
             FluidCollisionMode.NEVER
         )
 
