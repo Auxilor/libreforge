@@ -2,7 +2,7 @@ package com.willfp.libreforge.lrcdb
 
 import com.willfp.eco.core.command.impl.Subcommand
 import com.willfp.eco.core.config.ConfigType
-import com.willfp.eco.core.config.TransientConfig
+import com.willfp.eco.core.config.readConfig
 import com.willfp.libreforge.LibReforgePlugin
 import org.bukkit.command.CommandSender
 import java.io.BufferedReader
@@ -40,7 +40,7 @@ class CommandImport(
                 connection.inputStream.reader()
             }
 
-            val res = TransientConfig(BufferedReader(reader).readText(), ConfigType.JSON)
+            val res = readConfig(BufferedReader(reader).readText(), ConfigType.JSON)
 
             if (isError) {
                 sender.sendMessage(

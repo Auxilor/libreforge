@@ -1,6 +1,6 @@
 package com.willfp.libreforge.events
 
-import com.willfp.eco.core.config.TransientConfig
+import com.willfp.eco.core.config.emptyConfig
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Holder
 import com.willfp.libreforge.effects.Effect
@@ -13,7 +13,7 @@ class EffectPreActivateEvent(
     who: Player,
     val holder: Holder,
     val effect: Effect,
-    val config: Config = TransientConfig()
+    val config: Config = emptyConfig()
 ) : PlayerEvent(who), Cancellable {
     /**
      * If the event is cancelled.

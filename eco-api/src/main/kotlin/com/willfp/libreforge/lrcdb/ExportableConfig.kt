@@ -1,9 +1,9 @@
 package com.willfp.libreforge.lrcdb
 
 import com.willfp.eco.core.config.ConfigType
-import com.willfp.eco.core.config.TransientConfig
 import com.willfp.eco.core.config.config
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.config.readConfig
 import com.willfp.libreforge.LibReforgePlugin
 import java.net.URI
 import java.net.http.HttpClient
@@ -52,7 +52,7 @@ data class ExportableConfig(
         val code = res.statusCode()
 
         val isError = code in 400..599
-        val json = TransientConfig(res.body(), ConfigType.JSON)
+        val json = readConfig(res.body(), ConfigType.JSON)
 
         return ExportResponse(
             !isError,

@@ -7,8 +7,9 @@ import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.PluginProps
 import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.config.ConfigType
-import com.willfp.eco.core.config.TransientConfig
+import com.willfp.eco.core.config.emptyConfig
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.config.readConfig
 import com.willfp.eco.core.integrations.IntegrationLoader
 import com.willfp.libreforge.chains.EffectChains
 import com.willfp.libreforge.conditions.Conditions
@@ -74,7 +75,7 @@ abstract class LibReforgePlugin @JvmOverloads constructor(
     val lrcdbYml: Config by lazy {
         if (supportsLrcdb) {
             LrcdbYml(this)
-        } else TransientConfig()
+        } else emptyConfig()
     }
 
     init {
@@ -149,7 +150,7 @@ abstract class LibReforgePlugin @JvmOverloads constructor(
             }
 
             val id = file.nameWithoutExtension
-            val config = TransientConfig(file, ConfigType.YAML)
+            val config = file.readConfig(ConfigType.YAML)
             configs[id] = config
         }
 
