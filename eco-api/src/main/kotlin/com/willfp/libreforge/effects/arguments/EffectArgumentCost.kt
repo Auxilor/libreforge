@@ -1,13 +1,14 @@
 package com.willfp.libreforge.effects.arguments
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.price.Prices
+import com.willfp.eco.core.integrations.economy.balance
+import com.willfp.eco.util.NumberUtils
 import com.willfp.eco.util.PlayerUtils
 import com.willfp.eco.util.StringUtils
 import com.willfp.libreforge.LibReforgePlugin
 import com.willfp.libreforge.effects.ConfiguredEffect
 import com.willfp.libreforge.effects.EffectArgument
-import com.willfp.libreforge.toMathContext
+import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.InvocationData
 import org.bukkit.Sound
 
@@ -19,15 +20,15 @@ object EffectArgumentCost : EffectArgument {
 
     override fun isMet(effect: ConfiguredEffect, data: InvocationData, config: Config): Boolean {
         val player = data.player
-        return Prices.lookup("cost", config.toMathContext(data.data)).canAfford(player)
+        return player.balance >= config.getDoubleFromExpression("cost", data.data)
     }
 
     override fun ifNotMet(effect: ConfiguredEffect, data: InvocationData, config: Config) {
         val player = data.player
 
-        val cost = Prices.lookup("cost", config.toMathContext(data.data))
+        val cost = config.getDoubleFromExpression("cost", data.data)
 
-        val message = plugin.langYml.getMessage("cannot-afford").replace("%cost%", cost.displayText)
+        val message = plugin.langYml.getMessage("cannot-afford").replace("%cost%", NumberUtils.format(cost))
 
         if (plugin.configYml.getBool("cannot-afford.in-actionbar")) {
             PlayerUtils.getAudience(player).sendActionBar(StringUtils.toComponent(message))
@@ -46,6 +47,6 @@ object EffectArgumentCost : EffectArgument {
     }
 
     override fun ifMet(effect: ConfiguredEffect, data: InvocationData, config: Config) {
-        Prices.lookup("cost", config.toMathContext(data.data)).pay(data.player)
+        data.player.balance -= config.getDoubleFromExpression("cost", data.data)
     }
 }

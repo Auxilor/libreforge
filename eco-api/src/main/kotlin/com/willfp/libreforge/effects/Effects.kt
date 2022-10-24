@@ -14,6 +14,7 @@ import com.willfp.libreforge.effects.arguments.EffectArgumentCooldown
 import com.willfp.libreforge.effects.arguments.EffectArgumentCost
 import com.willfp.libreforge.effects.arguments.EffectArgumentEvery
 import com.willfp.libreforge.effects.arguments.EffectArgumentPointCost
+import com.willfp.libreforge.effects.arguments.EffectArgumentPrice
 import com.willfp.libreforge.effects.arguments.EffectArgumentRequire
 import com.willfp.libreforge.effects.effects.EffectAOE
 import com.willfp.libreforge.effects.effects.EffectAddDamage
@@ -222,6 +223,7 @@ object Effects {
         addNewEffectArgument(EffectArgumentEvery)
         addNewEffectArgument(EffectArgumentPointCost)
         addNewEffectArgument(EffectArgumentRequire)
+        addNewEffectArgument(EffectArgumentPrice)
     }
 
     /**
