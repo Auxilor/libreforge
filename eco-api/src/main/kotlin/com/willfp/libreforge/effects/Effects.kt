@@ -1,7 +1,7 @@
 package com.willfp.libreforge.effects
 
 import com.google.common.collect.HashBiMap
-import com.willfp.eco.core.config.TransientConfig
+import com.willfp.eco.core.config.emptyConfig
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.placeholder.InjectablePlaceholder
 import com.willfp.eco.core.placeholder.StaticPlaceholder
@@ -358,7 +358,7 @@ object Effects {
             }
 
             it
-        } ?: TransientConfig()
+        } ?: emptyConfig()
 
         val triggers = config.getStrings("triggers").let {
             val triggers = mutableListOf<Trigger>()
