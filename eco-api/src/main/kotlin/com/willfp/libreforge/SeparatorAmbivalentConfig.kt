@@ -155,6 +155,6 @@ fun Config.getDoubleFromExpression(path: String, data: TriggerData): Double {
 
 private fun String.toCamelCase(): String {
     val words = this.lowercase().split("_")
-    val camelCaseWorlds = words.map { it.substring(0, 1).uppercase() + it.substring(1) }
-    return camelCaseWorlds.joinToString("")
+    val camelCaseWorlds = words.drop(1).map { it.substring(0, 1).uppercase() + it.substring(1) }
+    return words[0] + camelCaseWorlds.joinToString("")
 }
