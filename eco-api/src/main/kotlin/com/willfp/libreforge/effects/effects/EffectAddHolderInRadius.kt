@@ -80,6 +80,8 @@ class EffectAddHolderInRadius : Effect(
             applyToSelf
         )
 
+        holders.add(nearby)
+
         plugin.scheduler.runLater(duration.toLong()) {
             holders.remove(nearby)
         }
