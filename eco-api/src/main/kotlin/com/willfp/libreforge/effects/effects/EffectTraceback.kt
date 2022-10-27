@@ -18,16 +18,16 @@ class EffectTraceback : Effect(
         TriggerParameter.PLAYER
     )
 ) {
-    private val key = "${plugin.name}_tracekabck"
+    private val key = "${plugin.name}_traceback"
 
     override fun handle(data: TriggerData, config: Config) {
         val player = data.player ?: return
 
         val time = max(1.0, min(30.0, config.getDoubleFromExpression("seconds", data)))
-        val index = time.toInt() - 1
+        val index = time.toInt() - 1 // This is some genuinely bullshit code
 
         @Suppress("UNCHECKED_CAST")
-        val times = player.getMetadata(key).getOrNull(0) as? List<Location> ?: emptyList()
+        val times = player.getMetadata(key).getOrNull(0)?.value() as? List<Location> ?: emptyList()
         val location = times.getOrElse(index) { times.lastOrNull() } ?: return
 
         player.teleport(location)
@@ -50,11 +50,14 @@ class EffectTraceback : Effect(
         plugin.scheduler.runTimer(20, 20) {
             for (player in Bukkit.getOnlinePlayers()) {
                 @Suppress("UNCHECKED_CAST")
-                val times = player.getMetadata(key).getOrNull(0) as? List<Location> ?: emptyList()
+                val times = player.getMetadata(key).getOrNull(0)?.value() as? List<Location> ?: emptyList()
                 val newTimes = mutableListOf(player.location)
+
+                // Most recent time goes at front
                 times.chunked(29).getOrNull(0)?.let {
                     newTimes += it
                 }
+
                 player.removeMetadata(key, plugin)
                 player.setMetadata(key, plugin.metadataValueFactory.create(newTimes))
             }
