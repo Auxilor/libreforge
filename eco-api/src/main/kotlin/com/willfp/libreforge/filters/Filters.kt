@@ -8,6 +8,7 @@ import com.willfp.libreforge.filters.filters.FilterEntityType
 import com.willfp.libreforge.filters.filters.FilterFromSpawner
 import com.willfp.libreforge.filters.filters.FilterFullyCharged
 import com.willfp.libreforge.filters.filters.FilterFullyGrown
+import com.willfp.libreforge.filters.filters.FilterIsBehindVictim
 import com.willfp.libreforge.filters.filters.FilterItems
 import com.willfp.libreforge.filters.filters.FilterOnMaxHealth
 import com.willfp.libreforge.filters.filters.FilterOnlyBosses
@@ -36,6 +37,7 @@ object Filters {
     val PLAYER_PLACED: Filter = FilterPlayerPlaced
     val TEXT: Filter = FilterText
     val TEXT_CONTAINS: Filter = FilterTextContains
+    val IS_BEHIND_VICTIM: Filter = FilterIsBehindVictim
     val FULLY_CHARGED: Filter = FilterFullyCharged
 
     /**

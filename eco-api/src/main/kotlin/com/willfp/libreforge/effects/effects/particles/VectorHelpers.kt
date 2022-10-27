@@ -63,6 +63,11 @@ fun Vector.toVector3f() = Vector3f(
     this.z.toFloat()
 )
 
+fun Vector.toVector2f() = Vector2f(
+    this.x.toFloat(),
+    this.z.toFloat()
+)
+
 fun Location.toDirectionVector() = DirectionVector(
     this.yaw,
     this.pitch
