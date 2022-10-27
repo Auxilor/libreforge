@@ -61,7 +61,7 @@ class EffectMineRadius : Effect(
                     }
 
                     if (config.getBool("check_hardness")) {
-                        if (toBreak.type.hardness > block.type.hardness) {
+                        if (toBreak.type.hardness == -1 || toBreak.type.hardness > block.type.hardness) {
                             continue
                         }
                     }
