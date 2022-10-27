@@ -37,6 +37,7 @@ import com.willfp.libreforge.effects.effects.EffectConsumeHeldItem
 import com.willfp.libreforge.effects.effects.EffectCreateExplosion
 import com.willfp.libreforge.effects.effects.EffectCritMultiplier
 import com.willfp.libreforge.effects.effects.EffectDamageArmor
+import com.willfp.libreforge.effects.effects.EffectDamageMainhand
 import com.willfp.libreforge.effects.effects.EffectDamageMultiplier
 import com.willfp.libreforge.effects.effects.EffectDamageNearbyEntities
 import com.willfp.libreforge.effects.effects.EffectDamageVictim
@@ -215,6 +216,7 @@ object Effects {
     val DROP_ITEM_FOR_PLAYER: Effect = EffectDropItemForPlayer()
     val AOE: Effect = EffectAOE()
     val SET_VICTIM_VELOCITY: Effect = EffectSetVictimVelocity()
+    val DAMAGE_MAINHAND: Effect = EffectDamageMainhand()
 
     init {
         addNewEffectArgument(EffectArgumentChance)
