@@ -1,22 +1,7 @@
 package com.willfp.libreforge.filters
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.filters.filters.FilterAboveHealthPercent
-import com.willfp.libreforge.filters.filters.FilterBlocks
-import com.willfp.libreforge.filters.filters.FilterDamageCause
-import com.willfp.libreforge.filters.filters.FilterEntityType
-import com.willfp.libreforge.filters.filters.FilterFromSpawner
-import com.willfp.libreforge.filters.filters.FilterFullyCharged
-import com.willfp.libreforge.filters.filters.FilterFullyGrown
-import com.willfp.libreforge.filters.filters.FilterIsBehindVictim
-import com.willfp.libreforge.filters.filters.FilterItems
-import com.willfp.libreforge.filters.filters.FilterOnMaxHealth
-import com.willfp.libreforge.filters.filters.FilterOnlyBosses
-import com.willfp.libreforge.filters.filters.FilterOnlyNonBosses
-import com.willfp.libreforge.filters.filters.FilterPlayerPlaced
-import com.willfp.libreforge.filters.filters.FilterProjectiles
-import com.willfp.libreforge.filters.filters.FilterText
-import com.willfp.libreforge.filters.filters.FilterTextContains
+import com.willfp.libreforge.filters.filters.*
 import com.willfp.libreforge.triggers.TriggerData
 
 @Suppress("UNUSED")
@@ -39,6 +24,7 @@ object Filters {
     val TEXT_CONTAINS: Filter = FilterTextContains
     val IS_BEHIND_VICTIM: Filter = FilterIsBehindVictim
     val FULLY_CHARGED: Filter = FilterFullyCharged
+    val POTION_EFFECTS: Filter = FilterPotionEffects
 
     /**
      * List of all registered filters.
