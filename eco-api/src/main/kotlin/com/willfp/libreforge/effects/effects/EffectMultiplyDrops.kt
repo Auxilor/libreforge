@@ -24,8 +24,11 @@ class EffectMultiplyDrops : Effect(
         event.modifiers += {
             val fortune = config.getIntFromExpression("fortune", data)
 
-            val items = config.getStrings("on_items").map { string -> Items.lookup(string) }
-            val matches = items.any { test -> test.matches(it) }
+            var matches = true
+            if (config.has("on_items")) {
+                val items = config.getStrings("on_items").map { string -> Items.lookup(string) }
+                matches = items.any { test -> test.matches(it) }
+            }
 
             if (fortune > 0 && it.maxStackSize > 1 && matches) {
                 it.amount = (Math.random() * (fortune.toDouble() - 1) + 1.1).roundToInt()
@@ -42,13 +45,6 @@ class EffectMultiplyDrops : Effect(
             ConfigViolation(
                 "fortune",
                 "You must specify the fortune to give!"
-            )
-        )
-
-        if (!config.has("on_items")) violations.add(
-            ConfigViolation(
-                "on_items",
-                "You must specify the items that can be multiplied!"
             )
         )
 
