@@ -24,7 +24,7 @@ object Filters {
     val TEXT_CONTAINS: Filter = FilterTextContains
     val IS_BEHIND_VICTIM: Filter = FilterIsBehindVictim
     val FULLY_CHARGED: Filter = FilterFullyCharged
-    val POTION_EFFECTS: Filter = FilterPotionEffects
+    val POTION_EFFECTS: Filter = FilterPotionEffect
 
     /**
      * List of all registered filters.
