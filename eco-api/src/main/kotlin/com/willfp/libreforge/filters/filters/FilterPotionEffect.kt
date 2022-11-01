@@ -7,11 +7,11 @@ import com.willfp.libreforge.triggers.GenericCancellableEvent
 import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.event.entity.EntityPotionEffectEvent
 
-object FilterPotionEffects: Filter() {
+object FilterPotionEffect: Filter() {
     override fun passes(data: TriggerData, config: Config): Boolean {
         val event = (data.event as? GenericCancellableEvent)?.handle as? EntityPotionEffectEvent ?: return true
 
-        return config.withInverse("potion_effects", Config::getStrings) {
+        return config.withInverse("potion_effect", Config::getStrings) {
             it.containsIgnoreCase(event.newEffect?.type?.name?: "")
         }
     }
