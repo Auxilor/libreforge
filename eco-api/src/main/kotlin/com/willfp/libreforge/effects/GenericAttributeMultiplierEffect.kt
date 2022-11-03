@@ -19,12 +19,20 @@ abstract class GenericAttributeMultiplierEffect(
     ) {
         val instance = player.getAttribute(attribute) ?: return
         val uuid = identifiers.uuid
-        instance.removeModifier(AttributeModifier(uuid, this.id, 0.0, operation))
+
+        val modifier = instance.modifiers.find { it.uniqueId == uuid } ?: AttributeModifier(uuid, this.id, 0.0, operation)
+        instance.removeModifier(modifier)
+
+        var value = getValue(config, player)
+        if (config.getBool("stack")) {
+            value += modifier.amount
+        }
+
         instance.addModifier(
             AttributeModifier(
                 uuid,
                 this.id,
-                getValue(config, player),
+                value,
                 operation
             )
         )

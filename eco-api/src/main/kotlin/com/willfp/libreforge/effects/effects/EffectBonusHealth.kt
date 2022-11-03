@@ -25,6 +25,13 @@ class EffectBonusHealth : GenericAttributeMultiplierEffect(
             )
         )
 
+        if (!config.has("stack")) violations.add(
+            ConfigViolation(
+                "stack",
+                "You must specify whether to stack effect when applied on different item!"
+            )
+        )
+
         return violations
     }
 }
