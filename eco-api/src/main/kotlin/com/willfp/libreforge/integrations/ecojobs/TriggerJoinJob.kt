@@ -12,7 +12,8 @@ import org.bukkit.event.EventHandler
 class TriggerJoinJob : Trigger(
     "join_job", listOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.LOCATION
+        TriggerParameter.LOCATION,
+        TriggerParameter.EVENT
     )
 ) {
     @EventHandler(ignoreCancelled = true)
@@ -27,7 +28,8 @@ class TriggerJoinJob : Trigger(
             player,
             TriggerData(
                 player = player,
-                location = player.location
+                location = player.location,
+                event = WrappedJobJoinEvent(event)
             ),
             value = EcoJobsAPI.instance.getJobLevel(player, event.job).toDouble()
         )
