@@ -9,7 +9,7 @@ import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.util.Vector
 
-data class TriggerData(
+data class TriggerData @JvmOverloads constructor(
     val player: Player? = null,
     val victim: LivingEntity? = null,
     val block: Block? = null,
@@ -19,7 +19,8 @@ data class TriggerData(
     val damageCause: EntityDamageEvent.DamageCause? = null,
     val velocity: Vector? = player?.velocity ?: victim?.velocity,
     val item: ItemStack? = player?.inventory?.itemInMainHand ?: victim?.equipment?.itemInMainHand,
-    val text: String? = null
+    val text: String? = null,
+    internal val originalPlayer: Player? = player
 )
 
 enum class TriggerParameter {
