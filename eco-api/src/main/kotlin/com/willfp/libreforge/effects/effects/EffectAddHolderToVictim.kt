@@ -32,7 +32,7 @@ class EffectAddHolderToVictim : Effect(
     }
 
     override fun handle(invocation: InvocationData, config: Config) {
-        val player = invocation.data.victim as? Player ?: return
+        val victim = invocation.data.victim as? Player ?: return
         val unfinished = invocation.compileData as? UnfinishedHolder ?: return
 
         val uuid = UUID.randomUUID()
@@ -45,14 +45,14 @@ class EffectAddHolderToVictim : Effect(
 
         val duration = config.getIntFromExpression("duration", invocation.data)
 
-        val current = holders[player.uniqueId] ?: mutableMapOf()
+        val current = holders[victim.uniqueId] ?: mutableMapOf()
         current[uuid] = holder
-        holders[player.uniqueId] = current
+        holders[victim.uniqueId] = current
 
         plugin.scheduler.runLater(duration.toLong()) {
-            val new = holders[player.uniqueId] ?: mutableMapOf()
+            val new = holders[victim.uniqueId] ?: mutableMapOf()
             new.remove(uuid)
-            holders[player.uniqueId] = new
+            holders[victim.uniqueId] = new
         }
     }
 
@@ -86,12 +86,12 @@ class EffectAddHolderToVictim : Effect(
     override fun makeCompileData(config: Config, context: String): CompileData {
         val effects = Effects.compile(
             config.getSubsections("effects"),
-            "$context -> add_holder Effects"
+            "$context -> add_holder_to_victim Effects"
         )
 
         val conditions = Conditions.compile(
             config.getSubsections("conditions"),
-            "$context -> add_holder Conditions"
+            "$context -> add_holder_to_victim Conditions"
         )
 
         return UnfinishedHolder(
