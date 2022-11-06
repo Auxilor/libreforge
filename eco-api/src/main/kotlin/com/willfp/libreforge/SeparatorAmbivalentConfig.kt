@@ -120,12 +120,16 @@ fun Config.separatorAmbivalent(): Config =
     if (this is SeparatorAmbivalentConfig) this else SeparatorAmbivalentConfig(this)
 
 fun Config.getIntFromExpression(path: String, data: TriggerData): Int {
-    val player = data.player
+    val player = data.originalPlayer
+
     val additional = mutableListOf<AdditionalPlayer>()
 
-    if (data.victim is Player) {
-        additional += AdditionalPlayer(data.victim, "victim")
+    val victim = data.victim
+
+    if (victim is Player) {
+        additional += AdditionalPlayer(victim, "victim")
     }
+
     return getIntFromExpression(path, player, additional)
 }
 
@@ -144,12 +148,16 @@ fun Config.toMathContext(data: TriggerData): MathContext {
 }
 
 fun Config.getDoubleFromExpression(path: String, data: TriggerData): Double {
-    val player = data.player
+    val player = data.originalPlayer
+
     val additional = mutableListOf<AdditionalPlayer>()
 
-    if (data.victim is Player) {
-        additional += AdditionalPlayer(data.victim, "victim")
+    val victim = data.victim
+
+    if (victim is Player) {
+        additional += AdditionalPlayer(victim, "victim")
     }
+
     return getDoubleFromExpression(path, player, additional)
 }
 
