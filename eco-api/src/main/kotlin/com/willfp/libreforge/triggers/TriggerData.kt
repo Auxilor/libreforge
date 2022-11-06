@@ -20,7 +20,7 @@ data class TriggerData @JvmOverloads constructor(
     val velocity: Vector? = player?.velocity ?: victim?.velocity,
     val item: ItemStack? = player?.inventory?.itemInMainHand ?: victim?.equipment?.itemInMainHand,
     val text: String? = null,
-    internal val originalPlayer: Player? = player
+    internal val originalPlayer: Player? = player // We have this to keep placeholders working with mutators
 )
 
 enum class TriggerParameter {
