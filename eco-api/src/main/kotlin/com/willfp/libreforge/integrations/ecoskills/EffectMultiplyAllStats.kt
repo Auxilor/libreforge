@@ -7,6 +7,7 @@ import com.willfp.ecoskills.api.modifier.PlayerStatModifier
 import com.willfp.ecoskills.stats.Stats
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.effects.IDGenerator
 import com.willfp.libreforge.effects.Identifiers
 import org.bukkit.entity.Player
 
@@ -18,11 +19,13 @@ class EffectMultiplyAllStats : Effect("multiply_all_stats") {
         config: Config,
         identifiers: Identifiers
     ) {
-        for (stat in Stats.values()) {
+        val generator = IDGenerator(identifiers.uuid)
+
+        for ((offset, stat) in Stats.values().withIndex()) {
             api.addStatModifier(
                 player,
                 PlayerStatModifier(
-                    identifiers.key,
+                    generator.makeIdentifiers(offset).key,
                     stat,
                     config.getDoubleFromExpression("multiplier", player),
                     ModifierOperation.MULTIPLY
@@ -35,10 +38,12 @@ class EffectMultiplyAllStats : Effect("multiply_all_stats") {
         player: Player,
         identifiers: Identifiers
     ) {
-        for (stat in Stats.values()) {
+        val generator = IDGenerator(identifiers.uuid)
+
+        for (offset in Stats.values().indices) {
             api.removeStatModifier(
                 player,
-                identifiers.key
+                generator.makeIdentifiers(offset).key
             )
         }
     }
