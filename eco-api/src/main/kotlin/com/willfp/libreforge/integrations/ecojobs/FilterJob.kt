@@ -8,6 +8,7 @@ class FilterJob : Filter() {
     override fun passes(data: TriggerData, config: Config): Boolean {
         val job = (data.event as? WrappedJobXpEvent)?.job
             ?: (data.event as? WrappedJobLevelUpEvent)?.job
+            ?: (data.event as? WrappedJobJoinEvent)?.job
             ?: return true
 
         return config.withInverse("job", Config::getStrings) {
