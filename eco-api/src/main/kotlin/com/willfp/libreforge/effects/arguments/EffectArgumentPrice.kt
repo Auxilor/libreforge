@@ -40,7 +40,7 @@ object EffectArgumentPrice : EffectArgument {
         )
 
         val display = config.getString("price.display")
-            .replace("%value%", NumberUtils.format(price.value))
+            .replace("%value%", NumberUtils.format(price.getValue(player)))
 
         val message = plugin.langYml.getMessage("cannot-afford-price")
             .replace("%price%", display)
