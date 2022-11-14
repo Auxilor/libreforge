@@ -14,11 +14,15 @@ import java.util.Objects
 
 abstract class Trigger(
     val id: String,
-    val parameters: Collection<TriggerParameter>
+    parameters: Collection<TriggerParameter>
 ) : Listener {
+    val parameters: Collection<TriggerParameter>
+
     protected val plugin = LibReforgePlugin.instance
 
     init {
+        this.parameters = parameters.flatMap { listOf(it, *it.inheritsFrom) }
+
         postInit()
     }
 
