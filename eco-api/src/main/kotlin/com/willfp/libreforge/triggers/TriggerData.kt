@@ -23,15 +23,17 @@ data class TriggerData @JvmOverloads constructor(
     internal val originalPlayer: Player? = player // We have this to keep placeholders working with mutators
 )
 
-enum class TriggerParameter {
+enum class TriggerParameter(
+    vararg val inheritsFrom: TriggerParameter
+) {
     PLAYER,
     VICTIM,
     BLOCK,
     EVENT,
-    LOCATION,
+    LOCATION(VICTIM, PLAYER),
     PROJECTILE,
     DAMAGE_CAUSE,
-    VELOCITY,
-    ITEM,
+    VELOCITY(PLAYER, VICTIM),
+    ITEM(PLAYER, VICTIM),
     TEXT
 }
