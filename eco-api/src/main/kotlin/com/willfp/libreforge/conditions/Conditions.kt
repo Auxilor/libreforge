@@ -18,6 +18,7 @@ import com.willfp.libreforge.conditions.conditions.ConditionBelowHungerPercent
 import com.willfp.libreforge.conditions.conditions.ConditionBelowPoints
 import com.willfp.libreforge.conditions.conditions.ConditionBelowXPLevel
 import com.willfp.libreforge.conditions.conditions.ConditionBelowY
+import com.willfp.libreforge.conditions.conditions.ConditionCanAffordPrice
 import com.willfp.libreforge.conditions.conditions.ConditionHasItem
 import com.willfp.libreforge.conditions.conditions.ConditionHasPermission
 import com.willfp.libreforge.conditions.conditions.ConditionHasPotionEffect
@@ -100,6 +101,7 @@ object Conditions {
     val IS_EXPRESSION_TRUE: Condition = ConditionIsExpressionTrue()
     val IN_BLOCK: Condition = ConditionInBlock()
     val IS_SWIMMING: Condition = ConditionIsSwimming()
+    val CAN_AFFORD_PRICE: Condition = ConditionCanAffordPrice()
 
     /**
      * Get condition matching id.
