@@ -72,6 +72,10 @@ class TriggerAltClick : Trigger(
     fun handle(event: PlayerInteractEvent) {
         val player = event.player
         val itemStack = player.inventory.itemInMainHand
+        
+        if (event.action == Action.PHYSICAL) {
+            return
+        }
 
         if (LEFT_CLICK_ITEMS.contains(itemStack.type)) {
             if (event.action == Action.RIGHT_CLICK_AIR || event.action == Action.RIGHT_CLICK_BLOCK) {
