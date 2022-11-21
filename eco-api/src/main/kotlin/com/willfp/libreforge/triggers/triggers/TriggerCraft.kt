@@ -5,6 +5,7 @@ import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.Player
+import org.bukkit.event.Event
 import org.bukkit.event.EventHandler
 import org.bukkit.event.inventory.CraftItemEvent
 
@@ -20,6 +21,8 @@ class TriggerCraft : Trigger(
         if (McmmoManager.isFake(event)) {
             return
         }
+
+        if (event.result == Event.Result.DENY) return
 
         val player = event.whoClicked as? Player ?: return
         val item = event.recipe.result
