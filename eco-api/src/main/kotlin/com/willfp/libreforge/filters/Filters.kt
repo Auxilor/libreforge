@@ -25,6 +25,7 @@ object Filters {
     val IS_BEHIND_VICTIM: Filter = FilterIsBehindVictim
     val FULLY_CHARGED: Filter = FilterFullyCharged
     val POTION_EFFECTS: Filter = FilterPotionEffect
+    val IS_NPC: Filter = FilterIsNPC
 
     /**
      * List of all registered filters.
