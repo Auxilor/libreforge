@@ -13,9 +13,12 @@ import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.entity.EntityType
+import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Shulker
 import org.bukkit.event.EventHandler
 import org.bukkit.event.block.BlockBreakEvent
+import org.bukkit.event.world.ChunkLoadEvent
+import org.bukkit.event.world.ChunkUnloadEvent
 import org.bukkit.scoreboard.Team
 import java.util.UUID
 
@@ -25,6 +28,20 @@ class EffectGlowNearbyBlocks : Effect(
         TriggerParameter.LOCATION
     )
 ) {
+    @EventHandler
+    fun handleChunkUnload(event: ChunkUnloadEvent) {
+        event.chunk.entities.filterIsInstance<LivingEntity>()
+            .filter { it.hasMetadata("gnb-shulker") }
+            .forEach { it.remove() }
+    }
+
+    @EventHandler
+    fun handleChunkLoad(event: ChunkLoadEvent) {
+        event.chunk.entities.filterIsInstance<LivingEntity>()
+            .filter { it.hasMetadata("gnb-shulker") }
+            .forEach { it.remove() }
+    }
+
     override fun handle(data: TriggerData, config: Config) {
         val location = data.location ?: return
 
