@@ -37,6 +37,7 @@ import com.willfp.libreforge.conditions.conditions.ConditionIsSneaking
 import com.willfp.libreforge.conditions.conditions.ConditionIsSprinting
 import com.willfp.libreforge.conditions.conditions.ConditionIsStorm
 import com.willfp.libreforge.conditions.conditions.ConditionIsSwimming
+import com.willfp.libreforge.conditions.conditions.ConditionNearEntity
 import com.willfp.libreforge.conditions.conditions.ConditionOnFire
 import com.willfp.libreforge.conditions.conditions.ConditionPlaceholderContains
 import com.willfp.libreforge.conditions.conditions.ConditionPlaceholderEquals
@@ -102,6 +103,7 @@ object Conditions {
     val IN_BLOCK: Condition = ConditionInBlock()
     val IS_SWIMMING: Condition = ConditionIsSwimming()
     val CAN_AFFORD_PRICE: Condition = ConditionCanAffordPrice()
+    val NEAR_ENTITY: Condition = ConditionNearEntity()
 
     /**
      * Get condition matching id.
