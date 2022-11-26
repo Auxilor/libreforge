@@ -12,6 +12,7 @@ import com.willfp.libreforge.conditions.conditions.ConditionAbovePoints
 import com.willfp.libreforge.conditions.conditions.ConditionAboveXPLevel
 import com.willfp.libreforge.conditions.conditions.ConditionAboveY
 import com.willfp.libreforge.conditions.conditions.ConditionAnyOf
+import com.willfp.libreforge.conditions.conditions.ConditionAtLeastOf
 import com.willfp.libreforge.conditions.conditions.ConditionBelowBalance
 import com.willfp.libreforge.conditions.conditions.ConditionBelowHealthPercent
 import com.willfp.libreforge.conditions.conditions.ConditionBelowHungerPercent
@@ -104,6 +105,7 @@ object Conditions {
     val IS_SWIMMING: Condition = ConditionIsSwimming()
     val CAN_AFFORD_PRICE: Condition = ConditionCanAffordPrice()
     val NEAR_ENTITY: Condition = ConditionNearEntity()
+    val AT_LEAST_OF: Condition = ConditionAtLeastOf()
 
     /**
      * Get condition matching id.
