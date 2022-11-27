@@ -20,6 +20,7 @@ import com.willfp.libreforge.filters.filters.FilterPotionEffect
 import com.willfp.libreforge.filters.filters.FilterProjectiles
 import com.willfp.libreforge.filters.filters.FilterText
 import com.willfp.libreforge.filters.filters.FilterTextContains
+import com.willfp.libreforge.filters.filters.FilterVictimName
 import com.willfp.libreforge.triggers.TriggerData
 
 @Suppress("UNUSED")
@@ -45,6 +46,7 @@ object Filters {
     val POTION_EFFECTS: Filter = FilterPotionEffect
     val IS_NPC: Filter = FilterIsNPC
     val PLAYER_NAME: Filter = FilterPlayerName
+    val VICTIM_NAME: Filter = FilterVictimName
 
     /**
      * List of all registered filters.
