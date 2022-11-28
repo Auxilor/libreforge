@@ -6,6 +6,7 @@ import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 
 class TriggerSellItem : Trigger(
     "sell_item", listOf(
@@ -13,7 +14,7 @@ class TriggerSellItem : Trigger(
         TriggerParameter.ITEM
     )
 ) {
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     fun handle(event: ShopSellEvent) {
         if (McmmoManager.isFake(event)) {
             return
@@ -28,7 +29,7 @@ class TriggerSellItem : Trigger(
                 player = player,
                 item = item
             ),
-            value = event.price
+            value = event.value.getValue(player, event.multiplier)
         )
     }
 }

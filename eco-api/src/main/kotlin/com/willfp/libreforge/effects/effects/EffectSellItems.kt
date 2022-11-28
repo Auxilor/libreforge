@@ -1,8 +1,8 @@
 package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.integrations.economy.balance
-import com.willfp.eco.core.integrations.shop.getPrice
+import com.willfp.eco.core.integrations.shop.getUnitValue
+import com.willfp.eco.core.integrations.shop.isSellable
 import com.willfp.eco.core.items.Items
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.RunOrder
@@ -53,12 +53,12 @@ class EffectSellItems : Effect(
         val sold = mutableListOf<ItemStack>()
 
         for (item in items) {
-            val price = item.getPrice(player) * multiplier
-
-            if (price > 0.0) {
-                player.balance += price
-                sold += item
+            if (!item.isSellable(player)) {
+                continue
             }
+
+            val price = item.getUnitValue(player)
+            price.giveTo(player, item.amount * multiplier)
         }
 
         return sold
