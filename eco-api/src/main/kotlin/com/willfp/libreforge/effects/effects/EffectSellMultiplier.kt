@@ -7,6 +7,6 @@ import org.bukkit.event.EventHandler
 class EffectSellMultiplier : GenericMultiplierEffect("sell_multiplier") {
     @EventHandler
     fun handle(event: ShopSellEvent) {
-        event.price *= getMultiplier(event.player)
+        event.multiplier *= getMultiplier(event.player)
     }
 }
