@@ -22,6 +22,7 @@ import com.willfp.libreforge.triggers.triggers.TriggerDeployElytra
 import com.willfp.libreforge.triggers.triggers.TriggerDropItem
 import com.willfp.libreforge.triggers.triggers.TriggerEnchantItem
 import com.willfp.libreforge.triggers.triggers.TriggerEntityItemDrop
+import com.willfp.libreforge.triggers.triggers.TriggerEntityTarget
 import com.willfp.libreforge.triggers.triggers.TriggerFallDamage
 import com.willfp.libreforge.triggers.triggers.TriggerGainHunger
 import com.willfp.libreforge.triggers.triggers.TriggerGainXp
@@ -128,6 +129,7 @@ object Triggers {
     val PICK_UP_ITEM: Trigger = TriggerPickUpItem()
     val DROP_ITEM: Trigger = TriggerDropItem()
     val LEASH_ENTITY: Trigger = TriggerLeashEntity()
+    val ENTITY_TARGET: Trigger = TriggerEntityTarget()
 
 
     fun values(): Set<Trigger> {
