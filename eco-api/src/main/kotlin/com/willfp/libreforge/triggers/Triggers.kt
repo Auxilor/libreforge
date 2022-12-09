@@ -160,7 +160,6 @@ object Triggers {
      * @param trigger The trigger to add.
      */
     fun addNewTrigger(trigger: Trigger) {
-        BY_ID.remove(trigger.id)
         BY_ID[trigger.id] = trigger
     }
 
@@ -170,7 +169,6 @@ object Triggers {
      * @param group The trigger group to add.
      */
     fun addNewTriggerGroup(group: TriggerGroup) {
-        TRIGGER_GROUPS.remove(group.prefix)
         TRIGGER_GROUPS[group.prefix] = group
     }
 
