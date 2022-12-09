@@ -21,6 +21,7 @@ import com.willfp.libreforge.triggers.triggers.TriggerDeath
 import com.willfp.libreforge.triggers.triggers.TriggerDeployElytra
 import com.willfp.libreforge.triggers.triggers.TriggerDropItem
 import com.willfp.libreforge.triggers.triggers.TriggerEnchantItem
+import com.willfp.libreforge.triggers.triggers.TriggerEnterBed
 import com.willfp.libreforge.triggers.triggers.TriggerEntityItemDrop
 import com.willfp.libreforge.triggers.triggers.TriggerEntityTarget
 import com.willfp.libreforge.triggers.triggers.TriggerFallDamage
@@ -36,6 +37,7 @@ import com.willfp.libreforge.triggers.triggers.TriggerJump
 import com.willfp.libreforge.triggers.triggers.TriggerKill
 import com.willfp.libreforge.triggers.triggers.TriggerLeashEntity
 import com.willfp.libreforge.triggers.triggers.TriggerLeave
+import com.willfp.libreforge.triggers.triggers.TriggerLeaveBed
 import com.willfp.libreforge.triggers.triggers.TriggerLevelUpXp
 import com.willfp.libreforge.triggers.triggers.TriggerLoseHunger
 import com.willfp.libreforge.triggers.triggers.TriggerLosePotionEffect
@@ -130,6 +132,8 @@ object Triggers {
     val DROP_ITEM: Trigger = TriggerDropItem()
     val LEASH_ENTITY: Trigger = TriggerLeashEntity()
     val ENTITY_TARGET: Trigger = TriggerEntityTarget()
+    val ENTER_BED: Trigger = TriggerEnterBed()
+    val LEAVE_BED: Trigger = TriggerLeaveBed()
 
 
     fun values(): Set<Trigger> {
