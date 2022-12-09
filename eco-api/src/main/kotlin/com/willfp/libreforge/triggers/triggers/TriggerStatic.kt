@@ -48,21 +48,12 @@ class TriggerStatic(interval: Int) : Trigger(
                 ) {
                     override fun create(value: String): Trigger? {
                         val interval = value.toIntOrNull() ?: return null
-                        return getWithInterval(interval)
+                        return intervals.getOrPut(interval) {
+                            TriggerStatic(interval)
+                        }
                     }
                 }
             )
-        }
-
-        private fun getWithInterval(interval: Int): Trigger {
-            if (intervals.containsKey(interval)) {
-                return intervals[interval]!!
-            }
-
-            val trigger = TriggerStatic(interval)
-            intervals[interval] = trigger
-
-            return trigger
         }
 
         fun beginTiming(plugin: LibReforgePlugin) {
