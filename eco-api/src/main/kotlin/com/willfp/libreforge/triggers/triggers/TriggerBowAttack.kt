@@ -17,7 +17,8 @@ class TriggerBowAttack : Trigger(
         TriggerParameter.VICTIM,
         TriggerParameter.LOCATION,
         TriggerParameter.EVENT,
-        TriggerParameter.VELOCITY
+        TriggerParameter.VELOCITY,
+        TriggerParameter.PROJECTILE
     )
 ) {
     @EventHandler(ignoreCancelled = true)
@@ -54,7 +55,8 @@ class TriggerBowAttack : Trigger(
                 victim = victim,
                 location = victim.location,
                 event = WrappedDamageEvent(event),
-                velocity = arrow.velocity
+                velocity = arrow.velocity,
+                projectile = arrow
             ),
             event.finalDamage
         )
