@@ -110,7 +110,7 @@ data class ConfiguredEffect internal constructor(
 
         val (player, data, holder, _) = invocation
 
-        if (data.player != null && data.victim != null) {
+        if (data.player != null && data.victim != null && data.victim != data.player) {
             if (!args.getBool("disable_antigrief_check")) {
                 if (!AntigriefManager.canInjure(data.player, data.victim)) {
                     return
