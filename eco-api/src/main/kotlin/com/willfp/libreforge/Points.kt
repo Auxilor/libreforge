@@ -95,6 +95,10 @@ class PointPriceFactory(private val type: String) : PriceFactory {
         override fun setMultiplier(player: Player, multiplier: Double) {
             multipliers[player.uniqueId] = multiplier
         }
+
+        override fun getIdentifier(): String {
+            return "libreforge:point_$type"
+        }
     }
 }
 
