@@ -4,6 +4,7 @@ import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.drops.DropQueue
 import com.willfp.eco.core.events.EntityDeathByEntityEvent
 import com.willfp.eco.core.integrations.mcmmo.McmmoManager
+import com.willfp.eco.core.items.isEmpty
 import com.willfp.eco.util.tryAsPlayer
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
@@ -34,7 +35,7 @@ class TriggerEntityItemDrop : Trigger(
 
         val entity = event.victim
         val player = event.killer.tryAsPlayer() ?: return
-        val originalDrops = event.drops
+        val originalDrops = event.drops.filterNot { it.isEmpty }
 
         val wrapped = WrappedEntityDropEvent(event.deathEvent)
 
