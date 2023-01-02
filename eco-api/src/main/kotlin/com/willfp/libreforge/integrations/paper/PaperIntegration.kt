@@ -9,6 +9,7 @@ object PaperIntegration {
     private lateinit var BEACON_EFFECT: Trigger
     private lateinit var ELYTRA_BOOST: Trigger
     private lateinit var ELYTRA_BOOST_SAVE_CHANCE: Effect
+    private lateinit var VILLAGER_TRADE: Trigger
 
     fun load() {
         if (ClassUtils.exists("io.papermc.paper.event.player.PlayerArmSwingEvent")) {
@@ -18,5 +19,6 @@ object PaperIntegration {
         ELYTRA_BOOST = TriggerElytraBoost()
         BEACON_EFFECT = TriggerBeaconEffect()
         ELYTRA_BOOST_SAVE_CHANCE = EffectElytraBoostSaveChance()
+        VILLAGER_TRADE = TriggerVillagerTrade()
     }
 }
