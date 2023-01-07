@@ -56,9 +56,8 @@ class TriggerEntityItemDrop : Trigger(
             xp += i
         }
 
-        for (i in event.drops.indices) {
-            event.drops[i] = newDrops[i].first
-        }
+        event.drops.clear()
+        event.drops.addAll(newDrops.map { it.first })
 
         if (xp > 0) {
             DropQueue(player)
