@@ -53,7 +53,8 @@ class TriggerBlockItemDrop : Trigger(
                 player = player,
                 block = block,
                 location = block.location,
-                event = wrapped
+                event = wrapped,
+                item = null
             ),
             originalDrops.sumOf { it.amount }.toDouble()
         )
