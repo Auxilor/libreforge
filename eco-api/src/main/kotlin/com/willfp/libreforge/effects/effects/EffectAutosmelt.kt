@@ -53,10 +53,10 @@ class EffectAutosmelt : Effect(
 
         if (event != null && player != null) {
             handleEvent(player, event, config)
-        }
-
-        if (item != null) {
-            handleItem(item)
+        } else {
+            if (item != null) {
+                handleItem(item)
+            }
         }
     }
 
