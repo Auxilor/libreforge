@@ -10,6 +10,10 @@ private val lineCache = Caffeine.newBuilder()
     .expireAfterWrite(1, TimeUnit.SECONDS)
     .build<Int, List<String>>()
 
+private val anyNotMetCache = Caffeine.newBuilder()
+    .expireAfterWrite(1, TimeUnit.SECONDS)
+    .build<Int, Boolean>()
+
 internal object BlankHolder : Holder {
     override val id = "internal:blank"
     override val conditions = emptySet<ConfiguredCondition>()
@@ -20,6 +24,22 @@ interface Holder {
     val id: String
     val effects: Set<ConfiguredEffect>
     val conditions: Set<ConfiguredCondition>
+
+    fun showAnyNotMet(player: Player): Boolean {
+        val hash = player.uniqueId.hashCode() * 31 + id.hashCode()
+
+        return anyNotMetCache.get(hash) {
+            for (condition in this.conditions) {
+                if (condition.notMetEffects.isNotEmpty() || condition.notMetLines?.isNotEmpty() == true) {
+                    if (!condition.isMet(player)) {
+                        return@get true
+                    }
+                }
+            }
+
+            false
+        }
+    }
 
     fun getNotMetLines(player: Player): List<String> {
         val hash = player.uniqueId.hashCode() * 31 + id.hashCode()
