@@ -2,8 +2,8 @@ package com.willfp.libreforge.integrations.ecojobs
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.ecojobs.api.EcoJobsAPI
+import com.willfp.ecojobs.api.event.PlayerJobLevelUpEvent
 import com.willfp.ecojobs.jobs.Jobs
-import com.willfp.ecopets.api.event.PlayerPetLevelUpEvent
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.updateEffects
@@ -16,7 +16,7 @@ class ConditionHasJobLevel : Condition("has_job_level") {
         priority = EventPriority.MONITOR,
         ignoreCancelled = true
     )
-    fun handle(event: PlayerPetLevelUpEvent) {
+    fun handle(event: PlayerJobLevelUpEvent) {
         val player = event.player
 
         player.updateEffects()
