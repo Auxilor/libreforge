@@ -20,7 +20,8 @@ class TriggerAltClick : Trigger(
         TriggerParameter.VICTIM,
         TriggerParameter.LOCATION,
         TriggerParameter.EVENT,
-        TriggerParameter.ITEM
+        TriggerParameter.ITEM,
+        TriggerParameter.BLOCK
     )
 ) {
     companion object {
@@ -120,7 +121,8 @@ class TriggerAltClick : Trigger(
                 victim = entityResult?.hitEntity as? LivingEntity,
                 location = location,
                 event = GenericCancellableEvent(event),
-                item = player.inventory.itemInMainHand
+                item = player.inventory.itemInMainHand,
+                block = (entityResult?.hitEntity as? LivingEntity)?.location?.block ?: result?.hitBlock
             )
         )
     }
