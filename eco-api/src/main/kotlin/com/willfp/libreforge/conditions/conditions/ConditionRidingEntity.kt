@@ -3,7 +3,7 @@ package com.willfp.libreforge.conditions.conditions
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.entities.Entities
 import com.willfp.eco.core.entities.TestableEntity
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.effects.CompileData
 import com.willfp.libreforge.updateEffects
@@ -15,6 +15,10 @@ import org.spigotmc.event.entity.EntityDismountEvent
 import org.spigotmc.event.entity.EntityMountEvent
 
 class ConditionRidingEntity : Condition("riding_entity") {
+    override val arguments = arguments {
+        require("entities", "You must specify the list of allowed entities!")
+    }
+
     @EventHandler(
         priority = EventPriority.MONITOR,
         ignoreCancelled = true
@@ -39,19 +43,6 @@ class ConditionRidingEntity : Condition("riding_entity") {
         val compileData = data as? RidingEntityCompileData ?: return true
 
         return compileData.isMet(player.vehicle)
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("entities")) violations.add(
-            ConfigViolation(
-                "entities",
-                "You must specify the entity list!"
-            )
-        )
-
-        return violations
     }
 
     override fun makeCompileData(config: Config, context: String): CompileData {

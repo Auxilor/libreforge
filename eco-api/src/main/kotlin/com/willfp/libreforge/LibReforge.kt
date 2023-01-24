@@ -202,7 +202,7 @@ abstract class LibReforgePlugin @JvmOverloads constructor(
         holderProviders.add(provider::apply)
     }
 
-    fun logViolation(id: String, context: String, violation: ConfigViolation) {
+    fun logViolation(id: String, context: ViolationContext, violation: ConfigViolation) {
         this.logger.warning("")
         this.logger.warning("Invalid configuration for $id in context $context:")
         this.logger.warning("(Cause) Argument '${violation.param}'")
