@@ -29,7 +29,6 @@ class ConfigArgumentsBuilder {
     }
 
     fun require(names: Collection<String>, message: String) {
-        @Suppress("UNCHECKED_CAST")
         require(names, message, { get(it) }) {
             true
         }

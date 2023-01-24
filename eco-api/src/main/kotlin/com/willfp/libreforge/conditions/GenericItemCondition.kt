@@ -4,7 +4,8 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.items.Items
 import com.willfp.eco.core.items.TestableItem
 import com.willfp.eco.core.recipe.parts.EmptyTestableItem
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.ViolationContext
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.CompileData
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -13,6 +14,10 @@ abstract class GenericItemCondition(
     id: String,
     private val getItems: (Player) -> Collection<ItemStack?>
 ): Condition(id) {
+    override val arguments = arguments {
+        require(listOf("item", "items"), "You must specify the item / list of items!")
+    }
+
     final override fun isConditionMet(player: Player, config: Config, data: CompileData?): Boolean {
         if (data !is ItemCompileData) {
             return true
@@ -21,20 +26,7 @@ abstract class GenericItemCondition(
         return getItems(player).any { data.isMet(it) }
     }
 
-    final override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("items") && !config.has("item")) violations.add(
-            ConfigViolation(
-                "items / item",
-                "You must specify the item / list of items!"
-            )
-        )
-
-        return violations
-    }
-
-    final override fun makeCompileData(config: Config, context: String): CompileData {
+    final override fun makeCompileData(config: Config, context: ViolationContext): CompileData {
         return ItemCompileData((config.getStrings("items").map {
             Items.lookup(it)
         } + Items.lookup(config.getString("item"))).filterNot { it is EmptyTestableItem })
