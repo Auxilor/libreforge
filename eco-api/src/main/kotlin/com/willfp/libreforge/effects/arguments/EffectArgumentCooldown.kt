@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.arguments
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.util.PlayerUtils
 import com.willfp.eco.util.StringUtils
+import com.willfp.eco.util.formatEco
 import com.willfp.libreforge.LibReforgePlugin
 import com.willfp.libreforge.effects.ConfiguredEffect
 import com.willfp.libreforge.effects.EffectArgument
@@ -49,7 +50,10 @@ object EffectArgumentCooldown : EffectArgument {
 
         val cooldown = getCooldown(effect, data)
 
-        val message = plugin.langYml.getMessage("on-cooldown").replace("%seconds%", cooldown.toString())
+        val message = config.getStringOrNull("cooldown_message")
+            ?.replace("%seconds%", cooldown.toString())
+            ?.formatEco(data.player, true) ?: plugin.langYml.getMessage("on-cooldown")
+            .replace("%seconds%", cooldown.toString())
 
         if (plugin.configYml.getBool("cooldown.in-actionbar")) {
             PlayerUtils.getAudience(player).sendActionBar(StringUtils.toComponent(message))
