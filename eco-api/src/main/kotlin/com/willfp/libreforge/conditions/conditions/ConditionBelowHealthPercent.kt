@@ -1,7 +1,7 @@
 package com.willfp.libreforge.conditions.conditions
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.updateEffects
 import org.bukkit.attribute.Attribute
@@ -12,6 +12,10 @@ import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.EntityRegainHealthEvent
 
 class ConditionBelowHealthPercent : Condition("below_health_percent") {
+    override val arguments = arguments {
+        require("percent", "You must specify the health percentage!")
+    }
+
     @EventHandler(
         priority = EventPriority.MONITOR,
         ignoreCancelled = true
@@ -45,18 +49,5 @@ class ConditionBelowHealthPercent : Condition("below_health_percent") {
         val health = player.health
 
         return health / maxHealth * 100 <= config.getDoubleFromExpression("percent", player)
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("percent")) violations.add(
-            ConfigViolation(
-                "percent",
-                "You must specify the health percentage!"
-            )
-        )
-
-        return violations
     }
 }

@@ -10,32 +10,27 @@ abstract class ConfigurableProperty(
     protected val plugin = LibReforgePlugin.instance
 
     /**
+     * The arguments that will be checked.
+     */
+    open val arguments: ConfigArguments = arguments { }
+
+    /**
      * Check if the config for this is valid.
      *
      * Will send messages to console if invalid.
      *
      * @param config The config.
-     * @param context Additional context, e.g. path in config.
+     * @param context The context.
      * @return If any violations are found, take true to be a failure.
      */
-    fun checkConfig(config: Config, context: String): Boolean {
-        val violations = this.validateConfig(config)
+    fun checkConfig(config: Config, context: ViolationContext): Boolean {
+        val violations = arguments.test(config)
 
         for (violation in violations) {
             plugin.logViolation(this.id, context, violation)
         }
 
         return violations.isNotEmpty()
-    }
-
-    /**
-     * Check if the config for this effect is valid.
-     *
-     * @param config The config.
-     * @return A list of violations.
-     */
-    open fun validateConfig(config: Config): List<ConfigViolation> {
-        return emptyList()
     }
 
     override fun equals(other: Any?): Boolean {
