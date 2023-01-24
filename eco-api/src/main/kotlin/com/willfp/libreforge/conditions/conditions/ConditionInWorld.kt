@@ -1,25 +1,16 @@
 package com.willfp.libreforge.conditions.conditions
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
 import org.bukkit.entity.Player
 
 class ConditionInWorld : Condition("in_world") {
-    override fun isConditionMet(player: Player, config: Config): Boolean {
-        return player.world.name.equals(config.getString("world"), ignoreCase = true)
+    override val arguments = arguments {
+        require("world", "You must specify the world name!")
     }
 
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("world")) violations.add(
-            ConfigViolation(
-                "world",
-                "You must specify the world name!"
-            )
-        )
-
-        return violations
+    override fun isConditionMet(player: Player, config: Config): Boolean {
+        return player.world.name.equals(config.getString("world"), ignoreCase = true)
     }
 }
