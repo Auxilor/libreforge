@@ -7,10 +7,11 @@ import org.bukkit.entity.Player
 
 class EffectFlight: Effect("flight", supportsFilters = true) {
     override fun handleEnable(player: Player, config: Config, identifiers: Identifiers) {
-        player.isFlying = true
+        player.allowFlight = true
     }
 
     override fun handleDisable(player: Player, identifiers: Identifiers) {
+        player.allowFlight = false
         player.isFlying = false
     }
 }
