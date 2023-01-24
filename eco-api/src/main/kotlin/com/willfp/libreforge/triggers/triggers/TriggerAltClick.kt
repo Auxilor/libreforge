@@ -114,15 +114,17 @@ class TriggerAltClick : Trigger(
             player.eyeLocation.direction, 50.0, 3.0
         ) { entity: Entity? -> entity is LivingEntity }
 
+        val victim = entityResult?.hitEntity as? LivingEntity
+
         this.processTrigger(
             player,
             TriggerData(
                 player = player,
-                victim = entityResult?.hitEntity as? LivingEntity,
+                victim = victim,
                 location = location,
                 event = GenericCancellableEvent(event),
                 item = player.inventory.itemInMainHand,
-                block = (entityResult?.hitEntity as? LivingEntity)?.location?.block ?: result?.hitBlock
+                block = victim?.location?.block ?: result?.hitBlock
             )
         )
     }

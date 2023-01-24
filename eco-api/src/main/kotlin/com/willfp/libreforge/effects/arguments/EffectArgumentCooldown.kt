@@ -52,8 +52,10 @@ object EffectArgumentCooldown : EffectArgument {
 
         val message = config.getStringOrNull("cooldown_message")
             ?.replace("%seconds%", cooldown.toString())
-            ?.formatEco(data.player, true) ?: plugin.langYml.getMessage("on-cooldown")
-            .replace("%seconds%", cooldown.toString())
+            ?.formatEco(data.player, true)
+
+            ?: plugin.langYml.getMessage("on-cooldown")
+                .replace("%seconds%", cooldown.toString())
 
         if (plugin.configYml.getBool("cooldown.in-actionbar")) {
             PlayerUtils.getAudience(player).sendActionBar(StringUtils.toComponent(message))
