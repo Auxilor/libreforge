@@ -1,6 +1,7 @@
 package com.willfp.libreforge.conditions.conditions
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.conditions.Conditions
@@ -19,11 +20,11 @@ class ConditionAnyOf : Condition("any_of") {
         return anyOfData.isMet(player)
     }
 
-    override fun makeCompileData(config: Config, context: String): CompileData {
+    override fun makeCompileData(config: Config, context: ViolationContext): CompileData {
         return AnyOfCompileData(
             Conditions.compile(
                 config.getSubsections("conditions"),
-                "$context -> any_of Conditions)"
+                context.with("any_of Conditions")
             )
         )
     }

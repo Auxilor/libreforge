@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.entities.Entities
 import com.willfp.eco.core.entities.TestableEntity
 import com.willfp.eco.core.entities.impl.EmptyTestableEntity
+import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.effects.CompileData
@@ -25,7 +26,7 @@ class ConditionNearEntity : Condition("near_entity") {
         }
     }
 
-    override fun makeCompileData(config: Config, context: String): CompileData {
+    override fun makeCompileData(config: Config, context: ViolationContext): CompileData {
         return EntitiesCompileData(
             config.getStrings("entities").map {
                 Entities.lookup(it)

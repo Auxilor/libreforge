@@ -1,6 +1,7 @@
 package com.willfp.libreforge.conditions.conditions
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.conditions.Conditions
@@ -20,11 +21,11 @@ class ConditionAtLeastOf : Condition("at_least_of") {
         return anyOfData.isMet(player, config.getIntFromExpression("amount", player))
     }
 
-    override fun makeCompileData(config: Config, context: String): CompileData {
+    override fun makeCompileData(config: Config, context: ViolationContext): CompileData {
         return AtLeastOfCompileData(
             Conditions.compile(
                 config.getSubsections("conditions"),
-                "$context -> at_least_of Conditions)"
+                context.with("at_least_of Conditions")
             )
         )
     }

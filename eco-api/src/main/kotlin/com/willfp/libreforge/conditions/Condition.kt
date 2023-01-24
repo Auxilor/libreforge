@@ -2,6 +2,7 @@ package com.willfp.libreforge.conditions
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigurableProperty
+import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.effects.CompileData
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
@@ -42,7 +43,7 @@ abstract class Condition(
         data: CompileData?
     ): Boolean = isConditionMet(player, config)
 
-    open fun makeCompileData(config: Config, context: String): CompileData? {
+    open fun makeCompileData(config: Config, context: ViolationContext): CompileData? {
         return null
     }
 }
