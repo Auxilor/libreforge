@@ -9,6 +9,10 @@ class ViolationContext {
         parents = listOf()
     }
 
+    constructor(context: String) {
+        parents = listOf(context)
+    }
+
     internal constructor(parents: List<String>) {
         this.parents = parents
     }

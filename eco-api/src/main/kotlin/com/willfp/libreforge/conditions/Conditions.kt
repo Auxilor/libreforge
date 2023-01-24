@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableList
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.LibReforgePlugin
+import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.conditions.conditions.ConditionAboveBalance
 import com.willfp.libreforge.conditions.conditions.ConditionAboveHealthPercent
 import com.willfp.libreforge.conditions.conditions.ConditionAboveHungerPercent
@@ -146,7 +147,7 @@ object Conditions {
     @JvmStatic
     fun compile(
         configs: Iterable<Config>,
-        context: String
+        context: ViolationContext
     ): Set<ConfiguredCondition> = configs.mapNotNull { compile(it, context) }.toSet()
 
     /**
@@ -157,7 +158,7 @@ object Conditions {
      * @return The configured condition, or null if invalid.
      */
     @JvmStatic
-    fun compile(cfg: Config, context: String): ConfiguredCondition? {
+    fun compile(cfg: Config, context: ViolationContext): ConfiguredCondition? {
         val config = cfg.separatorAmbivalent()
 
         val condition = config.getString("id").let {
