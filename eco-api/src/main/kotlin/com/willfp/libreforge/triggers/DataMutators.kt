@@ -47,7 +47,7 @@ object DataMutators {
     @JvmStatic
     fun compile(
         configs: Iterable<Config>,
-        context: String
+        context: ViolationContext
     ): List<ConfiguredDataMutator> = configs.mapNotNull { compile(it, context) }
 
 

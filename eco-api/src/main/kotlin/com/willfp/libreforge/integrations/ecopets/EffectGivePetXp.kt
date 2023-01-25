@@ -3,7 +3,7 @@ package com.willfp.libreforge.integrations.ecopets
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.ecopets.api.EcoPetsAPI
 import com.willfp.ecopets.pets.Pets
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -15,6 +15,11 @@ class EffectGivePetXp : Effect(
         TriggerParameter.PLAYER
     )
 ) {
+    override val arguments = arguments {
+        require("amount", "You must specify the amount of xp to give!")
+        require("pet", "You must specify the pet to give xp for!")
+    }
+
     override fun handle(data: TriggerData, config: Config) {
         val player = data.player ?: return
 
@@ -23,25 +28,5 @@ class EffectGivePetXp : Effect(
             Pets.getByID(config.getString("pet")) ?: return,
             config.getDoubleFromExpression("amount", player)
         )
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("amount")) violations.add(
-            ConfigViolation(
-                "amount",
-                "You must specify the amount of xp to give!"
-            )
-        )
-
-        if (!config.has("pet")) violations.add(
-            ConfigViolation(
-                "pet",
-                "You must specify the pet to give xp for!"
-            )
-        )
-
-        return violations
     }
 }

@@ -4,7 +4,7 @@ import com.destroystokyo.paper.event.player.PlayerElytraBoostEvent
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.mcmmo.McmmoManager
 import com.willfp.eco.util.NumberUtils
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.effects.MultiplierModifier
@@ -13,6 +13,10 @@ import org.bukkit.event.EventHandler
 import java.util.UUID
 
 class EffectElytraBoostSaveChance : Effect("elytra_boost_save_chance") {
+    override val arguments = arguments {
+        require("chance", "You must specify the chance to not consume rockets!")
+    }
+
     private val modifiers = mutableMapOf<UUID, MutableList<MultiplierModifier>>()
 
     override fun handleEnable(
@@ -58,18 +62,5 @@ class EffectElytraBoostSaveChance : Effect("elytra_boost_save_chance") {
         if (NumberUtils.randFloat(0.0, 100.0) > chance) {
             event.setShouldConsume(false)
         }
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("chance")) violations.add(
-            ConfigViolation(
-                "chance",
-                "You must specify the chance to not consume rockets!"
-            )
-        )
-
-        return violations
     }
 }
