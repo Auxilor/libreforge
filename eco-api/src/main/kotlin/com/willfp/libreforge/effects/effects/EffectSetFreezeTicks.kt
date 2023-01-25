@@ -1,7 +1,7 @@
 package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
@@ -14,22 +14,13 @@ class EffectSetFreezeTicks : Effect(
         TriggerParameter.VICTIM
     )
 ) {
+    override val arguments = arguments {
+        require("ticks", "You must specify the freeze ticks!")
+    }
+
     override fun handle(data: TriggerData, config: Config) {
         val victim = data.victim ?: return
 
         victim.freezeTicks = config.getIntFromExpression("ticks", data)
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("ticks")) violations.add(
-            ConfigViolation(
-                "ticks",
-                "You must specify the ticks!"
-            )
-        )
-
-        return violations
     }
 }

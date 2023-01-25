@@ -4,7 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.eco.util.BlockUtils
 import com.willfp.eco.util.runExempted
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
@@ -19,6 +19,10 @@ class EffectMineVein : Effect(
         TriggerParameter.BLOCK
     )
 ) {
+    override val arguments = arguments {
+        require("limit", "You must specify the most blocks to break!")
+    }
+
     override fun handle(data: TriggerData, config: Config) {
         val block = data.block ?: data.location?.block ?: return
 
@@ -60,18 +64,5 @@ class EffectMineVein : Effect(
                 toBreak.removeMetadata("block-ignore", plugin)
             }
         }
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("limit")) violations.add(
-            ConfigViolation(
-                "limit",
-                "You must specify the maximum amount of blocks to break!"
-            )
-        )
-
-        return violations
     }
 }

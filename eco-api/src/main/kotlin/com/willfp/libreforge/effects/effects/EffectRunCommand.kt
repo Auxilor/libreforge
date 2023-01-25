@@ -2,7 +2,7 @@ package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.placeholder.PlaceholderManager
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -16,6 +16,10 @@ class EffectRunCommand : Effect(
         TriggerParameter.PLAYER
     )
 ) {
+    override val arguments = arguments {
+        require("command", "You must specify the command to run!")
+    }
+
     override fun handle(data: TriggerData, config: Config) {
         val player = data.player ?: return
         val victim = data.victim as? Player
@@ -33,18 +37,5 @@ class EffectRunCommand : Effect(
             Bukkit.getConsoleSender(),
             command
         )
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("command")) violations.add(
-            ConfigViolation(
-                "command",
-                "You must specify the command to execute!"
-            )
-        )
-
-        return violations
     }
 }

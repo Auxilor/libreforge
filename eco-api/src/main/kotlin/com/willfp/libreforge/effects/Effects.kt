@@ -7,6 +7,7 @@ import com.willfp.eco.core.placeholder.InjectablePlaceholder
 import com.willfp.eco.core.placeholder.StaticPlaceholder
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.LibReforgePlugin
+import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.chains.EffectChains
 import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.effects.arguments.EffectArgumentChance
@@ -198,9 +199,9 @@ object Effects {
     @JvmOverloads
     fun compile(
         configs: Iterable<Config>,
-        context: String,
+        context: ViolationContext,
         chainLike: Boolean = false
-    ): Set<ConfiguredEffect> = configs.mapNotNull { compile(it, context, chainLike = chainLike) }.inRunOrder()
+    ): List<ConfiguredEffect> = configs.mapNotNull { compile(it, context, chainLike = chainLike) }.inRunOrder()
 
     /**
      * Compile an effect.
@@ -215,7 +216,7 @@ object Effects {
     @JvmOverloads
     fun compile(
         cfg: Config,
-        context: String,
+        context: ViolationContext,
         chainLike: Boolean = false
     ): ConfiguredEffect? {
         val config = cfg.separatorAmbivalent()
@@ -348,17 +349,17 @@ object Effects {
 
         val conditions = Conditions.compile(
             config.getSubsections("conditions"),
-            "$context -> Effect-Specific Conditions"
+            context.with("Effect-Specific conditions")
         )
 
         val mutators = config.getSubsections("mutators").mapNotNull {
-            DataMutators.compile(it, "$context -> Mutators")
+            DataMutators.compile(it, context.with("Mutators"))
         }
 
         val compileData = if (isShorthandInlineChain) {
             val chain = EffectChains.compile(
                 config,
-                "$context -> Effects",
+                context.with("Effects"),
                 anonymous = true
             )
 

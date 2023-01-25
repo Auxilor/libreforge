@@ -3,8 +3,8 @@ package com.willfp.libreforge.chains
 import com.google.common.collect.HashBiMap
 import com.google.common.collect.ImmutableList
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.effects.Effects
-import com.willfp.libreforge.effects.inRunOrder
 import com.willfp.libreforge.separatorAmbivalent
 
 @Suppress("UNUSED")
@@ -39,7 +39,7 @@ object EffectChains {
      */
     @JvmStatic
     @JvmOverloads
-    fun compile(cfg: Config, context: String, anonymous: Boolean = false): EffectChain? {
+    fun compile(cfg: Config, context: ViolationContext, anonymous: Boolean = false): EffectChain? {
         val config = cfg.separatorAmbivalent()
 
         val id = if (anonymous) "<inline chain>" else config.getString("id")
@@ -48,7 +48,7 @@ object EffectChains {
 
         Effects.compile(
             config.getSubsections("effects"),
-            "$context -> Chain ID $id",
+            context.with("Chain ID $id"),
             chainLike = true
         ).mapTo(components) { ChainComponentEffect(it) }
 

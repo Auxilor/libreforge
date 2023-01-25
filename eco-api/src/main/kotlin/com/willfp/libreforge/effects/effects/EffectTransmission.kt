@@ -1,7 +1,7 @@
 package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
@@ -14,6 +14,10 @@ class EffectTransmission : Effect(
         TriggerParameter.PLAYER
     )
 ) {
+    override val arguments = arguments {
+        require("distance", "You must specify the distance to transmit!")
+    }
+
     override fun handle(data: TriggerData, config: Config) {
         val player = data.player ?: return
 
@@ -37,18 +41,5 @@ class EffectTransmission : Effect(
         location.yaw = player.location.yaw
 
         player.teleport(location)
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("distance")) violations.add(
-            ConfigViolation(
-                "distance",
-                "You must specify the distance to transmit!"
-            )
-        )
-
-        return violations
     }
 }

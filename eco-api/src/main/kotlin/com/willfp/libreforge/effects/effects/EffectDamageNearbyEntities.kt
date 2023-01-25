@@ -2,14 +2,13 @@ package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.entities.Entities
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
 import org.bukkit.entity.LivingEntity
-
 
 class EffectDamageNearbyEntities : Effect(
     "damage_nearby_entities",
@@ -18,6 +17,12 @@ class EffectDamageNearbyEntities : Effect(
         TriggerParameter.PLAYER
     )
 ) {
+    override val arguments = arguments {
+        require("radius", "You must specify the radius!")
+        require("damage_as_player", "You must specify if the player should be marked as the damager!")
+        require("damage", "You must specify the damage to deal!")
+    }
+
     override fun handle(data: TriggerData, config: Config) {
         val location = data.location ?: return
         val world = location.world ?: return
@@ -57,32 +62,5 @@ class EffectDamageNearbyEntities : Effect(
                 entity.damage(damage)
             }
         }
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("radius")) violations.add(
-            ConfigViolation(
-                "radius",
-                "You must specify the radius!"
-            )
-        )
-
-        if (!config.has("damage_as_player")) violations.add(
-            ConfigViolation(
-                "damage_as_player",
-                "You must specify if the player should be marked as the damager!"
-            )
-        )
-
-        if (!config.has("damage")) violations.add(
-            ConfigViolation(
-                "damage",
-                "You must specify the damage to deal!"
-            )
-        )
-
-        return violations
     }
 }

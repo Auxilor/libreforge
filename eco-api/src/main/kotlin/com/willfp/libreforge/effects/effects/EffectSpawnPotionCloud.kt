@@ -1,7 +1,7 @@
 package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
@@ -18,6 +18,12 @@ class EffectSpawnPotionCloud : Effect(
         TriggerParameter.LOCATION
     )
 ), Listener {
+    override val arguments = arguments {
+        require("effect", "You must specify the potion effect!")
+        require("level", "You must specify the effect level!")
+        require("duration", "You must specify the duration of the effect applied!")
+    }
+
     override fun handle(data: TriggerData, config: Config) {
         val location = data.location ?: return
         val world = location.world ?: return
@@ -37,32 +43,5 @@ class EffectSpawnPotionCloud : Effect(
         )
 
         cloud.source = data.player
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("effect")) violations.add(
-            ConfigViolation(
-                "effect",
-                "You must specify the potion effect!"
-            )
-        )
-
-        if (!config.has("level")) violations.add(
-            ConfigViolation(
-                "level",
-                "You must specify the level of the effect!"
-            )
-        )
-
-        if (!config.has("duration")) violations.add(
-            ConfigViolation(
-                "duration",
-                "You must specify the duration of the potion effect applied!"
-            )
-        )
-
-        return violations
     }
 }

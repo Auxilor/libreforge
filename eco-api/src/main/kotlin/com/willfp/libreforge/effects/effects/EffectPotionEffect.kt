@@ -1,7 +1,7 @@
 package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
@@ -16,8 +16,17 @@ class EffectPotionEffect : Effect(
         TriggerParameter.PLAYER
     )
 ) {
+    override val arguments = arguments {
+        require("effect", "You must specify a valid potion effect! See here: " +
+                "https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/potion/PotionEffectType.html", Config::getString) {
+            PotionEffectType.getByName(it.uppercase()) != null
+        }
+        require("level", "You must specify the effect level!")
+        require("duration", "You must specify the duration!")
+    }
+
     override fun handle(data: TriggerData, config: Config) {
-        val toApply = if (config.getBool("apply_to_player")) {
+        val toApply = if (config.getBoolOrNull("apply_to_player") == true) {
             data.player ?: return
         } else {
             data.victim ?: return
@@ -34,40 +43,5 @@ class EffectPotionEffect : Effect(
                 plugin.configYml.getBool("potions.icon.triggered")
             )
         )
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (PotionEffectType.getByName(config.getStringOrNull("effect")?.uppercase() ?: "") == null) violations.add(
-            ConfigViolation(
-                "effect",
-                "You must specify the potion effect / invalid effect specified! Get a list of valid effects here: "
-                        + " https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/potion/PotionEffectType.html"
-            )
-        )
-
-        if (!config.has("level")) violations.add(
-            ConfigViolation(
-                "level",
-                "You must specify the effect level!"
-            )
-        )
-
-        if (!config.has("duration")) violations.add(
-            ConfigViolation(
-                "duration",
-                "You must specify the duration!"
-            )
-        )
-
-        if (!config.has("apply_to_player")) violations.add(
-            ConfigViolation(
-                "apply_to_player",
-                "You must specify whether the player or victim gets the effect!"
-            )
-        )
-
-        return violations
     }
 }

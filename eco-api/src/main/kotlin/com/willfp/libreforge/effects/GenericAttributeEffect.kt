@@ -5,7 +5,7 @@ import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeModifier
 import org.bukkit.entity.Player
 
-abstract class GenericAttributeMultiplierEffect(
+abstract class GenericAttributeEffect(
     id: String,
     private val attribute: Attribute,
     private val operation: AttributeModifier.Operation

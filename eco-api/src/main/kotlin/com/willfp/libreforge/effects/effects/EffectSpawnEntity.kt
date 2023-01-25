@@ -2,7 +2,7 @@ package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.entities.Entities
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -15,23 +15,14 @@ class EffectSpawnEntity : Effect(
         TriggerParameter.LOCATION
     )
 ), Listener {
+    override val arguments = arguments {
+        require("entity", "You must specify the mob to spawn!")
+    }
+
     override fun handle(data: TriggerData, config: Config) {
         val location = data.location ?: return
 
         val entity = Entities.lookup(config.getString("entity"))
         entity.spawn(location)
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("entity")) violations.add(
-            ConfigViolation(
-                "entity",
-                "You must specify the mob to spawn!"
-            )
-        )
-
-        return violations
     }
 }

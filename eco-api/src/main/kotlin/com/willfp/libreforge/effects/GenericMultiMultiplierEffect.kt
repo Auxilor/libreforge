@@ -1,7 +1,7 @@
 package com.willfp.libreforge.effects
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import org.bukkit.entity.Player
 import java.util.UUID
 
@@ -11,6 +11,10 @@ abstract class GenericMultiMultiplierEffect<T : Any>(
     private val getAll: () -> Iterable<T>,
     private val key: String,
 ) : Effect(id) {
+    override val arguments = arguments {
+        require("multiplier", "You must specify the multiplier!")
+    }
+
     private val modifiers = mutableMapOf<UUID, MutableMap<T, MutableList<MultiplierModifier>>>()
     private val globalModifiers = mutableMapOf<UUID, MutableList<MultiplierModifier>>()
 
@@ -79,19 +83,5 @@ abstract class GenericMultiMultiplierEffect<T : Any>(
         }
 
         return multiplier
-    }
-
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("multiplier")) violations.add(
-            ConfigViolation(
-                "multiplier",
-                "You must specify the multiplier!"
-            )
-        )
-
-        return violations
     }
 }

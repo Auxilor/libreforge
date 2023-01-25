@@ -2,7 +2,7 @@ package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.fast.FastItemStack
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.RunOrder
 import com.willfp.libreforge.triggers.TriggerData
@@ -23,6 +23,10 @@ class EffectAutosmelt : Effect(
     triggers = Triggers.all(),
     runOrder = RunOrder.LATE
 ) {
+    override val arguments = arguments {
+        require("drop_xp", "You must specify if xp should be dropped!")
+    }
+
     private val recipes = mutableMapOf<Material, Pair<Material, Int>>()
     private val fortuneMaterials = mutableSetOf(
         Material.GOLD_INGOT,
@@ -84,18 +88,5 @@ class EffectAutosmelt : Effect(
     private fun handleItem(item: ItemStack) {
         val (type, _) = getOutput(item.type)
         item.type = type
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("drop_xp")) violations.add(
-            ConfigViolation(
-                "drop_xp",
-                "You must specify if xp should be dropped!"
-            )
-        )
-
-        return violations
     }
 }

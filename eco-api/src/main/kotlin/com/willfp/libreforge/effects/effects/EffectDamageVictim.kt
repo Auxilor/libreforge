@@ -2,7 +2,7 @@ package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
@@ -16,6 +16,10 @@ class EffectDamageVictim : Effect(
         TriggerParameter.VICTIM
     )
 ) {
+    override val arguments = arguments {
+        require("damage", "You must specify the amount of damage!")
+    }
+
     override fun handle(data: TriggerData, config: Config) {
         val victim = data.victim ?: return
         val player = data.player
@@ -38,18 +42,5 @@ class EffectDamageVictim : Effect(
                 victim.damage(damage)
             }
         }
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("damage")) violations.add(
-            ConfigViolation(
-                "damage",
-                "You must specify the damage to deal!"
-            )
-        )
-
-        return violations
     }
 }

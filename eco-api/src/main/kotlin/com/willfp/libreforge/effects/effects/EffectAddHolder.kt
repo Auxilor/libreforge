@@ -1,8 +1,9 @@
 package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.Holder
+import com.willfp.libreforge.ViolationContext
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.conditions.ConfiguredCondition
 import com.willfp.libreforge.effects.CompileData
@@ -21,6 +22,12 @@ class EffectAddHolder : Effect(
         TriggerParameter.PLAYER
     )
 ) {
+    override val arguments = arguments {
+        require("effects", "You must specify the effects!")
+        require("conditions", "You must specify the conditions!")
+        require("duration", "You must specify the duration (in ticks)!")
+    }
+
     private val holders = mutableMapOf<UUID, MutableMap<UUID, Holder>>()
 
     init {
@@ -55,42 +62,15 @@ class EffectAddHolder : Effect(
         }
     }
 
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("effects")) violations.add(
-            ConfigViolation(
-                "effects",
-                "You must specify the effects!"
-            )
-        )
-
-        if (!config.has("conditions")) violations.add(
-            ConfigViolation(
-                "conditions",
-                "You must specify the conditions!"
-            )
-        )
-
-        if (!config.has("duration")) violations.add(
-            ConfigViolation(
-                "duration",
-                "You must specify the duration (in ticks)!"
-            )
-        )
-
-        return violations
-    }
-
-    override fun makeCompileData(config: Config, context: String): CompileData {
+    override fun makeCompileData(config: Config, context: ViolationContext): CompileData {
         val effects = Effects.compile(
             config.getSubsections("effects"),
-            "$context -> add_holder Effects"
+            context.with("add_holder Effects")
         )
 
         val conditions = Conditions.compile(
             config.getSubsections("conditions"),
-            "$context -> add_holder Conditions"
+            context.with("add_holder Conditions")
         )
 
         return UnfinishedHolder(
@@ -100,13 +80,13 @@ class EffectAddHolder : Effect(
     }
 
     private data class UnfinishedHolder(
-        val effects: Set<ConfiguredEffect>,
-        val conditions: Set<ConfiguredCondition>
+        val effects: List<ConfiguredEffect>,
+        val conditions: List<ConfiguredCondition>
     ) : CompileData
 
     private class AddedHolder(
-        override val effects: Set<ConfiguredEffect>,
-        override val conditions: Set<ConfiguredCondition>,
+        override val effects: List<ConfiguredEffect>,
+        override val conditions: List<ConfiguredCondition>,
         override val id: String
     ) : Holder
 }

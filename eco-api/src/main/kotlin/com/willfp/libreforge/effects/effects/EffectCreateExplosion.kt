@@ -1,7 +1,7 @@
 package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.getIntFromExpression
@@ -15,6 +15,11 @@ class EffectCreateExplosion : Effect(
         TriggerParameter.LOCATION
     )
 ) {
+    override val arguments = arguments {
+        require("amount", "You must specify the amount of explosions!")
+        require("power", "You must specify the explosion power!")
+    }
+
     override fun handle(data: TriggerData, config: Config) {
         val location = data.location ?: return
         val world = location.world ?: return
@@ -27,25 +32,5 @@ class EffectCreateExplosion : Effect(
                 world.createExplosion(location, power.toFloat())
             }
         }
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("amount")) violations.add(
-            ConfigViolation(
-                "amount",
-                "You must specify the amount of explosions!"
-            )
-        )
-
-        if (!config.has("power")) violations.add(
-            ConfigViolation(
-                "power",
-                "You must specify the explosion power!"
-            )
-        )
-
-        return violations
     }
 }

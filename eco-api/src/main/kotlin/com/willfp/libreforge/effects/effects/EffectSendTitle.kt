@@ -5,7 +5,7 @@ import com.willfp.eco.core.integrations.placeholder.PlaceholderManager
 import com.willfp.eco.util.asAudience
 import com.willfp.eco.util.formatEco
 import com.willfp.eco.util.toComponent
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -18,6 +18,11 @@ class EffectSendTitle : Effect(
         TriggerParameter.PLAYER
     )
 ) {
+    override val arguments = arguments {
+        require("title", "You must specify the title!")
+        require("subtitle", "You must specify the subtitle!")
+    }
+
     override fun handle(data: TriggerData, config: Config) {
         val player = data.player ?: return
 
@@ -35,25 +40,5 @@ class EffectSendTitle : Effect(
 
         audience.sendTitlePart(TitlePart.TITLE, title.toComponent())
         audience.sendTitlePart(TitlePart.SUBTITLE, subtitle.toComponent())
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("title")) violations.add(
-            ConfigViolation(
-                "title",
-                "You must specify the title to send!"
-            )
-        )
-
-        if (!config.has("subtitle")) violations.add(
-            ConfigViolation(
-                "subtitle",
-                "You must specify the subtitle to send!"
-            )
-        )
-
-        return violations
     }
 }

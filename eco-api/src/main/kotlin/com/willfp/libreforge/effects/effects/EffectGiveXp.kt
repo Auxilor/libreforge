@@ -2,7 +2,7 @@ package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
@@ -15,35 +15,17 @@ class EffectGiveXp : Effect(
         TriggerParameter.PLAYER
     )
 ) {
+    override val arguments = arguments {
+        require("amount", "You must specify the amount of xp to give!")
+    }
+
     override fun handle(data: TriggerData, config: Config) {
         val player = data.player ?: return
 
         if (Prerequisite.HAS_PAPER.isMet) {
-            player.giveExp(config.getIntFromExpression("amount", data), config.getBool("apply_mending"))
+            player.giveExp(config.getIntFromExpression("amount", data), config.getBoolOrNull("apply_mending") ?: true)
         } else {
             player.giveExp(config.getIntFromExpression("amount", data))
         }
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("amount")) violations.add(
-            ConfigViolation(
-                "amount",
-                "You must specify the amount of xp to give!"
-            )
-        )
-
-        if (Prerequisite.HAS_PAPER.isMet) {
-            if (!config.has("apply_mending")) violations.add(
-                ConfigViolation(
-                    "apply_mending",
-                    "You must specify whether or not to apply mending!"
-                )
-            )
-        }
-
-        return violations
     }
 }

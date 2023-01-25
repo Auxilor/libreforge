@@ -12,7 +12,6 @@ class EffectExtinguish: Effect(
         TriggerParameter.PLAYER
     )
 ) {
-
     override fun handle(data: TriggerData, config: Config) {
         val player = data.player ?: return
         player.fireTicks = 0

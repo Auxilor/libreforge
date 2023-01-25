@@ -2,7 +2,7 @@ package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.items.Items
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
@@ -18,6 +18,10 @@ class EffectMultiplyDrops : Effect(
     ),
     noDelay = true
 ) {
+    override val arguments = arguments {
+        require("fortune", "You must specify the level of fortune to mimic!")
+    }
+
     override fun handle(data: TriggerData, config: Config) {
         val event = data.event as? WrappedDropEvent<*> ?: return
 
@@ -36,18 +40,5 @@ class EffectMultiplyDrops : Effect(
 
             Pair(it, 0)
         }
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("fortune")) violations.add(
-            ConfigViolation(
-                "fortune",
-                "You must specify the fortune to give!"
-            )
-        )
-
-        return violations
     }
 }

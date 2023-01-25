@@ -1,7 +1,6 @@
 package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
 import org.bukkit.entity.Player
@@ -43,9 +42,5 @@ class EffectFeatherStep : Effect("feather_step") {
         if ((players[player.uniqueId] ?: emptyList()).isNotEmpty()) {
             event.isCancelled = true
         }
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        return mutableListOf()
     }
 }

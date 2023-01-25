@@ -2,6 +2,7 @@ package com.willfp.libreforge.effects
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigurableProperty
+import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.triggers.InvocationData
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
@@ -91,7 +92,7 @@ abstract class Effect @JvmOverloads constructor(
         // Override when needed
     }
 
-    open fun makeCompileData(config: Config, context: String): CompileData? {
+    open fun makeCompileData(config: Config, context: ViolationContext): CompileData? {
         return null
     }
 }

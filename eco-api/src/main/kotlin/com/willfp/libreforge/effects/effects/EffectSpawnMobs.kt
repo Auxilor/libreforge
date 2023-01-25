@@ -3,7 +3,7 @@ package com.willfp.libreforge.effects.effects
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.entities.Entities
 import com.willfp.eco.util.NumberUtils
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.getIntFromExpression
@@ -27,6 +27,13 @@ class EffectSpawnMobs : Effect(
         TriggerParameter.LOCATION
     )
 ), Listener {
+    override val arguments = arguments {
+        require("amount", "You must specify the amount of mobs to spawn!")
+        require("ticks_to_live", "You must specify the mob lifespan!")
+        require("range", "You must specify the range to spawn in!")
+        require("entity", "You must specify the mob to spawn!")
+    }
+
     override fun handle(data: TriggerData, config: Config) {
         val location = data.location ?: return
         location.world ?: return
@@ -69,40 +76,6 @@ class EffectSpawnMobs : Effect(
 
             this.plugin.scheduler.runLater(ticksToLive.toLong()) { mob.remove() }
         }
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("amount")) violations.add(
-            ConfigViolation(
-                "amount",
-                "You must specify the amount of mobs to spawn!"
-            )
-        )
-
-        if (!config.has("ticks_to_live")) violations.add(
-            ConfigViolation(
-                "ticks_to_live",
-                "You must specify the amount of ticks the mobs should live!"
-            )
-        )
-
-        if (!config.has("range")) violations.add(
-            ConfigViolation(
-                "range",
-                "You must specify the range for mobs to spawn!"
-            )
-        )
-
-        if (!config.has("entity")) violations.add(
-            ConfigViolation(
-                "entity",
-                "You must specify the mob to spawn!"
-            )
-        )
-
-        return violations
     }
 
     @EventHandler
