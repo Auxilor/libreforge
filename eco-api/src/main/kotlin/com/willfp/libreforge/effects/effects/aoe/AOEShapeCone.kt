@@ -1,7 +1,7 @@
 package com.willfp.libreforge.effects.effects.aoe
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.effects.particles.copy
 import com.willfp.libreforge.effects.effects.particles.toLocation
 import com.willfp.libreforge.getDoubleFromExpression
@@ -13,6 +13,11 @@ import org.joml.Vector3f
 import kotlin.math.abs
 
 object AOEShapeCone: AOEShape("cone") {
+    override val arguments = arguments {
+        require("radius", "You must specify the cone radius!")
+        require("angle", "You must specify the angle of the cone!")
+    }
+
     override fun getEntities(
         location: Vector3f,
         direction: Vector3f,
@@ -47,25 +52,5 @@ object AOEShapeCone: AOEShape("cone") {
 
                 abs(angle) <= maxAngle / 2
             }
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("radius")) violations.add(
-            ConfigViolation(
-                "radius",
-                "You must specify the cone radius!"
-            )
-        )
-
-        if (!config.has("angle")) violations.add(
-            ConfigViolation(
-                "angle",
-                "You must specify the angle of the cone!"
-            )
-        )
-
-        return violations
     }
 }

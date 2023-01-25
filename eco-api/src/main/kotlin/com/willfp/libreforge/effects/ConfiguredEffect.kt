@@ -245,10 +245,10 @@ internal data class RepeatData(
     }
 }
 
-private class EffectSet(effects: Collection<ConfiguredEffect>) : HashSet<ConfiguredEffect>(effects)
+private class EffectList(effects: Collection<ConfiguredEffect>) : ArrayList<ConfiguredEffect>(effects)
 
-fun Iterable<ConfiguredEffect>.inRunOrder(): Set<ConfiguredEffect> =
-    if (this is EffectSet) this else {
+fun Iterable<ConfiguredEffect>.inRunOrder(): List<ConfiguredEffect> =
+    if (this is EffectList) this else {
         val list = mutableListOf<ConfiguredEffect>()
 
         // wah wah wah this is janky this sucks (I don't care)
@@ -258,7 +258,7 @@ fun Iterable<ConfiguredEffect>.inRunOrder(): Set<ConfiguredEffect> =
         list += this.filter { it.effect.runOrder == RunOrder.LATE }
         list += this.filter { it.effect.runOrder == RunOrder.END }
 
-        EffectSet(list)
+        EffectList(list)
     }
 
 operator fun Iterable<ConfiguredEffect>.invoke(

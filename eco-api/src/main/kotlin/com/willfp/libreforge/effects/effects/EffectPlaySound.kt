@@ -1,7 +1,7 @@
 package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
@@ -15,6 +15,12 @@ class EffectPlaySound : Effect(
         TriggerParameter.PLAYER
     )
 ) {
+    override val arguments = arguments {
+        require("sound", "You must specify the sound to play!")
+        require("pitch", "You must specify the sound pitch (0.5-2)!")
+        require("volume", "You must specify the sound volume!")
+    }
+
     override fun handle(data: TriggerData, config: Config) {
         val player = data.player ?: return
 
@@ -23,32 +29,5 @@ class EffectPlaySound : Effect(
         val volume = config.getDoubleFromExpression("volume", data)
 
         player.playSound(player.location, sound, volume.toFloat(), pitch.toFloat())
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("sound")) violations.add(
-            ConfigViolation(
-                "sound",
-                "You must specify the sound to play!"
-            )
-        )
-
-        if (!config.has("pitch")) violations.add(
-            ConfigViolation(
-                "pitch",
-                "You must specify the pitch of the sound (0.5-2)!"
-            )
-        )
-
-        if (!config.has("volume")) violations.add(
-            ConfigViolation(
-                "volume",
-                "You must specify the volume of the sound!"
-            )
-        )
-
-        return violations
     }
 }

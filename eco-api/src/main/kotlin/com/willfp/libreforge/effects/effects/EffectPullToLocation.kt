@@ -1,7 +1,7 @@
 package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
@@ -15,6 +15,10 @@ class EffectPullToLocation : Effect(
         TriggerParameter.LOCATION
     )
 ) {
+    override val arguments = arguments {
+        require("velocity", "You must specify the movement velocity!")
+    }
+
     override fun handle(data: TriggerData, config: Config) {
         val player = data.player ?: return
         val location = data.location ?: return
@@ -27,18 +31,5 @@ class EffectPullToLocation : Effect(
             .multiply(config.getDoubleFromExpression("velocity", data))
 
         player.velocity = vector
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("velocity")) violations.add(
-            ConfigViolation(
-                "velocity",
-                "You must specify the movement velocity!"
-            )
-        )
-
-        return violations
     }
 }

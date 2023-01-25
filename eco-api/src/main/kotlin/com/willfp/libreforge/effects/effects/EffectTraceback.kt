@@ -1,7 +1,7 @@
 package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
@@ -16,6 +16,10 @@ class EffectTraceback : Effect(
         TriggerParameter.PLAYER
     )
 ) {
+    override val arguments = arguments {
+        require("seconds", "You must specify the amount of seconds to go back in time (1-30)!")
+    }
+
     private val key = "${plugin.name}_traceback"
 
     override fun handle(data: TriggerData, config: Config) {
@@ -32,19 +36,6 @@ class EffectTraceback : Effect(
         val location = times.getOrElse(index) { times.lastOrNull() } ?: return
 
         player.teleport(location)
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("seconds")) violations.add(
-            ConfigViolation(
-                "seconds",
-                "You must specify the amount of seconds back in time (between 1 and 30)!"
-            )
-        )
-
-        return violations
     }
 
     fun init() {

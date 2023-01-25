@@ -1,7 +1,7 @@
 package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.RunOrder
 import com.willfp.libreforge.getDoubleFromExpression
@@ -18,6 +18,10 @@ class EffectAddDamage : Effect(
     noDelay = true,
     runOrder = RunOrder.LATE
 ) {
+    override val arguments = arguments {
+        require("damage", "You must specify the damage to add!")
+    }
+
     override fun handle(data: TriggerData, config: Config) {
         val event = data.event as? WrappedDamageEvent ?: return
 
@@ -26,18 +30,5 @@ class EffectAddDamage : Effect(
         if (event.damage < 0.01) {
             event.isCancelled = true
         }
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("damage")) violations.add(
-            ConfigViolation(
-                "damage",
-                "You must specify the damage to add!"
-            )
-        )
-
-        return violations
     }
 }

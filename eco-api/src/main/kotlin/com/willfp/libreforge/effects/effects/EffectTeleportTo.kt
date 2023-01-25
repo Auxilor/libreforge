@@ -1,7 +1,7 @@
 package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
@@ -16,6 +16,13 @@ class EffectTeleportTo : Effect(
         TriggerParameter.PLAYER
     )
 ) {
+    override val arguments = arguments {
+        require("world", "You must specify the world to go to!")
+        require("x", "You must specify the x coordinate!")
+        require("y", "You must specify the y coordinate!")
+        require("z", "You must specify the z coordinate!")
+    }
+
     override fun handle(data: TriggerData, config: Config) {
         val player = data.player ?: return
 
@@ -28,39 +35,5 @@ class EffectTeleportTo : Effect(
         )
 
         player.teleport(loc)
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("world")) violations.add(
-            ConfigViolation(
-                "world",
-                "You must specify the world to go to!"
-            )
-        )
-
-        if (!config.has("x")) violations.add(
-            ConfigViolation(
-                "x",
-                "You must specify the x coordinate!"
-            )
-        )
-
-        if (!config.has("y")) violations.add(
-            ConfigViolation(
-                "y",
-                "You must specify the y coordinate!"
-            )
-        )
-
-        if (!config.has("z")) violations.add(
-            ConfigViolation(
-                "z",
-                "You must specify the z coordinate!"
-            )
-        )
-
-        return violations
     }
 }

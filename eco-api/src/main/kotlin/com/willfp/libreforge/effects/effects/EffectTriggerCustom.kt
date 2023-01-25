@@ -1,7 +1,7 @@
 package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
@@ -16,24 +16,15 @@ class EffectTriggerCustom : Effect(
     ),
     noDelay = true
 ) {
+    override val arguments = arguments {
+        require("trigger", "You must specify the custom trigger ID!")
+    }
+
     override fun handle(data: TriggerData, config: Config) {
         val player = data.player ?: return
         val trigger = TriggerCustom.getWithID(config.getString("trigger"))
         val value = config.getDoubleFromExpression("value", data)
 
         trigger.invoke(player, data, value)
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("trigger")) violations.add(
-            ConfigViolation(
-                "trigger",
-                "You must specify the custom trigger ID!"
-            )
-        )
-
-        return violations
     }
 }

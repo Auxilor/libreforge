@@ -1,7 +1,6 @@
 package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
 import org.bukkit.entity.Player
@@ -39,9 +38,5 @@ class EffectKeepInventory : Effect("keep_inventory") {
             event.keepInventory = true
             event.drops.clear()
         }
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        return mutableListOf()
     }
 }

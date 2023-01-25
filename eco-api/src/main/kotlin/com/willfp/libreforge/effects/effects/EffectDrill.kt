@@ -5,7 +5,7 @@ import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.eco.util.VectorUtils
 import com.willfp.eco.util.containsIgnoreCase
 import com.willfp.eco.util.runExempted
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
@@ -20,6 +20,11 @@ class EffectDrill : Effect(
         TriggerParameter.PLAYER
     )
 ) {
+    override val arguments = arguments {
+        require("amount", "You must specify the amount of blocks to break!")
+        require("check_hardness", "You must specify if hardness should be checked!")
+    }
+
     override fun handle(data: TriggerData, config: Config) {
         val block = data.block ?: data.location?.block ?: return
 
@@ -73,25 +78,5 @@ class EffectDrill : Effect(
                 toBreak.removeMetadata("block-ignore", plugin)
             }
         }
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("amount")) violations.add(
-            ConfigViolation(
-                "amount",
-                "You must specify the amount of blocks to break!"
-            )
-        )
-
-        if (!config.has("check_hardness")) violations.add(
-            ConfigViolation(
-                "check_hardness",
-                "You must specify if block hardness should be checked!"
-            )
-        )
-
-        return violations
     }
 }

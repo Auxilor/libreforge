@@ -5,7 +5,7 @@ import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.eco.util.containsIgnoreCase
 import com.willfp.eco.util.runExempted
 import com.willfp.eco.util.simplify
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
@@ -22,6 +22,10 @@ class EffectMineRadiusOneDeep : Effect(
         TriggerParameter.PLAYER
     )
 ) {
+    override val arguments = arguments {
+        require("radius", "You must specify the radius to break!")
+    }
+
     override fun handle(data: TriggerData, config: Config) {
         val block = data.block ?: data.location?.block ?: return
 
@@ -90,7 +94,7 @@ class EffectMineRadiusOneDeep : Effect(
                         }
                     }
 
-                    if (config.getBool("check_hardness")) {
+                    if (config.getBoolOrNull("check_hardness") != false) {
                         if (toBreak.type.hardness > block.type.hardness) {
                             continue
                         }
@@ -121,25 +125,5 @@ class EffectMineRadiusOneDeep : Effect(
                 toBreak.removeMetadata("block-ignore", plugin)
             }
         }
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("radius")) violations.add(
-            ConfigViolation(
-                "radius",
-                "You must specify the radius to break!"
-            )
-        )
-
-        if (!config.has("check_hardness")) violations.add(
-            ConfigViolation(
-                "check_hardness",
-                "You must specify if block hardness should be checked!"
-            )
-        )
-
-        return violations
     }
 }
