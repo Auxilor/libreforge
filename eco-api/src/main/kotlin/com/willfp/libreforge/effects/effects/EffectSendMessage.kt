@@ -5,7 +5,7 @@ import com.willfp.eco.core.integrations.placeholder.PlaceholderManager
 import com.willfp.eco.util.PlayerUtils
 import com.willfp.eco.util.StringUtils
 import com.willfp.eco.util.formatEco
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -17,6 +17,10 @@ class EffectSendMessage : Effect(
         TriggerParameter.PLAYER
     )
 ) {
+    override val arguments = arguments {
+        require("message", "You must specify the message to send!")
+    }
+
     override fun handle(data: TriggerData, config: Config) {
         val player = data.player ?: return
 
@@ -34,18 +38,5 @@ class EffectSendMessage : Effect(
             PlayerUtils.getAudience(player)
                 .sendMessage(StringUtils.toComponent(message))
         }
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("message")) violations.add(
-            ConfigViolation(
-                "message",
-                "You must specify the message to send!"
-            )
-        )
-
-        return violations
     }
 }

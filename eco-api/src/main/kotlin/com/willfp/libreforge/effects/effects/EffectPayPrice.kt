@@ -2,7 +2,7 @@ package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.price.Prices
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.toMathContext
 import com.willfp.libreforge.triggers.TriggerData
@@ -15,6 +15,11 @@ class EffectPayPrice : Effect(
         TriggerParameter.PLAYER
     )
 ) {
+    override val arguments = arguments {
+        require("value", "You must specify the value of the price to pay!")
+        require("type", "You must specify the type of price (coins, xpl, etc.)!")
+    }
+
     override fun handle(data: TriggerData, config: Config) {
         val player = data.player ?: return
 
@@ -25,25 +30,5 @@ class EffectPayPrice : Effect(
         )
 
         price.pay(player)
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("value")) violations.add(
-            ConfigViolation(
-                "value",
-                "You must specify the value of the price to pay!"
-            )
-        )
-
-        if (!config.has("type")) violations.add(
-            ConfigViolation(
-                "type",
-                "You must specify the type of price (coins, xpl, etc)!"
-            )
-        )
-
-        return violations
     }
 }

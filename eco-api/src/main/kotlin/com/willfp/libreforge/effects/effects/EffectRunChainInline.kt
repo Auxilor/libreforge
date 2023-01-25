@@ -2,7 +2,8 @@ package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.placeholder.PlaceholderManager
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.ViolationContext
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.chains.ChainCompileData
 import com.willfp.libreforge.chains.CycleChainCompileData
 import com.willfp.libreforge.chains.EffectChain
@@ -19,6 +20,10 @@ class EffectRunChainInline : Effect(
     "run_chain_inline",
     triggers = Triggers.all()
 ) {
+    override val arguments = arguments {
+        require(listOf("effects", "chain"), "You must specify the effects!")
+    }
+
     override fun handle(invocation: InvocationData, config: Config) {
         val compileData = invocation.compileData as? InlineEffectChainCompileData ?: return
         val chain = compileData.chain
@@ -38,30 +43,17 @@ class EffectRunChainInline : Effect(
         chain(chainInvocation, namedArgs)
     }
 
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("chain") && !config.has("effects")) violations.add(
-            ConfigViolation(
-                "chain / effects",
-                "You must create a chain or specify effects directly!"
-            )
-        )
-
-        return violations
-    }
-
-    override fun makeCompileData(config: Config, context: String): CompileData? {
+    override fun makeCompileData(config: Config, context: ViolationContext): CompileData? {
         val chain = if (config.has("chain")) {
             EffectChains.compile(
                 config.getSubsection("chain"),
-                "$context -> Inline Chain",
+                context.with("Inline Chain"),
                 anonymous = true
             )
         } else {
             EffectChains.compile(
                 config,
-                "$context -> Inline Chain",
+                context.with("Inline Chain"),
                 anonymous = true
             )
         } ?: return null

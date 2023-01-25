@@ -16,14 +16,14 @@ private val anyNotMetCache = Caffeine.newBuilder()
 
 internal object BlankHolder : Holder {
     override val id = "internal:blank"
-    override val conditions = emptySet<ConfiguredCondition>()
-    override val effects = emptySet<ConfiguredEffect>()
+    override val conditions = emptyList<ConfiguredCondition>()
+    override val effects = emptyList<ConfiguredEffect>()
 }
 
 interface Holder {
     val id: String
-    val effects: Set<ConfiguredEffect>
-    val conditions: Set<ConfiguredCondition>
+    val effects: List<ConfiguredEffect>
+    val conditions: List<ConfiguredCondition>
 
     fun showAnyNotMet(player: Player): Boolean {
         val hash = player.uniqueId.hashCode() * 31 + id.hashCode()

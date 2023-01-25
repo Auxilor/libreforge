@@ -1,7 +1,7 @@
 package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
@@ -15,6 +15,12 @@ class EffectSetVelocity : Effect(
         TriggerParameter.PLAYER
     )
 ) {
+    override val arguments = arguments {
+        require("x", "You must specify the velocity x component!")
+        require("y", "You must specify the velocity y component!")
+        require("z", "You must specify the velocity z component!")
+    }
+
     override fun handle(data: TriggerData, config: Config) {
         val player = data.player ?: return
 
@@ -23,32 +29,5 @@ class EffectSetVelocity : Effect(
             config.getDoubleFromExpression("y", data),
             config.getDoubleFromExpression("z", data)
         )
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("x")) violations.add(
-            ConfigViolation(
-                "x",
-                "You must specify the velocity x component!"
-            )
-        )
-
-        if (!config.has("y")) violations.add(
-            ConfigViolation(
-                "y",
-                "You must specify the velocity y component!"
-            )
-        )
-
-        if (!config.has("z")) violations.add(
-            ConfigViolation(
-                "z",
-                "You must specify the velocity z component!"
-            )
-        )
-
-        return violations
     }
 }

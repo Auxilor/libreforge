@@ -1,7 +1,7 @@
 package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.getDoubleFromExpression
@@ -12,6 +12,11 @@ import org.bukkit.entity.Player
 import java.util.UUID
 
 class EffectAddPoints : Effect("add_points") {
+    override val arguments = arguments {
+        require("type", "You must specify the type of points!")
+        require("amount", "You must specify the amount of points!")
+    }
+
     private val tracker = mutableMapOf<UUID, MutableMap<UUID, AddedPoint>>()
 
     override fun handle(data: TriggerData, config: Config) {
@@ -52,26 +57,6 @@ class EffectAddPoints : Effect("add_points") {
         player.takePoints(addedPoint.point, addedPoint.amount)
 
         tracker[player.uniqueId] = added
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("type")) violations.add(
-            ConfigViolation(
-                "type",
-                "You must specify the points type!"
-            )
-        )
-
-        if (!config.has("amount")) violations.add(
-            ConfigViolation(
-                "amount",
-                "You must specify the amount of points!"
-            )
-        )
-
-        return violations
     }
 
     private data class AddedPoint(

@@ -1,7 +1,7 @@
 package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.getIntFromExpression
@@ -16,6 +16,12 @@ class EffectBleed : Effect(
         TriggerParameter.VICTIM
     )
 ) {
+    override val arguments = arguments {
+        require("amount", "You must specify the amount of bleed ticks!")
+        require("damage", "You must specify the amount of damage to deal!")
+        require("interval", "You must specify the tick delay between damages!")
+    }
+
     override fun handle(data: TriggerData, config: Config) {
         val victim = data.victim ?: return
 
@@ -38,32 +44,5 @@ class EffectBleed : Effect(
                 it.cancel()
             }
         }.runTaskTimer(interval.toLong(), interval.toLong())
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("amount")) violations.add(
-            ConfigViolation(
-                "amount",
-                "You must specify the amount of bleed ticks!"
-            )
-        )
-
-        if (!config.has("damage")) violations.add(
-            ConfigViolation(
-                "damage",
-                "You must specify the amount of damage to deal!"
-            )
-        )
-
-        if (!config.has("interval")) violations.add(
-            ConfigViolation(
-                "interval",
-                "You must specify the tick delay between damages!"
-            )
-        )
-
-        return violations
     }
 }

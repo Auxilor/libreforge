@@ -1,7 +1,7 @@
 package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
 import org.bukkit.entity.Player
@@ -13,6 +13,14 @@ import java.util.UUID
 
 @Suppress("UNCHECKED_CAST")
 class EffectPermanentPotionEffect : Effect("permanent_potion_effect") {
+    override val arguments = arguments {
+        require("effect", "You must specify a valid potion effect! See here: " +
+                "https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/potion/PotionEffectType.html", Config::getString) {
+            PotionEffectType.getByName(it.uppercase()) != null
+        }
+        require("level", "You must specify the effect level!")
+    }
+
     private val metaKey = "${plugin.name}_${this.id}"
 
     @EventHandler
@@ -86,26 +94,5 @@ class EffectPermanentPotionEffect : Effect("permanent_potion_effect") {
         player.setMetadata(metaKey, plugin.metadataValueFactory.create(meta))
 
         player.removePotionEffect(toRemove)
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (PotionEffectType.getByName(config.getStringOrNull("effect")?.uppercase() ?: "") == null) violations.add(
-            ConfigViolation(
-                "effect",
-                "You must specify the potion effect / invalid effect specified! Get a list of valid effects here: "
-                        + " https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/potion/PotionEffectType.html"
-            )
-        )
-
-        if (!config.has("level")) violations.add(
-            ConfigViolation(
-                "level",
-                "You must specify the effect level!"
-            )
-        )
-
-        return violations
     }
 }

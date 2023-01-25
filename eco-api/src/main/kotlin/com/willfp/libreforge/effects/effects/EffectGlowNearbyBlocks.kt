@@ -2,7 +2,7 @@ package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.util.TeamUtils
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
@@ -28,6 +28,12 @@ class EffectGlowNearbyBlocks : Effect(
         TriggerParameter.LOCATION
     )
 ) {
+    override val arguments = arguments {
+        require("radius", "You must specify the radius!")
+        require("duration", "You must specify the duration to glow for!")
+        require("colors", "You must specify the block colors!")
+    }
+
     @EventHandler
     fun handleChunkUnload(event: ChunkUnloadEvent) {
         event.chunk.entities.filterIsInstance<LivingEntity>()
@@ -120,33 +126,5 @@ class EffectGlowNearbyBlocks : Effect(
         ) { it.hasMetadata("gnb-shulker") }) {
             shulker.remove()
         }
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("radius")) violations.add(
-            ConfigViolation(
-                "radius",
-                "You must specify the radius!"
-            )
-        )
-
-        if (!config.has("duration")) violations.add(
-            ConfigViolation(
-                "duration",
-                "You must specify the duration to glow for!"
-            )
-        )
-
-        if (!config.has("colors")) violations.add(
-            ConfigViolation(
-                "colors",
-                "You must specify the block colors! " +
-                        "(See the wiki for the format: https://plugins.auxilor.io/effects/all-effects/glow_nearby_blocks)"
-            )
-        )
-
-        return violations
     }
 }

@@ -2,7 +2,7 @@ package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.items.Items
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -14,24 +14,15 @@ class EffectDropItem : Effect(
         TriggerParameter.LOCATION
     )
 ) {
+    override val arguments = arguments {
+        require("item", "You must specify the item to drop!")
+    }
+
     override fun handle(data: TriggerData, config: Config) {
         val location = data.location ?: return
 
         val item = Items.lookup(config.getString("item")).item
 
         location.world?.dropItemNaturally(location, item)
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("item")) violations.add(
-            ConfigViolation(
-                "item",
-                "You must specify the item to gidropve!"
-            )
-        )
-
-        return violations
     }
 }

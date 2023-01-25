@@ -2,7 +2,7 @@ package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.getIntFromExpression
@@ -21,6 +21,14 @@ class EffectArrowRing : Effect(
         TriggerParameter.LOCATION
     )
 ) {
+    override val arguments = arguments {
+        require("amount", "You must specify the amount of arrows!")
+        require("height", "You must specify the height to spawn the arrows at!")
+        require("radius", "You must specify the radius of the circle!")
+        require("arrow_damage", "You must specify the arrow damage!")
+        require("fire_ticks", "You must specify the arrow fire ticks!")
+    }
+
     override fun handle(data: TriggerData, config: Config) {
         val location = data.location ?: return
         val world = location.world ?: return
@@ -56,46 +64,5 @@ class EffectArrowRing : Effect(
             arrow.damage = damage
             arrow.fireTicks = flameTicks
         }
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("amount")) violations.add(
-            ConfigViolation(
-                "amount",
-                "You must specify the amount of arrows!"
-            )
-        )
-
-        if (!config.has("height")) violations.add(
-            ConfigViolation(
-                "height",
-                "You must specify the height at which to spawn the arrows!"
-            )
-        )
-
-        if (!config.has("radius")) violations.add(
-            ConfigViolation(
-                "radius",
-                "You must specify the radius of the circle!"
-            )
-        )
-
-        if (!config.has("arrow_damage")) violations.add(
-            ConfigViolation(
-                "arrow_damage",
-                "You must specify the arrow damage!"
-            )
-        )
-
-        if (!config.has("fire_ticks")) violations.add(
-            ConfigViolation(
-                "fire_ticks",
-                "You must specify the arrow fire ticks!"
-            )
-        )
-
-        return violations
     }
 }

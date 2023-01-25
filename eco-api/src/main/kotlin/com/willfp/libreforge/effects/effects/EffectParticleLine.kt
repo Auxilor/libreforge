@@ -2,7 +2,7 @@ package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.particle.Particles
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.getIntFromExpression
@@ -18,6 +18,12 @@ class EffectParticleLine : Effect(
         TriggerParameter.LOCATION
     )
 ) {
+    override val arguments = arguments {
+        require("particle", "You must specify the particle!")
+        require("amount", "You must specify the amount of particles to spawn!")
+        require("spacing", "You must specify the spacing between particles!")
+    }
+
     override fun handle(data: TriggerData, config: Config) {
         val location = data.location ?: return
         val player = data.player ?: return
@@ -41,32 +47,5 @@ class EffectParticleLine : Effect(
             particle.spawn(currentVector.toLocation(world), amount)
             currentVector = currentVector.add(addVector)
         }
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("particle")) violations.add(
-            ConfigViolation(
-                "particle",
-                "You must specify the particle!"
-            )
-        )
-
-        if (!config.has("amount")) violations.add(
-            ConfigViolation(
-                "amount",
-                "You must specify the amount of particles to spawn!"
-            )
-        )
-
-        if (!config.has("spacing")) violations.add(
-            ConfigViolation(
-                "spacing",
-                "You must specify the spacing between particles!"
-            )
-        )
-
-        return violations
     }
 }

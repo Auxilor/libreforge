@@ -3,6 +3,7 @@ package com.willfp.libreforge.triggers
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.LibReforgePlugin
+import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.separatorAmbivalent
 import com.willfp.libreforge.triggers.mutators.*
 
@@ -58,7 +59,7 @@ object DataMutators {
      * @return The mutator, or null if invalid.
      */
     @JvmStatic
-    fun compile(cfg: Config, context: String): ConfiguredDataMutator? {
+    fun compile(cfg: Config, context: ViolationContext): ConfiguredDataMutator? {
         val config = cfg.separatorAmbivalent()
 
         val mutator = config.getString("id").let {

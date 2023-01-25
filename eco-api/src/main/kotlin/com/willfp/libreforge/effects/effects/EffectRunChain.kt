@@ -2,7 +2,8 @@ package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.placeholder.PlaceholderManager
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.ViolationContext
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.chains.CycleChainCompileData
 import com.willfp.libreforge.chains.EffectChains
 import com.willfp.libreforge.chains.NormalChainCompileData
@@ -17,6 +18,10 @@ class EffectRunChain : Effect(
     "run_chain",
     triggers = Triggers.all()
 ) {
+    override val arguments = arguments {
+        require("chain", "You must specify the chain to run!")
+    }
+
     override fun handle(invocation: InvocationData, config: Config) {
         val chain = EffectChains.getByID(config.getString("chain")) ?: return
         val namedArgs = mutableListOf<NamedArgument>()
@@ -34,20 +39,7 @@ class EffectRunChain : Effect(
         chain(invocation, namedArgs)
     }
 
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("chain")) violations.add(
-            ConfigViolation(
-                "chain",
-                "You must specify the chain to run!"
-            )
-        )
-
-        return violations
-    }
-
-    override fun makeCompileData(config: Config, context: String): CompileData {
+    override fun makeCompileData(config: Config, context: ViolationContext): CompileData {
         return when (config.getString("run-type").lowercase()) {
             "cycle" -> CycleChainCompileData()
             "random" -> RandomChainCompileData()

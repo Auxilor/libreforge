@@ -148,7 +148,7 @@ object Conditions {
     fun compile(
         configs: Iterable<Config>,
         context: ViolationContext
-    ): Set<ConfiguredCondition> = configs.mapNotNull { compile(it, context) }.toSet()
+    ): List<ConfiguredCondition> = configs.mapNotNull { compile(it, context) }
 
     /**
      * Compile a condition.
@@ -187,7 +187,7 @@ object Conditions {
 
         val notMetEffects = Effects.compile(
             config.getSubsections("not-met-effects"),
-            "$context -> Not Met Effects)",
+            context.with("Not Met Effects"),
             chainLike = true
         )
 

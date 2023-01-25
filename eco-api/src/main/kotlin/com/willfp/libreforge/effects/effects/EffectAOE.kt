@@ -1,7 +1,8 @@
 package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.ViolationContext
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.CompileData
 import com.willfp.libreforge.effects.ConfiguredEffect
 import com.willfp.libreforge.effects.Effect
@@ -22,6 +23,14 @@ class EffectAOE : Effect(
         TriggerParameter.PLAYER
     )
 ) {
+    override val arguments = arguments {
+        require("effects", "You must specify the effects!")
+        require("shape", "You must specify a valid shape!", Config::getString) {
+            AOEShapes.getByID(it) != null
+        }
+        inherit { AOEShapes.getByID(it.getString("shape")) }
+    }
+
     override fun handle(invocation: InvocationData, config: Config) {
         val player = invocation.data.player ?: return
         val effects = invocation.compileData as? AOEEffects ?: return
@@ -39,43 +48,10 @@ class EffectAOE : Effect(
         }
     }
 
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("effects")) violations.add(
-            ConfigViolation(
-                "effects",
-                "You must specify the effects!"
-            )
-        )
-
-        if (!config.has("shape")) violations.add(
-            ConfigViolation(
-                "shape",
-                "You must specify the shape of the AOE area!"
-            )
-        )
-
-        val shape = AOEShapes.getByID(config.getString("shape"))
-
-        if (shape == null) {
-            violations.add(
-                ConfigViolation(
-                    "shape",
-                    "Invalid shape!"
-                )
-            )
-        } else {
-            violations.addAll(shape.validateConfig(config))
-        }
-
-        return violations
-    }
-
-    override fun makeCompileData(config: Config, context: String): CompileData {
+    override fun makeCompileData(config: Config, context: ViolationContext): CompileData {
         val effects = Effects.compile(
             config.getSubsections("effects"),
-            "$context -> aoe Effects",
+            context.with("aoe Effects"),
             chainLike = true
         )
 
@@ -85,7 +61,7 @@ class EffectAOE : Effect(
     }
 
     private data class AOEEffects(
-        val effects: Set<ConfiguredEffect>
+        val effects: List<ConfiguredEffect>
     ) : CompileData {
         operator fun invoke(player: Player, victim: LivingEntity) {
             effects(

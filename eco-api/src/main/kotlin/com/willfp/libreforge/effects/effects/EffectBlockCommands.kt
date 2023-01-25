@@ -1,7 +1,7 @@
 package com.willfp.libreforge.effects.effects
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
 import org.bukkit.entity.Player
@@ -12,6 +12,10 @@ import java.util.UUID
 class EffectBlockCommands : Effect(
     "block_commands"
 ) {
+    override val arguments = arguments {
+        require("commands", "You must specify the commands to block!")
+    }
+
     private val players = mutableMapOf<UUID, MutableMap<UUID, List<String>>>()
 
     override fun handleEnable(
@@ -51,18 +55,5 @@ class EffectBlockCommands : Effect(
                 }
             }
         }
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("commands")) violations.add(
-            ConfigViolation(
-                "commands",
-                "You must specify the commands to block!"
-            )
-        )
-
-        return violations
     }
 }

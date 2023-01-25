@@ -8,7 +8,7 @@ class ConfigArguments internal constructor(
     private val arguments = builder.arguments
 
     fun test(config: Config): List<ConfigViolation> {
-        return arguments.mapNotNull { it.test(config) }
+        return arguments.flatMap { it.test(config) }
     }
 }
 
@@ -42,6 +42,14 @@ class ConfigArgumentsBuilder {
     ) {
         arguments += RequiredArgument(names, message, getter, predicate)
     }
+
+    fun inherit(getter: (Config) -> ConfigurableProperty?) {
+        arguments += InheritedArguments(getter)
+    }
+
+    fun inherit(subsection: String, getter: (Config) -> ConfigurableProperty?) {
+        arguments += InheritedArguments(getter, subsection)
+    }
 }
 
 fun arguments(block: ConfigArgumentsBuilder.() -> Unit): ConfigArguments {
@@ -54,19 +62,33 @@ interface ConfigArgument {
     /**
      * Null if valid.
      */
-    fun test(config: Config): ConfigViolation?
+    fun test(config: Config): List<ConfigViolation>
 }
 
 private class RequiredArgument<T>(
-    val names: Collection<String>, val message: String, val getter: Config.(String) -> T, val predicate: (T) -> Boolean
+    val names: Collection<String>,
+    val message: String,
+    val getter: Config.(String) -> T,
+    val predicate: (T) -> Boolean
 ) : ConfigArgument {
-    override fun test(config: Config): ConfigViolation? {
+    override fun test(config: Config): List<ConfigViolation> {
         for (key in names) {
             if (config.has(key) && predicate(config.getter(key))) {
-                return null
+                return emptyList()
             }
         }
 
-        return ConfigViolation(names.first(), message)
+        return listOf(ConfigViolation(names.first(), message))
+    }
+}
+
+private class InheritedArguments(
+    val getter: (Config) -> ConfigurableProperty?,
+    val subsection: String? = null
+) : ConfigArgument {
+    override fun test(config: Config): List<ConfigViolation> {
+        val section = if (subsection == null) config else config.getSubsection(subsection)
+
+        return getter(config)?.arguments?.test(section) ?: emptyList()
     }
 }
