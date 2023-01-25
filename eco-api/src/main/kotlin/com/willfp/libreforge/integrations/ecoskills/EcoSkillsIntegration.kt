@@ -29,7 +29,7 @@ object EcoSkillsIntegration : Integration {
         GIVE_SKILL_XP = EffectGiveSkillXp()
         MULTIPLY_ALL_STATS = EffectMultiplyAllStats()
         ADD_STAT_TEMPORARILY = EffectAddStatTemporarily()
-        MULTIPLY_STAT_TEMPORARILY = MultiplyStatTemporarily()
+        MULTIPLY_STAT_TEMPORARILY = EffectMultiplyStatTemporarily()
         SKILL = FilterSkill()
     }
 

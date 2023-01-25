@@ -5,12 +5,17 @@ import com.willfp.ecoskills.api.EcoSkillsAPI
 import com.willfp.ecoskills.api.modifier.ModifierOperation
 import com.willfp.ecoskills.api.modifier.PlayerStatModifier
 import com.willfp.ecoskills.stats.Stats
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
 import org.bukkit.entity.Player
 
 class EffectMultiplyStat : Effect("multiply_stat") {
+    override val arguments = arguments {
+        require("stat", "You must specify the stat!")
+        require("multiplier", "You must specify the multiplier!")
+    }
+
     private val api = EcoSkillsAPI.getInstance()
 
     override fun handleEnable(
@@ -37,25 +42,5 @@ class EffectMultiplyStat : Effect("multiply_stat") {
             player,
             identifiers.key
         )
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("stat")) violations.add(
-            ConfigViolation(
-                "stat",
-                "You must specify the stat!"
-            )
-        )
-
-        if (!config.has("multiplier")) violations.add(
-            ConfigViolation(
-                "multiplier",
-                "You must specify the multiplier!"
-            )
-        )
-
-        return violations
     }
 }
