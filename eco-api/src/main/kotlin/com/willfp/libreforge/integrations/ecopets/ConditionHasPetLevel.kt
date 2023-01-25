@@ -4,7 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.ecopets.api.EcoPetsAPI
 import com.willfp.ecopets.api.event.PlayerPetLevelUpEvent
 import com.willfp.ecopets.pets.Pets
-import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.updateEffects
 import org.bukkit.entity.Player
@@ -12,6 +12,11 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 
 class ConditionHasPetLevel : Condition("has_pet_level") {
+    override val arguments = arguments {
+        require("pet", "You must specify the pet!")
+        require("level", "You must specify the level!")
+    }
+
     @EventHandler(
         priority = EventPriority.MONITOR,
         ignoreCancelled = true
@@ -27,25 +32,5 @@ class ConditionHasPetLevel : Condition("has_pet_level") {
             player,
             Pets.getByID(config.getString("pet").lowercase()) ?: return false
         ) >= config.getIntFromExpression("level", player)
-    }
-
-    override fun validateConfig(config: Config): List<ConfigViolation> {
-        val violations = mutableListOf<ConfigViolation>()
-
-        if (!config.has("pet")) violations.add(
-            ConfigViolation(
-                "pet",
-                "You must specify the pet!"
-            )
-        )
-
-        if (!config.has("level")) violations.add(
-            ConfigViolation(
-                "level",
-                "You must specify the pet level!"
-            )
-        )
-
-        return violations
     }
 }
