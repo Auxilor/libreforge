@@ -69,7 +69,7 @@ abstract class Filter<T, C>(
      * @param context The context to log violations for.
      * @return The compile data.
      */
-    open fun makeCompileData(config: Config, context: ViolationContext): T? {
+    open fun makeCompileData(config: Config, values: C, context: ViolationContext): T? {
         return null
     }
 }

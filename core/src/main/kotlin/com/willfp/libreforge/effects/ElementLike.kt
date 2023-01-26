@@ -31,6 +31,7 @@ abstract class ElementLike {
             .forEach { it.addInjectablePlaceholder(trigger.placeholders) }
 
         if (!conditions.areMet(trigger.player)) {
+            conditions.triggerNotMetEffects(trigger)
             return
         }
 
