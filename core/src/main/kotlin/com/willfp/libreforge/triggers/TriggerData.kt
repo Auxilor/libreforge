@@ -21,7 +21,16 @@ data class TriggerData(
     val velocity: Vector? = player?.velocity ?: victim?.velocity,
     val item: ItemStack? = player?.inventory?.itemInMainHand ?: victim?.equipment?.itemInMainHand,
     val text: String? = null,
-    val value: Double? = null
+    val value: Double? = null,
+
+    /*
+    This is a bodge inherited from v3, but it's the only real way to do this.
+    Essentially, the player can get messed up by mutators, and that causes
+    placeholders to parse incorrectly when doing Config#get<x>FromExpression.
+
+    It's really not very nice, but it's good enough. Just don't think about it.
+     */
+    internal val originalPlayer: Player? = player
 )
 
 enum class TriggerParameter(
