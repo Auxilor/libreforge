@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects
 
 import com.willfp.libreforge.DelegatedList
+import com.willfp.libreforge.triggers.DispatchedTrigger
 
 /**
  * A list of effect groups.
@@ -14,4 +15,7 @@ class EffectList(
             total / it.effects.size
         }
     }
+
+    fun trigger(trigger: DispatchedTrigger) =
+        this.forEach { it.trigger(trigger) }
 }
