@@ -3,6 +3,7 @@ package com.willfp.libreforge.triggers
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.LibReforgePlugin
+import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.separatorAmbivalent
 
@@ -16,7 +17,7 @@ object Counters {
      * @return The counter, or null if invalid.
      */
     @JvmStatic
-    fun compile(cfg: Config, context: String): Counter? {
+    fun compile(cfg: Config, context: ViolationContext): Counter? {
         val config = cfg.separatorAmbivalent()
 
         val id = config.getString("trigger")
@@ -42,7 +43,7 @@ object Counters {
 
         val conditions = Conditions.compile(
             config.getSubsections("conditions"),
-            "$context -> Conditions"
+            context.with("Conditions")
         )
 
         val filters = config.getSubsection("filters")
