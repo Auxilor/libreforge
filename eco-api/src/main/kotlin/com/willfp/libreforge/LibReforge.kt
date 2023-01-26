@@ -254,7 +254,7 @@ abstract class LibReforgePlugin @JvmOverloads constructor(
         Effects.TRACEBACK.init()
 
         for (config in chainsYml.getSubsections("chains")) {
-            EffectChains.compile(config, "chains.yml")
+            EffectChains.compile(config, ViolationContext("chains.yml"))
         }
 
         handleReloadAdditional()
