@@ -1,6 +1,7 @@
 package com.willfp.libreforge.conditions
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ConfiguredProperty
 import org.bukkit.entity.Player
 
 /**
@@ -8,9 +9,9 @@ import org.bukkit.entity.Player
  */
 class ConditionBlock<T>(
     val condition: Condition<T>,
-    val config: Config,
-    val compileData: T?
-) {
+    override val config: Config,
+    override val compileData: T?
+) : ConfiguredProperty<T> {
     fun isMet(player: Player) =
         condition.isMet(player, config, compileData)
 }

@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.argument
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ConfiguredProperty
 import com.willfp.libreforge.effects.ElementLike
 import com.willfp.libreforge.triggers.DispatchedTrigger
 
@@ -9,9 +10,9 @@ import com.willfp.libreforge.triggers.DispatchedTrigger
  */
 class EffectArgumentBlock<T>(
     val argument: EffectArgument<T>,
-    val config: Config,
-    val compileData: T?
-) {
+    override val config: Config,
+    override val compileData: T?
+) : ConfiguredProperty<T> {
     fun isMet(
         element: ElementLike,
         trigger: DispatchedTrigger

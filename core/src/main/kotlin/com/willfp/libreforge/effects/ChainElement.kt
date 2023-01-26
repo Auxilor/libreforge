@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ConfiguredProperty
 import com.willfp.libreforge.conditions.ConditionList
 import com.willfp.libreforge.effects.argument.EffectArgumentList
 import com.willfp.libreforge.filters.FilterList
@@ -14,13 +15,13 @@ import java.util.UUID
  */
 class ChainElement<T>(
     val effect: Effect<T>,
-    val config: Config,
-    val compileData: T?,
+    override val config: Config,
+    override val compileData: T?,
     override val arguments: EffectArgumentList,
     override val conditions: ConditionList,
     override val mutators: MutatorList,
     override val filters: FilterList
-) : ElementLike() {
+) : ElementLike(), ConfiguredProperty<T> {
     override val uuid: UUID = UUID.randomUUID()
 
     fun enable(player: Player, identifierFactory: IdentifierFactory) {

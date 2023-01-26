@@ -40,6 +40,9 @@ abstract class Effect<T>(
     val isPermanent: Boolean
         get() = parameters === noTriggers
 
+    /**
+     * If the effect supports a certain [trigger].
+     */
     fun supportsTrigger(trigger: Trigger) =
         parameters(trigger)
 

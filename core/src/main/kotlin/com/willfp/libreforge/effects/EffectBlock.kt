@@ -16,7 +16,7 @@ import java.util.UUID
  */
 class EffectBlock(
     override val uuid: UUID,
-    val config: Config,
+    override val config: Config,
     val effects: Chain,
     val triggers: Collection<Trigger>,
     override val arguments: EffectArgumentList,

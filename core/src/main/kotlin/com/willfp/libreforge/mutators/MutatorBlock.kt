@@ -1,6 +1,7 @@
 package com.willfp.libreforge.mutators
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ConfiguredProperty
 import com.willfp.libreforge.triggers.TriggerData
 
 /**
@@ -8,9 +9,9 @@ import com.willfp.libreforge.triggers.TriggerData
  */
 class MutatorBlock<T>(
     val mutator: Mutator<T>,
-    val config: Config,
-    val compileData: T?
-) {
+    override val config: Config,
+    override val compileData: T?
+): ConfiguredProperty<T> {
     fun mutate(data: TriggerData) =
         mutator.mutate(data, this)
 }
