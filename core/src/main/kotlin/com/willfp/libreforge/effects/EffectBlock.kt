@@ -1,38 +1,61 @@
 package com.willfp.libreforge.effects
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.conditions.ConditionList
+import com.willfp.libreforge.effects.argument.EffectArgumentList
 import com.willfp.libreforge.filters.FilterList
 import com.willfp.libreforge.mutators.MutatorList
-import com.willfp.libreforge.triggers.TriggerData
+import com.willfp.libreforge.triggers.DispatchedTrigger
+import com.willfp.libreforge.triggers.Trigger
 import org.bukkit.entity.Player
+import java.util.Objects
+import java.util.UUID
 
 /**
- * A single effect config block.
+ * A compiled group of effects.
  */
-class EffectBlock<T>(
-    val effect: Effect<T>,
+class EffectBlock(
+    override val uuid: UUID,
     val config: Config,
-    val compileData: T?,
-    val mutators: MutatorList,
-    val filters: FilterList
-) {
-    fun enable(player: Player, identifierFactory: IdentifierFactory) {
-        effect.enable(player, identifierFactory, this)
-    }
+    val effects: Chain,
+    val triggers: Collection<Trigger>,
+    override val arguments: EffectArgumentList,
+    override val conditions: ConditionList,
+    override val mutators: MutatorList,
+    override val filters: FilterList
+) : ElementLike() {
+    private val identifierFactory = IdentifierFactory(uuid)
 
-    fun disable(player: Player, identifierFactory: IdentifierFactory) {
-        effect.disable(player, identifierFactory)
-    }
+    fun enable(player: Player) =
+        effects.forEach { it.enable(player, identifierFactory) }
 
-    fun reload(player: Player, identifierFactory: IdentifierFactory) {
-        effect.reload(player, identifierFactory, this)
-    }
+    fun disable(player: Player) =
+        effects.forEach { it.disable(player, identifierFactory) }
 
-    fun trigger(player: Player, data: TriggerData) {
-        if (!filters.filter(data)) {
+    fun reload(player: Player) =
+        effects.forEach { it.reload(player, identifierFactory) }
+
+    fun tryTrigger(trigger: DispatchedTrigger) {
+        if (trigger.trigger !in triggers) {
             return
         }
 
-        effect.trigger(player, mutators.mutate(data), this)
+        trigger(trigger)
+    }
+
+    override fun doTrigger(trigger: DispatchedTrigger) {
+        effects.trigger(trigger)
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (other !is EffectBlock) {
+            return false
+        }
+
+        return this.uuid == other.uuid
+    }
+
+    override fun hashCode(): Int {
+        return Objects.hashCode(this.uuid)
     }
 }

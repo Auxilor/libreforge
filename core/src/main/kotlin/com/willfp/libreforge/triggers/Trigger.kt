@@ -20,14 +20,16 @@ abstract class Trigger(
         player: Player,
         data: TriggerData
     ) {
-        val dispatchEvent = TriggerDispatchEvent(player, this, data)
+        val dispatch = DispatchedTrigger(player, this, data)
+
+        val dispatchEvent = TriggerDispatchEvent(player, dispatch)
         Bukkit.getPluginManager().callEvent(dispatchEvent)
         if (dispatchEvent.isCancelled) {
             return
         }
 
-        for (group in player.activeEffects) {
-            group.trigger(player, this, data)
+        for (block in player.activeEffects) {
+            block.tryTrigger(dispatch)
         }
     }
 }

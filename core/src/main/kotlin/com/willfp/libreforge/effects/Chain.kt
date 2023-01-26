@@ -1,24 +1,23 @@
 package com.willfp.libreforge.effects
 
 import com.willfp.libreforge.DelegatedList
-import com.willfp.libreforge.effects.triggerer.EffectTriggerer
-import com.willfp.libreforge.triggers.TriggerData
-import org.bukkit.entity.Player
+import com.willfp.libreforge.effects.triggerer.ChainTriggerer
+import com.willfp.libreforge.triggers.DispatchedTrigger
 
 /**
  * A list of effect blocks.
  */
 class Chain(
-    effects: List<EffectBlock<*>>,
-    private val triggerer: EffectTriggerer
-) : DelegatedList<EffectBlock<*>>() {
+    effects: List<ChainElement<*>>,
+    private val triggerer: ChainTriggerer
+) : DelegatedList<ChainElement<*>>() {
     init {
         for (order in RunOrder.values()) {
             this.list += effects.filter { it.effect.runOrder == order }
         }
     }
 
-    fun trigger(player: Player, data: TriggerData) {
-        triggerer.trigger(this, player, data)
+    fun trigger(trigger: DispatchedTrigger) {
+        triggerer.trigger(this, trigger)
     }
 }

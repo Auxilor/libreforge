@@ -1,7 +1,7 @@
 package com.willfp.libreforge
 
 import com.github.benmanes.caffeine.cache.Caffeine
-import com.willfp.libreforge.effects.EffectGroup
+import com.willfp.libreforge.effects.EffectBlock
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.HandlerList
@@ -68,7 +68,7 @@ fun Player.updateHolders() {
 }
 
 // Effects that were active on previous update
-private val previousStates = DefaultHashMap<UUID, Set<EffectGroup>>(emptySet())
+private val previousStates = DefaultHashMap<UUID, Set<EffectBlock>>(emptySet())
 
 /**
  * Recalculate active effects.
@@ -83,7 +83,7 @@ fun Player.calculateActiveEffects() =
 /**
  * The active effects.
  */
-val Player.activeEffects: Set<EffectGroup>
+val Player.activeEffects: Set<EffectBlock>
     get() = previousStates[this.uniqueId]
 
 /**

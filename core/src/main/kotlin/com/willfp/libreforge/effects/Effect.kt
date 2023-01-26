@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigurableProperty
 import com.willfp.libreforge.DefaultHashMap
 import com.willfp.libreforge.ViolationContext
+import com.willfp.libreforge.triggers.DispatchedTrigger
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.entity.Player
@@ -31,13 +32,16 @@ abstract class Effect<T>(
     /**
      * The required trigger parameters.
      */
-    open val parameters: (Trigger) -> Boolean = noTriggers
+    protected open val parameters: (Trigger) -> Boolean = noTriggers
 
     /**
      * If the effect is permanent.
      */
     val isPermanent: Boolean
         get() = parameters === noTriggers
+
+    fun supportsTrigger(trigger: Trigger) =
+        parameters(trigger)
 
     /**
      * Enable a permanent effect.
@@ -49,7 +53,7 @@ abstract class Effect<T>(
     fun enable(
         player: Player,
         identifierFactory: IdentifierFactory,
-        config: EffectBlock<T>
+        config: ChainElement<T>
     ) {
         val count = effectCounter[player.uniqueId]++
         onEnable(player, config.config, identifierFactory.makeIdentifiers(count), config.compileData)
@@ -102,16 +106,14 @@ abstract class Effect<T>(
     /**
      * Trigger the effect.
      *
-     * @param player The player.
-     * @param data The trigger data.
+     * @param trigger The trigger.
      * @param config The config.
      */
     fun trigger(
-        player: Player,
-        data: TriggerData,
-        config: EffectBlock<T>
+        trigger: DispatchedTrigger,
+        config: ChainElement<T>
     ) {
-        onTrigger(player, config.config, data, config.compileData)
+        onTrigger(trigger.player, config.config, trigger.data, config.compileData)
     }
 
     /**
@@ -140,7 +142,7 @@ abstract class Effect<T>(
     fun reload(
         player: Player,
         identifierFactory: IdentifierFactory,
-        config: EffectBlock<T>
+        config: ChainElement<T>
     ) {
         if (!shouldReload) {
             return
