@@ -8,11 +8,11 @@ import com.willfp.libreforge.triggers.TriggerData
  * A list of filters.
  */
 class FilterList(
-    mutators: List<FilterBlock<*, *>>
+    filters: List<FilterBlock<*, *>>
 ) : DelegatedList<FilterBlock<*, *>>() {
     init {
         for (order in RunOrder.values()) {
-            this.list += mutators.filter { it.filter.runOrder == order }
+            this.list += filters.filter { it.filter.runOrder == order }
         }
     }
 
