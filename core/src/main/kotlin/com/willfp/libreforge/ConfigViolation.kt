@@ -46,6 +46,17 @@ class ViolationContext {
         plugin.logger.warning("")
     }
 
+    /**
+     * Log a violation.
+     */
+    fun log(violation: ConfigViolation) {
+        plugin.logger.warning("")
+        plugin.logger.warning("Invalid configuration found at $this:")
+        plugin.logger.warning("(Cause) Argument '${violation.param}'")
+        plugin.logger.warning("(Reason) ${violation.message}")
+        plugin.logger.warning("")
+    }
+
     override fun toString(): String {
         return parents.joinToString(" -> ")
     }
