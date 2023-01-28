@@ -23,6 +23,7 @@ class ChainElement<T>(
     override val filters: FilterList
 ) : ElementLike(), ConfiguredProperty<T> {
     override val uuid: UUID = UUID.randomUUID()
+    override val supportsDelay = effect.supportsDelay
 
     fun enable(player: Player, identifierFactory: IdentifierFactory) {
         effect.enable(player, identifierFactory, this)
