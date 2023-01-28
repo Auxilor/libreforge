@@ -17,7 +17,7 @@ class EffectArgumentList(
         }
     }
 
-    fun checkMet(element: ElementLike, trigger: DispatchedTrigger): Boolean {
+    fun checkMet(element: ElementLike, trigger: DispatchedTrigger): EffectArgumentResponse {
         val met = mutableListOf<EffectArgumentBlock<*>>()
         val notMet = mutableListOf<EffectArgumentBlock<*>>()
 
@@ -31,9 +31,10 @@ class EffectArgumentList(
             }
         }
 
-        met.forEach { it.ifMet(element, trigger) }
-        notMet.forEach { it.ifNotMet(element, trigger) }
-
-        return notMet.isEmpty()
+        return EffectArgumentResponse(
+            notMet.isEmpty(),
+            met,
+            notMet
+        )
     }
 }

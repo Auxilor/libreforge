@@ -25,6 +25,7 @@ class EffectBlock(
     override val filters: FilterList
 ) : ElementLike() {
     private val identifierFactory = IdentifierFactory(uuid)
+    override val supportsDelay = effects.all { it.supportsDelay }
 
     fun enable(player: Player) =
         effects.forEach { it.enable(player, identifierFactory) }
