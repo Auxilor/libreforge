@@ -45,6 +45,8 @@ allprojects {
         compileOnly 'org.joml:joml:1.10.4'
         compileOnly 'org.jetbrains:annotations:23.0.0'
         compileOnly 'org.jetbrains.kotlin:kotlin-stdlib:1.7.10'
+
+        compileOnly fileTree(dir: 'lib', include: ['*.jar'])
     }
 
     tasks.withType(JavaCompile) {

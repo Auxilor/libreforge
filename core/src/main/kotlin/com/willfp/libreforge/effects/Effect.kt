@@ -30,6 +30,11 @@ abstract class Effect<T>(
     open val runOrder = RunOrder.NORMAL
 
     /**
+     * If the effect can be delayed.
+     */
+    open val supportsDelay = true
+
+    /**
      * The required trigger parameters.
      */
     protected open val parameters: (Trigger) -> Boolean = noTriggers

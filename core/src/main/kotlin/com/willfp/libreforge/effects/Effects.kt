@@ -115,6 +115,12 @@ object Effects {
     /**
      * Compile a list of [configs] and a [triggerer] into a Chain in a given [context].
      */
+    fun compileChain(
+        configs: Collection<Config>,
+        triggerer: ChainTriggerer,
+        context: ViolationContext,
+    ): Chain? = compileChain(configs, triggerer, context, false)
+
     private fun compileChain(
         configs: Collection<Config>,
         triggerer: ChainTriggerer,
