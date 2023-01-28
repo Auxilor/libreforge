@@ -5,9 +5,11 @@ object ChainTriggerers {
 
     /**
      * Get triggerer by ID, or null if invalid ID is provided.
+     *
+     * Returns normal if the ID is null.
      */
-    fun getByID(id: String): ChainTriggerer? {
-        return registry[id]?.create()
+    fun getByID(id: String?): ChainTriggerer? {
+        return if (id != null) registry[id]?.create() else NormalTriggererFactory.create()
     }
 
     /**

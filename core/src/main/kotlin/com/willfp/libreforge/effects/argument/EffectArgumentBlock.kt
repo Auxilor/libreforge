@@ -6,7 +6,7 @@ import com.willfp.libreforge.effects.ElementLike
 import com.willfp.libreforge.triggers.DispatchedTrigger
 
 /**
- * A single filter config block.
+ * A single argument config block.
  */
 class EffectArgumentBlock<T>(
     val argument: EffectArgument<T>,

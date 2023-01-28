@@ -30,14 +30,14 @@ abstract class ElementLike {
             .plusElement(config)
             .forEach { it.addInjectablePlaceholder(trigger.placeholders) }
 
-        if (!conditions.areMet(trigger.player)) {
-            conditions.triggerNotMetEffects(trigger)
-            return
-        }
-
         val data = mutators.mutate(trigger.data)
 
         if (!filters.filter(data)) {
+            return
+        }
+
+
+        if (!conditions.areMet(trigger.player)) {
             return
         }
 

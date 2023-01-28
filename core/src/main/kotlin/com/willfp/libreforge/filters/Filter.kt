@@ -17,7 +17,7 @@ abstract class Filter<T, C>(
     /**
      * Fetch values from config.
      */
-    abstract fun Config.getValues(key: String): C
+    abstract fun getValues(config: Config, key: String): C
 
     /**
      * Filter the trigger data.
@@ -42,9 +42,9 @@ abstract class Filter<T, C>(
         }
 
         return if (inversePresent) {
-            !filter(data, cfg.getValues("not_$id"), config.compileData)
+            !filter(data, getValues(cfg, "not_$id"), config.compileData)
         } else {
-            filter(data, cfg.getValues(id), config.compileData)
+            filter(data, getValues(cfg, id), config.compileData)
         }
     }
 
