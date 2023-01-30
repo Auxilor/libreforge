@@ -4,7 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.libreforge.GroupedStaticPlaceholder
 import com.willfp.libreforge.conditions.ConditionList
-import com.willfp.libreforge.effects.argument.EffectArgumentList
+import com.willfp.libreforge.effects.arguments.EffectArgumentList
 import com.willfp.libreforge.filters.FilterList
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.getIntFromExpression

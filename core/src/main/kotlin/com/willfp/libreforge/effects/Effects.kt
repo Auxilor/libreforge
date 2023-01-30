@@ -4,9 +4,9 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.conditions.Conditions
-import com.willfp.libreforge.effects.argument.EffectArguments
-import com.willfp.libreforge.effects.triggerer.ChainTriggerer
-import com.willfp.libreforge.effects.triggerer.ChainTriggerers
+import com.willfp.libreforge.effects.arguments.EffectArguments
+import com.willfp.libreforge.effects.triggerers.ChainTriggerer
+import com.willfp.libreforge.effects.triggerers.ChainTriggerers
 import com.willfp.libreforge.filters.Filters
 import com.willfp.libreforge.mutators.Mutators
 import com.willfp.libreforge.triggers.Triggers
@@ -14,6 +14,7 @@ import java.util.UUID
 
 object Effects {
     private val registry = mutableMapOf<String, Effect<*>>()
+    private val identifiedChains = mutableMapOf<String, Chain>()
 
     /**
      * Get an effect by [id].
@@ -27,6 +28,13 @@ object Effects {
      */
     fun register(effect: Effect<*>) {
         registry[effect.id] = effect
+    }
+
+    /**
+     * Register a new [chain] with a certain [id].
+     */
+    fun register(id: String, chain: Chain) {
+        identifiedChains[id] = chain
     }
 
     /**

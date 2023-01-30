@@ -1,4 +1,4 @@
-package com.willfp.libreforge.effects.triggerer
+package com.willfp.libreforge.effects.triggerers
 
 import com.willfp.libreforge.effects.Chain
 import com.willfp.libreforge.triggers.DispatchedTrigger
