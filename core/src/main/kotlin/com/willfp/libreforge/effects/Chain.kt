@@ -1,7 +1,7 @@
 package com.willfp.libreforge.effects
 
 import com.willfp.libreforge.DelegatedList
-import com.willfp.libreforge.effects.triggerer.ChainTriggerer
+import com.willfp.libreforge.effects.triggerers.ChainTriggerer
 import com.willfp.libreforge.triggers.DispatchedTrigger
 
 /**

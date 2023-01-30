@@ -3,7 +3,7 @@ package com.willfp.libreforge.effects
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfiguredProperty
 import com.willfp.libreforge.conditions.ConditionList
-import com.willfp.libreforge.effects.argument.EffectArgumentList
+import com.willfp.libreforge.effects.arguments.EffectArgumentList
 import com.willfp.libreforge.filters.FilterList
 import com.willfp.libreforge.mutators.MutatorList
 import com.willfp.libreforge.triggers.DispatchedTrigger

@@ -1,4 +1,4 @@
-package com.willfp.libreforge.effects.argument
+package com.willfp.libreforge.effects.arguments
 
 import com.willfp.libreforge.DelegatedList
 import com.willfp.libreforge.effects.ElementLike
