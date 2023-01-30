@@ -1,7 +1,7 @@
 package com.willfp.libreforge.effects
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.ConfiguredProperty
+import com.willfp.libreforge.Compiled
 import com.willfp.libreforge.conditions.ConditionList
 import com.willfp.libreforge.effects.arguments.EffectArgumentList
 import com.willfp.libreforge.filters.FilterList
@@ -16,12 +16,12 @@ import java.util.UUID
 class ChainElement<T>(
     val effect: Effect<T>,
     override val config: Config,
-    override val compileData: T?,
+    override val compileData: T,
     override val arguments: EffectArgumentList,
     override val conditions: ConditionList,
     override val mutators: MutatorList,
     override val filters: FilterList
-) : ElementLike(), ConfiguredProperty<T> {
+) : ElementLike(), Compiled<T> {
     override val uuid: UUID = UUID.randomUUID()
     override val supportsDelay = effect.supportsDelay
 
