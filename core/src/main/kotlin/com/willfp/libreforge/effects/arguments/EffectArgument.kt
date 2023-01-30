@@ -1,15 +1,13 @@
 package com.willfp.libreforge.effects.arguments
 
-import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.ConfigurableProperty
-import com.willfp.libreforge.ViolationContext
+import com.willfp.libreforge.Compilable
 import com.willfp.libreforge.effects.ElementLike
 import com.willfp.libreforge.effects.RunOrder
 import com.willfp.libreforge.triggers.DispatchedTrigger
 
 abstract class EffectArgument<T>(
     override val id: String
-) : ConfigurableProperty() {
+) : Compilable<T>() {
     /**
      * The run order.
      */
@@ -26,7 +24,7 @@ abstract class EffectArgument<T>(
     abstract fun isMet(
         element: ElementLike,
         trigger: DispatchedTrigger,
-        compileData: T?
+        compileData: T
     ): Boolean
 
     /**
@@ -39,7 +37,7 @@ abstract class EffectArgument<T>(
     open fun ifMet(
         element: ElementLike,
         trigger: DispatchedTrigger,
-        compileData: T?
+        compileData: T
     ) {
         // Override when needed.
     }
@@ -54,17 +52,8 @@ abstract class EffectArgument<T>(
     open fun ifNotMet(
         element: ElementLike,
         trigger: DispatchedTrigger,
-        compileData: T?
+        compileData: T
     ) {
         // Override when needed.
-    }
-
-    /**
-     * @param config The config.
-     * @param context The context to log violations for.
-     * @return The compile data.
-     */
-    open fun makeCompileData(config: Config, context: ViolationContext): T? {
-        return null
     }
 }

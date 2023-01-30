@@ -1,9 +1,8 @@
 package com.willfp.libreforge.effects
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.ConfigurableProperty
+import com.willfp.libreforge.Compilable
 import com.willfp.libreforge.DefaultHashMap
-import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.triggers.DispatchedTrigger
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
@@ -15,7 +14,7 @@ private val noTriggers: (Trigger) -> Boolean = { false }
 
 abstract class Effect<T>(
     override val id: String
-) : ConfigurableProperty() {
+) : Compilable<T>() {
     // Maps Player UUIDs to the effect count.
     private val effectCounter = DefaultHashMap<UUID, Int>(0)
 
@@ -79,7 +78,7 @@ abstract class Effect<T>(
         player: Player,
         config: Config,
         identifiers: Identifiers,
-        compileData: T?
+        compileData: T
     ) {
         // Override when needed.
     }
@@ -135,7 +134,7 @@ abstract class Effect<T>(
         player: Player,
         config: Config,
         data: TriggerData,
-        compileData: T?
+        compileData: T
     ) {
         // Override when needed.
     }
@@ -159,14 +158,5 @@ abstract class Effect<T>(
         val count = effectCounter[player.uniqueId]
         onDisable(player, identifierFactory.makeIdentifiers(count))
         onEnable(player, config.config, identifierFactory.makeIdentifiers(count), config.compileData)
-    }
-
-    /**
-     * @param config The config.
-     * @param context The context to log violations for.
-     * @return The compile data.
-     */
-    open fun makeCompileData(config: Config, context: ViolationContext): T? {
-        return null
     }
 }

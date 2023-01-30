@@ -43,11 +43,11 @@ class ConfigArgumentsBuilder {
         arguments += RequiredArgument(names, message, getter, predicate)
     }
 
-    fun inherit(getter: (Config) -> ConfigurableProperty?) {
+    fun inherit(getter: (Config) -> Compilable<*>?) {
         arguments += InheritedArguments(getter)
     }
 
-    fun inherit(subsection: String, getter: (Config) -> ConfigurableProperty?) {
+    fun inherit(subsection: String, getter: (Config) -> Compilable<*>?) {
         arguments += InheritedArguments(getter, subsection)
     }
 }
@@ -83,7 +83,7 @@ private class RequiredArgument<T>(
 }
 
 private class InheritedArguments(
-    val getter: (Config) -> ConfigurableProperty?,
+    val getter: (Config) -> Compilable<*>?,
     val subsection: String? = null
 ) : ConfigArgument {
     override fun test(config: Config): List<ConfigViolation> {

@@ -1,14 +1,13 @@
 package com.willfp.libreforge.filters
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.ConfigurableProperty
-import com.willfp.libreforge.ViolationContext
+import com.willfp.libreforge.Compilable
 import com.willfp.libreforge.effects.RunOrder
 import com.willfp.libreforge.triggers.TriggerData
 
 abstract class Filter<T, C>(
     override val id: String
-) : ConfigurableProperty() {
+) : Compilable<T>() {
     /**
      * The run order.
      */
@@ -61,15 +60,6 @@ abstract class Filter<T, C>(
     protected abstract fun filter(
         data: TriggerData,
         values: C,
-        compileData: T?
+        compileData: T
     ): Boolean
-
-    /**
-     * @param config The config.
-     * @param context The context to log violations for.
-     * @return The compile data.
-     */
-    open fun makeCompileData(config: Config, values: C, context: ViolationContext): T? {
-        return null
-    }
 }

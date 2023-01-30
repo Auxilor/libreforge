@@ -52,6 +52,7 @@ object Conditions {
         }
 
         val compileData = condition.makeCompileData(config, context)
+
         val notMetEffects = Effects.compile(
             config.getSubsections("not-met-effects"),
             context.with("not-met-effects")
