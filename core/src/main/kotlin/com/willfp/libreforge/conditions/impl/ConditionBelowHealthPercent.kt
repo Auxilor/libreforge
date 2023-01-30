@@ -1,6 +1,7 @@
 package com.willfp.libreforge.conditions.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.updateEffects
@@ -11,43 +12,27 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.EntityRegainHealthEvent
 
-class ConditionBelowHealthPercent : Condition("below_health_percent") {
+object ConditionBelowHealthPercent : Condition<NoCompileData>("below_health_percent") {
     override val arguments = arguments {
         require("percent", "You must specify the health percentage!")
     }
 
-    @EventHandler(
-        priority = EventPriority.MONITOR,
-        ignoreCancelled = true
-    )
-    fun handle(event: EntityRegainHealthEvent) {
-        val player = event.entity
-
-        if (player !is Player) {
-            return
-        }
-
-        player.updateEffects(noRescan = true)
-    }
-
-    @EventHandler(
-        priority = EventPriority.MONITOR,
-        ignoreCancelled = true
-    )
-    fun handle(event: EntityDamageEvent) {
-        val player = event.entity
-
-        if (player !is Player) {
-            return
-        }
-
-        player.updateEffects(noRescan = true)
-    }
-
-    override fun isConditionMet(player: Player, config: Config): Boolean {
+    override fun isMet(player: Player, config: Config, compileData: NoCompileData): Boolean {
         val maxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.value ?: return false
         val health = player.health
 
-        return health / maxHealth * 100 <= config.getDoubleFromExpression("percent", player)
+        return health / maxHealth <= config.getDoubleFromExpression("percent", player) / 100
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    fun handle(event: EntityRegainHealthEvent) {
+        val player = event.entity as? Player ?: return
+        player.updateEffects()
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    fun handle(event: EntityDamageEvent) {
+        val player = event.entity as? Player ?: return
+        player.updateEffects()
     }
 }

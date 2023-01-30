@@ -51,7 +51,7 @@ abstract class Compilable<T> {
         @Suppress("UNCHECKED_CAST")
         return NoCompileData as? T
             ?: throw InvalidCompileDataException(
-                "Invalid compile data! If you don't need any CompileData, use NoCompileData as the generic type."
+                "You must override makeCompileData or use NoCompileData as the type!"
             )
     }
 
