@@ -1,4 +1,4 @@
-package com.willfp.libreforge.effects.argument
+package com.willfp.libreforge.effects.arguments
 
 data class EffectArgumentResponse(
     val wasMet: Boolean,

@@ -1,8 +1,8 @@
-package com.willfp.libreforge.effects.triggerer
+package com.willfp.libreforge.effects.triggerers
 
-import com.willfp.libreforge.effects.triggerer.impl.CycleTriggererFactory
-import com.willfp.libreforge.effects.triggerer.impl.NormalTriggererFactory
-import com.willfp.libreforge.effects.triggerer.impl.RandomTriggererFactory
+import com.willfp.libreforge.effects.triggerers.impl.CycleTriggererFactory
+import com.willfp.libreforge.effects.triggerers.impl.NormalTriggererFactory
+import com.willfp.libreforge.effects.triggerers.impl.RandomTriggererFactory
 
 object ChainTriggerers {
     private val registry = mutableMapOf<String, ChainTriggererFactory>()

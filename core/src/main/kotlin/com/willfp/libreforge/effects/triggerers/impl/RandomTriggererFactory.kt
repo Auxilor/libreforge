@@ -1,8 +1,8 @@
-package com.willfp.libreforge.effects.triggerer.impl
+package com.willfp.libreforge.effects.triggerers.impl
 
 import com.willfp.libreforge.effects.Chain
-import com.willfp.libreforge.effects.triggerer.ChainTriggerer
-import com.willfp.libreforge.effects.triggerer.ChainTriggererFactory
+import com.willfp.libreforge.effects.triggerers.ChainTriggerer
+import com.willfp.libreforge.effects.triggerers.ChainTriggererFactory
 import com.willfp.libreforge.triggers.DispatchedTrigger
 
 object RandomTriggererFactory : ChainTriggererFactory("random") {

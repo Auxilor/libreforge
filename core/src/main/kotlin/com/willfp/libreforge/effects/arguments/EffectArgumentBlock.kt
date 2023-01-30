@@ -1,4 +1,4 @@
-package com.willfp.libreforge.effects.argument
+package com.willfp.libreforge.effects.arguments
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfiguredProperty

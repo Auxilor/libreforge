@@ -1,7 +1,8 @@
-package com.willfp.libreforge.effects.argument
+package com.willfp.libreforge.effects.arguments
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ViolationContext
+import com.willfp.libreforge.effects.arguments.impl.ArgumentChainArgs
 
 object EffectArguments {
     private val registry = mutableMapOf<String, EffectArgument<*>>()
@@ -48,6 +49,6 @@ object EffectArguments {
     }
 
     init {
-
+        register(ArgumentChainArgs)
     }
 }
