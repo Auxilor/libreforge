@@ -1,14 +1,13 @@
 package com.willfp.libreforge.mutators
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.ConfigurableProperty
-import com.willfp.libreforge.ViolationContext
+import com.willfp.libreforge.Compilable
 import com.willfp.libreforge.effects.RunOrder
 import com.willfp.libreforge.triggers.TriggerData
 
 abstract class Mutator<T>(
     override val id: String
-) : ConfigurableProperty() {
+) : Compilable<T>() {
     /**
      * The run order.
      */
@@ -37,15 +36,6 @@ abstract class Mutator<T>(
     protected abstract fun mutate(
         data: TriggerData,
         config: Config,
-        compileData: T?
+        compileData: T
     ): TriggerData
-
-    /**
-     * @param config The config.
-     * @param context The context to log violations for.
-     * @return The compile data.
-     */
-    open fun makeCompileData(config: Config, context: ViolationContext): T? {
-        return null
-    }
 }
