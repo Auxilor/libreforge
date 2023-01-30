@@ -2,6 +2,9 @@ package com.willfp.libreforge.filters
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Compilable
+import com.willfp.libreforge.InvalidCompileDataException
+import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.effects.RunOrder
 import com.willfp.libreforge.triggers.TriggerData
 
@@ -62,4 +65,31 @@ abstract class Filter<T, C>(
         values: C,
         compileData: T
     ): Boolean
+
+    /*
+
+    This really isn't the best way of doing this, but it's probably better
+    than duplicating the compilable code, and it helps with compatibility.
+
+    It's not like makeCompileData is ever used in a generic context anyway?
+    It's there more as a template, like the rest of Compilable.
+
+     */
+
+    override fun makeCompileData(config: Config, context: ViolationContext): T {
+        throw UnsupportedOperationException("Use makeCompileData(Config, ViolationContext, C) instead!")
+    }
+
+    /**
+     * @param config The config.
+     * @param context The context to log violations for.
+     * @return The compile data.
+     */
+    open fun makeCompileData(config: Config, context: ViolationContext, values: C): T {
+        @Suppress("UNCHECKED_CAST")
+        return NoCompileData as? T
+            ?: throw InvalidCompileDataException(
+                "You must override makeCompileData or use NoCompileData as the type!"
+            )
+    }
 }
