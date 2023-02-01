@@ -139,7 +139,7 @@ object Triggers {
     val LEAVE_BED: Trigger = TriggerLeaveBed()
     val FILL_BUCKET: Trigger = TriggerFillBucket()
     val EMPTY_BUCKET: Trigger = TriggerEmptyBucket()
-    val SHEAR_ENTITY: Trigger = TriggerShearEntity
+    val SHEAR_ENTITY: Trigger = TriggerShearEntity()
 
 
     fun values(): Set<Trigger> {
