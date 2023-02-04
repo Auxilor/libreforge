@@ -5,14 +5,12 @@ import com.willfp.libreforge.effects.triggerers.ChainTriggerer
 import com.willfp.libreforge.effects.triggerers.ChainTriggererFactory
 import com.willfp.libreforge.triggers.DispatchedTrigger
 
-object NormalTriggererFactory: ChainTriggererFactory("normal") {
+object NormalTriggererFactory : ChainTriggererFactory("normal") {
     override fun create() = NormalChainTriggerer
 
     object NormalChainTriggerer : ChainTriggerer {
-        override fun trigger(chain: Chain, trigger: DispatchedTrigger) {
-            for (element in chain) {
-                element.trigger(trigger)
-            }
+        override fun trigger(chain: Chain, trigger: DispatchedTrigger): Boolean {
+            return chain.all { it.trigger(trigger) }
         }
     }
 }

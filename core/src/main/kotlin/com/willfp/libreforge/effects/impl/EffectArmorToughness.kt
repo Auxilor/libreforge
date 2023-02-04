@@ -2,12 +2,12 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.arguments
-import com.willfp.libreforge.effects.GenericAttributeEffect
+import com.willfp.libreforge.effects.AttributeEffect
 import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeModifier
 import org.bukkit.entity.Player
 
-class EffectArmorToughness : GenericAttributeEffect(
+object EffectArmorToughness : AttributeEffect(
     "armor_toughness",
     Attribute.GENERIC_ARMOR_TOUGHNESS,
     AttributeModifier.Operation.ADD_NUMBER

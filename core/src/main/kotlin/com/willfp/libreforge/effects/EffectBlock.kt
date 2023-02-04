@@ -44,9 +44,8 @@ class EffectBlock(
         trigger(trigger)
     }
 
-    override fun doTrigger(trigger: DispatchedTrigger) {
+    override fun doTrigger(trigger: DispatchedTrigger) =
         effects.trigger(trigger)
-    }
 
     override fun equals(other: Any?): Boolean {
         if (other !is EffectBlock) {

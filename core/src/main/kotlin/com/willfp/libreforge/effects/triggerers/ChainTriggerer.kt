@@ -10,7 +10,7 @@ interface ChainTriggerer {
     fun trigger(
         chain: Chain,
         trigger: DispatchedTrigger
-    )
+    ): Boolean
 }
 
 /**

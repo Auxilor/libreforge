@@ -17,7 +17,7 @@ class Chain(
         }
     }
 
-    fun trigger(trigger: DispatchedTrigger) {
-        triggerer.trigger(this, trigger)
+    fun trigger(trigger: DispatchedTrigger): Boolean {
+        return triggerer.trigger(this, trigger)
     }
 }

@@ -9,8 +9,8 @@ object RandomTriggererFactory : ChainTriggererFactory("random") {
     override fun create() = RandomChainTriggerer
 
     object RandomChainTriggerer : ChainTriggerer {
-        override fun trigger(chain: Chain, trigger: DispatchedTrigger) {
-            chain.random().trigger(trigger)
+        override fun trigger(chain: Chain, trigger: DispatchedTrigger): Boolean {
+           return chain.random().trigger(trigger)
         }
     }
 }

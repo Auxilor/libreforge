@@ -93,20 +93,22 @@ abstract class ElementLike {
             if (!conditions.areMet(trigger.player)) {
                 return
             }
-
-            met.forEach { it.ifMet(this, trigger) }
         } else {
             notMet.forEach { it.ifNotMet(this, trigger) }
             return
         }
 
+        var didTrigger = false
+
         fun trigger() {
-            doTrigger(
-                trigger.copy(
-                    // Mutate again here for each repeat.
-                    data = mutators.mutate(trigger.data)
+            // Set to true if triggered.
+            didTrigger = if (doTrigger(
+                    trigger.copy(
+                        // Mutate again here for each repeat.
+                        data = mutators.mutate(trigger.data)
+                    )
                 )
-            )
+            ) true else didTrigger
         }
 
         // Can't delay initial execution for things that modify events.
@@ -128,7 +130,12 @@ abstract class ElementLike {
                 }
             }.runTaskTimer(delay, delay)
         }
+
+        // Only run met conditions if the trigger was actually successful.
+        if (didTrigger) {
+            met.forEach { it.ifMet(this, trigger) }
+        }
     }
 
-    protected abstract fun doTrigger(trigger: DispatchedTrigger)
+    protected abstract fun doTrigger(trigger: DispatchedTrigger): Boolean
 }

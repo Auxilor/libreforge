@@ -1,34 +1,35 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import com.willfp.libreforge.triggers.Triggers
-import com.willfp.libreforge.triggers.wrappers.WrappedDamageEvent
+import org.bukkit.event.entity.EntityDamageEvent
 
-class EffectCritMultiplier : Effect(
-    "crit_multiplier",
-    triggers = Triggers.withParameters(
-        TriggerParameter.EVENT,
-        TriggerParameter.PLAYER
-    ),
-    noDelay = true
-) {
+object EffectCritMultiplier : Effect<NoCompileData>("crit_multiplier") {
+    override val supportsDelay = false
+
+    override val parameters = setOf(
+        TriggerParameter.PLAYER,
+        TriggerParameter.EVENT
+    )
+
     override val arguments = arguments {
         require("multiplier", "You must specify the crit damage multiplier!")
     }
 
-    override fun handle(data: TriggerData, config: Config) {
-        val event = data.event as? WrappedDamageEvent ?: return
-        val player = data.player ?: return
+    override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
+        val event = data.event as? EntityDamageEvent ?: return false
+        val player = data.player ?: return false
 
         if (player.velocity.y >= 0) {
-            return
+            return false
         }
 
         event.damage *= config.getDoubleFromExpression("multiplier", data)
+        return true
     }
 }

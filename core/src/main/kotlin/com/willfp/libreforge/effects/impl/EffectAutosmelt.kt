@@ -2,6 +2,7 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.fast.FastItemStack
+import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.RunOrder
@@ -18,16 +19,15 @@ import org.bukkit.inventory.ItemStack
 import kotlin.math.ceil
 import kotlin.math.roundToInt
 
-class EffectAutosmelt : Effect(
-    "autosmelt",
-    triggers = Triggers.all(),
-    runOrder = RunOrder.LATE
-) {
+object EffectAutosmelt : Effect<NoCompileData>("autosmelt") {
+    override val isPermanent = false
+
     override val arguments = arguments {
         require("drop_xp", "You must specify if xp should be dropped!")
     }
 
     private val recipes = mutableMapOf<Material, Pair<Material, Int>>()
+
     private val fortuneMaterials = mutableSetOf(
         Material.GOLD_INGOT,
         Material.IRON_INGOT,
