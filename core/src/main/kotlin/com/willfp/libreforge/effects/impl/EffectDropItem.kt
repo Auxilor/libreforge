@@ -2,27 +2,30 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.items.Items
+import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import com.willfp.libreforge.triggers.Triggers
+import org.bukkit.inventory.ItemStack
 
-class EffectDropItem : Effect(
-    "drop_item",
-    triggers = Triggers.withParameters(
+object EffectDropItem : Effect<ItemStack>("drop_item") {
+    override val parameters = setOf(
         TriggerParameter.LOCATION
     )
-) {
+
     override val arguments = arguments {
         require("item", "You must specify the item to drop!")
     }
 
-    override fun handle(data: TriggerData, config: Config) {
-        val location = data.location ?: return
+    override fun onTrigger(config: Config, data: TriggerData, compileData: ItemStack): Boolean {
+        val location = data.location ?: return false
+        location.world?.dropItem(location, compileData)
 
-        val item = Items.lookup(config.getString("item")).item
+        return true
+    }
 
-        location.world?.dropItemNaturally(location, item)
+    override fun makeCompileData(config: Config, context: ViolationContext): ItemStack {
+        return Items.lookup(config.getString("item")).item
     }
 }

@@ -4,39 +4,37 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.eco.util.containsIgnoreCase
 import com.willfp.eco.util.runExempted
+import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getIntFromExpression
+import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import com.willfp.libreforge.triggers.Triggers
-import com.willfp.libreforge.triggers.triggers.TriggerMineBlock.Companion.preventMineBlockTrigger
 import org.bukkit.Material
 import org.bukkit.block.Block
 
-class EffectMineRadius : Effect(
-    "mine_radius",
-    triggers = Triggers.withParameters(
+object EffectMineRadius : Effect<NoCompileData>("mine_radius") {
+    override val parameters = setOf(
         TriggerParameter.PLAYER
     )
-) {
+
     override val arguments = arguments {
         require("radius", "You must specify the radius to break!")
     }
 
-    override fun handle(data: TriggerData, config: Config) {
-        val block = data.block ?: data.location?.block ?: return
+    override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
+        val block = data.block ?: data.location?.block ?: return false
+        val player = data.player ?: return false
 
         if (block.hasMetadata("block-ignore")) {
-            return
+            return false
         }
-
-        val player = data.player ?: return
 
         val radius = config.getIntFromExpression("radius", data)
 
         if (player.isSneaking && config.getBool("disable_on_sneak")) {
-            return
+            return false
         }
 
         val whitelist = config.getStringsOrNull("whitelist")
@@ -86,14 +84,11 @@ class EffectMineRadius : Effect(
         player.runExempted {
             for (toBreak in blocks) {
                 toBreak.setMetadata("block-ignore", plugin.metadataValueFactory.create(true))
-
-                if (config.getBool("prevent_trigger")) {
-                    toBreak.preventMineBlockTrigger()
-                }
-
                 player.breakBlock(toBreak)
                 toBreak.removeMetadata("block-ignore", plugin)
             }
         }
+
+        return true
     }
 }

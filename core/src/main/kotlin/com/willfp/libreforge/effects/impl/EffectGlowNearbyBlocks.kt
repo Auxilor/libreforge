@@ -2,12 +2,13 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.util.TeamUtils
+import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getIntFromExpression
+import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import com.willfp.libreforge.triggers.Triggers
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Material
@@ -22,34 +23,19 @@ import org.bukkit.event.world.ChunkUnloadEvent
 import org.bukkit.scoreboard.Team
 import java.util.UUID
 
-class EffectGlowNearbyBlocks : Effect(
-    "glow_nearby_blocks",
-    triggers = Triggers.withParameters(
+object EffectGlowNearbyBlocks : Effect<NoCompileData>("glow_nearby_blocks") {
+    override val parameters = setOf(
         TriggerParameter.LOCATION
     )
-) {
+
     override val arguments = arguments {
         require("radius", "You must specify the radius!")
         require("duration", "You must specify the duration to glow for!")
         require("colors", "You must specify the block colors!")
     }
 
-    @EventHandler
-    fun handleChunkUnload(event: ChunkUnloadEvent) {
-        event.chunk.entities.filterIsInstance<LivingEntity>()
-            .filter { it.hasMetadata("gnb-shulker") }
-            .forEach { it.remove() }
-    }
-
-    @EventHandler
-    fun handleChunkLoad(event: ChunkLoadEvent) {
-        event.chunk.entities.filterIsInstance<LivingEntity>()
-            .filter { it.hasMetadata("gnb-shulker") }
-            .forEach { it.remove() }
-    }
-
-    override fun handle(data: TriggerData, config: Config) {
-        val location = data.location ?: return
+    override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
+        val location = data.location ?: return false
 
         val radius = config.getIntFromExpression("radius", data)
 
@@ -93,15 +79,31 @@ class EffectGlowNearbyBlocks : Effect(
             shulker.setGravity(false)
             shulker.isGlowing = true
             shulker.isInvisible = true
-            shulker.setMetadata("gnb-shulker", this.plugin.metadataValueFactory.create(true))
+            shulker.setMetadata("gnb-shulker", plugin.metadataValueFactory.create(true))
             team.addEntry(shulker.uniqueId.toString())
-            block.setMetadata("gnb-uuid", this.plugin.metadataValueFactory.create(shulker.uniqueId))
+            block.setMetadata("gnb-uuid", plugin.metadataValueFactory.create(shulker.uniqueId))
 
-            this.plugin.scheduler.runLater(duration.toLong()) {
+            plugin.scheduler.runLater(duration.toLong()) {
                 shulker.remove()
-                block.removeMetadata("gnb-uuid", this.plugin)
+                block.removeMetadata("gnb-uuid", plugin)
             }
         }
+
+        return true
+    }
+
+    @EventHandler
+    fun handleChunkUnload(event: ChunkUnloadEvent) {
+        event.chunk.entities.filterIsInstance<LivingEntity>()
+            .filter { it.hasMetadata("gnb-shulker") }
+            .forEach { it.remove() }
+    }
+
+    @EventHandler
+    fun handleChunkLoad(event: ChunkLoadEvent) {
+        event.chunk.entities.filterIsInstance<LivingEntity>()
+            .filter { it.hasMetadata("gnb-shulker") }
+            .forEach { it.remove() }
     }
 
     @EventHandler

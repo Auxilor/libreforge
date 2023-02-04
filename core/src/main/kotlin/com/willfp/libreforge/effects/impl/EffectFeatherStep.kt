@@ -1,6 +1,8 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ListedHashMap
+import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
 import org.bukkit.entity.Player
@@ -9,26 +11,15 @@ import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import java.util.UUID
 
-class EffectFeatherStep : Effect("feather_step") {
-    private val players = mutableMapOf<UUID, MutableList<UUID>>()
+object EffectFeatherStep : Effect<NoCompileData>("feather_step") {
+    private val players = ListedHashMap<UUID, UUID>()
 
-    override fun handleEnable(
-        player: Player,
-        config: Config,
-        identifiers: Identifiers
-    ) {
-        val existing = players[player.uniqueId] ?: mutableListOf()
-        existing.add(identifiers.uuid)
-        players[player.uniqueId] = existing
+    override fun onEnable(player: Player, config: Config, identifiers: Identifiers, compileData: NoCompileData) {
+        players[player.uniqueId] += identifiers.uuid
     }
 
-    override fun handleDisable(
-        player: Player,
-        identifiers: Identifiers
-    ) {
-        val existing = players[player.uniqueId] ?: mutableListOf()
-        existing.remove(identifiers.uuid)
-        players[player.uniqueId] = existing
+    override fun onDisable(player: Player, identifiers: Identifiers) {
+        players[player.uniqueId] -= identifiers.uuid
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -39,7 +30,7 @@ class EffectFeatherStep : Effect("feather_step") {
 
         val player = event.player
 
-        if ((players[player.uniqueId] ?: emptyList()).isNotEmpty()) {
+        if (players[player.uniqueId].isNotEmpty()) {
             event.isCancelled = true
         }
     }

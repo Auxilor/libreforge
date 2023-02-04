@@ -5,39 +5,39 @@ import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.eco.util.VectorUtils
 import com.willfp.eco.util.containsIgnoreCase
 import com.willfp.eco.util.runExempted
+import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getIntFromExpression
+import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import com.willfp.libreforge.triggers.Triggers
 import org.bukkit.block.Block
 
 
-class EffectDrill : Effect(
-    "drill",
-    triggers = Triggers.withParameters(
+object EffectDrill : Effect<NoCompileData>("drill") {
+    override val parameters = setOf(
         TriggerParameter.PLAYER
     )
-) {
+
     override val arguments = arguments {
         require("amount", "You must specify the amount of blocks to break!")
         require("check_hardness", "You must specify if hardness should be checked!")
     }
 
-    override fun handle(data: TriggerData, config: Config) {
-        val block = data.block ?: data.location?.block ?: return
+    override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
+        val block = data.block ?: data.location?.block ?: return false
 
         if (block.hasMetadata("block-ignore")) {
-            return
+            return false
         }
 
-        val player = data.player ?: return
+        val player = data.player ?: return false
 
         val amount = config.getIntFromExpression("amount", data)
 
         if (player.isSneaking && config.getBool("disable_on_sneak")) {
-            return
+            return false
         }
 
         val whitelist = config.getStringsOrNull("whitelist")
@@ -78,5 +78,7 @@ class EffectDrill : Effect(
                 toBreak.removeMetadata("block-ignore", plugin)
             }
         }
+
+        return true
     }
 }
