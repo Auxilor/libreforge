@@ -297,7 +297,7 @@ abstract class LibReforgePlugin @JvmOverloads constructor(
     }
 
     override fun getMinimumEcoVersion(): String {
-        return "6.48.0"
+        return "6.50.0"
     }
 
     companion object {
