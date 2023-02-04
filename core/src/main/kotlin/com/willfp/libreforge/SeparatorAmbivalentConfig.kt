@@ -99,7 +99,7 @@ fun Config.separatorAmbivalent(): Config =
     if (this is SeparatorAmbivalentConfig) this else SeparatorAmbivalentConfig(this)
 
 fun Config.toMathContext(data: TriggerData): MathContext {
-    val player = data.originalPlayer
+    val player = data._originalPlayer
     val additional = mutableListOf<AdditionalPlayer>()
 
     if (data.victim is Player) {
