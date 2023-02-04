@@ -1,9 +1,9 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.DefaultHashMap
 import com.willfp.libreforge.Holder
 import com.willfp.libreforge.HolderTemplate
+import com.willfp.libreforge.ListedHashMap
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Conditions
@@ -28,7 +28,7 @@ object EffectAddHolderToVictim : Effect<HolderTemplate>("add_holder_to_victim") 
         require("duration", "You must specify the duration (in ticks)!")
     }
 
-    private val holders = DefaultHashMap<UUID, MutableList<Holder>>(mutableListOf())
+    private val holders = ListedHashMap<UUID, Holder>()
 
     init {
         registerHolderProvider { holders[it.uniqueId] }

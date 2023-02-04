@@ -22,7 +22,7 @@ object Triggers {
      */
     fun withParameters(parameters: Set<TriggerParameter>): (Trigger) -> Boolean {
         return {
-            it.parameters.containsAll(parameters)
+            it.parameters.flatMap { param -> param.inheritsFrom.toList().plusElement(param) }.containsAll(parameters)
         }
     }
 

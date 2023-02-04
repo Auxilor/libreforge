@@ -1,41 +1,31 @@
 package com.willfp.libreforge.effects.impl
 
-import com.willfp.eco.core.integrations.mcmmo.McmmoManager
 import com.willfp.eco.util.NumberUtils
-import com.willfp.libreforge.effects.GenericMultiplierEffect
-import com.willfp.libreforge.triggers.wrappers.WrappedHungerEvent
+import com.willfp.libreforge.effects.MultiplierEffect
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.FoodLevelChangeEvent
 import kotlin.math.ceil
 
-class EffectHungerMultiplier : GenericMultiplierEffect("hunger_multiplier") {
+object EffectHungerMultiplier : MultiplierEffect("hunger_multiplier") {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: FoodLevelChangeEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
+        val player = event.entity as? Player ?: return
 
-        val player = event.entity
+        val diff = event.foodLevel - player.foodLevel
 
-        if (player !is Player) {
+        if (diff >= 0) {
             return
         }
 
         val multiplier = getMultiplier(player)
 
-        val wrapped = WrappedHungerEvent(event)
-
-        if (wrapped.amount <= 0) {
-            return
-        }
-
         if (multiplier < 1) {
             if (NumberUtils.randFloat(0.0, 1.0) > multiplier) {
-                wrapped.isCancelled = true
+                event.isCancelled = true
             }
         } else {
-            wrapped.amount = ceil(wrapped.amount * multiplier).toInt()
+            event.foodLevel = player.foodLevel + ceil(diff * getMultiplier(player)).toInt()
         }
     }
 }

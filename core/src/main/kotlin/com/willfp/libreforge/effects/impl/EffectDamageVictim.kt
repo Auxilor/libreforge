@@ -2,26 +2,25 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import com.willfp.libreforge.triggers.Triggers
 
 
-class EffectDamageVictim : Effect(
-    "damage_victim",
-    triggers = Triggers.withParameters(
+object EffectDamageVictim : Effect<NoCompileData>("damage_victim") {
+    override val parameters = setOf(
         TriggerParameter.VICTIM
     )
-) {
+
     override val arguments = arguments {
         require("damage", "You must specify the amount of damage!")
     }
 
-    override fun handle(data: TriggerData, config: Config) {
-        val victim = data.victim ?: return
+    override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
+        val victim = data.victim ?: return false
         val player = data.player
 
         val damage = config.getDoubleFromExpression("damage", data)
@@ -42,5 +41,7 @@ class EffectDamageVictim : Effect(
                 victim.damage(damage)
             }
         }
+
+        return true
     }
 }
