@@ -7,25 +7,20 @@ import com.willfp.eco.core.data.keys.PersistentDataKeyType
 import com.willfp.eco.core.data.profile
 import com.willfp.eco.core.integrations.placeholder.PlaceholderManager
 import com.willfp.eco.core.math.MathContext
-import com.willfp.eco.core.placeholder.PlayerPlaceholder
+import com.willfp.eco.core.placeholder.PlayerDynamicPlaceholder
 import com.willfp.eco.core.price.Price
 import com.willfp.eco.core.price.PriceFactory
 import com.willfp.eco.core.price.Prices
 import com.willfp.eco.util.NamespacedKeyUtils
-import com.willfp.eco.util.NumberUtils
+import com.willfp.eco.util.toNiceString
 import com.willfp.libreforge.events.PointsChangeEvent
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.util.UUID
 import java.util.function.Function
+import java.util.regex.Pattern
 
 private val keys = mutableMapOf<String, PersistentDataKey<Double>>()
-
-private val registeredPointsKey = PersistentDataKey(
-    LibReforgePlugin.instance.namespacedKeyFactory.create("registered_points"),
-    PersistentDataKeyType.STRING_LIST,
-    emptyList()
-)
 
 private fun getKeyForType(type: String): PersistentDataKey<Double> {
     val existing = keys[type.lowercase()]
@@ -39,18 +34,7 @@ private fun getKeyForType(type: String): PersistentDataKey<Double> {
             0.0
         )
 
-        PlaceholderManager.registerPlaceholder(
-            PlayerPlaceholder(
-                LibReforgePlugin.instance,
-                "points_${type.lowercase()}"
-            ) { NumberUtils.format(it.getPoints(type)) }
-        )
-
         Prices.registerPriceFactory(PointPriceFactory(type.lowercase()))
-
-        val knownPoints = Bukkit.getServer().profile.read(registeredPointsKey).toMutableSet()
-        knownPoints.add(type)
-        Bukkit.getServer().profile.write(registeredPointsKey, knownPoints.toList())
 
         getKeyForType(type)
     } else {
@@ -103,7 +87,15 @@ class PointPriceFactory(private val type: String) : PriceFactory {
 }
 
 fun initPointPlaceholders() {
-    Bukkit.getServer().profile.read(registeredPointsKey).forEach { getKeyForType(it) }
+    PlaceholderManager.registerPlaceholder(
+        PlayerDynamicPlaceholder(
+            LibReforgePlugin.instance,
+            Pattern.compile("points_[a-z]+")
+        ) { args, player ->
+            val type = args.split("_")[1]
+            player.getPoints(type).toNiceString()
+        }
+    )
 }
 
 fun Player.getPoints(type: String): Double {
