@@ -42,6 +42,13 @@ private val providers = mutableListOf<HolderProvider>()
  */
 fun registerHolderProvider(provider: HolderProvider) = providers.add(provider)
 
+/**
+ * Register a new holder provider.
+ */
+fun registerHolderProvider(provider: (Player) -> Collection<Holder>) = providers.add(object : HolderProvider {
+    override fun provide(player: Player) = provider(player)
+})
+
 private val holderCache = Caffeine.newBuilder()
     .expireAfterWrite(4, TimeUnit.SECONDS)
     .build<UUID, Collection<Holder>>()
