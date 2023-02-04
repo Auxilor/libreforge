@@ -2,33 +2,32 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.price.Prices
+import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.toMathContext
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import com.willfp.libreforge.triggers.Triggers
 
-class EffectGivePrice : Effect(
-    "give_price",
-    triggers = Triggers.withParameters(
+object EffectGivePrice : Effect<NoCompileData>("give_price") {
+    override val parameters = setOf(
         TriggerParameter.PLAYER
     )
-) {
+
     override val arguments = arguments {
         require("value", "You must specify the value of the price to give!")
         require("type", "You must specify the value of the price (coins, xpl, etc.)!")
     }
 
-    override fun handle(data: TriggerData, config: Config) {
-        val player = data.player ?: return
+    override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
+        val player = data.player ?: return false
 
-        val price = Prices.create(
+        Prices.create(
             config.getString("value"),
             config.getString("type"),
             config.toMathContext(data)
-        )
+        ).giveTo(player)
 
-        price.giveTo(player)
+        return true
     }
 }
