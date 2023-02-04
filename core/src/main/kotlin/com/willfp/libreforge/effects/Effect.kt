@@ -6,11 +6,10 @@ import com.willfp.libreforge.DefaultHashMap
 import com.willfp.libreforge.triggers.DispatchedTrigger
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
+import com.willfp.libreforge.triggers.TriggerParameter
+import com.willfp.libreforge.triggers.Triggers
 import org.bukkit.entity.Player
 import java.util.UUID
-
-// Done this way so identity equality check works for isPermanent.
-private val noTriggers: (Trigger) -> Boolean = { false }
 
 abstract class Effect<T>(
     override val id: String
@@ -36,19 +35,19 @@ abstract class Effect<T>(
     /**
      * The required trigger parameters.
      */
-    protected open val parameters: (Trigger) -> Boolean = noTriggers
+    protected open val parameters: Set<TriggerParameter> = emptySet()
 
     /**
      * If the effect is permanent.
      */
     val isPermanent: Boolean
-        get() = parameters === noTriggers
+        get() = parameters.isEmpty()
 
     /**
      * If the effect supports a certain [trigger].
      */
     fun supportsTrigger(trigger: Trigger) =
-        parameters(trigger)
+        Triggers.withParameters(parameters)(trigger)
 
     /**
      * Enable a permanent effect.
@@ -120,18 +119,16 @@ abstract class Effect<T>(
         trigger: DispatchedTrigger,
         config: ChainElement<T>
     ) {
-        onTrigger(trigger.player, config.config, trigger.data, config.compileData)
+        onTrigger(config.config, trigger.data, config.compileData)
     }
 
     /**
      * Handle triggering.
      *
-     * @param player The player.
      * @param data The trigger data.
      * @param compileData The compile data.
      */
     protected open fun onTrigger(
-        player: Player,
         config: Config,
         data: TriggerData,
         compileData: T

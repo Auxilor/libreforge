@@ -30,7 +30,7 @@ data class TriggerData(
 
     It's really not very nice, but it's good enough. Just don't think about it.
      */
-    internal val originalPlayer: Player? = player
+    internal val _originalPlayer: Player? = player
 )
 
 enum class TriggerParameter(

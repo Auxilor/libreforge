@@ -20,11 +20,9 @@ object Triggers {
     /**
      * Get a predicate requiring certain trigger parameters.
      */
-    fun withParameters(vararg parameters: TriggerParameter): (Trigger) -> Boolean {
-        val params = parameters.toSet()
-
+    fun withParameters(parameters: Set<TriggerParameter>): (Trigger) -> Boolean {
         return {
-            it.parameters.containsAll(params)
+            it.parameters.containsAll(parameters)
         }
     }
 
