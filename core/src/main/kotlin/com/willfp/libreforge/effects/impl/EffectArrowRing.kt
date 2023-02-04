@@ -2,25 +2,24 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
+import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import com.willfp.libreforge.triggers.Triggers
 import org.bukkit.entity.Arrow
 import org.bukkit.util.Vector
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
-class EffectArrowRing : Effect(
-    "arrow_ring",
-    triggers = Triggers.withParameters(
+object EffectArrowRing : Effect<NoCompileData>("arrow_ring") {
+    override val parameters = setOf(
         TriggerParameter.LOCATION
     )
-) {
+
     override val arguments = arguments {
         require("amount", "You must specify the amount of arrows!")
         require("height", "You must specify the height to spawn the arrows at!")
@@ -29,9 +28,9 @@ class EffectArrowRing : Effect(
         require("fire_ticks", "You must specify the arrow fire ticks!")
     }
 
-    override fun handle(data: TriggerData, config: Config) {
-        val location = data.location ?: return
-        val world = location.world ?: return
+    override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
+        val location = data.location ?: return false
+        val world = location.world ?: return false
 
         val amount = config.getIntFromExpression("amount", data)
         val height = config.getDoubleFromExpression("height", data)
@@ -41,7 +40,7 @@ class EffectArrowRing : Effect(
 
         if (data.player != null) {
             if (!location.getNearbyPlayers(radius + 0.5f).all { AntigriefManager.canInjure(data.player, it) }) {
-                return
+                return false
             }
         }
 
@@ -64,5 +63,7 @@ class EffectArrowRing : Effect(
             arrow.damage = damage
             arrow.fireTicks = flameTicks
         }
+
+        return true
     }
 }

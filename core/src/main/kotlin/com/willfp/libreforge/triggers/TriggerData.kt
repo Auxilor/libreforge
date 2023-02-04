@@ -10,6 +10,13 @@ import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.util.Vector
 
+/**
+ * For turning TriggerData into new DispatchedTriggers.
+ */
+internal object BlankTrigger : Trigger("internal:blank") {
+    override val parameters = TriggerParameter.values().toSet()
+}
+
 data class TriggerData(
     val player: Player? = null,
     val victim: LivingEntity? = null,
@@ -31,7 +38,16 @@ data class TriggerData(
     It's really not very nice, but it's good enough. Just don't think about it.
      */
     internal val _originalPlayer: Player? = player
-)
+) {
+    /**
+     * Turn into a dispatched trigger for a [player].
+     */
+    fun dispatch(player: Player) = DispatchedTrigger(
+        player,
+        BlankTrigger,
+        this
+    )
+}
 
 enum class TriggerParameter(
     vararg val inheritsFrom: TriggerParameter

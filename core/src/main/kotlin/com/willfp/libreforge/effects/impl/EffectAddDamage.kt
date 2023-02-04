@@ -23,8 +23,10 @@ object EffectAddDamage : Effect<NoCompileData>("add_damage") {
 
     override val runOrder = RunOrder.LATE
 
-    override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData) {
-        val event = data.event as? EntityDamageEvent ?: return
+    override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
+        val event = data.event as? EntityDamageEvent ?: return false
         event.damage += config.getDoubleFromExpression("damage", data)
+
+        return true
     }
 }

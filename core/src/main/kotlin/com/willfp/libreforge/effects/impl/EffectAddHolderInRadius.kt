@@ -48,9 +48,9 @@ object EffectAddHolderInRadius : Effect<HolderTemplate>("add_holder_in_radius") 
         }
     }
 
-    override fun onTrigger(config: Config, data: TriggerData, compileData: HolderTemplate) {
-        val player = data.player ?: return
-        val location = data.location ?: return
+    override fun onTrigger(config: Config, data: TriggerData, compileData: HolderTemplate): Boolean {
+        val player = data.player ?: return false
+        val location = data.location ?: return false
 
         val radius = config.getDoubleFromExpression("radius", data)
         val duration = config.getIntFromExpression("duration", data)
@@ -68,6 +68,8 @@ object EffectAddHolderInRadius : Effect<HolderTemplate>("add_holder_in_radius") 
         plugin.scheduler.runLater(duration.toLong()) {
             holders -= holder
         }
+
+        return true
     }
 
     override fun makeCompileData(config: Config, context: ViolationContext): HolderTemplate {
