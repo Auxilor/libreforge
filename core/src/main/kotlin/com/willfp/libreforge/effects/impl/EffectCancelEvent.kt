@@ -1,21 +1,23 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import com.willfp.libreforge.triggers.Triggers
-import com.willfp.libreforge.triggers.WrappedCancellableEvent
+import org.bukkit.event.Cancellable
 
-class EffectCancelEvent : Effect(
-    "cancel_event",
-    triggers = Triggers.withParameters(
+object EffectCancelEvent : Effect<NoCompileData>("cancel_event") {
+    override val supportsDelay = false
+
+    override val parameters = setOf(
         TriggerParameter.EVENT
-    ),
-    noDelay = true
-) {
-    override fun handle(data: TriggerData, config: Config) {
-        val event = data.event as? WrappedCancellableEvent<*> ?: return
+    )
+
+    override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
+        val event = data.event as? Cancellable ?: return false
         event.isCancelled = true
+
+        return true
     }
 }

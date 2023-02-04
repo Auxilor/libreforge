@@ -33,8 +33,8 @@ object EffectAddHolder : Effect<HolderTemplate>("add_holder") {
         registerHolderProvider { holders[it.uniqueId] }
     }
 
-    override fun onTrigger(config: Config, data: TriggerData, compileData: HolderTemplate) {
-        val player = data.player ?: return
+    override fun onTrigger(config: Config, data: TriggerData, compileData: HolderTemplate): Boolean {
+        val player = data.player ?: return false
 
         val duration = config.getIntFromExpression("duration", data)
         val holder = compileData.toHolder()
@@ -44,6 +44,8 @@ object EffectAddHolder : Effect<HolderTemplate>("add_holder") {
         plugin.scheduler.runLater(duration.toLong()) {
             holders[player.uniqueId] -= holder
         }
+
+        return true
     }
 
     override fun makeCompileData(config: Config, context: ViolationContext): HolderTemplate {

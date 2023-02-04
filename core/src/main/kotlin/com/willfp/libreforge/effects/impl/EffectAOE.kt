@@ -3,26 +3,21 @@ package com.willfp.libreforge.effects.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
-import com.willfp.libreforge.effects.CompileData
-import com.willfp.libreforge.effects.ConfiguredEffect
+import com.willfp.libreforge.effects.Chain
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.effects.aoe.AOEShapes
 import com.willfp.libreforge.effects.effects.particles.toVector3f
 import com.willfp.libreforge.effects.invoke
-import com.willfp.libreforge.triggers.InvocationData
+import com.willfp.libreforge.effects.triggerers.impl.NormalTriggererFactory
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import com.willfp.libreforge.triggers.Triggers
-import org.bukkit.entity.LivingEntity
-import org.bukkit.entity.Player
 
-class EffectAOE : Effect(
-    "aoe",
-    triggers = Triggers.withParameters(
+object EffectAOE : Effect<Chain?>("aoe") {
+    override val parameters = setOf(
         TriggerParameter.PLAYER
     )
-) {
+
     override val arguments = arguments {
         require("effects", "You must specify the effects!")
         require("shape", "You must specify a valid shape!", Config::getString) {
@@ -31,11 +26,9 @@ class EffectAOE : Effect(
         inherit { AOEShapes.getByID(it.getString("shape")) }
     }
 
-    override fun handle(invocation: InvocationData, config: Config) {
-        val player = invocation.data.player ?: return
-        val effects = invocation.compileData as? AOEEffects ?: return
-
-        val shape = AOEShapes.getByID(config.getString("shape")) ?: return
+    override fun onTrigger(config: Config, data: TriggerData, compileData: Chain?): Boolean {
+        val player = data.player ?: return false
+        val shape = AOEShapes.getByKD(config.getString("shape")) ?: return false
 
         for (entity in shape.getEntities(
             player.location.toVector3f(),
@@ -44,36 +37,15 @@ class EffectAOE : Effect(
             config,
             invocation.data
         ).filter { it != player }) {
-            effects(player, entity)
+            compileData?.trigger(data.dispatch(player))
         }
     }
 
-    override fun makeCompileData(config: Config, context: ViolationContext): CompileData {
-        val effects = Effects.compile(
+    override fun makeCompileData(config: Config, context: ViolationContext): Chain? {
+        return Effects.compileChain(
             config.getSubsections("effects"),
-            context.with("aoe Effects"),
-            chainLike = true
+            NormalTriggererFactory.create(),
+            context.with("aoe Effects")
         )
-
-        return AOEEffects(
-            effects
-        )
-    }
-
-    private data class AOEEffects(
-        val effects: List<ConfiguredEffect>
-    ) : CompileData {
-        operator fun invoke(player: Player, victim: LivingEntity) {
-            effects(
-                player,
-                TriggerData(
-                    player = player,
-                    victim = victim,
-                    location = victim.location,
-                    block = victim.location.clone().subtract(0.0, 1.0, 0.0).block
-                ),
-                useTriggerPlayerForConditions = true
-            )
-        }
     }
 }

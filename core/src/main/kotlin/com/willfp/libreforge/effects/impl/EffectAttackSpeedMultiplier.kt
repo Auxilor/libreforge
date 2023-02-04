@@ -2,12 +2,12 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.arguments
-import com.willfp.libreforge.effects.GenericAttributeEffect
+import com.willfp.libreforge.effects.AttributeEffect
 import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeModifier
 import org.bukkit.entity.Player
 
-class EffectAttackSpeedMultiplier : GenericAttributeEffect(
+object EffectAttackSpeedMultiplier : AttributeEffect(
     "attack_speed_multiplier",
     Attribute.GENERIC_ATTACK_SPEED,
     AttributeModifier.Operation.MULTIPLY_SCALAR_1

@@ -7,7 +7,7 @@ import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeModifier
 import org.bukkit.entity.Player
 
-class EffectArmor : GenericAttributeEffect(
+object EffectArmor : GenericAttributeEffect(
     "armor",
     Attribute.GENERIC_ARMOR,
     AttributeModifier.Operation.ADD_NUMBER

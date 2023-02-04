@@ -1,60 +1,44 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.DefaultHashMap
+import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
-import com.willfp.libreforge.getDoubleFromExpression
-import com.willfp.libreforge.givePoints
-import com.willfp.libreforge.takePoints
-import com.willfp.libreforge.triggers.TriggerData
+import com.willfp.libreforge.points
 import org.bukkit.entity.Player
 import java.util.UUID
 
-class EffectAddPoints : Effect("add_points") {
+object EffectAddPoints : Effect<NoCompileData>("add_points") {
     override val arguments = arguments {
         require("type", "You must specify the type of points!")
         require("amount", "You must specify the amount of points!")
     }
 
-    private val tracker = mutableMapOf<UUID, MutableMap<UUID, AddedPoint>>()
+    private val tracker = DefaultHashMap<UUID, MutableMap<UUID, AddedPoint>>(mutableMapOf())
 
-    override fun handle(data: TriggerData, config: Config) {
-        val player = data.player ?: return
-
-        player.givePoints(config.getString("type"), config.getDoubleFromExpression("amount", data))
-    }
-
-    override fun handleEnable(
-        player: Player,
-        config: Config,
-        identifiers: Identifiers
-    ) {
-        val added = tracker[player.uniqueId] ?: mutableMapOf()
-        val uuid = identifiers.uuid
+    override fun onEnable(player: Player, config: Config, identifiers: Identifiers, compileData: NoCompileData) {
+        val added = tracker[player.uniqueId]
         val point = config.getString("type")
         val amount = config.getDoubleFromExpression("amount", player)
 
-        added[uuid] = AddedPoint(
+        added[identifiers.uuid] = AddedPoint(
             point,
             amount
         )
 
-        player.givePoints(point, amount)
+        player.points[point] += amount
 
         tracker[player.uniqueId] = added
     }
 
-    override fun handleDisable(
-        player: Player,
-        identifiers: Identifiers
-    ) {
-        val added = tracker[player.uniqueId] ?: mutableMapOf()
-        val uuid = identifiers.uuid
-        val addedPoint = added[uuid] ?: return
-        added.remove(uuid)
+    override fun onDisable(player: Player, identifiers: Identifiers) {
+        val added = tracker[player.uniqueId]
+        val addedPoint = added[identifiers.uuid] ?: return
+        added -= identifiers.uuid
 
-        player.takePoints(addedPoint.point, addedPoint.amount)
+        player.points[addedPoint.point] -= addedPoint.amount
 
         tracker[player.uniqueId] = added
     }

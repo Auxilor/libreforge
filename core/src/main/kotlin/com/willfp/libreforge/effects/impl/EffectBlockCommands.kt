@@ -1,6 +1,8 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.DefaultHashMap
+import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
@@ -9,30 +11,21 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerCommandPreprocessEvent
 import java.util.UUID
 
-class EffectBlockCommands : Effect(
-    "block_commands"
-) {
+object EffectBlockCommands : Effect<NoCompileData>("block_commands") {
     override val arguments = arguments {
         require("commands", "You must specify the commands to block!")
     }
 
-    private val players = mutableMapOf<UUID, MutableMap<UUID, List<String>>>()
+    private val players = DefaultHashMap<UUID, MutableMap<UUID, List<String>>>(mutableMapOf())
 
-    override fun handleEnable(
-        player: Player,
-        config: Config,
-        identifiers: Identifiers
-    ) {
-        val commands = players[player.uniqueId] ?: mutableMapOf()
+    override fun onEnable(player: Player, config: Config, identifiers: Identifiers, compileData: NoCompileData) {
+        val commands = players[player.uniqueId]
         commands[identifiers.uuid] = config.getStrings("commands")
         players[player.uniqueId] = commands
     }
 
-    override fun handleDisable(
-        player: Player,
-        identifiers: Identifiers
-    ) {
-        val existing = players[player.uniqueId] ?: mutableMapOf()
+    override fun onDisable(player: Player, identifiers: Identifiers) {
+        val existing = players[player.uniqueId]
         existing.remove(identifiers.uuid)
         players[player.uniqueId] = existing
     }
@@ -41,7 +34,7 @@ class EffectBlockCommands : Effect(
     fun handle(event: PlayerCommandPreprocessEvent) {
         val player = event.player
 
-        val effects = players[player.uniqueId] ?: emptyMap()
+        val effects = players[player.uniqueId]
 
         var command = event.message.split(" ").getOrNull(0) ?: return
         if (command.startsWith("/")) {

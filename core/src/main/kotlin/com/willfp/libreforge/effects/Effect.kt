@@ -9,11 +9,12 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
 import org.bukkit.entity.Player
+import org.bukkit.event.Listener
 import java.util.UUID
 
 abstract class Effect<T>(
     override val id: String
-) : Compilable<T>() {
+) : Compilable<T>(), Listener {
     // Maps Player UUIDs to the effect count.
     private val effectCounter = DefaultHashMap<UUID, Int>(0)
 
@@ -40,7 +41,7 @@ abstract class Effect<T>(
     /**
      * If the effect is permanent.
      */
-    val isPermanent: Boolean
+    open val isPermanent: Boolean
         get() = parameters.isEmpty()
 
     /**
@@ -112,18 +113,20 @@ abstract class Effect<T>(
     /**
      * Trigger the effect.
      *
+     * Returns if the execution was successful.
+     *
      * @param trigger The trigger.
      * @param config The config.
      */
     fun trigger(
         trigger: DispatchedTrigger,
         config: ChainElement<T>
-    ) {
-        onTrigger(config.config, trigger.data, config.compileData)
-    }
+    ): Boolean = onTrigger(config.config, trigger.data, config.compileData)
 
     /**
      * Handle triggering.
+     *
+     * Returns if the execution was successful.
      *
      * @param data The trigger data.
      * @param compileData The compile data.
@@ -132,8 +135,8 @@ abstract class Effect<T>(
         config: Config,
         data: TriggerData,
         compileData: T
-    ) {
-        // Override when needed.
+    ): Boolean {
+        return false
     }
 
     /**

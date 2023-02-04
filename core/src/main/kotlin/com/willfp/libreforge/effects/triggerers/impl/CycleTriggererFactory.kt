@@ -11,10 +11,11 @@ object CycleTriggererFactory: ChainTriggererFactory("cycle") {
     class CycleChainTriggerer : ChainTriggerer {
         private var offset = 0
 
-        override fun trigger(chain: Chain, trigger: DispatchedTrigger) {
+        override fun trigger(chain: Chain, trigger: DispatchedTrigger): Boolean {
             offset %= chain.size
-            chain[offset].trigger(trigger)
+            val success = chain[offset].trigger(trigger)
             offset++
+            return success
         }
     }
 }

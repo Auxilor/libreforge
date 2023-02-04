@@ -37,7 +37,6 @@ class ChainElement<T>(
         effect.reload(player, identifierFactory, this)
     }
 
-    override fun doTrigger(trigger: DispatchedTrigger) {
+    override fun doTrigger(trigger: DispatchedTrigger) =
         effect.trigger(trigger, this)
-    }
 }
