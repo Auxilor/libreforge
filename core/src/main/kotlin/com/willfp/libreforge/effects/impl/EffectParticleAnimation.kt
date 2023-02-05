@@ -2,6 +2,7 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.particle.Particles
+import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.effects.particles.ParticleAnimations
@@ -10,18 +11,18 @@ import com.willfp.libreforge.effects.effects.particles.toDirectionVector
 import com.willfp.libreforge.effects.effects.particles.toLocation
 import com.willfp.libreforge.effects.effects.particles.toVector3f
 import com.willfp.libreforge.getIntFromExpression
+import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
 import org.bukkit.entity.LivingEntity
 
-class EffectParticleAnimation : Effect(
-    "particle_animation",
-    triggers = Triggers.withParameters(
+object EffectParticleAnimation : Effect<NoCompileData>("particle_animation") {
+    override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION
     )
-) {
+
     override val arguments = arguments {
         require("particle", "You must specify the particle!")
         require("animation", "You must specify a valid animation!", Config::getString) {
@@ -31,19 +32,19 @@ class EffectParticleAnimation : Effect(
         inherit("particle_args") { ParticleAnimations.getByID(it.getString("animation")) }
     }
 
-    override fun handle(data: TriggerData, config: Config) {
-        val location = data.location ?: return
-        val player = data.player ?: return
+    override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
+        val location = data.location ?: return false
+        val player = data.player ?: return false
 
         val entity = when (config.getString("entity").lowercase()) {
             "victim" -> data.victim
             "projectile" -> data.projectile
             else -> data.player
-        } ?: return
+        } ?: return false
 
-        val world = location.world ?: return
+        val world = location.world ?: return false
 
-        val animation = ParticleAnimations.getByID(config.getString("animation")) ?: return
+        val animation = ParticleAnimations.getByID(config.getString("animation")) ?: return false
         val particle = Particles.lookup(config.getString("particle"))
 
         var tick = 0
@@ -110,5 +111,7 @@ class EffectParticleAnimation : Effect(
 
             tick++
         }.runTaskTimerAsynchronously(1, 1)
+
+        return true
     }
 }

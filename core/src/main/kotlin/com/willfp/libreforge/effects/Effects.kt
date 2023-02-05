@@ -24,6 +24,13 @@ object Effects {
     }
 
     /**
+     * Get a chain by [id].
+     */
+    fun getChainByID(id: String): Chain? {
+        return identifiedChains[id]
+    }
+
+    /**
      * Register a new [effect].
      */
     fun register(effect: Effect<*>) {

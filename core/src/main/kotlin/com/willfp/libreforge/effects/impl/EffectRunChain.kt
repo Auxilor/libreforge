@@ -2,48 +2,41 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.placeholder.PlaceholderManager
-import com.willfp.libreforge.ViolationContext
+import com.willfp.libreforge.GroupedStaticPlaceholder
+import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
-import com.willfp.libreforge.chains.CycleChainCompileData
-import com.willfp.libreforge.chains.EffectChains
-import com.willfp.libreforge.chains.NormalChainCompileData
-import com.willfp.libreforge.chains.RandomChainCompileData
-import com.willfp.libreforge.effects.CompileData
 import com.willfp.libreforge.effects.Effect
-import com.willfp.libreforge.effects.NamedArgument
-import com.willfp.libreforge.triggers.InvocationData
-import com.willfp.libreforge.triggers.Triggers
+import com.willfp.libreforge.effects.Effects
+import com.willfp.libreforge.triggers.TriggerData
+import com.willfp.libreforge.triggers.TriggerParameter
 
-class EffectRunChain : Effect(
-    "run_chain",
-    triggers = Triggers.all()
-) {
+object EffectRunChain : Effect<NoCompileData>("run_chain") {
+    override val parameters = setOf(
+        TriggerParameter.PLAYER
+    )
+
     override val arguments = arguments {
         require("chain", "You must specify the chain to run!")
     }
 
-    override fun handle(invocation: InvocationData, config: Config) {
-        val chain = EffectChains.getByID(config.getString("chain")) ?: return
-        val namedArgs = mutableListOf<NamedArgument>()
+    override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
+        val player = data.player ?: return false
+
+        val dispatch = data.dispatch(player)
+
         val args = config.getSubsection("chain_args")
 
         for (key in args.getKeys(false)) {
-            namedArgs.add(
-                NamedArgument(
+            dispatch.addPlaceholder(
+                GroupedStaticPlaceholder(
                     listOf(key, key.replace("_", "")),
-                    PlaceholderManager.translatePlaceholders(args.getString(key), invocation.player)
+                    PlaceholderManager.translatePlaceholders(args.getString(key), player)
                 )
             )
         }
 
-        chain(invocation, namedArgs)
-    }
+        val chain = Effects.getChainByID(config.getString("chain")) ?: return false
 
-    override fun makeCompileData(config: Config, context: ViolationContext): CompileData {
-        return when (config.getString("run-type").lowercase()) {
-            "cycle" -> CycleChainCompileData()
-            "random" -> RandomChainCompileData()
-            else -> NormalChainCompileData
-        }
+        return chain.trigger(dispatch)
     }
 }

@@ -4,6 +4,8 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.shop.getUnitValue
 import com.willfp.eco.core.integrations.shop.isSellable
 import com.willfp.eco.core.items.Items
+import com.willfp.eco.core.items.TestableItem
+import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.RunOrder
 import com.willfp.libreforge.getDoubleFromExpression
@@ -15,15 +17,15 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
-class EffectSellItems : Effect(
-    "sell_items",
-    triggers = Triggers.withParameters(
+object EffectSellItems : Effect<Collection<TestableItem>?>("sell_items") {
+    override val parameters = setOf(
         TriggerParameter.PLAYER
-    ),
-    runOrder = RunOrder.END
-) {
-    override fun handle(data: TriggerData, config: Config) {
-        val player = data.player ?: return
+    )
+
+    override val runOrder = RunOrder.END
+
+    override fun onTrigger(config: Config, data: TriggerData, compileData: Collection<TestableItem>?): Boolean {
+        val player = data.player ?: return false
         val event = data.event as? WrappedDropEvent<*>
         val item = data.item
 
@@ -31,12 +33,9 @@ class EffectSellItems : Effect(
             config.getDoubleFromExpression("multiplier", data)
         } else 1.0
 
-        val whitelist = config.getStringsOrNull("whitelist")
-            ?.map { Items.lookup(it) }
-
         val items = (event?.finalItems ?: listOf(item))
             .filterNotNull()
-            .filter { whitelist?.any { t -> t.matches(it) } ?: true }
+            .filter { compileData?.any { t -> t.matches(it) } ?: true }
 
         val sold = sell(player, items, multiplier)
 
@@ -47,6 +46,8 @@ class EffectSellItems : Effect(
             }
             event?.removeItem(soldItem)
         }
+
+        return true
     }
 
     private fun sell(player: Player, items: Iterable<ItemStack>, multiplier: Double): Collection<ItemStack> {
@@ -62,5 +63,10 @@ class EffectSellItems : Effect(
         }
 
         return sold
+    }
+
+    override fun makeCompileData(config: Config, context: ViolationContext): Collection<TestableItem>? {
+        return config.getStringsOrNull("whitelist")
+            ?.map { Items.lookup(it) }
     }
 }
