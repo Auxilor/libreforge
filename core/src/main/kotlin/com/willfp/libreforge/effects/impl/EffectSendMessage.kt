@@ -5,24 +5,23 @@ import com.willfp.eco.core.integrations.placeholder.PlaceholderManager
 import com.willfp.eco.util.PlayerUtils
 import com.willfp.eco.util.StringUtils
 import com.willfp.eco.util.formatEco
+import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import com.willfp.libreforge.triggers.Triggers
 
-class EffectSendMessage : Effect(
-    "send_message",
-    triggers = Triggers.withParameters(
+object EffectSendMessage : Effect<NoCompileData>("send_message") {
+    override val parameters = setOf(
         TriggerParameter.PLAYER
     )
-) {
+
     override val arguments = arguments {
         require("message", "You must specify the message to send!")
     }
 
-    override fun handle(data: TriggerData, config: Config) {
-        val player = data.player ?: return
+    override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
+        val player = data.player ?: return false
 
         val message = config.getString("message")
             .replace("%player%", player.name)
@@ -38,5 +37,7 @@ class EffectSendMessage : Effect(
             PlayerUtils.getAudience(player)
                 .sendMessage(StringUtils.toComponent(message))
         }
+
+        return true
     }
 }
