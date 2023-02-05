@@ -1,4 +1,4 @@
-package com.willfp.libreforge.triggers.triggers
+package com.willfp.libreforge.triggers.impl
 
 import com.willfp.eco.core.integrations.mcmmo.McmmoManager
 import com.willfp.eco.core.recipe.parts.EmptyTestableItem

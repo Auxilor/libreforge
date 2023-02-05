@@ -11,7 +11,7 @@ abstract class Trigger(
     /**
      * The TriggerData parameters that are sent.
      */
-    abstract val parameters: Collection<TriggerParameter>
+    abstract val parameters: Set<TriggerParameter>
 
     /**
      * Dispatch the trigger.
