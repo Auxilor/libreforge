@@ -28,7 +28,7 @@ data class TriggerData(
     val velocity: Vector? = player?.velocity ?: victim?.velocity,
     val item: ItemStack? = player?.inventory?.itemInMainHand ?: victim?.equipment?.itemInMainHand,
     val text: String? = null,
-    val value: Double? = null,
+    val value: Double = 1.0,
 
     /*
     This is a bodge inherited from v3, but it's the only real way to do this.

@@ -1,4 +1,4 @@
-package com.willfp.libreforge.triggers.triggers
+package com.willfp.libreforge.triggers.impl
 
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
