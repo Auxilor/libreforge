@@ -5,26 +5,25 @@ import com.willfp.eco.core.integrations.placeholder.PlaceholderManager
 import com.willfp.eco.util.asAudience
 import com.willfp.eco.util.formatEco
 import com.willfp.eco.util.toComponent
+import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import com.willfp.libreforge.triggers.Triggers
 import net.kyori.adventure.title.TitlePart
 
-class EffectSendTitle : Effect(
-    "send_title",
-    triggers = Triggers.withParameters(
+object EffectSendTitle : Effect<NoCompileData>("send_title") {
+    override val parameters = setOf(
         TriggerParameter.PLAYER
     )
-) {
+
     override val arguments = arguments {
         require("title", "You must specify the title!")
         require("subtitle", "You must specify the subtitle!")
     }
 
-    override fun handle(data: TriggerData, config: Config) {
-        val player = data.player ?: return
+    override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
+        val player = data.player ?: return false
 
         val title = config.getString("title")
             .replace("%player%", player.name)
@@ -40,5 +39,7 @@ class EffectSendTitle : Effect(
 
         audience.sendTitlePart(TitlePart.TITLE, title.toComponent())
         audience.sendTitlePart(TitlePart.SUBTITLE, subtitle.toComponent())
+
+        return true
     }
 }

@@ -1,31 +1,35 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import com.willfp.libreforge.triggers.Triggers
 import org.bukkit.potion.PotionEffectType
 
-class EffectRemovePotionEffect : Effect(
-    "remove_potion_effect",
-    triggers = Triggers.withParameters(
+object EffectRemovePotionEffect : Effect<NoCompileData>("remove_potion_effect") {
+    override val parameters = setOf(
         TriggerParameter.PLAYER
     )
-) {
+
     override val arguments = arguments {
-        require("effect", "You must specify a valid potion effect! See here: " +
-                "https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/potion/PotionEffectType.html", Config::getString) {
+        require(
+            "effect",
+            "You must specify a valid potion effect! See here: " +
+                    "https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/potion/PotionEffectType.html",
+            Config::getString
+        ) {
             PotionEffectType.getByName(it.uppercase()) != null
         }
     }
 
-    override fun handle(data: TriggerData, config: Config) {
+    override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val toApply = if (config.getBoolOrNull("apply_to_player") == true) {
-            data.player ?: return
+            data.player ?: return false
         } else {
-            data.victim ?: return
+            data.victim ?: return false
         }
 
         plugin.scheduler.run {
@@ -34,5 +38,7 @@ class EffectRemovePotionEffect : Effect(
                     ?: PotionEffectType.INCREASE_DAMAGE
             )
         }
+
+        return true
     }
 }

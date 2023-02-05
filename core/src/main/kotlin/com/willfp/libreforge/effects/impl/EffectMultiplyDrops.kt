@@ -2,6 +2,7 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.items.Items
+import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getIntFromExpression
@@ -11,18 +12,16 @@ import com.willfp.libreforge.triggers.Triggers
 import com.willfp.libreforge.triggers.wrappers.WrappedDropEvent
 import kotlin.math.roundToInt
 
-class EffectMultiplyDrops : Effect(
-    "multiply_drops",
-    triggers = Triggers.withParameters(
+object EffectMultiplyDrops : Effect<NoCompileData>("multiply_drops") {
+    override val parameters = setOf(
         TriggerParameter.EVENT
-    ),
-    noDelay = true
-) {
+    )
+
     override val arguments = arguments {
         require("fortune", "You must specify the level of fortune to mimic!")
     }
 
-    override fun handle(data: TriggerData, config: Config) {
+    override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val event = data.event as? WrappedDropEvent<*> ?: return
 
         event.modifiers += {
