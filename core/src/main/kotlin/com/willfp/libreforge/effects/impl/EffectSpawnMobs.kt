@@ -2,31 +2,26 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.entities.Entities
+import com.willfp.eco.core.entities.TestableEntity
 import com.willfp.eco.util.NumberUtils
+import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.getIntFromExpression
+import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
-import com.willfp.libreforge.triggers.TriggerParameter
-import com.willfp.libreforge.triggers.Triggers
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Mob
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
-import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDeathEvent
 import org.bukkit.event.entity.EntityTargetEvent
 import java.util.UUID
 
 
-class EffectSpawnMobs : Effect(
-    "spawn_mobs",
-    triggers = Triggers.withParameters(
-        TriggerParameter.LOCATION
-    )
-), Listener {
+object EffectSpawnMobs : Effect<TestableEntity>("spawn_mobs") {
     override val arguments = arguments {
         require("amount", "You must specify the amount of mobs to spawn!")
         require("ticks_to_live", "You must specify the mob lifespan!")
@@ -34,15 +29,15 @@ class EffectSpawnMobs : Effect(
         require("entity", "You must specify the mob to spawn!")
     }
 
-    override fun handle(data: TriggerData, config: Config) {
-        val location = data.location ?: return
-        location.world ?: return
+    override fun onTrigger(config: Config, data: TriggerData, compileData: TestableEntity): Boolean {
+        val location = data.location ?: return false
+        location.world ?: return false
         val victim = data.victim
         val player = data.player
 
         if (victim != null) {
             if (victim.getMetadata("spawn-mobs-target").isNotEmpty()) {
-                return
+                return false
             }
         }
 
@@ -74,8 +69,14 @@ class EffectSpawnMobs : Effect(
 
             mob.health = health
 
-            this.plugin.scheduler.runLater(ticksToLive.toLong()) { mob.remove() }
+            plugin.scheduler.runLater(ticksToLive.toLong()) { mob.remove() }
         }
+
+        return true
+    }
+
+    override fun makeCompileData(config: Config, context: ViolationContext): TestableEntity {
+        return Entities.lookup(config.getString("entity"))
     }
 
     @EventHandler

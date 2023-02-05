@@ -2,34 +2,34 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.util.runExempted
+import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import com.willfp.libreforge.triggers.Triggers
-import com.willfp.libreforge.triggers.wrappers.WrappedShootBowEvent
 import org.bukkit.entity.AbstractArrow
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Projectile
+import org.bukkit.event.entity.EntityShootBowEvent
 
 @Suppress("UNCHECKED_CAST")
-class EffectShoot : Effect(
-    "shoot",
-    triggers = Triggers.withParameters(
+object EffectShoot : Effect<NoCompileData>("shoot") {
+    override val parameters = setOf(
         TriggerParameter.PLAYER
     )
-) {
+
     override val arguments = arguments {
         require("projectile", "You must specify the projectile!")
     }
 
-    override fun handle(data: TriggerData, config: Config) {
-        val player = data.player ?: return
+    override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
+        val player = data.player ?: return false
         val velocity = data.velocity
-        val fire = (data.event as? WrappedShootBowEvent)?.hasFire
+        val fire = ((data.event as? EntityShootBowEvent)?.projectile?.fireTicks ?: 0) > 0
+
         val projectileClass = runCatching {
             EntityType.valueOf(config.getString("projectile").uppercase()).entityClass
-        }.getOrNull() ?: return
+        }.getOrNull() ?: return false
 
         player.runExempted {
             val projectile = if (velocity == null || !config.getBool("inherit_velocity")) {
@@ -41,7 +41,8 @@ class EffectShoot : Effect(
             if (projectile is AbstractArrow) {
                 projectile.pickupStatus = AbstractArrow.PickupStatus.DISALLOWED
             }
-            if (fire == true) {
+
+            if (fire) {
                 projectile.fireTicks = Int.MAX_VALUE
             }
 
@@ -49,5 +50,7 @@ class EffectShoot : Effect(
                 projectile.shooter = null
             }
         }
+
+        return true
     }
 }

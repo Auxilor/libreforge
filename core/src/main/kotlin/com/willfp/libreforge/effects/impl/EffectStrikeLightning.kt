@@ -1,21 +1,21 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getIntFromExpression
+import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import com.willfp.libreforge.triggers.Triggers
 
-class EffectStrikeLightning : Effect(
-    "strike_lightning",
-    triggers = Triggers.withParameters(
+object EffectStrikeLightning : Effect<NoCompileData>("strike_lightning") {
+    override val parameters = setOf(
         TriggerParameter.LOCATION
     )
-) {
-    override fun handle(data: TriggerData, config: Config) {
-        val location = data.location ?: return
-        val world = location.world ?: return
+
+    override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
+        val location = data.location ?: return false
+        val world = location.world ?: return false
 
         val amount = if (config.has("amount")) config.getIntFromExpression("amount", data) else 1
 
@@ -24,5 +24,7 @@ class EffectStrikeLightning : Effect(
                 world.strikeLightning(location)
             }, 1)
         }
+
+        return true
     }
 }

@@ -2,24 +2,23 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.util.runExempted
+import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import com.willfp.libreforge.triggers.Triggers
-import com.willfp.libreforge.triggers.wrappers.WrappedShootBowEvent
 import org.bukkit.entity.AbstractArrow
 import org.bukkit.entity.Arrow
+import org.bukkit.event.entity.EntityShootBowEvent
 
-class EffectShootArrow : Effect(
-    "shoot_arrow",
-    triggers = Triggers.withParameters(
+object EffectShootArrow : Effect<NoCompileData>("shoot_arrow") {
+    override val parameters = setOf(
         TriggerParameter.PLAYER
     )
-) {
-    override fun handle(data: TriggerData, config: Config) {
-        val player = data.player ?: return
+
+    override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
+        val player = data.player ?: return false
         val velocity = data.velocity
-        val fire = (data.event as? WrappedShootBowEvent)?.hasFire
+        val fire = ((data.event as? EntityShootBowEvent)?.projectile?.fireTicks ?: 0) > 0
 
         player.runExempted {
             val arrow = if (velocity == null || !config.getBool("inherit_velocity")) {
@@ -29,7 +28,7 @@ class EffectShootArrow : Effect(
             }
 
             arrow.pickupStatus = AbstractArrow.PickupStatus.DISALLOWED
-            if (fire == true) {
+            if (fire) {
                 arrow.fireTicks = Int.MAX_VALUE
             }
 
@@ -37,5 +36,7 @@ class EffectShootArrow : Effect(
                 arrow.shooter = null
             }
         }
+
+        return true
     }
 }

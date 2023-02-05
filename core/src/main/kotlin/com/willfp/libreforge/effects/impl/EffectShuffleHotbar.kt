@@ -1,21 +1,19 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import com.willfp.libreforge.triggers.Triggers
 import org.bukkit.entity.Player
 
-@Suppress("UNCHECKED_CAST")
-class EffectShuffleHotbar : Effect(
-    "shuffle_hotbar",
-    triggers = Triggers.withParameters(
+object EffectShuffleHotbar : Effect<NoCompileData>("shuffle_hotbar") {
+    override val parameters = setOf(
         TriggerParameter.VICTIM
     )
-) {
-    override fun handle(data: TriggerData, config: Config) {
-        val victim = data.victim as? Player ?: return
+
+    override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
+        val victim = data.victim as? Player ?: return false
 
         val hotbar = (0..9)
             .map { victim.inventory.getItem(it) }
@@ -24,5 +22,7 @@ class EffectShuffleHotbar : Effect(
         for ((index, item) in hotbar.withIndex()) {
             victim.inventory.setItem(index, item)
         }
+
+        return true
     }
 }
