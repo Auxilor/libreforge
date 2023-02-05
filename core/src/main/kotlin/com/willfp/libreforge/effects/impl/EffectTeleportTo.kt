@@ -1,21 +1,20 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import com.willfp.libreforge.triggers.Triggers
 import org.bukkit.Bukkit
 import org.bukkit.Location
 
-class EffectTeleportTo : Effect(
-    "teleport_to",
-    triggers = Triggers.withParameters(
+object EffectTeleportTo : Effect<NoCompileData>("teleport_to") {
+    override val parameters = setOf(
         TriggerParameter.PLAYER
     )
-) {
+
     override val arguments = arguments {
         require("world", "You must specify the world to go to!")
         require("x", "You must specify the x coordinate!")
@@ -23,10 +22,10 @@ class EffectTeleportTo : Effect(
         require("z", "You must specify the z coordinate!")
     }
 
-    override fun handle(data: TriggerData, config: Config) {
-        val player = data.player ?: return
+    override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
+        val player = data.player ?: return false
 
-        val world = Bukkit.getWorld(config.getString("world")) ?: return
+        val world = Bukkit.getWorld(config.getString("world")) ?: return false
         val loc = Location(
             world,
             config.getDoubleFromExpression("x", data),
@@ -35,5 +34,7 @@ class EffectTeleportTo : Effect(
         )
 
         player.teleport(loc)
+
+        return true
     }
 }

@@ -1,34 +1,32 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import com.willfp.libreforge.triggers.Triggers
 import org.bukkit.entity.AreaEffectCloud
-import org.bukkit.event.Listener
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 
-class EffectSpawnPotionCloud : Effect(
-    "spawn_potion_cloud",
-    triggers = Triggers.withParameters(
+object EffectSpawnPotionCloud : Effect<NoCompileData>("spawn_potion_cloud") {
+    override val parameters = setOf(
         TriggerParameter.LOCATION
     )
-), Listener {
+
     override val arguments = arguments {
         require("effect", "You must specify the potion effect!")
         require("level", "You must specify the effect level!")
         require("duration", "You must specify the duration of the effect applied!")
     }
 
-    override fun handle(data: TriggerData, config: Config) {
-        val location = data.location ?: return
-        val world = location.world ?: return
+    override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
+        val location = data.location ?: return false
+        val world = location.world ?: return false
 
-        val effect = PotionEffectType.getByName(config.getString("effect").uppercase()) ?: return
+        val effect = PotionEffectType.getByName(config.getString("effect").uppercase()) ?: return false
         val level = config.getIntFromExpression("level", data)
         val duration = config.getIntFromExpression("duration", data)
 
@@ -43,5 +41,7 @@ class EffectSpawnPotionCloud : Effect(
         )
 
         cloud.source = data.player
+
+        return true
     }
 }

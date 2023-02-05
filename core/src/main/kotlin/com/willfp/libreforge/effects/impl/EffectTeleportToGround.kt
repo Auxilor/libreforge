@@ -1,22 +1,21 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import com.willfp.libreforge.triggers.Triggers
 import org.bukkit.Material
 
-class EffectTeleportToGround : Effect(
-    "teleport_to_ground",
-    triggers = Triggers.withParameters(
+object EffectTeleportToGround : Effect<NoCompileData>("teleport_to_ground") {
+    override val parameters = setOf(
         TriggerParameter.PLAYER
     )
-) {
-    override fun handle(data: TriggerData, config: Config) {
-        val player = data.player ?: return
+
+    override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
+        val player = data.player ?: return false
         val location = player.location
-        val world = location.world ?: return
+        val world = location.world ?: return false
 
         var current = location.clone()
         if (current.y > world.maxHeight) {
@@ -25,11 +24,13 @@ class EffectTeleportToGround : Effect(
 
         while (world.getBlockAt(current).type == Material.AIR) {
             if (current.y <= world.minHeight) {
-                return
+                return false
             }
             current = current.subtract(0.0, 1.0, 0.0)
         }
 
         player.teleport(current)
+
+        return true
     }
 }
