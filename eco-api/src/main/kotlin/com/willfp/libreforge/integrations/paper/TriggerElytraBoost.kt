@@ -15,10 +15,6 @@ class TriggerElytraBoost : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerElytraBoostEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.player
 
         if (event.isCancelled) {

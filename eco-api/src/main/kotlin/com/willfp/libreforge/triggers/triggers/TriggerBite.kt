@@ -19,10 +19,6 @@ class TriggerBite : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerFishEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         if (event.state != PlayerFishEvent.State.BITE) {
             return
         }

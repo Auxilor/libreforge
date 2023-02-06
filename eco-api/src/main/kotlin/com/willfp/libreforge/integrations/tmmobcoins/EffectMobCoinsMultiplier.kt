@@ -8,10 +8,6 @@ import org.bukkit.event.EventHandler
 class EffectMobCoinsMultiplier : GenericMultiplierEffect("mob_coins_multiplier") {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: MobCoinReceiveEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.player
 
         val multiplier = getMultiplier(player)

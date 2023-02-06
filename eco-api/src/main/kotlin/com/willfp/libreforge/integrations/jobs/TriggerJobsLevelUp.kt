@@ -15,10 +15,6 @@ class TriggerJobsLevelUp : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: JobsLevelUpEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.player.player
 
         this.processTrigger(

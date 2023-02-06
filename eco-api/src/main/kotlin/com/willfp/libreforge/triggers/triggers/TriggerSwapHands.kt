@@ -18,10 +18,6 @@ class TriggerSwapHands : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerSwapHandItemsEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.player
         if (event.isCancelled) {
             return

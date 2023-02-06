@@ -25,10 +25,6 @@ class TriggerBlockItemDrop : Trigger(
         ignoreCancelled = true
     )
     fun handle(event: BlockDropItemEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.player
         val block = event.block
 

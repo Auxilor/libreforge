@@ -19,10 +19,6 @@ class TriggerCraft : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     fun handle(event: CraftItemEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         if (event.result == Event.Result.DENY) {
             return
         }

@@ -16,10 +16,6 @@ class TriggerDropItem : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityDropItemEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.entity as? Player ?: return
 
         this.processTrigger(

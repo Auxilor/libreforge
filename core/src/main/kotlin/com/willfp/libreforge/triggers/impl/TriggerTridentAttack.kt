@@ -1,19 +1,16 @@
 package com.willfp.libreforge.triggers.impl
 
-import com.willfp.eco.core.integrations.mcmmo.McmmoManager
-import com.willfp.libreforge.getAttachedHolders
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import com.willfp.libreforge.triggers.wrappers.WrappedDamageEvent
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.entity.Trident
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 
-class TriggerTridentAttack : Trigger(
-    "trident_attack", listOf(
+object TriggerTridentAttack : Trigger("trident_attack") {
+    override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
         TriggerParameter.LOCATION,
@@ -22,13 +19,9 @@ class TriggerTridentAttack : Trigger(
         TriggerParameter.ITEM,
         TriggerParameter.VELOCITY
     )
-) {
+
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityDamageByEntityEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val trident = event.damager
         val victim = event.entity
 

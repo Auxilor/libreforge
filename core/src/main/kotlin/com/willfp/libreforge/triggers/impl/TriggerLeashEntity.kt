@@ -1,7 +1,5 @@
 package com.willfp.libreforge.triggers.impl
 
-import com.willfp.eco.core.integrations.mcmmo.McmmoManager
-import com.willfp.libreforge.triggers.GenericCancellableEvent
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -9,20 +7,16 @@ import org.bukkit.entity.LivingEntity
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.PlayerLeashEntityEvent
 
-class TriggerLeashEntity : Trigger(
-    "leash_entity", listOf(
+object TriggerLeashEntity : Trigger("leash_entity") {
+    override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,
         TriggerParameter.VICTIM,
         TriggerParameter.EVENT
     )
-) {
+
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerLeashEntityEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.player
 
         this.dispatch(

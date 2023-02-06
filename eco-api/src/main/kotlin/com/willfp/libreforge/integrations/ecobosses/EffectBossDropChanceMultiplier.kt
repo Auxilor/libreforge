@@ -15,10 +15,6 @@ class EffectBossDropChanceMultiplier : GenericMultiMultiplierEffect<EcoBoss>(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: BossTryDropItemEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.player ?: return
 
         val multiplier = getMultiplier(player, event.boss)

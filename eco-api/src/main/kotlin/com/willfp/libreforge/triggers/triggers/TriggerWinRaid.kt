@@ -15,10 +15,6 @@ class TriggerWinRaid : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: RaidFinishEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         for (player in event.winners) {
             this.processTrigger(
                 player,

@@ -15,10 +15,6 @@ class TriggerRespawn : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerRespawnEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         this.processTrigger(
             event.player,
             TriggerData(

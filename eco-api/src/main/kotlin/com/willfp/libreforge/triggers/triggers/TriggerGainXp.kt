@@ -16,10 +16,6 @@ class TriggerGainXp : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: NaturalExpGainEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.expChangeEvent.player
 
         this.processTrigger(

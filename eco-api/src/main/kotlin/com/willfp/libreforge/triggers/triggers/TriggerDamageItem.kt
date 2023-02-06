@@ -16,10 +16,6 @@ class TriggerDamageItem : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerItemDamageEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.player
 
         this.processTrigger(

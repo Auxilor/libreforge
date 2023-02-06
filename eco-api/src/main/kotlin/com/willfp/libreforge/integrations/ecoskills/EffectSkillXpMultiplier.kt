@@ -15,10 +15,6 @@ class EffectSkillXpMultiplier : GenericMultiMultiplierEffect<Skill>(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerSkillExpGainEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.player
 
         val multiplier = getMultiplier(player, event.skill)

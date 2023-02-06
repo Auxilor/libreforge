@@ -24,10 +24,6 @@ class TriggerMineBlock : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: BlockBreakEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.player
         val block = event.block
 

@@ -17,10 +17,6 @@ class TriggerConsume : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerItemConsumeEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.player
         this.processTrigger(
             player,

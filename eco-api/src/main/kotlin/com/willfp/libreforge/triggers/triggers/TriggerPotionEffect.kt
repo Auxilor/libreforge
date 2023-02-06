@@ -18,10 +18,6 @@ class TriggerPotionEffect : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityPotionEffectEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         if (event.newEffect == null) {
             return
         }

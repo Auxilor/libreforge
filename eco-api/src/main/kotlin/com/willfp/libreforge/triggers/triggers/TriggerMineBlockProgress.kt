@@ -19,10 +19,6 @@ class TriggerMineBlockProgress : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: BlockDamageEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.player
         val block = event.block
 

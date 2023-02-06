@@ -15,10 +15,6 @@ class EffectJobXpMultiplier : GenericMultiMultiplierEffect<Job>(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerJobExpGainEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.player
 
         val multiplier = getMultiplier(player, event.job)

@@ -18,10 +18,6 @@ class TriggerHoldItem : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerItemHeldEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.player
         if (event.isCancelled) {
             return

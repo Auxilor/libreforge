@@ -17,10 +17,6 @@ class TriggerLeaveJob : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerJobLeaveEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.player as? Player ?: return
 
         this.processTrigger(

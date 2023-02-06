@@ -20,10 +20,6 @@ class TriggerProjectileLaunch : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: ProjectileLaunchEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val shooter = event.entity.shooter
 
         if (shooter !is Player) {

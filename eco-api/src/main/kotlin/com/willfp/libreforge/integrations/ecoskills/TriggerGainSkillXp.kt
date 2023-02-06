@@ -16,10 +16,6 @@ class TriggerGainSkillXp : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerSkillExpGainEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.player
 
         this.processTrigger(

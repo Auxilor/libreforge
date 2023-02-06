@@ -25,10 +25,6 @@ class TriggerTridentAttack : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityDamageByEntityEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val trident = event.damager
         val victim = event.entity
 

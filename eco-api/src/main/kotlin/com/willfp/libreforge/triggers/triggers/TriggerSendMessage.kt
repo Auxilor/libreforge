@@ -18,10 +18,6 @@ class TriggerSendMessage : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: AsyncPlayerChatEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.player
         if (event.isCancelled) {
             return

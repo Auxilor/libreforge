@@ -22,10 +22,6 @@ class TriggerHeadshot : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityDamageByEntityEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val projectile = event.damager as? Projectile ?: return
         val victim = event.entity as? LivingEntity ?: return
         val shooter = projectile.shooter as? Player ?: return

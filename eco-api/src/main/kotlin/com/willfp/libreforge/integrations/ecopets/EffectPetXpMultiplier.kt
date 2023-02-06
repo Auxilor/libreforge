@@ -15,10 +15,6 @@ class EffectPetXpMultiplier : GenericMultiMultiplierEffect<Pet>(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerPetExpGainEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.player
 
         val multiplier = getMultiplier(player, event.pet)

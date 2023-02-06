@@ -20,10 +20,6 @@ class TriggerPlaceBlock : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: BlockPlaceEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.player
         val block = event.blockPlaced
 

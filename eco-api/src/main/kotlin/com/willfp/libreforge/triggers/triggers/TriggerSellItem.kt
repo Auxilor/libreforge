@@ -16,10 +16,6 @@ class TriggerSellItem : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     fun handle(event: ShopSellEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.player
         val item = event.item
 

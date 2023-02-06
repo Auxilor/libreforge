@@ -47,10 +47,6 @@ class EffectElytraBoostSaveChance : Effect("elytra_boost_save_chance") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerElytraBoostEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.player
 
         var chance = 100.0

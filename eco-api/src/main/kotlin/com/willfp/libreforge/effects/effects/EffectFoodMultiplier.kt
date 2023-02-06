@@ -11,10 +11,6 @@ import kotlin.math.ceil
 class EffectFoodMultiplier : GenericMultiplierEffect("food_multiplier") {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: FoodLevelChangeEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.entity
 
         if (player !is Player) {

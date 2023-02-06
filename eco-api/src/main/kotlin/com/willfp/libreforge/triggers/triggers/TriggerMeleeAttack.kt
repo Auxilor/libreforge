@@ -22,10 +22,6 @@ class TriggerMeleeAttack : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityDamageByEntityEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val attacker = event.damager as? Player ?: return
         val victim = event.entity as? LivingEntity ?: return
 

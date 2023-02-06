@@ -21,10 +21,6 @@ class TriggerShieldBlock : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityDamageByEntityEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val attacker = event.damager as? LivingEntity ?: return
         val victim = event.entity as? Player ?: return
 

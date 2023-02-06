@@ -19,10 +19,6 @@ class TriggerChangeWorld : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerMoveEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.player
 
         if (event.to.world != event.from.world) {

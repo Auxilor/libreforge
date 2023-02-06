@@ -20,10 +20,6 @@ class TriggerShootBow : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityShootBowEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val shooter = event.entity
 
         if (shooter !is Player) {

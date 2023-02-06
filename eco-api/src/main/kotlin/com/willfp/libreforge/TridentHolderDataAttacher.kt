@@ -13,10 +13,6 @@ class TridentHolderDataAttacher(
 ) : Listener {
     @EventHandler(ignoreCancelled = true)
     fun onProjectileLaunch(event: ProjectileLaunchEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val shooter = event.entity.shooter as? Player ?: return
         val trident = event.entity
 

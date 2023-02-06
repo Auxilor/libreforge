@@ -10,10 +10,6 @@ import kotlin.math.ceil
 class EffectXpMultiplier : GenericMultiplierEffect("xp_multiplier") {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: NaturalExpGainEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.expChangeEvent.player
 
         val multiplier = getMultiplier(player)
