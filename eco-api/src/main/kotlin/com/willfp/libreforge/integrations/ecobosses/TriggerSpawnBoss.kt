@@ -15,10 +15,6 @@ class TriggerSpawnBoss : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: BossSpawnEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.spawner ?: return
         val location = event.location
 

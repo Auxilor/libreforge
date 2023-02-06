@@ -15,10 +15,6 @@ class TriggerLevelUpSkill : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerSkillLevelUpEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.player
 
         this.processTrigger(

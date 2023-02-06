@@ -20,10 +20,6 @@ class TriggerKill : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityDeathByEntityEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         var killer: Any? = null
         if (event.killer is Player) {
             killer = event.killer

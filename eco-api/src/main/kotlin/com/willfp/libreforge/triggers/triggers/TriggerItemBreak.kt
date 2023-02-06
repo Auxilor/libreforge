@@ -16,10 +16,6 @@ class TriggerItemBreak : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerItemBreakEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.player
 
         this.processTrigger(

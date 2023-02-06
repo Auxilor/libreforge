@@ -13,20 +13,16 @@ import com.willfp.libreforge.triggers.wrappers.WrappedEntityDropEvent
 import org.bukkit.event.EventHandler
 
 
-class TriggerEntityItemDrop : Trigger(
-    "entity_item_drop", listOf(
+object TriggerEntityItemDrop : Trigger("entity_item_drop") {
+    override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
         TriggerParameter.EVENT,
         TriggerParameter.LOCATION
     )
-) {
+
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityDeathByEntityEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         if (Prerequisite.HAS_PAPER.isMet) {
             if (event.deathEvent.isCancelled) {
                 return

@@ -16,10 +16,6 @@ class TriggerPickUpItem : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityPickupItemEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.entity as? Player ?: return
 
         this.processTrigger(

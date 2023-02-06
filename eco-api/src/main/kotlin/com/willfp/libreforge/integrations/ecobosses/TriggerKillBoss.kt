@@ -17,10 +17,6 @@ class TriggerKillBoss : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: BossKillEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val killer = event.killer ?: return
         val entity = event.boss.entity ?: return
 

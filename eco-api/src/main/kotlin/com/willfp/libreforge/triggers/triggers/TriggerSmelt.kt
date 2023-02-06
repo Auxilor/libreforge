@@ -18,10 +18,6 @@ class TriggerSmelt : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: FurnaceSmeltEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val furnace = event.block.state as? Furnace ?: return
         val player = furnace.inventory.viewers.firstOrNull() as? Player ?: return
         val item = event.result

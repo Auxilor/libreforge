@@ -16,10 +16,6 @@ class TriggerGainPetXp : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerPetExpGainEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.player
 
         this.processTrigger(

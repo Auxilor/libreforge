@@ -17,10 +17,6 @@ class TriggerEntityTarget : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityTargetEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.target as? Player ?: return
         val entity = event.entity as? LivingEntity ?: return
 

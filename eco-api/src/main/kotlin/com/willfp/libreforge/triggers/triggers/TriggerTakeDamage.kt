@@ -18,10 +18,6 @@ class TriggerTakeDamage : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityDamageEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val victim = event.entity
 
         if (victim !is Player) {

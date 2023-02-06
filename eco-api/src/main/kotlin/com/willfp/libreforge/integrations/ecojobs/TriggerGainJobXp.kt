@@ -16,10 +16,6 @@ class TriggerGainJobXp : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerJobExpGainEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.player
 
         this.processTrigger(

@@ -10,8 +10,8 @@ import com.willfp.libreforge.triggers.Triggers
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
-class TriggerStatic(interval: Int) : Trigger(
-    "static_$interval", listOf(
+class TriggerStatic(interval: Int) : Trigger("static_$interval") {
+    override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,
         TriggerParameter.VICTIM,
@@ -19,7 +19,7 @@ class TriggerStatic(interval: Int) : Trigger(
         TriggerParameter.VELOCITY,
         TriggerParameter.ITEM
     )
-) {
+
     private fun invoke(player: Player) {
         val block = if (Prerequisite.HAS_PAPER.isMet) {
             player.getTargetBlock(plugin.configYml.getDoubleFromExpression("raytrace-distance").toInt())

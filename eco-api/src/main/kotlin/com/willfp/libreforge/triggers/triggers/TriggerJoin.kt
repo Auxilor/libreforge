@@ -15,10 +15,6 @@ class TriggerJoin : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerJoinEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         this.processTrigger(
             event.player,
             TriggerData(

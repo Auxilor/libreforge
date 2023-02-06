@@ -1,31 +1,25 @@
 package com.willfp.libreforge.triggers.impl
 
-import com.willfp.eco.core.integrations.mcmmo.McmmoManager
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import com.willfp.libreforge.triggers.wrappers.WrappedMeleeDamageEvent
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
 
-class TriggerMeleeAttack : Trigger(
-    "melee_attack", listOf(
+object TriggerMeleeAttack : Trigger("melee_attack") {
+    override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
         TriggerParameter.LOCATION,
         TriggerParameter.EVENT,
         TriggerParameter.ITEM
     )
-) {
+
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityDamageByEntityEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val attacker = event.damager as? Player ?: return
         val victim = event.entity as? LivingEntity ?: return
 

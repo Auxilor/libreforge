@@ -17,11 +17,7 @@ class TriggerToggleSneak : Trigger(
     )
 ) {
     @EventHandler(ignoreCancelled = true)
-    fun handle(event: PlayerToggleSneakEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-        val player = event.player
+    fun handle(event: PlayerToggleSneakEvent) {        val player = event.player
 
         this.processTrigger(
             player,

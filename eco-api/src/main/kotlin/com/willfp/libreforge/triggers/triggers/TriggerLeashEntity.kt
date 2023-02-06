@@ -19,10 +19,6 @@ class TriggerLeashEntity : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerLeashEntityEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.player
 
         this.processTrigger(

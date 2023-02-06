@@ -18,10 +18,6 @@ class TriggerDeployElytra : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityToggleGlideEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.entity as? Player ?: return
 
         this.processTrigger(

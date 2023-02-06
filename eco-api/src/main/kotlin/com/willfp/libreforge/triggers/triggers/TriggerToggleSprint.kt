@@ -17,11 +17,7 @@ class TriggerToggleSprint : Trigger(
     )
 ) {
     @EventHandler(ignoreCancelled = true)
-    fun handle(event: PlayerToggleSprintEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-        val player = event.player
+    fun handle(event: PlayerToggleSprintEvent) {        val player = event.player
 
         this.processTrigger(
             player,

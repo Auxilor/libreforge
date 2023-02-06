@@ -17,11 +17,7 @@ class TriggerToggleFlight : Trigger(
     )
 ) {
     @EventHandler(ignoreCancelled = true)
-    fun handle(event: PlayerToggleFlightEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-        val player = event.player
+    fun handle(event: PlayerToggleFlightEvent) {        val player = event.player
 
         this.processTrigger(
             player,

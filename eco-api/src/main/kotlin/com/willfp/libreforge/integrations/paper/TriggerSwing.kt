@@ -15,10 +15,6 @@ class TriggerSwing : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerArmSwingEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.player
 
         if (event.isCancelled) {
