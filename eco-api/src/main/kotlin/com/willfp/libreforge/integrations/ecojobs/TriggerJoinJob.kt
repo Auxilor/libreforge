@@ -18,10 +18,6 @@ class TriggerJoinJob : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerJobJoinEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.player as? Player ?: return
 
         this.processTrigger(

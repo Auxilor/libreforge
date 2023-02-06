@@ -17,11 +17,7 @@ class TriggerJump : Trigger(
     )
 ) {
     @EventHandler(ignoreCancelled = true)
-    fun handle(event: PlayerJumpEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-        val player = event.player
+    fun handle(event: PlayerJumpEvent) {        val player = event.player
 
         this.processTrigger(
             player,

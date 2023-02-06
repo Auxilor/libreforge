@@ -17,10 +17,6 @@ class TriggerDeath : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerDeathEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.entity
 
         this.processTrigger(

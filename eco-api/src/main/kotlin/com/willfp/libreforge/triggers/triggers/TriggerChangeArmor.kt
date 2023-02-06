@@ -15,10 +15,6 @@ class TriggerChangeArmor : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: ArmorChangeEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.player
 
         this.processTrigger(

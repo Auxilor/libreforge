@@ -17,10 +17,6 @@ class TriggerScytherAutoCollect : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: ScytherAutocollectEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         if (event.isCancelled) return
 
         this.processTrigger(

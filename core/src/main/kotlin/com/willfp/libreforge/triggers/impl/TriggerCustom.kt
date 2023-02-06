@@ -7,10 +7,9 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
 import org.bukkit.entity.Player
 
-class TriggerCustom(id: String) : Trigger(
-    "custom_$id",
-    TriggerParameter.values().toList()
-) {
+class TriggerCustom(id: String) : Trigger("custom_$id") {
+    override val parameters = TriggerParameter.values().toSet()
+
     fun invoke(player: Player, data: TriggerData, value: Double) {
         this.dispatch(
             player,

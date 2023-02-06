@@ -18,10 +18,6 @@ class TriggerBreed : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityBreedEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.breeder as? Player ?: return
 
         this.processTrigger(

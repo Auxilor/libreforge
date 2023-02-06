@@ -15,10 +15,6 @@ class TriggerLevelUpPet : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerPetLevelUpEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.player
 
         this.processTrigger(

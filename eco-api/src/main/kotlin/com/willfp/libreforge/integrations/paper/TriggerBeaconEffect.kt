@@ -17,10 +17,6 @@ class TriggerBeaconEffect : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: BeaconEffectEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.player
 
         if (event.isCancelled) {

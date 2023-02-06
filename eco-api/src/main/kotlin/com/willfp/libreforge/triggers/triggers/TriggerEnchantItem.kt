@@ -16,10 +16,6 @@ class TriggerEnchantItem : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EnchantItemEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.enchanter
         val item = event.item
 

@@ -10,10 +10,6 @@ import org.bukkit.event.entity.EntityRegainHealthEvent
 class EffectRegenMultiplier : GenericMultiplierEffect("regen_multiplier") {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityRegainHealthEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.entity
 
         if (player !is Player) {

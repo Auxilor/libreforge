@@ -23,10 +23,6 @@ class TriggerBowAttack : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityDamageByEntityEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val arrow = event.damager
         val victim = event.entity
 

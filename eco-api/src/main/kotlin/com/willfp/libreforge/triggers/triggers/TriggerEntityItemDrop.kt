@@ -23,10 +23,6 @@ class TriggerEntityItemDrop : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityDeathByEntityEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         if (Prerequisite.HAS_PAPER.isMet) {
             if (event.deathEvent.isCancelled) {
                 return

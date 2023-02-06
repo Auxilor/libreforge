@@ -1,24 +1,19 @@
 package com.willfp.libreforge.triggers.impl
 
-import com.willfp.eco.core.integrations.mcmmo.McmmoManager
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.event.EventHandler
 import org.bukkit.event.raid.RaidFinishEvent
 
-class TriggerWinRaid : Trigger(
-    "win_raid", listOf(
+object TriggerWinRaid : Trigger("win_raid") {
+    override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION
     )
-) {
+
     @EventHandler(ignoreCancelled = true)
     fun handle(event: RaidFinishEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         for (player in event.winners) {
             this.dispatch(
                 player,

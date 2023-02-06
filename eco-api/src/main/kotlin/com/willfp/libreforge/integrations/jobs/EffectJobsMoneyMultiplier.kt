@@ -10,10 +10,6 @@ import org.bukkit.event.EventHandler
 class EffectJobsMoneyMultiplier : GenericMultiplierEffect("jobs_money_multiplier") {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: JobsPaymentEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.player as? Player ?: return
 
         val multiplier = getMultiplier(player)

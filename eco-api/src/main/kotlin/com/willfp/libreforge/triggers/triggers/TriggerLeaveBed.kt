@@ -15,10 +15,6 @@ class TriggerLeaveBed : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerBedLeaveEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.player
 
         this.processTrigger(

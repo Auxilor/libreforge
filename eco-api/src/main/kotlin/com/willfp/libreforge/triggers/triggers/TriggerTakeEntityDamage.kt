@@ -21,10 +21,6 @@ class TriggerTakeEntityDamage : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityDamageByEntityEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val attacker = event.damager
 
         if (attacker !is LivingEntity) {

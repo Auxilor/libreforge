@@ -15,10 +15,6 @@ class TriggerLevelUpXp : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerLevelChangeEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.player
 
         if (event.newLevel < event.oldLevel) {

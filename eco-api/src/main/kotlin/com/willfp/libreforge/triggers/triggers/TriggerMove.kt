@@ -19,11 +19,7 @@ class TriggerMove : Trigger(
     )
 ) {
     @EventHandler(ignoreCancelled = true)
-    fun handle(event: PlayerMoveEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-        val player = event.player
+    fun handle(event: PlayerMoveEvent) {        val player = event.player
 
         if (plugin.configYml.getBool("use-faster-move-trigger") && Prerequisite.HAS_PAPER.isMet) {
             if (!event.hasChangedBlock()) {

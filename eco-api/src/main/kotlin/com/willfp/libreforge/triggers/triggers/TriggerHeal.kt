@@ -17,10 +17,6 @@ class TriggerHeal : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityRegainHealthEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         val player = event.entity
 
         if (player !is Player) {

@@ -15,10 +15,6 @@ class TriggerLeave : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerQuitEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         this.processTrigger(
             event.player,
             TriggerData(

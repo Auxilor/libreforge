@@ -17,10 +17,6 @@ class TriggerScytherAutoSell : Trigger(
 ) {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: ScytherAutosellEvent) {
-        if (McmmoManager.isFake(event)) {
-            return
-        }
-
         if (event.isCancelled) return
 
         this.processTrigger(
