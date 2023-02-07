@@ -37,6 +37,7 @@ class EffectKeepInventory : Effect("keep_inventory") {
 
         if ((players[player.uniqueId] ?: emptyList()).isNotEmpty()) {
             event.keepInventory = true
+            event.drops.clear()
         }
     }
 
