@@ -17,9 +17,11 @@ abstract class Filter<T, C>(
     open val runOrder = RunOrder.NORMAL
 
     /**
-     * Fetch values from config.
+     * Fetch value from config.
+     *
+     * [data] is null when generating compile data.
      */
-    abstract fun getValues(config: Config, key: String): C
+    abstract fun getValue(config: Config, data: TriggerData?, key: String): C
 
     /**
      * Filter the trigger data.
@@ -44,9 +46,9 @@ abstract class Filter<T, C>(
         }
 
         return if (inversePresent) {
-            !filter(data, getValues(cfg, "not_$id"), config.compileData)
+            !filter(data, getValue(cfg, data, "not_$id"), config.compileData)
         } else {
-            filter(data, getValues(cfg, id), config.compileData)
+            filter(data, getValue(cfg, data, id), config.compileData)
         }
     }
 
@@ -56,13 +58,13 @@ abstract class Filter<T, C>(
      * Return true if allowed, false if not.
      *
      * @param data The data.
-     * @param values The values from config.
+     * @param value The value from config.
      * @param compileData The compile data.
      * @return The modified data.
      */
     protected abstract fun filter(
         data: TriggerData,
-        values: C,
+        value: C,
         compileData: T
     ): Boolean
 
@@ -76,7 +78,7 @@ abstract class Filter<T, C>(
 
      */
 
-    override fun makeCompileData(config: Config, context: ViolationContext): T {
+    final override fun makeCompileData(config: Config, context: ViolationContext): T {
         throw UnsupportedOperationException("Use makeCompileData(Config, ViolationContext, C) instead!")
     }
 
