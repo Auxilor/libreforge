@@ -43,7 +43,7 @@ object Filters {
             return null
         }
 
-        val compileData = filter.makeCompileData(config, context, filter.getValues(config, filter.id))
+        val compileData = filter.makeCompileData(config, context, filter.getValue(config, null, filter.id))
         return FilterBlock(filter, config, compileData)
     }
 
