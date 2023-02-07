@@ -98,24 +98,28 @@ private class SeparatorAmbivalentConfig(
 fun Config.separatorAmbivalent(): Config =
     if (this is SeparatorAmbivalentConfig) this else SeparatorAmbivalentConfig(this)
 
-fun Config.toMathContext(data: TriggerData): MathContext {
-    val player = data._originalPlayer
-    val additional = mutableListOf<AdditionalPlayer>()
+fun Config.toMathContext(data: TriggerData?): MathContext {
+    return if (data == null) {
+        MathContext.of(this)
+    } else {
+        val player = data._originalPlayer
+        val additional = mutableListOf<AdditionalPlayer>()
 
-    if (data.victim is Player) {
-        additional += AdditionalPlayer(data.victim, "victim")
+        if (data.victim is Player) {
+            additional += AdditionalPlayer(data.victim, "victim")
+        }
+
+        MathContext(
+            this, player, additional
+        )
     }
-
-    return MathContext(
-        this, player, additional
-    )
 }
 
-fun Config.getIntFromExpression(path: String, data: TriggerData) = NumberUtils.evaluateExpression(
+fun Config.getIntFromExpression(path: String, data: TriggerData?) = NumberUtils.evaluateExpression(
     this.getString(path), this.toMathContext(data)
 ).toInt()
 
-fun Config.getDoubleFromExpression(path: String, data: TriggerData) = NumberUtils.evaluateExpression(
+fun Config.getDoubleFromExpression(path: String, data: TriggerData?) = NumberUtils.evaluateExpression(
     this.getString(path), this.toMathContext(data)
 )
 
