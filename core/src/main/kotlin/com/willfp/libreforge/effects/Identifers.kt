@@ -25,4 +25,9 @@ class IdentifierFactory(
 data class Identifiers(
     val uuid: UUID,
     val key: NamespacedKey
-)
+) {
+    /**
+     * Make a spin-off factory.
+     */
+    fun makeFactory() = IdentifierFactory(uuid)
+}

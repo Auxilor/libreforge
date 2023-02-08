@@ -19,3 +19,8 @@ class ListedHashMap<K, V> : DefaultHashMap<K, MutableList<V>>(mutableListOf())
  * Key to MutableMap HashMap.
  */
 class MappedHashMap<K, K1, V> : DefaultHashMap<K, MutableMap<K1, V>>(mutableMapOf())
+
+/**
+ * Key to ListedHashMap HashMap.
+ */
+class MappedListedHashMap<K, K1, V> : DefaultHashMap<K, ListedHashMap<K1, V>>(ListedHashMap())
