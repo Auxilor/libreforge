@@ -16,7 +16,7 @@ plugins {
 }
 
 dependencies {
-    implementation project(":eco-api")
+    implementation project(":core")
 }
 
 allprojects {

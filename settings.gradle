@@ -1,5 +1,4 @@
 rootProject.name = 'libreforge'
 
-include ':eco-api'
 include ':core'
 include ':loader'
