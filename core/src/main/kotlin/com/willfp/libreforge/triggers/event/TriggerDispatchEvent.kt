@@ -8,7 +8,7 @@ import org.bukkit.event.player.PlayerEvent
 
 class TriggerDispatchEvent(
     who: Player,
-    trigger: DispatchedTrigger
+    val trigger: DispatchedTrigger
 ) : PlayerEvent(who), Cancellable {
     private var _cancelled = false
 
