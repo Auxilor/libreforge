@@ -1,7 +1,7 @@
 package com.willfp.libreforge.effects
 
 import com.willfp.libreforge.DelegatedList
-import com.willfp.libreforge.effects.triggerers.ChainTriggerer
+import com.willfp.libreforge.effects.executors.ChainExecutor
 import com.willfp.libreforge.triggers.DispatchedTrigger
 
 /**
@@ -9,7 +9,7 @@ import com.willfp.libreforge.triggers.DispatchedTrigger
  */
 class Chain(
     effects: List<ChainElement<*>>,
-    private val triggerer: ChainTriggerer
+    private val executor: ChainExecutor
 ) : DelegatedList<ChainElement<*>>() {
     init {
         for (order in RunOrder.values()) {
@@ -18,6 +18,6 @@ class Chain(
     }
 
     fun trigger(trigger: DispatchedTrigger): Boolean {
-        return triggerer.trigger(this, trigger)
+        return executor.execute(this, trigger)
     }
 }

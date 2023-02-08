@@ -38,7 +38,7 @@ abstract class ElementLike {
     /**
      * Mutate, filter, and then trigger.
      */
-    fun trigger(trigger: DispatchedTrigger) {
+    fun trigger(trigger: DispatchedTrigger): Boolean {
         // It would be nice to abstract repeat/delay away here, but that would be
         // really, really, overengineering it - even for me.
         val repeatTimes = config.getIntFromExpression("repeat.times", trigger.data).coerceAtLeast(1)
@@ -69,7 +69,7 @@ abstract class ElementLike {
         if (data.player != null && data.victim != null && data.victim != data.player) {
             if (!config.getBool("disable_antigrief_check")) {
                 if (!AntigriefManager.canInjure(data.player, data.victim)) {
-                    return
+                    return false
                 }
             }
         }
@@ -77,11 +77,11 @@ abstract class ElementLike {
         // Filter
         if (config.getBool("filters_before_mutation")) {
             if (!filters.filter(trigger.data)) {
-                return
+                return false
             }
         } else {
             if (!filters.filter(data)) {
-                return
+                return false
             }
         }
 
@@ -91,11 +91,11 @@ abstract class ElementLike {
         if (argumentsMet) {
             // Check conditions
             if (!conditions.areMet(trigger.player)) {
-                return
+                return false
             }
         } else {
             notMet.forEach { it.ifNotMet(this, trigger) }
-            return
+            return false
         }
 
         var didTrigger = false
@@ -131,10 +131,15 @@ abstract class ElementLike {
             }.runTaskTimer(delay, delay)
         }
 
+        // Code here is fucking disgusting duplicating the delay check.
+        // Whatever.
+
         // Only run met conditions if the trigger was actually successful.
-        if (didTrigger) {
+        if (didTrigger || delay > 0) {
             met.forEach { it.ifMet(this, trigger) }
         }
+
+        return didTrigger || delay > 0
     }
 
     protected abstract fun doTrigger(trigger: DispatchedTrigger): Boolean
