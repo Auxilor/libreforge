@@ -2,22 +2,21 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.particle.Particles
-import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
-import com.willfp.libreforge.effects.effects.particles.ParticleAnimations
-import com.willfp.libreforge.effects.effects.particles.copy
-import com.willfp.libreforge.effects.effects.particles.toDirectionVector
-import com.willfp.libreforge.effects.effects.particles.toLocation
-import com.willfp.libreforge.effects.effects.particles.toVector3f
+import com.willfp.libreforge.effects.impl.particles.ParticleAnimationBlock
+import com.willfp.libreforge.effects.impl.particles.ParticleAnimations
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.plugin
+import com.willfp.libreforge.toFloat3
+import com.willfp.libreforge.toLocation
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import com.willfp.libreforge.triggers.Triggers
+import com.willfp.libreforge.xz
 import org.bukkit.entity.LivingEntity
 
-object EffectParticleAnimation : Effect<NoCompileData>("particle_animation") {
+object EffectParticleAnimation : Effect<ParticleAnimationBlock<*>?>("particle_animation") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION
@@ -32,9 +31,10 @@ object EffectParticleAnimation : Effect<NoCompileData>("particle_animation") {
         inherit("particle_args") { ParticleAnimations.getByID(it.getString("animation")) }
     }
 
-    override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
+    override fun onTrigger(config: Config, data: TriggerData, compileData: ParticleAnimationBlock<*>?): Boolean {
         val location = data.location ?: return false
         val player = data.player ?: return false
+        compileData ?: return false
 
         val entity = when (config.getString("entity").lowercase()) {
             "victim" -> data.victim
@@ -44,7 +44,6 @@ object EffectParticleAnimation : Effect<NoCompileData>("particle_animation") {
 
         val world = location.world ?: return false
 
-        val animation = ParticleAnimations.getByID(config.getString("animation")) ?: return false
         val particle = Particles.lookup(config.getString("particle"))
 
         var tick = 0
@@ -53,14 +52,14 @@ object EffectParticleAnimation : Effect<NoCompileData>("particle_animation") {
 
         plugin.runnableFactory.create {
             val entityVector = if (config.getBool("use-eye-location") && entity is LivingEntity) {
-                entity.eyeLocation.toVector3f()
+                entity.eyeLocation.toFloat3()
             } else {
-                entity.location.toVector3f()
+                entity.location.toFloat3()
             }
 
-            val entityDirectionVector = entity.location.toDirectionVector()
+            val entityDirectionVector = entity.location.toFloat3().xz
 
-            val locationVector = location.toVector3f()
+            val locationVector = location.toFloat3()
 
             val vectors = if (args.has("tick-multiplier")) {
                 val mult = args.getIntFromExpression("tick-multiplier", data)
@@ -68,22 +67,20 @@ object EffectParticleAnimation : Effect<NoCompileData>("particle_animation") {
                 val mockTicks = (tick * mult until (tick * mult) + mult)
 
                 mockTicks.map { t ->
-                    animation.getParticleLocations(
+                    compileData.getParticleLocations(
                         t,
                         entityVector.copy(),
                         entityDirectionVector.copy(),
                         locationVector.copy(),
-                        args,
                         player
                     )
                 }.flatten()
             } else {
-                animation.getParticleLocations(
+                compileData.getParticleLocations(
                     tick,
                     entityVector.copy(),
                     entityDirectionVector.copy(),
                     locationVector.copy(),
-                    args,
                     player
                 )
             }
@@ -96,13 +93,12 @@ object EffectParticleAnimation : Effect<NoCompileData>("particle_animation") {
             }
 
             if (vectors.any { v ->
-                    animation.shouldStopTicking(
+                    compileData.shouldStopTicking(
                         tick,
                         entityVector.copy(),
                         entityDirectionVector.copy(),
                         locationVector.copy(),
                         v,
-                        args,
                         player
                     )
                 }) {
@@ -113,5 +109,12 @@ object EffectParticleAnimation : Effect<NoCompileData>("particle_animation") {
         }.runTaskTimerAsynchronously(1, 1)
 
         return true
+    }
+
+    override fun makeCompileData(config: Config, context: ViolationContext): ParticleAnimationBlock<*>? {
+        return ParticleAnimations.compile(
+            config,
+            context
+        )
     }
 }

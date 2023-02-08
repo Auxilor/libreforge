@@ -8,7 +8,7 @@ import org.bukkit.World
 import org.bukkit.entity.LivingEntity
 
 /**
- * A single condition config block.
+ * A single animation config block.
  */
 class AOEBlock<T>(
     val shape: AOEShape<T>,
