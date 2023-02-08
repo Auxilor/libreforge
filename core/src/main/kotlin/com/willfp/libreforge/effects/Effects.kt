@@ -9,6 +9,7 @@ import com.willfp.libreforge.effects.triggerers.ChainTriggerer
 import com.willfp.libreforge.effects.triggerers.ChainTriggerers
 import com.willfp.libreforge.filters.Filters
 import com.willfp.libreforge.mutators.Mutators
+import com.willfp.libreforge.separatorAmbivalent
 import com.willfp.libreforge.triggers.Triggers
 import java.util.UUID
 
@@ -51,9 +52,11 @@ object Effects {
         EffectList(configs.mapNotNull { compile(it, context) })
 
     /**
-     * Compile a [config] into an EffectBlock in a given [context].
+     * Compile a [cfg] into an EffectBlock in a given [context].
      */
-    fun compile(config: Config, context: ViolationContext): EffectBlock? {
+    fun compile(cfg: Config, context: ViolationContext): EffectBlock? {
+        val config = cfg.separatorAmbivalent()
+
         val args = config.getSubsection("args")
 
         val arguments = EffectArguments.compile(args, context.with("args"))
@@ -142,7 +145,7 @@ object Effects {
         context: ViolationContext,
         directIDSpecified: Boolean // If it's configured with 'id', rather than 'effects'
     ): Chain? {
-        val elements = configs.mapNotNull { compileElement(it, context) }
+        val elements = configs.map { it.separatorAmbivalent() }.mapNotNull { compileElement(it, context) }
 
         if ((elements.size > 1 || !directIDSpecified) && elements.any { it.effect.isPermanent }) {
             context.log(ConfigViolation("effects", "Permanent effects are not allowed in chains!"))

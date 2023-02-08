@@ -1,8 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.events.NaturalExpGainEvent
-import com.willfp.eco.core.integrations.mcmmo.McmmoManager
-import com.willfp.libreforge.effects.MultiplierEffect
+import com.willfp.libreforge.effects.templates.MultiplierEffect
 import org.bukkit.event.EventHandler
 import kotlin.math.ceil
 
