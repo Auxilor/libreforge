@@ -1,7 +1,7 @@
 package com.willfp.libreforge.integrations.vault.impl
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.MappedHashMap
+import com.willfp.libreforge.KeyToMutableMapMap
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -17,7 +17,7 @@ class EffectGivePermission(
         require("permission", "You must specify the permission!")
     }
 
-    private val permissions = MappedHashMap<UUID, UUID, String>()
+    private val permissions = KeyToMutableMapMap<UUID, UUID, String>()
 
     override fun onEnable(player: Player, config: Config, identifiers: Identifiers, compileData: NoCompileData) {
         val permission = config.getString("permission")

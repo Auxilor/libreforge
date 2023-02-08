@@ -1,8 +1,8 @@
 package com.willfp.libreforge.effects.templates
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.ListedHashMap
-import com.willfp.libreforge.MappedListedHashMap
+import com.willfp.libreforge.KeyToMutableListMap
+import com.willfp.libreforge.KeyToMutableListMapMap
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -16,8 +16,8 @@ abstract class MultiMultiplierEffect<T>(id: String) : Effect<NoCompileData>(id) 
         require("multiplier", "You must specify the multiplier!")
     }
 
-    private val globalModifiers = ListedHashMap<UUID, MultiplierModifier>()
-    private val modifiers = MappedListedHashMap<UUID, T, MultiplierModifier>()
+    private val globalModifiers = KeyToMutableListMap<UUID, MultiplierModifier>()
+    private val modifiers = KeyToMutableListMapMap<UUID, T, MultiplierModifier>()
 
     /**
      * The key to look for in arguments, e.g. "stat" or "skill".
