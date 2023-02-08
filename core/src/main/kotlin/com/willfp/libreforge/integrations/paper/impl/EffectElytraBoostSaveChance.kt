@@ -3,7 +3,7 @@ package com.willfp.libreforge.integrations.paper.impl
 import com.destroystokyo.paper.event.player.PlayerElytraBoostEvent
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.util.NumberUtils
-import com.willfp.libreforge.ListedHashMap
+import com.willfp.libreforge.KeyToMutableListMap
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -18,7 +18,7 @@ object EffectElytraBoostSaveChance : Effect<NoCompileData>("elytra_boost_save_ch
         require("chance", "You must specify the chance to not consume rockets!")
     }
 
-    private val modifiers = ListedHashMap<UUID, MultiplierModifier>()
+    private val modifiers = KeyToMutableListMap<UUID, MultiplierModifier>()
 
     override fun onEnable(player: Player, config: Config, identifiers: Identifiers, compileData: NoCompileData) {
         modifiers[player.uniqueId] += object : MultiplierModifier(identifiers.uuid) {
