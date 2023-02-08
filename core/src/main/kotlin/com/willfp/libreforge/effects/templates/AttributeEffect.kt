@@ -1,7 +1,9 @@
-package com.willfp.libreforge.effects
+package com.willfp.libreforge.effects.templates
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.effects.Identifiers
 import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeModifier
 import org.bukkit.entity.Player

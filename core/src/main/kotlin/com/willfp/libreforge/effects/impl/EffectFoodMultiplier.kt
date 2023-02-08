@@ -1,6 +1,6 @@
 package com.willfp.libreforge.effects.impl
 
-import com.willfp.libreforge.effects.MultiplierEffect
+import com.willfp.libreforge.effects.templates.MultiplierEffect
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.FoodLevelChangeEvent

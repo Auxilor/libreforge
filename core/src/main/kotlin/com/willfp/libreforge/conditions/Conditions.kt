@@ -3,7 +3,55 @@ package com.willfp.libreforge.conditions
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.ViolationContext
+import com.willfp.libreforge.conditions.impl.ConditionAboveBalance
+import com.willfp.libreforge.conditions.impl.ConditionAboveHealthPercent
+import com.willfp.libreforge.conditions.impl.ConditionAboveHungerPercent
+import com.willfp.libreforge.conditions.impl.ConditionAbovePoints
+import com.willfp.libreforge.conditions.impl.ConditionAboveXPLevel
+import com.willfp.libreforge.conditions.impl.ConditionAboveY
+import com.willfp.libreforge.conditions.impl.ConditionAnyOf
+import com.willfp.libreforge.conditions.impl.ConditionAtLeastOf
+import com.willfp.libreforge.conditions.impl.ConditionBelowBalance
+import com.willfp.libreforge.conditions.impl.ConditionBelowHealthPercent
+import com.willfp.libreforge.conditions.impl.ConditionBelowHungerPercent
+import com.willfp.libreforge.conditions.impl.ConditionBelowPoints
+import com.willfp.libreforge.conditions.impl.ConditionBelowXPLevel
+import com.willfp.libreforge.conditions.impl.ConditionBelowY
+import com.willfp.libreforge.conditions.impl.ConditionCanAffordPrice
+import com.willfp.libreforge.conditions.impl.ConditionHasItem
+import com.willfp.libreforge.conditions.impl.ConditionHasPermission
+import com.willfp.libreforge.conditions.impl.ConditionHasPotionEffect
+import com.willfp.libreforge.conditions.impl.ConditionInAir
+import com.willfp.libreforge.conditions.impl.ConditionInBiome
+import com.willfp.libreforge.conditions.impl.ConditionInBlock
+import com.willfp.libreforge.conditions.impl.ConditionInMainhand
+import com.willfp.libreforge.conditions.impl.ConditionInOffhand
+import com.willfp.libreforge.conditions.impl.ConditionInWater
+import com.willfp.libreforge.conditions.impl.ConditionInWorld
+import com.willfp.libreforge.conditions.impl.ConditionIsExpressionTrue
+import com.willfp.libreforge.conditions.impl.ConditionIsFrozen
+import com.willfp.libreforge.conditions.impl.ConditionIsGliding
+import com.willfp.libreforge.conditions.impl.ConditionIsNight
+import com.willfp.libreforge.conditions.impl.ConditionIsSneaking
+import com.willfp.libreforge.conditions.impl.ConditionIsSprinting
+import com.willfp.libreforge.conditions.impl.ConditionIsStorm
+import com.willfp.libreforge.conditions.impl.ConditionIsSwimming
+import com.willfp.libreforge.conditions.impl.ConditionNearEntity
+import com.willfp.libreforge.conditions.impl.ConditionOnFire
+import com.willfp.libreforge.conditions.impl.ConditionPlaceholderContains
+import com.willfp.libreforge.conditions.impl.ConditionPlaceholderEquals
+import com.willfp.libreforge.conditions.impl.ConditionPlaceholderGreaterThan
+import com.willfp.libreforge.conditions.impl.ConditionPlaceholderLessThan
+import com.willfp.libreforge.conditions.impl.ConditionPointsEqual
+import com.willfp.libreforge.conditions.impl.ConditionRidingEntity
+import com.willfp.libreforge.conditions.impl.ConditionStandingOnBlock
+import com.willfp.libreforge.conditions.impl.ConditionWearingBoots
+import com.willfp.libreforge.conditions.impl.ConditionWearingChestplate
+import com.willfp.libreforge.conditions.impl.ConditionWearingHelmet
+import com.willfp.libreforge.conditions.impl.ConditionWearingLeggings
+import com.willfp.libreforge.conditions.impl.ConditionWithinRadiusOf
 import com.willfp.libreforge.effects.Effects
+import com.willfp.libreforge.separatorAmbivalent
 
 object Conditions {
     private val registry = mutableMapOf<String, Condition<*>>()
@@ -29,9 +77,11 @@ object Conditions {
         ConditionList(configs.mapNotNull { compile(it, context) })
 
     /**
-     * Compile a [config] into a ConditionBlock in a given [context].
+     * Compile a [cfg] into a ConditionBlock in a given [context].
      */
-    fun compile(config: Config, context: ViolationContext): ConditionBlock<*>? {
+    fun compile(cfg: Config, context: ViolationContext): ConditionBlock<*>? {
+        val config = cfg.separatorAmbivalent()
+
         val condition = getByID(config.getString("id"))
 
         if (condition == null) {
@@ -68,6 +118,52 @@ object Conditions {
     }
 
     init {
-
+        register(ConditionAboveBalance)
+        register(ConditionAboveHealthPercent)
+        register(ConditionAboveHungerPercent)
+        register(ConditionAbovePoints)
+        register(ConditionAboveXPLevel)
+        register(ConditionAboveY)
+        register(ConditionAnyOf)
+        register(ConditionAtLeastOf)
+        register(ConditionBelowBalance)
+        register(ConditionBelowHealthPercent)
+        register(ConditionBelowHungerPercent)
+        register(ConditionBelowPoints)
+        register(ConditionBelowXPLevel)
+        register(ConditionBelowY)
+        register(ConditionCanAffordPrice)
+        register(ConditionHasItem)
+        register(ConditionHasPermission)
+        register(ConditionHasPotionEffect)
+        register(ConditionInAir)
+        register(ConditionInBiome)
+        register(ConditionInBlock)
+        register(ConditionInMainhand)
+        register(ConditionInOffhand)
+        register(ConditionInWater)
+        register(ConditionInWorld)
+        register(ConditionIsExpressionTrue)
+        register(ConditionIsFrozen)
+        register(ConditionIsGliding)
+        register(ConditionIsNight)
+        register(ConditionIsSneaking)
+        register(ConditionIsSprinting)
+        register(ConditionIsStorm)
+        register(ConditionIsSwimming)
+        register(ConditionNearEntity)
+        register(ConditionOnFire)
+        register(ConditionPlaceholderContains)
+        register(ConditionPlaceholderEquals)
+        register(ConditionPlaceholderGreaterThan)
+        register(ConditionPlaceholderLessThan)
+        register(ConditionPointsEqual)
+        register(ConditionRidingEntity)
+        register(ConditionStandingOnBlock)
+        register(ConditionWearingBoots)
+        register(ConditionWearingChestplate)
+        register(ConditionWearingHelmet)
+        register(ConditionWearingLeggings)
+        register(ConditionWithinRadiusOf)
     }
 }

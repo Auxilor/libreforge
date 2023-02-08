@@ -1,9 +1,12 @@
-package com.willfp.libreforge.effects
+package com.willfp.libreforge.effects.templates
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ListedHashMap
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
+import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.effects.Identifiers
+import com.willfp.libreforge.effects.MultiplierModifier
 import org.bukkit.entity.Player
 import java.util.UUID
 
