@@ -78,14 +78,19 @@ fun Player.updateHolders() {
 private val previousStates = DefaultHashMap<UUID, Set<EffectBlock>>(emptySet())
 
 /**
+ * Get active effects for a [player] from holders.
+ */
+fun Collection<Holder>.getActiveEffects(player: Player) =
+    this.filter { it.conditions.areMet(player) }
+        .flatMap { it.effects }
+        .filter { it.conditions.areMet(player) }
+        .toSet()
+
+/**
  * Recalculate active effects.
  */
 fun Player.calculateActiveEffects() =
-    this.holders
-        .filter { it.conditions.areMet(this) }
-        .flatMap { it.effects }
-        .filter { it.conditions.areMet(this) }
-        .toSet()
+    this.holders.getActiveEffects(this)
 
 /**
  * The active effects.

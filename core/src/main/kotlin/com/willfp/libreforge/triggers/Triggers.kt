@@ -2,12 +2,19 @@ package com.willfp.libreforge.triggers
 
 object Triggers {
     private val registry = mutableMapOf<String, Trigger>()
+    private val groupRegistry = mutableMapOf<String, TriggerGroup>()
 
     /**
      * Get a trigger by [id].
      */
     fun getByID(id: String): Trigger? {
-        return registry[id]
+        for ((prefix, group) in groupRegistry) {
+            if (id.startsWith("${prefix}_")) {
+                return group.create(id.removePrefix("${prefix}_"))
+            }
+        }
+
+        return registry[id.lowercase()]
     }
 
     /**
@@ -15,6 +22,13 @@ object Triggers {
      */
     fun register(trigger: Trigger) {
         registry[trigger.id] = trigger
+    }
+
+    /**
+     * Register a new [triggerGroup].
+     */
+    fun register(triggerGroup: TriggerGroup) {
+        groupRegistry[triggerGroup.prefix] = triggerGroup
     }
 
     /**

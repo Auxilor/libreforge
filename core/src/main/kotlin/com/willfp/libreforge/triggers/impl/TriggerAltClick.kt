@@ -1,6 +1,6 @@
 package com.willfp.libreforge.triggers.impl
 
-import com.willfp.libreforge.triggers.GenericCancellableEvent
+import com.willfp.libreforge.RAYTRACE_DISTANCE
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -95,7 +95,7 @@ object TriggerAltClick : Trigger("alt_click") {
         val location: Location?
         val world = player.location.world ?: return
         val result = player.rayTraceBlocks(
-            plugin.configYml.getDoubleFromExpression("raytrace-distance", player),
+            RAYTRACE_DISTANCE.toDouble(),
             FluidCollisionMode.NEVER
         )
 
@@ -103,7 +103,7 @@ object TriggerAltClick : Trigger("alt_click") {
             result.hitPosition.toLocation(world)
         } else {
             val dir = player.location.direction.normalize()
-                .multiply(plugin.configYml.getDoubleFromExpression("raytrace-distance"))
+                .multiply(RAYTRACE_DISTANCE.toDouble())
             player.location.add(dir)
         }
 
@@ -122,7 +122,7 @@ object TriggerAltClick : Trigger("alt_click") {
                 location = location,
                 event = event,
                 item = player.inventory.itemInMainHand,
-                block = victim?.location?.block ?: result.hitBlock
+                block = victim?.location?.block ?: result?.hitBlock
             )
         )
     }

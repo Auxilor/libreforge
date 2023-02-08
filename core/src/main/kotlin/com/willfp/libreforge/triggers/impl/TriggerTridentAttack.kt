@@ -1,5 +1,8 @@
 package com.willfp.libreforge.triggers.impl
 
+import com.willfp.libreforge.Holder
+import com.willfp.libreforge.holders
+import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -8,6 +11,9 @@ import org.bukkit.entity.Player
 import org.bukkit.entity.Trident
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageByEntityEvent
+import org.bukkit.event.entity.ProjectileLaunchEvent
+
+private const val META_KEY = "libreforge_trident_holders"
 
 object TriggerTridentAttack : Trigger("trident_attack") {
     override val parameters = setOf(
@@ -21,28 +27,30 @@ object TriggerTridentAttack : Trigger("trident_attack") {
     )
 
     @EventHandler(ignoreCancelled = true)
-    fun handle(event: EntityDamageByEntityEvent) {
-        val trident = event.damager
-        val victim = event.entity
+    fun onProjectileLaunch(event: ProjectileLaunchEvent) {
+        val shooter = event.entity.shooter as? Player ?: return
+        val trident = event.entity
 
         if (trident !is Trident) {
             return
         }
 
-        if (victim !is LivingEntity) {
-            return
-        }
+        trident.setMetadata(
+            META_KEY,
+            plugin.metadataValueFactory.create(
+                shooter.holders
+            )
+        )
+    }
 
-        val shooter = trident.shooter
+    @EventHandler(ignoreCancelled = true)
+    fun handle(event: EntityDamageByEntityEvent) {
+        val trident = event.damager as? Trident ?: return
+        val victim = event.entity as? LivingEntity ?: return
 
-        if (shooter !is Player) {
-            return
-        }
+        val shooter = trident.shooter as? Player ?: return
 
-        if (event.isCancelled) {
-            return
-        }
-
+        @Suppress("UNCHECKED_CAST")
         this.dispatch(
             shooter,
             TriggerData(
@@ -54,7 +62,8 @@ object TriggerTridentAttack : Trigger("trident_attack") {
                 item = trident.item,
                 velocity = trident.velocity,
                 value = event.finalDamage
-            )
+            ),
+            forceHolders = trident.getMetadata(META_KEY).firstOrNull()?.value() as? Collection<Holder>
         )
     }
 }
