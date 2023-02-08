@@ -6,13 +6,9 @@ import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
-import com.willfp.libreforge.triggers.TriggerParameter
-import com.willfp.libreforge.triggers.Triggers
-import com.willfp.libreforge.triggers.triggers.TriggerCustom
+import com.willfp.libreforge.triggers.impl.TriggerGroupCustom
 
-object EffectTriggerCustom : Effect<NoCompileData>(
-    "trigger_custom"
-) {
+object EffectTriggerCustom : Effect<NoCompileData>("trigger_custom") {
     override val isPermanent = false
 
     override val arguments = arguments {
@@ -21,10 +17,10 @@ object EffectTriggerCustom : Effect<NoCompileData>(
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val player = data.player ?: return false
-        val trigger = TriggerCustom.getWithID(config.getString("trigger"))
+        val trigger = TriggerGroupCustom.create(config.getString("trigger"))
         val value = config.getDoubleFromExpression("value", data)
 
-        trigger.invoke(player, data, value)
+        trigger.dispatch(player, data.copy(value = value))
 
         return true
     }
