@@ -5,8 +5,8 @@ import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.effects.arguments.EffectArguments
-import com.willfp.libreforge.effects.triggerers.ChainTriggerer
-import com.willfp.libreforge.effects.triggerers.ChainTriggerers
+import com.willfp.libreforge.effects.executors.ChainExecutor
+import com.willfp.libreforge.effects.executors.ChainExecutors
 import com.willfp.libreforge.filters.Filters
 import com.willfp.libreforge.mutators.Mutators
 import com.willfp.libreforge.separatorAmbivalent
@@ -75,15 +75,15 @@ object Effects {
 
         val directIDSpecified = config.has("id")
 
-        val triggerer = ChainTriggerers.getByID(args.getString("run-type"))
+        val executor = ChainExecutors.getByID(args.getString("run-type"))
 
-        if (triggerer == null) {
+        if (executor == null) {
             context.with("args")
                 .log(ConfigViolation("run-type", "Invalid run type specified!"))
             return null
         }
 
-        val chain = compileChain(effectConfigs, triggerer, context, directIDSpecified) ?: return null
+        val chain = compileChain(effectConfigs, executor, context, directIDSpecified) ?: return null
 
         if (triggers.isNotEmpty() && chain.any { it.effect.isPermanent }) {
             context.log(ConfigViolation("triggers", "Triggers are not allowed on permanent effects!"))
@@ -131,17 +131,17 @@ object Effects {
     }
 
     /**
-     * Compile a list of [configs] and a [triggerer] into a Chain in a given [context].
+     * Compile a list of [configs] and an [executor] into a Chain in a given [context].
      */
     fun compileChain(
         configs: Collection<Config>,
-        triggerer: ChainTriggerer,
+        executor: ChainExecutor,
         context: ViolationContext,
-    ): Chain? = compileChain(configs, triggerer, context, false)
+    ): Chain? = compileChain(configs, executor, context, false)
 
     private fun compileChain(
         configs: Collection<Config>,
-        triggerer: ChainTriggerer,
+        executor: ChainExecutor,
         context: ViolationContext,
         directIDSpecified: Boolean // If it's configured with 'id', rather than 'effects'
     ): Chain? {
@@ -152,7 +152,7 @@ object Effects {
             return null
         }
 
-        return Chain(elements, triggerer)
+        return Chain(elements, executor)
     }
 
     private fun compileElement(config: Config, context: ViolationContext): ChainElement<*>? {
