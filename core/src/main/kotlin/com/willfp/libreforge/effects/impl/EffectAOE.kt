@@ -8,7 +8,7 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.impl.aoe.AOEBlock
 import com.willfp.libreforge.effects.impl.aoe.AOEShapes
-import com.willfp.libreforge.effects.triggerers.impl.NormalTriggererFactory
+import com.willfp.libreforge.effects.executors.impl.NormalExecutorFactory
 import com.willfp.libreforge.toFloat3
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -47,7 +47,7 @@ object EffectAOE : Effect<EffectAOE.AOEData>("aoe") {
             AOEShapes.compile(config, context),
             Effects.compileChain(
                 config.getSubsections("effects"),
-                NormalTriggererFactory.create(),
+                NormalExecutorFactory.create(),
                 context.with("aoe Effects")
             )
         )
