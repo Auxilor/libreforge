@@ -2,17 +2,19 @@ package com.willfp.libreforge.filters.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.util.containsIgnoreCase
+import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.filters.Filter
-import com.willfp.libreforge.triggers.GenericCancellableEvent
 import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.event.entity.EntityPotionEffectEvent
 
-object FilterPotionEffect: Filter() {
-    override fun passes(data: TriggerData, config: Config): Boolean {
-        val event = (data.event as? GenericCancellableEvent)?.handle as? EntityPotionEffectEvent ?: return true
+object FilterPotionEffect : Filter<NoCompileData, Collection<String>>("potion_effect") {
+    override fun getValue(config: Config, data: TriggerData?, key: String): Collection<String> {
+        return config.getStrings(key)
+    }
 
-        return config.withInverse("potion_effect", Config::getStrings) {
-            it.containsIgnoreCase(event.newEffect?.type?.name?: "")
-        }
+    override fun filter(data: TriggerData, value: Collection<String>, compileData: NoCompileData): Boolean {
+        val event = data.event as? EntityPotionEffectEvent ?: return true
+
+        return value.containsIgnoreCase(event.newEffect?.type?.name ?: "")
     }
 }
