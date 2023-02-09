@@ -65,6 +65,9 @@ import com.willfp.libreforge.triggers.triggers.TriggerToggleSneak
 import com.willfp.libreforge.triggers.triggers.TriggerToggleSprint
 import com.willfp.libreforge.triggers.triggers.TriggerTridentAttack
 import com.willfp.libreforge.triggers.triggers.TriggerWinRaid
+import com.willfp.libreforge.triggers.triggers.TriggerFillBucket
+import com.willfp.libreforge.triggers.triggers.TriggerEmptyBucket
+import com.willfp.libreforge.triggers.triggers.TriggerShearEntity
 
 @Suppress("UNUSED")
 object Triggers {
@@ -134,6 +137,9 @@ object Triggers {
     val ENTITY_TARGET: Trigger = TriggerEntityTarget()
     val ENTER_BED: Trigger = TriggerEnterBed()
     val LEAVE_BED: Trigger = TriggerLeaveBed()
+    val FILL_BUCKET: Trigger = TriggerFillBucket()
+    val EMPTY_BUCKET: Trigger = TriggerEmptyBucket()
+    val SHEAR_ENTITY: Trigger = TriggerShearEntity()
 
 
     fun values(): Set<Trigger> {
