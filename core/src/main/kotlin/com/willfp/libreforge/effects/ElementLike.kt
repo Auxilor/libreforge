@@ -76,11 +76,11 @@ abstract class ElementLike {
 
         // Filter
         if (config.getBool("filters_before_mutation")) {
-            if (!filters.filter(trigger.data)) {
+            if (!filters.isMet(trigger.data)) {
                 return false
             }
         } else {
-            if (!filters.filter(data)) {
+            if (!filters.isMet(data)) {
                 return false
             }
         }

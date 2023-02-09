@@ -11,7 +11,7 @@ object FilterPlayerName : Filter<NoCompileData, Collection<String>>("player_name
         return config.getStrings(key)
     }
 
-    override fun filter(data: TriggerData, value: Collection<String>, compileData: NoCompileData): Boolean {
+    override fun isMet(data: TriggerData, value: Collection<String>, compileData: NoCompileData): Boolean {
         val player = data.player ?: return true
         return value.containsIgnoreCase(player.name)
     }
