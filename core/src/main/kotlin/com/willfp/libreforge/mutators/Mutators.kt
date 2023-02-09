@@ -3,6 +3,18 @@ package com.willfp.libreforge.mutators
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.ViolationContext
+import com.willfp.libreforge.mutators.impl.MutatorBlockToLocation
+import com.willfp.libreforge.mutators.impl.MutatorLocationToBlock
+import com.willfp.libreforge.mutators.impl.MutatorLocationToCursor
+import com.willfp.libreforge.mutators.impl.MutatorLocationToPlayer
+import com.willfp.libreforge.mutators.impl.MutatorLocationToProjectile
+import com.willfp.libreforge.mutators.impl.MutatorLocationToVictim
+import com.willfp.libreforge.mutators.impl.MutatorPlayerAsVictim
+import com.willfp.libreforge.mutators.impl.MutatorSpinLocation
+import com.willfp.libreforge.mutators.impl.MutatorSpinVelocity
+import com.willfp.libreforge.mutators.impl.MutatorTranslateLocation
+import com.willfp.libreforge.mutators.impl.MutatorVictimAsPlayer
+import com.willfp.libreforge.mutators.impl.MutatorVictimToOwner
 
 object Mutators {
     private val registry = mutableMapOf<String, Mutator<*>>()
@@ -60,6 +72,17 @@ object Mutators {
     }
 
     init {
-
+        register(MutatorBlockToLocation)
+        register(MutatorLocationToBlock)
+        register(MutatorLocationToCursor)
+        register(MutatorLocationToPlayer)
+        register(MutatorLocationToProjectile)
+        register(MutatorLocationToVictim)
+        register(MutatorPlayerAsVictim)
+        register(MutatorSpinLocation)
+        register(MutatorSpinVelocity)
+        register(MutatorTranslateLocation)
+        register(MutatorVictimAsPlayer)
+        register(MutatorVictimToOwner)
     }
 }
