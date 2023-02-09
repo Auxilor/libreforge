@@ -12,7 +12,7 @@ object FilterFullyCharged : Filter<NoCompileData, Boolean>("fully_charged") {
         return config.getBool(key)
     }
 
-    override fun filter(data: TriggerData, value: Boolean, compileData: NoCompileData): Boolean {
+    override fun isMet(data: TriggerData, value: Boolean, compileData: NoCompileData): Boolean {
         val event = data.event as? EntityDamageByEntityEvent ?: return true
         val player = event.damager as? Player ?: return true
         return player.attackCooldown >= 1f == value

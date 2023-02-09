@@ -27,6 +27,7 @@ object EffectKeepInventory : Effect<NoCompileData>("keep_inventory") {
 
         if (players[player.uniqueId].isNotEmpty()) {
             event.keepInventory = true
+            event.drops.clear()
         }
     }
 }

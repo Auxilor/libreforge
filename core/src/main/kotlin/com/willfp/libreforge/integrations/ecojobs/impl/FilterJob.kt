@@ -11,7 +11,7 @@ object FilterJob : Filter<NoCompileData, Collection<String>>("job") {
         return config.getStrings(key)
     }
 
-    override fun filter(data: TriggerData, value: Collection<String>, compileData: NoCompileData): Boolean {
+    override fun isMet(data: TriggerData, value: Collection<String>, compileData: NoCompileData): Boolean {
         val event = data.event as? JobEvent ?: return true
 
         return value.any { jobName ->

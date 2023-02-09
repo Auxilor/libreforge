@@ -16,6 +16,6 @@ class FilterList(
         }
     }
 
-    fun filter(data: TriggerData) =
-        this.any { !it.filter(data) }
+    fun isMet(data: TriggerData) =
+        this.all { it.isMet(data) }
 }

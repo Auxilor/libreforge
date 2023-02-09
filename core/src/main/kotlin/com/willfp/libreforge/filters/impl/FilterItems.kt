@@ -14,7 +14,7 @@ object FilterItems : Filter<Collection<TestableItem>, Collection<String>>("items
         return config.getStrings(key)
     }
 
-    override fun filter(data: TriggerData, value: Collection<String>, compileData: Collection<TestableItem>): Boolean {
+    override fun isMet(data: TriggerData, value: Collection<String>, compileData: Collection<TestableItem>): Boolean {
         val itemList = listOf(data.item)
         val unfilteredItems = (data.event as? WrappedDropEvent<*>)?.items ?: itemList
         val items = unfilteredItems.filterNotNull()

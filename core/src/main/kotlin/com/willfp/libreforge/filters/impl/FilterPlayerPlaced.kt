@@ -11,7 +11,7 @@ object FilterPlayerPlaced : Filter<NoCompileData, Boolean>("player_placed") {
         return config.getBool(key)
     }
 
-    override fun filter(data: TriggerData, value: Boolean, compileData: NoCompileData): Boolean {
+    override fun isMet(data: TriggerData, value: Boolean, compileData: NoCompileData): Boolean {
         val block = data.block ?: return true
 
         return block.isPlayerPlaced == value

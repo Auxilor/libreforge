@@ -12,7 +12,7 @@ object FilterDamageCause : Filter<NoCompileData, Collection<String>>("damage_cau
         return config.getStrings(key)
     }
 
-    override fun filter(data: TriggerData, value: Collection<String>, compileData: NoCompileData): Boolean {
+    override fun isMet(data: TriggerData, value: Collection<String>, compileData: NoCompileData): Boolean {
         val cause = (data.event as? EntityDamageEvent)?.cause ?: return true
         return value.containsIgnoreCase(cause.name)
     }

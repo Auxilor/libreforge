@@ -26,13 +26,11 @@ abstract class Filter<T, C>(
     /**
      * Filter the trigger data.
      *
-     * Return true if allowed, false if not.
-     *
      * @param data The data.
      * @param config The config.
      * @return The modified data.
      */
-    fun filter(
+    fun isMet(
         data: TriggerData,
         config: FilterBlock<T, C>
     ): Boolean {
@@ -46,9 +44,9 @@ abstract class Filter<T, C>(
         }
 
         return if (inversePresent) {
-            !filter(data, getValue(cfg, data, "not_$id"), config.compileData)
+            !isMet(data, getValue(cfg, data, "not_$id"), config.compileData)
         } else {
-            filter(data, getValue(cfg, data, id), config.compileData)
+            isMet(data, getValue(cfg, data, id), config.compileData)
         }
     }
 
@@ -62,7 +60,7 @@ abstract class Filter<T, C>(
      * @param compileData The compile data.
      * @return The modified data.
      */
-    protected abstract fun filter(
+    protected abstract fun isMet(
         data: TriggerData,
         value: C,
         compileData: T
