@@ -12,7 +12,7 @@ object FilterProjectiles : Filter<Collection<TestableEntity>, List<String>>("pro
         return config.getStrings(key)
     }
 
-    override fun filter(data: TriggerData, value: List<String>, compileData: Collection<TestableEntity>): Boolean {
+    override fun isMet(data: TriggerData, value: List<String>, compileData: Collection<TestableEntity>): Boolean {
         val projectile = data.projectile
         return compileData.any { test -> test.matches(projectile) }
     }

@@ -11,7 +11,7 @@ object FilterFullyGrown : Filter<NoCompileData, Boolean>("fully_grown") {
         return config.getBool(key)
     }
 
-    override fun filter(data: TriggerData, value: Boolean, compileData: NoCompileData): Boolean {
+    override fun isMet(data: TriggerData, value: Boolean, compileData: NoCompileData): Boolean {
         val block = data.block ?: return true
         val blockData = block.blockData
 

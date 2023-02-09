@@ -12,6 +12,6 @@ class FilterBlock<T, C>(
     override val config: Config,
     override val compileData: T
 ) : Compiled<T> {
-    fun filter(data: TriggerData) =
-        filter.filter(data, this)
+    fun isMet(data: TriggerData) =
+        filter.isMet(data, this)
 }

@@ -12,7 +12,7 @@ object FilterIsBehindVictim : Filter<NoCompileData, Boolean>("is_behind_victim")
         return config.getBool(key)
     }
 
-    override fun filter(data: TriggerData, value: Boolean, compileData: NoCompileData): Boolean {
+    override fun isMet(data: TriggerData, value: Boolean, compileData: NoCompileData): Boolean {
         val player = data.player ?: return true
         val victim = data.victim ?: return true
 

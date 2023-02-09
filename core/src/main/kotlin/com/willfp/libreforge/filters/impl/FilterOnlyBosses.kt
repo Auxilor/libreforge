@@ -14,7 +14,7 @@ object FilterOnlyBosses : Filter<NoCompileData, Boolean>("only_bosses") {
         return config.getBool(key)
     }
 
-    override fun filter(data: TriggerData, value: Boolean, compileData: NoCompileData): Boolean {
+    override fun isMet(data: TriggerData, value: Boolean, compileData: NoCompileData): Boolean {
         val entity = data.victim ?: return true
         return (entity is Boss || entity is ElderGuardian || entity.persistentDataContainer
             .has(NamespacedKeyUtils.create("ecobosses", "boss"), PersistentDataType.STRING)) == value

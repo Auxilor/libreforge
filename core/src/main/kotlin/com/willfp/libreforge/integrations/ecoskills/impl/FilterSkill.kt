@@ -11,7 +11,7 @@ object FilterSkill : Filter<NoCompileData, Collection<String>>("skill") {
         return config.getStrings(key)
     }
 
-    override fun filter(data: TriggerData, value: Collection<String>, compileData: NoCompileData): Boolean {
+    override fun isMet(data: TriggerData, value: Collection<String>, compileData: NoCompileData): Boolean {
         val event = data.event as? SkillEvent ?: return true
 
         return value.any { skillName ->

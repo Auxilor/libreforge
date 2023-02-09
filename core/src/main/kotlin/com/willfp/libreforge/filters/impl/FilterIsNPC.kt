@@ -10,7 +10,7 @@ object FilterIsNPC : Filter<NoCompileData, Boolean>("is_npc") {
         return config.getBool(key)
     }
 
-    override fun filter(data: TriggerData, value: Boolean, compileData: NoCompileData): Boolean {
+    override fun isMet(data: TriggerData, value: Boolean, compileData: NoCompileData): Boolean {
         val victim = data.victim ?: return true
 
         return value == victim.hasMetadata("NPC")

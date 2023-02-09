@@ -12,7 +12,7 @@ object FilterPotionEffect : Filter<NoCompileData, Collection<String>>("potion_ef
         return config.getStrings(key)
     }
 
-    override fun filter(data: TriggerData, value: Collection<String>, compileData: NoCompileData): Boolean {
+    override fun isMet(data: TriggerData, value: Collection<String>, compileData: NoCompileData): Boolean {
         val event = data.event as? EntityPotionEffectEvent ?: return true
 
         return value.containsIgnoreCase(event.newEffect?.type?.name ?: "")
