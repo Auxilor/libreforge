@@ -17,7 +17,7 @@ class EffectShuffleHotbar : Effect(
     override fun handle(data: TriggerData, config: Config) {
         val victim = data.victim as? Player ?: return
 
-        val hotbar = (0..9)
+        val hotbar = (0..8)
             .map { victim.inventory.getItem(it) }
             .shuffled()
 

@@ -34,7 +34,7 @@ License apply to your use of that work.
 Any use of the Licensed Work in violation of this License will automatically
 terminate your rights under this License for the current and all other
 versions of the Licensed Work.
-
+git
 This License does not grant you any right in any trademark or logo of
 Licensor or its affiliates (provided that you may use a trademark or logo of
 Licensor as expressly required by this License).
