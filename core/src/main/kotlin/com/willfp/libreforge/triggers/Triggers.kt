@@ -68,6 +68,8 @@ import com.willfp.libreforge.triggers.impl.TriggerToggleSneak
 import com.willfp.libreforge.triggers.impl.TriggerToggleSprint
 import com.willfp.libreforge.triggers.impl.TriggerTridentAttack
 import com.willfp.libreforge.triggers.impl.TriggerWinRaid
+import com.willfp.libreforge.triggers.impl.TriggerChangeChunk
+import com.willfp.libreforge.triggers.impl.TriggerDrink
 
 object Triggers {
     private val registry = mutableMapOf<String, Trigger>()
@@ -179,5 +181,7 @@ object Triggers {
         register(TriggerToggleSprint)
         register(TriggerTridentAttack)
         register(TriggerWinRaid)
+        register(TriggerDrink)
+        register(TriggerChangeChunk)
     }
 }
