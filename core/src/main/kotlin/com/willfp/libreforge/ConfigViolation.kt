@@ -38,7 +38,7 @@ class ViolationContext {
     /**
      * Log a violation.
      */
-    fun log(property: Compilable, violation: ConfigViolation) {
+    fun log(property: Compilable<*>, violation: ConfigViolation) {
         plugin.logger.warning("")
         plugin.logger.warning("Invalid configuration for ${property.id} found at $this:")
         plugin.logger.warning("(Cause) Argument '${violation.param}'")
