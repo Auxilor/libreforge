@@ -13,11 +13,11 @@ object EffectFlight : Effect<NoCompileData>("flight") {
 
     override fun onEnable(player: Player, config: Config, identifiers: Identifiers, compileData: NoCompileData) {
         players[player.uniqueId] += identifiers.uuid
-        player.isFlying = players[player.uniqueId].isNotEmpty()
+        player.allowFlight = players[player.uniqueId].isNotEmpty()
     }
 
     override fun onDisable(player: Player, identifiers: Identifiers) {
         players[player.uniqueId] -= identifiers.uuid
-        player.isFlying = players[player.uniqueId].isNotEmpty()
+        player.allowFlight = players[player.uniqueId].isNotEmpty()
     }
 }
