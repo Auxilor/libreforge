@@ -15,7 +15,7 @@ object EffectShuffleHotbar : Effect<NoCompileData>("shuffle_hotbar") {
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val victim = data.victim as? Player ?: return false
 
-        val hotbar = (0..9)
+        val hotbar = (0..8)
             .map { victim.inventory.getItem(it) }
             .shuffled()
 
