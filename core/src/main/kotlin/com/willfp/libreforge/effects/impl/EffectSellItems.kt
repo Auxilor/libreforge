@@ -11,8 +11,7 @@ import com.willfp.libreforge.effects.RunOrder
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import com.willfp.libreforge.triggers.Triggers
-import com.willfp.libreforge.triggers.wrappers.WrappedDropEvent
+import com.willfp.libreforge.triggers.event.EditableDropEvent
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -26,14 +25,14 @@ object EffectSellItems : Effect<Collection<TestableItem>?>("sell_items") {
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: Collection<TestableItem>?): Boolean {
         val player = data.player ?: return false
-        val event = data.event as? WrappedDropEvent<*>
+        val event = data.event as? EditableDropEvent
         val item = data.item
 
         val multiplier = if (config.has("multiplier")) {
             config.getDoubleFromExpression("multiplier", data)
         } else 1.0
 
-        val items = (event?.finalItems ?: listOf(item))
+        val items = (event?.items?.map { it.item } ?: listOf(item))
             .filterNotNull()
             .filter { compileData?.any { t -> t.matches(it) } ?: true }
 

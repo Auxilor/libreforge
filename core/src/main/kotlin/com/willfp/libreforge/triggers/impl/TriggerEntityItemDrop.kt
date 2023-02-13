@@ -3,13 +3,12 @@ package com.willfp.libreforge.triggers.impl
 import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.drops.DropQueue
 import com.willfp.eco.core.events.EntityDeathByEntityEvent
-import com.willfp.eco.core.integrations.mcmmo.McmmoManager
 import com.willfp.eco.core.items.isEmpty
 import com.willfp.eco.util.tryAsPlayer
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import com.willfp.libreforge.triggers.wrappers.WrappedEntityDropEvent
+import com.willfp.libreforge.triggers.event.EditableEntityDropEvent
 import org.bukkit.event.EventHandler
 
 
@@ -33,7 +32,7 @@ object TriggerEntityItemDrop : Trigger("entity_item_drop") {
         val player = event.killer.tryAsPlayer() ?: return
         val originalDrops = event.drops.filterNot { it.isEmpty }
 
-        val wrapped = WrappedEntityDropEvent(event.deathEvent)
+        val editableEvent = EditableEntityDropEvent(event.deathEvent)
 
         this.dispatch(
             player,
@@ -41,24 +40,20 @@ object TriggerEntityItemDrop : Trigger("entity_item_drop") {
                 player = player,
                 victim = entity,
                 location = entity.location,
-                event = wrapped,
+                event = editableEvent,
                 value = originalDrops.sumOf { it.amount }.toDouble()
             )
         )
 
-        val newDrops = originalDrops.map(wrapped::modify)
-        var xp = 0
-        for ((_, i) in newDrops) {
-            xp += i
-        }
+        val newDrops = editableEvent.items
 
         event.drops.clear()
-        event.drops.addAll(newDrops.map { it.first })
+        event.drops.addAll(newDrops.map { it.item })
 
-        if (xp > 0) {
+        if (newDrops.sumOf { it.xp } > 0) {
             DropQueue(player)
                 .setLocation(entity.location)
-                .addXP(xp)
+                .addXP(newDrops.sumOf { it.xp })
                 .push()
         }
     }

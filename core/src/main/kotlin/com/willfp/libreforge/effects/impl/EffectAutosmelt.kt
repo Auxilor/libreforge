@@ -5,11 +5,10 @@ import com.willfp.eco.core.fast.FastItemStack
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
-import com.willfp.libreforge.effects.RunOrder
 import com.willfp.libreforge.triggers.TriggerData
-import com.willfp.libreforge.triggers.Triggers
-import com.willfp.libreforge.triggers.wrappers.WrappedBlockDropEvent
-import com.willfp.libreforge.triggers.wrappers.WrappedDropEvent
+import com.willfp.libreforge.triggers.event.DropResult
+import com.willfp.libreforge.triggers.event.EditableBlockDropEvent
+import com.willfp.libreforge.triggers.event.EditableDropEvent
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
@@ -50,29 +49,33 @@ object EffectAutosmelt : Effect<NoCompileData>("autosmelt") {
         return recipes[input] ?: return Pair(input, 0)
     }
 
-    override fun handle(data: TriggerData, config: Config) {
+    override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val player = data.player
-        val event = data.event as? WrappedDropEvent<*>
+        val event = data.event as? EditableDropEvent
         val item = data.item
 
         if (event != null && player != null) {
             handleEvent(player, event, config)
+            return true
         } else {
             if (item != null) {
                 handleItem(item)
+                return true
             }
         }
+
+        return false
     }
 
-    private fun handleEvent(player: Player, event: WrappedDropEvent<*>, config: Config) {
+    private fun handleEvent(player: Player, event: EditableDropEvent, config: Config) {
         val fortune = FastItemStack.wrap(player.inventory.itemInMainHand)
             .getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS, false)
 
-        event.modifiers += {
+        event.addModifier {
             var (type, xp) = getOutput(it.type)
             it.type = type
 
-            if (fortune > 0 && it.maxStackSize > 1 && event is WrappedBlockDropEvent && fortuneMaterials.contains(type)) {
+            if (fortune > 0 && it.maxStackSize > 1 && event is EditableBlockDropEvent && fortuneMaterials.contains(type)) {
                 it.amount = (Math.random() * (fortune.toDouble() - 1) + 1.1).roundToInt()
                 xp++
             }
@@ -81,7 +84,7 @@ object EffectAutosmelt : Effect<NoCompileData>("autosmelt") {
                 xp = 0
             }
 
-            Pair(it, xp)
+            DropResult(it, xp)
         }
     }
 
