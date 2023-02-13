@@ -51,6 +51,7 @@ import com.willfp.libreforge.conditions.impl.ConditionWearingHelmet
 import com.willfp.libreforge.conditions.impl.ConditionWearingLeggings
 import com.willfp.libreforge.conditions.impl.ConditionWithinRadiusOf
 import com.willfp.libreforge.effects.Effects
+import com.willfp.libreforge.plugin
 import com.willfp.libreforge.separatorAmbivalent
 
 object Conditions {
@@ -67,6 +68,7 @@ object Conditions {
      * Register a new [condition].
      */
     fun register(condition: Condition<*>) {
+        plugin.eventManager.registerListener(condition)
         registry[condition.id] = condition
     }
 

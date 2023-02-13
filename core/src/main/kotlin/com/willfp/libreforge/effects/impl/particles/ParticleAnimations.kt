@@ -3,6 +3,12 @@ package com.willfp.libreforge.effects.impl.particles
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.ViolationContext
+import com.willfp.libreforge.effects.impl.particles.impl.AnimationCircle
+import com.willfp.libreforge.effects.impl.particles.impl.AnimationDoubleHelix
+import com.willfp.libreforge.effects.impl.particles.impl.AnimationGroundSpiral
+import com.willfp.libreforge.effects.impl.particles.impl.AnimationHelix
+import com.willfp.libreforge.effects.impl.particles.impl.AnimationTrace
+import com.willfp.libreforge.effects.impl.particles.impl.AnimationTwirl
 
 @Suppress("UNUSED")
 object ParticleAnimations {
@@ -52,5 +58,14 @@ object ParticleAnimations {
             config,
             compileData,
         )
+    }
+
+    init {
+        register(AnimationCircle)
+        register(AnimationDoubleHelix)
+        register(AnimationGroundSpiral)
+        register(AnimationHelix)
+        register(AnimationTrace)
+        register(AnimationTwirl)
     }
 }

@@ -3,6 +3,10 @@ package com.willfp.libreforge.effects.impl.aoe
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.ViolationContext
+import com.willfp.libreforge.effects.impl.aoe.impl.AOEShapeCircle
+import com.willfp.libreforge.effects.impl.aoe.impl.AOEShapeCone
+import com.willfp.libreforge.effects.impl.aoe.impl.AOEShapeOffsetCircle
+import com.willfp.libreforge.effects.impl.aoe.impl.AOEShapeScanInFront
 
 @Suppress("UNUSED")
 object AOEShapes {
@@ -52,5 +56,12 @@ object AOEShapes {
             config,
             compileData,
         )
+    }
+
+    init {
+        register(AOEShapeCircle)
+        register(AOEShapeCone)
+        register(AOEShapeOffsetCircle)
+        register(AOEShapeScanInFront)
     }
 }

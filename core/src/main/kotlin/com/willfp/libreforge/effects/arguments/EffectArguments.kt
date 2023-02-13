@@ -3,6 +3,13 @@ package com.willfp.libreforge.effects.arguments
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.effects.arguments.impl.ArgumentChainArgs
+import com.willfp.libreforge.effects.arguments.impl.ArgumentChance
+import com.willfp.libreforge.effects.arguments.impl.ArgumentCooldown
+import com.willfp.libreforge.effects.arguments.impl.ArgumentCost
+import com.willfp.libreforge.effects.arguments.impl.ArgumentEvery
+import com.willfp.libreforge.effects.arguments.impl.ArgumentPointCost
+import com.willfp.libreforge.effects.arguments.impl.ArgumentPrice
+import com.willfp.libreforge.effects.arguments.impl.ArgumentRequire
 
 object EffectArguments {
     private val registry = mutableMapOf<String, EffectArgument<*>>()
@@ -50,5 +57,12 @@ object EffectArguments {
 
     init {
         register(ArgumentChainArgs)
+        register(ArgumentChance)
+        register(ArgumentCooldown)
+        register(ArgumentCost)
+        register(ArgumentEvery)
+        register(ArgumentPointCost)
+        register(ArgumentPrice)
+        register(ArgumentRequire)
     }
 }
