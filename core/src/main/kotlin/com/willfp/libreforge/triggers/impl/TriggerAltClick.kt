@@ -1,6 +1,6 @@
 package com.willfp.libreforge.triggers.impl
 
-import com.willfp.libreforge.RAYTRACE_DISTANCE
+import com.willfp.libreforge.LibreforgeConfig
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -95,7 +95,7 @@ object TriggerAltClick : Trigger("alt_click") {
         val location: Location?
         val world = player.location.world ?: return
         val result = player.rayTraceBlocks(
-            RAYTRACE_DISTANCE.toDouble(),
+            LibreforgeConfig.getDouble("raytrace-distance"),
             FluidCollisionMode.NEVER
         )
 
@@ -103,7 +103,7 @@ object TriggerAltClick : Trigger("alt_click") {
             result.hitPosition.toLocation(world)
         } else {
             val dir = player.location.direction.normalize()
-                .multiply(RAYTRACE_DISTANCE.toDouble())
+                .multiply(LibreforgeConfig.getDouble("raytrace-distance"))
             player.location.add(dir)
         }
 

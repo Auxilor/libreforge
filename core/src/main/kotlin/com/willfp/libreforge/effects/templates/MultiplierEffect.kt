@@ -19,7 +19,8 @@ abstract class MultiplierEffect(id: String) : Effect<NoCompileData>(id) {
 
     final override fun onEnable(player: Player, config: Config, identifiers: Identifiers, compileData: NoCompileData) {
         modifiers[player.uniqueId] += object : MultiplierModifier(identifiers.uuid) {
-            override fun getMultiplier(): Double = config.getDoubleFromExpression("multiplier", player)
+            override val multiplier
+                get() = config.getDoubleFromExpression("multiplier", player)
         }
     }
 
