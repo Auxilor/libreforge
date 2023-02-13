@@ -6,7 +6,7 @@ import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.arguments.EffectArguments
 import com.willfp.libreforge.integrations.aureliumskills.impl.ConditionHasMana
 import com.willfp.libreforge.integrations.aureliumskills.impl.EffectAddStat
-import com.willfp.libreforge.integrations.aureliumskills.impl.EffectArgumentManaCost
+import com.willfp.libreforge.integrations.aureliumskills.impl.ArgumentManaCost
 import com.willfp.libreforge.integrations.aureliumskills.impl.EffectSkillXpMultiplier
 
 object AureliumSkillsIntegration : Integration {
@@ -14,7 +14,7 @@ object AureliumSkillsIntegration : Integration {
         Effects.register(EffectAddStat)
         Conditions.register(ConditionHasMana)
         Effects.register(EffectSkillXpMultiplier)
-        EffectArguments.register(EffectArgumentManaCost)
+        EffectArguments.register(ArgumentManaCost)
     }
 
     override fun getPluginName(): String {

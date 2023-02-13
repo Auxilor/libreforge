@@ -1,19 +1,15 @@
 package com.willfp.libreforge.effects.arguments.impl
 
-import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.economy.balance
 import com.willfp.eco.util.NumberUtils
 import com.willfp.eco.util.PlayerUtils
 import com.willfp.eco.util.StringUtils
-import com.willfp.libreforge.LibReforgePlugin
+import com.willfp.libreforge.LibreforgeConfig
 import com.willfp.libreforge.NoCompileData
-import com.willfp.libreforge.effects.ConfiguredEffect
-import com.willfp.libreforge.effects.EffectArgument
 import com.willfp.libreforge.effects.ElementLike
 import com.willfp.libreforge.effects.arguments.EffectArgument
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.DispatchedTrigger
-import com.willfp.libreforge.triggers.InvocationData
 import org.bukkit.Sound
 
 object ArgumentCost : EffectArgument<NoCompileData>("cost") {
@@ -27,20 +23,20 @@ object ArgumentCost : EffectArgument<NoCompileData>("cost") {
 
         val cost = element.config.getDoubleFromExpression("cost", trigger.data)
 
-        val message = plugin.langYml.getMessage("cannot-afford").replace("%cost%", NumberUtils.format(cost))
+        val message = LibreforgeConfig.getMessage("cannot-afford").replace("%cost%", NumberUtils.format(cost))
 
-        if (plugin.configYml.getBool("cannot-afford.in-actionbar")) {
+        if (LibreforgeConfig.getBool("cannot-afford.in-actionbar")) {
             PlayerUtils.getAudience(player).sendActionBar(StringUtils.toComponent(message))
         } else {
             player.sendMessage(message)
         }
 
-        if (plugin.configYml.getBool("cannot-afford.sound.enabled")) {
+        if (LibreforgeConfig.getBool("cannot-afford.sound.enabled")) {
             player.playSound(
                 player.location,
-                Sound.valueOf(plugin.configYml.getString("cannot-afford.sound.sound").uppercase()),
+                Sound.valueOf(LibreforgeConfig.getString("cannot-afford.sound.sound").uppercase()),
                 1.0f,
-                plugin.configYml.getDouble("cannot-afford.sound.pitch").toFloat()
+                LibreforgeConfig.getDouble("cannot-afford.sound.pitch").toFloat()
             )
         }
     }

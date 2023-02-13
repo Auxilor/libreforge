@@ -4,10 +4,10 @@ import com.willfp.eco.core.price.Prices
 import com.willfp.eco.util.NumberUtils
 import com.willfp.eco.util.PlayerUtils
 import com.willfp.eco.util.StringUtils
+import com.willfp.libreforge.LibreforgeConfig
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.effects.ElementLike
 import com.willfp.libreforge.effects.arguments.EffectArgument
-import com.willfp.libreforge.plugin
 import com.willfp.libreforge.toMathContext
 import com.willfp.libreforge.triggers.DispatchedTrigger
 import org.bukkit.Sound
@@ -54,21 +54,21 @@ object ArgumentPrice : EffectArgument<NoCompileData>("price") {
         val display = element.config.getString("price.display")
             .replace("%value%", NumberUtils.format(price.getValue(trigger.player)))
 
-        val message = plugin.langYml.getMessage("cannot-afford-price")
+        val message = LibreforgeConfig.getMessage("cannot-afford-price")
             .replace("%price%", display)
 
-        if (plugin.configYml.getBool("cannot-afford-price.in-actionbar")) {
+        if (LibreforgeConfig.getBool("cannot-afford-price.in-actionbar")) {
             PlayerUtils.getAudience(trigger.player).sendActionBar(StringUtils.toComponent(message))
         } else {
             trigger.player.sendMessage(message)
         }
 
-        if (plugin.configYml.getBool("cannot-afford-price.sound.enabled")) {
+        if (LibreforgeConfig.getBool("cannot-afford-price.sound.enabled")) {
             trigger.player.playSound(
                 trigger.player.location,
-                Sound.valueOf(plugin.configYml.getString("cannot-afford-price.sound.sound").uppercase()),
+                Sound.valueOf(LibreforgeConfig.getString("cannot-afford-price.sound.sound").uppercase()),
                 1.0f,
-                plugin.configYml.getDouble("cannot-afford-price.sound.pitch").toFloat()
+                LibreforgeConfig.getDouble("cannot-afford-price.sound.pitch").toFloat()
             )
         }
     }

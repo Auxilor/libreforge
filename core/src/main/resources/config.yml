@@ -1,0 +1,67 @@
+# Options for lrcdb (https://lrcdb.auxilor.io), a website to share configs
+# with other server owners, so you can get more configs without making them
+# yourself!
+
+author: "Unknown Author" # The name attached to configs you export
+
+# Options about automatically sharing configs you create
+share-configs:
+  # If you want all your configs to automatically be publicly available,
+  # set this to true. This really helps out other users!
+  publicly: false
+
+  # If you don't want your configs to be usable to gather information about
+  # plugin usage or to improve the plugins in the future, disable this.
+  # Nothing identifying is shared.
+  enabled: true
+
+# If you disable share-configs, you can still share select configs publicly
+# with /lrcdb export <config>.
+
+cooldown:
+  in-actionbar: true
+  sound:
+    enabled: true
+    sound: "BLOCK_NOTE_BLOCK_PLING"
+    pitch: 0.5
+
+cannot-afford:
+  in-actionbar: true
+  sound:
+    enabled: true
+    sound: "BLOCK_NOTE_BLOCK_PLING"
+    pitch: 0.5
+
+cannot-afford-type:
+  in-actionbar: true
+  sound:
+    enabled: true
+    sound: "BLOCK_NOTE_BLOCK_PLING"
+    pitch: 0.5
+
+cannot-afford-price:
+  in-actionbar: true
+  sound:
+    enabled: true
+    sound: "BLOCK_NOTE_BLOCK_PLING"
+    pitch: 0.5
+
+point-names: # If you have point names that look ugly (e.g. souls) then you can map them to nice names to be shown to players.
+  souls: "Souls"
+
+use-faster-move-trigger: true # Disable if you want the move trigger to detect sub-1-block movements
+raytrace-distance: 80 # The distance that alt_click should check for a location
+
+messages:
+  cannot-afford: "&cYou can't afford to do this! &fCost: &a$$%cost%"
+  cannot-afford-type: "&cYou can't afford to do this! &fCost: &a%cost% %type%"
+  cannot-afford-price: "&cYou can't afford to do this! &fPrice: %price%"
+  on-cooldown: "&cThis effect is on cooldown! &fTime left: &a%seconds% seconds"
+  cannot-transmit: "&cYou can't transmit here!"
+  must-specify-lrcdb-id: "&cYou must specify the ID of the config to download! Not sure what this means? Go to &alrcdb.auxilor.io"
+  lrcdb-import-error: "&cError importing config: &f%message%"
+  lrcdb-import-success: "&fImported &a%name%&f! Reload the plugin to install it"
+  must-specify-config-name: "&cYou must specify the config name!"
+  invalid-config-name: "&cInvalid config name!"
+  lrcdb-export-error: "&cError exporting config: &f%message%"
+  lrcdb-export-success: "&fExported &a%name%&f! View it on &alrcdb.auxilor.io&f, or share your config ID: &f%id%"
