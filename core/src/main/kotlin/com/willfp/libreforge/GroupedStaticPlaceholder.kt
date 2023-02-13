@@ -8,11 +8,6 @@ class GroupedStaticPlaceholder constructor(
 ) {
     constructor(
         identifier: String,
-        value: String
-    ) : this(listOf(identifier), value)
-
-    constructor(
-        identifier: String,
         value: Any
     ) : this(listOf(identifier), value.toString())
 

@@ -107,6 +107,7 @@ import com.willfp.libreforge.effects.impl.EffectTriggerCustom
 import com.willfp.libreforge.effects.impl.EffectXpMultiplier
 import com.willfp.libreforge.filters.Filters
 import com.willfp.libreforge.mutators.Mutators
+import com.willfp.libreforge.plugin
 import com.willfp.libreforge.separatorAmbivalent
 import com.willfp.libreforge.triggers.Triggers
 import java.util.UUID
@@ -133,6 +134,7 @@ object Effects {
      * Register a new [effect].
      */
     fun register(effect: Effect<*>) {
+        plugin.eventManager.registerListener(effect)
         registry[effect.id] = effect
     }
 

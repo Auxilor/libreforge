@@ -6,10 +6,11 @@ import com.willfp.libreforge.getActiveEffects
 import com.willfp.libreforge.triggers.event.TriggerDispatchEvent
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import org.bukkit.event.Listener
 
 abstract class Trigger(
     val id: String
-) {
+): Listener {
     /**
      * The TriggerData parameters that are sent.
      */

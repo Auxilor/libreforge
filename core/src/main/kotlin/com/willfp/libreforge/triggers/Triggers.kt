@@ -1,5 +1,6 @@
 package com.willfp.libreforge.triggers
 
+import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.impl.TriggerAltClick
 import com.willfp.libreforge.triggers.impl.TriggerBite
 import com.willfp.libreforge.triggers.impl.TriggerBlockItemDrop
@@ -11,12 +12,14 @@ import com.willfp.libreforge.triggers.impl.TriggerCatchEntity
 import com.willfp.libreforge.triggers.impl.TriggerCatchFish
 import com.willfp.libreforge.triggers.impl.TriggerCatchFishFail
 import com.willfp.libreforge.triggers.impl.TriggerChangeArmor
+import com.willfp.libreforge.triggers.impl.TriggerChangeChunk
 import com.willfp.libreforge.triggers.impl.TriggerChangeWorld
 import com.willfp.libreforge.triggers.impl.TriggerConsume
 import com.willfp.libreforge.triggers.impl.TriggerCraft
 import com.willfp.libreforge.triggers.impl.TriggerDamageItem
 import com.willfp.libreforge.triggers.impl.TriggerDeath
 import com.willfp.libreforge.triggers.impl.TriggerDeployElytra
+import com.willfp.libreforge.triggers.impl.TriggerDrink
 import com.willfp.libreforge.triggers.impl.TriggerDropItem
 import com.willfp.libreforge.triggers.impl.TriggerEmptyBucket
 import com.willfp.libreforge.triggers.impl.TriggerEnchantItem
@@ -68,8 +71,6 @@ import com.willfp.libreforge.triggers.impl.TriggerToggleSneak
 import com.willfp.libreforge.triggers.impl.TriggerToggleSprint
 import com.willfp.libreforge.triggers.impl.TriggerTridentAttack
 import com.willfp.libreforge.triggers.impl.TriggerWinRaid
-import com.willfp.libreforge.triggers.impl.TriggerChangeChunk
-import com.willfp.libreforge.triggers.impl.TriggerDrink
 
 object Triggers {
     private val registry = mutableMapOf<String, Trigger>()
@@ -92,6 +93,7 @@ object Triggers {
      * Register a new [trigger].
      */
     fun register(trigger: Trigger) {
+        plugin.eventManager.registerListener(trigger)
         registry[trigger.id] = trigger
     }
 
