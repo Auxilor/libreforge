@@ -24,3 +24,6 @@ class PointsMap(
 
 val Player.points: PointsMap
     get() = PointsMap(this)
+
+fun String.toFriendlyPointName() =
+    LibreforgeConfig.getFormattedString("point-names.$this")

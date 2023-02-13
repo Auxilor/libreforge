@@ -1,10 +1,11 @@
 package com.willfp.libreforge.lrcdb
 
+import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.config.ConfigType
 import com.willfp.eco.core.config.config
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.config.readConfig
-import com.willfp.libreforge.LibReforgePlugin
+import com.willfp.libreforge.LibreforgeConfig
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
@@ -16,20 +17,20 @@ private val executor = Executors.newSingleThreadExecutor()
 
 internal fun <T> onLrcdbThread(action: () -> T): Future<T> = executor.submit(action)
 
+private val client = HttpClient.newBuilder().build()
+
 data class ExportableConfig(
     val name: String,
     val config: Config
 ) {
-    fun export(plugin: LibReforgePlugin, private: Boolean): ExportResponse {
+    fun export(plugin: EcoPlugin, private: Boolean): ExportResponse {
         val body = config(ConfigType.JSON) {
             "name" to name
             "plugin" to plugin.name
-            "author" to plugin.lrcdbYml.getString("author")
+            "author" to LibreforgeConfig.getString("author")
             "contents" to config.toPlaintext()
             "isPrivate" to private
         }.toPlaintext()
-
-        val client = HttpClient.newBuilder().build()
 
         val request = HttpRequest.newBuilder()
             .uri(URI.create("https://lrcdb.auxilor.io/api/v1/addConfig"))

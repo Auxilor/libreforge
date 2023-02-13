@@ -1,9 +1,10 @@
 package com.willfp.libreforge.lrcdb
 
+import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.command.impl.Subcommand
 import com.willfp.eco.core.config.ConfigType
 import com.willfp.eco.core.config.readConfig
-import com.willfp.libreforge.LibReforgePlugin
+import com.willfp.libreforge.LibreforgeConfig
 import org.bukkit.command.CommandSender
 import java.io.BufferedReader
 import java.io.File
@@ -12,7 +13,7 @@ import java.net.URL
 
 class CommandImport(
     private val directory: String,
-    plugin: LibReforgePlugin
+    plugin: EcoPlugin
 ) : Subcommand(
     plugin,
     "import",
@@ -21,7 +22,7 @@ class CommandImport(
 ) {
     override fun onExecute(sender: CommandSender, args: List<String>) {
         if (args.isEmpty()) {
-            sender.sendMessage(plugin.langYml.getMessage("must-specify-lrcdb-id"))
+            sender.sendMessage(LibreforgeConfig.getMessage("must-specify-lrcdb-id"))
             return
         }
 
@@ -44,7 +45,7 @@ class CommandImport(
 
             if (isError) {
                 sender.sendMessage(
-                    plugin.langYml.getMessage("lrcdb-import-error")
+                    LibreforgeConfig.getMessage("lrcdb-import-error")
                         .replace(
                             "%message%",
                             res.getStringOrNull("message") ?: "HTTP Error $code"
@@ -56,7 +57,7 @@ class CommandImport(
                 val contents = config.getString("contents")
 
                 sender.sendMessage(
-                    plugin.langYml.getMessage("lrcdb-import-success")
+                    LibreforgeConfig.getMessage("lrcdb-import-success")
                         .replace("%name%", name)
                 )
 
