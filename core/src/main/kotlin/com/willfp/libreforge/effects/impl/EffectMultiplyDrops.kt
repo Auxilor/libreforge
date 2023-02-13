@@ -8,8 +8,8 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import com.willfp.libreforge.triggers.Triggers
-import com.willfp.libreforge.triggers.wrappers.WrappedDropEvent
+import com.willfp.libreforge.triggers.event.DropResult
+import com.willfp.libreforge.triggers.event.EditableDropEvent
 import kotlin.math.roundToInt
 
 object EffectMultiplyDrops : Effect<NoCompileData>("multiply_drops") {
@@ -22,9 +22,9 @@ object EffectMultiplyDrops : Effect<NoCompileData>("multiply_drops") {
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
-        val event = data.event as? WrappedDropEvent<*> ?: return
+        val event = data.event as? EditableDropEvent ?: return false
 
-        event.modifiers += {
+        event.addModifier {
             val fortune = config.getIntFromExpression("fortune", data)
 
             var matches = true
@@ -37,7 +37,9 @@ object EffectMultiplyDrops : Effect<NoCompileData>("multiply_drops") {
                 it.amount = (Math.random() * (fortune.toDouble() - 1) + 1.1).roundToInt()
             }
 
-            Pair(it, 0)
+            DropResult(it, 0)
         }
+
+        return true
     }
 }
