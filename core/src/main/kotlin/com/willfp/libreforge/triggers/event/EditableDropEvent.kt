@@ -61,7 +61,7 @@ abstract class EditableDropEvent : Event(), Cancellable {
 
     companion object {
         @JvmStatic
-        val handlerList = HandlerList()
+        private val handlerList = HandlerList()
 
         @JvmStatic
         fun getHandlerList(): HandlerList {

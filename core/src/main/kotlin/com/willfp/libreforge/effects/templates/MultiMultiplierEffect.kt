@@ -29,11 +29,13 @@ abstract class MultiMultiplierEffect<T>(id: String) : Effect<NoCompileData>(id) 
             val element = getElement(config.getString(key)) ?: return
 
             modifiers[player.uniqueId][element] += object : MultiplierModifier(identifiers.uuid) {
-                override fun getMultiplier() = config.getDoubleFromExpression("multiplier", player)
+                override val multiplier
+                    get() = config.getDoubleFromExpression("multiplier", player)
             }
         } else {
             globalModifiers[player.uniqueId] += object : MultiplierModifier(identifiers.uuid) {
-                override fun getMultiplier() = config.getDoubleFromExpression("multiplier", player)
+                override val multiplier
+                    get() = config.getDoubleFromExpression("multiplier", player)
             }
         }
     }

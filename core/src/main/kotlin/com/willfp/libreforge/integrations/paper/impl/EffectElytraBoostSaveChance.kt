@@ -22,7 +22,8 @@ object EffectElytraBoostSaveChance : Effect<NoCompileData>("elytra_boost_save_ch
 
     override fun onEnable(player: Player, config: Config, identifiers: Identifiers, compileData: NoCompileData) {
         modifiers[player.uniqueId] += object : MultiplierModifier(identifiers.uuid) {
-            override fun getMultiplier() = config.getDoubleFromExpression("chance", player)
+            override val multiplier
+                get() = config.getDoubleFromExpression("chance", player)
         }
     }
 

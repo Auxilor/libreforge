@@ -1,7 +1,7 @@
 package com.willfp.libreforge.triggers.impl
 
 import com.willfp.eco.core.Prerequisite
-import com.willfp.libreforge.RAYTRACE_DISTANCE
+import com.willfp.libreforge.LibreforgeConfig
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
@@ -47,7 +47,7 @@ object TriggerGroupStatic : TriggerGroup("static") {
 
         fun dispatch(player: Player) {
             val block = if (Prerequisite.HAS_PAPER.isMet) {
-                player.getTargetBlock(RAYTRACE_DISTANCE)
+                player.getTargetBlock(LibreforgeConfig.getInt("raytrace-distance"))
             } else null
 
             this.dispatch(
