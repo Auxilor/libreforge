@@ -1,7 +1,7 @@
 package com.willfp.libreforge.integrations.ecojobs
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.ecojobs.api.EcoJobsAPI
+import com.willfp.ecojobs.api.giveJobExperience
 import com.willfp.ecojobs.jobs.Jobs
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.effects.Effect
@@ -18,8 +18,7 @@ class EffectGiveJobXp : Effect(
     override fun handle(data: TriggerData, config: Config) {
         val player = data.player ?: return
 
-        EcoJobsAPI.instance.giveJobExperience(
-            player,
+        player.giveJobExperience(
             Jobs.getByID(config.getString("job")) ?: return,
             config.getDoubleFromExpression("amount", player)
         )

@@ -1,8 +1,8 @@
 package com.willfp.libreforge.integrations.ecojobs
 
 import com.willfp.eco.core.integrations.mcmmo.McmmoManager
-import com.willfp.ecojobs.api.EcoJobsAPI
 import com.willfp.ecojobs.api.event.PlayerJobLeaveEvent
+import com.willfp.ecojobs.api.getJobLevel
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -29,7 +29,7 @@ class TriggerLeaveJob : Trigger(
                 player = player,
                 location = player.location
             ),
-            value = EcoJobsAPI.instance.getJobLevel(player, event.job).toDouble()
+            value = player.getJobLevel(event.job).toDouble()
         )
     }
 }

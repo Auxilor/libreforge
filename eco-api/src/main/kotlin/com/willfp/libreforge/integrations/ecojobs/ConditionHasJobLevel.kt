@@ -1,8 +1,8 @@
 package com.willfp.libreforge.integrations.ecojobs
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.ecojobs.api.EcoJobsAPI
 import com.willfp.ecojobs.api.event.PlayerJobLevelUpEvent
+import com.willfp.ecojobs.api.getJobLevel
 import com.willfp.ecojobs.jobs.Jobs
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.conditions.Condition
@@ -23,8 +23,7 @@ class ConditionHasJobLevel : Condition("has_job_level") {
     }
 
     override fun isConditionMet(player: Player, config: Config): Boolean {
-        return EcoJobsAPI.instance.getJobLevel(
-            player,
+        return player.getJobLevel(
             Jobs.getByID(config.getString("job").lowercase()) ?: return false
         ) >= config.getIntFromExpression("level", player)
     }
