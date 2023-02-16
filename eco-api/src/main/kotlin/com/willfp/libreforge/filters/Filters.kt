@@ -16,6 +16,7 @@ import com.willfp.libreforge.filters.filters.FilterOnlyBosses
 import com.willfp.libreforge.filters.filters.FilterOnlyNonBosses
 import com.willfp.libreforge.filters.filters.FilterPlayerName
 import com.willfp.libreforge.filters.filters.FilterPlayerPlaced
+import com.willfp.libreforge.filters.filters.FilterSelfPlaced
 import com.willfp.libreforge.filters.filters.FilterPotionEffect
 import com.willfp.libreforge.filters.filters.FilterProjectiles
 import com.willfp.libreforge.filters.filters.FilterText
@@ -39,6 +40,7 @@ object Filters {
     val ABOVE_HEALTH_PERCENT: Filter = FilterAboveHealthPercent
     val FULLY_GROWN: Filter = FilterFullyGrown
     val PLAYER_PLACED: Filter = FilterPlayerPlaced
+    val SELF_PLACED: Filter = FilterSelfPlaced
     val TEXT: Filter = FilterText
     val TEXT_CONTAINS: Filter = FilterTextContains
     val IS_BEHIND_VICTIM: Filter = FilterIsBehindVictim
