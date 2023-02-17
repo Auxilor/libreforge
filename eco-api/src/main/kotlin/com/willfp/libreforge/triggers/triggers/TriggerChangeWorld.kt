@@ -6,6 +6,7 @@ import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.event.EventHandler
+import org.bukkit.event.player.PlayerChangedWorldEvent
 import org.bukkit.event.player.PlayerMoveEvent
 
 class TriggerChangeWorld : Trigger(
@@ -13,29 +14,23 @@ class TriggerChangeWorld : Trigger(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,
         TriggerParameter.VELOCITY,
-        TriggerParameter.EVENT,
         TriggerParameter.ITEM
     )
 ) {
     @EventHandler(ignoreCancelled = true)
-    fun handle(event: PlayerMoveEvent) {
+    fun handle(event: PlayerChangedWorldEvent) {
         if (McmmoManager.isFake(event)) {
             return
         }
 
         val player = event.player
 
-        if (event.to.world != event.from.world) {
-            return
-        }
-
         this.processTrigger(
             player,
             TriggerData(
                 player = player,
-                location = event.to,
+                location = event.player.location,
                 velocity = player.velocity,
-                event = GenericCancellableEvent(event),
                 item = player.inventory.itemInMainHand
             )
         )
