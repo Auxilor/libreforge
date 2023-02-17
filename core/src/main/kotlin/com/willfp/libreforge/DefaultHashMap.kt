@@ -4,10 +4,13 @@ package com.willfp.libreforge
  * HashMap with a default value.
  */
 open class DefaultHashMap<K, V>(
-    private val default: V
-) : MutableMap<K, V> by HashMap() {
+    private val default: V,
+    private val map: MutableMap<K, V> = HashMap()
+) : MutableMap<K, V> by map {
     override fun get(key: K): V =
-        this.getOrDefault(key, default)
+        map.getOrPut(key) { default }
+
+    override fun toString() = map.toString()
 }
 
 /**
