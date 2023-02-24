@@ -8,13 +8,10 @@ import org.bukkit.command.CommandSender
 import org.bukkit.util.StringUtil
 import java.util.concurrent.TimeUnit
 
-class CommandExport(
-    plugin: EcoPlugin,
-    private val configGetter: () -> Collection<ExportableConfig>
-) : Subcommand(
+class CommandLrcdbExport(plugin: EcoPlugin) : Subcommand(
     plugin,
     "export",
-    "${plugin.name.lowercase()}.command.export",
+    "libreforge.command.export",
     false
 ) {
     // Using 0 as the key

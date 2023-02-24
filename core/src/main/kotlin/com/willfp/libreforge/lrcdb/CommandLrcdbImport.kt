@@ -11,13 +11,10 @@ import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
 
-class CommandImport(
-    private val directory: String,
-    plugin: EcoPlugin
-) : Subcommand(
+class CommandLrcdbImport(plugin: EcoPlugin) : Subcommand(
     plugin,
     "import",
-    "${plugin.name.lowercase()}.command.import",
+    "libreforge.command.import",
     false
 ) {
     override fun onExecute(sender: CommandSender, args: List<String>) {
