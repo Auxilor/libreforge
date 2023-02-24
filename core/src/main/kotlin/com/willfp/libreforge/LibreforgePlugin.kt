@@ -23,14 +23,12 @@ import com.willfp.libreforge.integrations.tmmobcoins.TMMobcoinsIntegration
 import com.willfp.libreforge.integrations.vault.VaultIntegration
 import org.bukkit.event.Listener
 
-private lateinit var libreforgePlugin: LibreforgePlugin
-
-internal val plugin: EcoPlugin
-    get() = libreforgePlugin
+internal lateinit var plugin: EcoPlugin
+    private set
 
 class LibreforgePlugin : EcoPlugin() {
     init {
-        libreforgePlugin = this
+        plugin = this
     }
 
     override fun handleEnable() {
