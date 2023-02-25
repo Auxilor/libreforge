@@ -1,8 +1,9 @@
 package com.willfp.libreforge.triggers
 
-import com.willfp.libreforge.Holder
-import com.willfp.libreforge.activeEffects
-import com.willfp.libreforge.getActiveEffects
+import com.willfp.libreforge.ProvidedHolder
+import com.willfp.libreforge.getProvidedActiveEffects
+import com.willfp.libreforge.providedActiveEffects
+import com.willfp.libreforge.triggers.DispatchedTrigger.Companion.inheritPlaceholders
 import com.willfp.libreforge.triggers.event.TriggerDispatchEvent
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
@@ -10,7 +11,7 @@ import org.bukkit.event.Listener
 
 abstract class Trigger(
     val id: String
-): Listener {
+) : Listener {
     /**
      * The TriggerData parameters that are sent.
      */
@@ -22,7 +23,7 @@ abstract class Trigger(
     protected fun dispatch(
         player: Player,
         data: TriggerData,
-        forceHolders: Collection<Holder>? = null
+        forceHolders: Collection<ProvidedHolder<*>>? = null
     ) {
         val dispatch = DispatchedTrigger(player, this, data)
 
@@ -32,10 +33,15 @@ abstract class Trigger(
             return
         }
 
-        val effects = forceHolders?.getActiveEffects(player) ?: player.activeEffects
+        val effects = forceHolders?.getProvidedActiveEffects(player) ?: player.providedActiveEffects
 
-        for (block in effects) {
-            block.tryTrigger(dispatch)
+        for ((blocks, holder) in effects) {
+            val withHolder = data.copy(holder = holder)
+            val dispatchWithHolder = DispatchedTrigger(player, this, withHolder).inheritPlaceholders(dispatch)
+
+            for (block in blocks) {
+                block.tryTrigger(dispatchWithHolder)
+            }
         }
     }
 }

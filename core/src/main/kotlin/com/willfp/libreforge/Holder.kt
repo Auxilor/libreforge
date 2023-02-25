@@ -5,6 +5,7 @@ import com.willfp.eco.util.NumberUtils
 import com.willfp.libreforge.conditions.ConditionList
 import com.willfp.libreforge.effects.EffectList
 import org.bukkit.NamespacedKey
+import org.bukkit.inventory.ItemStack
 import java.util.Objects
 
 /**
@@ -28,6 +29,58 @@ interface Holder {
      */
     val conditions: ConditionList
 }
+
+/**
+ * A blank holder is a holder with no effects or conditions.
+ *
+ * It's used in triggers in order to be able to provide an
+ * empty provided holder so the holders can then be attached
+ * to a copy of the data before it's processed by effects.
+ */
+object BlankHolder : Holder {
+    override val id = plugin.namespacedKeyFactory.create("blank")
+
+    override val effects = EffectList(emptyList())
+    override val conditions = ConditionList(emptyList())
+}
+
+/**
+ * A provided holder is a holder with the item that has provided it,
+ * i.e. The physical ItemStack that has the enchantment on it.
+ */
+interface ProvidedHolder<T> {
+    /**
+     * The holder.
+     */
+    val holder: Holder
+
+    /**
+     * The item.
+     */
+    val item: T
+
+    // Destructuring support
+    operator fun component1() = holder
+    operator fun component2() = item
+}
+
+/**
+ * An empty provided holder is a provided holder with no item.
+ *
+ * Used internally to provide a default value for TriggerData.
+ */
+object EmptyProvidedHolder : ProvidedHolder<Nothing?> {
+    override val holder = BlankHolder
+    override val item: Nothing? = null
+}
+
+/**
+ * A provided holder for an ItemStack.
+ */
+class ItemProvidedHolder(
+    override val holder: Holder,
+    override val item: ItemStack
+) : ProvidedHolder<ItemStack>
 
 /**
  * A template that a may create a holder when given an ID.

@@ -1,6 +1,6 @@
 package com.willfp.libreforge.triggers.impl
 
-import com.willfp.libreforge.Holder
+import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.holders
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.Trigger
@@ -63,7 +63,7 @@ object TriggerTridentAttack : Trigger("trident_attack") {
                 velocity = trident.velocity,
                 value = event.finalDamage
             ),
-            forceHolders = trident.getMetadata(META_KEY).firstOrNull()?.value() as? Collection<Holder>
+            forceHolders = trident.getMetadata(META_KEY).firstOrNull()?.value() as? Collection<ProvidedHolder<*>>
         )
     }
 }
