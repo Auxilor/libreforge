@@ -17,4 +17,11 @@ data class DispatchedTrigger(
     fun addPlaceholder(placeholder: GroupedStaticPlaceholder) {
         _placeholders += placeholder
     }
+
+    companion object {
+        fun DispatchedTrigger.inheritPlaceholders(other: DispatchedTrigger): DispatchedTrigger {
+            _placeholders += other._placeholders
+            return this
+        }
+    }
 }

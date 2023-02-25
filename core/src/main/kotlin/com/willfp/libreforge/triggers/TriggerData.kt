@@ -1,5 +1,7 @@
 package com.willfp.libreforge.triggers
 
+import com.willfp.libreforge.EmptyProvidedHolder
+import com.willfp.libreforge.ProvidedHolder
 import org.bukkit.Location
 import org.bukkit.block.Block
 import org.bukkit.entity.LivingEntity
@@ -17,6 +19,13 @@ internal object BlankTrigger : Trigger("internal:blank") {
 }
 
 data class TriggerData(
+    /*
+    In order to get the holder from the trigger data without
+    having to pass it around everywhere, we just pass it in
+    Trigger#dispatch by copying over the trigger data.
+     */
+    val holder: ProvidedHolder<*> = EmptyProvidedHolder,
+
     val player: Player? = null,
     val victim: LivingEntity? = null,
     val block: Block? = null,
