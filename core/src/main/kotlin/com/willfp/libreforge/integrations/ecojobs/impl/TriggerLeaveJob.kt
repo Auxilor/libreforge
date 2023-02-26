@@ -1,7 +1,7 @@
 package com.willfp.libreforge.integrations.ecojobs.impl
 
-import com.willfp.ecojobs.api.EcoJobsAPI
 import com.willfp.ecojobs.api.event.PlayerJobLeaveEvent
+import com.willfp.ecojobs.api.getJobLevel
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -23,7 +23,7 @@ object TriggerLeaveJob : Trigger("leave_job") {
             TriggerData(
                 player = player,
                 location = player.location,
-                value = EcoJobsAPI.instance.getJobLevel(player, event.job).toDouble()
+                value = player.getJobLevel(event.job).toDouble()
             )
         )
     }
