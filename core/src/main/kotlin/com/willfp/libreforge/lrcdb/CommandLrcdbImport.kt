@@ -4,7 +4,6 @@ import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.command.impl.Subcommand
 import com.willfp.eco.core.config.ConfigType
 import com.willfp.eco.core.config.readConfig
-import com.willfp.libreforge.LibreforgeConfig
 import org.bukkit.command.CommandSender
 import java.io.BufferedReader
 import java.io.File
@@ -19,7 +18,7 @@ class CommandLrcdbImport(plugin: EcoPlugin) : Subcommand(
 ) {
     override fun onExecute(sender: CommandSender, args: List<String>) {
         if (args.isEmpty()) {
-            sender.sendMessage(LibreforgeConfig.getMessage("must-specify-lrcdb-id"))
+            sender.sendMessage(plugin.langYml.getMessage("must-specify-lrcdb-id"))
             return
         }
 
@@ -42,7 +41,7 @@ class CommandLrcdbImport(plugin: EcoPlugin) : Subcommand(
 
             if (isError) {
                 sender.sendMessage(
-                    LibreforgeConfig.getMessage("lrcdb-import-error")
+                    plugin.langYml.getMessage("lrcdb-import-error")
                         .replace(
                             "%message%",
                             res.getStringOrNull("message") ?: "HTTP Error $code"
@@ -54,7 +53,7 @@ class CommandLrcdbImport(plugin: EcoPlugin) : Subcommand(
                 val contents = config.getString("contents")
 
                 sender.sendMessage(
-                    LibreforgeConfig.getMessage("lrcdb-import-success")
+                    plugin.langYml.getMessage("lrcdb-import-success")
                         .replace("%name%", name)
                 )
 

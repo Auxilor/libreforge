@@ -3,11 +3,11 @@ package com.willfp.libreforge.effects.arguments.impl
 import com.willfp.eco.util.NumberUtils
 import com.willfp.eco.util.PlayerUtils
 import com.willfp.eco.util.StringUtils
-import com.willfp.libreforge.LibreforgeConfig
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.effects.ElementLike
 import com.willfp.libreforge.effects.arguments.EffectArgument
 import com.willfp.libreforge.getDoubleFromExpression
+import com.willfp.libreforge.plugin
 import com.willfp.libreforge.points
 import com.willfp.libreforge.toFriendlyPointName
 import com.willfp.libreforge.triggers.DispatchedTrigger
@@ -29,22 +29,22 @@ object ArgumentPointCost : EffectArgument<NoCompileData>("point_cost") {
         val cost = element.config.getDoubleFromExpression("point_cost.cost", trigger.data)
         val type = element.config.getString("point_cost.type")
 
-        val message = LibreforgeConfig.getMessage("cannot-afford-type")
+        val message = plugin.langYml.getMessage("cannot-afford-type")
             .replace("%cost%", NumberUtils.format(cost))
             .replace("%type%", type.toFriendlyPointName())
 
-        if (LibreforgeConfig.getBool("cannot-afford-type.in-actionbar")) {
+        if (plugin.configYml.getBool("cannot-afford-type.in-actionbar")) {
             PlayerUtils.getAudience(player).sendActionBar(StringUtils.toComponent(message))
         } else {
             player.sendMessage(message)
         }
 
-        if (LibreforgeConfig.getBool("cannot-afford-type.sound.enabled")) {
+        if (plugin.configYml.getBool("cannot-afford-type.sound.enabled")) {
             player.playSound(
                 player.location,
-                Sound.valueOf(LibreforgeConfig.getString("cannot-afford-type.sound.sound").uppercase()),
+                Sound.valueOf(plugin.configYml.getString("cannot-afford-type.sound.sound").uppercase()),
                 1.0f,
-                LibreforgeConfig.getDouble("cannot-afford-type.sound.pitch").toFloat()
+                plugin.configYml.getDouble("cannot-afford-type.sound.pitch").toFloat()
             )
         }
     }

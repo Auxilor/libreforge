@@ -5,7 +5,6 @@ import com.willfp.eco.core.config.ConfigType
 import com.willfp.eco.core.config.config
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.config.readConfig
-import com.willfp.libreforge.LibreforgeConfig
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
@@ -27,7 +26,7 @@ data class ExportableConfig(
         val body = config(ConfigType.JSON) {
             "name" to name
             "plugin" to plugin.name
-            "author" to LibreforgeConfig.getString("author")
+            "author" to plugin.configYml.getString("author")
             "contents" to config.toPlaintext()
             "isPrivate" to private
         }.toPlaintext()

@@ -3,11 +3,11 @@ package com.willfp.libreforge.effects.arguments.impl
 import com.willfp.eco.util.PlayerUtils
 import com.willfp.eco.util.StringUtils
 import com.willfp.eco.util.formatEco
-import com.willfp.libreforge.LibreforgeConfig
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.effects.ElementLike
 import com.willfp.libreforge.effects.arguments.EffectArgument
 import com.willfp.libreforge.getDoubleFromExpression
+import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.DispatchedTrigger
 import org.bukkit.Sound
 import java.util.UUID
@@ -50,21 +50,21 @@ object ArgumentCooldown : EffectArgument<NoCompileData>("cooldown") {
             ?.replace("%seconds%", cooldown.toString())
             ?.formatEco(trigger.player, true)
 
-            ?: LibreforgeConfig.getMessage("on-cooldown")
+            ?: plugin.langYml.getMessage("on-cooldown")
                 .replace("%seconds%", cooldown.toString())
 
-        if (LibreforgeConfig.getBool("cooldown.in-actionbar")) {
+        if (plugin.configYml.getBool("cooldown.in-actionbar")) {
             PlayerUtils.getAudience(player).sendActionBar(StringUtils.toComponent(message))
         } else {
             player.sendMessage(message)
         }
 
-        if (LibreforgeConfig.getBool("cooldown.sound.enabled")) {
+        if (plugin.configYml.getBool("cooldown.sound.enabled")) {
             player.playSound(
                 player.location,
-                Sound.valueOf(LibreforgeConfig.getString("cooldown.sound.sound").uppercase()),
+                Sound.valueOf(plugin.configYml.getString("cooldown.sound.sound").uppercase()),
                 1.0f,
-                LibreforgeConfig.getDouble("cooldown.sound.pitch").toFloat()
+                plugin.configYml.getDouble("cooldown.sound.pitch").toFloat()
             )
         }
     }
