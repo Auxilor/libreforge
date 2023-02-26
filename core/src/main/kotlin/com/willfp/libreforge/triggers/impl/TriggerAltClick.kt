@@ -1,6 +1,7 @@
 package com.willfp.libreforge.triggers.impl
 
 import com.willfp.libreforge.LibreforgeConfig
+import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -99,18 +100,19 @@ object TriggerAltClick : Trigger("alt_click") {
             FluidCollisionMode.NEVER
         )
 
-        location = if (result != null) {
-            result.hitPosition.toLocation(world)
-        } else {
-            val dir = player.location.direction.normalize()
-                .multiply(LibreforgeConfig.getDouble("raytrace-distance"))
-            player.location.add(dir)
-        }
-
         val entityResult = world.rayTraceEntities(
             player.eyeLocation,
             player.eyeLocation.direction, 50.0, 3.0
         ) { entity: Entity? -> entity is LivingEntity }
+
+        location = result?.hitPosition?.toLocation(world)
+            ?: if (entityResult != null) {
+                entityResult.hitPosition.toLocation(world)
+            } else {
+                val dir = player.location.direction.normalize()
+                    .multiply(plugin.configYml.getDoubleFromExpression("raytrace-distance"))
+                player.location.add(dir)
+            }
 
         val victim = entityResult?.hitEntity as? LivingEntity
 
@@ -122,7 +124,7 @@ object TriggerAltClick : Trigger("alt_click") {
                 location = location,
                 event = event,
                 item = player.inventory.itemInMainHand,
-                block = victim?.location?.block ?: result?.hitBlock
+                block = event.clickedBlock ?: result?.hitBlock ?: victim?.location?.block
             )
         )
     }
