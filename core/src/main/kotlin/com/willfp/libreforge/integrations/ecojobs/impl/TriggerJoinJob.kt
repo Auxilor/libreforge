@@ -1,7 +1,7 @@
 package com.willfp.libreforge.integrations.ecojobs.impl
 
-import com.willfp.ecojobs.api.EcoJobsAPI
 import com.willfp.ecojobs.api.event.PlayerJobJoinEvent
+import com.willfp.ecojobs.api.getJobLevel
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -25,7 +25,7 @@ object TriggerJoinJob : Trigger("join_job") {
                 player = player,
                 location = player.location,
                 event = event,
-                value = EcoJobsAPI.instance.getJobLevel(player, event.job).toDouble()
+                value = player.getJobLevel(event.job).toDouble()
             )
         )
     }

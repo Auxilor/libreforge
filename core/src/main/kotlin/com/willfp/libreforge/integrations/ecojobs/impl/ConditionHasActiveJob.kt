@@ -1,7 +1,7 @@
 package com.willfp.libreforge.integrations.ecojobs.impl
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.ecojobs.api.EcoJobsAPI
+import com.willfp.ecojobs.api.activeJobs
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
@@ -13,7 +13,6 @@ object ConditionHasActiveJob : Condition<NoCompileData>("has_active_job") {
     }
 
     override fun isMet(player: Player, config: Config, compileData: NoCompileData): Boolean {
-        return EcoJobsAPI.instance.getActiveJob(player)?.id ==
-                config.getString("job").lowercase()
+        return player.activeJobs.any { it.id == config.getString("job").lowercase() }
     }
 }
