@@ -38,7 +38,10 @@ class LibreforgePlugin : EcoPlugin() {
     }
 
     override fun loadListeners(): List<Listener> {
-        TODO("Not yet implemented")
+        return listOf(
+            TriggerPlaceholderListener,
+            EffectCollisionFixer
+        )
     }
 
     override fun loadIntegrationLoaders(): List<IntegrationLoader> {

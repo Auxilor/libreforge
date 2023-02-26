@@ -3,7 +3,6 @@ package com.willfp.libreforge.lrcdb
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.command.impl.Subcommand
-import com.willfp.libreforge.LibreforgeConfig
 import org.bukkit.command.CommandSender
 import org.bukkit.util.StringUtil
 import java.util.concurrent.TimeUnit
@@ -26,7 +25,7 @@ class CommandLrcdbExport(plugin: EcoPlugin) : Subcommand(
 
     override fun onExecute(sender: CommandSender, args: List<String>) {
         if (args.isEmpty()) {
-            sender.sendMessage(LibreforgeConfig.getMessage("must-specify-config-name"))
+            sender.sendMessage(plugin.langYml.getMessage("must-specify-config-name"))
             return
         }
 
@@ -35,7 +34,7 @@ class CommandLrcdbExport(plugin: EcoPlugin) : Subcommand(
         val exportable = configs.firstOrNull { it.name == name }
 
         if (exportable == null) {
-            sender.sendMessage(LibreforgeConfig.getMessage("invalid-config-name"))
+            sender.sendMessage(plugin.langYml.getMessage("invalid-config-name"))
             return
         }
 
@@ -44,13 +43,13 @@ class CommandLrcdbExport(plugin: EcoPlugin) : Subcommand(
 
             if (response.success) {
                 sender.sendMessage(
-                    LibreforgeConfig.getMessage("lrcdb-export-success")
+                    plugin.langYml.getMessage("lrcdb-export-success")
                         .replace("%name%", name)
                         .replace("%id%", response.body.getString("id"))
                 )
             } else {
                 sender.sendMessage(
-                    LibreforgeConfig.getMessage("lrcdb-export-error")
+                    plugin.langYml.getMessage("lrcdb-export-error")
                         .replace(
                             "%message%",
                             response.body.getStringOrNull("message") ?: "HTTP Error ${response.code}"

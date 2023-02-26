@@ -34,4 +34,4 @@ val Player.points: PointsMap
     get() = PointsMap(this)
 
 fun String.toFriendlyPointName() =
-    LibreforgeConfig.getFormattedString("point-names.$this")
+    plugin.configYml.getFormattedString("point-names.$this")
