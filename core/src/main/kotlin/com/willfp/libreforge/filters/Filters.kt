@@ -1,6 +1,7 @@
 package com.willfp.libreforge.filters
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.registry.Registry
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.filters.impl.FilterAboveHealthPercent
 import com.willfp.libreforge.filters.impl.FilterBlocks
@@ -24,23 +25,7 @@ import com.willfp.libreforge.filters.impl.FilterTextContains
 import com.willfp.libreforge.filters.impl.FilterVictimConditions
 import com.willfp.libreforge.filters.impl.FilterVictimName
 
-object Filters {
-    private val registry = mutableMapOf<String, Filter<*, *>>()
-
-    /**
-     * Get a filter by [id].
-     */
-    fun getByID(id: String): Filter<*, *>? {
-        return registry[id]
-    }
-
-    /**
-     * Register a new [filter].
-     */
-    fun register(filter: Filter<*, *>) {
-        registry[filter.id] = filter
-    }
-
+object Filters : Registry<Filter<*, *>>() {
     /**
      * Compile a [config] into a FilterList a given [context].
      */
@@ -48,7 +33,7 @@ object Filters {
         val blocks = mutableListOf<FilterBlock<*, *>>()
 
         for (key in config.getKeys(false)) {
-            val filter = getByID(key) ?: continue
+            val filter = get(key) ?: continue
             blocks += makeBlock(filter, config, context) ?: continue
         }
 

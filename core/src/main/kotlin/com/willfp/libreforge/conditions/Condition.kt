@@ -2,6 +2,7 @@ package com.willfp.libreforge.conditions
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Compilable
+import com.willfp.libreforge.plugin
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
 
@@ -21,4 +22,8 @@ abstract class Condition<T>(
         config: Config,
         compileData: T
     ): Boolean
+
+    override fun onRegister() {
+        plugin.eventManager.registerListener(this)
+    }
 }

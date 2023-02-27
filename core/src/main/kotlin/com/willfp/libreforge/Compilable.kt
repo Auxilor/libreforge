@@ -1,6 +1,7 @@
 package com.willfp.libreforge
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.registry.Registrable
 
 /*
 Sometimes you don't need any compile data,
@@ -18,7 +19,7 @@ interface Compiled<T> {
     val compileData: T
 }
 
-abstract class Compilable<T> {
+abstract class Compilable<T> : Registrable {
     /**
      * The ID.
      */
@@ -73,4 +74,6 @@ abstract class Compilable<T> {
 
         return violations.isNotEmpty()
     }
+
+    override fun getID() = id
 }

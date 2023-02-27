@@ -1,4 +1,4 @@
-package com.willfp.libreforge.lrcdb
+package com.willfp.libreforge.configs.lrcdb
 
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.willfp.eco.core.EcoPlugin

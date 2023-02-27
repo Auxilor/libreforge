@@ -1,6 +1,7 @@
 package com.willfp.libreforge.conditions
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.registry.Registry
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.conditions.impl.ConditionAboveBalance
@@ -51,27 +52,9 @@ import com.willfp.libreforge.conditions.impl.ConditionWearingHelmet
 import com.willfp.libreforge.conditions.impl.ConditionWearingLeggings
 import com.willfp.libreforge.conditions.impl.ConditionWithinRadiusOf
 import com.willfp.libreforge.effects.Effects
-import com.willfp.libreforge.plugin
 import com.willfp.libreforge.separatorAmbivalent
 
-object Conditions {
-    private val registry = mutableMapOf<String, Condition<*>>()
-
-    /**
-     * Get a condition by [id].
-     */
-    fun getByID(id: String): Condition<*>? {
-        return registry[id]
-    }
-
-    /**
-     * Register a new [condition].
-     */
-    fun register(condition: Condition<*>) {
-        plugin.eventManager.registerListener(condition)
-        registry[condition.id] = condition
-    }
-
+object Conditions : Registry<Condition<*>>() {
     /**
      * Compile a list of [configs] into a ConditionList in a given [context].
      */
@@ -84,7 +67,7 @@ object Conditions {
     fun compile(cfg: Config, context: ViolationContext): ConditionBlock<*>? {
         val config = cfg.separatorAmbivalent()
 
-        val condition = getByID(config.getString("id"))
+        val condition = get(config.getString("id"))
 
         if (condition == null) {
             context.log(ConfigViolation("id", "Invalid condition ID specified!"))

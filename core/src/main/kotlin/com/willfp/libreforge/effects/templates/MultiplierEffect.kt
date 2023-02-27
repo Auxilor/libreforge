@@ -1,7 +1,7 @@
 package com.willfp.libreforge.effects.templates
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.KeyToMutableListMap
+import com.willfp.eco.core.map.listMap
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -15,7 +15,7 @@ abstract class MultiplierEffect(id: String) : Effect<NoCompileData>(id) {
         require("multiplier", "You must specify the multiplier!")
     }
 
-    private val modifiers = KeyToMutableListMap<UUID, MultiplierModifier>()
+    private val modifiers = listMap<UUID, MultiplierModifier>()
 
     final override fun onEnable(player: Player, config: Config, identifiers: Identifiers, compileData: NoCompileData) {
         modifiers[player.uniqueId] += object : MultiplierModifier(identifiers.uuid) {

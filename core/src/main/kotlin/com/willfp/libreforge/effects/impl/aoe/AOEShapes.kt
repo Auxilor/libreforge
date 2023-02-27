@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl.aoe
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.registry.Registry
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.effects.impl.aoe.impl.AOEShapeCircle
@@ -9,28 +10,12 @@ import com.willfp.libreforge.effects.impl.aoe.impl.AOEShapeOffsetCircle
 import com.willfp.libreforge.effects.impl.aoe.impl.AOEShapeScanInFront
 
 @Suppress("UNUSED")
-object AOEShapes {
-    private val registry = mutableMapOf<String, AOEShape<*>>()
-
-    /**
-     * Get a shape by [id].
-     */
-    fun getByID(id: String): AOEShape<*>? {
-        return registry[id]
-    }
-
-    /**
-     * Register a new [shape].
-     */
-    fun register(shape: AOEShape<*>) {
-        registry[shape.id] = shape
-    }
-
+object AOEShapes : Registry<AOEShape<*>>() {
     /**
      * Compile a [config] into a AOEBlock in a given [context].
      */
     fun compile(config: Config, context: ViolationContext): AOEBlock<*>? {
-        val shape = getByID(config.getString("id"))
+        val shape = get(config.getString("id"))
 
         if (shape == null) {
             context.log(ConfigViolation("id", "Invalid shape ID specified!"))

@@ -1,7 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.KeyToMutableListMap
+import com.willfp.eco.core.map.listMap
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
@@ -12,7 +12,7 @@ import org.bukkit.event.player.PlayerInteractEvent
 import java.util.UUID
 
 object EffectFeatherStep : Effect<NoCompileData>("feather_step") {
-    private val players = KeyToMutableListMap<UUID, UUID>()
+    private val players = listMap<UUID, UUID>()
 
     override fun onEnable(player: Player, config: Config, identifiers: Identifiers, compileData: NoCompileData) {
         players[player.uniqueId] += identifiers.uuid

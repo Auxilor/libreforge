@@ -1,8 +1,8 @@
 package com.willfp.libreforge.effects.templates
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.KeyToMutableListMap
-import com.willfp.libreforge.KeyToMutableListMapMap
+import com.willfp.eco.core.map.listMap
+import com.willfp.eco.core.map.nestedListMap
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -11,13 +11,13 @@ import com.willfp.libreforge.effects.MultiplierModifier
 import org.bukkit.entity.Player
 import java.util.UUID
 
-abstract class MultiMultiplierEffect<T>(id: String) : Effect<NoCompileData>(id) {
+abstract class MultiMultiplierEffect<T : Any>(id: String) : Effect<NoCompileData>(id) {
     override val arguments = arguments {
         require("multiplier", "You must specify the multiplier!")
     }
 
-    private val globalModifiers = KeyToMutableListMap<UUID, MultiplierModifier>()
-    private val modifiers = KeyToMutableListMapMap<UUID, T, MultiplierModifier>()
+    private val globalModifiers = listMap<UUID, MultiplierModifier>()
+    private val modifiers = nestedListMap<UUID, T, MultiplierModifier>()
 
     /**
      * The key to look for in arguments, e.g. "stat" or "skill".

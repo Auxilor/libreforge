@@ -1,4 +1,4 @@
-package com.willfp.libreforge.lrcdb
+package com.willfp.libreforge.configs.lrcdb
 
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.config.ConfigType
@@ -26,7 +26,7 @@ data class ExportableConfig(
         val body = config(ConfigType.JSON) {
             "name" to name
             "plugin" to plugin.name
-            "author" to plugin.configYml.getString("author")
+            "author" to plugin.configYml.getString("lrcdb.author")
             "contents" to config.toPlaintext()
             "isPrivate" to private
         }.toPlaintext()

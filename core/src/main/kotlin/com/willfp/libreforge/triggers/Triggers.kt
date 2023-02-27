@@ -1,6 +1,6 @@
 package com.willfp.libreforge.triggers
 
-import com.willfp.libreforge.plugin
+import com.willfp.eco.core.registry.Registry
 import com.willfp.libreforge.triggers.impl.TriggerAltClick
 import com.willfp.libreforge.triggers.impl.TriggerBite
 import com.willfp.libreforge.triggers.impl.TriggerBlockItemDrop
@@ -72,29 +72,20 @@ import com.willfp.libreforge.triggers.impl.TriggerToggleSprint
 import com.willfp.libreforge.triggers.impl.TriggerTridentAttack
 import com.willfp.libreforge.triggers.impl.TriggerWinRaid
 
-object Triggers {
-    private val registry = mutableMapOf<String, Trigger>()
+object Triggers : Registry<Trigger>() {
     private val groupRegistry = mutableMapOf<String, TriggerGroup>()
 
     /**
      * Get a trigger by [id].
      */
-    fun getByID(id: String): Trigger? {
+    override fun get(id: String): Trigger? {
         for ((prefix, group) in groupRegistry) {
             if (id.startsWith("${prefix}_")) {
                 return group.create(id.removePrefix("${prefix}_"))
             }
         }
 
-        return registry[id.lowercase()]
-    }
-
-    /**
-     * Register a new [trigger].
-     */
-    fun register(trigger: Trigger) {
-        plugin.eventManager.registerListener(trigger)
-        registry[trigger.id] = trigger
+        return super.get(id)
     }
 
     /**
@@ -116,7 +107,6 @@ object Triggers {
     init {
         register(TriggerGroupCustom)
         register(TriggerGroupStatic)
-
         register(TriggerAltClick)
         register(TriggerBite)
         register(TriggerBlockItemDrop)

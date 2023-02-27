@@ -1,7 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.DefaultHashMap
+import com.willfp.eco.core.map.nestedListMap
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -16,7 +16,7 @@ object EffectBlockCommands : Effect<NoCompileData>("block_commands") {
         require("commands", "You must specify the commands to block!")
     }
 
-    private val players = DefaultHashMap<UUID, MutableMap<UUID, List<String>>>(mutableMapOf())
+    private val players = nestedListMap<UUID, UUID, String>()
 
     override fun onEnable(player: Player, config: Config, identifiers: Identifiers, compileData: NoCompileData) {
         val commands = players[player.uniqueId]

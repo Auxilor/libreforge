@@ -1,6 +1,7 @@
 package com.willfp.libreforge.mutators
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.registry.Registry
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.mutators.impl.MutatorBlockToLocation
@@ -16,23 +17,7 @@ import com.willfp.libreforge.mutators.impl.MutatorTranslateLocation
 import com.willfp.libreforge.mutators.impl.MutatorVictimAsPlayer
 import com.willfp.libreforge.mutators.impl.MutatorVictimToOwner
 
-object Mutators {
-    private val registry = mutableMapOf<String, Mutator<*>>()
-
-    /**
-     * Get a mutator by [id].
-     */
-    fun getByID(id: String): Mutator<*>? {
-        return registry[id]
-    }
-
-    /**
-     * Register a new [mutator].
-     */
-    fun register(mutator: Mutator<*>) {
-        registry[mutator.id] = mutator
-    }
-
+object Mutators: Registry<Mutator<*>>() {
     /**
      * Compile a list of [configs] into a MutatorList in a given [context].
      */
@@ -43,7 +28,7 @@ object Mutators {
      * Compile a [config] into a MutatorBlock in a given [context].
      */
     fun compile(config: Config, context: ViolationContext): MutatorBlock<*>? {
-        val mutator = getByID(config.getString("id"))
+        val mutator = get(config.getString("id"))
 
         if (mutator == null) {
             context.log(ConfigViolation("id", "Invalid mutator ID specified!"))

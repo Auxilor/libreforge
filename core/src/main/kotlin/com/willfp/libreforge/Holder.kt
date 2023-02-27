@@ -75,6 +75,15 @@ object EmptyProvidedHolder : ProvidedHolder<Nothing?> {
 }
 
 /**
+ * Provided holder for nothing.
+ */
+class SimpleProvidedHolder(
+    override val holder: Holder
+) : ProvidedHolder<Nothing?> {
+    override val item: Nothing? = null
+}
+
+/**
  * A provided holder for an ItemStack.
  */
 class ItemProvidedHolder(
