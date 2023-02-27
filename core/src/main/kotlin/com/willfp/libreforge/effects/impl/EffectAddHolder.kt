@@ -1,9 +1,10 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.map.listMap
 import com.willfp.libreforge.Holder
 import com.willfp.libreforge.HolderTemplate
-import com.willfp.libreforge.KeyToMutableListMap
+import com.willfp.libreforge.SimpleProvidedHolder
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Conditions
@@ -27,10 +28,12 @@ object EffectAddHolder : Effect<HolderTemplate>("add_holder") {
         require("duration", "You must specify the duration (in ticks)!")
     }
 
-    private val holders = KeyToMutableListMap<UUID, Holder>()
+    private val holders = listMap<UUID, Holder>()
 
     init {
-        registerHolderProvider { holders[it.uniqueId] }
+        registerHolderProvider {
+            holders[it.uniqueId].map { h -> SimpleProvidedHolder(h) }
+        }
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: HolderTemplate): Boolean {

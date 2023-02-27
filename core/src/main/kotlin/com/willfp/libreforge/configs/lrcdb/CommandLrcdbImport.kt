@@ -1,4 +1,4 @@
-package com.willfp.libreforge.lrcdb
+package com.willfp.libreforge.configs.lrcdb
 
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.command.impl.Subcommand

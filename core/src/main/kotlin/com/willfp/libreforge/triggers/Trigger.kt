@@ -1,7 +1,9 @@
 package com.willfp.libreforge.triggers
 
+import com.willfp.eco.core.registry.Registrable
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.getProvidedActiveEffects
+import com.willfp.libreforge.plugin
 import com.willfp.libreforge.providedActiveEffects
 import com.willfp.libreforge.triggers.DispatchedTrigger.Companion.inheritPlaceholders
 import com.willfp.libreforge.triggers.event.TriggerDispatchEvent
@@ -11,7 +13,7 @@ import org.bukkit.event.Listener
 
 abstract class Trigger(
     val id: String
-) : Listener {
+) : Listener, Registrable {
     /**
      * The TriggerData parameters that are sent.
      */
@@ -44,4 +46,10 @@ abstract class Trigger(
             }
         }
     }
+
+    override fun onRegister() {
+        plugin.eventManager.registerListener(this)
+    }
+
+    override fun getID() = id
 }

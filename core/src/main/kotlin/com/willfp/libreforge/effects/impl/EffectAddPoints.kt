@@ -1,7 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.DefaultHashMap
+import com.willfp.eco.core.map.nestedMap
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -16,7 +16,7 @@ object EffectAddPoints : Effect<NoCompileData>("add_points") {
         require("amount", "You must specify the amount of points!")
     }
 
-    private val tracker = DefaultHashMap<UUID, MutableMap<UUID, AddedPoint>>(mutableMapOf())
+    private val tracker = nestedMap<UUID, UUID, AddedPoint>()
 
     override fun onEnable(player: Player, config: Config, identifiers: Identifiers, compileData: NoCompileData) {
         val added = tracker[player.uniqueId]

@@ -1,8 +1,9 @@
 package com.willfp.libreforge.effects
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.map.defaultMap
 import com.willfp.libreforge.Compilable
-import com.willfp.libreforge.DefaultHashMap
+import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.DispatchedTrigger
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
@@ -16,7 +17,7 @@ abstract class Effect<T>(
     override val id: String
 ) : Compilable<T>(), Listener {
     // Maps Player UUIDs to the effect count.
-    private val effectCounter = DefaultHashMap<UUID, Int>(0)
+    private val effectCounter = defaultMap<UUID, Int>(0)
 
     /**
      * If the effect should be reloaded.
@@ -158,5 +159,9 @@ abstract class Effect<T>(
         val count = effectCounter[player.uniqueId]
         onDisable(player, identifierFactory.makeIdentifiers(count))
         onEnable(player, config.config, identifierFactory.makeIdentifiers(count), config.compileData)
+    }
+
+    override fun onRegister() {
+        plugin.eventManager.registerListener(this)
     }
 }

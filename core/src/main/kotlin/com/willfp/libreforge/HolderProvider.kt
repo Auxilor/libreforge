@@ -1,6 +1,7 @@
 package com.willfp.libreforge
 
 import com.github.benmanes.caffeine.cache.Caffeine
+import com.willfp.eco.core.map.defaultMap
 import com.willfp.libreforge.effects.EffectBlock
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
@@ -76,8 +77,8 @@ fun Player.updateHolders() {
 }
 
 // Effects that were active on previous update
-private val previousStates = DefaultHashMap<UUID, Map<Set<EffectBlock>, ProvidedHolder<*>>>(emptyMap())
-private val flattenedPreviousStates = DefaultHashMap<UUID, Set<EffectBlock>>(emptySet()) // Optimisation.
+private val previousStates = defaultMap<UUID, Map<Set<EffectBlock>, ProvidedHolder<*>>>(emptyMap())
+private val flattenedPreviousStates = defaultMap<UUID, Set<EffectBlock>>(emptySet()) // Optimisation.
 
 /**
  * Flatten down to purely the effects.

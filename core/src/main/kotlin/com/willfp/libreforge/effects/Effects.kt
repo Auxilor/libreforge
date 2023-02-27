@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.registry.Registry
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.conditions.Conditions
@@ -107,35 +108,18 @@ import com.willfp.libreforge.effects.impl.EffectTriggerCustom
 import com.willfp.libreforge.effects.impl.EffectXpMultiplier
 import com.willfp.libreforge.filters.Filters
 import com.willfp.libreforge.mutators.Mutators
-import com.willfp.libreforge.plugin
 import com.willfp.libreforge.separatorAmbivalent
 import com.willfp.libreforge.triggers.Triggers
 import java.util.UUID
 
-object Effects {
-    private val registry = mutableMapOf<String, Effect<*>>()
+object Effects : Registry<Effect<*>>() {
     private val identifiedChains = mutableMapOf<String, Chain>()
-
-    /**
-     * Get an effect by [id].
-     */
-    fun getByID(id: String): Effect<*>? {
-        return registry[id]
-    }
 
     /**
      * Get a chain by [id].
      */
     fun getChainByID(id: String): Chain? {
         return identifiedChains[id]
-    }
-
-    /**
-     * Register a new [effect].
-     */
-    fun register(effect: Effect<*>) {
-        plugin.eventManager.registerListener(effect)
-        registry[effect.id] = effect
     }
 
     /**
@@ -164,7 +148,7 @@ object Effects {
         val mutators = Mutators.compile(config.getSubsections("mutators"), context.with("mutators"))
         val filters = Filters.compile(config.getSubsection("filters"), context.with("filters"))
         val triggers = config.getStrings("triggers").mapNotNull {
-            Triggers.getByID(it)
+            Triggers[it]
         }
 
         val effectConfigs = if (config.has("id")) {
@@ -256,7 +240,7 @@ object Effects {
     }
 
     private fun compileElement(config: Config, context: ViolationContext): ChainElement<*>? {
-        val effect = getByID(config.getString("id"))
+        val effect = this.get(config.getString("id"))
 
         if (effect == null) {
             context.log(ConfigViolation("id", "Invalid effect ID specified!"))

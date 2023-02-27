@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl.particles
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.registry.Registry
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.effects.impl.particles.impl.AnimationCircle
@@ -11,28 +12,12 @@ import com.willfp.libreforge.effects.impl.particles.impl.AnimationTrace
 import com.willfp.libreforge.effects.impl.particles.impl.AnimationTwirl
 
 @Suppress("UNUSED")
-object ParticleAnimations {
-    private val registry = mutableMapOf<String, ParticleAnimation<*>>()
-
-    /**
-     * Get an animation by [id].
-     */
-    fun getByID(id: String): ParticleAnimation<*>? {
-        return registry[id]
-    }
-
-    /**
-     * Register a new [animation].
-     */
-    fun register(animation: ParticleAnimation<*>) {
-        registry[animation.id] = animation
-    }
-
+object ParticleAnimations : Registry<ParticleAnimation<*>>() {
     /**
      * Compile a [config] into a ParticleAnimationBloc in a given [context].
      */
     fun compile(config: Config, context: ViolationContext): ParticleAnimationBlock<*>? {
-        val animation = getByID(config.getString("id"))
+        val animation = get(config.getString("id"))
 
         if (animation == null) {
             context.log(ConfigViolation("id", "Invalid shape ID specified!"))
