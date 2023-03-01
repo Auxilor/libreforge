@@ -4,6 +4,7 @@ import com.willfp.eco.core.integrations.mcmmo.McmmoManager
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import com.willfp.libreforge.triggers.GenericCancellableEvent
 import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerItemDamageEvent
 
@@ -27,7 +28,8 @@ class TriggerDamageItem : Trigger(
             TriggerData(
                 player = player,
                 location = player.location,
-                item = event.item
+                item = event.item,
+                event = GenericCancellableEvent(event)
             ),
             event.damage.toDouble()
         )
