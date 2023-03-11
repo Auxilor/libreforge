@@ -12,6 +12,7 @@ class TriggerDamageItem : Trigger(
     "damage_item", listOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,
+        TriggerParameter.EVENT,
         TriggerParameter.ITEM
     )
 ) {
