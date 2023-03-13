@@ -25,10 +25,10 @@ object EffectParticleAnimation : Effect<ParticleAnimationBlock<*>?>("particle_an
     override val arguments = arguments {
         require("particle", "You must specify the particle!")
         require("animation", "You must specify a valid animation!", Config::getString) {
-            ParticleAnimations.getByID(it) != null
+            ParticleAnimations[it] != null
         }
 
-        inherit("particle_args") { ParticleAnimations.getByID(it.getString("animation")) }
+        inherit("particle_args") { ParticleAnimations[it.getString("animation")] }
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: ParticleAnimationBlock<*>?): Boolean {

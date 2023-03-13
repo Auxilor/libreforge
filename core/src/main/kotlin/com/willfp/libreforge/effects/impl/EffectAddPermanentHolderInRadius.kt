@@ -4,6 +4,7 @@ import com.github.benmanes.caffeine.cache.Caffeine
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Holder
 import com.willfp.libreforge.HolderTemplate
+import com.willfp.libreforge.SimpleProvidedHolder
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Conditions
@@ -28,13 +29,13 @@ object EffectAddPermanentHolderInRadius : Effect<HolderTemplate>("add_permanent_
 
     private val nearbyCache = Caffeine.newBuilder()
         .expireAfterWrite(250L, TimeUnit.MILLISECONDS)
-        .build<UUID, Collection<Holder>>()
+        .build<UUID, Collection<SimpleProvidedHolder>>()
 
     init {
         registerHolderProvider { player ->
             nearbyCache.get(player.uniqueId) { _ ->
                 holders.filter { it.canApplyTo(player) }
-                    .map { it.holder }
+                    .map { SimpleProvidedHolder(it.holder) }
             }
         }
     }
