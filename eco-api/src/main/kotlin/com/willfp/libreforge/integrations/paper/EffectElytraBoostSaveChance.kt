@@ -52,7 +52,7 @@ class EffectElytraBoostSaveChance : Effect("elytra_boost_save_chance") {
         var chance = 100.0
 
         for (modifier in (modifiers[player.uniqueId] ?: emptyList())) {
-            chance *= (100 - modifier.multiplier)
+            chance *= ((100 - modifier.multiplier) / 100)
         }
 
         if (NumberUtils.randFloat(0.0, 100.0) > chance) {
