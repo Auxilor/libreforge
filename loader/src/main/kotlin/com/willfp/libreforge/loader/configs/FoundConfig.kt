@@ -4,7 +4,7 @@ import com.willfp.eco.core.config.ConfigType
 import com.willfp.eco.core.config.ExtendableConfig
 import com.willfp.libreforge.loader.LibreforgePlugin
 
-class FoundConfig(
+internal class FoundConfig(
     name: String,
     category: ConfigCategory,
     plugin: LibreforgePlugin
