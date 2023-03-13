@@ -39,7 +39,10 @@ abstract class LibreforgePlugin : EcoPlugin(), LibreforgePluginLike {
 
     private fun loadCategories() {
         for (category in loadConfigCategories()) {
+            category.makeHandle(this)
+
             copyConfigs(category)
+
             loaderCategories += category
             categories.register(category.handle)
         }
