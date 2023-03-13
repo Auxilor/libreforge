@@ -2,8 +2,11 @@ package com.willfp.libreforge.configs.lrcdb
 
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.command.impl.Subcommand
+import com.willfp.eco.core.commands.notifyNull
 import com.willfp.eco.core.config.ConfigType
 import com.willfp.eco.core.config.readConfig
+import com.willfp.libreforge.Plugins
+import com.willfp.libreforge.configs.onLrcdbThread
 import org.bukkit.command.CommandSender
 import java.io.BufferedReader
 import java.io.File
@@ -13,7 +16,7 @@ import java.net.URL
 class CommandLrcdbImport(plugin: EcoPlugin) : Subcommand(
     plugin,
     "import",
-    "libreforge.command.import",
+    "libreforge.command.lrcdb",
     false
 ) {
     override fun onExecute(sender: CommandSender, args: List<String>) {
@@ -49,6 +52,10 @@ class CommandLrcdbImport(plugin: EcoPlugin) : Subcommand(
                 )
             } else {
                 val config = res.getSubsection("config")
+
+                val pluginName = config.getString("plugin")
+                val categoryID = config.getString("category")
+
                 val name = config.getString("name")
                 val contents = config.getString("contents")
 
@@ -56,6 +63,9 @@ class CommandLrcdbImport(plugin: EcoPlugin) : Subcommand(
                     plugin.langYml.getMessage("lrcdb-import-success")
                         .replace("%name%", name)
                 )
+
+                val plugin = Plugins[pluginName].notifyNull("plugin-not-installed") ?: return@onLrcdbThread
+                val directory = plugin.categories[categoryID]!!.directory
 
                 val dir = File(plugin.dataFolder, "$directory/imports")
                 dir.mkdirs()

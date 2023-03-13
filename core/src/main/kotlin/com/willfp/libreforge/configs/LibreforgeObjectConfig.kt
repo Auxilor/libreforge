@@ -1,10 +1,12 @@
-package com.willfp.libreforge.configs.lrcdb
+package com.willfp.libreforge.configs
 
-import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.config.ConfigType
 import com.willfp.eco.core.config.config
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.config.readConfig
+import com.willfp.eco.core.registry.Registrable
+import com.willfp.libreforge.plugin
+import java.io.File
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
@@ -12,20 +14,24 @@ import java.net.http.HttpResponse
 import java.util.concurrent.Executors
 import java.util.concurrent.Future
 
+
 private val executor = Executors.newSingleThreadExecutor()
 
 internal fun <T> onLrcdbThread(action: () -> T): Future<T> = executor.submit(action)
 
 private val client = HttpClient.newBuilder().build()
 
-data class ExportableConfig(
+data class LibreforgeObjectConfig(
+    val config: Config,
+    val file: File,
     val name: String,
-    val config: Config
-) {
-    fun export(plugin: EcoPlugin, private: Boolean): ExportResponse {
+    val category: LibreforgeConfigCategory
+) : Registrable {
+    fun share(private: Boolean): ExportResponse {
         val body = config(ConfigType.JSON) {
             "name" to name
-            "plugin" to plugin.name
+            "plugin" to category.plugin.name
+            "category" to category.id
             "author" to plugin.configYml.getString("lrcdb.author")
             "contents" to config.toPlaintext()
             "isPrivate" to private
@@ -60,10 +66,16 @@ data class ExportableConfig(
             json
         )
     }
-}
 
-data class ExportResponse(
-    val success: Boolean,
-    val code: Int,
-    val body: Config
-)
+    override fun onRegister() {
+        if (!plugin.configYml.getBool("lrcdb.share-configs.enabled")) {
+            return
+        }
+
+        share(!plugin.configYml.getBool("lrcdb.share-configs.publicly"))
+    }
+
+    override fun getID(): String {
+        return name
+    }
+}

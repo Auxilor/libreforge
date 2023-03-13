@@ -2,7 +2,9 @@ package com.willfp.libreforge
 
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.Prerequisite
+import com.willfp.eco.core.command.impl.PluginCommand
 import com.willfp.eco.core.integrations.IntegrationLoader
+import com.willfp.libreforge.configs.lrcdb.CommandLrcdb
 import com.willfp.libreforge.integrations.aureliumskills.AureliumSkillsIntegration
 import com.willfp.libreforge.integrations.boosters.BoostersIntegration
 import com.willfp.libreforge.integrations.ecoarmor.EcoArmorIntegration
@@ -26,7 +28,7 @@ import org.bukkit.event.Listener
 internal lateinit var plugin: EcoPlugin
     private set
 
-class LibreforgePlugin : EcoPlugin() {
+class LibreforgeSpigotPlugin : EcoPlugin() {
     init {
         plugin = this
     }
@@ -63,6 +65,12 @@ class LibreforgePlugin : EcoPlugin() {
             IntegrationLoader("Talismans") { TalismansIntegration.load() },
             IntegrationLoader("TMMobcoins") { TMMobcoinsIntegration.load() },
             IntegrationLoader("Vault") { VaultIntegration.load() }
+        )
+    }
+
+    override fun loadPluginCommands(): List<PluginCommand> {
+        return listOf(
+            CommandLrcdb(this)
         )
     }
 }
