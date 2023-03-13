@@ -1,0 +1,44 @@
+name: libreforge
+version: ${projectVersion}
+main: com.willfp.libreforge.LibreforgeSpigotPlugin
+api-version: 1.17
+authors: [ Auxilor ]
+website: willfp.com
+load: STARTUP
+depend:
+  - eco
+softdepend:
+  - AureliumSkills
+  - Boosters
+  - EcoArmor
+  - EcoBosses
+  - EcoEnchants
+  - EcoItems
+  - EcoJobs
+  - EcoPets
+  - EcoSkills
+  - Jobs
+  - LevelledMobs
+  - mcMMO
+  - Reforges
+  - Scyther
+  - Talismans
+  - TMMobcoins
+  - Vault
+
+commands:
+  lrcdb:
+    description: Handles lrcdb
+    permission: libreforge.command.lrcdb
+
+permissions:
+  libreforge.*:
+    description: All libreforge permissions
+    default: op
+    children:
+      libreforge.command.*: true
+  libreforge.command.*:
+    description: All commands
+    default: op
+    children:
+      libreforge.command.lrcdb: true
