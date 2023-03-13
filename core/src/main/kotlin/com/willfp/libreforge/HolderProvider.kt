@@ -101,21 +101,6 @@ fun Collection<ProvidedHolder<*>>.getProvidedActiveEffects(player: Player): Map<
 }
 
 /**
- * Get active effects for a [player] from holders.
- */
-fun Collection<ProvidedHolder<*>>.getActiveEffects(player: Player) =
-    this.map { it.holder }
-        .getActiveEffects(player)
-
-/**
- * Get active effects for a [player] from holders.
- */
-fun Collection<Holder>.getActiveEffects(player: Player) =
-    this.filter { it.conditions.areMet(player) }
-        .flatMap { it.getActiveEffects(player) }
-        .toSet()
-
-/**
  * Get active effects for a [player].
  */
 fun Holder.getActiveEffects(player: Player) =
