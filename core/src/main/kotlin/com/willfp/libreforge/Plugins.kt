@@ -14,4 +14,6 @@ interface LibreforgePluginLike : Registrable, PluginLike {
     val categories: Registry<LibreforgeConfigCategory>
 
     override fun getID() = plugin.name.lowercase()
+        .replace(" ", "_")
+        .replace("-", "_")
 }

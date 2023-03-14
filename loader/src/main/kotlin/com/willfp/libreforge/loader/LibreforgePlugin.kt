@@ -5,25 +5,28 @@ import com.willfp.eco.core.LifecyclePosition
 import com.willfp.eco.core.config.readConfig
 import com.willfp.eco.core.registry.Registry
 import com.willfp.libreforge.LibreforgePluginLike
+import com.willfp.libreforge.Plugins
 import com.willfp.libreforge.configs.LibreforgeConfigCategory
 import com.willfp.libreforge.loader.configs.ConfigCategory
 import com.willfp.libreforge.loader.configs.FoundConfig
 import com.willfp.libreforge.loader.configs.RegistrableConfig
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion
-import java.io.FileOutputStream
+import java.io.File
 import java.util.zip.ZipFile
 
-abstract class LibreforgePlugin : EcoPlugin(), LibreforgePluginLike {
+abstract class LibreforgePlugin : EcoPlugin() {
     private val loaderCategories = mutableListOf<ConfigCategory>()
-    final override val categories = object : Registry<LibreforgeConfigCategory>() {}
+
+    val categories = Registry<LibreforgeConfigCategory>()
+
+    val libreforgeVersion = DefaultArtifactVersion(this.props.getEnvironmentVariable("libreforge-version"))
 
     init {
-        loadLibreforge()
-
-        loadCategories()
+        checkVersion()
 
         onReload(LifecyclePosition.START) {
             for (category in loaderCategories) {
+                category.beforeReload()
                 category.handle.clear()
 
                 val configs = doFetchConfigs(category)
@@ -33,8 +36,32 @@ abstract class LibreforgePlugin : EcoPlugin(), LibreforgePluginLike {
 
                     category.acceptConfig(config.config)
                 }
+
+                category.afterReload()
             }
         }
+    }
+
+    private fun checkVersion() {
+        checkHighestVersion(this)
+    }
+
+    override fun handleEnable() {
+        loadHighestLibreforgeVersion()
+
+        Plugins.register(
+            object : LibreforgePluginLike {
+                override val plugin: LibreforgePlugin = this@LibreforgePlugin
+
+                override val categories = plugin.categories
+
+                override fun getDataFolder() = plugin.dataFolder
+                override fun getConfigHandler() = plugin.configHandler
+                override fun getLogger() = plugin.logger
+            }
+        )
+
+        loadCategories()
     }
 
     private fun loadCategories() {
@@ -45,30 +72,6 @@ abstract class LibreforgePlugin : EcoPlugin(), LibreforgePluginLike {
 
             loaderCategories += category
             categories.register(category.handle)
-        }
-    }
-
-    private fun loadLibreforge() {
-        val libreforgeFolder = this.dataFolder.parentFile.resolve("libreforge")
-        libreforgeFolder.mkdirs()
-
-        val config = libreforgeFolder.resolve("version.yml").readConfig()
-        val pluginConfig = this::class.java.getResourceAsStream("libreforge.yml").readConfig()
-
-        val installedVersion = DefaultArtifactVersion(config.getString("version"))
-        val currentVersion = DefaultArtifactVersion(pluginConfig.getString("version"))
-
-        if (installedVersion < currentVersion || !config.has("version")) {
-            libreforgeFolder.mkdirs()
-            val libreforgeJar = libreforgeFolder.resolve("libreforge.jar")
-
-            val inputStream = this::class.java.getResourceAsStream("libreforge.jar")
-                ?: throw LibreforgeNotFoundError("libreforge wasn't found in the plugin jar!")
-
-            FileOutputStream(libreforgeJar).use {
-                inputStream.copyTo(it)
-                inputStream.close()
-            }
         }
     }
 
@@ -120,6 +123,10 @@ abstract class LibreforgePlugin : EcoPlugin(), LibreforgePluginLike {
         }
 
         return configs
+    }
+
+    public override fun getFile(): File {
+        return super.getFile()
     }
 
     abstract fun loadConfigCategories(): List<ConfigCategory>

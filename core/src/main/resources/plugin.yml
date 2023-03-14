@@ -4,10 +4,10 @@ main: com.willfp.libreforge.LibreforgeSpigotPlugin
 api-version: 1.17
 authors: [ Auxilor ]
 website: willfp.com
-load: STARTUP
-depend:
-  - eco
+#depend:
+#  - eco
 softdepend:
+  - eco
   - AureliumSkills
   - Boosters
   - EcoArmor

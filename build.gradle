@@ -55,7 +55,7 @@ allprojects {
     }
 
     processResources {
-        filesMatching(["**plugin.yml"]) {
+        filesMatching(["**plugin.yml", "**version.yml"]) {
             expand projectVersion: project.version
         }
     }

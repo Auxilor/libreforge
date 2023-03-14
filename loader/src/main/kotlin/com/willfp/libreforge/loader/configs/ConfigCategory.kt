@@ -19,4 +19,18 @@ abstract class ConfigCategory(
      * Accept a config found in the directory (e.g. load it).
      */
     abstract fun acceptConfig(config: Config)
+
+    /**
+     * Run before reloading.
+     */
+    open fun beforeReload() {
+        // Override when needed.
+    }
+
+    /**
+     * Run after reloading.
+     */
+    open fun afterReload() {
+        // Override when needed.
+    }
 }
