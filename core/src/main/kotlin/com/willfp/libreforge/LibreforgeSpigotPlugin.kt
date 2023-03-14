@@ -34,6 +34,16 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
     }
 
     override fun handleEnable() {
+        this.logger.info("")
+        this.logger.info("Hey, what's this plugin doing here, I didn't install it!")
+        this.logger.info("libreforge is the effects system for plugins like EcoEnchants,")
+        this.logger.info("EcoJobs, EcoItems, etc. If you're looking for config options for")
+        this.logger.info("things like cooldown messages, lrcdb, and stuff like that, you'll")
+        this.logger.info("find it under /plugins/libreforge")
+        this.logger.info("")
+        this.logger.info("Don't worry about updating libreforge, it handles it automatically!")
+        this.logger.info("")
+
         if (Prerequisite.HAS_PAPER.isMet) {
             PaperIntegration.load()
         }
