@@ -4,10 +4,8 @@ main: com.willfp.libreforge.LibreforgeSpigotPlugin
 api-version: 1.17
 authors: [ Auxilor ]
 website: willfp.com
-#depend:
-#  - eco
 softdepend:
-  - eco
+  - eco # eco is written as a softdepend because otherwise the plugin loader will complain about it not being installed.
   - AureliumSkills
   - Boosters
   - EcoArmor
