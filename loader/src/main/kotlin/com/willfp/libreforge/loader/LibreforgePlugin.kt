@@ -19,7 +19,7 @@ abstract class LibreforgePlugin : EcoPlugin() {
 
     val categories = Registry<LibreforgeConfigCategory>()
 
-    val libreforgeVersion = DefaultArtifactVersion(this.props.getEnvironmentVariable("libreforge-version"))
+    val libreforgeVersion = DefaultArtifactVersion(this.props.getEnvironmentVariable("libreforge version"))
 
     init {
         checkVersion()
