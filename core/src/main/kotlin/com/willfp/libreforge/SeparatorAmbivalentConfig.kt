@@ -10,6 +10,7 @@ import com.willfp.eco.util.NumberUtils
 import com.willfp.eco.util.StringUtils
 import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.entity.Player
+import java.util.Locale
 
 private class SeparatorAmbivalentConfig(
     private val config: Config
@@ -19,25 +20,20 @@ private class SeparatorAmbivalentConfig(
     }
 
     private inline fun <reified T> preprocess(
-        path: String, getter: (String) -> T, invalidator: (T) -> Boolean, invalid: T?
+        path: String,
+        getter: (String) -> T,
+        invalidator: (T) -> Boolean,
+        invalid: T?
     ): T? {
         val hyphen = path.lowercase().replace('_', '-')
-
         val underscore = path.lowercase().replace('-', '_')
-
         val unspaced = path.lowercase().replace("-", "").replace("_", "")
-
         val camelcase = underscore.toCamelCase()
 
-        for (formattedPath in arrayOf(hyphen, underscore, unspaced, camelcase)) {
-            val found = getter(formattedPath)
+        val formattedPaths = arrayOf(hyphen, underscore, unspaced, camelcase)
 
-            if (!invalidator(found)) {
-                return found
-            }
-        }
-
-        return invalid
+        return formattedPaths.map(getter)
+            .firstOrNull { !invalidator(it) } ?: invalid
     }
 
     override fun clone(): Config = config.clone().separatorAmbivalent()
@@ -98,22 +94,18 @@ private class SeparatorAmbivalentConfig(
 fun Config.separatorAmbivalent(): Config =
     if (this is SeparatorAmbivalentConfig) this else SeparatorAmbivalentConfig(this)
 
-fun Config.toMathContext(data: TriggerData?): MathContext {
-    return if (data == null) {
-        MathContext.of(this)
-    } else {
-        val player = data._originalPlayer
-        val additional = mutableListOf<AdditionalPlayer>()
+fun Config.toMathContext(data: TriggerData? = null): MathContext {
+    val additionalPlayers = mutableListOf<AdditionalPlayer>()
 
-        if (data.victim is Player) {
-            additional += AdditionalPlayer(data.victim, "victim")
+    data?.let {
+        if (it.victim is Player) {
+            additionalPlayers += AdditionalPlayer(it.victim, "victim")
         }
-
-        MathContext(
-            this, player, additional
-        )
     }
+
+    return MathContext(this, data?._originalPlayer, additionalPlayers)
 }
+
 
 fun Config.getIntFromExpression(path: String, data: TriggerData?) = NumberUtils.evaluateExpression(
     this.getString(path), this.toMathContext(data)
@@ -125,6 +117,10 @@ fun Config.getDoubleFromExpression(path: String, data: TriggerData?) = NumberUti
 
 private fun String.toCamelCase(): String {
     val words = this.lowercase().split("_")
-    val camelCaseWorlds = words.drop(1).map { it.substring(0, 1).uppercase() + it.substring(1) }
-    return words[0] + camelCaseWorlds.joinToString("")
+
+    return words.first() + words.drop(1).joinToString("") { it.replaceFirstChar { char ->
+        if (char.isLowerCase()) char.titlecase(
+            Locale.getDefault()
+        ) else char.toString()
+    }}
 }

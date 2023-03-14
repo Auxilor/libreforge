@@ -33,11 +33,8 @@ abstract class LibreforgePlugin : EcoPlugin() {
                 category.beforeReload()
                 category.handle.clear()
 
-                val configs = doFetchConfigs(category)
-
-                for (config in configs) {
+                for (config in fetchConfigs(category)) {
                     category.handle.register(config.handle)
-
                     category.acceptConfig(config.config)
                 }
 
@@ -51,13 +48,10 @@ abstract class LibreforgePlugin : EcoPlugin() {
     }
 
     override fun handleEnable() {
-
         Plugins.register(
             object : LibreforgePluginLike {
                 override val plugin: LibreforgePlugin = this@LibreforgePlugin
-
                 override val categories = plugin.categories
-
                 override fun getDataFolder() = plugin.dataFolder
                 override fun getConfigHandler() = plugin.configHandler
                 override fun getLogger() = plugin.logger
@@ -70,20 +64,16 @@ abstract class LibreforgePlugin : EcoPlugin() {
     private fun loadCategories() {
         for (category in loadConfigCategories()) {
             category.makeHandle(this)
-
             copyConfigs(category)
-
             loaderCategories += category
             categories.register(category.handle)
         }
     }
 
     private fun copyConfigs(category: ConfigCategory) {
-        val folder = this.dataFolder.resolve(category.directory)
+        val folder = dataFolder.resolve(category.directory)
         if (!folder.exists()) {
-            val files = getDefaultConfigNames(category)
-
-            for (configName in files) {
+            getDefaultConfigNames(category).forEach { configName ->
                 FoundConfig(configName, category, this)
             }
         }
@@ -93,40 +83,29 @@ abstract class LibreforgePlugin : EcoPlugin() {
         val files = mutableListOf<String>()
 
         try {
-            for (entry in ZipFile(this.file).entries().asIterator()) {
-                if (entry.name.startsWith("${category.directory}/")) {
-                    files.add(entry.name.removePrefix("${category.directory}/"))
-                }
+            ZipFile(file).use { zipFile ->
+                zipFile.entries().asSequence()
+                    .filter { it.name.startsWith("${category.directory}/") }
+                    .mapTo(files) { it.name.removePrefix("${category.directory}/") }
             }
         } catch (_: Exception) {
             // Sometimes, ZipFile likes to completely fail. No idea why, but here's the 'solution'!
         }
 
-        files.removeIf { !it.endsWith(".yml") }
-        files.replaceAll { it.replace(".yml", "") }
-
-        return files
+        return files.filter { it.endsWith(".yml") }.map { it.removeSuffix(".yml") }
     }
 
-    private fun doFetchConfigs(category: ConfigCategory): Set<RegistrableConfig> {
-        val configs = mutableSetOf<RegistrableConfig>()
-
-        for (file in this.dataFolder.resolve(category.directory).walk()) {
-            if (file.nameWithoutExtension == "_example") {
-                continue
-            }
-
-            if (!file.name.endsWith(".yml")) {
-                continue
-            }
-
-            val id = file.nameWithoutExtension
-            val config = file.readConfig()
-            configs += RegistrableConfig(config, file, id, category)
-        }
-
-        return configs
+    private fun fetchConfigs(category: ConfigCategory): Set<RegistrableConfig> {
+        return dataFolder.resolve(category.directory)
+            .walk()
+            .filter { it.isFile && it.name.endsWith(".yml") && it.nameWithoutExtension != "_example" }
+            .map { file ->
+                val id = file.nameWithoutExtension
+                val config = file.readConfig()
+                RegistrableConfig(config, file, id, category)
+            }.toSet()
     }
+
 
     public override fun getFile(): File {
         return super.getFile()

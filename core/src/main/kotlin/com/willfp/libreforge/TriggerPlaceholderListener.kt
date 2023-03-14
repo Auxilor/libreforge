@@ -14,12 +14,6 @@ import java.util.UUID
 object TriggerPlaceholderListener : Listener {
     private const val HITS_META_KEY = "libreforge_tracked_hits"
 
-    /*
-
-    The code here isn't very good, but it works, so suck it.
-
-     */
-
     @EventHandler
     fun handle(event: TriggerDispatchEvent) {
         val data = event.trigger.data
