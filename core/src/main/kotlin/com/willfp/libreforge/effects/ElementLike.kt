@@ -75,14 +75,14 @@ abstract class ElementLike {
         }
 
         // Filter
-        if (config.getBool("filters_before_mutation")) {
-            if (!filters.isMet(trigger.data)) {
-                return false
-            }
+        val filterResult = if (config.getBool("filters_before_mutation")) {
+            filters.isMet(trigger.data)
         } else {
-            if (!filters.isMet(data)) {
-                return false
-            }
+            filters.isMet(data)
+        }
+
+        if (!filterResult) {
+            return false
         }
 
         val (argumentsMet, met, notMet) = arguments.checkMet(this, trigger)

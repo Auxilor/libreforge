@@ -36,17 +36,13 @@ fun loadHighestLibreforgeVersion() {
         ?: throw IllegalStateException("No libreforge version found?")
 
     val libreforgeFolder = plugin.dataFolder.parentFile.resolve("libreforge")
-
     val versionsFolder = libreforgeFolder.resolve("versions")
+
     versionsFolder.mkdirs()
 
-    libreforgeFolder.mkdirs()
-    val libreforgeJar = versionsFolder
-        .resolve("libreforge-${version}.jar")
-
+    val libreforgeJar = versionsFolder.resolve("libreforge-${version}.jar")
     val zip = ZipFile(plugin.file)
-
-    val libreforgeResourceName = zip.entries().asIterator().asSequence()
+    val libreforgeResourceName = zip.entries().asSequence()
         .map { it.name }
         .firstOrNull { it.startsWith("libreforge") && it.endsWith(".jar") }
         ?: throw LibreforgeNotFoundError("libreforge wasn't found in the plugin jar!")
