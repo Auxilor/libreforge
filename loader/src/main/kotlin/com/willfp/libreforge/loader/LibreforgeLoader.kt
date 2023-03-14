@@ -25,7 +25,7 @@ fun checkHighestVersion(plugin: LibreforgePlugin) {
 }
 
 fun loadHighestLibreforgeVersion() {
-    if (Bukkit.getPluginManager().isPluginEnabled("libreforge")) {
+    if (Bukkit.getPluginManager().plugins.any { it.name == "libreforge" }) {
         return
     }
 
