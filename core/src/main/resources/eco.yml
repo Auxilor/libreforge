@@ -1,3 +1,4 @@
-resource-id: 0
-bstats-id: 17938
-color: "&e"
+options:
+  bstats-id: 17938
+  color: "&e"
+  uses-reflective-reload: false
