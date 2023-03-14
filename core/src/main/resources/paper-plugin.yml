@@ -1,0 +1,77 @@
+name: libreforge
+version: ${projectVersion}
+main: com.willfp.libreforge.LibreforgeSpigotPlugin
+api-version: 1.19
+
+dependencies:
+  - name: eco
+    required: true
+    bootstrap: false
+
+  - name: AureliumSkills
+    required: false
+    bootstrap: false
+
+  - name: Boosters
+    required: false
+    bootstrap: false
+
+  - name: EcoArmor
+    required: false
+    bootstrap: false
+
+  - name: EcoBosses
+    required: false
+    bootstrap: false
+
+  - name: EcoEnchants
+    required: false
+    bootstrap: false
+
+  - name: EcoItems
+    required: false
+    bootstrap: false
+
+  - name: EcoJobs
+    required: false
+    bootstrap: false
+
+  - name: EcoPets
+    required: false
+    bootstrap: false
+
+  - name: EcoSkills
+    required: false
+    bootstrap: false
+
+  - name: Jobs
+    required: false
+    bootstrap: false
+
+  - name: LevelledMobs
+    required: false
+    bootstrap: false
+
+  - name: mcMMO
+    required: false
+    bootstrap: false
+
+  - name: Reforges
+    required: false
+    bootstrap: false
+
+  - name: Scyther
+    required: false
+    bootstrap: false
+
+  - name: Talismans
+    required: false
+    bootstrap: false
+
+  - name: TMMobcoins
+    required: false
+    bootstrap: false
+
+  - name: Vault
+    required: false
+    bootstrap: false
