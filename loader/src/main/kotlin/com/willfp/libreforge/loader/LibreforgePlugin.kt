@@ -22,7 +22,11 @@ abstract class LibreforgePlugin : EcoPlugin() {
     val libreforgeVersion = DefaultArtifactVersion(this.props.getEnvironmentVariable("libreforge version"))
 
     init {
-        checkVersion()
+        competeForVersion()
+
+        onLoad(LifecyclePosition.START) {
+            loadHighestLibreforgeVersion()
+        }
 
         onReload(LifecyclePosition.START) {
             for (category in loaderCategories) {
@@ -42,12 +46,11 @@ abstract class LibreforgePlugin : EcoPlugin() {
         }
     }
 
-    private fun checkVersion() {
+    private fun competeForVersion() {
         checkHighestVersion(this)
     }
 
     override fun handleEnable() {
-        loadHighestLibreforgeVersion()
 
         Plugins.register(
             object : LibreforgePluginLike {

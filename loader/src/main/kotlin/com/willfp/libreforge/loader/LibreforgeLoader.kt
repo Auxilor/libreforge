@@ -18,14 +18,9 @@ fun checkHighestVersion(plugin: LibreforgePlugin) {
     val currentHighestVersion = readExternalData<DefaultArtifactVersion>(HIGHEST_LIBREFORGE_VERSION_KEY)
         ?: DefaultArtifactVersion("0.0.0")
 
-    println("In plugin: ${plugin.libreforgeVersion}")
-    println("Current highest: $currentHighestVersion")
-    println("Should update: ${plugin.libreforgeVersion > currentHighestVersion}")
-
     if (plugin.libreforgeVersion > currentHighestVersion) {
         writeExternalData(HIGHEST_LIBREFORGE_VERSION_KEY, plugin.libreforgeVersion)
         writeExternalData(HIGHEST_LIBREFORGE_VERSION_PLUGIN_KEY, plugin)
-        println(readExternalData<LibreforgePlugin>(HIGHEST_LIBREFORGE_VERSION_PLUGIN_KEY)?.id)
     }
 }
 
