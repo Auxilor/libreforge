@@ -7,6 +7,8 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Effects
+import com.willfp.libreforge.effects.executors.ChainExecutors
+import com.willfp.libreforge.effects.executors.impl.NormalExecutorFactory
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
@@ -37,6 +39,9 @@ object EffectRunChain : Effect<NoCompileData>("run_chain") {
 
         val chain = Effects.getChainByID(config.getString("chain")) ?: return false
 
-        return chain.trigger(dispatch)
+        return chain.trigger(
+            dispatch,
+            ChainExecutors.getByID(config.getString("run-type")) ?: NormalExecutorFactory.create()
+        )
     }
 }

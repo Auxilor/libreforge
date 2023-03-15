@@ -6,7 +6,10 @@ import com.willfp.eco.core.config.readConfig
 import com.willfp.eco.core.registry.Registry
 import com.willfp.libreforge.LibreforgePluginLike
 import com.willfp.libreforge.Plugins
+import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.configs.LibreforgeConfigCategory
+import com.willfp.libreforge.effects.Effects
+import com.willfp.libreforge.effects.executors.impl.NormalExecutorFactory
 import com.willfp.libreforge.loader.configs.ConfigCategory
 import com.willfp.libreforge.loader.configs.FoundConfig
 import com.willfp.libreforge.loader.configs.RegistrableConfig
@@ -39,6 +42,24 @@ abstract class LibreforgePlugin : EcoPlugin() {
                 }
 
                 category.afterReload()
+            }
+        }
+
+        // Legacy chains.yml.
+        onReload(LifecyclePosition.START) {
+            val chainsYml = this::class.java.classLoader
+                .getResourceAsStream("chains.yml")
+                .readConfig()
+
+            for (config in chainsYml.getSubsections("chains")) {
+                Effects.register(
+                    config.getString("id"),
+                    Effects.compileChain(
+                        config.getSubsections("effects"),
+                        NormalExecutorFactory.create(),
+                        ViolationContext(this, "chains.yml")
+                    ) ?: continue
+                )
             }
         }
     }

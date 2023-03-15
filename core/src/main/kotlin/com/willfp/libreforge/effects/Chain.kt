@@ -17,7 +17,10 @@ class Chain(
         }
     }
 
-    fun trigger(trigger: DispatchedTrigger): Boolean {
+    fun trigger(
+        trigger: DispatchedTrigger,
+        executor: ChainExecutor = this.executor
+    ): Boolean {
         return executor.execute(this, trigger)
     }
 }
