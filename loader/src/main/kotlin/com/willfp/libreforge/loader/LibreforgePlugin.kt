@@ -31,20 +31,6 @@ abstract class LibreforgePlugin : EcoPlugin() {
             loadHighestLibreforgeVersion()
         }
 
-        onReload(LifecyclePosition.START) {
-            for (category in loaderCategories) {
-                category.beforeReload()
-                category.handle.clear()
-
-                for (config in fetchConfigs(category)) {
-                    category.handle.register(config.handle)
-                    category.acceptConfig(config.config)
-                }
-
-                category.afterReload()
-            }
-        }
-
         // Legacy chains.yml.
         onReload(LifecyclePosition.START) {
             val chainsYml = this::class.java.classLoader
@@ -60,6 +46,20 @@ abstract class LibreforgePlugin : EcoPlugin() {
                         ViolationContext(this, "chains.yml")
                     ) ?: continue
                 )
+            }
+        }
+
+        onReload(LifecyclePosition.START) {
+            for (category in loaderCategories) {
+                category.beforeReload()
+                category.handle.clear()
+
+                for (config in fetchConfigs(category)) {
+                    category.handle.register(config.handle)
+                    category.acceptConfig(config.config)
+                }
+
+                category.afterReload()
             }
         }
     }
