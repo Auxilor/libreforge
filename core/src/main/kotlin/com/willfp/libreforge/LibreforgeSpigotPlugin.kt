@@ -4,7 +4,10 @@ import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.command.impl.PluginCommand
 import com.willfp.eco.core.integrations.IntegrationLoader
+import com.willfp.libreforge.configs.ChainsYml
 import com.willfp.libreforge.configs.lrcdb.CommandLrcdb
+import com.willfp.libreforge.effects.Effects
+import com.willfp.libreforge.effects.executors.impl.NormalExecutorFactory
 import com.willfp.libreforge.integrations.aureliumskills.AureliumSkillsIntegration
 import com.willfp.libreforge.integrations.boosters.BoostersIntegration
 import com.willfp.libreforge.integrations.ecoarmor.EcoArmorIntegration
@@ -29,6 +32,8 @@ internal lateinit var plugin: EcoPlugin
     private set
 
 class LibreforgeSpigotPlugin : EcoPlugin() {
+    val chainsYml = ChainsYml(this)
+
     init {
         plugin = this
     }
@@ -46,6 +51,19 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
 
         if (Prerequisite.HAS_PAPER.isMet) {
             PaperIntegration.load()
+        }
+    }
+
+    override fun handleReload() {
+        for (config in chainsYml.getSubsections("chains")) {
+            Effects.register(
+                config.getString("id"),
+                Effects.compileChain(
+                    config.getSubsections("effects"),
+                    NormalExecutorFactory.create(),
+                    ViolationContext(this, "chains.yml")
+                ) ?: continue
+            )
         }
     }
 
