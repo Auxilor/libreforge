@@ -59,6 +59,25 @@ abstract class LibreforgePlugin : EcoPlugin() {
                     category.acceptConfig(config.config)
                 }
 
+                val legacy = category.legacyLocation
+                if (legacy != null) {
+                    val legacyConfig = this::class.java.classLoader
+                        .getResourceAsStream("${legacy.filename}.yml")
+                        .readConfig()
+
+                    for (config in legacyConfig.getSubsections(legacy.section)) {
+                        val registrable = RegistrableConfig(
+                            config,
+                            null,
+                            config.getString("id"),
+                            category
+                        )
+
+                        category.handle.register(registrable.handle)
+                        category.acceptConfig(registrable.config)
+                    }
+                }
+
                 category.afterReload()
             }
         }

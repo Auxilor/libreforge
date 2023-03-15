@@ -6,9 +6,14 @@ import java.io.File
 
 data class RegistrableConfig(
     val config: Config,
-    val file: File,
+    val file: File?,
     val name: String,
     val category: ConfigCategory
 ) {
-    internal val handle = LibreforgeObjectConfig(config, file, name, category.handle)
+    internal val handle = LibreforgeObjectConfig(
+        config,
+        file?.readText() ?: config.toPlaintext(),
+        name,
+        category.handle
+    )
 }
