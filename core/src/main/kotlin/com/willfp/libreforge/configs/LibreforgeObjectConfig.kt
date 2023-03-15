@@ -6,7 +6,6 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.config.readConfig
 import com.willfp.eco.core.registry.Registrable
 import com.willfp.libreforge.plugin
-import java.io.File
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
@@ -23,7 +22,7 @@ private val client = HttpClient.newBuilder().build()
 
 data class LibreforgeObjectConfig(
     val config: Config,
-    val file: File,
+    val contents: String,
     val name: String,
     val category: LibreforgeConfigCategory
 ) : Registrable {
@@ -33,7 +32,7 @@ data class LibreforgeObjectConfig(
             "plugin" to category.plugin.name
             "category" to category.id
             "author" to plugin.configYml.getString("lrcdb.author")
-            "contents" to config.toPlaintext()
+            "contents" to contents
             "isPrivate" to private
         }.toPlaintext()
 

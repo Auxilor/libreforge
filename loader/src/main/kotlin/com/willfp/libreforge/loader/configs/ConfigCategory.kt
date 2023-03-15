@@ -8,6 +8,8 @@ abstract class ConfigCategory(
     private val id: String,
     val directory: String
 ) {
+    open val legacyLocation: LegacyLocation? = null
+
     internal lateinit var handle: LibreforgeConfigCategory
         private set
 
