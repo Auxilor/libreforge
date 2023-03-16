@@ -1,4 +1,5 @@
 options:
   bstats-id: 17938
-  color: "&e"
+  color: "&#b4ff33"
   uses-reflective-reload: false
+  supports-extensions: true
