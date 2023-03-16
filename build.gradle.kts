@@ -50,7 +50,7 @@ allprojects {
     }
 
     tasks.processResources {
-        filesMatching(listOf("**plugin.yml", "**version.yml")) {
+        filesMatching(listOf("**plugin.yml")) {
             expand("projectVersion" to rootProject.version)
         }
     }
