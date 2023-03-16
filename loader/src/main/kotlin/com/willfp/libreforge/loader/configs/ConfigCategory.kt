@@ -20,7 +20,7 @@ abstract class ConfigCategory(
     /**
      * Accept a config found in the directory (e.g. load it).
      */
-    abstract fun acceptConfig(config: Config)
+    abstract fun acceptConfig(id: String, config: Config)
 
     /**
      * Run before reloading.

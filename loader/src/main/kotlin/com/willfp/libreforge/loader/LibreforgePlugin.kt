@@ -56,7 +56,7 @@ abstract class LibreforgePlugin : EcoPlugin() {
 
                 for (config in fetchConfigs(category)) {
                     category.handle.register(config.handle)
-                    category.acceptConfig(config.config)
+                    category.acceptConfig(config.id, config.config)
                 }
 
                 val legacy = category.legacyLocation
@@ -66,15 +66,17 @@ abstract class LibreforgePlugin : EcoPlugin() {
                         .readConfig()
 
                     for (config in legacyConfig.getSubsections(legacy.section)) {
+                        val id = config.getString("id")
+
                         val registrable = RegistrableConfig(
                             config,
                             null,
-                            config.getString("id"),
+                            id,
                             category
                         )
 
                         category.handle.register(registrable.handle)
-                        category.acceptConfig(registrable.config)
+                        category.acceptConfig(id, registrable.config)
                     }
                 }
 
@@ -136,7 +138,18 @@ abstract class LibreforgePlugin : EcoPlugin() {
     }
 
     private fun fetchConfigs(category: ConfigCategory): Set<RegistrableConfig> {
-        return dataFolder.resolve(category.directory)
+        val configs = mutableSetOf<RegistrableConfig>()
+        configs += doFetchConfigs(category, category.directory)
+
+        category.legacyLocation?.alternativeDirectories?.forEach { directory ->
+            configs += doFetchConfigs(category, directory)
+        }
+
+        return configs
+    }
+
+    private fun doFetchConfigs(category: ConfigCategory, directory: String): Set<RegistrableConfig> {
+        return dataFolder.resolve(directory)
             .walk()
             .filter { it.isFile && it.name.endsWith(".yml") && it.nameWithoutExtension != "_example" }
             .map { file ->
