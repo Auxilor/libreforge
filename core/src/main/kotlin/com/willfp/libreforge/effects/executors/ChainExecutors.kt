@@ -12,8 +12,9 @@ object ChainExecutors {
      *
      * Returns normal if the ID is null.
      */
-    fun getByID(id: String?): ChainExecutor? {
-        return if (id != null) registry[id]?.create() else NormalExecutorFactory.create()
+    fun getByID(id: String?): ChainExecutor {
+        return if (id != null) registry[id]?.create() ?: NormalExecutorFactory.create()
+        else NormalExecutorFactory.create()
     }
 
     /**
