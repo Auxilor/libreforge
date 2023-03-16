@@ -10,6 +10,6 @@ data class LibreforgeConfigCategory(
     val plugin: EcoPlugin
 ): Registry<LibreforgeObjectConfig>(), Registrable {
     override fun getID(): String {
-        return "${plugin.name.lowercase()}_$id"
+        return id
     }
 }
