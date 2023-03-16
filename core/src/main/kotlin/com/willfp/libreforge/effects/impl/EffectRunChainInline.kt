@@ -9,7 +9,6 @@ import com.willfp.libreforge.effects.Chain
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.executors.ChainExecutors
-import com.willfp.libreforge.effects.executors.impl.NormalExecutorFactory
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
@@ -45,13 +44,13 @@ object EffectRunChainInline : Effect<Chain?>("run_chain_inline") {
         return if (config.has("chain")) {
             Effects.compileChain(
                 config.getSubsections("chain.effects"),
-                ChainExecutors.getByID(config.getString("run-type")) ?: NormalExecutorFactory.create(),
+                ChainExecutors.getByID(config.getStringOrNull("run-type")),
                 context.with("run_chain_inline"),
             )
         } else {
             Effects.compileChain(
                 config.getSubsections("effects"),
-                ChainExecutors.getByID(config.getString("run-type")) ?: NormalExecutorFactory.create(),
+                ChainExecutors.getByID(config.getStringOrNull("run-type")),
                 context.with("run_chain_inline"),
             )
         }
