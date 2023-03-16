@@ -17,7 +17,7 @@ messages:
   lrcdb-export-success: "&fExported &a%name%&f! View it on &alrcdb.auxilor.io&f, or share your config ID: &f%id%"
 
   must-specify-plugin: "&cYou must specify the plugin!"
-  invalid-plugin-name: "&cInvalid plugin name!"
+  invalid-plugin: "&cInvalid plugin name!"
   must-specify-category: "&cYou must specify the category!"
   invalid-category: "&cInvalid category!"
   must-specify-config-name: "&cYou must specify the config name!"

@@ -3,6 +3,7 @@ package com.willfp.libreforge.loader.configs
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.configs.LibreforgeConfigCategory
+import com.willfp.libreforge.loader.LibreforgePlugin
 
 abstract class ConfigCategory(
     private val id: String,
@@ -18,9 +19,14 @@ abstract class ConfigCategory(
     }
 
     /**
+     * Clear all configs.
+     */
+    abstract fun clear()
+
+    /**
      * Accept a config found in the directory (e.g. load it).
      */
-    abstract fun acceptConfig(id: String, config: Config)
+    abstract fun acceptConfig(plugin: LibreforgePlugin, id: String, config: Config)
 
     /**
      * Run before reloading.

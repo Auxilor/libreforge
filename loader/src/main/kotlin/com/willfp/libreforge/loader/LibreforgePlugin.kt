@@ -52,11 +52,12 @@ abstract class LibreforgePlugin : EcoPlugin() {
         onReload(LifecyclePosition.START) {
             for (category in loaderCategories) {
                 category.beforeReload()
+                category.clear()
                 category.handle.clear()
 
                 for (config in fetchConfigs(category)) {
                     category.handle.register(config.handle)
-                    category.acceptConfig(config.id, config.config)
+                    category.acceptConfig(this, config.id, config.config)
                 }
 
                 val legacy = category.legacyLocation
@@ -76,7 +77,7 @@ abstract class LibreforgePlugin : EcoPlugin() {
                         )
 
                         category.handle.register(registrable.handle)
-                        category.acceptConfig(id, registrable.config)
+                        category.acceptConfig(this, id, registrable.config)
                     }
                 }
 

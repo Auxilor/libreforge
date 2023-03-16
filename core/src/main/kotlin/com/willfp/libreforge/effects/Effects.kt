@@ -8,6 +8,7 @@ import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.effects.arguments.EffectArguments
 import com.willfp.libreforge.effects.executors.ChainExecutor
 import com.willfp.libreforge.effects.executors.ChainExecutors
+import com.willfp.libreforge.effects.executors.impl.NormalExecutorFactory
 import com.willfp.libreforge.effects.impl.EffectAOE
 import com.willfp.libreforge.effects.impl.EffectAddDamage
 import com.willfp.libreforge.effects.impl.EffectAddHolder
@@ -159,7 +160,11 @@ object Effects : Registry<Effect<*>>() {
 
         val directIDSpecified = config.has("id")
 
-        val executor = ChainExecutors.getByID(args.getString("run-type"))
+        val executor = if (args.has("run-type")) {
+            ChainExecutors.getByID(args.getString("run-type"))
+        } else {
+            NormalExecutorFactory.create()
+        }
 
         if (executor == null) {
             context.with("args")
