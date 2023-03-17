@@ -2,6 +2,7 @@ package com.willfp.libreforge.loader
 
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.LifecyclePosition
+import com.willfp.eco.core.PluginProps
 import com.willfp.eco.core.config.readConfig
 import com.willfp.eco.core.registry.Registry
 import com.willfp.libreforge.LibreforgePluginLike
@@ -29,6 +30,20 @@ abstract class LibreforgePlugin : EcoPlugin() {
 
         onLoad(LifecyclePosition.START) {
             loadHighestLibreforgeVersion()
+        }
+
+        onEnable(LifecyclePosition.START) {
+            Plugins.register(
+                object : LibreforgePluginLike {
+                    override val plugin: LibreforgePlugin = this@LibreforgePlugin
+                    override val categories = plugin.categories
+                    override fun getDataFolder() = plugin.dataFolder
+                    override fun getConfigHandler() = plugin.configHandler
+                    override fun getLogger() = plugin.logger
+                }
+            )
+
+            loadCategories()
         }
 
         // Legacy chains.yml.
@@ -90,20 +105,6 @@ abstract class LibreforgePlugin : EcoPlugin() {
         checkHighestVersion(this)
     }
 
-    override fun handleEnable() {
-        Plugins.register(
-            object : LibreforgePluginLike {
-                override val plugin: LibreforgePlugin = this@LibreforgePlugin
-                override val categories = plugin.categories
-                override fun getDataFolder() = plugin.dataFolder
-                override fun getConfigHandler() = plugin.configHandler
-                override fun getLogger() = plugin.logger
-            }
-        )
-
-        loadCategories()
-    }
-
     private fun loadCategories() {
         for (category in loadConfigCategories()) {
             category.makeHandle(this)
@@ -160,10 +161,17 @@ abstract class LibreforgePlugin : EcoPlugin() {
             }.toSet()
     }
 
-
     public override fun getFile(): File {
         return super.getFile()
     }
 
-    abstract fun loadConfigCategories(): List<ConfigCategory>
+    override fun mutateProps(props: PluginProps): PluginProps {
+        return props.apply {
+            isSupportingExtensions = true
+        }
+    }
+
+    open fun loadConfigCategories(): List<ConfigCategory> {
+        return listOf()
+    }
 }

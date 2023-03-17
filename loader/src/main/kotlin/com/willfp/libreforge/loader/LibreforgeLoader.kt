@@ -10,11 +10,11 @@ import java.util.zip.ZipFile
 private const val HIGHEST_LIBREFORGE_VERSION_KEY = "highest-libreforge-version"
 private const val HIGHEST_LIBREFORGE_VERSION_PLUGIN_KEY = "highest-libreforge-version-plugin"
 
-class LibreforgeNotFoundError(
+private class LibreforgeNotFoundError(
     override val message: String
 ) : Error(message)
 
-fun checkHighestVersion(plugin: LibreforgePlugin) {
+internal fun checkHighestVersion(plugin: LibreforgePlugin) {
     val currentHighestVersion = readExternalData<DefaultArtifactVersion>(HIGHEST_LIBREFORGE_VERSION_KEY)
         ?: DefaultArtifactVersion("0.0.0")
 
@@ -24,7 +24,7 @@ fun checkHighestVersion(plugin: LibreforgePlugin) {
     }
 }
 
-fun loadHighestLibreforgeVersion() {
+internal fun loadHighestLibreforgeVersion() {
     if (Bukkit.getPluginManager().plugins.any { it.name == "libreforge" }) {
         return
     }
