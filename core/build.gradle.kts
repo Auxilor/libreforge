@@ -1,4 +1,8 @@
 dependencies {
+    implementation("dev.romainguy:kotlin-math:1.5.3") {
+        isTransitive = false
+    }
+
     compileOnly("io.papermc.paper:paper-api:1.17.1-R0.1-SNAPSHOT")
 
     compileOnly("com.willfp:EcoSkills:1.115.0")
@@ -29,6 +33,10 @@ group = "com.willfp"
 version = rootProject.version
 
 tasks {
+    shadowJar {
+        relocate("dev.romainguy.kotlin.math", "com.willfp.libreforge.libs.math")
+    }
+
     build {
         dependsOn("publishToMavenLocal")
     }
@@ -39,6 +47,9 @@ publishing {
         create<MavenPublication>("maven") {
             from(components["java"])
             artifactId = "libreforge"
+            artifact(tasks.shadowJar.get().archiveFile.get()) {
+                classifier = "shadow"
+            }
         }
     }
 }
