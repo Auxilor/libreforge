@@ -12,7 +12,7 @@ class EffectList(
     init {
         this.list += effects.sortedBy {
             val total = it.effects.sumOf { element -> element.effect.runOrder.weight }
-            total / it.effects.size
+            total / it.effects.size.coerceAtLeast(1)
         }
     }
 
