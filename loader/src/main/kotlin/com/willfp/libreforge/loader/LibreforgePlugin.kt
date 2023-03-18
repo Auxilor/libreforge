@@ -66,8 +66,8 @@ abstract class LibreforgePlugin : EcoPlugin() {
 
         onReload(LifecyclePosition.START) {
             for (category in loaderCategories) {
-                category.beforeReload()
-                category.clear()
+                category.beforeReload(this)
+                category.clear(this)
                 category.handle.clear()
 
                 for (config in fetchConfigs(category)) {
@@ -96,7 +96,7 @@ abstract class LibreforgePlugin : EcoPlugin() {
                     }
                 }
 
-                category.afterReload()
+                category.afterReload(this)
             }
         }
     }

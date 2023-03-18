@@ -25,3 +25,8 @@ class ConditionList(
         this.flatMap { it.notMetLines }
             .map { it.formatEco(player, formatPlaceholders = true) }
 }
+
+/**
+ * Create an empty [ConditionList].
+ */
+fun emptyConditionList() = ConditionList(emptyList())
