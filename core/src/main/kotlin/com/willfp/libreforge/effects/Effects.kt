@@ -31,6 +31,7 @@ import com.willfp.libreforge.effects.impl.EffectCreateExplosion
 import com.willfp.libreforge.effects.impl.EffectCritMultiplier
 import com.willfp.libreforge.effects.impl.EffectDamageArmor
 import com.willfp.libreforge.effects.impl.EffectDamageMainhand
+import com.willfp.libreforge.effects.impl.EffectDamageMultiplier
 import com.willfp.libreforge.effects.impl.EffectDamageNearbyEntities
 import com.willfp.libreforge.effects.impl.EffectDamageVictim
 import com.willfp.libreforge.effects.impl.EffectDrill
@@ -297,6 +298,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectCritMultiplier)
         register(EffectDamageArmor)
         register(EffectDamageMainhand)
+        register(EffectDamageMultiplier)
         register(EffectDamageNearbyEntities)
         register(EffectDamageVictim)
         register(EffectDrill)
