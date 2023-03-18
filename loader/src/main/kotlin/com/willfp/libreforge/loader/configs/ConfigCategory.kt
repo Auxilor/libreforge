@@ -21,7 +21,7 @@ abstract class ConfigCategory(
     /**
      * Clear all configs.
      */
-    abstract fun clear()
+    abstract fun clear(plugin: LibreforgePlugin)
 
     /**
      * Accept a config found in the directory (e.g. load it).
@@ -31,14 +31,14 @@ abstract class ConfigCategory(
     /**
      * Run before reloading.
      */
-    open fun beforeReload() {
+    open fun beforeReload(plugin: LibreforgePlugin) {
         // Override when needed.
     }
 
     /**
      * Run after reloading.
      */
-    open fun afterReload() {
+    open fun afterReload(plugin: LibreforgePlugin) {
         // Override when needed.
     }
 }

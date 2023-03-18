@@ -19,3 +19,8 @@ class EffectList(
     fun trigger(trigger: DispatchedTrigger) =
         this.forEach { it.trigger(trigger) }
 }
+
+/**
+ * Create an empty [EffectList].
+ */
+fun emptyEffectList() = EffectList(emptyList())
