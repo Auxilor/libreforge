@@ -70,8 +70,7 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
         // Poll for changes
         this.scheduler.runTimer(20, 20) {
             for (player in Bukkit.getOnlinePlayers()) {
-                player.updateHolders()
-                player.updateEffects()
+                player.refreshHolders()
             }
         }
     }
@@ -79,7 +78,8 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
     override fun loadListeners(): List<Listener> {
         return listOf(
             TriggerPlaceholderListener,
-            EffectCollisionFixer
+            EffectCollisionFixer,
+            ItemRefreshListener(this)
         )
     }
 

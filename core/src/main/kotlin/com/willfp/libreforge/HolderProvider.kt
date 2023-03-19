@@ -51,6 +51,25 @@ fun registerHolderProvider(provider: (Player) -> Collection<ProvidedHolder<*>>) 
         override fun provide(player: Player) = provider(player)
     })
 
+
+private val playerRefreshFunctions = mutableListOf<(Player) -> Unit>()
+
+/**
+ * Register a function to be called when a player's holders are refreshed.
+ */
+fun registerPlayerRefreshFunction(function: (Player) -> Unit) {
+    playerRefreshFunctions += function
+}
+
+/**
+ * Update holders, effects, and call refresh functions.
+ */
+fun Player.refreshHolders() {
+    playerRefreshFunctions.forEach { it(this) }
+    this.updateHolders()
+    this.updateEffects()
+}
+
 private val holderCache = Caffeine.newBuilder()
     .expireAfterWrite(4, TimeUnit.SECONDS)
     .build<UUID, Collection<ProvidedHolder<*>>>()
