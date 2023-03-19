@@ -37,7 +37,7 @@ abstract class Trigger(
 
         val effects = forceHolders?.getProvidedActiveEffects(player) ?: player.providedActiveEffects
 
-        for ((blocks, holder) in effects) {
+        for ((holder, blocks) in effects) {
             val withHolder = data.copy(holder = holder)
             val dispatchWithHolder = DispatchedTrigger(player, this, withHolder).inheritPlaceholders(dispatch)
 

@@ -76,7 +76,7 @@ class CommandLrcdbExport(plugin: EcoPlugin) : Subcommand(
 
         if (args.size == 3) {
             StringUtil.copyPartialMatches(
-                args[1],
+                args[2],
                 category.values().map { it.id },
                 completions
             )

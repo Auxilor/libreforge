@@ -63,7 +63,7 @@ abstract class Compilable<T> : Registrable {
      *
      * @param config The config.
      * @param context The context.
-     * @return If any violations are found, take true to be a failure.
+     * @return If the config is valid.
      */
     fun checkConfig(config: Config, context: ViolationContext): Boolean {
         val violations = arguments.test(config)
@@ -72,7 +72,7 @@ abstract class Compilable<T> : Registrable {
             context.log(this, violation)
         }
 
-        return violations.isNotEmpty()
+        return violations.isEmpty()
     }
 
     override fun getID() = id

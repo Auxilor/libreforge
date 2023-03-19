@@ -71,7 +71,9 @@ data class LibreforgeObjectConfig(
             return
         }
 
-        share(!plugin.configYml.getBool("lrcdb.share-configs.publicly"))
+        onLrcdbThread {
+            share(!plugin.configYml.getBool("lrcdb.share-configs.publicly"))
+        }
     }
 
     override fun getID(): String {
