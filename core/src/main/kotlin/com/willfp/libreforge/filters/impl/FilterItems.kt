@@ -3,6 +3,7 @@ package com.willfp.libreforge.filters.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.items.Items
 import com.willfp.eco.core.items.TestableItem
+import com.willfp.eco.core.items.matches
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.filters.Filter
 import com.willfp.libreforge.triggers.TriggerData
@@ -24,7 +25,7 @@ object FilterItems : Filter<Collection<TestableItem>, Collection<String>>("items
             return true
         }
 
-        return compileData.any { test -> unfilteredItems.any { item -> test.matches(item) } }
+        return compileData.matches(items)
     }
 
     override fun makeCompileData(
