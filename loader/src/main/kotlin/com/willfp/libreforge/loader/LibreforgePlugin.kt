@@ -171,6 +171,10 @@ abstract class LibreforgePlugin : EcoPlugin() {
         }
     }
 
+    override fun getMinimumEcoVersion(): String {
+        return "6.53.0"
+    }
+
     open fun loadConfigCategories(): List<ConfigCategory> {
         return listOf()
     }
