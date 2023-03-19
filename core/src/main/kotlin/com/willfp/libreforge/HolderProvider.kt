@@ -77,24 +77,23 @@ fun Player.updateHolders() {
 }
 
 // Effects that were active on previous update
-private val previousStates = defaultMap<UUID, Map<Set<EffectBlock>, ProvidedHolder<*>>>(emptyMap())
+private val previousStates = defaultMap<UUID, Map<ProvidedHolder<*>, Set<EffectBlock>>>(emptyMap())
 private val flattenedPreviousStates = defaultMap<UUID, Set<EffectBlock>>(emptySet()) // Optimisation.
 
 /**
  * Flatten down to purely the effects.
  */
-fun Map<Set<EffectBlock>, ProvidedHolder<*>>.flatten() = this.flatMap { it.key }.toSet()
+fun Map<ProvidedHolder<*>, Set<EffectBlock>>.flatten() = this.flatMap { it.value }.toSet()
 
 /**
  * Get active effects for a [player] from holders mapped to the holder
  * that has provided them.
  */
-fun Collection<ProvidedHolder<*>>.getProvidedActiveEffects(player: Player): Map<Set<EffectBlock>, ProvidedHolder<*>> {
-    val map = mutableMapOf<Set<EffectBlock>, ProvidedHolder<*>>()
+fun Collection<ProvidedHolder<*>>.getProvidedActiveEffects(player: Player): Map<ProvidedHolder<*>, Set<EffectBlock>> {
+    val map = mutableMapOf<ProvidedHolder<*>, Set<EffectBlock>>()
 
     for (holder in this) {
-        val effects = holder.holder.getActiveEffects(player)
-        map[effects] = holder
+        map[holder] = holder.holder.getActiveEffects(player)
     }
 
     return map
@@ -121,7 +120,7 @@ val Player.activeEffects: Set<EffectBlock>
 /**
  * The active effects mapped to the holder that provided them.
  */
-val Player.providedActiveEffects: Map<Set<EffectBlock>, ProvidedHolder<*>>
+val Player.providedActiveEffects: Map<ProvidedHolder<*>, Set<EffectBlock>>
     get() = previousStates[this.uniqueId]
 
 /**

@@ -81,6 +81,18 @@ class SimpleProvidedHolder(
     override val holder: Holder
 ) : ProvidedHolder<Nothing?> {
     override val item: Nothing? = null
+
+    override fun hashCode(): Int {
+        return Objects.hash(holder)
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (other !is SimpleProvidedHolder) {
+            return false
+        }
+
+        return other.holder == this.holder
+    }
 }
 
 /**
@@ -89,7 +101,20 @@ class SimpleProvidedHolder(
 class ItemProvidedHolder(
     override val holder: Holder,
     override val item: ItemStack
-) : ProvidedHolder<ItemStack>
+) : ProvidedHolder<ItemStack> {
+    override fun hashCode(): Int {
+        return Objects.hash(holder, item)
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (other !is ItemProvidedHolder) {
+            return false
+        }
+
+        return other.holder == this.holder
+                && other.item == this.item
+    }
+}
 
 /**
  * A template that a may create a holder when given an ID.

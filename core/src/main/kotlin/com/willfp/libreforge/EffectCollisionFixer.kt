@@ -17,7 +17,7 @@ object EffectCollisionFixer : Listener {
         player.updateHolders()
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     fun scanOnJoin(event: PlayerJoinEvent) {
         val player = event.player
 
