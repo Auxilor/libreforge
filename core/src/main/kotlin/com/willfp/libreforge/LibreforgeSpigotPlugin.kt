@@ -51,8 +51,10 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
         this.logger.info("")
 
         if (Prerequisite.HAS_PAPER.isMet) {
-            PaperIntegration.load()
+            PaperIntegration.load(this)
         }
+
+        pointsPlaceholder(this).register()
     }
 
     override fun handleReload() {
@@ -85,23 +87,23 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
 
     override fun loadIntegrationLoaders(): List<IntegrationLoader> {
         return listOf(
-            IntegrationLoader("AureliumSkills") { AureliumSkillsIntegration.load() },
-            IntegrationLoader("Boosters") { BoostersIntegration.load() },
-            IntegrationLoader("EcoArmor") { EcoArmorIntegration.load() },
-            IntegrationLoader("EcoBosses") { EcoBossesIntegration.load() },
-            IntegrationLoader("EcoEnchants") { EcoEnchantsIntegration.load() },
-            IntegrationLoader("EcoItems") { EcoItemsIntegration.load() },
-            IntegrationLoader("EcoJobs") { EcoJobsIntegration.load() },
-            IntegrationLoader("EcoPets") { EcoPetsIntegration.load() },
-            IntegrationLoader("EcoSkills") { EcoSkillsIntegration.load() },
-            IntegrationLoader("Jobs") { JobsIntegration.load() },
-            IntegrationLoader("LevelledMobs") { LevelledMobsIntegration.load() },
-            IntegrationLoader("mcMMO") { McMMOIntegration.load() },
-            IntegrationLoader("Reforges") { ReforgesIntegration.load() },
-            IntegrationLoader("Scyther") { ScytherIntegration.load() },
-            IntegrationLoader("Talismans") { TalismansIntegration.load() },
-            IntegrationLoader("TMMobcoins") { TMMobcoinsIntegration.load() },
-            IntegrationLoader("Vault") { VaultIntegration.load() }
+            IntegrationLoader("AureliumSkills") { AureliumSkillsIntegration.load(this) },
+            IntegrationLoader("Boosters") { BoostersIntegration.load(this) },
+            IntegrationLoader("EcoArmor") { EcoArmorIntegration.load(this) },
+            IntegrationLoader("EcoBosses") { EcoBossesIntegration.load(this) },
+            IntegrationLoader("EcoEnchants") { EcoEnchantsIntegration.load(this) },
+            IntegrationLoader("EcoItems") { EcoItemsIntegration.load(this) },
+            IntegrationLoader("EcoJobs") { EcoJobsIntegration.load(this) },
+            IntegrationLoader("EcoPets") { EcoPetsIntegration.load(this) },
+            IntegrationLoader("EcoSkills") { EcoSkillsIntegration.load(this) },
+            IntegrationLoader("Jobs") { JobsIntegration.load(this) },
+            IntegrationLoader("LevelledMobs") { LevelledMobsIntegration.load(this) },
+            IntegrationLoader("mcMMO") { McMMOIntegration.load(this) },
+            IntegrationLoader("Reforges") { ReforgesIntegration.load(this) },
+            IntegrationLoader("Scyther") { ScytherIntegration.load(this) },
+            IntegrationLoader("Talismans") { TalismansIntegration.load(this) },
+            IntegrationLoader("TMMobcoins") { TMMobcoinsIntegration.load(this) },
+            IntegrationLoader("Vault") { VaultIntegration.load(this) }
         )
     }
 

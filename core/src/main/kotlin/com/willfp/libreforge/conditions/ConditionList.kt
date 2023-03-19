@@ -10,11 +10,7 @@ import org.bukkit.entity.Player
  */
 class ConditionList(
     conditions: List<ConditionBlock<*>>
-) : DelegatedList<ConditionBlock<*>>() {
-    init {
-        this.list += conditions
-    }
-
+) : DelegatedList<ConditionBlock<*>>(conditions) {
     fun areMet(player: Player): Boolean =
         this.all { it.isMet(player) }
 

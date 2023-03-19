@@ -7,8 +7,8 @@ import com.willfp.libreforge.triggers.TriggerData
 /**
  * A single filter config block.
  */
-class FilterBlock<T, C>(
-    val filter: Filter<T, C>,
+class FilterBlock<T, V>(
+    val filter: Filter<T, V>,
     override val config: Config,
     override val compileData: T
 ) : Compiled<T> {

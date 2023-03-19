@@ -1,10 +1,14 @@
 package com.willfp.libreforge
 
+import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.data.keys.PersistentDataKey
 import com.willfp.eco.core.data.keys.PersistentDataKeyType
 import com.willfp.eco.core.data.profile
+import com.willfp.eco.core.placeholder.PlayerDynamicPlaceholder
 import com.willfp.eco.util.NamespacedKeyUtils
+import com.willfp.eco.util.toNiceString
 import org.bukkit.entity.Player
+import java.util.regex.Pattern
 
 class PointsMap(
     private val player: Player
@@ -27,6 +31,18 @@ class PointsMap(
         )
 
         player.profile.write(dataKey, value)
+    }
+}
+
+fun pointsPlaceholder(
+    plugin: EcoPlugin
+): PlayerDynamicPlaceholder {
+    return PlayerDynamicPlaceholder(
+        plugin,
+        Pattern.compile("points_[a-zA-z_-]+")
+    ) { args, player ->
+        val type = args.removePrefix("points_")
+        player.points[type].toNiceString()
     }
 }
 

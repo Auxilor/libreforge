@@ -1,12 +1,13 @@
 package com.willfp.libreforge.integrations.mcmmo
 
-import com.willfp.eco.core.integrations.Integration
+import com.willfp.eco.core.EcoPlugin
 import com.willfp.libreforge.effects.Effects
+import com.willfp.libreforge.integrations.LoadableIntegration
 import com.willfp.libreforge.integrations.mcmmo.impl.EffectGiveMcMMOXp
 import com.willfp.libreforge.integrations.mcmmo.impl.EffectMcMMOXpMultiplier
 
-object McMMOIntegration : Integration {
-    fun load() {
+object McMMOIntegration : LoadableIntegration {
+    override fun load(plugin: EcoPlugin) {
         Effects.register(EffectMcMMOXpMultiplier)
         Effects.register(EffectGiveMcMMOXp)
     }

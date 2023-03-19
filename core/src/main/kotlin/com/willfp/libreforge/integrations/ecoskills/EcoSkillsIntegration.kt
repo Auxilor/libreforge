@@ -1,9 +1,10 @@
 package com.willfp.libreforge.integrations.ecoskills
 
-import com.willfp.eco.core.integrations.Integration
+import com.willfp.eco.core.EcoPlugin
 import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.filters.Filters
+import com.willfp.libreforge.integrations.LoadableIntegration
 import com.willfp.libreforge.integrations.ecoskills.impl.ConditionHasSkillLevel
 import com.willfp.libreforge.integrations.ecoskills.impl.EffectAddStat
 import com.willfp.libreforge.integrations.ecoskills.impl.EffectAddStatTemporarily
@@ -17,8 +18,8 @@ import com.willfp.libreforge.integrations.ecoskills.impl.TriggerGainSkillXp
 import com.willfp.libreforge.integrations.ecoskills.impl.TriggerLevelUpSkill
 import com.willfp.libreforge.triggers.Triggers
 
-object EcoSkillsIntegration : Integration {
-    fun load() {
+object EcoSkillsIntegration : LoadableIntegration {
+    override fun load(plugin: EcoPlugin) {
         Effects.register(EffectAddStat)
         Effects.register(EffectMultiplyStat)
         Effects.register(EffectSkillXpMultiplier)

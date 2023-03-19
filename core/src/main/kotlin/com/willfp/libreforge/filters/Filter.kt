@@ -8,7 +8,7 @@ import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.effects.RunOrder
 import com.willfp.libreforge.triggers.TriggerData
 
-abstract class Filter<T, C>(
+abstract class Filter<T, V>(
     override val id: String
 ) : Compilable<T>() {
     /**
@@ -21,7 +21,7 @@ abstract class Filter<T, C>(
      *
      * [data] is null when generating compile data.
      */
-    abstract fun getValue(config: Config, data: TriggerData?, key: String): C
+    abstract fun getValue(config: Config, data: TriggerData?, key: String): V
 
     /**
      * Filter the trigger data.
@@ -32,7 +32,7 @@ abstract class Filter<T, C>(
      */
     fun isMet(
         data: TriggerData,
-        config: FilterBlock<T, C>
+        config: FilterBlock<T, V>
     ): Boolean {
         val cfg = config.config
 
@@ -62,7 +62,7 @@ abstract class Filter<T, C>(
      */
     protected abstract fun isMet(
         data: TriggerData,
-        value: C,
+        value: V,
         compileData: T
     ): Boolean
 
@@ -77,7 +77,7 @@ abstract class Filter<T, C>(
      */
 
     final override fun makeCompileData(config: Config, context: ViolationContext): T {
-        throw UnsupportedOperationException("Use makeCompileData(Config, ViolationContext, C) instead!")
+        throw UnsupportedOperationException("Use makeCompileData(Config, ViolationContext, V) instead!")
     }
 
     /**
@@ -85,7 +85,7 @@ abstract class Filter<T, C>(
      * @param context The context to log violations for.
      * @return The compile data.
      */
-    open fun makeCompileData(config: Config, context: ViolationContext, values: C): T {
+    open fun makeCompileData(config: Config, context: ViolationContext, values: V): T {
         @Suppress("UNCHECKED_CAST")
         return NoCompileData as? T
             ?: throw InvalidCompileDataException(

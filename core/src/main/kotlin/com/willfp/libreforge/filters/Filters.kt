@@ -40,11 +40,11 @@ object Filters : Registry<Filter<*, *>>() {
         return FilterList(blocks)
     }
 
-    private fun <T, C> makeBlock(
-        filter: Filter<T, C>,
+    private fun <T, V> makeBlock(
+        filter: Filter<T, V>,
         config: Config,
         context: ViolationContext
-    ): FilterBlock<T, C>? {
+    ): FilterBlock<T, V>? {
         if (!filter.checkConfig(config, context)) {
             return null
         }

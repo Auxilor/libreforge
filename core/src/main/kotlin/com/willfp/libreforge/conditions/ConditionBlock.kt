@@ -16,7 +16,6 @@ class ConditionBlock<T>(
     val notMetLines: List<String>
 ) : Compiled<T> {
     fun isMet(player: Player): Boolean {
-
         return condition.isMet(player, config, compileData)
     }
 }
