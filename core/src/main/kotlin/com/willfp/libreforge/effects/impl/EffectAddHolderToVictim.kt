@@ -53,12 +53,12 @@ object EffectAddHolderToVictim : Effect<HolderTemplate>("add_holder_to_victim") 
     override fun makeCompileData(config: Config, context: ViolationContext): HolderTemplate {
         val effects = Effects.compile(
             config.getSubsections("effects"),
-            context.with("add_holder_to_victim Effects")
+            context.with("add_holder_to_victim effects")
         )
 
         val conditions = Conditions.compile(
             config.getSubsections("conditions"),
-            context.with("add_holder_to_victim Conditions")
+            context.with("add_holder_to_victim conditions")
         )
 
         return HolderTemplate(

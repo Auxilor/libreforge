@@ -48,7 +48,7 @@ object EffectAOE : Effect<EffectAOE.AOEData>("aoe") {
             Effects.compileChain(
                 config.getSubsections("effects"),
                 NormalExecutorFactory.create(),
-                context.with("aoe Effects")
+                context.with("aoe effects")
             )
         )
     }

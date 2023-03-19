@@ -54,12 +54,12 @@ object EffectAddHolder : Effect<HolderTemplate>("add_holder") {
     override fun makeCompileData(config: Config, context: ViolationContext): HolderTemplate {
         val effects = Effects.compile(
             config.getSubsections("effects"),
-            context.with("add_holder Effects")
+            context.with("add_holder effects")
         )
 
         val conditions = Conditions.compile(
             config.getSubsections("conditions"),
-            context.with("add_holder Conditions")
+            context.with("add_holder conditions")
         )
 
         return HolderTemplate(
