@@ -107,10 +107,7 @@ abstract class LibreforgePlugin : EcoPlugin() {
 
     private fun loadCategories() {
         for (category in loadConfigCategories()) {
-            category.makeHandle(this)
-            copyConfigs(category)
-            loaderCategories += category
-            categories.register(category.handle)
+            addCategory(category)
         }
     }
 
@@ -177,5 +174,15 @@ abstract class LibreforgePlugin : EcoPlugin() {
 
     open fun loadConfigCategories(): List<ConfigCategory> {
         return listOf()
+    }
+
+    /**
+     * Add a new [category].
+     */
+    fun addCategory(category: ConfigCategory) {
+        category.makeHandle(this)
+        copyConfigs(category)
+        loaderCategories += category
+        categories.register(category.handle)
     }
 }
