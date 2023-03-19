@@ -10,7 +10,9 @@ object TriggerDamageItem : Trigger("damage_item") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,
-        TriggerParameter.ITEM
+        TriggerParameter.ITEM,
+        TriggerParameter.EVENT,
+        TriggerParameter.VALUE
     )
 
     @EventHandler(ignoreCancelled = true)
@@ -23,7 +25,8 @@ object TriggerDamageItem : Trigger("damage_item") {
                 player = player,
                 location = player.location,
                 item = event.item,
-                value = event.damage.toDouble()
+                value = event.damage.toDouble(),
+                event = event
             )
         )
     }
