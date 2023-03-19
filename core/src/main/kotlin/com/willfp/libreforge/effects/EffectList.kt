@@ -8,14 +8,10 @@ import com.willfp.libreforge.triggers.DispatchedTrigger
  */
 class EffectList(
     effects: List<EffectBlock>
-) : DelegatedList<EffectBlock>() {
-    init {
-        this.list += effects.sortedBy {
-            val total = it.effects.sumOf { element -> element.effect.runOrder.weight }
-            total / it.effects.size.coerceAtLeast(1)
-        }
-    }
-
+) : DelegatedList<EffectBlock>(effects.sortedBy {
+    val total = it.effects.sumOf { element -> element.effect.runOrder.weight }
+    total / it.effects.size.coerceAtLeast(1)
+}) {
     fun trigger(trigger: DispatchedTrigger) =
         this.forEach { it.trigger(trigger) }
 }

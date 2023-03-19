@@ -28,14 +28,12 @@ abstract class MultiMultiplierEffect<T : Any>(id: String) : Effect<NoCompileData
         if (config.has(key)) {
             val element = getElement(config.getString(key)) ?: return
 
-            modifiers[player.uniqueId][element] += object : MultiplierModifier(identifiers.uuid) {
-                override val multiplier
-                    get() = config.getDoubleFromExpression("multiplier", player)
+            modifiers[player.uniqueId][element] += MultiplierModifier(identifiers.uuid) {
+                config.getDoubleFromExpression("multiplier", player)
             }
         } else {
-            globalModifiers[player.uniqueId] += object : MultiplierModifier(identifiers.uuid) {
-                override val multiplier
-                    get() = config.getDoubleFromExpression("multiplier", player)
+            globalModifiers[player.uniqueId] += MultiplierModifier(identifiers.uuid) {
+                config.getDoubleFromExpression("multiplier", player)
             }
         }
     }

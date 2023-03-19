@@ -10,13 +10,11 @@ import com.willfp.libreforge.triggers.DispatchedTrigger
 class Chain(
     effects: List<ChainElement<*>>,
     private val executor: ChainExecutor
-) : DelegatedList<ChainElement<*>>() {
-    init {
-        for (order in RunOrder.values()) {
-            this.list += effects.filter { it.effect.runOrder == order }
-        }
+) : DelegatedList<ChainElement<*>>(
+    effects.sortedBy {
+        it.effect.runOrder.weight
     }
-
+) {
     fun trigger(
         trigger: DispatchedTrigger,
         executor: ChainExecutor = this.executor

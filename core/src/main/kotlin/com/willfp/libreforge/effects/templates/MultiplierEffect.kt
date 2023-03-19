@@ -18,9 +18,8 @@ abstract class MultiplierEffect(id: String) : Effect<NoCompileData>(id) {
     private val modifiers = listMap<UUID, MultiplierModifier>()
 
     final override fun onEnable(player: Player, config: Config, identifiers: Identifiers, compileData: NoCompileData) {
-        modifiers[player.uniqueId] += object : MultiplierModifier(identifiers.uuid) {
-            override val multiplier
-                get() = config.getDoubleFromExpression("multiplier", player)
+        modifiers[player.uniqueId] += MultiplierModifier(identifiers.uuid) {
+            config.getDoubleFromExpression("multiplier", player)
         }
     }
 

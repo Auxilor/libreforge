@@ -1,9 +1,10 @@
 package com.willfp.libreforge.integrations.ecojobs
 
-import com.willfp.eco.core.integrations.Integration
+import com.willfp.eco.core.EcoPlugin
 import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.filters.Filters
+import com.willfp.libreforge.integrations.LoadableIntegration
 import com.willfp.libreforge.integrations.ecojobs.impl.ConditionHasActiveJob
 import com.willfp.libreforge.integrations.ecojobs.impl.ConditionHasJobLevel
 import com.willfp.libreforge.integrations.ecojobs.impl.EffectGiveJobXp
@@ -15,8 +16,8 @@ import com.willfp.libreforge.integrations.ecojobs.impl.TriggerLeaveJob
 import com.willfp.libreforge.integrations.ecojobs.impl.TriggerLevelUpJob
 import com.willfp.libreforge.triggers.Triggers
 
-object EcoJobsIntegration : Integration {
-    fun load() {
+object EcoJobsIntegration : LoadableIntegration {
+    override fun load(plugin: EcoPlugin) {
         Conditions.register(ConditionHasJobLevel)
         Conditions.register(ConditionHasActiveJob)
         Effects.register(EffectJobXpMultiplier)

@@ -1,9 +1,10 @@
 package com.willfp.libreforge.integrations.ecopets
 
-import com.willfp.eco.core.integrations.Integration
+import com.willfp.eco.core.EcoPlugin
 import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.filters.Filters
+import com.willfp.libreforge.integrations.LoadableIntegration
 import com.willfp.libreforge.integrations.ecopets.impl.ConditionHasActivePet
 import com.willfp.libreforge.integrations.ecopets.impl.ConditionHasPetLevel
 import com.willfp.libreforge.integrations.ecopets.impl.EffectGivePetXp
@@ -13,8 +14,8 @@ import com.willfp.libreforge.integrations.ecopets.impl.TriggerGainPetXp
 import com.willfp.libreforge.integrations.ecopets.impl.TriggerLevelUpPet
 import com.willfp.libreforge.triggers.Triggers
 
-object EcoPetsIntegration : Integration {
-    fun load() {
+object EcoPetsIntegration : LoadableIntegration {
+    override fun load(plugin: EcoPlugin) {
         Conditions.register(ConditionHasPetLevel)
         Conditions.register(ConditionHasActivePet)
         Effects.register(EffectPetXpMultiplier)

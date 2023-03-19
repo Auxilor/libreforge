@@ -1,7 +1,6 @@
 package com.willfp.libreforge.mutators
 
 import com.willfp.libreforge.DelegatedList
-import com.willfp.libreforge.effects.RunOrder
 import com.willfp.libreforge.triggers.TriggerData
 
 /**
@@ -9,13 +8,11 @@ import com.willfp.libreforge.triggers.TriggerData
  */
 class MutatorList(
     mutators: List<MutatorBlock<*>>
-) : DelegatedList<MutatorBlock<*>>() {
-    init {
-        for (order in RunOrder.values()) {
-            this.list += mutators.filter { it.mutator.runOrder == order }
-        }
+) : DelegatedList<MutatorBlock<*>>(
+    mutators.sortedBy {
+        it.mutator.runOrder.weight
     }
-
+) {
     fun mutate(data: TriggerData): TriggerData {
         var current = data
 

@@ -2,8 +2,10 @@ package com.willfp.libreforge.effects
 
 import java.util.UUID
 
-abstract class MultiplierModifier(
-    val uuid: UUID
+class MultiplierModifier(
+    val uuid: UUID,
+    private val getMultiplier: () -> Double
 ) {
-    abstract val multiplier: Double
+    val multiplier: Double
+        get() = getMultiplier()
 }

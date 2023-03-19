@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.arguments
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.registry.Registry
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.effects.arguments.impl.ArgumentChainArgs
 import com.willfp.libreforge.effects.arguments.impl.ArgumentChance
@@ -11,23 +12,7 @@ import com.willfp.libreforge.effects.arguments.impl.ArgumentPointCost
 import com.willfp.libreforge.effects.arguments.impl.ArgumentPrice
 import com.willfp.libreforge.effects.arguments.impl.ArgumentRequire
 
-object EffectArguments {
-    private val registry = mutableMapOf<String, EffectArgument<*>>()
-
-    /**
-     * Get an effect argument by [id].
-     */
-    fun getByID(id: String): EffectArgument<*>? {
-        return registry[id]
-    }
-
-    /**
-     * Register a new [argument].
-     */
-    fun register(argument: EffectArgument<*>) {
-        registry[argument.id] = argument
-    }
-
+object EffectArguments : Registry<EffectArgument<*>>() {
     /**
      * Compile a [config] into an EffectArgumentList a given [context].
      */
@@ -35,7 +20,7 @@ object EffectArguments {
         val blocks = mutableListOf<EffectArgumentBlock<*>>()
 
         for (key in config.getKeys(false)) {
-            val argument = getByID(key) ?: continue
+            val argument = get(key) ?: continue
             blocks += makeBlock(argument, config, context) ?: continue
         }
 

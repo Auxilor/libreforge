@@ -3,17 +3,15 @@ package com.willfp.libreforge
 import com.willfp.eco.core.config.interfaces.Config
 
 class ConfigArguments internal constructor(
-    builder: ConfigArgumentsBuilder
+    private val arguments: List<ConfigArgument>
 ) {
-    private val arguments = builder.arguments
-
     fun test(config: Config): List<ConfigViolation> {
         return arguments.flatMap { it.test(config) }
     }
 }
 
 class ConfigArgumentsBuilder {
-    internal val arguments = mutableListOf<ConfigArgument>()
+    private val arguments = mutableListOf<ConfigArgument>()
 
     fun require(name: String, message: String) {
         require(listOf(name), message)
@@ -50,12 +48,12 @@ class ConfigArgumentsBuilder {
     fun inherit(subsection: String, getter: (Config) -> Compilable<*>?) {
         arguments += InheritedArguments(getter, subsection)
     }
+
+    internal fun build() = ConfigArguments(arguments)
 }
 
 fun arguments(block: ConfigArgumentsBuilder.() -> Unit): ConfigArguments {
-    val builder = ConfigArgumentsBuilder()
-    block(builder)
-    return ConfigArguments(builder)
+    return ConfigArgumentsBuilder().apply(block).build()
 }
 
 interface ConfigArgument {
@@ -66,29 +64,31 @@ interface ConfigArgument {
 }
 
 private class RequiredArgument<T>(
-    val names: Collection<String>,
-    val message: String,
-    val getter: Config.(String) -> T,
-    val predicate: (T) -> Boolean
+    private val names: Collection<String>,
+    private val message: String,
+    private val getter: Config.(String) -> T,
+    private val predicate: (T) -> Boolean
 ) : ConfigArgument {
     override fun test(config: Config): List<ConfigViolation> {
-        for (key in names) {
-            if (config.has(key) && predicate(config.getter(key))) {
-                return emptyList()
+        for (name in names) {
+            val value = config.getter(name)
+            if (config.has(name) && predicate(value)) {
+                return emptyList() // no violations
             }
         }
 
-        return listOf(ConfigViolation(names.first(), message))
+        return listOf(ConfigViolation(names.first(), message)) // violation found
     }
 }
 
 private class InheritedArguments(
-    val getter: (Config) -> Compilable<*>?,
-    val subsection: String? = null
+    private val getter: (Config) -> Compilable<*>?,
+    private val subsection: String? = null
 ) : ConfigArgument {
     override fun test(config: Config): List<ConfigViolation> {
-        val section = if (subsection == null) config else config.getSubsection(subsection)
+        val section = subsection?.let { config.getSubsection(it) } ?: config
+        val compilable = getter(section)
 
-        return getter(config)?.arguments?.test(section) ?: emptyList()
+        return compilable?.arguments?.test(section) ?: emptyList()
     }
 }
