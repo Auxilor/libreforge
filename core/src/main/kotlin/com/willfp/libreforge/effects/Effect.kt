@@ -63,7 +63,9 @@ abstract class Effect<T>(
         identifierFactory: IdentifierFactory,
         config: ChainElement<T>
     ) {
-        val count = effectCounter[player.uniqueId]++
+        // Increment first to fix reload bug where effects are applied twice.
+        effectCounter[player.uniqueId]++
+        val count = effectCounter[player.uniqueId]
         onEnable(player, config.config, identifierFactory.makeIdentifiers(count), config.compileData)
     }
 

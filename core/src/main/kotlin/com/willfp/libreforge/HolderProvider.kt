@@ -138,6 +138,7 @@ fun Player.updateEffects() {
 
     val added = afterF - beforeF
     val removed = beforeF - afterF
+    val toReload = afterF - added
 
     for (effect in removed) {
         effect.disable(this)
@@ -147,7 +148,7 @@ fun Player.updateEffects() {
         effect.enable(this)
     }
 
-    for (effect in afterF) {
+    for (effect in toReload) {
         effect.reload(this)
     }
 }

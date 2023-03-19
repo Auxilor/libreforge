@@ -76,12 +76,12 @@ object EffectAddHolderInRadius : Effect<HolderTemplate>("add_holder_in_radius") 
     override fun makeCompileData(config: Config, context: ViolationContext): HolderTemplate {
         val effects = Effects.compile(
             config.getSubsections("effects"),
-            context.with("add_holder_in_radius Effects")
+            context.with("add_holder_in_radius effects")
         )
 
         val conditions = Conditions.compile(
             config.getSubsections("conditions"),
-            context.with("add_holder_in_radius Conditions")
+            context.with("add_holder_in_radius conditions")
         )
 
         return HolderTemplate(

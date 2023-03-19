@@ -26,6 +26,7 @@ import com.willfp.libreforge.integrations.scyther.ScytherIntegration
 import com.willfp.libreforge.integrations.talismans.TalismansIntegration
 import com.willfp.libreforge.integrations.tmmobcoins.TMMobcoinsIntegration
 import com.willfp.libreforge.integrations.vault.VaultIntegration
+import org.bukkit.Bukkit
 import org.bukkit.event.Listener
 
 internal lateinit var plugin: EcoPlugin
@@ -64,6 +65,14 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
                     ViolationContext(this, "chains.yml")
                 ) ?: continue
             )
+        }
+
+        // Poll for changes
+        this.scheduler.runTimer(20, 20) {
+            for (player in Bukkit.getOnlinePlayers()) {
+                player.updateHolders()
+                player.updateEffects()
+            }
         }
     }
 
