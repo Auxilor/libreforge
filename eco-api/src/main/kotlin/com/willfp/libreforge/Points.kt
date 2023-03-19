@@ -90,9 +90,9 @@ fun initPointPlaceholders() {
     PlaceholderManager.registerPlaceholder(
         PlayerDynamicPlaceholder(
             LibReforgePlugin.instance,
-            Pattern.compile("points_[a-z]+")
+            Pattern.compile("points_[a-zA-z_-]+")
         ) { args, player ->
-            val type = args.split("_")[1]
+            val type = args.removePrefix("points_")
             player.getPoints(type).toNiceString()
         }
     )
