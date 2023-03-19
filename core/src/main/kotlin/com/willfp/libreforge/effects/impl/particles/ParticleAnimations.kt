@@ -17,10 +17,10 @@ object ParticleAnimations : Registry<ParticleAnimation<*>>() {
      * Compile a [config] into a ParticleAnimationBloc in a given [context].
      */
     fun compile(config: Config, context: ViolationContext): ParticleAnimationBlock<*>? {
-        val animation = get(config.getString("id"))
+        val animation = get(config.getString("animation"))
 
         if (animation == null) {
-            context.log(ConfigViolation("id", "Invalid shape ID specified!"))
+            context.log(ConfigViolation("animation", "Invalid animation specified!"))
             return null
         }
 
