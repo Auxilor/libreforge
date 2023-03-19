@@ -14,6 +14,7 @@ import org.bukkit.event.player.PlayerItemHeldEvent
 import org.bukkit.event.player.PlayerJoinEvent
 
 
+@Suppress("unused", "UNUSED_PARAMETER")
 class ItemRefreshListener(
     private val plugin: EcoPlugin
 ) : Listener {
