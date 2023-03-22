@@ -13,7 +13,8 @@ class ConditionBlock<T>(
     override val config: Config,
     override val compileData: T,
     val notMetEffects: EffectList,
-    val notMetLines: List<String>
+    val notMetLines: List<String>,
+    val showNotMet: Boolean
 ) : Compiled<T> {
     fun isMet(player: Player): Boolean {
         return condition.isMet(player, config, compileData)

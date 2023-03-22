@@ -20,6 +20,9 @@ class ConditionList(
     fun getNotMetLines(player: Player): List<String> =
         this.flatMap { it.notMetLines }
             .map { it.formatEco(player, formatPlaceholders = true) }
+
+    fun showNotMet(): Boolean =
+        this.any { it.showNotMet }
 }
 
 /**
