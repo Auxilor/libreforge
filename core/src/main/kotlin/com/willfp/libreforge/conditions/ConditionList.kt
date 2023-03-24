@@ -21,8 +21,9 @@ class ConditionList(
         this.flatMap { it.notMetLines }
             .map { it.formatEco(player, formatPlaceholders = true) }
 
-    fun showNotMet(): Boolean =
-        this.any { it.showNotMet }
+    fun isShowingAnyNotMet(player: Player): Boolean =
+        this.getNotMetLines(player).isNotEmpty()
+                || this.any { it.showNotMet && !it.isMet(player) }
 }
 
 /**
