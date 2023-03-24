@@ -12,26 +12,12 @@ import com.willfp.libreforge.triggers.Triggers
 object Counters {
     /**
      * Compile a counter from a [cfg] in a [context].
-     *
-     * The [count] function accepts values from the counter once it is bound to a plugin.
-     */
-    @JvmStatic
-    fun compile(
-        cfg: Config,
-        context: ViolationContext,
-        count: (Double) -> Unit
-    ): Counter? {
-        return compile(cfg, context)?.define(count)
-    }
-
-    /**
-     * Compile a counter from a [cfg] in a [context].
      */
     @JvmStatic
     fun compile(
         cfg: Config,
         context: ViolationContext
-    ): UndefinedCounter? {
+    ): Counter? {
         val config = cfg.separatorAmbivalent()
 
         // Legacy support for 'id' instead of 'trigger'
@@ -66,7 +52,7 @@ object Counters {
             context.with("filters")
         )
 
-        return UndefinedCounter(
+        return Counter(
             trigger,
             multiplier,
             conditions,

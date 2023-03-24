@@ -1,47 +1,42 @@
 package com.willfp.libreforge.counters
 
-import com.willfp.eco.core.EcoPlugin
 import com.willfp.libreforge.conditions.ConditionList
 import com.willfp.libreforge.filters.FilterList
 import com.willfp.libreforge.triggers.Trigger
-import com.willfp.libreforge.triggers.event.TriggerDispatchEvent
-import org.bukkit.event.EventHandler
-import org.bukkit.event.Listener
+import java.util.Objects
+import java.util.UUID
 
 class Counter internal constructor(
-    trigger: Trigger,
-    multiplier: Double,
-    conditions: ConditionList,
-    filters: FilterList,
-    private val count: (Double) -> Unit
-) : UndefinedCounter(trigger, multiplier, conditions, filters) {
+    val trigger: Trigger,
+    val multiplier: Double,
+    val conditions: ConditionList,
+    val filters: FilterList
+) {
+    private val uuid = UUID.randomUUID()
+
     /**
-     * Bind a counter to a plugin.
+     * Bind this counter to an [accumulator].
      */
-    fun bind(plugin: EcoPlugin) {
-        plugin.eventManager.registerListener(object : Listener {
-            @EventHandler
-            fun handle(event: TriggerDispatchEvent) {
-                val dispatch = event.trigger
-                val data = dispatch.data
+    fun bind(accumulator: Accumulator) {
+        bindCounter(this, accumulator)
+    }
 
-                val player = dispatch.player
-                val value = data.value
+    /**
+     * Unbind this counter from all accumulators.
+     */
+    fun unbind() {
+        unbindCounter(this)
+    }
 
-                if (!conditions.areMet(player)) {
-                    return
-                }
+    override fun equals(other: Any?): Boolean {
+        if (other !is Counter) {
+            return false
+        }
 
-                if (!filters.isMet(data)) {
-                    return
-                }
+        return other.uuid == this.uuid
+    }
 
-                if (dispatch.trigger != trigger) {
-                    return
-                }
-
-                count(value * multiplier)
-            }
-        })
+    override fun hashCode(): Int {
+        return Objects.hash(uuid)
     }
 }
