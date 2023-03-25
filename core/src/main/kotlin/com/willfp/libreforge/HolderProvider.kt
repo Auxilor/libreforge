@@ -17,12 +17,12 @@ interface HolderProvider {
     /**
      * Provide the holders.
      */
-    fun provide(player: Player): Collection<ProvidedHolder<*>>
+    fun provide(player: Player): Collection<ProvidedHolder>
 }
 
 class HolderProvideEvent(
     who: Player,
-    val holders: Collection<ProvidedHolder<*>>
+    val holders: Collection<ProvidedHolder>
 ) : PlayerEvent(who) {
     override fun getHandlers() = handlerList
 
@@ -46,7 +46,7 @@ fun registerHolderProvider(provider: HolderProvider) = providers.add(provider)
 /**
  * Register a new holder provider.
  */
-fun registerHolderProvider(provider: (Player) -> Collection<ProvidedHolder<*>>) =
+fun registerHolderProvider(provider: (Player) -> Collection<ProvidedHolder>) =
     providers.add(object : HolderProvider {
         override fun provide(player: Player) = provider(player)
     })
@@ -72,12 +72,12 @@ fun Player.refreshHolders() {
 
 private val holderCache = Caffeine.newBuilder()
     .expireAfterWrite(4, TimeUnit.SECONDS)
-    .build<UUID, Collection<ProvidedHolder<*>>>()
+    .build<UUID, Collection<ProvidedHolder>>()
 
 /**
  * The holders.
  */
-val Player.holders: Collection<ProvidedHolder<*>>
+val Player.holders: Collection<ProvidedHolder>
     get() = holderCache.get(this.uniqueId) {
         val holders = providers.flatMap { it.provide(this) }
 
@@ -96,20 +96,20 @@ fun Player.updateHolders() {
 }
 
 // Effects that were active on previous update
-private val previousStates = defaultMap<UUID, Map<ProvidedHolder<*>, Set<EffectBlock>>>(emptyMap())
+private val previousStates = defaultMap<UUID, Map<ProvidedHolder, Set<EffectBlock>>>(emptyMap())
 private val flattenedPreviousStates = defaultMap<UUID, Set<EffectBlock>>(emptySet()) // Optimisation.
 
 /**
  * Flatten down to purely the effects.
  */
-fun Map<ProvidedHolder<*>, Set<EffectBlock>>.flatten() = this.flatMap { it.value }.toSet()
+fun Map<ProvidedHolder, Set<EffectBlock>>.flatten() = this.flatMap { it.value }.toSet()
 
 /**
  * Get active effects for a [player] from holders mapped to the holder
  * that has provided them.
  */
-fun Collection<ProvidedHolder<*>>.getProvidedActiveEffects(player: Player): Map<ProvidedHolder<*>, Set<EffectBlock>> {
-    val map = mutableMapOf<ProvidedHolder<*>, Set<EffectBlock>>()
+fun Collection<ProvidedHolder>.getProvidedActiveEffects(player: Player): Map<ProvidedHolder, Set<EffectBlock>> {
+    val map = mutableMapOf<ProvidedHolder, Set<EffectBlock>>()
 
     for (holder in this) {
         map[holder] = holder.holder.getActiveEffects(player)
@@ -139,7 +139,7 @@ val Player.activeEffects: Set<EffectBlock>
 /**
  * The active effects mapped to the holder that provided them.
  */
-val Player.providedActiveEffects: Map<ProvidedHolder<*>, Set<EffectBlock>>
+val Player.providedActiveEffects: Map<ProvidedHolder, Set<EffectBlock>>
     get() = previousStates[this.uniqueId]
 
 /**

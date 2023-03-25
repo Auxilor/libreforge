@@ -48,7 +48,7 @@ object BlankHolder : Holder {
  * A provided holder is a holder with the item that has provided it,
  * i.e. The physical ItemStack that has the enchantment on it.
  */
-interface ProvidedHolder<T> {
+interface ProvidedHolder {
     /**
      * The holder.
      */
@@ -57,7 +57,7 @@ interface ProvidedHolder<T> {
     /**
      * The item.
      */
-    val item: T
+    val item: Any?
 
     // Destructuring support
     operator fun component1() = holder
@@ -69,9 +69,9 @@ interface ProvidedHolder<T> {
  *
  * Used internally to provide a default value for TriggerData.
  */
-object EmptyProvidedHolder : ProvidedHolder<Nothing?> {
+object EmptyProvidedHolder : ProvidedHolder {
     override val holder = BlankHolder
-    override val item: Nothing? = null
+    override val item = null
 }
 
 /**
@@ -79,8 +79,8 @@ object EmptyProvidedHolder : ProvidedHolder<Nothing?> {
  */
 class SimpleProvidedHolder(
     override val holder: Holder
-) : ProvidedHolder<Nothing?> {
-    override val item: Nothing? = null
+) : ProvidedHolder {
+    override val item = null
 
     override fun hashCode(): Int {
         return Objects.hash(holder)
@@ -101,7 +101,7 @@ class SimpleProvidedHolder(
 class ItemProvidedHolder(
     override val holder: Holder,
     override val item: ItemStack
-) : ProvidedHolder<ItemStack> {
+) : ProvidedHolder {
     override fun hashCode(): Int {
         return Objects.hash(holder, item)
     }
