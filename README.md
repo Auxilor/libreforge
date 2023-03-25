@@ -13,25 +13,6 @@ libreforge is a powerful yaml-based 'scripting' language to create powerful conf
     </a>
 </p>
 
-## Get from JitPack:
-
-Gradle:
-
-```groovy
-repositories {
-        maven { url 'https://jitpack.io' }
-}
-
-```
-
-```groovy
-dependencies {
-        compileOnly 'com.willfp:libreforge:Tag'
-}
-```
-
-Replace `Tag` with a release tag for libreforge, eg `3.112.0`.
-
 ## License
 
 *Click here to read [the entire license](https://github.com/Auxilor/eco/blob/master/LICENSE.md).*
