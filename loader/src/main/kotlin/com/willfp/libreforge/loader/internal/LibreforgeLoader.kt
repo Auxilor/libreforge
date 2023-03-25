@@ -1,7 +1,8 @@
-package com.willfp.libreforge.loader
+package com.willfp.libreforge.loader.internal
 
 import com.willfp.eco.core.data.readExternalData
 import com.willfp.eco.core.data.writeExternalData
+import com.willfp.libreforge.loader.LibreforgePlugin
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion
 import org.bukkit.Bukkit
 import java.io.File

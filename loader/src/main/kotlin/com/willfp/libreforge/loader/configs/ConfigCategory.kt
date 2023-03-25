@@ -5,6 +5,9 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.configs.LibreforgeConfigCategory
 import com.willfp.libreforge.loader.LibreforgePlugin
 
+/**
+ * A category of configs, for example enchants, or sets, or skills.
+ */
 abstract class ConfigCategory(
     private val id: String,
     val directory: String

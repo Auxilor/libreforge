@@ -4,6 +4,13 @@
 lrcdb:
   author: "Unknown Author" # The name attached to configs you export
 
+  # Your key is what will identify you to lrcdb - it works like a password.
+  # Make sure to keep it secret, make it long, hard to guess, and try
+  # to make it something unique so that other people can't guess it.
+  # You won't be able to export configs if you don't have a key set.
+
+  key: ""
+
   # Options about automatically sharing configs you create
   share-configs:
     # If you want all your configs to automatically be publicly available,
