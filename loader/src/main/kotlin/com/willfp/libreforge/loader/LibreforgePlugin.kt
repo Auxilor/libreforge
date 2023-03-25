@@ -5,15 +5,17 @@ import com.willfp.eco.core.LifecyclePosition
 import com.willfp.eco.core.PluginProps
 import com.willfp.eco.core.config.readConfig
 import com.willfp.eco.core.registry.Registry
-import com.willfp.libreforge.LibreforgePluginLike
 import com.willfp.libreforge.Plugins
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.configs.LibreforgeConfigCategory
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.executors.impl.NormalExecutorFactory
 import com.willfp.libreforge.loader.configs.ConfigCategory
-import com.willfp.libreforge.loader.configs.FoundConfig
-import com.willfp.libreforge.loader.configs.RegistrableConfig
+import com.willfp.libreforge.loader.internal.LoadedLibreforgePluginImpl
+import com.willfp.libreforge.loader.internal.checkHighestVersion
+import com.willfp.libreforge.loader.internal.configs.FoundConfig
+import com.willfp.libreforge.loader.internal.configs.RegistrableConfig
+import com.willfp.libreforge.loader.internal.loadHighestLibreforgeVersion
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion
 import java.io.File
 import java.util.zip.ZipFile
@@ -33,16 +35,7 @@ abstract class LibreforgePlugin : EcoPlugin() {
         }
 
         onEnable(LifecyclePosition.START) {
-            Plugins.register(
-                object : LibreforgePluginLike {
-                    override val plugin: LibreforgePlugin = this@LibreforgePlugin
-                    override val categories = plugin.categories
-                    override fun getDataFolder() = plugin.dataFolder
-                    override fun getConfigHandler() = plugin.configHandler
-                    override fun getLogger() = plugin.logger
-                }
-            )
-
+            Plugins.register(LoadedLibreforgePluginImpl(this))
             loadCategories()
         }
 
@@ -172,6 +165,9 @@ abstract class LibreforgePlugin : EcoPlugin() {
         return "6.53.0"
     }
 
+    /**
+     * Load default config categories.
+     */
     open fun loadConfigCategories(): List<ConfigCategory> {
         return listOf()
     }
