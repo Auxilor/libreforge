@@ -1,12 +1,12 @@
 package com.willfp.libreforge
 
 import com.willfp.eco.util.NamespacedKeyUtils
-import com.willfp.eco.util.NumberUtils
 import com.willfp.libreforge.conditions.ConditionList
 import com.willfp.libreforge.effects.EffectList
 import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemStack
 import java.util.Objects
+import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * A holder 'holds' a list of effects and a list of conditions.
@@ -116,6 +116,9 @@ class ItemProvidedHolder(
     }
 }
 
+// The current template ID, incremented every time a holder is created from a template.
+private val currentTemplateID = AtomicInteger(0)
+
 /**
  * A template that a may create a holder when given an ID.
  */
@@ -127,7 +130,7 @@ data class HolderTemplate(
      * Create a holder from the template.
      */
     fun toHolder() = toHolder(
-        NamespacedKeyUtils.createEcoKey("template_${NumberUtils.randInt(0, 1000000)}")
+        NamespacedKeyUtils.createEcoKey("template_${currentTemplateID.addAndGet(1)}")
     )
 
     /**

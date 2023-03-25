@@ -73,15 +73,15 @@ import com.willfp.libreforge.triggers.impl.TriggerTridentAttack
 import com.willfp.libreforge.triggers.impl.TriggerWinRaid
 
 object Triggers : Registry<Trigger>() {
-    private val groupRegistry = mutableMapOf<String, TriggerGroup>()
+    private val groupRegistry = Registry<TriggerGroup>()
 
     /**
      * Get a trigger by [id].
      */
     override fun get(id: String): Trigger? {
-        for ((prefix, group) in groupRegistry) {
-            if (id.startsWith("${prefix}_")) {
-                return group.create(id.removePrefix("${prefix}_"))
+        for (group in groupRegistry.values()) {
+            if (id.startsWith("${group.prefix}_")) {
+                return group.create(id.removePrefix("${group.prefix}_"))
             }
         }
 
@@ -92,7 +92,7 @@ object Triggers : Registry<Trigger>() {
      * Register a new [triggerGroup].
      */
     fun register(triggerGroup: TriggerGroup) {
-        groupRegistry[triggerGroup.prefix] = triggerGroup
+        groupRegistry.register(triggerGroup)
     }
 
     /**
