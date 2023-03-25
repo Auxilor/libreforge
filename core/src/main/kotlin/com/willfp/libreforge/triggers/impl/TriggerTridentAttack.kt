@@ -63,7 +63,7 @@ object TriggerTridentAttack : Trigger("trident_attack") {
                 velocity = trident.velocity,
                 value = event.finalDamage
             ),
-            forceHolders = trident.getMetadata(META_KEY).firstOrNull()?.value() as? Collection<ProvidedHolder<*>>
+            forceHolders = trident.getMetadata(META_KEY).firstOrNull()?.value() as? Collection<ProvidedHolder>
         )
     }
 }

@@ -24,7 +24,7 @@ data class TriggerData(
     having to pass it around everywhere, we just pass it in
     Trigger#dispatch by copying over the trigger data.
      */
-    val holder: ProvidedHolder<*> = EmptyProvidedHolder,
+    val holder: ProvidedHolder = EmptyProvidedHolder,
 
     val player: Player? = null,
     val victim: LivingEntity? = null,

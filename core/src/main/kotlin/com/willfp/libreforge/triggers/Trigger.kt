@@ -25,7 +25,7 @@ abstract class Trigger(
     protected fun dispatch(
         player: Player,
         data: TriggerData,
-        forceHolders: Collection<ProvidedHolder<*>>? = null
+        forceHolders: Collection<ProvidedHolder>? = null
     ) {
         val dispatch = DispatchedTrigger(player, this, data)
 
