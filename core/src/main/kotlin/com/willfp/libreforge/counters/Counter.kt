@@ -6,7 +6,7 @@ import com.willfp.libreforge.triggers.Trigger
 import java.util.Objects
 import java.util.UUID
 
-class Counter internal constructor(
+class Counter(
     val trigger: Trigger,
     val multiplier: Double,
     val conditions: ConditionList,
