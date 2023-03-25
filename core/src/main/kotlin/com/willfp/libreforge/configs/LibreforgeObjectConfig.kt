@@ -32,6 +32,7 @@ data class LibreforgeObjectConfig(
             "plugin" to category.plugin.name
             "category" to category.id
             "author" to plugin.configYml.getString("lrcdb.author")
+            "apiKey" to plugin.configYml.getString("lrcdb.key")
             "contents" to contents
             "isPrivate" to private
         }.toPlaintext()
