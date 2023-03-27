@@ -27,6 +27,16 @@ data class LibreforgeObjectConfig(
     val category: LibreforgeConfigCategory
 ) : Registrable {
     fun share(private: Boolean): ExportResponse {
+        if (!category.supportsSharing) {
+            return ExportResponse(
+                false,
+                400,
+                config {
+                    "message" to "Configs in this category cannot be shared"
+                }
+            )
+        }
+
         val body = config(ConfigType.JSON) {
             "name" to name
             "plugin" to category.plugin.name
