@@ -38,7 +38,7 @@ object CounterHandler : Listener {
             }
 
             for (accumulator in accumulators) {
-                accumulator.accept(value * counter.multiplier)
+                accumulator.accept(player, value * counter.multiplier)
             }
         }
     }
