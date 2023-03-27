@@ -71,7 +71,7 @@ abstract class LibreforgePlugin : EcoPlugin() {
                 val legacy = category.legacyLocation
                 if (legacy != null) {
                     val legacyConfig = this::class.java.classLoader
-                        .getResourceAsStream("${legacy.filename}.yml")
+                        .getResourceAsStream(legacy.filename)
                         .readConfig()
 
                     for (config in legacyConfig.getSubsections(legacy.section)) {
