@@ -37,7 +37,19 @@ class SimpleHolder(
     override val id: NamespacedKey,
     override val effects: EffectList,
     override val conditions: ConditionList
-) : Holder
+) : Holder {
+    override fun hashCode(): Int {
+        return Objects.hash(id)
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (other !is SimpleHolder) {
+            return false
+        }
+
+        return other.id == this.id
+    }
+}
 
 /**
  * A blank holder is a holder with no effects or conditions.
