@@ -5,7 +5,7 @@ package com.willfp.libreforge.counters
  */
 interface Accumulator {
     /**
-     * Accept a count.
+     * Accept a [count] for a [player].
      */
-    fun accept(count: Double)
+    fun accept(player: Player, count: Double)
 }
