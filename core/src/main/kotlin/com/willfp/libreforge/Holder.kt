@@ -31,6 +31,15 @@ interface Holder {
 }
 
 /**
+ * A simple holder, just an ID, effects, and conditions.
+ */
+class SimpleHolder(
+    override val id: NamespacedKey,
+    override val effects: EffectList,
+    override val conditions: ConditionList
+) : Holder
+
+/**
  * A blank holder is a holder with no effects or conditions.
  *
  * It's used in triggers in order to be able to provide an
