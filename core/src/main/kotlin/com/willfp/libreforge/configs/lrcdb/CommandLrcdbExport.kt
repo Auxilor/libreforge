@@ -66,13 +66,19 @@ class CommandLrcdbExport(plugin: EcoPlugin) : Subcommand(
         if (args.size == 2) {
             StringUtil.copyPartialMatches(
                 args[1],
-                plugin.categories.values().map { it.id },
+                plugin.categories.values()
+                    .filter { it.supportsSharing }
+                    .map { it.id },
                 completions
             )
             return completions
         }
 
         val category = plugin.categories[args[1]] ?: return emptyList()
+
+        if (!category.supportsSharing) {
+            return emptyList()
+        }
 
         if (args.size == 3) {
             StringUtil.copyPartialMatches(

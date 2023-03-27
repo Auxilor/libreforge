@@ -14,11 +14,13 @@ abstract class ConfigCategory(
 ) {
     open val legacyLocation: LegacyLocation? = null
 
+    open val supportsSharing = true
+
     internal lateinit var handle: LibreforgeConfigCategory
         private set
 
     internal fun makeHandle(plugin: EcoPlugin) {
-        handle = LibreforgeConfigCategory(id, directory, plugin)
+        handle = LibreforgeConfigCategory(id, directory, supportsSharing, plugin)
     }
 
     /**
