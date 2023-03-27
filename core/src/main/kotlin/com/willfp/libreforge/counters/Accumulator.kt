@@ -1,5 +1,7 @@
 package com.willfp.libreforge.counters
 
+import org.bukkit.entity.Player
+
 /**
  * Accepts a count produced by a [Counter].
  */
