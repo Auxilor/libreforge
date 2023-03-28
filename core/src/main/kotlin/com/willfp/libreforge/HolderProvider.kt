@@ -47,10 +47,9 @@ fun registerHolderProvider(provider: HolderProvider) = providers.add(provider)
  * Register a new holder provider.
  */
 fun registerHolderProvider(provider: (Player) -> Collection<ProvidedHolder>) =
-    providers.add(object : HolderProvider {
+    registerHolderProvider(object : HolderProvider {
         override fun provide(player: Player) = provider(player)
     })
-
 
 private val playerRefreshFunctions = mutableListOf<(Player) -> Unit>()
 

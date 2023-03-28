@@ -44,6 +44,19 @@ allprojects {
         compileOnly(fileTree("lib") { include("*.jar") })
     }
 
+    publishing {
+        repositories {
+            maven {
+                name = "repo.auxilor.io"
+                url = uri("https://repo.auxilor.io/repository/maven-public/")
+                credentials {
+                    username = System.getenv("MAVEN_USERNAME")
+                    password = System.getenv("MAVEN_PASSWORD")
+                }
+            }
+        }
+    }
+
     tasks.withType<JavaCompile> {
         options.encoding = "UTF-8"
     }
