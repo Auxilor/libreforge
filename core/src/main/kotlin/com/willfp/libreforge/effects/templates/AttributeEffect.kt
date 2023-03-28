@@ -2,6 +2,7 @@ package com.willfp.libreforge.effects.templates
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
 import org.bukkit.attribute.Attribute
@@ -15,7 +16,7 @@ abstract class AttributeEffect(
 ) : Effect<NoCompileData>(id) {
     protected abstract fun getValue(config: Config, player: Player): Double
 
-    final override fun onEnable(player: Player, config: Config, identifiers: Identifiers, compileData: NoCompileData) {
+    final override fun onEnable(player: Player, config: Config, identifiers: Identifiers, holder: ProvidedHolder, compileData: NoCompileData) {
         val instance = player.getAttribute(attribute) ?: return
         val uuid = identifiers.uuid
         instance.removeModifier(AttributeModifier(uuid, this.id, 0.0, operation))
@@ -29,7 +30,7 @@ abstract class AttributeEffect(
         )
     }
 
-    final override fun onDisable(player: Player, identifiers: Identifiers) {
+    final override fun onDisable(player: Player, identifiers: Identifiers, holder: ProvidedHolder) {
         val instance = player.getAttribute(attribute) ?: return
         instance.removeModifier(
             AttributeModifier(

@@ -3,6 +3,7 @@ package com.willfp.libreforge.integrations.vault.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.map.nestedMap
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
@@ -19,14 +20,14 @@ class EffectGivePermission(
 
     private val permissions = nestedMap<UUID, UUID, String>()
 
-    override fun onEnable(player: Player, config: Config, identifiers: Identifiers, compileData: NoCompileData) {
+    override fun onEnable(player: Player, config: Config, identifiers: Identifiers, holder: ProvidedHolder, compileData: NoCompileData) {
         val permission = config.getString("permission")
 
         permissions[player.uniqueId][identifiers.uuid] += permission
         handler.playerAdd(player, permission)
     }
 
-    override fun onDisable(player: Player, identifiers: Identifiers) {
+    override fun onDisable(player: Player, identifiers: Identifiers, holder: ProvidedHolder) {
         permissions[player.uniqueId][identifiers.uuid]?.let {
             handler.playerRemove(player, it)
         }

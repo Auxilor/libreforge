@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.conditions.ConditionList
 import com.willfp.libreforge.effects.arguments.EffectArgumentList
 import com.willfp.libreforge.filters.FilterList
@@ -27,14 +28,14 @@ class EffectBlock(
     private val identifierFactory = IdentifierFactory(uuid)
     override val supportsDelay = effects.all { it.supportsDelay }
 
-    fun enable(player: Player) =
-        effects.forEach { it.enable(player, identifierFactory) }
+    fun enable(player: Player, holder: ProvidedHolder) =
+        effects.forEach { it.enable(player, holder, identifierFactory) }
 
-    fun disable(player: Player) =
-        effects.forEach { it.disable(player, identifierFactory) }
+    fun disable(player: Player, holder: ProvidedHolder) =
+        effects.forEach { it.disable(player, holder, identifierFactory) }
 
-    fun reload(player: Player) =
-        effects.forEach { it.reload(player, identifierFactory) }
+    fun reload(player: Player, holder: ProvidedHolder) =
+        effects.forEach { it.reload(player, holder, identifierFactory) }
 
     fun tryTrigger(trigger: DispatchedTrigger) {
         if (trigger.trigger !in triggers) {

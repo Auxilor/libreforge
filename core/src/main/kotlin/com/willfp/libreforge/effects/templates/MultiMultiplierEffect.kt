@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.map.listMap
 import com.willfp.eco.core.map.nestedListMap
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
@@ -24,7 +25,7 @@ abstract class MultiMultiplierEffect<T : Any>(id: String) : Effect<NoCompileData
      */
     abstract val key: String
 
-    final override fun onEnable(player: Player, config: Config, identifiers: Identifiers, compileData: NoCompileData) {
+    final override fun onEnable(player: Player, config: Config, identifiers: Identifiers, holder: ProvidedHolder, compileData: NoCompileData) {
         if (config.has(key)) {
             val element = getElement(config.getString(key)) ?: return
 
@@ -38,7 +39,7 @@ abstract class MultiMultiplierEffect<T : Any>(id: String) : Effect<NoCompileData
         }
     }
 
-    final override fun onDisable(player: Player, identifiers: Identifiers) {
+    final override fun onDisable(player: Player, identifiers: Identifiers, holder: ProvidedHolder) {
         globalModifiers[player.uniqueId].removeIf { it.uuid == identifiers.uuid }
 
         for (element in getAllElements()) {

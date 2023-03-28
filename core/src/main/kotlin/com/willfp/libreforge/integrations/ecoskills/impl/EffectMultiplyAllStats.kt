@@ -6,6 +6,7 @@ import com.willfp.ecoskills.api.modifier.ModifierOperation
 import com.willfp.ecoskills.api.modifier.PlayerStatModifier
 import com.willfp.ecoskills.stats.Stats
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
@@ -16,7 +17,7 @@ object EffectMultiplyAllStats : Effect<NoCompileData>("multiply_all_stats") {
         require("multiplier", "You must specify the multiplier!")
     }
 
-    override fun onEnable(player: Player, config: Config, identifiers: Identifiers, compileData: NoCompileData) {
+    override fun onEnable(player: Player, config: Config, identifiers: Identifiers, holder: ProvidedHolder, compileData: NoCompileData) {
         val factory = identifiers.makeFactory()
 
         for ((offset, stat) in Stats.values().withIndex()) {
@@ -32,7 +33,7 @@ object EffectMultiplyAllStats : Effect<NoCompileData>("multiply_all_stats") {
         }
     }
 
-    override fun onDisable(player: Player, identifiers: Identifiers) {
+    override fun onDisable(player: Player, identifiers: Identifiers, holder: ProvidedHolder) {
         val factory = identifiers.makeFactory()
 
         for (offset in Stats.values().indices) {

@@ -2,6 +2,7 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
@@ -48,7 +49,7 @@ object EffectPermanentPotionEffect : Effect<NoCompileData>("permanent_potion_eff
         }
     }
 
-    override fun onEnable(player: Player, config: Config, identifiers: Identifiers, compileData: NoCompileData) {
+    override fun onEnable(player: Player, config: Config, identifiers: Identifiers, holder: ProvidedHolder, compileData: NoCompileData) {
         val effectType = PotionEffectType.getByName(config.getString("effect").uppercase())
             ?: PotionEffectType.INCREASE_DAMAGE
 
@@ -73,7 +74,7 @@ object EffectPermanentPotionEffect : Effect<NoCompileData>("permanent_potion_eff
         player.setMetadata(metaKey, plugin.metadataValueFactory.create(meta))
     }
 
-    override fun onDisable(player: Player, identifiers: Identifiers) {
+    override fun onDisable(player: Player, identifiers: Identifiers, holder: ProvidedHolder) {
         val meta = player.getMetadata(metaKey).firstOrNull()?.value()
                 as? MutableMap<UUID, Pair<PotionEffectType, Int>> ?: mutableMapOf()
 

@@ -4,6 +4,7 @@ import com.github.benmanes.caffeine.cache.Caffeine
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Holder
 import com.willfp.libreforge.HolderTemplate
+import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.SimpleProvidedHolder
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
@@ -40,7 +41,7 @@ object EffectAddPermanentHolderInRadius : Effect<HolderTemplate>("add_permanent_
         }
     }
 
-    override fun onEnable(player: Player, config: Config, identifiers: Identifiers, compileData: HolderTemplate) {
+    override fun onEnable(player: Player, config: Config, identifiers: Identifiers, holder: ProvidedHolder, compileData: HolderTemplate) {
         val radius = config.getDoubleFromExpression("radius", player)
         val applyToSelf = config.getBool("apply-to-self")
 
@@ -54,7 +55,7 @@ object EffectAddPermanentHolderInRadius : Effect<HolderTemplate>("add_permanent_
         holders += holder
     }
 
-    override fun onDisable(player: Player, identifiers: Identifiers) {
+    override fun onDisable(player: Player, identifiers: Identifiers, holder: ProvidedHolder) {
         holders.removeIf { it.holder.id == identifiers.key }
     }
 

@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.map.defaultMap
 import com.willfp.libreforge.Compilable
+import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.DispatchedTrigger
 import com.willfp.libreforge.triggers.Trigger
@@ -61,12 +62,13 @@ abstract class Effect<T>(
     fun enable(
         player: Player,
         identifierFactory: IdentifierFactory,
+        holder: ProvidedHolder,
         config: ChainElement<T>
     ) {
         // Increment first to fix reload bug where effects are applied twice.
         effectCounter[player.uniqueId]++
         val count = effectCounter[player.uniqueId]
-        onEnable(player, config.config, identifierFactory.makeIdentifiers(count), config.compileData)
+        onEnable(player, config.config, identifierFactory.makeIdentifiers(count), holder, config.compileData)
     }
 
     /**
@@ -81,6 +83,7 @@ abstract class Effect<T>(
         player: Player,
         config: Config,
         identifiers: Identifiers,
+        holder: ProvidedHolder,
         compileData: T
     ) {
         // Override when needed.
@@ -94,10 +97,11 @@ abstract class Effect<T>(
      */
     fun disable(
         player: Player,
-        identifierFactory: IdentifierFactory
+        identifierFactory: IdentifierFactory,
+        holder: ProvidedHolder
     ) {
         val count = effectCounter[player.uniqueId]--
-        onDisable(player, identifierFactory.makeIdentifiers(count))
+        onDisable(player, identifierFactory.makeIdentifiers(count), holder)
     }
 
     /**
@@ -108,7 +112,8 @@ abstract class Effect<T>(
      */
     protected open fun onDisable(
         player: Player,
-        identifiers: Identifiers
+        identifiers: Identifiers,
+        holder: ProvidedHolder
     ) {
         // Override when needed.
     }
@@ -152,6 +157,7 @@ abstract class Effect<T>(
     fun reload(
         player: Player,
         identifierFactory: IdentifierFactory,
+        holder: ProvidedHolder,
         config: ChainElement<T>
     ) {
         if (!shouldReload) {
@@ -159,8 +165,8 @@ abstract class Effect<T>(
         }
 
         val count = effectCounter[player.uniqueId]
-        onDisable(player, identifierFactory.makeIdentifiers(count))
-        onEnable(player, config.config, identifierFactory.makeIdentifiers(count), config.compileData)
+        onDisable(player, identifierFactory.makeIdentifiers(count), holder)
+        onEnable(player, config.config, identifierFactory.makeIdentifiers(count), holder, config.compileData)
     }
 
     override fun onRegister() {

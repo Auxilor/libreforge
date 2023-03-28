@@ -105,6 +105,21 @@ private val flattenedPreviousStates = defaultMap<UUID, Set<EffectBlock>>(emptySe
 fun Map<ProvidedHolder, Set<EffectBlock>>.flatten() = this.flatMap { it.value }.toSet()
 
 /**
+ * Map the effects to the holders that provided them.
+ */
+fun Map<ProvidedHolder, Set<EffectBlock>>.mapBlocksToHolders(): Map<EffectBlock, ProvidedHolder> {
+    val map = mutableMapOf<EffectBlock, ProvidedHolder>()
+
+    for ((holder, effects) in this) {
+        for (effect in effects) {
+            map[effect] = holder
+        }
+    }
+
+    return map
+}
+
+/**
  * Get active effects for a [player] from holders mapped to the holder
  * that has provided them.
  */
@@ -155,19 +170,22 @@ fun Player.updateEffects() {
     val beforeF = before.flatten()
     val afterF = after.flatten()
 
+    val beforeMap = before.mapBlocksToHolders().toNotNullMap()
+    val afterMap = after.mapBlocksToHolders().toNotNullMap()
+
     val added = afterF - beforeF
     val removed = beforeF - afterF
     val toReload = afterF - added
 
     for (effect in removed) {
-        effect.disable(this)
+        effect.disable(this, beforeMap[effect])
     }
 
     for (effect in added) {
-        effect.enable(this)
+        effect.enable(this, afterMap[effect])
     }
 
     for (effect in toReload) {
-        effect.reload(this)
+        effect.reload(this, afterMap[effect])
     }
 }

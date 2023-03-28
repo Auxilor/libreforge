@@ -2,6 +2,7 @@ package com.willfp.libreforge.effects
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Compiled
+import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.conditions.ConditionList
 import com.willfp.libreforge.effects.arguments.EffectArgumentList
 import com.willfp.libreforge.filters.FilterList
@@ -25,16 +26,16 @@ class ChainElement<T>(
     override val uuid: UUID = UUID.randomUUID()
     override val supportsDelay = effect.supportsDelay
 
-    fun enable(player: Player, identifierFactory: IdentifierFactory) {
-        effect.enable(player, identifierFactory, this)
+    fun enable(player: Player, holder: ProvidedHolder, identifierFactory: IdentifierFactory) {
+        effect.enable(player, identifierFactory, holder, this)
     }
 
-    fun disable(player: Player, identifierFactory: IdentifierFactory) {
-        effect.disable(player, identifierFactory)
+    fun disable(player: Player, holder: ProvidedHolder, identifierFactory: IdentifierFactory) {
+        effect.disable(player, identifierFactory, holder)
     }
 
-    fun reload(player: Player, identifierFactory: IdentifierFactory) {
-        effect.reload(player, identifierFactory, this)
+    fun reload(player: Player, holder: ProvidedHolder, identifierFactory: IdentifierFactory) {
+        effect.reload(player, identifierFactory, holder, this)
     }
 
     override fun doTrigger(trigger: DispatchedTrigger) =

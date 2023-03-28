@@ -5,6 +5,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.map.listMap
 import com.willfp.eco.util.NumberUtils
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
@@ -20,13 +21,13 @@ object EffectElytraBoostSaveChance : Effect<NoCompileData>("elytra_boost_save_ch
 
     private val modifiers = listMap<UUID, MultiplierModifier>()
 
-    override fun onEnable(player: Player, config: Config, identifiers: Identifiers, compileData: NoCompileData) {
+    override fun onEnable(player: Player, config: Config, identifiers: Identifiers, holder: ProvidedHolder, compileData: NoCompileData) {
         modifiers[player.uniqueId] += MultiplierModifier(identifiers.uuid) {
             config.getDoubleFromExpression("chance", player)
         }
     }
 
-    override fun onDisable(player: Player, identifiers: Identifiers) {
+    override fun onDisable(player: Player, identifiers: Identifiers, holder: ProvidedHolder) {
         modifiers[player.uniqueId].removeIf { it.uuid == identifiers.uuid }
     }
 
