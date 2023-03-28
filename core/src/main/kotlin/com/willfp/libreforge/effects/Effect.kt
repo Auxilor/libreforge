@@ -169,7 +169,7 @@ abstract class Effect<T>(
         onEnable(player, config.config, identifierFactory.makeIdentifiers(count), holder, config.compileData)
     }
 
-    override fun onRegister() {
+    final override fun onRegister() {
         if (plugin.isEnabled) {
             plugin.eventManager.registerListener(this)
         } else {
@@ -177,5 +177,11 @@ abstract class Effect<T>(
                 plugin.eventManager.registerListener(this)
             }
         }
+
+        postRegister()
+    }
+
+    open fun postRegister() {
+        // Override when needed.
     }
 }

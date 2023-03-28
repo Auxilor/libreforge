@@ -23,7 +23,7 @@ abstract class Condition<T>(
         compileData: T
     ): Boolean
 
-    override fun onRegister() {
+    final override fun onRegister() {
         if (plugin.isEnabled) {
             plugin.eventManager.registerListener(this)
         } else {
@@ -31,5 +31,11 @@ abstract class Condition<T>(
                 plugin.eventManager.registerListener(this)
             }
         }
+
+        postRegister()
+    }
+
+    open fun postRegister() {
+        // Override when needed.
     }
 }
