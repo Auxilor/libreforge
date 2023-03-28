@@ -24,14 +24,9 @@ abstract class Condition<T>(
     ): Boolean
 
     final override fun onRegister() {
-        if (plugin.isEnabled) {
+        plugin.runWhenEnabled {
             plugin.eventManager.registerListener(this)
             postRegister()
-        } else {
-            plugin.onEnable {
-                plugin.eventManager.registerListener(this)
-                postRegister()
-            }
         }
     }
 

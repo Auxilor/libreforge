@@ -9,12 +9,8 @@ abstract class TriggerGroup(
     abstract fun create(value: String): Trigger?
 
     final override fun onRegister() {
-        if (plugin.isEnabled) {
+        plugin.runWhenEnabled {
             postRegister()
-        } else {
-            plugin.onEnable {
-                postRegister()
-            }
         }
     }
 

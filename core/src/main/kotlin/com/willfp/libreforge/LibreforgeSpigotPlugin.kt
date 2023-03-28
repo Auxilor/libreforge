@@ -20,7 +20,7 @@ import com.willfp.libreforge.integrations.vault.VaultIntegration
 import org.bukkit.Bukkit
 import org.bukkit.event.Listener
 
-internal lateinit var plugin: EcoPlugin
+internal lateinit var plugin: LibreforgeSpigotPlugin
     private set
 
 class LibreforgeSpigotPlugin : EcoPlugin() {
@@ -95,5 +95,16 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
         return listOf(
             CommandLrcdb(this)
         )
+    }
+
+    /**
+     * Run a runnable when the plugin is enabled.
+     */
+    fun runWhenEnabled(runnable: () -> Unit) {
+        if (isEnabled) {
+            runnable()
+        } else {
+            onEnable(runnable)
+        }
     }
 }
