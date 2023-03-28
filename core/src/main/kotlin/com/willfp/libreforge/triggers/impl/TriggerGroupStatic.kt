@@ -20,7 +20,7 @@ object TriggerGroupStatic : TriggerGroup("static") {
         return trigger
     }
 
-    init {
+    override fun postRegister() {
         plugin.scheduler.runTimer(1, 1) {
             tick++
 
