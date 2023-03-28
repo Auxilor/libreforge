@@ -43,7 +43,11 @@ publishing {
     publications {
         create<MavenPublication>("maven") {
             from(components["java"])
+
             artifactId = "libreforge"
+            groupId = "com.willfp"
+            version = project.version.toString()
+
             artifact(tasks.shadowJar.get().archiveFile.get()) {
                 classifier = "shadow"
             }

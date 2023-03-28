@@ -32,6 +32,8 @@ publishing {
         create<MavenPublication>("maven") {
             from(components["java"])
             artifactId = "libreforge-gradle-plugin"
+            groupId = "com.willfp"
+            version = project.version.toString()
         }
     }
 }
