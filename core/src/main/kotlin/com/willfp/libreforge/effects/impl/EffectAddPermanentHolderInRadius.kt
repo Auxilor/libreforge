@@ -45,14 +45,14 @@ object EffectAddPermanentHolderInRadius : Effect<HolderTemplate>("add_permanent_
         val radius = config.getDoubleFromExpression("radius", player)
         val applyToSelf = config.getBool("apply-to-self")
 
-        val holder = PermanentNearbyHolder(
+        val nearbyHolder = PermanentNearbyHolder(
             compileData.toHolder(identifiers.key),
             radius,
             player.uniqueId,
             applyToSelf
         )
 
-        holders += holder
+        holders += nearbyHolder
     }
 
     override fun onDisable(player: Player, identifiers: Identifiers, holder: ProvidedHolder) {
