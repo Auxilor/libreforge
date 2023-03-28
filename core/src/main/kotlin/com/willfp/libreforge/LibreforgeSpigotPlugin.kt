@@ -26,9 +26,6 @@ internal lateinit var plugin: EcoPlugin
 class LibreforgeSpigotPlugin : EcoPlugin() {
     val chainsYml = ChainsYml(this)
 
-    var isEnabled: Boolean = false
-        private set
-
     init {
         plugin = this
     }
@@ -49,8 +46,6 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
         }
 
         pointsPlaceholder(this).register()
-
-        isEnabled = true
     }
 
     override fun handleReload() {
