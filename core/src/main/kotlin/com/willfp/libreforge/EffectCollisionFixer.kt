@@ -10,8 +10,10 @@ object EffectCollisionFixer : Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     fun clearOnQuit(event: PlayerQuitEvent) {
         val player = event.player
-        for (effect in player.activeEffects) {
-            effect.disable(player)
+        for ((holder, effects) in player.providedActiveEffects) {
+            for (effect in effects) {
+                effect.disable(player, holder)
+            }
         }
 
         player.updateHolders()
