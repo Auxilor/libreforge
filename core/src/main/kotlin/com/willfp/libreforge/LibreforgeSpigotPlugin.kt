@@ -10,21 +10,11 @@ import com.willfp.libreforge.counters.CounterHandler
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.executors.impl.NormalExecutorFactory
 import com.willfp.libreforge.integrations.aureliumskills.AureliumSkillsIntegration
-import com.willfp.libreforge.integrations.boosters.BoostersIntegration
-import com.willfp.libreforge.integrations.ecoarmor.EcoArmorIntegration
-import com.willfp.libreforge.integrations.ecobosses.EcoBossesIntegration
-import com.willfp.libreforge.integrations.ecoenchants.EcoEnchantsIntegration
-import com.willfp.libreforge.integrations.ecoitems.EcoItemsIntegration
-import com.willfp.libreforge.integrations.ecojobs.EcoJobsIntegration
-import com.willfp.libreforge.integrations.ecopets.EcoPetsIntegration
-import com.willfp.libreforge.integrations.ecoskills.EcoSkillsIntegration
 import com.willfp.libreforge.integrations.jobs.JobsIntegration
 import com.willfp.libreforge.integrations.levelledmobs.LevelledMobsIntegration
 import com.willfp.libreforge.integrations.mcmmo.McMMOIntegration
 import com.willfp.libreforge.integrations.paper.PaperIntegration
-import com.willfp.libreforge.integrations.reforges.ReforgesIntegration
 import com.willfp.libreforge.integrations.scyther.ScytherIntegration
-import com.willfp.libreforge.integrations.talismans.TalismansIntegration
 import com.willfp.libreforge.integrations.tmmobcoins.TMMobcoinsIntegration
 import com.willfp.libreforge.integrations.vault.VaultIntegration
 import org.bukkit.Bukkit
@@ -35,6 +25,9 @@ internal lateinit var plugin: EcoPlugin
 
 class LibreforgeSpigotPlugin : EcoPlugin() {
     val chainsYml = ChainsYml(this)
+
+    var isEnabled: Boolean = false
+        private set
 
     init {
         plugin = this
@@ -56,6 +49,8 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
         }
 
         pointsPlaceholder(this).register()
+
+        isEnabled = true
     }
 
     override fun handleReload() {
@@ -90,20 +85,10 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
     override fun loadIntegrationLoaders(): List<IntegrationLoader> {
         return listOf(
             IntegrationLoader("AureliumSkills") { AureliumSkillsIntegration.load(this) },
-            IntegrationLoader("Boosters") { BoostersIntegration.load(this) },
-            IntegrationLoader("EcoArmor") { EcoArmorIntegration.load(this) },
-            IntegrationLoader("EcoBosses") { EcoBossesIntegration.load(this) },
-            IntegrationLoader("EcoEnchants") { EcoEnchantsIntegration.load(this) },
-            IntegrationLoader("EcoItems") { EcoItemsIntegration.load(this) },
-            IntegrationLoader("EcoJobs") { EcoJobsIntegration.load(this) },
-            IntegrationLoader("EcoPets") { EcoPetsIntegration.load(this) },
-            IntegrationLoader("EcoSkills") { EcoSkillsIntegration.load(this) },
             IntegrationLoader("Jobs") { JobsIntegration.load(this) },
             IntegrationLoader("LevelledMobs") { LevelledMobsIntegration.load(this) },
             IntegrationLoader("mcMMO") { McMMOIntegration.load(this) },
-            IntegrationLoader("Reforges") { ReforgesIntegration.load(this) },
             IntegrationLoader("Scyther") { ScytherIntegration.load(this) },
-            IntegrationLoader("Talismans") { TalismansIntegration.load(this) },
             IntegrationLoader("TMMobcoins") { TMMobcoinsIntegration.load(this) },
             IntegrationLoader("Vault") { VaultIntegration.load(this) }
         )
