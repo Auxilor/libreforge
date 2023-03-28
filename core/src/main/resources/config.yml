@@ -25,6 +25,10 @@ lrcdb:
   # If you disable share-configs, you can still share select configs publicly
   # with /lrcdb export <config>.
 
+
+# Show what libreforge is on startup, to explain to new users.
+show-libreforge-info: true
+
 cooldown:
   in-actionbar: true
   sound:
