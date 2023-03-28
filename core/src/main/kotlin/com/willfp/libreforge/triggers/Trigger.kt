@@ -48,7 +48,9 @@ abstract class Trigger(
     }
 
     override fun onRegister() {
-        plugin.eventManager.registerListener(this)
+        plugin.onEnable {
+            plugin.eventManager.registerListener(this)
+        }
     }
 
     override fun getID() = id
