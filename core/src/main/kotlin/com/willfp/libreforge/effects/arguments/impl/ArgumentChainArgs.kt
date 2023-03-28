@@ -7,7 +7,7 @@ import com.willfp.libreforge.effects.ElementLike
 import com.willfp.libreforge.effects.arguments.EffectArgument
 import com.willfp.libreforge.triggers.DispatchedTrigger
 
-object ArgumentChainArgs : EffectArgument<NoCompileData>("chain-args") {
+object ArgumentChainArgs : EffectArgument<NoCompileData>("chain_args") {
     // Misusing arguments a bit here but it's surprisingly clean
     override fun isMet(element: ElementLike, trigger: DispatchedTrigger, compileData: NoCompileData) = true
 
