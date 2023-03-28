@@ -4,6 +4,7 @@ import com.archyx.aureliumskills.api.AureliumAPI
 import com.archyx.aureliumskills.stats.Stats
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
@@ -15,7 +16,7 @@ object EffectAddStat : Effect<NoCompileData>("add_stat") {
         require("amount", "You must specify the amount!")
     }
 
-    override fun onEnable(player: Player, config: Config, identifiers: Identifiers, compileData: NoCompileData) {
+    override fun onEnable(player: Player, config: Config, identifiers: Identifiers, holder: ProvidedHolder, compileData: NoCompileData) {
         AureliumAPI.addStatModifier(
             player,
             identifiers.key.key,
@@ -24,7 +25,7 @@ object EffectAddStat : Effect<NoCompileData>("add_stat") {
         )
     }
 
-    override fun onDisable(player: Player, identifiers: Identifiers) {
+    override fun onDisable(player: Player, identifiers: Identifiers, holder: ProvidedHolder) {
         AureliumAPI.removeStatModifier(
             player,
             identifiers.key.key,

@@ -6,6 +6,7 @@ import com.willfp.ecoskills.api.modifier.ModifierOperation
 import com.willfp.ecoskills.api.modifier.PlayerStatModifier
 import com.willfp.ecoskills.stats.Stats
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
@@ -17,7 +18,7 @@ object EffectMultiplyStat : Effect<NoCompileData>("multiply_stat") {
         require("multiplier", "You must specify the multiplier!")
     }
 
-    override fun onEnable(player: Player, config: Config, identifiers: Identifiers, compileData: NoCompileData) {
+    override fun onEnable(player: Player, config: Config, identifiers: Identifiers, holder: ProvidedHolder, compileData: NoCompileData) {
         EcoSkillsAPI.getInstance().addStatModifier(
             player,
             PlayerStatModifier(
@@ -29,7 +30,7 @@ object EffectMultiplyStat : Effect<NoCompileData>("multiply_stat") {
         )
     }
 
-    override fun onDisable(player: Player, identifiers: Identifiers) {
+    override fun onDisable(player: Player, identifiers: Identifiers, holder: ProvidedHolder) {
         EcoSkillsAPI.getInstance().removeStatModifier(
             player,
             identifiers.key

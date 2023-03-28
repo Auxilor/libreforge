@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.map.nestedMap
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
@@ -18,7 +19,7 @@ object EffectAddPoints : Effect<NoCompileData>("add_points") {
 
     private val tracker = nestedMap<UUID, UUID, AddedPoint>()
 
-    override fun onEnable(player: Player, config: Config, identifiers: Identifiers, compileData: NoCompileData) {
+    override fun onEnable(player: Player, config: Config, identifiers: Identifiers, holder: ProvidedHolder, compileData: NoCompileData) {
         val added = tracker[player.uniqueId]
         val point = config.getString("type")
         val amount = config.getDoubleFromExpression("amount", player)
@@ -33,7 +34,7 @@ object EffectAddPoints : Effect<NoCompileData>("add_points") {
         tracker[player.uniqueId] = added
     }
 
-    override fun onDisable(player: Player, identifiers: Identifiers) {
+    override fun onDisable(player: Player, identifiers: Identifiers, holder: ProvidedHolder) {
         val added = tracker[player.uniqueId]
         val addedPoint = added[identifiers.uuid] ?: return
         added -= identifiers.uuid

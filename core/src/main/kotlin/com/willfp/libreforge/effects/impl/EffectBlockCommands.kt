@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.map.nestedListMap
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
@@ -18,13 +19,13 @@ object EffectBlockCommands : Effect<NoCompileData>("block_commands") {
 
     private val players = nestedListMap<UUID, UUID, String>()
 
-    override fun onEnable(player: Player, config: Config, identifiers: Identifiers, compileData: NoCompileData) {
+    override fun onEnable(player: Player, config: Config, identifiers: Identifiers, holder: ProvidedHolder, compileData: NoCompileData) {
         val commands = players[player.uniqueId]
         commands[identifiers.uuid] = config.getStrings("commands")
         players[player.uniqueId] = commands
     }
 
-    override fun onDisable(player: Player, identifiers: Identifiers) {
+    override fun onDisable(player: Player, identifiers: Identifiers, holder: ProvidedHolder) {
         val existing = players[player.uniqueId]
         existing.remove(identifiers.uuid)
         players[player.uniqueId] = existing
