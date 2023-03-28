@@ -2,7 +2,7 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.placeholder.PlaceholderManager
-import com.willfp.libreforge.GroupedStaticPlaceholder
+import com.willfp.libreforge.NamedValue
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Chain
@@ -30,7 +30,7 @@ object EffectRunChainInline : Effect<Chain?>("run_chain_inline") {
 
         for (key in args.getKeys(false)) {
             dispatch.addPlaceholder(
-                GroupedStaticPlaceholder(
+                NamedValue(
                     listOf(key, key.replace("_", "")),
                     PlaceholderManager.translatePlaceholders(args.getString(key), player)
                 )

@@ -1,6 +1,6 @@
 package com.willfp.libreforge.integrations.levelledmobs.impl
 
-import com.willfp.libreforge.GroupedStaticPlaceholder
+import com.willfp.libreforge.NamedValue
 import com.willfp.libreforge.triggers.event.TriggerDispatchEvent
 import me.lokka30.levelledmobs.LevelledMobs
 import org.bukkit.event.EventHandler
@@ -13,7 +13,7 @@ object LevelledMobsPlaceholderListener : Listener {
         val level = LevelledMobs.getInstance().levelInterface.getLevelOfMob(victim)
 
         event.trigger.addPlaceholder(
-            GroupedStaticPlaceholder(
+            NamedValue(
                 "victim_level",
                 level
             )

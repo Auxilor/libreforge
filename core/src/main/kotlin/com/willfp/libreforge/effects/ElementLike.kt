@@ -2,7 +2,7 @@ package com.willfp.libreforge.effects
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
-import com.willfp.libreforge.GroupedStaticPlaceholder
+import com.willfp.libreforge.NamedValue
 import com.willfp.libreforge.conditions.ConditionList
 import com.willfp.libreforge.effects.arguments.EffectArgumentList
 import com.willfp.libreforge.filters.FilterList
@@ -46,10 +46,10 @@ abstract class ElementLike {
         val repeatIncrement = config.getDoubleFromExpression("repeat.increment", trigger.data)
         var repeatCount = repeatStart
 
-        trigger.addPlaceholder(GroupedStaticPlaceholder("repeat_times", repeatTimes))
-        trigger.addPlaceholder(GroupedStaticPlaceholder("repeat_start", repeatStart))
-        trigger.addPlaceholder(GroupedStaticPlaceholder("repeat_increment", repeatIncrement))
-        trigger.addPlaceholder(GroupedStaticPlaceholder("repeat_count", repeatCount))
+        trigger.addPlaceholder(NamedValue("repeat_times", repeatTimes))
+        trigger.addPlaceholder(NamedValue("repeat_start", repeatStart))
+        trigger.addPlaceholder(NamedValue("repeat_increment", repeatIncrement))
+        trigger.addPlaceholder(NamedValue("repeat_count", repeatCount))
 
         val delay = config.getIntFromExpression("delay", trigger.data)
             .coerceAtLeast(0)

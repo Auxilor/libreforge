@@ -19,7 +19,7 @@ object TriggerPlaceholderListener : Listener {
         val data = event.trigger.data
 
         event.trigger.addPlaceholder(
-            GroupedStaticPlaceholder(
+            NamedValue(
                 listOf("trigger_value", "triggervalue", "trigger", "value", "tv", "v", "t"),
                 event.trigger.data.value
             )
@@ -27,14 +27,14 @@ object TriggerPlaceholderListener : Listener {
 
         if (data.victim != null) {
             event.trigger.addPlaceholder(
-                GroupedStaticPlaceholder(
+                NamedValue(
                     "victim_health",
                     data.victim.health
                 )
             )
 
             event.trigger.addPlaceholder(
-                GroupedStaticPlaceholder(
+                NamedValue(
                     "victim_max_health",
                     data.victim.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.value ?: 0.0
                 )
@@ -42,14 +42,14 @@ object TriggerPlaceholderListener : Listener {
 
             if (data.player != null) {
                 event.trigger.addPlaceholder(
-                    GroupedStaticPlaceholder(
+                    NamedValue(
                         "distance",
                         data.victim.location.toVector().distance(data.player.location.toVector())
                     )
                 )
 
                 event.trigger.addPlaceholder(
-                    GroupedStaticPlaceholder(
+                    NamedValue(
                         "hits",
                         data.victim.getHits(data.player)
                     )
