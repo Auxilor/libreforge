@@ -9,8 +9,13 @@ import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
+import com.willfp.libreforge.triggers.TriggerParameter
 
 object EffectRemoveItem : Effect<TestableItem>("remove_item") {
+    override val parameters = setOf(
+        TriggerParameter.PLAYER
+    )
+
     override val arguments = arguments {
         require("item", "You must specify the item to remove!")
     }
