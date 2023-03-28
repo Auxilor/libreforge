@@ -40,7 +40,7 @@ object EffectTraceback : Effect<NoCompileData>("traceback") {
         return true
     }
 
-    init {
+    override fun postRegister() {
         plugin.scheduler.runTimer(20, 20) {
             for (player in Bukkit.getOnlinePlayers()) {
                 @Suppress("UNCHECKED_CAST")

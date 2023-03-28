@@ -172,13 +172,13 @@ abstract class Effect<T>(
     final override fun onRegister() {
         if (plugin.isEnabled) {
             plugin.eventManager.registerListener(this)
+            postRegister()
         } else {
             plugin.onEnable {
                 plugin.eventManager.registerListener(this)
+                postRegister()
             }
         }
-
-        postRegister()
     }
 
     open fun postRegister() {
