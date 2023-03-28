@@ -48,7 +48,7 @@ allprojects {
         repositories {
             maven {
                 name = "repo.auxilor.io"
-                url = uri("https://repo.auxilor.io/repository/maven-public/")
+                url = uri("https://repo.auxilor.io/repository/maven-snapshots/")
                 credentials {
                     username = System.getenv("MAVEN_USERNAME")
                     password = System.getenv("MAVEN_PASSWORD")
