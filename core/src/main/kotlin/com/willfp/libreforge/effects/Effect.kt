@@ -170,14 +170,9 @@ abstract class Effect<T>(
     }
 
     final override fun onRegister() {
-        if (plugin.isEnabled) {
+        plugin.runWhenEnabled {
             plugin.eventManager.registerListener(this)
             postRegister()
-        } else {
-            plugin.onEnable {
-                plugin.eventManager.registerListener(this)
-                postRegister()
-            }
         }
     }
 
