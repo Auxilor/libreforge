@@ -2,7 +2,6 @@ package com.willfp.libreforge
 
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.events.ArmorChangeEvent
-import com.willfp.ecoenchants.target.EnchantmentTargets.isEnchantable
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -25,10 +24,6 @@ class ItemRefreshListener(
         }
         val player = event.entity as Player
 
-        if (!event.item.itemStack.isEnchantable) {
-            return
-        }
-
         player.refreshHolders()
     }
 
@@ -41,10 +36,6 @@ class ItemRefreshListener(
 
     @EventHandler
     fun onInventoryDrop(event: PlayerDropItemEvent) {
-        if (!event.itemDrop.itemStack.isEnchantable) {
-            return
-        }
-
         event.player.refreshHolders()
     }
 
