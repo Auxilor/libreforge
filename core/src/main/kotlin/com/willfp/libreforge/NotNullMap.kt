@@ -24,11 +24,11 @@ class NotNullMutableMap<K, V>(private val handle: MutableMap<K, V>) : MutableMap
     }
 }
 
-inline fun <reified K, reified V> Map<K, V>.toNotNullMutableMap(): NotNullMap<K, V> =
-    NotNullMap(this)
+inline fun <reified K, reified V> Map<K, V>.toNotNullMutableMap(): NotNullMutableMap<K, V> =
+    NotNullMutableMap(this.toMutableMap())
 
-inline fun <reified K, reified V> notNullMutableMapOf(): NotNullMap<K, V> =
-    mutableMapOf<K, V>().toNotNullMap()
+inline fun <reified K, reified V> notNullMutableMapOf(): NotNullMutableMap<K, V> =
+    mutableMapOf<K, V>().toNotNullMutableMap()
 
-inline fun <reified K, reified V> notNullMutableMapOf(vararg pairs: Pair<K, V>): NotNullMap<K, V> =
-    mutableMapOf(*pairs).toNotNullMap()
+inline fun <reified K, reified V> notNullMutableMapOf(vararg pairs: Pair<K, V>): NotNullMutableMap<K, V> =
+    mutableMapOf(*pairs).toNotNullMutableMap()
