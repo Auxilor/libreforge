@@ -5,9 +5,7 @@ import com.willfp.eco.core.data.writeExternalData
 import com.willfp.libreforge.loader.LibreforgePlugin
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion
 import org.bukkit.Bukkit
-import java.io.File
 import java.io.FileOutputStream
-import java.util.zip.ZipFile
 
 private const val HIGHEST_LIBREFORGE_VERSION_KEY = "highest-libreforge-version"
 private const val HIGHEST_LIBREFORGE_VERSION_PLUGIN_KEY = "highest-libreforge-version-plugin"
@@ -42,30 +40,14 @@ internal fun loadHighestLibreforgeVersion() {
     versionsFolder.mkdirs()
 
     val libreforgeJar = versionsFolder.resolve("libreforge-$version.jar")
-    val libreforgeResourceName = findLibreforgeResourceName(plugin.file)
-        ?: throw LibreforgeNotFoundError("Libreforge wasn't found in the plugin jar")
+    val libreforgeResourceName = "libreforge-$version-shadow.jar"
 
-    ZipFile(plugin.file).use { zip ->
-        val entry = zip.getEntry(libreforgeResourceName)
-        entry ?: throw LibreforgeNotFoundError("Libreforge resource not found in the plugin jar")
-        FileOutputStream(libreforgeJar).use { outputStream ->
-            zip.getInputStream(entry).use { inputStream ->
-                inputStream.copyTo(outputStream)
-            }
+    FileOutputStream(libreforgeJar).use { outputStream ->
+        LibreforgePlugin::class.java.classLoader.getResourceAsStream(libreforgeResourceName).use { inputStream ->
+            inputStream?.copyTo(outputStream)
+                ?: throw LibreforgeNotFoundError("Libreforge wasn't found in the plugin jar")
         }
     }
 
     Bukkit.getPluginManager().loadPlugin(libreforgeJar)
-}
-
-private fun findLibreforgeResourceName(pluginFile: File): String? {
-    val zip = ZipFile(pluginFile)
-    val entries = zip.entries()
-    while (entries.hasMoreElements()) {
-        val entry = entries.nextElement()
-        if (entry.name.startsWith("libreforge") && entry.name.endsWith(".jar")) {
-            return entry.name
-        }
-    }
-    return null
 }
