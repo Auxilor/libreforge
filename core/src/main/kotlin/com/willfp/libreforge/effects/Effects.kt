@@ -227,7 +227,13 @@ object Effects : Registry<Effect<*>>() {
         val elements = configs.map { it.separatorAmbivalent() }.mapNotNull { compileElement(it, context) }
 
         if ((elements.size > 1 || !directIDSpecified) && elements.any { it.effect.isPermanent }) {
-            context.log(ConfigViolation("effects", "Permanent effects are not allowed in chains!"))
+            context.log(
+                ConfigViolation(
+                    "effects",
+                    "Permanent effects (${
+                        elements.filter { it.effect.isPermanent }.joinToString(", ") { it.effect.id }
+                    }) are not allowed in chains!")
+            )
             return null
         }
 
