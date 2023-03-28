@@ -48,8 +48,12 @@ abstract class Trigger(
     }
 
     override fun onRegister() {
-        plugin.onEnable {
+        if (plugin.isEnabled) {
             plugin.eventManager.registerListener(this)
+        } else {
+            plugin.onEnable {
+                plugin.eventManager.registerListener(this)
+            }
         }
     }
 

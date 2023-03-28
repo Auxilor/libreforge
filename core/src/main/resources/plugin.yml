@@ -14,20 +14,10 @@ website: willfp.com
 softdepend:
   - eco
   - AureliumSkills
-  - Boosters
-  - EcoArmor
-  - EcoBosses
-  - EcoEnchants
-  - EcoItems
-  - EcoJobs
-  - EcoPets
-  - EcoSkills
   - Jobs
   - LevelledMobs
   - mcMMO
-  - Reforges
   - Scyther
-  - Talismans
   - TMMobcoins
   - Vault
 
