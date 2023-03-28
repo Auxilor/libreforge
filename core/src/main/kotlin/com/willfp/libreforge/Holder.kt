@@ -76,13 +76,13 @@ interface ProvidedHolder {
     val holder: Holder
 
     /**
-     * The item.
+     * The provider.
      */
-    val item: Any?
+    val provider: Any?
 
     // Destructuring support
     operator fun component1() = holder
-    operator fun component2() = item
+    operator fun component2() = provider
 }
 
 /**
@@ -92,7 +92,7 @@ interface ProvidedHolder {
  */
 object EmptyProvidedHolder : ProvidedHolder {
     override val holder = BlankHolder
-    override val item = null
+    override val provider = null
 }
 
 /**
@@ -101,7 +101,7 @@ object EmptyProvidedHolder : ProvidedHolder {
 class SimpleProvidedHolder(
     override val holder: Holder
 ) : ProvidedHolder {
-    override val item = null
+    override val provider = null
 
     override fun hashCode(): Int {
         return Objects.hash(holder)
@@ -121,10 +121,10 @@ class SimpleProvidedHolder(
  */
 class ItemProvidedHolder(
     override val holder: Holder,
-    override val item: ItemStack
+    override val provider: ItemStack
 ) : ProvidedHolder {
     override fun hashCode(): Int {
-        return Objects.hash(holder, item)
+        return Objects.hash(holder, provider)
     }
 
     override fun equals(other: Any?): Boolean {
@@ -133,7 +133,7 @@ class ItemProvidedHolder(
         }
 
         return other.holder == this.holder
-                && other.item == this.item
+                && other.provider == this.provider
     }
 }
 
