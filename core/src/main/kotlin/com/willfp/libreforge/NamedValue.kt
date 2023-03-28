@@ -2,7 +2,7 @@ package com.willfp.libreforge
 
 import com.willfp.eco.core.placeholder.StaticPlaceholder
 
-class GroupedStaticPlaceholder constructor(
+class NamedValue constructor(
     identifiers: Collection<String>,
     value: String
 ) {
