@@ -20,7 +20,6 @@ publishing {
             from(components["java"])
             artifactId = "libreforge-loader"
             groupId = "com.willfp"
-            version = project.version.toString()
         }
     }
 }
