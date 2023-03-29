@@ -19,7 +19,7 @@ tasks {
 
 gradlePlugin {
     plugins {
-        create("com.willfp.libreforge-gradle-plugin") {
+        create("libreforgeGradlePlugin") {
             id = "com.willfp.libreforge-gradle-plugin"
             implementationClass = "com.willfp.libreforge.gradle.LibreforgeGradlePlugin"
         }
@@ -31,8 +31,6 @@ publishing {
     publications {
         create<MavenPublication>("maven") {
             from(components["java"])
-            artifactId = "libreforge-gradle-plugin"
-            groupId = "com.willfp"
         }
     }
 }
