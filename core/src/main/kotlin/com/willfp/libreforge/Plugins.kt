@@ -24,4 +24,8 @@ interface LoadedLibreforgePlugin : Registrable, PluginLike {
     val categories: Registry<LibreforgeConfigCategory>
 
     override fun getID() = plugin.id
+
+    override fun onRegister() {
+        pointsPlaceholder(plugin).register()
+    }
 }
