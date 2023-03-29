@@ -16,7 +16,7 @@ object FilterVictimConditions : Filter<ConditionList, Collection<Config>>("victi
     override fun isMet(data: TriggerData, value: Collection<Config>, compileData: ConditionList): Boolean {
         val victim = data.victim as? Player ?: return true
 
-        return compileData.areMet(victim)
+        return compileData.areMet(victim, data.holder)
     }
 
     override fun makeCompileData(config: Config, context: ViolationContext, values: Collection<Config>): ConditionList {
