@@ -47,7 +47,7 @@ allprojects {
     publishing {
         repositories {
             maven {
-                name = "repo.auxilor.io"
+                name = "auxilor"
                 url = uri("https://repo.auxilor.io/repository/maven-releases/")
                 credentials {
                     username = System.getenv("MAVEN_USERNAME")
