@@ -20,7 +20,8 @@ class ConditionBlock<T>(
 ) : Compiled<T> {
     @Deprecated(
         "Use isMet(player, holder) instead.",
-        ReplaceWith("condition.isMet(player, config, compileData)")
+        ReplaceWith("condition.isMet(player, config, compileData)"),
+        DeprecationLevel.ERROR
     )
     fun isMet(player: Player): Boolean {
         return isMet(player, EmptyProvidedHolder)
