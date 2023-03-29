@@ -19,8 +19,8 @@ tasks {
 
 gradlePlugin {
     plugins {
-        create("libreforge-gradle-plugin") {
-            id = "libreforge-gradle-plugin"
+        create("com.willfp.libreforge-gradle-plugin") {
+            id = "com.willfp.libreforge-gradle-plugin"
             implementationClass = "com.willfp.libreforge.gradle.LibreforgeGradlePlugin"
         }
     }
