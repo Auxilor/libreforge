@@ -30,6 +30,10 @@ gradlePlugin {
 publishing {
     publications {
         create<MavenPublication>("maven") {
+            groupId = group.toString()
+            artifactId = "libreforge-gradle-plugin"
+            version = version.toString()
+
             from(components["java"])
         }
     }
