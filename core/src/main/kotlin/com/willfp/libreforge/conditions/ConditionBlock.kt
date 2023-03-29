@@ -2,6 +2,8 @@ package com.willfp.libreforge.conditions
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Compiled
+import com.willfp.libreforge.EmptyProvidedHolder
+import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.effects.EffectList
 import org.bukkit.entity.Player
 
@@ -16,7 +18,18 @@ class ConditionBlock<T>(
     val notMetLines: List<String>,
     val showNotMet: Boolean
 ) : Compiled<T> {
+    @Deprecated(
+        "Use isMet(player, holder) instead.",
+        ReplaceWith("condition.isMet(player, config, compileData)")
+    )
     fun isMet(player: Player): Boolean {
-        return condition.isMet(player, config, compileData)
+        return isMet(player, EmptyProvidedHolder)
+    }
+
+    fun isMet(player: Player, holder: ProvidedHolder): Boolean {
+        val metWith = condition.isMet(player, config, holder, compileData)
+        val metWithout = condition.isMet(player, config, compileData)
+
+        return metWith && metWithout
     }
 }

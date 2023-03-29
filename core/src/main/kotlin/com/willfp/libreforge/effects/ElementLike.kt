@@ -90,7 +90,7 @@ abstract class ElementLike {
         // Only execute not met effects if the arguments were met.
         if (argumentsMet) {
             // Check conditions
-            if (!conditions.areMet(trigger.player)) {
+            if (!conditions.areMet(trigger.player, data.holder)) {
                 return false
             }
         } else {

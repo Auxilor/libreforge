@@ -126,7 +126,9 @@ fun Collection<ProvidedHolder>.getProvidedActiveEffects(player: Player): Map<Pro
     val map = mutableMapOf<ProvidedHolder, Set<EffectBlock>>()
 
     for (holder in this) {
-        map[holder] = holder.holder.getActiveEffects(player)
+        if (holder.holder.conditions.areMet(player, holder)) {
+            map[holder] = holder.getActiveEffects(player)
+        }
     }
 
     return map
@@ -135,8 +137,20 @@ fun Collection<ProvidedHolder>.getProvidedActiveEffects(player: Player): Map<Pro
 /**
  * Get active effects for a [player].
  */
+@Deprecated(
+    "Use ProvidedHolder.getActiveEffects instead", ReplaceWith(
+        "SimpleProvidedHolder(this).getActiveEffects(player)",
+        "com.willfp.libreforge.SimpleProvidedHolder"
+    )
+)
 fun Holder.getActiveEffects(player: Player) =
-    this.effects.filter { it.conditions.areMet(player) }.toSet()
+    SimpleProvidedHolder(this).getActiveEffects(player)
+
+/**
+ * Get active effects for a [player].
+ */
+fun ProvidedHolder.getActiveEffects(player: Player) =
+    this.holder.effects.filter { it.conditions.areMet(player, this) }.toSet()
 
 /**
  * Recalculate active effects.

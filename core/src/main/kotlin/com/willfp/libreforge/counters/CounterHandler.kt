@@ -29,7 +29,7 @@ object CounterHandler : Listener {
         }
 
         for ((counter, accumulators) in applicableCounters) {
-            if (!counter.conditions.areMet(player)) {
+            if (!counter.conditions.areMet(player, data.holder)) {
                 return
             }
 
