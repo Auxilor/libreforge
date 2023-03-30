@@ -26,6 +26,7 @@ class LibreforgeGradlePlugin : Plugin<Project> {
         }
 
         val configuration = project.configurations.maybeCreate("libreforge")
+        configuration.extendsFrom(project.configurations.getByName("compileOnly"))
         configuration.isTransitive = false
 
         project.afterEvaluate {
