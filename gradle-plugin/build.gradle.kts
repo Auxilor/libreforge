@@ -9,7 +9,7 @@ dependencies {
 }
 
 group = "com.willfp"
-version = "1.0.1"
+version = "1.0.2"
 
 tasks {
     build {

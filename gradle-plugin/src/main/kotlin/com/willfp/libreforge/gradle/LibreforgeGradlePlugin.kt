@@ -26,7 +26,6 @@ class LibreforgeGradlePlugin : Plugin<Project> {
         }
 
         val configuration = project.configurations.maybeCreate("libreforge")
-        configuration.extendsFrom(project.configurations.getByName("compileOnly"))
         configuration.isTransitive = false
 
         project.afterEvaluate {
@@ -34,8 +33,10 @@ class LibreforgeGradlePlugin : Plugin<Project> {
                 ?: throw IllegalStateException("libreforge-version must be specified in gradle.properties!")
 
             val libreforge = project.configurations.getByName("libreforge")
+            val compile = project.configurations.getByName("compileOnly")
 
             libreforge.dependencies.add(project.dependencies.create("com.willfp:libreforge:$libreforgeVersion:shadow"))
+            compile.dependencies.add(project.dependencies.create("com.willfp:libreforge:$libreforgeVersion:shadow"))
 
             val implementation = project.configurations.getByName("implementation")
             implementation.dependencies.add(project.dependencies.create("com.willfp:libreforge-loader:$libreforgeVersion"))
