@@ -2,6 +2,7 @@ package com.willfp.libreforge.triggers
 
 import com.willfp.eco.core.registry.Registrable
 import com.willfp.libreforge.ProvidedHolder
+import com.willfp.libreforge.generatePlaceholders
 import com.willfp.libreforge.getProvidedActiveEffects
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.providedActiveEffects
@@ -40,6 +41,10 @@ abstract class Trigger(
         for ((holder, blocks) in effects) {
             val withHolder = data.copy(holder = holder)
             val dispatchWithHolder = DispatchedTrigger(player, this, withHolder).inheritPlaceholders(dispatch)
+
+            for (placeholder in holder.generatePlaceholders()) {
+                dispatchWithHolder.addPlaceholder(placeholder)
+            }
 
             for (block in blocks) {
                 block.tryTrigger(dispatchWithHolder)

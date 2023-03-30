@@ -18,10 +18,6 @@ object TriggerPlaceholderListener : Listener {
     fun handle(event: TriggerDispatchEvent) {
         val data = event.trigger.data
 
-        for (placeholder in event.trigger.data.holder.generatePlaceholders()) {
-            event.trigger.addPlaceholder(placeholder)
-        }
-
         if (data.text != null) {
             event.trigger.addPlaceholder(
                 NamedValue(
