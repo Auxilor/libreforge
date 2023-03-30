@@ -15,10 +15,10 @@ object AOEShapes : Registry<AOEShape<*>>() {
      * Compile a [config] into a AOEBlock in a given [context].
      */
     fun compile(config: Config, context: ViolationContext): AOEBlock<*>? {
-        val shape = get(config.getString("id"))
+        val shape = get(config.getString("shape"))
 
         if (shape == null) {
-            context.log(ConfigViolation("id", "Invalid shape ID specified!"))
+            context.log(ConfigViolation("shape", "Invalid shape ID specified!"))
             return null
         }
 
