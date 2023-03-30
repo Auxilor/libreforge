@@ -5,6 +5,8 @@ import com.willfp.libreforge.Compiled
 import com.willfp.libreforge.EmptyProvidedHolder
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.effects.EffectList
+import com.willfp.libreforge.generatePlaceholders
+import com.willfp.libreforge.mapToPlaceholders
 import org.bukkit.entity.Player
 
 /**
@@ -28,6 +30,8 @@ class ConditionBlock<T>(
     }
 
     fun isMet(player: Player, holder: ProvidedHolder): Boolean {
+        config.injectPlaceholders(*holder.generatePlaceholders().mapToPlaceholders())
+
         val metWith = condition.isMet(player, config, holder, compileData)
         val metWithout = condition.isMet(player, config, compileData)
 

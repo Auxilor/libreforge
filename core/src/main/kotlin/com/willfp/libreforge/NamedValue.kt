@@ -22,3 +22,7 @@ class NamedValue constructor(
         ) { value }
     }
 }
+
+fun Collection<NamedValue>.mapToPlaceholders(): Array<out StaticPlaceholder> {
+    return this.flatMap { it.placeholders }.toTypedArray()
+}

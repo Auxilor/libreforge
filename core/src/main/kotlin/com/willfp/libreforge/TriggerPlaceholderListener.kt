@@ -18,6 +18,19 @@ object TriggerPlaceholderListener : Listener {
     fun handle(event: TriggerDispatchEvent) {
         val data = event.trigger.data
 
+        for (placeholder in event.trigger.data.holder.generatePlaceholders()) {
+            event.trigger.addPlaceholder(placeholder)
+        }
+
+        if (data.text != null) {
+            event.trigger.addPlaceholder(
+                NamedValue(
+                    listOf("text", "string", "message"),
+                    data.text
+                )
+            )
+        }
+
         event.trigger.addPlaceholder(
             NamedValue(
                 listOf("trigger_value", "triggervalue", "trigger", "value", "tv", "v", "t"),

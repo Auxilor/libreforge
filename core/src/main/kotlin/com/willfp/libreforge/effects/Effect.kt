@@ -4,6 +4,8 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.map.defaultMap
 import com.willfp.libreforge.Compilable
 import com.willfp.libreforge.ProvidedHolder
+import com.willfp.libreforge.generatePlaceholders
+import com.willfp.libreforge.mapToPlaceholders
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.DispatchedTrigger
 import com.willfp.libreforge.triggers.Trigger
@@ -68,6 +70,7 @@ abstract class Effect<T>(
         // Increment first to fix reload bug where effects are applied twice.
         effectCounter[player.uniqueId]++
         val count = effectCounter[player.uniqueId]
+        config.config.injectPlaceholders(*holder.generatePlaceholders().mapToPlaceholders())
         onEnable(player, config.config, identifierFactory.makeIdentifiers(count), holder, config.compileData)
     }
 
