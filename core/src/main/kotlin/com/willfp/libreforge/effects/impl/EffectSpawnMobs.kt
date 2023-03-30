@@ -11,6 +11,7 @@ import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
+import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Mob
@@ -22,6 +23,11 @@ import java.util.UUID
 
 
 object EffectSpawnMobs : Effect<TestableEntity>("spawn_mobs") {
+    override val parameters: Set<TriggerParameter> = setOf(
+        TriggerParameter.PLAYER,
+        TriggerParameter.LOCATION
+    )
+
     override val arguments = arguments {
         require("amount", "You must specify the amount of mobs to spawn!")
         require("ticks_to_live", "You must specify the mob lifespan!")
