@@ -74,7 +74,7 @@ private val holderPlaceholderProviders = mutableListOf<(ProvidedHolder) -> List<
 /**
  * Register a function to generate placeholders for a holder.
  */
-fun registerPlaceholderProvider(provider: (ProvidedHolder) -> List<NamedValue>) {
+fun registerHolderPlaceholderProvider(provider: (ProvidedHolder) -> List<NamedValue>) {
     holderPlaceholderProviders += provider
 }
 
