@@ -69,12 +69,12 @@ fun Player.refreshHolders() {
     this.updateEffects()
 }
 
-private val holderPlaceholderProviders = mutableListOf<(ProvidedHolder) -> List<NamedValue>>()
+private val holderPlaceholderProviders = mutableListOf<(ProvidedHolder) -> Collection<NamedValue>>()
 
 /**
  * Register a function to generate placeholders for a holder.
  */
-fun registerHolderPlaceholderProvider(provider: (ProvidedHolder) -> List<NamedValue>) {
+fun registerHolderPlaceholderProvider(provider: (ProvidedHolder) -> Collection<NamedValue>) {
     holderPlaceholderProviders += provider
 }
 
