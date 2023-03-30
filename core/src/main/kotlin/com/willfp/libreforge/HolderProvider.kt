@@ -69,6 +69,22 @@ fun Player.refreshHolders() {
     this.updateEffects()
 }
 
+private val holderPlaceholderProviders = mutableListOf<(ProvidedHolder) -> List<NamedValue>>()
+
+/**
+ * Register a function to generate placeholders for a holder.
+ */
+fun registerPlaceholderProvider(provider: (ProvidedHolder) -> List<NamedValue>) {
+    holderPlaceholderProviders += provider
+}
+
+/**
+ * Generate placeholders for a holder.
+ */
+fun ProvidedHolder.generatePlaceholders(): List<NamedValue> {
+    return holderPlaceholderProviders.flatMap { it(this) }
+}
+
 private val holderCache = Caffeine.newBuilder()
     .expireAfterWrite(4, TimeUnit.SECONDS)
     .build<UUID, Collection<ProvidedHolder>>()
