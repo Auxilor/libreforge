@@ -12,6 +12,9 @@ import kotlin.math.pow
 import kotlin.math.sin
 import kotlin.math.sqrt
 
+fun Float.cosSin(): Float2 =
+    Float2(cos(this), sin(this))
+
 fun Float3.toLocation(world: World) =
     Location(world, x.toDouble(), y.toDouble(), z.toDouble())
 
@@ -68,21 +71,21 @@ fun Float2.det(other: Float2): Float {
 }
 
 fun Float3.rotate(yaw: Float, pitch: Float, roll: Float): Float3 {
-    val (cosYaw, sinYaw) = yaw.toDouble().let { cos(it) to sin(it) }
-    val (cosPitch, sinPitch) = pitch.toDouble().let { cos(it) to sin(it) }
-    val (cosRoll, sinRoll) = roll.toDouble().let { cos(it) to sin(it) }
+    val (cosYaw, sinYaw) = yaw.cosSin()
+    val (cosPitch, sinPitch) = pitch.cosSin()
+    val (cosRoll, sinRoll) = roll.cosSin()
 
     // Rotate around Y-axis (yaw)
-    val x1 = x * cosYaw.toFloat() + z * sinYaw.toFloat()
-    val z1 = (-x * sinYaw + z * cosYaw).toFloat()
+    val x1 = x * cosYaw + z * sinYaw
+    val z1 = (-x * sinYaw + z * cosYaw)
 
     // Rotate around X-axis (pitch)
-    val y2 = (y * cosPitch - z1 * sinPitch).toFloat()
-    val z2 = (y * sinPitch + z1 * cosPitch).toFloat()
+    val y2 = (y * cosPitch - z1 * sinPitch)
+    val z2 = (y * sinPitch + z1 * cosPitch)
 
     // Rotate around Z-axis (roll)
-    val x3 = (x1 * cosRoll - y2 * sinRoll).toFloat()
-    val y3 = (x1 * sinRoll + y2 * cosRoll).toFloat()
+    val x3 = (x1 * cosRoll - y2 * sinRoll)
+    val y3 = (x1 * sinRoll + y2 * cosRoll)
 
     return Float3(x3, y3, z2)
 }
