@@ -28,10 +28,11 @@ object Mutators: Registry<Mutator<*>>() {
      * Compile a [config] into a MutatorBlock in a given [context].
      */
     fun compile(config: Config, context: ViolationContext): MutatorBlock<*>? {
-        val mutator = get(config.getString("id"))
+        val mutatorID = config.getString("id")
+        val mutator = get(mutatorID)
 
         if (mutator == null) {
-            context.log(ConfigViolation("id", "Invalid mutator ID specified!"))
+            context.log(ConfigViolation("id", "Invalid mutator ID specified: ${mutatorID}!"))
             return null
         }
 
