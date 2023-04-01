@@ -9,7 +9,7 @@ import java.io.File
 import java.io.FileOutputStream
 
 private const val HIGHEST_LIBREFORGE_VERSION_KEY = "highest-libreforge-version"
-private const val HIGHEST_LIBREFORGE_VERSION_FOLDER_KEY = "highest-libreforge-version-folder"
+private const val HIGHEST_LIBREFORGE_VERSION_CLASSLOADER_KEY = "highest-libreforge-version-classloader"
 
 private class LibreforgeNotFoundError(
     override val message: String
@@ -22,20 +22,20 @@ internal fun checkHighestVersion(plugin: LibreforgePlugin) {
 
     if (plugin.libreforgeVersion > currentHighestVersion) {
         writeExternalData(HIGHEST_LIBREFORGE_VERSION_KEY, plugin.libreforgeVersion)
-        writeExternalData(HIGHEST_LIBREFORGE_VERSION_FOLDER_KEY, plugin.dataFolder)
+        writeExternalData(HIGHEST_LIBREFORGE_VERSION_CLASSLOADER_KEY, plugin::class.java.classLoader)
     }
 }
 
-internal fun loadHighestLibreforgeVersion() {
+internal fun loadHighestLibreforgeVersion(pluginFolder: File) {
     if (Bukkit.getPluginManager().plugins.any { it.name == "libreforge" }) return
 
-    val folder = readExternalData<File>(HIGHEST_LIBREFORGE_VERSION_FOLDER_KEY)
-        ?: throw LibreforgeNotFoundError("No libreforge plugins found")
+    val classLoader = readExternalData<ClassLoader>(HIGHEST_LIBREFORGE_VERSION_CLASSLOADER_KEY)
+        ?: throw LibreforgeNotFoundError("No libreforge plugin classloader found")
 
     val version = readExternalData<DefaultArtifactVersion>(HIGHEST_LIBREFORGE_VERSION_KEY)
         ?: throw LibreforgeNotFoundError("No libreforge version found")
 
-    val libreforgeFolder = folder.parentFile.resolve("libreforge")
+    val libreforgeFolder = pluginFolder.resolve("libreforge")
     val versionsFolder = libreforgeFolder.resolve("versions")
 
     versionsFolder.mkdirs()
@@ -44,9 +44,9 @@ internal fun loadHighestLibreforgeVersion() {
     val libreforgeResourceName = "libreforge-$version-shadow.jar"
 
     FileOutputStream(libreforgeJar).use { outputStream ->
-        LibreforgePlugin::class.java.classLoader.getResourceAsStream(libreforgeResourceName).use { inputStream ->
+        classLoader.getResourceAsStream(libreforgeResourceName).use { inputStream ->
             inputStream?.copyTo(outputStream)
-                ?: throw LibreforgeNotFoundError("Libreforge wasn't found in the plugin jar")
+                ?: throw LibreforgeNotFoundError("libreforge wasn't found in the plugin jar")
         }
     }
 
