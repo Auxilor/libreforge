@@ -169,13 +169,13 @@ object Effects : Registry<Effect<*>>() {
 
         if (triggers.isNotEmpty() && permanentEffects.isNotEmpty() ) {
             context.log(ConfigViolation("triggers", "Triggers are not allowed on permanent " +
-                    "effects: ${permanentEffects.joinToString(", ")}!"))
+                    "effects: ${permanentEffects.joinToString(", ") { it.effect.id }}!"))
             return null
         }
 
         if (triggers.isEmpty() && chain.any { !it.effect.isPermanent }) {
             context.log(ConfigViolation("triggers", "You must specify at least one trigger for " +
-                    "triggered effects: ${triggeredEffects.joinToString(", ")}!"))
+                    "triggered effects: ${triggeredEffects.joinToString(", ") { it.effect.id }}!"))
             return null
         }
 
