@@ -31,7 +31,7 @@ abstract class LibreforgePlugin : EcoPlugin() {
         competeForVersion()
 
         onLoad(LifecyclePosition.START) {
-            loadHighestLibreforgeVersion()
+            loadHighestLibreforgeVersion(dataFolder.parentFile)
 
             // Remove legacy lrcdb.yml.
             this.dataFolder.resolve("lrcdb.yml").delete()
