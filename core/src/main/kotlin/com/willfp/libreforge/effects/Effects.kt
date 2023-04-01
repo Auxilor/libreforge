@@ -164,13 +164,18 @@ object Effects : Registry<Effect<*>>() {
 
         val chain = compileChain(effectConfigs, executor, context, directIDSpecified) ?: return null
 
-        if (triggers.isNotEmpty() && chain.any { it.effect.isPermanent }) {
-            context.log(ConfigViolation("triggers", "Triggers are not allowed on permanent effects!"))
+        val permanentEffects = chain.filter { it.effect.isPermanent }
+        val triggeredEffects = chain.filterNot { it.effect.isPermanent }
+
+        if (triggers.isNotEmpty() && permanentEffects.isNotEmpty() ) {
+            context.log(ConfigViolation("triggers", "Triggers are not allowed on permanent " +
+                    "effects: ${permanentEffects.joinToString(", ")}!"))
             return null
         }
 
         if (triggers.isEmpty() && chain.any { !it.effect.isPermanent }) {
-            context.log(ConfigViolation("triggers", "You must specify at least one trigger!"))
+            context.log(ConfigViolation("triggers", "You must specify at least one trigger for " +
+                    "triggered effects: ${triggeredEffects.joinToString(", ")}!"))
             return null
         }
 
@@ -241,10 +246,11 @@ object Effects : Registry<Effect<*>>() {
     }
 
     private fun compileElement(config: Config, context: ViolationContext): ChainElement<*>? {
-        val effect = this.get(config.getString("id"))
+        val id = config.getString("id")
+        val effect = this.get(id)
 
         if (effect == null) {
-            context.log(ConfigViolation("id", "Invalid effect ID specified!"))
+            context.log(ConfigViolation("id", "Invalid effect ID specified: ${id}!"))
             return null
         }
 
