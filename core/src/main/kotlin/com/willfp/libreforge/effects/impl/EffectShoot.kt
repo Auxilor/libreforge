@@ -38,6 +38,10 @@ object EffectShoot : Effect<NoCompileData>("shoot") {
                 player.launchProjectile(projectileClass as Class<out Projectile>, velocity)
             }
 
+            if (config.getBool("launch-at-location") && data.location != null) {
+                projectile.teleportAsync(data.location)
+            }
+
             if (projectile is AbstractArrow) {
                 projectile.pickupStatus = AbstractArrow.PickupStatus.DISALLOWED
             }
