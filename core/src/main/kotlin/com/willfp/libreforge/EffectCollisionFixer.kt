@@ -1,5 +1,9 @@
 package com.willfp.libreforge
 
+import com.willfp.libreforge.effects.Effects
+import org.bukkit.attribute.Attribute
+import org.bukkit.attribute.AttributeModifier
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
@@ -16,6 +20,9 @@ object EffectCollisionFixer : Listener {
             }
         }
 
+        // Extra fix for pre-4.2.3
+        player.fixAttributes()
+
         player.updateHolders()
     }
 
@@ -23,10 +30,25 @@ object EffectCollisionFixer : Listener {
     fun scanOnJoin(event: PlayerJoinEvent) {
         val player = event.player
 
+        // Extra fix for pre-4.2.3
+        player.fixAttributes()
+
         player.updateHolders()
 
         plugin.scheduler.run {
             player.updateEffects()
+        }
+    }
+
+    private fun Player.fixAttributes() {
+        for (effect in Effects.values()) {
+            for (attribute in Attribute.values()) {
+                val inst = this.getAttribute(attribute) ?: continue
+                val mods = inst.modifiers.filter { it.name.startsWith(effect.id) }
+                for (mod in mods) {
+                    inst.removeModifier(mod)
+                }
+            }
         }
     }
 }
