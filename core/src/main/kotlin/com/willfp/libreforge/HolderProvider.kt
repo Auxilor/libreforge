@@ -217,10 +217,10 @@ fun Player.updateEffects() {
     // Reloading is now done by disabling all, then enabling all. Effect#reload is deprecated.
 
     for (effect in toReload) {
-        effect.disable(this, afterMap[effect])
+        effect.disable(this, afterMap[effect], isReload = true)
     }
 
     for (effect in toReload) {
-        effect.enable(this, afterMap[effect])
+        effect.enable(this, afterMap[effect], isReload = true)
     }
 }
