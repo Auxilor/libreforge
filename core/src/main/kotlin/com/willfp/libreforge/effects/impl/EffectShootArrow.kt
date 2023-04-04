@@ -9,7 +9,6 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.AbstractArrow
 import org.bukkit.entity.Arrow
 import org.bukkit.event.entity.EntityShootBowEvent
-import org.bukkit.event.player.PlayerTeleportEvent
 
 object EffectShootArrow : Effect<NoCompileData>("shoot_arrow") {
     override val parameters = setOf(

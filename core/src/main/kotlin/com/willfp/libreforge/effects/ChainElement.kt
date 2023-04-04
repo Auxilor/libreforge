@@ -9,7 +9,7 @@ import com.willfp.libreforge.filters.FilterList
 import com.willfp.libreforge.mutators.MutatorList
 import com.willfp.libreforge.triggers.DispatchedTrigger
 import org.bukkit.entity.Player
-import java.util.*
+import java.util.UUID
 
 /**
  * A single effect config block.

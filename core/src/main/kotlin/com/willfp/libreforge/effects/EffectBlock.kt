@@ -9,7 +9,8 @@ import com.willfp.libreforge.mutators.MutatorList
 import com.willfp.libreforge.triggers.DispatchedTrigger
 import com.willfp.libreforge.triggers.Trigger
 import org.bukkit.entity.Player
-import java.util.*
+import java.util.Objects
+import java.util.UUID
 
 /**
  * A compiled group of effects.
