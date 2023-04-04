@@ -3,6 +3,7 @@ package com.willfp.libreforge.loader
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.LifecyclePosition
 import com.willfp.eco.core.PluginProps
+import com.willfp.eco.core.config.emptyConfig
 import com.willfp.eco.core.config.readConfig
 import com.willfp.eco.core.registry.Registry
 import com.willfp.libreforge.Plugins
@@ -73,9 +74,8 @@ abstract class LibreforgePlugin : EcoPlugin() {
 
                 val legacy = category.legacyLocation
                 if (legacy != null) {
-                    val legacyConfig = this::class.java.classLoader
-                        .getResourceAsStream(legacy.filename)
-                        .readConfig()
+                    val legacyConfig = this.dataFolder.resolve(legacy.filename)
+                        .let { if (it.exists()) it.readConfig() else emptyConfig() }
 
                     for (config in legacyConfig.getSubsections(legacy.section)) {
                         val id = config.getString("id")

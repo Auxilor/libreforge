@@ -9,7 +9,7 @@ import com.willfp.libreforge.filters.FilterList
 import com.willfp.libreforge.mutators.MutatorList
 import com.willfp.libreforge.triggers.DispatchedTrigger
 import org.bukkit.entity.Player
-import java.util.UUID
+import java.util.*
 
 /**
  * A single effect config block.
@@ -26,16 +26,50 @@ class ChainElement<T>(
     override val uuid: UUID = UUID.randomUUID()
     override val supportsDelay = effect.supportsDelay
 
+    fun enable(
+        player: Player,
+        holder: ProvidedHolder,
+        isReload: Boolean = false
+    ) {
+        effect.enable(player, holder, this, isReload = isReload)
+    }
+
+    fun disable(
+        player: Player,
+        holder: ProvidedHolder,
+        isReload: Boolean = false
+    ) {
+        effect.disable(player, holder, isReload = isReload)
+    }
+
+    @Deprecated(
+        "Use enable(player, holder) instead",
+        ReplaceWith("enable(player, holder)"),
+        DeprecationLevel.ERROR
+    )
+    @Suppress("UNUSED_PARAMETER")
     fun enable(player: Player, holder: ProvidedHolder, identifierFactory: IdentifierFactory) {
-        effect.enable(player, identifierFactory, holder, this)
+        effect.enable(player, holder, this)
     }
 
+    @Deprecated(
+        "Use disable(player, holder) instead",
+        ReplaceWith("disable(player, holder)"),
+        DeprecationLevel.ERROR
+    )
+    @Suppress("UNUSED_PARAMETER")
     fun disable(player: Player, holder: ProvidedHolder, identifierFactory: IdentifierFactory) {
-        effect.disable(player, identifierFactory, holder)
+        effect.disable(player, holder)
     }
 
+    @Deprecated(
+        "Reloading is now handled by effect blocks",
+        ReplaceWith("effectBlock.reload(player, holder)"),
+        DeprecationLevel.ERROR
+    )
+    @Suppress("UNUSED_PARAMETER")
     fun reload(player: Player, holder: ProvidedHolder, identifierFactory: IdentifierFactory) {
-        effect.reload(player, identifierFactory, holder, this)
+        // Do nothing.
     }
 
     override fun doTrigger(trigger: DispatchedTrigger) =

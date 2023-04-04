@@ -14,13 +14,16 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
-import java.util.UUID
+import java.util.*
 
 abstract class Effect<T>(
-    override val id: String
+    final override val id: String
 ) : Compilable<T>(), Listener {
     // Maps Player UUIDs to the effect count.
     private val effectCounter = defaultMap<UUID, Int>(0)
+
+    // The identifier factory.
+    private val identifierFactory = IdentifierFactory(UUID.nameUUIDFromBytes(id.toByteArray()))
 
     /**
      * If the effect should be reloaded.
@@ -58,20 +61,45 @@ abstract class Effect<T>(
      * Enable a permanent effect.
      *
      * @param player The player.
+     * @param config The effect config.
+     */
+    fun enable(
+        player: Player,
+        holder: ProvidedHolder,
+        config: ChainElement<T>,
+        isReload: Boolean = false
+    ) {
+        if (isReload && !shouldReload) {
+            return
+        }
+
+        // Increment first to fix reload bug where effects are applied twice.
+        effectCounter[player.uniqueId]++
+        val count = effectCounter[player.uniqueId]
+        config.config.injectPlaceholders(*holder.generatePlaceholders().mapToPlaceholders())
+        onEnable(player, config.config, identifierFactory.makeIdentifiers(count), holder, config.compileData)
+    }
+
+    /**
+     * Enable a permanent effect.
+     *
+     * @param player The player.
      * @param identifierFactory The identifier factory.
      * @param config The effect config.
      */
+    @Deprecated(
+        "Use enable(player, holder, config) instead.",
+        ReplaceWith("enable(player, holder, config)"),
+        DeprecationLevel.ERROR
+    )
+    @Suppress("UNUSED_PARAMETER")
     fun enable(
         player: Player,
         identifierFactory: IdentifierFactory,
         holder: ProvidedHolder,
         config: ChainElement<T>
     ) {
-        // Increment first to fix reload bug where effects are applied twice.
-        effectCounter[player.uniqueId]++
-        val count = effectCounter[player.uniqueId]
-        config.config.injectPlaceholders(*holder.generatePlaceholders().mapToPlaceholders())
-        onEnable(player, config.config, identifierFactory.makeIdentifiers(count), holder, config.compileData)
+        enable(player, holder, config)
     }
 
     /**
@@ -96,15 +124,42 @@ abstract class Effect<T>(
      * Disable a permanent effect.
      *
      * @param player The player.
+     */
+    fun disable(
+        player: Player,
+        holder: ProvidedHolder,
+        isReload: Boolean = false
+    ) {
+        if (isReload && !shouldReload) {
+            return
+        }
+
+        if (effectCounter[player.uniqueId] == 0) {
+            return
+        }
+
+        val count = effectCounter[player.uniqueId]--
+        onDisable(player, identifierFactory.makeIdentifiers(count), holder)
+    }
+
+    /**
+     * Disable a permanent effect.
+     *
+     * @param player The player.
      * @param identifierFactory The identifier factory.
      */
+    @Deprecated(
+        "Use disable(player, holder) instead.",
+        ReplaceWith("disable(player, holder)"),
+        DeprecationLevel.ERROR
+    )
+    @Suppress("UNUSED_PARAMETER")
     fun disable(
         player: Player,
         identifierFactory: IdentifierFactory,
         holder: ProvidedHolder
     ) {
-        val count = effectCounter[player.uniqueId]--
-        onDisable(player, identifierFactory.makeIdentifiers(count), holder)
+        disable(player, holder)
     }
 
     /**
@@ -157,19 +212,19 @@ abstract class Effect<T>(
      * @param identifierFactory The identifier factory.
      * @param config The effect config.
      */
+    @Deprecated(
+        "Reloading is now handled by EffectBlock.",
+        ReplaceWith("effectBlock.reload(player, holder)"),
+        DeprecationLevel.ERROR
+    )
+    @Suppress("UNUSED_PARAMETER")
     fun reload(
         player: Player,
         identifierFactory: IdentifierFactory,
         holder: ProvidedHolder,
         config: ChainElement<T>
     ) {
-        if (!shouldReload) {
-            return
-        }
-
-        val count = effectCounter[player.uniqueId]
-        onDisable(player, identifierFactory.makeIdentifiers(count), holder)
-        onEnable(player, config.config, identifierFactory.makeIdentifiers(count), holder, config.compileData)
+        // Do nothing.
     }
 
     final override fun onRegister() {

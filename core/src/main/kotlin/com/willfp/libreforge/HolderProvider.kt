@@ -7,7 +7,7 @@ import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.HandlerList
 import org.bukkit.event.player.PlayerEvent
-import java.util.UUID
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 /**
@@ -214,7 +214,13 @@ fun Player.updateEffects() {
         effect.enable(this, afterMap[effect])
     }
 
+    // Reloading is now done by disabling all, then enabling all. Effect#reload is deprecated.
+
     for (effect in toReload) {
-        effect.reload(this, afterMap[effect])
+        effect.disable(this, afterMap[effect])
+    }
+
+    for (effect in toReload) {
+        effect.enable(this, afterMap[effect])
     }
 }

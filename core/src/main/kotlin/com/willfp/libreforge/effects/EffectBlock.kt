@@ -9,8 +9,7 @@ import com.willfp.libreforge.mutators.MutatorList
 import com.willfp.libreforge.triggers.DispatchedTrigger
 import com.willfp.libreforge.triggers.Trigger
 import org.bukkit.entity.Player
-import java.util.Objects
-import java.util.UUID
+import java.util.*
 
 /**
  * A compiled group of effects.
@@ -25,17 +24,21 @@ class EffectBlock(
     override val mutators: MutatorList,
     override val filters: FilterList
 ) : ElementLike() {
-    private val identifierFactory = IdentifierFactory(uuid)
     override val supportsDelay = effects.all { it.supportsDelay }
 
-    fun enable(player: Player, holder: ProvidedHolder) =
-        effects.forEach { it.enable(player, holder, identifierFactory) }
+    @JvmOverloads
+    fun enable(
+        player: Player,
+        holder: ProvidedHolder,
+        isReload: Boolean = false
+    ) = effects.forEach { it.enable(player, holder, isReload = isReload) }
 
-    fun disable(player: Player, holder: ProvidedHolder) =
-        effects.forEach { it.disable(player, holder, identifierFactory) }
-
-    fun reload(player: Player, holder: ProvidedHolder) =
-        effects.forEach { it.reload(player, holder, identifierFactory) }
+    @JvmOverloads
+    fun disable(
+        player: Player,
+        holder: ProvidedHolder,
+        isReload: Boolean = false
+    ) = effects.forEach { it.disable(player, holder, isReload = isReload) }
 
     fun tryTrigger(trigger: DispatchedTrigger) {
         if (trigger.trigger !in triggers) {
