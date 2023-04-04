@@ -2,7 +2,7 @@ package com.willfp.libreforge.effects
 
 import com.willfp.eco.util.NamespacedKeyUtils
 import org.bukkit.NamespacedKey
-import java.util.*
+import java.util.UUID
 
 /**
  * Generates IDs around a base UUID.

@@ -2,7 +2,6 @@ package com.willfp.libreforge
 
 import com.willfp.libreforge.effects.Effects
 import org.bukkit.attribute.Attribute
-import org.bukkit.attribute.AttributeModifier
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
