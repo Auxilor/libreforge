@@ -99,7 +99,8 @@ object Conditions : Registry<Condition<*>>() {
             compileData,
             notMetEffects,
             config.getStrings("not-met-lines"),
-            config.getBool("show-not-met")
+            config.getBool("show-not-met"),
+            config.getBool("inverse")
         )
     }
 

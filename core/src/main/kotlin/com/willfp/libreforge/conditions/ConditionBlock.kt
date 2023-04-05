@@ -18,7 +18,8 @@ class ConditionBlock<T>(
     override val compileData: T,
     val notMetEffects: EffectList,
     val notMetLines: List<String>,
-    val showNotMet: Boolean
+    val showNotMet: Boolean,
+    val isInverted: Boolean
 ) : Compiled<T> {
     @Deprecated(
         "Use isMet(player, holder) instead.",
@@ -35,6 +36,6 @@ class ConditionBlock<T>(
         val metWith = condition.isMet(player, config, holder, compileData)
         val metWithout = condition.isMet(player, config, compileData)
 
-        return metWith && metWithout
+        return (metWith && metWithout) xor isInverted
     }
 }
