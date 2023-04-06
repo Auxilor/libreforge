@@ -26,6 +26,8 @@ internal lateinit var plugin: LibreforgeSpigotPlugin
 class LibreforgeSpigotPlugin : EcoPlugin() {
     val chainsYml = ChainsYml(this)
 
+    private var hasLoaded = false
+
     init {
         plugin = this
     }
@@ -68,6 +70,8 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
                 player.refreshHolders()
             }
         }
+
+        hasLoaded = true
     }
 
     override fun loadListeners(): List<Listener> {
@@ -101,10 +105,10 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
      * Run a runnable when the plugin is enabled.
      */
     fun runWhenEnabled(runnable: () -> Unit) {
-        if (isEnabled) {
+        if (hasLoaded) {
             runnable()
         } else {
-            onEnable(runnable)
+            onReload(runnable)
         }
     }
 }
