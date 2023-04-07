@@ -7,8 +7,13 @@ import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
+import com.willfp.libreforge.triggers.TriggerParameter
 
 object EffectSpawnEntity : Effect<TestableEntity>("spawn_entity") {
+    override val parameters = setOf(
+        TriggerParameter.LOCATION
+    )
+
     override val arguments = arguments {
         require("entity", "You must specify the mob to spawn!")
     }
