@@ -45,9 +45,8 @@ abstract class LibreforgePlugin : EcoPlugin() {
 
         // Legacy chains.yml.
         onReload(LifecyclePosition.START) {
-            val chainsYml = this::class.java.classLoader
-                .getResourceAsStream("chains.yml")
-                .readConfig()
+            val chainsYml = this.dataFolder.resolve("chains.yml")
+                .let { if (it.exists()) it.readConfig() else emptyConfig() }
 
             for (config in chainsYml.getSubsections("chains")) {
                 Effects.register(
@@ -63,13 +62,20 @@ abstract class LibreforgePlugin : EcoPlugin() {
 
         onReload(LifecyclePosition.START) {
             for (category in loaderCategories) {
-                category.beforeReload(this)
-                category.clear(this)
-                category.handle.clear()
+                withLogs(category, "before reload") {
+                    category.beforeReload(this)
+                }
+
+                withLogs(category, "clear") {
+                    category.clear(this)
+                    category.handle.clear()
+                }
 
                 for (config in fetchConfigs(category)) {
-                    category.handle.register(config.handle)
-                    category.acceptConfig(this, config.id, config.config)
+                    withLogs(category, "loading config ${config.id}") {
+                        category.handle.register(config.handle)
+                        category.acceptConfig(this, config.id, config.config)
+                    }
                 }
 
                 val legacy = category.legacyLocation
@@ -87,13 +93,26 @@ abstract class LibreforgePlugin : EcoPlugin() {
                             category
                         )
 
-                        category.handle.register(registrable.handle)
-                        category.acceptConfig(this, id, registrable.config)
+                        withLogs(category, "loading legacy config $id") {
+                            category.handle.register(registrable.handle)
+                            category.acceptConfig(this, id, registrable.config)
+                        }
                     }
                 }
 
-                category.afterReload(this)
+                withLogs(category, "after reload") {
+                    category.afterReload(this)
+                }
             }
+        }
+    }
+
+    private fun withLogs(category: ConfigCategory, position: String, block: () -> Unit) {
+        try {
+            block()
+        } catch (e: Exception) {
+            this.logger.warning("Exception loading ${category.id} at $position!")
+            e.printStackTrace()
         }
     }
 
