@@ -32,6 +32,7 @@ version = rootProject.version
 tasks {
     shadowJar {
         relocate("dev.romainguy.kotlin.math", "com.willfp.libreforge.libs.math")
+        relocate("org.apache.maven", "com.willfp.eco.libs.maven")
     }
 
     build {
