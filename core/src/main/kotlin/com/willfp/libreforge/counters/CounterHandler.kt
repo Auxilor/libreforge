@@ -30,11 +30,11 @@ object CounterHandler : Listener {
 
         for ((counter, accumulators) in applicableCounters) {
             if (!counter.conditions.areMet(player, data.holder)) {
-                return
+                continue
             }
 
             if (!counter.filters.isMet(data)) {
-                return
+                continue
             }
 
             for (accumulator in accumulators) {
