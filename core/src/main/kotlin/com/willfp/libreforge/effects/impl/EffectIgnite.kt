@@ -43,6 +43,6 @@ object EffectIgnite : Effect<NoCompileData>("ignite") {
             return
         }
 
-        event.damage = event.entity.getMetadata("ignitedMob")[0].asDouble()
+        event.damage = event.entity.getMetadata("libreforge-ignite")[0].asDouble()
     }
 }
