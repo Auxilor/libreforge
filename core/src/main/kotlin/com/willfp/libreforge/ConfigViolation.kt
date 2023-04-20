@@ -14,12 +14,12 @@ interface ViolationLogger {
     /**
      * Log a violation.
      */
-    fun log(property: Compilable<*>, violation: ConfigViolation)
+    fun log(context: ViolationContext, property: Compilable<*>, violation: ConfigViolation)
 
     /**
      * Log a violation.
      */
-    fun log(violation: ConfigViolation)
+    fun log(context: ViolationContext, violation: ConfigViolation)
 }
 
 /**
@@ -28,17 +28,17 @@ interface ViolationLogger {
 class PluginViolationLogger(
     private val plugin: EcoPlugin
 ) : ViolationLogger {
-    override fun log(property: Compilable<*>, violation: ConfigViolation) {
+    override fun log(context: ViolationContext, property: Compilable<*>, violation: ConfigViolation) {
         plugin.logger.warning("")
-        plugin.logger.warning("Invalid configuration for ${property.id} found at $this:")
+        plugin.logger.warning("Invalid configuration for ${property.id} found at $context:")
         plugin.logger.warning("(Cause) Argument '${violation.param}'")
         plugin.logger.warning("(Reason) ${violation.message}")
         plugin.logger.warning("")
     }
 
-    override fun log(violation: ConfigViolation) {
+    override fun log(context: ViolationContext, violation: ConfigViolation) {
         plugin.logger.warning("")
-        plugin.logger.warning("Invalid configuration found at $this:")
+        plugin.logger.warning("Invalid configuration found at $context:")
         plugin.logger.warning("(Cause) Argument '${violation.param}'")
         plugin.logger.warning("(Reason) ${violation.message}")
         plugin.logger.warning("")
@@ -66,7 +66,7 @@ open class ViolationContext internal constructor(
      * Log a violation.
      */
     fun log(property: Compilable<*>, violation: ConfigViolation) {
-        logger.log(property, violation)
+        logger.log(this, property, violation)
         plugin.logger.warning("")
     }
 
@@ -74,7 +74,7 @@ open class ViolationContext internal constructor(
      * Log a violation.
      */
     fun log(violation: ConfigViolation) {
-        logger.log(violation)
+        logger.log(this, violation)
     }
 
     override fun toString(): String {
@@ -86,11 +86,11 @@ open class ViolationContext internal constructor(
  * A violation logger that does not log.
  */
 object SilentViolationLogger : ViolationLogger {
-    override fun log(property: Compilable<*>, violation: ConfigViolation) {
+    override fun log(context: ViolationContext, property: Compilable<*>, violation: ConfigViolation) {
         // Do nothing
     }
 
-    override fun log(violation: ConfigViolation) {
+    override fun log(context: ViolationContext, violation: ConfigViolation) {
         // Do nothing
     }
 }
