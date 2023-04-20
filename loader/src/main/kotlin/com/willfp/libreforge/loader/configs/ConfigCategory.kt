@@ -48,4 +48,11 @@ abstract class ConfigCategory(
     open fun afterReload(plugin: LibreforgePlugin) {
         // Override when needed.
     }
+
+    /**
+     * Accept a config in preloading.
+     */
+    open fun acceptPreloadConfig(plugin: LibreforgePlugin, id: String, config: Config) {
+        acceptConfig(plugin, id, config)
+    }
 }
