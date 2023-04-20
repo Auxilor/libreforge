@@ -33,6 +33,7 @@ abstract class LibreforgePlugin : EcoPlugin() {
     )
 
     init {
+        categories.lock() // Only allow registration through addCategory.
         competeForVersion()
 
         onLoad(LifecyclePosition.START) {
@@ -210,9 +211,11 @@ abstract class LibreforgePlugin : EcoPlugin() {
      * Add a new [category].
      */
     fun addCategory(category: ConfigCategory) {
+        categories.unlock()
         category.makeHandle(this)
         copyConfigs(category)
         loaderCategories += category
         categories.register(category.handle)
+        categories.lock()
     }
 }
