@@ -1,6 +1,6 @@
 package com.willfp.libreforge.triggers
 
-import com.willfp.eco.core.registry.Registrable
+import com.willfp.eco.core.registry.KRegistrable
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.generatePlaceholders
 import com.willfp.libreforge.getProvidedActiveEffects
@@ -13,8 +13,8 @@ import org.bukkit.entity.Player
 import org.bukkit.event.Listener
 
 abstract class Trigger(
-    val id: String
-) : Listener, Registrable {
+    override val id: String
+) : Listener, KRegistrable {
     /**
      * The TriggerData parameters that are sent.
      */
