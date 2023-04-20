@@ -2,8 +2,8 @@ package com.willfp.libreforge.loader.internal
 
 import com.willfp.eco.core.data.readExternalData
 import com.willfp.eco.core.data.writeExternalData
+import com.willfp.eco.core.version.Version
 import com.willfp.libreforge.loader.LibreforgePlugin
-import org.apache.maven.artifact.versioning.DefaultArtifactVersion
 import org.bukkit.Bukkit
 import java.io.File
 import java.io.FileOutputStream
@@ -15,9 +15,13 @@ private class LibreforgeNotFoundError(
     override val message: String
 ) : Error(message)
 
+internal class InvalidLibreforgePluginError(
+    override val message: String
+) : Error(message)
+
 internal fun checkHighestVersion(plugin: LibreforgePlugin) {
     val currentHighestVersion = readExternalData(HIGHEST_LIBREFORGE_VERSION_KEY) {
-        DefaultArtifactVersion("0.0.0")
+        Version("0.0.0")
     }
 
     if (plugin.libreforgeVersion > currentHighestVersion) {
@@ -32,7 +36,7 @@ internal fun loadHighestLibreforgeVersion(pluginFolder: File) {
     val classLoader = readExternalData<ClassLoader>(HIGHEST_LIBREFORGE_VERSION_CLASSLOADER_KEY)
         ?: throw LibreforgeNotFoundError("No libreforge plugin classloader found")
 
-    val version = readExternalData<DefaultArtifactVersion>(HIGHEST_LIBREFORGE_VERSION_KEY)
+    val version = readExternalData<Version>(HIGHEST_LIBREFORGE_VERSION_KEY)
         ?: throw LibreforgeNotFoundError("No libreforge version found")
 
     val libreforgeFolder = pluginFolder.resolve("libreforge")
