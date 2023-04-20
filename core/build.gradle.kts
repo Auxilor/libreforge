@@ -22,6 +22,10 @@ dependencies {
     })
 }
 
+repositories {
+    maven("https://jitpack.io/")
+}
+
 configurations.all {
     exclude(group = "com.sk89q.worldedit", module = "worldedit-core")
 }
