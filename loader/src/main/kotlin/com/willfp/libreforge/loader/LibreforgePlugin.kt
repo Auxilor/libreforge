@@ -38,9 +38,16 @@ abstract class LibreforgePlugin : EcoPlugin() {
             this.dataFolder.resolve("lrcdb.yml").delete()
         }
 
+        onLoad(LifecyclePosition.END) {
+            loadCategories()
+
+            for (category in loaderCategories.filter { it.shouldPreload }) {
+                loadCategory(category)
+            }
+        }
+
         onEnable(LifecyclePosition.START) {
             Plugins.register(LoadedLibreforgePluginImpl(this))
-            loadCategories()
         }
 
         // Legacy chains.yml.
@@ -62,48 +69,49 @@ abstract class LibreforgePlugin : EcoPlugin() {
 
         onReload(LifecyclePosition.START) {
             for (category in loaderCategories) {
-                withLogs(category, "before reload") {
-                    category.beforeReload(this)
-                }
+                loadCategory(category)
+            }
+        }
+    }
 
-                withLogs(category, "clear") {
-                    category.clear(this)
-                    category.handle.clear()
-                }
+    private fun loadCategory(category: ConfigCategory) {
+        withLogs(category, "before reload") {
+            category.beforeReload(this)
+        }
 
-                for (config in fetchConfigs(category)) {
-                    withLogs(category, "loading config ${config.id}") {
-                        category.handle.register(config.handle)
-                        category.acceptConfig(this, config.id, config.config)
-                    }
-                }
+        withLogs(category, "clear") {
+            category.clear(this)
+            category.handle.clear()
+        }
 
-                val legacy = category.legacyLocation
-                if (legacy != null) {
-                    val legacyConfig = this.dataFolder.resolve(legacy.filename)
-                        .let { if (it.exists()) it.readConfig() else emptyConfig() }
+        for (config in fetchConfigs(category)) {
+            withLogs(category, "loading config ${config.id}") {
+                category.handle.register(config.handle)
+                category.acceptConfig(this, config.id, config.config)
+            }
+        }
 
-                    for (config in legacyConfig.getSubsections(legacy.section)) {
-                        val id = config.getString("id")
+        val legacy = category.legacyLocation
+        if (legacy != null) {
+            for (config in legacy.getConfig(this).getSubsections(legacy.section)) {
+                val id = config.getString("id")
 
-                        val registrable = RegistrableConfig(
-                            config,
-                            null,
-                            id,
-                            category
-                        )
+                val registrable = RegistrableConfig(
+                    config,
+                    null,
+                    id,
+                    category
+                )
 
-                        withLogs(category, "loading legacy config $id") {
-                            category.handle.register(registrable.handle)
-                            category.acceptConfig(this, id, registrable.config)
-                        }
-                    }
-                }
-
-                withLogs(category, "after reload") {
-                    category.afterReload(this)
+                withLogs(category, "loading legacy config $id") {
+                    category.handle.register(registrable.handle)
+                    category.acceptConfig(this, id, registrable.config)
                 }
             }
+        }
+
+        withLogs(category, "after reload") {
+            category.afterReload(this)
         }
     }
 
