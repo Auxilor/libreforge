@@ -47,7 +47,7 @@ abstract class LibreforgePlugin : EcoPlugin() {
             loadCategories()
 
             for (category in loaderCategories.filter { it.shouldPreload }) {
-                loadCategory(category)
+                loadCategory(category, preload = true)
             }
         }
 
@@ -79,7 +79,7 @@ abstract class LibreforgePlugin : EcoPlugin() {
         }
     }
 
-    private fun loadCategory(category: ConfigCategory) {
+    private fun loadCategory(category: ConfigCategory, preload: Boolean = false) {
         withLogs(category, "before reload") {
             category.beforeReload(this)
         }
@@ -92,7 +92,11 @@ abstract class LibreforgePlugin : EcoPlugin() {
         for (config in fetchConfigs(category)) {
             withLogs(category, "loading config ${config.id}") {
                 category.handle.register(config.handle)
-                category.acceptConfig(this, config.id, config.config)
+                if (preload) {
+                    category.acceptPreloadConfig(this, config.id, config.config)
+                } else {
+                    category.acceptConfig(this, config.id, config.config)
+                }
             }
         }
 
