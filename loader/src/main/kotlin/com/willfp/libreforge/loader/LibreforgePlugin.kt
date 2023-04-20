@@ -6,18 +6,19 @@ import com.willfp.eco.core.PluginProps
 import com.willfp.eco.core.config.emptyConfig
 import com.willfp.eco.core.config.readConfig
 import com.willfp.eco.core.registry.Registry
+import com.willfp.eco.core.version.Version
 import com.willfp.libreforge.Plugins
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.configs.LibreforgeConfigCategory
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.executors.impl.NormalExecutorFactory
 import com.willfp.libreforge.loader.configs.ConfigCategory
+import com.willfp.libreforge.loader.internal.InvalidLibreforgePluginError
 import com.willfp.libreforge.loader.internal.LoadedLibreforgePluginImpl
 import com.willfp.libreforge.loader.internal.checkHighestVersion
 import com.willfp.libreforge.loader.internal.configs.FoundConfig
 import com.willfp.libreforge.loader.internal.configs.RegistrableConfig
 import com.willfp.libreforge.loader.internal.loadHighestLibreforgeVersion
-import org.apache.maven.artifact.versioning.DefaultArtifactVersion
 import java.io.File
 import java.util.zip.ZipFile
 
@@ -26,7 +27,10 @@ abstract class LibreforgePlugin : EcoPlugin() {
 
     val categories = Registry<LibreforgeConfigCategory>()
 
-    val libreforgeVersion = DefaultArtifactVersion(this.props.getEnvironmentVariable("libreforge version"))
+    val libreforgeVersion = Version(
+        this.props.getEnvironmentVariable("libreforge version")
+            ?: throw InvalidLibreforgePluginError("libreforge version environment variable not set!")
+    )
 
     init {
         competeForVersion()
@@ -192,7 +196,7 @@ abstract class LibreforgePlugin : EcoPlugin() {
     }
 
     override fun getMinimumEcoVersion(): String {
-        return "6.53.0"
+        return "6.55.0"
     }
 
     /**
