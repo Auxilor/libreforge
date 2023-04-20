@@ -16,6 +16,8 @@ abstract class ConfigCategory(
 
     open val supportsSharing = true
 
+    open val shouldPreload = false
+
     internal lateinit var handle: LibreforgeConfigCategory
         private set
 
