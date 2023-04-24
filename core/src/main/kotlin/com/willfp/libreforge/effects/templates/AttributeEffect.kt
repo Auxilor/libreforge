@@ -14,6 +14,8 @@ abstract class AttributeEffect(
     private val attribute: Attribute,
     private val operation: AttributeModifier.Operation
 ) : Effect<NoCompileData>(id) {
+    override val disablesDuringReload = false
+
     protected abstract fun getValue(config: Config, player: Player): Double
 
     final override fun onEnable(player: Player, config: Config, identifiers: Identifiers, holder: ProvidedHolder, compileData: NoCompileData) {

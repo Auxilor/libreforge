@@ -31,6 +31,14 @@ abstract class Effect<T>(
     open val shouldReload = true
 
     /**
+     * If the effect should disable during reload.
+     *
+     * For example, Attribute-based effects have onEnable logic that does not require onDisable
+     * to be run to prevent a collision / duplication. For these effects, this should be false.
+     */
+    open val disablesDuringReload = true
+
+    /**
      * The run order.
      */
     open val runOrder = RunOrder.NORMAL
@@ -130,7 +138,7 @@ abstract class Effect<T>(
         holder: ProvidedHolder,
         isReload: Boolean = false
     ) {
-        if (isReload && !shouldReload) {
+        if (isReload && !(shouldReload && disablesDuringReload)) {
             return
         }
 
