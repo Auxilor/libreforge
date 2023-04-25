@@ -89,6 +89,10 @@ class PointsMap(
     operator fun set(key: String, value: Double) {
         initializeIfNeeded(key)
 
+        if (value < 0) {
+            throw IllegalArgumentException("Points cannot be negative! (Tried to set $key to $value)")
+        }
+
         val dataKey = PersistentDataKey(
             NamespacedKeyUtils.createEcoKey("points_${key.lowercase()}"),
             PersistentDataKeyType.DOUBLE,
