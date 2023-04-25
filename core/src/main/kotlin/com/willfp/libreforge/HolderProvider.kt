@@ -1,7 +1,7 @@
 package com.willfp.libreforge
 
 import com.github.benmanes.caffeine.cache.Caffeine
-import com.willfp.eco.core.map.defaultMap
+import com.willfp.eco.core.map.listMap
 import com.willfp.libreforge.effects.EffectBlock
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
@@ -35,6 +35,17 @@ class HolderProvideEvent(
         }
     }
 }
+
+/**
+ * EffectBlocks provided by a holder.
+ *
+ * Previously this was done with maps but this led to bugs where
+ * multiple identical holders were not recognised.
+ */
+data class ProvidedEffectBlocks(
+    val holder: ProvidedHolder,
+    val effects: Set<EffectBlock>
+)
 
 private val providers = mutableListOf<HolderProvider>()
 
@@ -111,18 +122,18 @@ fun Player.updateHolders() {
 }
 
 // Effects that were active on previous update
-private val previousStates = defaultMap<UUID, Map<ProvidedHolder, Set<EffectBlock>>>(emptyMap())
-private val flattenedPreviousStates = defaultMap<UUID, Set<EffectBlock>>(emptySet()) // Optimisation.
+private val previousStates = listMap<UUID, ProvidedEffectBlocks>()
+private val flattenedPreviousStates = listMap<UUID, EffectBlock>() // Optimisation.
 
 /**
  * Flatten down to purely the effects.
  */
-fun Map<ProvidedHolder, Set<EffectBlock>>.flatten() = this.flatMap { it.value }.toSet()
+fun Collection<ProvidedEffectBlocks>.flatten() = this.flatMap { it.effects }
 
 /**
  * Map the effects to the holders that provided them.
  */
-fun Map<ProvidedHolder, Set<EffectBlock>>.mapBlocksToHolders(): Map<EffectBlock, ProvidedHolder> {
+fun Collection<ProvidedEffectBlocks>.mapBlocksToHolders(): Map<EffectBlock, ProvidedHolder> {
     val map = mutableMapOf<EffectBlock, ProvidedHolder>()
 
     for ((holder, effects) in this) {
@@ -138,16 +149,16 @@ fun Map<ProvidedHolder, Set<EffectBlock>>.mapBlocksToHolders(): Map<EffectBlock,
  * Get active effects for a [player] from holders mapped to the holder
  * that has provided them.
  */
-fun Collection<ProvidedHolder>.getProvidedActiveEffects(player: Player): Map<ProvidedHolder, Set<EffectBlock>> {
-    val map = mutableMapOf<ProvidedHolder, Set<EffectBlock>>()
+fun Collection<ProvidedHolder>.getProvidedActiveEffects(player: Player): List<ProvidedEffectBlocks> {
+    val blocks = mutableListOf<ProvidedEffectBlocks>()
 
     for (holder in this) {
         if (holder.holder.conditions.areMet(player, holder)) {
-            map[holder] = holder.getActiveEffects(player)
+            blocks += ProvidedEffectBlocks(holder, holder.getActiveEffects(player))
         }
     }
 
-    return map
+    return blocks
 }
 
 /**
@@ -177,13 +188,13 @@ fun Player.calculateActiveEffects() =
 /**
  * The active effects.
  */
-val Player.activeEffects: Set<EffectBlock>
+val Player.activeEffects: List<EffectBlock>
     get() = flattenedPreviousStates[this.uniqueId]
 
 /**
  * The active effects mapped to the holder that provided them.
  */
-val Player.providedActiveEffects: Map<ProvidedHolder, Set<EffectBlock>>
+val Player.providedActiveEffects: List<ProvidedEffectBlocks>
     get() = previousStates[this.uniqueId]
 
 /**
@@ -202,9 +213,9 @@ fun Player.updateEffects() {
     val beforeMap = before.mapBlocksToHolders().toNotNullMap()
     val afterMap = after.mapBlocksToHolders().toNotNullMap()
 
-    val added = afterF - beforeF
-    val removed = beforeF - afterF
-    val toReload = afterF - added
+    val added = afterF without beforeF
+    val removed = beforeF without afterF
+    val toReload = afterF without added
 
     for (effect in removed) {
         effect.disable(this, beforeMap[effect])
@@ -222,5 +233,18 @@ fun Player.updateEffects() {
 
     for (effect in toReload) {
         effect.enable(this, afterMap[effect], isReload = true)
+    }
+}
+
+/**
+ * Removes all elements from the given [other] list that are contained in this list.
+ *
+ * Elements are only removed as many times as they are present.
+ */
+inline infix fun <reified T> List<T>.without(other: List<T>): List<T> {
+    return other.toMutableList().let { mutableOther ->
+        filter { element ->
+            !mutableOther.remove(element)
+        }
     }
 }
