@@ -26,6 +26,11 @@ abstract class ElementLike {
 
     abstract val supportsDelay: Boolean
 
+    /**
+     * If the element is its own chain, (e.g. has an ID specified directly at the top level).
+     */
+    open val isElementOwnChain: Boolean = false
+
     /*
     The replacement for the old ConfiguredEffect#invoke method.
 
@@ -39,6 +44,11 @@ abstract class ElementLike {
      * Mutate, filter, and then trigger.
      */
     fun trigger(trigger: DispatchedTrigger): Boolean {
+        // If own chain, defer all to elements.
+        if (isElementOwnChain) {
+            return doTrigger(trigger)
+        }
+
         // It would be nice to abstract repeat/delay away here, but that would be
         // really, really, overengineering it - even for me.
         val repeatTimes = config.getIntFromExpression("repeat.times", trigger.data).coerceAtLeast(1)
