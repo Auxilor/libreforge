@@ -33,7 +33,7 @@ object Filters : Registry<Filter<*, *>>() {
         val blocks = mutableListOf<FilterBlock<*, *>>()
 
         for (key in config.getKeys(false)) {
-            val filter = get(key) ?: continue
+            val filter = get(key) ?: get(key.removePrefix("not_")) ?: continue
             blocks += makeBlock(filter, config, context) ?: continue
         }
 
