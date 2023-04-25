@@ -211,7 +211,8 @@ object Effects : Registry<Effect<*>>() {
             arguments,
             conditions,
             mutators,
-            filters
+            filters,
+            directIDSpecified
         )
     }
 

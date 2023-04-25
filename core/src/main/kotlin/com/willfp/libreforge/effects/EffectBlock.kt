@@ -23,7 +23,8 @@ class EffectBlock internal constructor(
     override val arguments: EffectArgumentList,
     override val conditions: ConditionList,
     override val mutators: MutatorList,
-    override val filters: FilterList
+    override val filters: FilterList,
+    override val isElementOwnChain: Boolean
 ) : ElementLike() {
     override val supportsDelay = effects.all { it.supportsDelay }
 
