@@ -40,6 +40,20 @@ object EffectCollisionFixer : Listener {
     }
 
     private fun Player.fixAttributes() {
+        for (attribute in Attribute.values()) {
+            val inst = this.getAttribute(attribute) ?: continue
+            val mods = inst.modifiers.filter { it.name.startsWith("libreforge") }
+            println("Removing ${mods.size} modifiers from ${this.name}...")
+            for (mod in mods) {
+                inst.removeModifier(mod)
+            }
+        }
+
+        // Extra fix
+        if (this.health > (this.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.value ?: 0.0)) {
+            this.health = this.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.value ?: 0.0
+        }
+
         for (effect in Effects.values()) {
             for (attribute in Attribute.values()) {
                 val inst = this.getAttribute(attribute) ?: continue
