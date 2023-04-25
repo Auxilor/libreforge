@@ -49,7 +49,13 @@ object Filters : Registry<Filter<*, *>>() {
             return null
         }
 
-        val compileData = filter.makeCompileData(config, context, filter.getValue(config, null, filter.id))
+        val configKey = if (config.has("not_${filter.id}")) {
+            "not_${filter.id}"
+        } else {
+            filter.id
+        }
+
+        val compileData = filter.makeCompileData(config, context, filter.getValue(config, null, configKey))
         return FilterBlock(filter, config, compileData)
     }
 
