@@ -49,8 +49,6 @@ object ArgumentPrice : EffectArgument<NoCompileData>("price") {
             element.config.toMathContext(trigger.data)
         )
 
-        price.pay(trigger.player)
-
         val display = element.config.getString("price.display")
             .replace("%value%", NumberUtils.format(price.getValue(trigger.player)))
 
