@@ -47,6 +47,14 @@ data class ProvidedEffectBlocks(
     val effects: Set<EffectBlock>
 )
 
+/**
+ * EffectBlock provided by a holder.
+ */
+data class ProvidedEffectBlock(
+    val effect: EffectBlock,
+    val holder: ProvidedHolder
+)
+
 private val providers = mutableListOf<HolderProvider>()
 
 /**
@@ -123,26 +131,21 @@ fun Player.updateHolders() {
 
 // Effects that were active on previous update
 private val previousStates = listMap<UUID, ProvidedEffectBlocks>()
-private val flattenedPreviousStates = listMap<UUID, EffectBlock>() // Optimisation.
+private val flattenedPreviousStates = listMap<UUID, ProvidedEffectBlock>() // Optimisation.
 
 /**
- * Flatten down to purely the effects.
+ * Flatten down to the effects.
  */
-fun Collection<ProvidedEffectBlocks>.flatten() = this.flatMap { it.effects }
-
-/**
- * Map the effects to the holders that provided them.
- */
-fun Collection<ProvidedEffectBlocks>.mapBlocksToHolders(): Map<EffectBlock, ProvidedHolder> {
-    val map = mutableMapOf<EffectBlock, ProvidedHolder>()
+fun Collection<ProvidedEffectBlocks>.flatten(): List<ProvidedEffectBlock> {
+    val list = mutableListOf<ProvidedEffectBlock>()
 
     for ((holder, effects) in this) {
         for (effect in effects) {
-            map[effect] = holder
+            list += ProvidedEffectBlock(effect, holder)
         }
     }
 
-    return map
+    return list
 }
 
 /**
@@ -189,7 +192,7 @@ fun Player.calculateActiveEffects() =
  * The active effects.
  */
 val Player.activeEffects: List<EffectBlock>
-    get() = flattenedPreviousStates[this.uniqueId]
+    get() = flattenedPreviousStates[this.uniqueId].map { it.effect }
 
 /**
  * The active effects mapped to the holder that provided them.
@@ -210,29 +213,26 @@ fun Player.updateEffects() {
     val beforeF = before.flatten()
     val afterF = after.flatten()
 
-    val beforeMap = before.mapBlocksToHolders().toNotNullMap()
-    val afterMap = after.mapBlocksToHolders().toNotNullMap()
-
     val added = afterF without beforeF
     val removed = beforeF without afterF
     val toReload = afterF without added
 
-    for (effect in removed) {
-        effect.disable(this, beforeMap[effect])
+    for ((effect, holder) in removed) {
+        effect.disable(this, holder)
     }
 
-    for (effect in added) {
-        effect.enable(this, afterMap[effect])
+    for ((effect, holder) in added) {
+        effect.enable(this, holder)
     }
 
     // Reloading is now done by disabling all, then enabling all. Effect#reload is deprecated.
 
-    for (effect in toReload) {
-        effect.disable(this, afterMap[effect], isReload = true)
+    for ((effect, holder) in toReload) {
+        effect.disable(this, holder, isReload = true)
     }
 
-    for (effect in toReload) {
-        effect.enable(this, afterMap[effect], isReload = true)
+    for ((effect, holder) in toReload) {
+        effect.enable(this, holder, isReload = true)
     }
 }
 
