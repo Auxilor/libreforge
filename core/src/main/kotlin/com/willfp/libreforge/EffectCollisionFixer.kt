@@ -43,7 +43,6 @@ object EffectCollisionFixer : Listener {
         for (attribute in Attribute.values()) {
             val inst = this.getAttribute(attribute) ?: continue
             val mods = inst.modifiers.filter { it.name.startsWith("libreforge") }
-            println("Removing ${mods.size} modifiers from ${this.name}...")
             for (mod in mods) {
                 inst.removeModifier(mod)
             }
