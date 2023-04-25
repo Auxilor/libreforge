@@ -36,6 +36,7 @@ abstract class Effect<T>(
      * For example, Attribute-based effects have onEnable logic that does not require onDisable
      * to be run to prevent a collision / duplication. For these effects, this should be false.
      */
+    @Deprecated("This caused issues with effects and is no longer used.", ReplaceWith("true"), DeprecationLevel.ERROR)
     open val disablesDuringReload = true
 
     /**
@@ -138,7 +139,7 @@ abstract class Effect<T>(
         holder: ProvidedHolder,
         isReload: Boolean = false
     ) {
-        if (isReload && !(shouldReload && disablesDuringReload)) {
+        if (isReload && !shouldReload) {
             return
         }
 
