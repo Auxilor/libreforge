@@ -53,6 +53,7 @@ object EffectCollisionFixer : Listener {
             this.health = this.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.value ?: 0.0
         }
 
+        // Legacy fix
         for (effect in Effects.values()) {
             for (attribute in Attribute.values()) {
                 val inst = this.getAttribute(attribute) ?: continue

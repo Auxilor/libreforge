@@ -25,7 +25,17 @@ abstract class AttributeEffect(
         }
     }
 
-    final override fun onEnable(player: Player, config: Config, identifiers: Identifiers, holder: ProvidedHolder, compileData: NoCompileData) {
+    open fun constrainAttribute(player: Player, value: Double) {
+        // Override this to constrain the attribute value, e.g. to set health below max health.
+    }
+
+    final override fun onEnable(
+        player: Player,
+        config: Config,
+        identifiers: Identifiers,
+        holder: ProvidedHolder,
+        compileData: NoCompileData
+    ) {
         val instance = player.getAttribute(attribute) ?: return
         val modifierName = "libreforge:${this.id}_${identifiers.key}"
 
@@ -52,5 +62,7 @@ abstract class AttributeEffect(
                 operation
             )
         )
+
+        constrainAttribute(player, instance.value)
     }
 }
