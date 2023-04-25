@@ -12,7 +12,7 @@ import org.bukkit.entity.Player
 /**
  * A single condition config block.
  */
-class ConditionBlock<T>(
+class ConditionBlock<T> internal constructor(
     val condition: Condition<T>,
     override val config: Config,
     override val compileData: T,

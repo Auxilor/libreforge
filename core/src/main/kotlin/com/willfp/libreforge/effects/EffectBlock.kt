@@ -15,7 +15,7 @@ import java.util.UUID
 /**
  * A compiled group of effects.
  */
-class EffectBlock(
+class EffectBlock internal constructor(
     override val uuid: UUID,
     override val config: Config,
     val effects: Chain,
