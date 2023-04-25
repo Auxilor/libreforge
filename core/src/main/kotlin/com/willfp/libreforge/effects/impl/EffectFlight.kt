@@ -10,6 +10,8 @@ import org.bukkit.entity.Player
 import java.util.UUID
 
 object EffectFlight : Effect<NoCompileData>("flight") {
+    override val shouldReload = false
+
     private val players = listMap<UUID, UUID>()
 
     override fun onEnable(player: Player, config: Config, identifiers: Identifiers, holder: ProvidedHolder, compileData: NoCompileData) {
