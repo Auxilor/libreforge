@@ -38,7 +38,7 @@ abstract class AttributeEffect(
         compileData: NoCompileData
     ) {
         val instance = player.getAttribute(attribute) ?: return
-        val modifierName = "libreforge:${this.id}_${identifiers.key}"
+        val modifierName = "libreforge:${this.id} - ${identifiers.key.key} (${holder.holder.id})"
 
         instance.addModifier(
             AttributeModifier(
@@ -52,7 +52,7 @@ abstract class AttributeEffect(
 
     final override fun onDisable(player: Player, identifiers: Identifiers, holder: ProvidedHolder) {
         val instance = player.getAttribute(attribute) ?: return
-        val modifierName = "libreforge:${this.id}_${identifiers.key}"
+        val modifierName = "libreforge:${this.id} - ${identifiers.key.key} (${holder.holder.id})"
         instance.clean(modifierName)
 
         instance.removeModifier(
