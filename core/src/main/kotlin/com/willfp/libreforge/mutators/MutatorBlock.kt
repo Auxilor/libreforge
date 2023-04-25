@@ -7,7 +7,7 @@ import com.willfp.libreforge.triggers.TriggerData
 /**
  * A single mutator config block.
  */
-class MutatorBlock<T>(
+class MutatorBlock<T> internal constructor(
     val mutator: Mutator<T>,
     override val config: Config,
     override val compileData: T
