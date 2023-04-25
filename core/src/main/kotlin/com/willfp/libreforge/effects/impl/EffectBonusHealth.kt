@@ -6,7 +6,6 @@ import com.willfp.libreforge.effects.templates.AttributeEffect
 import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeModifier
 import org.bukkit.entity.Player
-import kotlin.math.min
 
 object EffectBonusHealth : AttributeEffect(
     "bonus_health",
@@ -21,6 +20,8 @@ object EffectBonusHealth : AttributeEffect(
         config.getIntFromExpression("health", player).toDouble()
 
     override fun constrainAttribute(player: Player, value: Double) {
-        player.health = min(player.health, value)
+        if (player.health > value) {
+            player.health = value
+        }
     }
 }
