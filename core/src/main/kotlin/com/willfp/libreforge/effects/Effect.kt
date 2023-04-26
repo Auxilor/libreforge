@@ -12,6 +12,7 @@ import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
+import com.willfp.libreforge.withHolder
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
 import java.util.UUID
@@ -85,8 +86,11 @@ abstract class Effect<T>(
         // Increment first to fix reload bug where effects are applied twice.
         effectCounter[player.uniqueId]++
         val count = effectCounter[player.uniqueId]
-        config.config.injectPlaceholders(*holder.generatePlaceholders().mapToPlaceholders())
-        onEnable(player, config.config, identifierFactory.makeIdentifiers(count), holder, config.compileData)
+
+        val withHolder = config.config.withHolder(holder)
+        withHolder.injectPlaceholders(*holder.generatePlaceholders().mapToPlaceholders())
+
+        onEnable(player, withHolder, identifierFactory.makeIdentifiers(count), holder, config.compileData)
     }
 
     /**
