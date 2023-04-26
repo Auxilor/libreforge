@@ -4,8 +4,9 @@ import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.data.keys.PersistentDataKey
 import com.willfp.eco.core.data.keys.PersistentDataKeyType
 import com.willfp.eco.core.data.profile
-import com.willfp.eco.core.math.MathContext
 import com.willfp.eco.core.placeholder.PlayerDynamicPlaceholder
+import com.willfp.eco.core.placeholder.context.PlaceholderContext
+import com.willfp.eco.core.placeholder.context.PlaceholderContextSupplier
 import com.willfp.eco.core.price.Price
 import com.willfp.eco.core.price.PriceFactory
 import com.willfp.eco.core.price.Prices
@@ -13,20 +14,19 @@ import com.willfp.eco.util.NamespacedKeyUtils
 import com.willfp.eco.util.toNiceString
 import org.bukkit.entity.Player
 import java.util.UUID
-import java.util.function.Function
 import java.util.regex.Pattern
 
 class PointPriceFactory(private val type: String) : PriceFactory {
     override fun getNames() = listOf(type)
 
-    override fun create(baseContext: MathContext, function: Function<MathContext, Double>): Price {
-        return PricePoint(type, baseContext) { function.apply(it) }
+    override fun create(baseContext: PlaceholderContext, function: PlaceholderContextSupplier<Double>): Price {
+        return PricePoint(type, baseContext) { function.get(it) }
     }
 
     private class PricePoint(
         private val type: String,
-        private val baseContext: MathContext,
-        private val function: (MathContext) -> Double
+        private val baseContext: PlaceholderContext,
+        private val function: (PlaceholderContext) -> Double
     ) : Price {
         private val multipliers = mutableMapOf<UUID, Double>()
 
@@ -43,7 +43,7 @@ class PointPriceFactory(private val type: String) : PriceFactory {
         }
 
         override fun getValue(player: Player, multiplier: Double): Double {
-            return function(MathContext.copyWithPlayer(baseContext, player)) * getMultiplier(player) * multiplier
+            return function(baseContext.copyWithPlayer(player)) * getMultiplier(player) * multiplier
         }
 
         override fun getMultiplier(player: Player): Double {

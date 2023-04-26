@@ -1,12 +1,12 @@
 package com.willfp.libreforge.conditions.impl
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.math.MathContext
 import com.willfp.eco.core.price.Price
 import com.willfp.eco.core.price.Prices
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
+import com.willfp.libreforge.toPlaceholderContext
 import org.bukkit.entity.Player
 
 object ConditionCanAffordPrice : Condition<Price>("can_afford_price") {
@@ -23,7 +23,7 @@ object ConditionCanAffordPrice : Condition<Price>("can_afford_price") {
         return Prices.create(
             config.getString("value"),
             config.getString("type"),
-            MathContext.of(config)
+            config.toPlaceholderContext()
         )
     }
 }
