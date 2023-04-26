@@ -1,7 +1,7 @@
 package com.willfp.libreforge.conditions.impl
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.integrations.placeholder.PlaceholderManager
+import com.willfp.eco.core.placeholder.context.placeholderContext
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
@@ -13,7 +13,7 @@ object ConditionPlaceholderContains : Condition<NoCompileData>("placeholder_cont
     }
 
     override fun isMet(player: Player, config: Config, compileData: NoCompileData): Boolean {
-        return PlaceholderManager.translatePlaceholders(config.getString("placeholder"), player)
+        return config.getFormattedString("placeholder", placeholderContext(player = player))
             .contains(config.getString("value"), ignoreCase = config.getBool("ignore_case"))
     }
 }

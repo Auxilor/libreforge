@@ -4,15 +4,13 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.map.defaultMap
 import com.willfp.libreforge.Compilable
 import com.willfp.libreforge.ProvidedHolder
-import com.willfp.libreforge.generatePlaceholders
-import com.willfp.libreforge.mapToPlaceholders
+import com.willfp.libreforge.applyHolder
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.DispatchedTrigger
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
-import com.willfp.libreforge.withHolder
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
 import java.util.UUID
@@ -87,8 +85,7 @@ abstract class Effect<T>(
         effectCounter[player.uniqueId]++
         val count = effectCounter[player.uniqueId]
 
-        val withHolder = config.config.withHolder(holder)
-        withHolder.injectPlaceholders(*holder.generatePlaceholders().mapToPlaceholders())
+        val withHolder = config.config.applyHolder(holder)
 
         onEnable(player, withHolder, identifierFactory.makeIdentifiers(count), holder, config.compileData)
     }

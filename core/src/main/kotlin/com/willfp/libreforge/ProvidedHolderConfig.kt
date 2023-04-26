@@ -1,11 +1,9 @@
 package com.willfp.libreforge
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.integrations.placeholder.PlaceholderManager
-import com.willfp.eco.core.placeholder.AdditionalPlayer
 import com.willfp.eco.core.placeholder.context.PlaceholderContext
 import com.willfp.eco.util.NumberUtils
-import org.bukkit.entity.Player
+import com.willfp.eco.util.formatEco
 import org.bukkit.inventory.ItemStack
 
 /**
@@ -20,43 +18,22 @@ private class ProvidedHolderConfig(
     override fun getDoubleFromExpression(path: String, context: PlaceholderContext): Double {
         return NumberUtils.evaluateExpression(
             this.getString(path),
-            PlaceholderContext(
-                null,
-                holder.provider as? ItemStack,
-                PlaceholderManager.EMPTY_INJECTABLE,
-                emptyList()
-            )
+            context.copyWithItem(holder.provider as? ItemStack)
         )
     }
 
-    override fun getDoubleFromExpression(path: String, player: Player?): Double {
-        return NumberUtils.evaluateExpression(
-            this.getString(path),
-            PlaceholderContext(
-                player,
-                holder.provider as? ItemStack,
-                PlaceholderManager.EMPTY_INJECTABLE,
-                emptyList()
-            )
-        )
+    override fun getFormattedStringOrNull(path: String, context: PlaceholderContext): String? {
+        val string = this.getStringOrNull(path) ?: return null
+        return string.formatEco(context.copyWithItem(holder.provider as? ItemStack))
     }
 
-    override fun getDoubleFromExpression(
-        path: String,
-        player: Player?,
-        additionalPlayers: MutableCollection<AdditionalPlayer>
-    ): Double {
-        return NumberUtils.evaluateExpression(
-            this.getString(path),
-            PlaceholderContext(
-                player,
-                holder.provider as? ItemStack,
-                PlaceholderManager.EMPTY_INJECTABLE,
-                additionalPlayers
-            )
-        )
+    override fun getFormattedStringsOrNull(path: String, context: PlaceholderContext): List<String>? {
+        val strings = this.getStringsOrNull(path) ?: return null
+        return strings.formatEco(context.copyWithItem(holder.provider as? ItemStack))
     }
 }
 
-fun Config.withHolder(providedHolder: ProvidedHolder): Config =
-    ProvidedHolderConfig(this, providedHolder)
+fun Config.applyHolder(providedHolder: ProvidedHolder): Config =
+    ProvidedHolderConfig(this, providedHolder).apply {
+        injectPlaceholders(*providedHolder.generatePlaceholders().mapToPlaceholders())
+    }

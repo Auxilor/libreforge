@@ -1,13 +1,13 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.integrations.placeholder.PlaceholderManager
 import com.willfp.eco.util.asAudience
 import com.willfp.eco.util.formatEco
 import com.willfp.eco.util.toComponent
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.toPlaceholderContext
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import net.kyori.adventure.title.TitlePart
@@ -27,12 +27,11 @@ object EffectSendTitle : Effect<NoCompileData>("send_title") {
 
         val title = config.getString("title")
             .replace("%player%", player.name)
-            .let { PlaceholderManager.translatePlaceholders(it, player, config) }
-            .formatEco(player)
+            .formatEco(config.toPlaceholderContext(data))
 
         val subtitle = config.getString("subtitle")
             .replace("%player%", player.name)
-            .let { PlaceholderManager.translatePlaceholders(it, player, config) }
+            .formatEco(config.toPlaceholderContext(data))
             .formatEco(player)
 
         val audience = player.asAudience()
