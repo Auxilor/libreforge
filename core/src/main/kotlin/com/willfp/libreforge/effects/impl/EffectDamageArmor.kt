@@ -14,6 +14,7 @@ import org.bukkit.SoundCategory
 import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerItemBreakEvent
 import org.bukkit.event.player.PlayerItemDamageEvent
+import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
 
@@ -34,35 +35,57 @@ object EffectDamageArmor : Effect<NoCompileData>("damage_armor") {
 
         val equipment = victim.equipment ?: return false
 
-        for (item in equipment.armorContents) {
-            @Suppress("SENSELESS_COMPARISON")
-            if (item == null) {
-                continue
-            }
+        val slots = config.getStrings("slots").mapNotNull {
+            kotlin.runCatching { EquipmentSlot.valueOf(it.uppercase()) }.getOrNull()
+        }
 
-            val meta = item.itemMeta ?: continue
-
-            if (meta.isUnbreakable) {
-                continue
-            }
-
-            if (meta !is Damageable) {
-                continue
-            }
-
-            // edge cases
-            if (arrayOf(Material.CARVED_PUMPKIN, Material.PLAYER_HEAD).contains(item.type)) {
-                continue
-            }
-
-            if (victim is Player) {
-                val event = PlayerItemDamageEvent(victim, item, damage)
-                Bukkit.getPluginManager().callEvent(event)
-                if (!event.isCancelled) {
-                    applyDamage(item, event.damage, victim)
+        if (slots.isEmpty()) {
+            for (item in equipment.armorContents) {
+                @Suppress("SENSELESS_COMPARISON")
+                if (item == null) {
+                    continue
                 }
-            } else {
-                applyDamage(item, damage, null)
+
+                val meta = item.itemMeta ?: continue
+
+                if (meta.isUnbreakable) {
+                    continue
+                }
+
+                if (meta !is Damageable) {
+                    continue
+                }
+
+                // edge cases
+                if (arrayOf(Material.CARVED_PUMPKIN, Material.PLAYER_HEAD).contains(item.type)) {
+                    continue
+                }
+
+                if (victim is Player) {
+                    val event = PlayerItemDamageEvent(victim, item, damage)
+                    Bukkit.getPluginManager().callEvent(event)
+                    if (!event.isCancelled) {
+                        applyDamage(item, event.damage, victim)
+                    }
+                } else {
+                    applyDamage(item, damage, null)
+                }
+            }
+        } else {
+            for (slot in slots) {
+                val item = equipment.getItem(slot)
+                @Suppress("SENSELESS_COMPARISON")
+                if (item != null && item.itemMeta is Damageable) {
+                    if (victim is Player) {
+                        val event = PlayerItemDamageEvent(victim, item, damage)
+                        Bukkit.getPluginManager().callEvent(event)
+                        if (!event.isCancelled) {
+                            applyDamage(item, event.damage, victim)
+                        }
+                    } else {
+                        applyDamage(item, damage, null)
+                    }
+                }
             }
         }
 
