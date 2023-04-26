@@ -22,6 +22,7 @@ import com.willfp.libreforge.triggers.impl.TriggerDeployElytra
 import com.willfp.libreforge.triggers.impl.TriggerDrink
 import com.willfp.libreforge.triggers.impl.TriggerDropItem
 import com.willfp.libreforge.triggers.impl.TriggerEmptyBucket
+import com.willfp.libreforge.triggers.impl.TriggerEnable
 import com.willfp.libreforge.triggers.impl.TriggerEnchantItem
 import com.willfp.libreforge.triggers.impl.TriggerEnterBed
 import com.willfp.libreforge.triggers.impl.TriggerEntityItemDrop
@@ -175,5 +176,6 @@ object Triggers : Registry<Trigger>() {
         register(TriggerWinRaid)
         register(TriggerDrink)
         register(TriggerChangeChunk)
+        register(TriggerEnable)
     }
 }
