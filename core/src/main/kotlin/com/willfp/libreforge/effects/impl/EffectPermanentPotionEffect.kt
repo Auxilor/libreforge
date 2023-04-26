@@ -1,5 +1,6 @@
 package com.willfp.libreforge.effects.impl
 
+import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
@@ -17,14 +18,24 @@ import java.util.UUID
 @Suppress("UNCHECKED_CAST")
 object EffectPermanentPotionEffect : Effect<NoCompileData>("permanent_potion_effect") {
     override val arguments = arguments {
-        require("effect", "You must specify a valid potion effect! See here: " +
-                "https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/potion/PotionEffectType.html", Config::getString) {
+        require(
+            "effect",
+            "You must specify a valid potion effect! See here: " +
+                    "https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/potion/PotionEffectType.html",
+            Config::getString
+        ) {
             PotionEffectType.getByName(it.uppercase()) != null
         }
         require("level", "You must specify the effect level!")
     }
 
     private val metaKey = "libreforge_${this.id}"
+
+    private val duration = if (Prerequisite.HAS_1_19_4.isMet) {
+        -1
+    } else {
+        1_500_000_000
+    }
 
     @EventHandler
     fun onRespawn(event: PlayerRespawnEvent) {
@@ -38,7 +49,7 @@ object EffectPermanentPotionEffect : Effect<NoCompileData>("permanent_potion_eff
 
             val effect = PotionEffect(
                 effectType,
-                1_500_000_000,
+                duration,
                 level,
                 false,
                 false,
@@ -49,7 +60,13 @@ object EffectPermanentPotionEffect : Effect<NoCompileData>("permanent_potion_eff
         }
     }
 
-    override fun onEnable(player: Player, config: Config, identifiers: Identifiers, holder: ProvidedHolder, compileData: NoCompileData) {
+    override fun onEnable(
+        player: Player,
+        config: Config,
+        identifiers: Identifiers,
+        holder: ProvidedHolder,
+        compileData: NoCompileData
+    ) {
         val effectType = PotionEffectType.getByName(config.getString("effect").uppercase())
             ?: PotionEffectType.INCREASE_DAMAGE
 
@@ -57,7 +74,7 @@ object EffectPermanentPotionEffect : Effect<NoCompileData>("permanent_potion_eff
 
         val effect = PotionEffect(
             effectType,
-            1_500_000_000,
+            duration,
             level,
             false,
             false,
@@ -82,8 +99,14 @@ object EffectPermanentPotionEffect : Effect<NoCompileData>("permanent_potion_eff
 
         val active = player.getPotionEffect(toRemove) ?: return
 
-        if (active.duration < 1_000_000_000) {
-            return
+        if (Prerequisite.HAS_1_19_4.isMet) {
+            if (active.duration != -1) {
+                return
+            }
+        } else {
+            if (active.duration < 1_000_000_000) {
+                return
+            }
         }
 
         meta.remove(identifiers.uuid)
