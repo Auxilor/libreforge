@@ -5,7 +5,7 @@ import com.willfp.eco.core.price.Prices
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
-import com.willfp.libreforge.toMathContext
+import com.willfp.libreforge.toPlaceholderContext
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
@@ -25,7 +25,7 @@ object EffectPayPrice : Effect<NoCompileData>("pay_price") {
         Prices.create(
             config.getString("value"),
             config.getString("type"),
-            config.toMathContext(data)
+            config.toPlaceholderContext(data)
         ).pay(player)
 
         return true

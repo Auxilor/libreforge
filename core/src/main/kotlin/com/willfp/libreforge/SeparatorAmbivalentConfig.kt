@@ -2,14 +2,15 @@ package com.willfp.libreforge
 
 import com.willfp.eco.core.config.ConfigType
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.math.MathContext
 import com.willfp.eco.core.placeholder.AdditionalPlayer
 import com.willfp.eco.core.placeholder.InjectablePlaceholder
 import com.willfp.eco.core.placeholder.StaticPlaceholder
+import com.willfp.eco.core.placeholder.context.PlaceholderContext
 import com.willfp.eco.util.NumberUtils
 import com.willfp.eco.util.StringUtils
 import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
 import java.util.Locale
 
 private class SeparatorAmbivalentConfig(
@@ -94,7 +95,17 @@ private class SeparatorAmbivalentConfig(
 fun Config.separatorAmbivalent(): Config =
     if (this is SeparatorAmbivalentConfig) this else SeparatorAmbivalentConfig(this)
 
-fun Config.toMathContext(data: TriggerData? = null): MathContext {
+@Deprecated(
+    "Use toPlaceholderContext instead",
+    ReplaceWith("this.toPlaceholderContext(data)"),
+    DeprecationLevel.ERROR
+)
+@Suppress("DEPRECATION")
+fun Config.toMathContext(data: TriggerData? = null): com.willfp.eco.core.math.MathContext {
+    return this.toPlaceholderContext(data).toMathContext()
+}
+
+fun Config.toPlaceholderContext(data: TriggerData? = null): PlaceholderContext {
     val additionalPlayers = mutableListOf<AdditionalPlayer>()
 
     data?.let {
@@ -103,16 +114,21 @@ fun Config.toMathContext(data: TriggerData? = null): MathContext {
         }
     }
 
-    return MathContext(this, data?._originalPlayer, additionalPlayers)
+    return PlaceholderContext(
+        data?._originalPlayer,
+        data?.holder?.provider as? ItemStack,
+        this,
+        additionalPlayers
+    )
 }
 
 
 fun Config.getIntFromExpression(path: String, data: TriggerData?) = NumberUtils.evaluateExpression(
-    this.getString(path), this.toMathContext(data)
+    this.getString(path), this.toPlaceholderContext(data)
 ).toInt()
 
 fun Config.getDoubleFromExpression(path: String, data: TriggerData?) = NumberUtils.evaluateExpression(
-    this.getString(path), this.toMathContext(data)
+    this.getString(path), this.toPlaceholderContext(data)
 )
 
 private fun String.toCamelCase(): String {

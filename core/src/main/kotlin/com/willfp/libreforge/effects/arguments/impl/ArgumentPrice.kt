@@ -8,7 +8,7 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.effects.ElementLike
 import com.willfp.libreforge.effects.arguments.EffectArgument
 import com.willfp.libreforge.plugin
-import com.willfp.libreforge.toMathContext
+import com.willfp.libreforge.toPlaceholderContext
 import com.willfp.libreforge.triggers.DispatchedTrigger
 import org.bukkit.Sound
 
@@ -26,7 +26,7 @@ object ArgumentPrice : EffectArgument<NoCompileData>("price") {
         val price = Prices.create(
             element.config.getString("price.value"),
             element.config.getString("price.type"),
-            element.config.toMathContext(trigger.data)
+            element.config.toPlaceholderContext(trigger.data)
         )
 
         return price.canAfford(trigger.player)
@@ -36,7 +36,7 @@ object ArgumentPrice : EffectArgument<NoCompileData>("price") {
         val price = Prices.create(
             element.config.getString("price.value"),
             element.config.getString("price.type"),
-            element.config.toMathContext(trigger.data)
+            element.config.toPlaceholderContext(trigger.data)
         )
 
         price.pay(trigger.player)
@@ -46,7 +46,7 @@ object ArgumentPrice : EffectArgument<NoCompileData>("price") {
         val price = Prices.create(
             element.config.getString("price.value"),
             element.config.getString("price.type"),
-            element.config.toMathContext(trigger.data)
+            element.config.toPlaceholderContext(trigger.data)
         )
 
         val display = element.config.getString("price.display")

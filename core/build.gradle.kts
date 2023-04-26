@@ -3,7 +3,7 @@ dependencies {
         isTransitive = false
     }
 
-    compileOnly("com.willfp:eco:6.55.2")
+    compileOnly("com.willfp:eco:6.56.0")
     compileOnly("io.papermc.paper:paper-api:1.17.1-R0.1-SNAPSHOT")
 
     compileOnly("com.github.Archy-X:AureliumSkills:Beta1.2.4")
