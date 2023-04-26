@@ -5,6 +5,7 @@ import com.willfp.eco.core.integrations.placeholder.PlaceholderManager
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.toPlaceholderContext
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.Player
@@ -29,7 +30,7 @@ object EffectRunPlayerCommand : Effect<NoCompileData>("run_player_command") {
             command = command.replace("%victim%", victim.name)
         }
 
-        command = PlaceholderManager.translatePlaceholders(command, player, config)
+        command = PlaceholderManager.translatePlaceholders(command, config.toPlaceholderContext(data))
 
         val isOp = player.isOp
 

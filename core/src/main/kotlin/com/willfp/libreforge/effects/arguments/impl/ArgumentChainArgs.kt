@@ -1,6 +1,6 @@
 package com.willfp.libreforge.effects.arguments.impl
 
-import com.willfp.eco.core.integrations.placeholder.PlaceholderManager
+import com.willfp.eco.core.placeholder.context.placeholderContext
 import com.willfp.libreforge.NamedValue
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.effects.ElementLike
@@ -18,11 +18,9 @@ object ArgumentChainArgs : EffectArgument<NoCompileData>("chain_args") {
             trigger.addPlaceholder(
                 NamedValue(
                     listOf(arg, arg.replace("_", "")),
-                    PlaceholderManager.translatePlaceholders(
-                        config.getString(arg),
-                        trigger.player,
-                        config
-                    )
+                    config.getFormattedString(arg, placeholderContext(
+                        player = trigger.player,
+                    ))
                 )
             )
         }

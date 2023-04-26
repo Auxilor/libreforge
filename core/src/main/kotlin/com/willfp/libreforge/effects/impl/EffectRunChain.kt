@@ -1,13 +1,14 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.integrations.placeholder.PlaceholderManager
+import com.willfp.eco.util.formatEco
 import com.willfp.libreforge.NamedValue
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.executors.ChainExecutors
+import com.willfp.libreforge.toPlaceholderContext
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
@@ -31,7 +32,8 @@ object EffectRunChain : Effect<NoCompileData>("run_chain") {
             dispatch.addPlaceholder(
                 NamedValue(
                     listOf(key, key.replace("_", "")),
-                    PlaceholderManager.translatePlaceholders(args.getString(key), player)
+                    args.getString(key)
+                        .formatEco(args.toPlaceholderContext(data))
                 )
             )
         }

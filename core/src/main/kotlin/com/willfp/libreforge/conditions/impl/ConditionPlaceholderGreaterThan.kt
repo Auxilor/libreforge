@@ -1,7 +1,7 @@
 package com.willfp.libreforge.conditions.impl
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.integrations.placeholder.PlaceholderManager
+import com.willfp.eco.core.placeholder.context.placeholderContext
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
@@ -15,7 +15,7 @@ object ConditionPlaceholderGreaterThan : Condition<NoCompileData>("placeholder_g
     }
 
     override fun isMet(player: Player, config: Config, compileData: NoCompileData): Boolean {
-        val value = PlaceholderManager.translatePlaceholders(config.getString("placeholder"), player)
+        val value = config.getFormattedString("placeholder", placeholderContext(player = player))
             .toDoubleOrNull() ?: 0.0
         return value >= config.getDoubleFromExpression("value", player)
     }
