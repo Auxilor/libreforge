@@ -80,4 +80,7 @@ class ChainElement<T>(
 
     override fun doTrigger(trigger: DispatchedTrigger) =
         effect.trigger(trigger, this)
+
+    override fun shouldTrigger(trigger: DispatchedTrigger): Boolean =
+        effect.shouldTrigger(trigger, this)
 }
