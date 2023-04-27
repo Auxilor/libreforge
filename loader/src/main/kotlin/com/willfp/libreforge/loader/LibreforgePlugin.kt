@@ -201,7 +201,7 @@ abstract class LibreforgePlugin : EcoPlugin() {
     }
 
     override fun getMinimumEcoVersion(): String {
-        return "6.55.0"
+        return "6.56.0"
     }
 
     /**
