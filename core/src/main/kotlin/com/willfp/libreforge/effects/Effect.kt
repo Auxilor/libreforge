@@ -216,6 +216,26 @@ abstract class Effect<T>(
     }
 
     /**
+     * If the effect should trigger.
+     */
+    fun shouldTrigger(
+        trigger: DispatchedTrigger,
+        config: ChainElement<T>
+    ): Boolean = shouldTrigger(config.config, trigger.data, config.compileData)
+
+    /**
+     * If the effect should trigger, ran before effect arguments in order
+     * to prevent unnecessary calculations.
+     */
+    protected open fun shouldTrigger(
+        config: Config,
+        data: TriggerData,
+        compileData: T
+    ): Boolean {
+        return true
+    }
+
+    /**
      * Reload the effect.
      *
      * @param player The player.

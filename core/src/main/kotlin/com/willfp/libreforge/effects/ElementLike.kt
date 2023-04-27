@@ -95,6 +95,10 @@ abstract class ElementLike {
             return false
         }
 
+        if (!shouldTrigger(trigger.copy(data = data))) {
+            return false
+        }
+
         val (argumentsMet, met, notMet) = arguments.checkMet(this, trigger)
 
         // Only execute not met effects if the arguments were met.
@@ -153,4 +157,8 @@ abstract class ElementLike {
     }
 
     protected abstract fun doTrigger(trigger: DispatchedTrigger): Boolean
+
+    protected open fun shouldTrigger(trigger: DispatchedTrigger): Boolean {
+        return true
+    }
 }

@@ -3,17 +3,15 @@ package com.willfp.libreforge.effects.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.eco.util.BlockUtils
-import com.willfp.eco.util.runExempted
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
-import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.effects.templates.MineBlockEffect
 import com.willfp.libreforge.getIntFromExpression
-import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.Material
 
-object EffectMineVein : Effect<NoCompileData>("mine_vein") {
+object EffectMineVein : MineBlockEffect<NoCompileData>("mine_vein") {
     override val parameters = setOf(
         TriggerParameter.PLAYER
     )
@@ -25,10 +23,6 @@ object EffectMineVein : Effect<NoCompileData>("mine_vein") {
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val block = data.block ?: data.location?.block ?: return false
         val player = data.player ?: return false
-
-        if (block.hasMetadata("block-ignore")) {
-            return false
-        }
 
         val limit = config.getIntFromExpression("limit", data)
 
@@ -44,20 +38,9 @@ object EffectMineVein : Effect<NoCompileData>("mine_vein") {
             block,
             whitelist,
             limit
-        )
+        ).filter { AntigriefManager.canBreakBlock(player, it) }
 
-        player.runExempted {
-            for (toBreak in blocks) {
-                if (!AntigriefManager.canBreakBlock(player, toBreak)) {
-                    continue
-                }
-
-                toBreak.setMetadata("block-ignore", plugin.metadataValueFactory.create(true))
-
-                player.breakBlock(toBreak)
-                toBreak.removeMetadata("block-ignore", plugin)
-            }
-        }
+        player.breakBlocksSafely(blocks)
 
         return true
     }

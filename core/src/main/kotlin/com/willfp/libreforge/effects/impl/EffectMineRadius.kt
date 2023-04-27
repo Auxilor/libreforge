@@ -3,18 +3,16 @@ package com.willfp.libreforge.effects.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.eco.util.containsIgnoreCase
-import com.willfp.eco.util.runExempted
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
-import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.effects.templates.MineBlockEffect
 import com.willfp.libreforge.getIntFromExpression
-import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.Material
 import org.bukkit.block.Block
 
-object EffectMineRadius : Effect<NoCompileData>("mine_radius") {
+object EffectMineRadius : MineBlockEffect<NoCompileData>("mine_radius") {
     override val parameters = setOf(
         TriggerParameter.PLAYER
     )
@@ -26,10 +24,6 @@ object EffectMineRadius : Effect<NoCompileData>("mine_radius") {
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val block = data.block ?: data.location?.block ?: return false
         val player = data.player ?: return false
-
-        if (block.hasMetadata("block-ignore")) {
-            return false
-        }
 
         val radius = config.getIntFromExpression("radius", data)
 
@@ -81,13 +75,7 @@ object EffectMineRadius : Effect<NoCompileData>("mine_radius") {
             }
         }
 
-        player.runExempted {
-            for (toBreak in blocks) {
-                toBreak.setMetadata("block-ignore", plugin.metadataValueFactory.create(true))
-                player.breakBlock(toBreak)
-                toBreak.removeMetadata("block-ignore", plugin)
-            }
-        }
+        player.breakBlocksSafely(blocks)
 
         return true
     }
