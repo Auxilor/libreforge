@@ -11,7 +11,6 @@ import com.willfp.eco.util.StringUtils
 import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import java.util.Locale
 
 private class SeparatorAmbivalentConfig(
     private val config: Config
@@ -131,12 +130,19 @@ fun Config.getDoubleFromExpression(path: String, data: TriggerData?) = NumberUti
     this.getString(path), this.toPlaceholderContext(data)
 )
 
-private fun String.toCamelCase(): String {
-    val words = this.lowercase().split("_")
+fun Config.getFormattedString(path: String, data: TriggerData?) =
+    this.getFormattedString(path, this.toPlaceholderContext(data))
 
-    return words.first() + words.drop(1).joinToString("") { it.replaceFirstChar { char ->
-        if (char.isLowerCase()) char.titlecase(
-            Locale.getDefault()
-        ) else char.toString()
-    }}
+fun Config.getFormattedStrings(path: String, data: TriggerData?) =
+    this.getFormattedStrings(path, this.toPlaceholderContext(data))
+
+private fun String.toCamelCase(): String {
+    val words = lowercase().split("_")
+
+    return buildString {
+        append(words.first())
+        words.drop(1).forEach { word ->
+            append(word.replaceFirstChar { char -> char.uppercase() })
+        }
+    }
 }
