@@ -23,6 +23,7 @@ object EffectCollisionFixer : Listener {
         player.fixAttributes()
 
         player.updateHolders()
+        player.purgePreviousHolders()
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

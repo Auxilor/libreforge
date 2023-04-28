@@ -5,6 +5,7 @@ import com.willfp.libreforge.Compiled
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.conditions.ConditionList
 import com.willfp.libreforge.effects.arguments.EffectArgumentList
+import com.willfp.libreforge.effects.events.EffectDisableEvent
 import com.willfp.libreforge.effects.events.EffectEnableEvent
 import com.willfp.libreforge.filters.FilterList
 import com.willfp.libreforge.mutators.MutatorList
@@ -45,6 +46,10 @@ class ChainElement<T>(
         holder: ProvidedHolder,
         isReload: Boolean = false
     ) {
+        if (!isReload) {
+            Bukkit.getPluginManager().callEvent(EffectDisableEvent(player, effect, holder))
+        }
+
         effect.disable(player, holder, isReload = isReload)
     }
 

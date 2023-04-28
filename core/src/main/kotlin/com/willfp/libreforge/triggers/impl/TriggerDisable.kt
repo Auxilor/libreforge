@@ -1,19 +1,19 @@
 package com.willfp.libreforge.triggers.impl
 
-import com.willfp.libreforge.HolderEnableEvent
+import com.willfp.libreforge.HolderDisableEvent
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.event.EventHandler
 
-object TriggerEnable : Trigger("enable") {
+object TriggerDisable : Trigger("disable") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT
     )
 
     @EventHandler(ignoreCancelled = true)
-    fun handle(event: HolderEnableEvent) {
+    fun handle(event: HolderDisableEvent) {
         val player = event.player
 
         this.dispatch(
@@ -22,7 +22,7 @@ object TriggerEnable : Trigger("enable") {
                 player = player,
                 event = event
             ),
-            forceHolders = event.newHolders
+            forceHolders = event.previousHolders
         )
     }
 }
