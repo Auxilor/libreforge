@@ -28,6 +28,7 @@ import com.willfp.libreforge.effects.impl.EffectBroadcast
 import com.willfp.libreforge.effects.impl.EffectCancelEvent
 import com.willfp.libreforge.effects.impl.EffectConsumeHeldItem
 import com.willfp.libreforge.effects.impl.EffectCreateExplosion
+import com.willfp.libreforge.effects.impl.EffectCreateHologram
 import com.willfp.libreforge.effects.impl.EffectCritMultiplier
 import com.willfp.libreforge.effects.impl.EffectDamageArmor
 import com.willfp.libreforge.effects.impl.EffectDamageMainhand
@@ -391,5 +392,6 @@ object Effects : Registry<Effect<*>>() {
         register(EffectXpMultiplier)
         register(EffectItemDurabilityMultiplier)
         register(EffectKick)
+        register(EffectCreateHologram)
     }
 }
