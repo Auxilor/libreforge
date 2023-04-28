@@ -36,6 +36,40 @@ class HolderProvideEvent(
     }
 }
 
+class HolderEnableEvent(
+    who: Player,
+    val holder: ProvidedHolder,
+    val newHolders: Collection<ProvidedHolder>
+) : PlayerEvent(who) {
+    override fun getHandlers() = handlerList
+
+    companion object {
+        private val handlerList = HandlerList()
+
+        @JvmStatic
+        fun getHandlerList(): HandlerList {
+            return handlerList
+        }
+    }
+}
+
+class HolderDisableEvent(
+    who: Player,
+    val holder: ProvidedHolder,
+    val previousHolders: Collection<ProvidedHolder>
+) : PlayerEvent(who) {
+    override fun getHandlers() = handlerList
+
+    companion object {
+        private val handlerList = HandlerList()
+
+        @JvmStatic
+        fun getHandlerList(): HandlerList {
+            return handlerList
+        }
+    }
+}
+
 /**
  * EffectBlocks provided by a holder.
  *
@@ -104,6 +138,8 @@ fun ProvidedHolder.generatePlaceholders(): List<NamedValue> {
     return holderPlaceholderProviders.flatMap { it(this) }
 }
 
+private val previousHolders = mutableMapOf<UUID, Collection<ProvidedHolder>>()
+
 private val holderCache = Caffeine.newBuilder()
     .expireAfterWrite(4, TimeUnit.SECONDS)
     .build<UUID, Collection<ProvidedHolder>>()
@@ -119,6 +155,31 @@ val Player.holders: Collection<ProvidedHolder>
             HolderProvideEvent(this, holders)
         )
 
+        val old = previousHolders[this.uniqueId] ?: emptyList()
+
+        val newID = holders.map { it.holder.id }
+        val oldID = old.map { it.holder.id }
+
+        val added = newID without oldID
+        val removed = oldID without newID
+
+        val newByID = holders.associateBy { it.holder.id }.toNotNullMap()
+        val oldByID = old.associateBy { it.holder.id }.toNotNullMap()
+
+        for (id in added) {
+            Bukkit.getPluginManager().callEvent(
+                HolderEnableEvent(this, newByID[id], holders)
+            )
+        }
+
+        for (id in removed) {
+            Bukkit.getPluginManager().callEvent(
+                HolderDisableEvent(this, oldByID[id], old)
+            )
+        }
+
+        previousHolders[this.uniqueId] = holders
+
         holders
     }
 
@@ -127,6 +188,13 @@ val Player.holders: Collection<ProvidedHolder>
  */
 fun Player.updateHolders() {
     holderCache.invalidate(this.uniqueId)
+}
+
+/**
+ * Purge previous known holders.
+ */
+fun Player.purgePreviousHolders() {
+    previousHolders.remove(this.uniqueId)
 }
 
 // Effects that were active on previous update
@@ -241,7 +309,7 @@ fun Player.updateEffects() {
  *
  * Elements are only removed as many times as they are present.
  */
-inline infix fun <reified T> List<T>.without(other: List<T>): List<T> {
+inline infix fun <reified T> Collection<T>.without(other: Collection<T>): List<T> {
     return other.toMutableList().let { mutableOther ->
         filter { element ->
             !mutableOther.remove(element)

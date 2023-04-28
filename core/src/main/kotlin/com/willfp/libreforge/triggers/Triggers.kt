@@ -19,6 +19,7 @@ import com.willfp.libreforge.triggers.impl.TriggerCraft
 import com.willfp.libreforge.triggers.impl.TriggerDamageItem
 import com.willfp.libreforge.triggers.impl.TriggerDeath
 import com.willfp.libreforge.triggers.impl.TriggerDeployElytra
+import com.willfp.libreforge.triggers.impl.TriggerDisable
 import com.willfp.libreforge.triggers.impl.TriggerDrink
 import com.willfp.libreforge.triggers.impl.TriggerDropItem
 import com.willfp.libreforge.triggers.impl.TriggerEmptyBucket
@@ -177,5 +178,6 @@ object Triggers : Registry<Trigger>() {
         register(TriggerDrink)
         register(TriggerChangeChunk)
         register(TriggerEnable)
+        register(TriggerDisable)
     }
 }
