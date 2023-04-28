@@ -54,6 +54,7 @@ import com.willfp.libreforge.effects.impl.EffectHungerMultiplier
 import com.willfp.libreforge.effects.impl.EffectIgnite
 import com.willfp.libreforge.effects.impl.EffectItemDurabilityMultiplier
 import com.willfp.libreforge.effects.impl.EffectKeepInventory
+import com.willfp.libreforge.effects.impl.EffectKick
 import com.willfp.libreforge.effects.impl.EffectKnockAway
 import com.willfp.libreforge.effects.impl.EffectKnockbackMultiplier
 import com.willfp.libreforge.effects.impl.EffectKnockbackResistanceMultiplier
@@ -389,5 +390,6 @@ object Effects : Registry<Effect<*>>() {
         register(EffectTriggerCustom)
         register(EffectXpMultiplier)
         register(EffectItemDurabilityMultiplier)
+        register(EffectKick)
     }
 }
