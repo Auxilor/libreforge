@@ -26,6 +26,7 @@ import com.willfp.libreforge.effects.impl.EffectBonusHealth
 import com.willfp.libreforge.effects.impl.EffectBreakBlock
 import com.willfp.libreforge.effects.impl.EffectBroadcast
 import com.willfp.libreforge.effects.impl.EffectCancelEvent
+import com.willfp.libreforge.effects.impl.EffectClearInvulnerability
 import com.willfp.libreforge.effects.impl.EffectConsumeHeldItem
 import com.willfp.libreforge.effects.impl.EffectCreateExplosion
 import com.willfp.libreforge.effects.impl.EffectCreateHologram
@@ -393,5 +394,6 @@ object Effects : Registry<Effect<*>>() {
         register(EffectItemDurabilityMultiplier)
         register(EffectKick)
         register(EffectCreateHologram)
+        register(EffectClearInvulnerability)
     }
 }
