@@ -10,7 +10,6 @@ import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
-import java.util.UUID
 
 object TriggerPlaceholderListener : Listener {
 
@@ -81,10 +80,9 @@ object TriggerPlaceholderListener : Listener {
         val player = event.trigger.data.player ?: return
         val entity = event.trigger.data.victim ?: return
 
-        @Suppress("UNCHECKED_CAST")
         val hits =
             if (entity.health >= entity.getAttribute(Attribute.GENERIC_MAX_HEALTH)!!.value) {
-                0
+                1
             } else {
                 entity.getHits(player)
             }
