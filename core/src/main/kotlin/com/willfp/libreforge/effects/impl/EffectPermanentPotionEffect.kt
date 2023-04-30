@@ -2,15 +2,17 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.NoCompileData
-import com.willfp.libreforge.ProvidedHolder
-import com.willfp.libreforge.arguments
+import com.willfp.libreforge.*
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.plugin
+import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerRespawnEvent
+import org.bukkit.persistence.PersistentDataAdapterContext
+import org.bukkit.persistence.PersistentDataContainer
+import org.bukkit.persistence.PersistentDataType
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import java.util.UUID
@@ -29,7 +31,7 @@ object EffectPermanentPotionEffect : Effect<NoCompileData>("permanent_potion_eff
         require("level", "You must specify the effect level!")
     }
 
-    private val metaKey = "libreforge_${this.id}"
+    private val storageKey = NamespacedKey(plugin, "libreforge_${this.id}")
 
     private val duration = if (Prerequisite.HAS_1_19_4.isMet) {
         -1
@@ -41,8 +43,7 @@ object EffectPermanentPotionEffect : Effect<NoCompileData>("permanent_potion_eff
     fun onRespawn(event: PlayerRespawnEvent) {
         val player = event.player
 
-        val meta = player.getMetadata(metaKey).firstOrNull()?.value()
-                as? MutableMap<UUID, Pair<PotionEffectType, Int>> ?: mutableMapOf()
+        val meta = player.pdc.get(storageKey, Storage) ?: mutableMapOf()
 
         for ((_, pair) in meta) {
             val (effectType, level) = pair
@@ -83,17 +84,15 @@ object EffectPermanentPotionEffect : Effect<NoCompileData>("permanent_potion_eff
 
         player.addPotionEffect(effect)
 
-        val meta = player.getMetadata(metaKey).firstOrNull()?.value()
-                as? MutableMap<UUID, Pair<PotionEffectType, Int>> ?: mutableMapOf()
+        val meta = player.pdc.get(storageKey, Storage) ?: mutableMapOf()
 
         meta[identifiers.uuid] = Pair(effectType, level)
 
-        player.setMetadata(metaKey, plugin.metadataValueFactory.create(meta))
+        player.pdc.set(storageKey, Storage, meta)
     }
 
     override fun onDisable(player: Player, identifiers: Identifiers, holder: ProvidedHolder) {
-        val meta = player.getMetadata(metaKey).firstOrNull()?.value()
-                as? MutableMap<UUID, Pair<PotionEffectType, Int>> ?: mutableMapOf()
+        val meta = player.pdc.get(storageKey, Storage) ?: mutableMapOf()
 
         val (toRemove, _) = meta[identifiers.uuid] ?: return
 
@@ -110,8 +109,46 @@ object EffectPermanentPotionEffect : Effect<NoCompileData>("permanent_potion_eff
         }
 
         meta.remove(identifiers.uuid)
-        player.setMetadata(metaKey, plugin.metadataValueFactory.create(meta))
+        player.pdc.set(storageKey, Storage, meta)
 
         player.removePotionEffect(toRemove)
+    }
+
+    object Storage : PersistentDataType<PersistentDataContainer, MutableMap<UUID, Pair<PotionEffectType, Int>>> {
+        override fun getPrimitiveType() = PersistentDataContainer::class.java
+
+        override fun getComplexType(): Class<MutableMap<UUID, Pair<PotionEffectType, Int>>> {
+            return MutableMap::class.java as Class<MutableMap<UUID, Pair<PotionEffectType, Int>>>
+        }
+        private val namespace = plugin.name.lowercase()
+
+        override fun fromPrimitive(
+            primitive: PersistentDataContainer,
+            context: PersistentDataAdapterContext
+        ): MutableMap<UUID, Pair<PotionEffectType, Int>> {
+            val map = mutableMapOf<UUID, Pair<PotionEffectType, Int>>()
+            for (key in primitive.keys) {
+                if (key.namespace != namespace) continue
+                val uuid = UUID.fromString(key.key)
+                val pair = primitive.getString(key) ?: continue
+                val index = pair.lastIndexOf(';')
+                val type = PotionEffectType.getByName(pair.substring(0 until index)) ?: continue
+                val power = pair.substring(index + 1).toInt()
+                map[uuid] = type to power
+            }
+            return map
+        }
+
+        override fun toPrimitive(
+            complex: MutableMap<UUID, Pair<PotionEffectType, Int>>,
+            context: PersistentDataAdapterContext
+        ): PersistentDataContainer {
+            val new = context.newPersistentDataContainer()
+            for ((id, pair) in complex) {
+                new.setString(NamespacedKey(plugin, id.toString()), "${pair.first};${pair.second}")
+            }
+            return new
+        }
+
     }
 }

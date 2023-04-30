@@ -4,6 +4,7 @@ import com.willfp.libreforge.triggers.event.TriggerDispatchEvent
 import com.willfp.libreforge.triggers.impl.TriggerBowAttack
 import com.willfp.libreforge.triggers.impl.TriggerMeleeAttack
 import com.willfp.libreforge.triggers.impl.TriggerTridentAttack
+import org.bukkit.NamespacedKey
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
@@ -12,7 +13,6 @@ import org.bukkit.event.Listener
 import java.util.UUID
 
 object TriggerPlaceholderListener : Listener {
-    private const val HITS_META_KEY = "libreforge_tracked_hits"
 
     @EventHandler
     fun handle(event: TriggerDispatchEvent) {
@@ -82,21 +82,17 @@ object TriggerPlaceholderListener : Listener {
         val entity = event.trigger.data.victim ?: return
 
         @Suppress("UNCHECKED_CAST")
-        val map = entity.getMetadata(HITS_META_KEY).firstOrNull()?.value() as? MutableMap<UUID, Int> ?: mutableMapOf()
-        val hits = entity.getHits(player)
-        if (entity.health >= entity.getAttribute(Attribute.GENERIC_MAX_HEALTH)!!.value) {
-            map[player.uniqueId] = 1
-        } else {
-            map[player.uniqueId] = hits + 1
-        }
+        val hits =
+            if (entity.health >= entity.getAttribute(Attribute.GENERIC_MAX_HEALTH)!!.value) {
+                0
+            } else {
+                entity.getHits(player)
+            }
 
-        entity.removeMetadata(HITS_META_KEY, plugin)
-        entity.setMetadata(HITS_META_KEY, plugin.createMetadataValue(map))
+        entity.pdc.setInt(NamespacedKey(plugin, "HITS:${player.uniqueId}"), hits)
     }
 
     private fun LivingEntity.getHits(player: Player): Int {
-        @Suppress("UNCHECKED_CAST")
-        val map = this.getMetadata(HITS_META_KEY).firstOrNull()?.value() as? MutableMap<UUID, Int> ?: mutableMapOf()
-        return map[player.uniqueId] ?: 0
+        return this.pdc.getInt(NamespacedKey(plugin, "HITS:${player.uniqueId}")) ?: 0
     }
 }

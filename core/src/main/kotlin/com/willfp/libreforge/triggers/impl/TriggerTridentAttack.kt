@@ -6,14 +6,15 @@ import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import org.bukkit.NamespacedKey
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.entity.Trident
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.ProjectileLaunchEvent
+import java.util.WeakHashMap
 
-private const val META_KEY = "libreforge_trident_holders"
 
 object TriggerTridentAttack : Trigger("trident_attack") {
     override val parameters = setOf(
@@ -25,6 +26,7 @@ object TriggerTridentAttack : Trigger("trident_attack") {
         TriggerParameter.ITEM,
         TriggerParameter.VELOCITY
     )
+    private val map = mutableMapOf<Trident, Collection<ProvidedHolder>>()
 
     @EventHandler(ignoreCancelled = true)
     fun onProjectileLaunch(event: ProjectileLaunchEvent) {
@@ -35,12 +37,10 @@ object TriggerTridentAttack : Trigger("trident_attack") {
             return
         }
 
-        trident.setMetadata(
-            META_KEY,
-            plugin.metadataValueFactory.create(
-                shooter.holders
-            )
-        )
+        map[trident] = shooter.holders
+        plugin.scheduler.runLater(6_000L) { //5 minutes
+            map.remove(trident)
+        }
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -50,7 +50,6 @@ object TriggerTridentAttack : Trigger("trident_attack") {
 
         val shooter = trident.shooter as? Player ?: return
 
-        @Suppress("UNCHECKED_CAST")
         this.dispatch(
             shooter,
             TriggerData(
@@ -63,7 +62,7 @@ object TriggerTridentAttack : Trigger("trident_attack") {
                 velocity = trident.velocity,
                 value = event.finalDamage
             ),
-            forceHolders = trident.getMetadata(META_KEY).firstOrNull()?.value() as? Collection<ProvidedHolder>
+            forceHolders = map[trident]
         )
     }
 }

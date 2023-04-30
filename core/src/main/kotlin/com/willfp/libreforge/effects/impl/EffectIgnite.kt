@@ -1,14 +1,12 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.NoCompileData
-import com.willfp.libreforge.arguments
+import com.willfp.libreforge.*
 import com.willfp.libreforge.effects.Effect
-import com.willfp.libreforge.getDoubleFromExpression
-import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import org.bukkit.NamespacedKey
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageEvent
 
@@ -17,6 +15,7 @@ object EffectIgnite : Effect<NoCompileData>("ignite") {
         TriggerParameter.VICTIM,
         TriggerParameter.PLAYER
     )
+    private val ignite = NamespacedKey(plugin, "libreforge-ignite")
 
     override val arguments = arguments {
         require("damage_per_tick", "You must specify the damage per fire tick!")
@@ -29,7 +28,7 @@ object EffectIgnite : Effect<NoCompileData>("ignite") {
         val duration = config.getIntFromExpression("ticks", data)
 
         victim.fireTicks = duration
-        victim.setMetadata("libreforge-ignite", plugin.createMetadataValue(damage))
+        victim.pdc.setDouble(ignite, damage)
 
         return true
     }
@@ -39,10 +38,6 @@ object EffectIgnite : Effect<NoCompileData>("ignite") {
         if (event.cause != EntityDamageEvent.DamageCause.FIRE_TICK) {
             return
         }
-        if (!event.entity.hasMetadata("libreforge-ignite")) {
-            return
-        }
-
-        event.damage = event.entity.getMetadata("libreforge-ignite")[0].asDouble()
+        event.damage = event.entity.pdc.getDouble(ignite) ?: return
     }
 }

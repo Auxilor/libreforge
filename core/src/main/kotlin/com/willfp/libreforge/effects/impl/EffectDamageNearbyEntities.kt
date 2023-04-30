@@ -3,19 +3,19 @@ package com.willfp.libreforge.effects.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.entities.Entities
 import com.willfp.eco.core.entities.TestableEntity
-import com.willfp.libreforge.ViolationContext
-import com.willfp.libreforge.arguments
+import com.willfp.libreforge.*
 import com.willfp.libreforge.effects.Effect
-import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import org.bukkit.NamespacedKey
 import org.bukkit.entity.LivingEntity
 
 object EffectDamageNearbyEntities : Effect<Collection<TestableEntity>>("damage_nearby_entities") {
     override val parameters = setOf(
         TriggerParameter.LOCATION, TriggerParameter.PLAYER
     )
+    private val ignoreNearbyDamage = NamespacedKey(plugin, "ignore-nearby-damage")
 
     override val arguments = arguments {
         require("radius", "You must specify the radius!")
@@ -34,7 +34,7 @@ object EffectDamageNearbyEntities : Effect<Collection<TestableEntity>>("damage_n
         val damageSelf = config.getBoolOrNull("damage_self") ?: true
 
         for (entity in world.getNearbyEntities(location, radius, radius, radius)) {
-            if (entity.hasMetadata("ignore-nearby-damage")) {
+            if (entity.pdc.hasBool(ignoreNearbyDamage)) {
                 continue
             }
 
@@ -48,8 +48,8 @@ object EffectDamageNearbyEntities : Effect<Collection<TestableEntity>>("damage_n
                 }
             }
 
-            entity.setMetadata("ignore-nearby-damage", plugin.metadataValueFactory.create(true))
-            plugin.scheduler.runLater(5) { entity.removeMetadata("ignore-nearby-damage", plugin) }
+            entity.pdc.setBool(ignoreNearbyDamage, true)
+            plugin.scheduler.runLater(5) { entity.pdc.remove(ignoreNearbyDamage) }
 
             if (!damageSelf && (entity == player)) {
                 continue

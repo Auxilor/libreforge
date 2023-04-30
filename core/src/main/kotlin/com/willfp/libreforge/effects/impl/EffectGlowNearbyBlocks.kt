@@ -2,16 +2,15 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.util.TeamUtils
-import com.willfp.libreforge.NoCompileData
-import com.willfp.libreforge.arguments
+import com.willfp.libreforge.*
 import com.willfp.libreforge.effects.Effect
-import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Material
+import org.bukkit.NamespacedKey
 import org.bukkit.block.Block
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.LivingEntity
@@ -20,6 +19,8 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.world.ChunkLoadEvent
 import org.bukkit.event.world.ChunkUnloadEvent
+import org.bukkit.persistence.PersistentDataContainer
+import org.bukkit.persistence.PersistentDataType
 import org.bukkit.scoreboard.Team
 import java.util.UUID
 
@@ -27,6 +28,8 @@ object EffectGlowNearbyBlocks : Effect<NoCompileData>("glow_nearby_blocks") {
     override val parameters = setOf(
         TriggerParameter.LOCATION
     )
+    private val shulker = NamespacedKey(plugin, "gnb-shulker")
+    val uuid = NamespacedKey(plugin, "gnb-uuid")
 
     override val arguments = arguments {
         require("radius", "You must specify the radius!")
@@ -79,13 +82,13 @@ object EffectGlowNearbyBlocks : Effect<NoCompileData>("glow_nearby_blocks") {
             shulker.setGravity(false)
             shulker.isGlowing = true
             shulker.isInvisible = true
-            shulker.setMetadata("gnb-shulker", plugin.metadataValueFactory.create(true))
+            shulker.pdc.setBool(this.shulker, true)
             team.addEntry(shulker.uniqueId.toString())
-            block.setMetadata("gnb-uuid", plugin.metadataValueFactory.create(shulker.uniqueId))
+            block.pdc.setUUID(uuid, shulker.uniqueId)
 
             plugin.scheduler.runLater(duration.toLong()) {
                 shulker.remove()
-                block.removeMetadata("gnb-uuid", plugin)
+                block.pdc.remove(uuid)
             }
         }
 
@@ -95,14 +98,14 @@ object EffectGlowNearbyBlocks : Effect<NoCompileData>("glow_nearby_blocks") {
     @EventHandler
     fun handleChunkUnload(event: ChunkUnloadEvent) {
         event.chunk.entities.filterIsInstance<LivingEntity>()
-            .filter { it.hasMetadata("gnb-shulker") }
+            .filter { it.pdc.hasBool(shulker) }
             .forEach { it.remove() }
     }
 
     @EventHandler
     fun handleChunkLoad(event: ChunkLoadEvent) {
         event.chunk.entities.filterIsInstance<LivingEntity>()
-            .filter { it.hasMetadata("gnb-shulker") }
+            .filter { it.pdc.hasBool(shulker) }
             .forEach { it.remove() }
     }
 
@@ -110,13 +113,11 @@ object EffectGlowNearbyBlocks : Effect<NoCompileData>("glow_nearby_blocks") {
     fun onBreak(event: BlockBreakEvent) {
         val block = event.block
 
-        if (!block.hasMetadata("gnb-uuid")) {
+        if (block.getPDCNoSave()?.hasUUID(uuid) != true) {
             return
         }
 
-        val uuid = block.getMetadata("gnb-uuid").firstOrNull {
-            it.value() is UUID
-        }?.value() as? UUID ?: return
+        val uuid = block.pdc.getUUID(uuid) ?: return
 
         Bukkit.getServer().getEntity(uuid)?.remove()
 
@@ -125,7 +126,7 @@ object EffectGlowNearbyBlocks : Effect<NoCompileData>("glow_nearby_blocks") {
             2.0,
             2.0,
             2.0
-        ) { it.hasMetadata("gnb-shulker") }) {
+        ) { it.pdc.hasBool(shulker) }) {
             shulker.remove()
         }
     }

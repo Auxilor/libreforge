@@ -4,14 +4,13 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.entities.Entities
 import com.willfp.eco.core.entities.TestableEntity
 import com.willfp.eco.util.NumberUtils
-import com.willfp.libreforge.ViolationContext
-import com.willfp.libreforge.arguments
+import com.willfp.libreforge.*
 import com.willfp.libreforge.effects.Effect
-import com.willfp.libreforge.getDoubleFromExpression
-import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import org.bukkit.Bukkit
+import org.bukkit.NamespacedKey
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Mob
@@ -34,6 +33,8 @@ object EffectSpawnMobs : Effect<TestableEntity>("spawn_mobs") {
         require("range", "You must specify the range to spawn in!")
         require("entity", "You must specify the mob to spawn!")
     }
+    private val target = NamespacedKey(plugin, "spawn-mobs-target")
+    private val avoid = NamespacedKey(plugin, "spawn-mobs-avoid")
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: TestableEntity): Boolean {
         val location = data.location ?: return false
@@ -42,7 +43,7 @@ object EffectSpawnMobs : Effect<TestableEntity>("spawn_mobs") {
         val player = data.player
 
         if (victim != null) {
-            if (victim.getMetadata("spawn-mobs-target").isNotEmpty()) {
+            if (victim.pdc.hasUUID(target)) {
                 return false
             }
         }
@@ -66,11 +67,11 @@ object EffectSpawnMobs : Effect<TestableEntity>("spawn_mobs") {
 
             if (victim != null) {
                 mob.target = victim
-                mob.setMetadata("spawn-mobs-target", plugin.createMetadataValue(victim))
+                mob.pdc.setUUID(target, victim.uniqueId)
             }
 
             if (player != null) {
-                mob.setMetadata("spawn-mobs-avoid", plugin.createMetadataValue(player.uniqueId))
+                mob.pdc.setUUID(avoid, player.uniqueId)
             }
 
             mob.health = health
@@ -87,13 +88,14 @@ object EffectSpawnMobs : Effect<TestableEntity>("spawn_mobs") {
 
     @EventHandler
     fun onSwitchTarget(event: EntityTargetEvent) {
-        if (event.entity.getMetadata("spawn-mobs-target").isNotEmpty()) {
-            val target = event.entity.getMetadata("spawn-mobs-target")[0].value() as? LivingEntity ?: return
+        if (event.entity.pdc.hasUUID(target)) {
+            val uuid = event.entity.pdc.getUUID(target) ?: return
+            val target = Bukkit.getEntity(uuid) as? LivingEntity ?: return
             event.target = target
         }
 
-        if (event.entity.getMetadata("spawn-mobs-avoid").isNotEmpty()) {
-            val uuid = event.entity.getMetadata("spawn-mobs-avoid")[0].value() as? UUID ?: return
+        if (event.entity.pdc.hasUUID(avoid)) {
+            val uuid = event.entity.pdc.getUUID(avoid) ?: return
             if (event.target?.uniqueId == uuid) {
                 event.isCancelled = true
             }
@@ -102,7 +104,7 @@ object EffectSpawnMobs : Effect<TestableEntity>("spawn_mobs") {
 
     @EventHandler(priority = EventPriority.LOW)
     fun onDropItem(event: EntityDeathEvent) {
-        if (event.entity.getMetadata("spawn-mobs-target").isEmpty()) {
+        if (event.entity.pdc.hasUUID(target)) {
             return
         }
 
