@@ -78,8 +78,8 @@ fun PersistentDataContainer.getPDC(key: NamespacedKey, save: Boolean = true): Pe
 }
 
 val Block.pdc : PersistentDataContainer get() {
-    return this.chunk.pdc.getPDC(NamespacedKey(plugin, "block:$x;$y;$z"))!!
+    return this.chunk.pdc.getPDC(NamespacedKey(plugin, "block/$x/$y/$z"))!!
 }
 fun Block.getPDCNoSave(): PersistentDataContainer? {
-    return this.chunk.pdc.getPDC(NamespacedKey(plugin, "block:$x;$y;$z"), false)
+    return this.chunk.pdc.getPDC(NamespacedKey(plugin, "block/$x/$y/$z"), false)
 }

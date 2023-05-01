@@ -87,10 +87,10 @@ object TriggerPlaceholderListener : Listener {
                 entity.getHits(player)
             }
 
-        entity.pdc.setInt(NamespacedKey(plugin, "HITS:${player.uniqueId}"), hits)
+        entity.pdc.setInt(NamespacedKey(plugin, "HITS/${player.uniqueId}"), hits)
     }
 
     private fun LivingEntity.getHits(player: Player): Int {
-        return this.pdc.getInt(NamespacedKey(plugin, "HITS:${player.uniqueId}")) ?: 0
+        return this.pdc.getInt(NamespacedKey(plugin, "HITS/${player.uniqueId}")) ?: 0
     }
 }
