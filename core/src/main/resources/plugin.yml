@@ -25,6 +25,9 @@ commands:
   lrcdb:
     description: Handles lrcdb
     permission: libreforge.command.lrcdb
+  libreforge:
+    description: Base libreforge command
+    permission: libreforge.command.libreforge
 
 permissions:
   libreforge.*:
@@ -37,3 +40,14 @@ permissions:
     default: op
     children:
       libreforge.command.lrcdb: true
+      libreforge.command.libreforge: true
+      libreforge.command.reloadextensions: true
+  libreforge.command.lrcdb:
+    description: Allows the use of /lrcdb
+    default: op
+  libreforge.command.libreforge:
+    description: Allows the use of /libreforge
+    default: op
+  libreforge.command.reloadextensions:
+    description: Allows the use of /libreforge reloadextensions
+    default: op
