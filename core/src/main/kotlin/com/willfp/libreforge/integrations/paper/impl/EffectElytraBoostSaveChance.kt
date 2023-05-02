@@ -35,13 +35,13 @@ object EffectElytraBoostSaveChance : Effect<NoCompileData>("elytra_boost_save_ch
     fun handle(event: PlayerElytraBoostEvent) {
         val player = event.player
 
-        var chance = 100.0
+        var chance = 1.0
 
         for (modifier in modifiers[player.uniqueId]) {
-            chance *= (100 - modifier.multiplier)
+            chance *= (100 - modifier.multiplier) / 100
         }
 
-        if (NumberUtils.randFloat(0.0, 100.0) > chance) {
+        if (NumberUtils.randFloat(0.0, 1.0) > chance) {
             event.setShouldConsume(false)
         }
     }
