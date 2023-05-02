@@ -34,6 +34,36 @@ object TriggerPlaceholderListener : Listener {
             )
         )
 
+        if (data.location != null) {
+            event.trigger.addPlaceholder(
+                NamedValue(
+                    listOf("location_x", "loc_x", "x"),
+                    data.location.x
+                )
+            )
+
+            event.trigger.addPlaceholder(
+                NamedValue(
+                    listOf("location_y", "loc_y", "y"),
+                    data.location.y
+                )
+            )
+
+            event.trigger.addPlaceholder(
+                NamedValue(
+                    listOf("location_z", "loc_z", "z"),
+                    data.location.z
+                )
+            )
+
+            event.trigger.addPlaceholder(
+                NamedValue(
+                    listOf("location_world", "loc_w", "world"),
+                    data.location.world?.name ?: ""
+                )
+            )
+        }
+
         if (data.victim != null) {
             event.trigger.addPlaceholder(
                 NamedValue(
