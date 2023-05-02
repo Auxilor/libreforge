@@ -4,6 +4,7 @@ import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.command.impl.PluginCommand
 import com.willfp.eco.core.integrations.IntegrationLoader
+import com.willfp.libreforge.commands.CommandLibreforge
 import com.willfp.libreforge.configs.ChainsYml
 import com.willfp.libreforge.configs.lrcdb.CommandLrcdb
 import com.willfp.libreforge.counters.CounterHandler
@@ -97,7 +98,8 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
 
     override fun loadPluginCommands(): List<PluginCommand> {
         return listOf(
-            CommandLrcdb(this)
+            CommandLrcdb(this),
+            CommandLibreforge(this)
         )
     }
 
