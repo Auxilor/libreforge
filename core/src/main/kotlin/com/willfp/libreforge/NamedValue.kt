@@ -1,8 +1,11 @@
 package com.willfp.libreforge
 
+import com.willfp.eco.core.placeholder.InjectablePlaceholder
 import com.willfp.eco.core.placeholder.StaticPlaceholder
+import com.willfp.eco.core.placeholder.context.PlaceholderContext
+import com.willfp.eco.core.placeholder.templates.SimpleInjectablePlaceholder
 
-class NamedValue constructor(
+open class NamedValue constructor(
     identifiers: Collection<String>,
     value: String
 ) {
@@ -16,13 +19,70 @@ class NamedValue constructor(
         value: Any
     ) : this(identifiers, value.toString())
 
-    val placeholders = identifiers.map {
+    open val placeholders: List<InjectablePlaceholder> = identifiers.map {
         StaticPlaceholder(
             it
         ) { value }
     }
 }
 
-fun Collection<NamedValue>.mapToPlaceholders(): Array<out StaticPlaceholder> {
+/*
+
+Ideally, this would be merged into NamedValue, but that would break backwards compatibility,
+because the () -> Any constructor would be ambiguous with the Any constructor, and casting
+doesn't seem to fix the problem either.
+
+This is internal because one: it's a hack, and two: there isn't really a case where this
+would be needed outside of repeats, which is a purely internal feature anyway.
+
+Because of how expression caching works, DynamicNamedValue also needs to provide placeholders
+that give different hashes each time, to force a re-calculation of the expression.
+
+ */
+
+internal class DynamicNumericValue(
+    identifiers: Collection<String>,
+    value: () -> Number
+) : NamedValue(identifiers, value()) {
+    constructor(
+        identifier: String,
+        value: () -> Number
+    ) : this(listOf(identifier), value)
+
+    override val placeholders: List<InjectablePlaceholder> = identifiers.map {
+        DynamicHashPlaceholder(
+            it,
+            value
+        )
+    }
+
+    private class DynamicHashPlaceholder(
+        private val identifier: String,
+        private val fn: () -> Number
+    ) : SimpleInjectablePlaceholder(identifier) {
+        override fun getValue(p0: String, p1: PlaceholderContext) = fn().toString()
+
+        override fun hashCode(): Int {
+            // Use the value of the function to force a re-calculation of the expression
+            return fn().toInt() * 31 + identifier.hashCode()
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            if (other !is DynamicHashPlaceholder) {
+                return false
+            }
+
+            return other.identifier == this.identifier
+                    && other.fn() == this.fn()
+        }
+    }
+}
+
+
+fun Collection<NamedValue>.mapToPlaceholders(): Array<out InjectablePlaceholder> {
     return this.flatMap { it.placeholders }.toTypedArray()
 }

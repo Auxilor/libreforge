@@ -89,6 +89,12 @@ private class SeparatorAmbivalentConfig(
 
     override fun injectPlaceholders(vararg placeholders: InjectablePlaceholder) =
         config.injectPlaceholders(*placeholders)
+
+    override fun equals(other: Any?) =
+        config == other
+
+    override fun hashCode() =
+        config.hashCode()
 }
 
 fun Config.separatorAmbivalent(): Config =

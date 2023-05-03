@@ -2,6 +2,7 @@ package com.willfp.libreforge.effects
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
+import com.willfp.libreforge.DynamicNumericValue
 import com.willfp.libreforge.NamedValue
 import com.willfp.libreforge.conditions.ConditionList
 import com.willfp.libreforge.effects.arguments.EffectArgumentList
@@ -49,6 +50,10 @@ abstract class ElementLike {
             return doTrigger(trigger)
         }
 
+        // Extra initial injection, otherwise it's not possible to use injections
+        // in the repeat configs.
+        config.addInjectablePlaceholder(trigger.placeholders)
+
         // It would be nice to abstract repeat/delay away here, but that would be
         // really, really, overengineering it - even for me.
         val repeatTimes = config.getIntFromExpression("repeat.times", trigger.data).coerceAtLeast(1)
@@ -59,7 +64,7 @@ abstract class ElementLike {
         trigger.addPlaceholder(NamedValue("repeat_times", repeatTimes))
         trigger.addPlaceholder(NamedValue("repeat_start", repeatStart))
         trigger.addPlaceholder(NamedValue("repeat_increment", repeatIncrement))
-        trigger.addPlaceholder(NamedValue("repeat_count", repeatCount))
+        trigger.addPlaceholder(DynamicNumericValue("repeat_count") { repeatCount })
 
         val delay = config.getIntFromExpression("delay", trigger.data)
             .coerceAtLeast(0)
@@ -123,6 +128,8 @@ abstract class ElementLike {
                     )
                 )
             ) true else didTrigger
+
+            repeatCount += repeatIncrement
         }
 
         // Can't delay initial execution for things that modify events.
@@ -130,8 +137,6 @@ abstract class ElementLike {
             repeat(repeatTimes) {
                 trigger()
             }
-
-            repeatCount += repeatIncrement
         } else {
             // Delay between each repeat.
             var repeats = 0
