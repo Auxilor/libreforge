@@ -73,6 +73,7 @@ import com.willfp.libreforge.triggers.impl.TriggerToggleSneak
 import com.willfp.libreforge.triggers.impl.TriggerToggleSprint
 import com.willfp.libreforge.triggers.impl.TriggerTridentAttack
 import com.willfp.libreforge.triggers.impl.TriggerWinRaid
+import com.willfp.libreforge.triggers.impl.TriggerTeleport
 
 object Triggers : Registry<Trigger>() {
     private val groupRegistry = Registry<TriggerGroup>()
@@ -179,5 +180,6 @@ object Triggers : Registry<Trigger>() {
         register(TriggerChangeChunk)
         register(TriggerEnable)
         register(TriggerDisable)
+        register(TriggerTeleport)
     }
 }
