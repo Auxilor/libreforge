@@ -44,6 +44,13 @@ object TriggerPlaceholderListener : Listener {
 
             event.trigger.addPlaceholder(
                 NamedValue(
+                    listOf("location_block_x", "loc_b_x", "block_x", "bx"),
+                    data.location.blockX
+                )
+            )
+
+            event.trigger.addPlaceholder(
+                NamedValue(
                     listOf("location_y", "loc_y", "y"),
                     data.location.y
                 )
@@ -51,8 +58,22 @@ object TriggerPlaceholderListener : Listener {
 
             event.trigger.addPlaceholder(
                 NamedValue(
+                    listOf("location_block_y", "loc_b_y", "block_y", "by"),
+                    data.location.blockY
+                )
+            )
+
+            event.trigger.addPlaceholder(
+                NamedValue(
                     listOf("location_z", "loc_z", "z"),
                     data.location.z
+                )
+            )
+
+            event.trigger.addPlaceholder(
+                NamedValue(
+                    listOf("location_block_z", "loc_b_z", "block_z", "bz"),
+                    data.location.blockZ
                 )
             )
 
