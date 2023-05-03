@@ -100,3 +100,10 @@ fun Float2.distance(other: Float2) =
 fun lerp(a: Float, b: Float, t: Float) = a + (b - a) * t
 
 fun lerp(a: Double, b: Double, t: Double) = a + (b - a) * t
+
+fun lerp(a: Float3, b: Float3, t: Float): Float3 {
+    val x = a.x * (1 - t) + b.x * t
+    val y = a.y * (1 - t) + b.y * t
+    val z = a.z * (1 - t) + b.z * t
+    return Float3(x, y, z)
+}
