@@ -1,6 +1,6 @@
 package com.willfp.libreforge.triggers
 
-import com.willfp.eco.core.placeholder.StaticPlaceholder
+import com.willfp.eco.core.placeholder.InjectablePlaceholder
 import com.willfp.libreforge.NamedValue
 import org.bukkit.entity.Player
 
@@ -11,7 +11,7 @@ data class DispatchedTrigger(
 ) {
     private val _placeholders = mutableListOf<NamedValue>()
 
-    val placeholders: List<StaticPlaceholder>
+    val placeholders: List<InjectablePlaceholder>
         get() = _placeholders.flatMap { it.placeholders }
 
     fun addPlaceholder(placeholder: NamedValue) {
