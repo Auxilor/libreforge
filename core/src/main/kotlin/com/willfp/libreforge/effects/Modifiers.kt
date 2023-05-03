@@ -9,3 +9,11 @@ class MultiplierModifier(
     val multiplier: Double
         get() = getMultiplier()
 }
+
+class AdditionModifier(
+    val uuid: UUID,
+    private val getBonus: () -> Double
+) {
+    val bonus: Double
+        get() = getBonus()
+}
