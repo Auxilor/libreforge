@@ -11,7 +11,8 @@ object TriggerTeleport : Trigger("teleport") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,
-        TriggerParameter.TEXT
+        TriggerParameter.TEXT,
+        TriggerParameter.EVENT
     )
 
     @EventHandler(ignoreCancelled = true)
