@@ -2,6 +2,8 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.map.nestedListMap
+import com.willfp.eco.util.PlayerUtils
+import com.willfp.eco.util.StringUtils
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
@@ -18,11 +20,14 @@ object EffectBlockCommands : Effect<NoCompileData>("block_commands") {
     }
 
     private val players = nestedListMap<UUID, UUID, String>()
+    private var message: String = ""
 
     override fun onEnable(player: Player, config: Config, identifiers: Identifiers, holder: ProvidedHolder, compileData: NoCompileData) {
         val commands = players[player.uniqueId]
         commands[identifiers.uuid] = config.getStrings("commands")
         players[player.uniqueId] = commands
+        message = config.getString("message")
+            .replace("%player%", player.name)
     }
 
     override fun onDisable(player: Player, identifiers: Identifiers, holder: ProvidedHolder) {
@@ -46,6 +51,10 @@ object EffectBlockCommands : Effect<NoCompileData>("block_commands") {
             for (s in list) {
                 if (s.equals(command, ignoreCase = true)) {
                     event.isCancelled = true
+                    if (message.isNotBlank()) {
+                        PlayerUtils.getAudience(player)
+                            .sendMessage(StringUtils.toComponent(message.replace("%command%", command)))
+                    }
                 }
             }
         }
