@@ -77,7 +77,6 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
 
     override fun loadListeners(): List<Listener> {
         return listOf(
-            TriggerPlaceholderListener,
             EffectCollisionFixer,
             ItemRefreshListener(this),
             CounterHandler
