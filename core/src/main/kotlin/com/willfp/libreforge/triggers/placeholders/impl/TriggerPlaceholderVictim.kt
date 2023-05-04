@@ -1,13 +1,13 @@
 package com.willfp.libreforge.triggers.placeholders.impl
 
 import com.willfp.libreforge.NamedValue
-import com.willfp.libreforge.triggers.DispatchedTrigger
+import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.placeholders.TriggerPlaceholder
 import org.bukkit.attribute.Attribute
 
 object TriggerPlaceholderVictim : TriggerPlaceholder("victim") {
-    override fun createPlaceholders(trigger: DispatchedTrigger): Collection<NamedValue> {
-        val victim = trigger.data.victim ?: return emptyList()
+    override fun createPlaceholders(data: TriggerData): Collection<NamedValue> {
+        val victim = data.victim ?: return emptyList()
 
         return listOf(
             NamedValue(

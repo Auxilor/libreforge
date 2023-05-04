@@ -71,14 +71,18 @@ abstract class ElementLike {
             .let { if (!supportsDelay) 0 else it }
             .toLong()
 
-        // Extremely janky code, but it's cleaner than repeating myself 5 times I think.
+        // Initial injection into mutators
+        mutators.map { it.config }.forEach { it.addInjectablePlaceholder(trigger.placeholders) }
+
+        val data = mutators.mutate(trigger.data)
+
+        // Inject placeholders everywhere after mutation
+        trigger.generatePlaceholders(data)
         listOf(arguments, conditions, mutators, filters)
             .flatten()
             .map { it.config }
             .plusElement(config)
             .forEach { it.addInjectablePlaceholder(trigger.placeholders) }
-
-        val data = mutators.mutate(trigger.data)
 
         // Antigrief check here - not very clean, but it works.
         if (data.player != null && data.victim != null && data.victim != data.player) {
