@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.map.nestedListMap
 import com.willfp.eco.util.PlayerUtils
 import com.willfp.eco.util.StringUtils
+import com.willfp.eco.util.formatEco
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
@@ -53,7 +54,8 @@ object EffectBlockCommands : Effect<NoCompileData>("block_commands") {
                     event.isCancelled = true
                     if (message.isNotBlank()) {
                         PlayerUtils.getAudience(player)
-                            .sendMessage(StringUtils.toComponent(message.replace("%command%", command)))
+                            .sendMessage(StringUtils.toComponent(message.replace("%command%", command)
+                                .formatEco(player, true)))
                     }
                 }
             }
