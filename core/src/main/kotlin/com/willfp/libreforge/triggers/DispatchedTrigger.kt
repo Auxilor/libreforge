@@ -15,12 +15,6 @@ data class DispatchedTrigger(
     val placeholders: List<InjectablePlaceholder>
         get() = _placeholders.flatMap { it.placeholders }
 
-    init {
-        for (placeholder in TriggerPlaceholders) {
-            _placeholders += placeholder.createPlaceholders(this)
-        }
-    }
-
     fun addPlaceholder(placeholder: NamedValue) {
         _placeholders += placeholder
     }
@@ -29,10 +23,20 @@ data class DispatchedTrigger(
         _placeholders += placeholder
     }
 
-    companion object {
-        fun DispatchedTrigger.inheritPlaceholders(other: DispatchedTrigger): DispatchedTrigger {
-            _placeholders += other._placeholders
-            return this
+    fun inheritPlaceholders(other: DispatchedTrigger): DispatchedTrigger {
+        _placeholders += other._placeholders
+        return this
+    }
+
+    /**
+     * Generate placeholders for some [data].
+     *
+     * This is called automatically when the trigger is dispatched,
+     * and again after mutation with the updated [data].
+     */
+    internal fun generatePlaceholders(data: TriggerData = this.data) {
+        for (placeholder in TriggerPlaceholders) {
+            _placeholders += placeholder.createPlaceholders(data)
         }
     }
 }

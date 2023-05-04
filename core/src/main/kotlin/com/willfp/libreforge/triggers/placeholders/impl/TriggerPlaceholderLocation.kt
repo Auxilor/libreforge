@@ -1,12 +1,12 @@
 package com.willfp.libreforge.triggers.placeholders.impl
 
 import com.willfp.libreforge.NamedValue
-import com.willfp.libreforge.triggers.DispatchedTrigger
+import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.placeholders.TriggerPlaceholder
 
 object TriggerPlaceholderLocation : TriggerPlaceholder("location") {
-    override fun createPlaceholders(trigger: DispatchedTrigger): Collection<NamedValue> {
-        val location = trigger.data.location ?: return emptyList()
+    override fun createPlaceholders(data: TriggerData): Collection<NamedValue> {
+        val location = data.location ?: return emptyList()
 
         return listOf(
             NamedValue(

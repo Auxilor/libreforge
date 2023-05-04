@@ -6,7 +6,6 @@ import com.willfp.libreforge.generatePlaceholders
 import com.willfp.libreforge.getProvidedActiveEffects
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.providedActiveEffects
-import com.willfp.libreforge.triggers.DispatchedTrigger.Companion.inheritPlaceholders
 import com.willfp.libreforge.triggers.event.TriggerDispatchEvent
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
@@ -29,6 +28,7 @@ abstract class Trigger(
         forceHolders: Collection<ProvidedHolder>? = null
     ) {
         val dispatch = DispatchedTrigger(player, this, data)
+        dispatch.generatePlaceholders(data)
 
         val dispatchEvent = TriggerDispatchEvent(player, dispatch)
         Bukkit.getPluginManager().callEvent(dispatchEvent)
