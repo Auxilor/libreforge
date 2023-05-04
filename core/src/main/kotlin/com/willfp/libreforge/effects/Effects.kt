@@ -73,6 +73,7 @@ import com.willfp.libreforge.effects.impl.EffectParticleAnimation
 import com.willfp.libreforge.effects.impl.EffectParticleLine
 import com.willfp.libreforge.effects.impl.EffectPayPrice
 import com.willfp.libreforge.effects.impl.EffectPermanentPotionEffect
+import com.willfp.libreforge.effects.impl.EffectPiercing
 import com.willfp.libreforge.effects.impl.EffectPlaySound
 import com.willfp.libreforge.effects.impl.EffectPotionEffect
 import com.willfp.libreforge.effects.impl.EffectPullIn
@@ -397,5 +398,6 @@ object Effects : Registry<Effect<*>>() {
         register(EffectCreateHologram)
         register(EffectClearInvulnerability)
         register(EffectHoming)
+        register(EffectPiercing)
     }
 }
