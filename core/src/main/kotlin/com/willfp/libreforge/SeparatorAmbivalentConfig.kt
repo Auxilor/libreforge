@@ -121,7 +121,7 @@ fun Config.toPlaceholderContext(data: TriggerData? = null): PlaceholderContext {
 
     return PlaceholderContext(
         data?._originalPlayer,
-        data?.holder?.provider as? ItemStack,
+        data?.holder?.provider as? ItemStack ?: data?.item,
         this,
         additionalPlayers
     )
