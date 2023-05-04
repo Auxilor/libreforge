@@ -52,7 +52,7 @@ import com.willfp.libreforge.effects.impl.EffectGivePoints
 import com.willfp.libreforge.effects.impl.EffectGivePrice
 import com.willfp.libreforge.effects.impl.EffectGiveXp
 import com.willfp.libreforge.effects.impl.EffectGlowNearbyBlocks
-import com.willfp.libreforge.effects.impl.EffectHomingArrows
+import com.willfp.libreforge.effects.impl.EffectHoming
 import com.willfp.libreforge.effects.impl.EffectHungerMultiplier
 import com.willfp.libreforge.effects.impl.EffectIgnite
 import com.willfp.libreforge.effects.impl.EffectItemDurabilityMultiplier
@@ -396,6 +396,6 @@ object Effects : Registry<Effect<*>>() {
         register(EffectKick)
         register(EffectCreateHologram)
         register(EffectClearInvulnerability)
-        register(EffectHomingArrows)
+        register(EffectHoming)
     }
 }

@@ -21,13 +21,12 @@ import org.bukkit.entity.AbstractArrow
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
-import org.bukkit.entity.Trident
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.entity.ProjectileLaunchEvent
 import kotlin.math.abs
 
-object EffectHomingArrows : Effect<List<TestableEntity>>("homing_arrows") {
+object EffectHoming : Effect<List<TestableEntity>>("homing") {
     override val arguments = arguments {
         require("distance", "You must specify the distance to hone from!")
     }
@@ -39,16 +38,13 @@ object EffectHomingArrows : Effect<List<TestableEntity>>("homing_arrows") {
     private const val META_KEY_DISTANCE = "libreforge-homing-arrows-distance"
     private const val META_KEY_FORCE = "libreforge-homing-arrows-force"
     private const val META_KEY_TARGETS = "libreforge-homing-arrows-targets"
+    private const val META_KEY_TRACKED = "libreforge-homing-arrows-tracked"
     private const val MAX_CHECKS = 10
     private const val CHECK_DELAY = 3L
     private const val SMOOTHNESS = 0.35f
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: List<TestableEntity>): Boolean {
         val arrow = data.projectile as? AbstractArrow ?: return false
-
-        if (arrow is Trident) {
-            return false
-        }
 
         var distance = config.getDoubleFromExpression("distance", data)
 
@@ -82,11 +78,17 @@ object EffectHomingArrows : Effect<List<TestableEntity>>("homing_arrows") {
 
         var checks = 0
 
+        if (arrow.hasMetadata(META_KEY_TRACKED)) {
+            return
+        }
+
         val distance = arrow.getMetadata(META_KEY_DISTANCE).firstOrNull()?.value() as? Double ?: return
         val force = arrow.getMetadata(META_KEY_FORCE).firstOrNull()?.value() as? Float ?: return
 
         @Suppress("UNCHECKED_CAST")
         val targets = arrow.getMetadata(META_KEY_TARGETS).firstOrNull()?.value() as? List<TestableEntity> ?: return
+
+        arrow.setMetadata(META_KEY_TRACKED, plugin.createMetadataValue(true))
 
         plugin.runnableFactory.create { task ->
             checks++
