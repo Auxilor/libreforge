@@ -25,7 +25,7 @@ object EffectCritMultiplier : Effect<NoCompileData>("crit_multiplier") {
         val event = data.event as? EntityDamageEvent ?: return false
         val player = data.player ?: return false
 
-        if (player.velocity.y >= 0) {
+        if (player.velocity.y >= -0.1) {
             return false
         }
 
