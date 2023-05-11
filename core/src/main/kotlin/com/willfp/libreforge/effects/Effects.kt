@@ -35,6 +35,7 @@ import com.willfp.libreforge.effects.impl.EffectDamageArmor
 import com.willfp.libreforge.effects.impl.EffectDamageMainhand
 import com.willfp.libreforge.effects.impl.EffectDamageMultiplier
 import com.willfp.libreforge.effects.impl.EffectDamageNearbyEntities
+import com.willfp.libreforge.effects.impl.EffectDamageTwice
 import com.willfp.libreforge.effects.impl.EffectDamageVictim
 import com.willfp.libreforge.effects.impl.EffectDrill
 import com.willfp.libreforge.effects.impl.EffectDropItem
@@ -399,5 +400,6 @@ object Effects : Registry<Effect<*>>() {
         register(EffectClearInvulnerability)
         register(EffectHoming)
         register(EffectPiercing)
+        register(EffectDamageTwice)
     }
 }
