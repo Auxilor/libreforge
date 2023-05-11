@@ -59,6 +59,7 @@ import com.willfp.libreforge.triggers.impl.TriggerProjectileHit
 import com.willfp.libreforge.triggers.impl.TriggerProjectileLaunch
 import com.willfp.libreforge.triggers.impl.TriggerReelIn
 import com.willfp.libreforge.triggers.impl.TriggerRespawn
+import com.willfp.libreforge.triggers.impl.TriggerRunCommand
 import com.willfp.libreforge.triggers.impl.TriggerSellItem
 import com.willfp.libreforge.triggers.impl.TriggerSendMessage
 import com.willfp.libreforge.triggers.impl.TriggerShearEntity
@@ -68,12 +69,12 @@ import com.willfp.libreforge.triggers.impl.TriggerSmelt
 import com.willfp.libreforge.triggers.impl.TriggerSwapHands
 import com.willfp.libreforge.triggers.impl.TriggerTakeDamage
 import com.willfp.libreforge.triggers.impl.TriggerTakeEntityDamage
+import com.willfp.libreforge.triggers.impl.TriggerTeleport
 import com.willfp.libreforge.triggers.impl.TriggerToggleFlight
 import com.willfp.libreforge.triggers.impl.TriggerToggleSneak
 import com.willfp.libreforge.triggers.impl.TriggerToggleSprint
 import com.willfp.libreforge.triggers.impl.TriggerTridentAttack
 import com.willfp.libreforge.triggers.impl.TriggerWinRaid
-import com.willfp.libreforge.triggers.impl.TriggerTeleport
 
 object Triggers : Registry<Trigger>() {
     private val groupRegistry = Registry<TriggerGroup>()
@@ -181,5 +182,6 @@ object Triggers : Registry<Trigger>() {
         register(TriggerEnable)
         register(TriggerDisable)
         register(TriggerTeleport)
+        register(TriggerRunCommand)
     }
 }
