@@ -32,6 +32,7 @@ import com.willfp.libreforge.effects.impl.EffectCreateExplosion
 import com.willfp.libreforge.effects.impl.EffectCreateHologram
 import com.willfp.libreforge.effects.impl.EffectCritMultiplier
 import com.willfp.libreforge.effects.impl.EffectDamageArmor
+import com.willfp.libreforge.effects.impl.EffectDamageItem
 import com.willfp.libreforge.effects.impl.EffectDamageMainhand
 import com.willfp.libreforge.effects.impl.EffectDamageMultiplier
 import com.willfp.libreforge.effects.impl.EffectDamageNearbyEntities
@@ -82,6 +83,7 @@ import com.willfp.libreforge.effects.impl.EffectPullToLocation
 import com.willfp.libreforge.effects.impl.EffectRegenMultiplier
 import com.willfp.libreforge.effects.impl.EffectRemoveItem
 import com.willfp.libreforge.effects.impl.EffectRemovePotionEffect
+import com.willfp.libreforge.effects.impl.EffectRepairItem
 import com.willfp.libreforge.effects.impl.EffectRotate
 import com.willfp.libreforge.effects.impl.EffectRunChain
 import com.willfp.libreforge.effects.impl.EffectRunChainInline
@@ -401,5 +403,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectHoming)
         register(EffectPiercing)
         register(EffectDamageTwice)
+        register(EffectDamageItem)
+        register(EffectRepairItem)
     }
 }

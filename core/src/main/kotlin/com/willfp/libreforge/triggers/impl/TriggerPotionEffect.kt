@@ -27,7 +27,8 @@ object TriggerPotionEffect : Trigger("potion_effect") {
             TriggerData(
                 player = player,
                 location = player.location,
-                event = event
+                event = event,
+                text = event.newEffect?.type?.name?.lowercase()
             )
         )
     }
