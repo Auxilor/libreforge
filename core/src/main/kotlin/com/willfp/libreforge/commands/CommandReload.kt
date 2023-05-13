@@ -14,6 +14,6 @@ class CommandReload(
 ) {
     override fun onExecute(sender: CommandSender, args: List<String>) {
         sender.sendMessage(plugin.langYml.getMessage("reloaded"))
-        plugin.reload()
+        plugin.reload(false)
     }
 }
