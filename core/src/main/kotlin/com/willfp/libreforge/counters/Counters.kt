@@ -53,12 +53,17 @@ object Counters {
             context.with("args")
         )
 
+        val multiplierExpression = if (config.has("multiplier")) {
+            config.getString("multiplier")
+        } else "1" // lmao
+
         return Counter(
             trigger,
             conditions,
             filters,
             args,
-            arguments
+            arguments,
+            multiplierExpression
         )
     }
 }
