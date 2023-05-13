@@ -3,8 +3,8 @@ package com.willfp.libreforge.effects.arguments.impl
 import com.willfp.eco.util.PlayerUtils
 import com.willfp.eco.util.StringUtils
 import com.willfp.eco.util.formatEco
+import com.willfp.libreforge.ConfigurableElement
 import com.willfp.libreforge.NoCompileData
-import com.willfp.libreforge.effects.ElementLike
 import com.willfp.libreforge.effects.arguments.EffectArgument
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.plugin
@@ -17,11 +17,11 @@ object ArgumentCooldown : EffectArgument<NoCompileData>("cooldown") {
     // Maps ConfiguredEffect UUIDs to Player UUIDs mapped to expiry time
     private val cooldownTracker = mutableMapOf<UUID, MutableMap<UUID, Long>>()
 
-    override fun isMet(element: ElementLike, trigger: DispatchedTrigger, compileData: NoCompileData): Boolean {
+    override fun isMet(element: ConfigurableElement, trigger: DispatchedTrigger, compileData: NoCompileData): Boolean {
         return getCooldown(element, trigger) <= 0
     }
 
-    private fun getCooldown(element: ElementLike, trigger: DispatchedTrigger): Int {
+    private fun getCooldown(element: ConfigurableElement, trigger: DispatchedTrigger): Int {
         val effectEndTimes = cooldownTracker[element.uuid] ?: return 0
         val endTime = effectEndTimes[trigger.player.uniqueId] ?: return 0
 
@@ -30,14 +30,14 @@ object ArgumentCooldown : EffectArgument<NoCompileData>("cooldown") {
         return secondsLeft.toInt()
     }
 
-    override fun ifMet(element: ElementLike, trigger: DispatchedTrigger, compileData: NoCompileData) {
+    override fun ifMet(element: ConfigurableElement, trigger: DispatchedTrigger, compileData: NoCompileData) {
         val effectEndTimes = cooldownTracker[element.uuid] ?: mutableMapOf()
         effectEndTimes[trigger.player.uniqueId] = System.currentTimeMillis() +
                 (element.config.getDoubleFromExpression("cooldown", trigger.data) * 1000L).toLong()
         cooldownTracker[element.uuid] = effectEndTimes
     }
 
-    override fun ifNotMet(element: ElementLike, trigger: DispatchedTrigger, compileData: NoCompileData) {
+    override fun ifNotMet(element: ConfigurableElement, trigger: DispatchedTrigger, compileData: NoCompileData) {
         if (element.config.getBoolOrNull("send_cooldown_message") == false) {
             return
         }
