@@ -39,6 +39,8 @@ import com.willfp.libreforge.effects.impl.EffectDamageMultiplier
 import com.willfp.libreforge.effects.impl.EffectDamageNearbyEntities
 import com.willfp.libreforge.effects.impl.EffectDamageTwice
 import com.willfp.libreforge.effects.impl.EffectDamageVictim
+import com.willfp.libreforge.effects.impl.EffectDontConsumeLapisChance
+import com.willfp.libreforge.effects.impl.EffectDontConsumeXpChance
 import com.willfp.libreforge.effects.impl.EffectDrill
 import com.willfp.libreforge.effects.impl.EffectDropItem
 import com.willfp.libreforge.effects.impl.EffectDropItemForPlayer
@@ -409,5 +411,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectRepairItem)
         register(EffectBrewTimeMultiplier)
         register(EffectPotionDurationMultiplier)
+        register(EffectDontConsumeLapisChance)
+        register(EffectDontConsumeXpChance)
     }
 }
