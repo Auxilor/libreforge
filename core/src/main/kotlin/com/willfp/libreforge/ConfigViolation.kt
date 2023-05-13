@@ -67,7 +67,6 @@ open class ViolationContext internal constructor(
      */
     fun log(property: Compilable<*>, violation: ConfigViolation) {
         logger.log(this, property, violation)
-        plugin.logger.warning("")
     }
 
     /**
