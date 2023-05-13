@@ -24,6 +24,10 @@ object ArgumentPointCost : EffectArgument<NoCompileData>("point_cost") {
     }
 
     override fun ifNotMet(element: ConfigurableElement, trigger: DispatchedTrigger, compileData: NoCompileData) {
+        if (!plugin.configYml.getBool("cannot-afford-type.message-enabled")) {
+            return
+        }
+
         val player = trigger.player
 
         val cost = element.config.getDoubleFromExpression("point_cost.cost", trigger.data)

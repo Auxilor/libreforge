@@ -43,6 +43,10 @@ object ArgumentPrice : EffectArgument<NoCompileData>("price") {
     }
 
     override fun ifNotMet(element: ConfigurableElement, trigger: DispatchedTrigger, compileData: NoCompileData) {
+        if (!plugin.configYml.getBool("cannot-afford-price.message-enabled")) {
+            return
+        }
+
         val price = Prices.create(
             element.config.getString("price.value"),
             element.config.getString("price.type"),
