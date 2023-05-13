@@ -14,7 +14,8 @@ class Counter internal constructor(
     val conditions: ConditionList,
     val filters: FilterList,
     override val config: Config,
-    val arguments: EffectArgumentList
+    val arguments: EffectArgumentList,
+    val multiplierExpression: String
 ) : ConfigurableElement {
     override val uuid: UUID = UUID.randomUUID()
 

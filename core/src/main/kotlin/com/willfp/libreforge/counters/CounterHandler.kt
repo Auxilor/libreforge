@@ -1,6 +1,8 @@
 package com.willfp.libreforge.counters
 
 import com.willfp.eco.core.map.listMap
+import com.willfp.eco.core.placeholder.context.placeholderContext
+import com.willfp.eco.util.evaluateExpression
 import com.willfp.libreforge.triggers.event.TriggerDispatchEvent
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -59,11 +61,13 @@ object CounterHandler : Listener {
                 continue
             }
 
-            val multiplier = if (counter.config.has("multiplier")) {
-                config.getDoubleFromExpression("multiplier")
-            } else {
-                1.0
-            }
+            val multiplier = evaluateExpression(
+                counter.multiplierExpression,
+                placeholderContext(
+                    player = player,
+                    injectable = config
+                )
+            )
 
             met.forEach { it.ifMet(counter, trigger) }
             notMet.forEach { it.ifNotMet(counter, trigger) }
