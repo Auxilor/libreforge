@@ -24,6 +24,7 @@ import com.willfp.libreforge.effects.impl.EffectBleed
 import com.willfp.libreforge.effects.impl.EffectBlockCommands
 import com.willfp.libreforge.effects.impl.EffectBonusHealth
 import com.willfp.libreforge.effects.impl.EffectBreakBlock
+import com.willfp.libreforge.effects.impl.EffectBrewTimeMultiplier
 import com.willfp.libreforge.effects.impl.EffectBroadcast
 import com.willfp.libreforge.effects.impl.EffectCancelEvent
 import com.willfp.libreforge.effects.impl.EffectClearInvulnerability
@@ -77,6 +78,7 @@ import com.willfp.libreforge.effects.impl.EffectPayPrice
 import com.willfp.libreforge.effects.impl.EffectPermanentPotionEffect
 import com.willfp.libreforge.effects.impl.EffectPiercing
 import com.willfp.libreforge.effects.impl.EffectPlaySound
+import com.willfp.libreforge.effects.impl.EffectPotionDurationMultiplier
 import com.willfp.libreforge.effects.impl.EffectPotionEffect
 import com.willfp.libreforge.effects.impl.EffectPullIn
 import com.willfp.libreforge.effects.impl.EffectPullToLocation
@@ -405,5 +407,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectDamageTwice)
         register(EffectDamageItem)
         register(EffectRepairItem)
+        register(EffectBrewTimeMultiplier)
+        register(EffectPotionDurationMultiplier)
     }
 }
