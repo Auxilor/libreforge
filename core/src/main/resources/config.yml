@@ -30,6 +30,7 @@ lrcdb:
 show-libreforge-info: true
 
 cooldown:
+  message-enabled: true
   in-actionbar: true
   sound:
     enabled: true
@@ -37,6 +38,7 @@ cooldown:
     pitch: 0.5
 
 cannot-afford:
+  message-enabled: true
   in-actionbar: true
   sound:
     enabled: true
@@ -44,6 +46,7 @@ cannot-afford:
     pitch: 0.5
 
 cannot-afford-type:
+  message-enabled: true
   in-actionbar: true
   sound:
     enabled: true
@@ -51,6 +54,7 @@ cannot-afford-type:
     pitch: 0.5
 
 cannot-afford-price:
+  message-enabled: true
   in-actionbar: true
   sound:
     enabled: true

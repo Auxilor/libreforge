@@ -42,6 +42,10 @@ object ArgumentCooldown : EffectArgument<NoCompileData>("cooldown") {
             return
         }
 
+        if (!plugin.configYml.getBool("cannot-afford-type.message-enabled")) {
+            return
+        }
+
         val player = trigger.player
 
         val cooldown = getCooldown(element, trigger)

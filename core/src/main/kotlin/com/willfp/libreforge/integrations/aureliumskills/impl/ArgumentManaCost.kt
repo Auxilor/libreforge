@@ -33,6 +33,10 @@ object ArgumentManaCost : EffectArgument<NoCompileData>("mana_cost") {
 
         val cost = element.config.getDoubleFromExpression("mana_cost", trigger.data)
 
+        if (!plugin.configYml.getBool("cannot-afford-type.message-enabled")) {
+            return
+        }
+
         val message = plugin.langYml.getMessage("cannot-afford-type")
             .replace("%cost%", NumberUtils.format(cost))
             .replace("%type%", "mana".toFriendlyPointName())

@@ -4,9 +4,9 @@ import com.willfp.eco.core.integrations.economy.balance
 import com.willfp.eco.util.NumberUtils
 import com.willfp.eco.util.PlayerUtils
 import com.willfp.eco.util.StringUtils
+import com.willfp.libreforge.ConfigurableElement
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.effects.arguments.EffectArgument
-import com.willfp.libreforge.ConfigurableElement
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.DispatchedTrigger
@@ -19,6 +19,10 @@ object ArgumentCost : EffectArgument<NoCompileData>("cost") {
     }
 
     override fun ifNotMet(element: ConfigurableElement, trigger: DispatchedTrigger, compileData: NoCompileData) {
+        if (!plugin.configYml.getBool("cannot-afford.message-enabled")) {
+            return
+        }
+
         val player = trigger.player
 
         val cost = element.config.getDoubleFromExpression("cost", trigger.data)
