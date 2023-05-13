@@ -29,7 +29,7 @@ object EffectAddHolderInRadius : Effect<HolderTemplate>("add_holder_in_radius") 
 
     override val arguments = arguments {
         require("effects", "You must specify the effects!")
-        require("conditions", "You must specify the conditions!")
+        // require("conditions", "You must specify the conditions!")
         require("duration", "You must specify the duration (in ticks)!")
         require("radius", "You must specify the radius!")
     }
