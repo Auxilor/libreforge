@@ -3,8 +3,8 @@ package com.willfp.libreforge.effects.arguments.impl
 import com.willfp.eco.util.NumberUtils
 import com.willfp.eco.util.PlayerUtils
 import com.willfp.eco.util.StringUtils
+import com.willfp.libreforge.ConfigurableElement
 import com.willfp.libreforge.NoCompileData
-import com.willfp.libreforge.effects.ElementLike
 import com.willfp.libreforge.effects.arguments.EffectArgument
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.plugin
@@ -14,7 +14,7 @@ import com.willfp.libreforge.triggers.DispatchedTrigger
 import org.bukkit.Sound
 
 object ArgumentPointCost : EffectArgument<NoCompileData>("point_cost") {
-    override fun isMet(element: ElementLike, trigger: DispatchedTrigger, compileData: NoCompileData): Boolean {
+    override fun isMet(element: ConfigurableElement, trigger: DispatchedTrigger, compileData: NoCompileData): Boolean {
         val player = trigger.player
 
         val cost = element.config.getDoubleFromExpression("point_cost.cost", trigger.data)
@@ -23,7 +23,7 @@ object ArgumentPointCost : EffectArgument<NoCompileData>("point_cost") {
         return player.points[type] >= cost
     }
 
-    override fun ifNotMet(element: ElementLike, trigger: DispatchedTrigger, compileData: NoCompileData) {
+    override fun ifNotMet(element: ConfigurableElement, trigger: DispatchedTrigger, compileData: NoCompileData) {
         val player = trigger.player
 
         val cost = element.config.getDoubleFromExpression("point_cost.cost", trigger.data)
@@ -49,7 +49,7 @@ object ArgumentPointCost : EffectArgument<NoCompileData>("point_cost") {
         }
     }
 
-    override fun ifMet(element: ElementLike, trigger: DispatchedTrigger, compileData: NoCompileData) {
+    override fun ifMet(element: ConfigurableElement, trigger: DispatchedTrigger, compileData: NoCompileData) {
         val cost = element.config.getDoubleFromExpression("point_cost.cost", trigger.data)
         val type = element.config.getString("point_cost.type")
 
