@@ -64,5 +64,4 @@ cannot-afford-price:
 point-names: # If you have point names that look ugly (e.g. souls) then you can map them to nice names to be shown to players.
   souls: "Souls"
 
-use-faster-move-trigger: true # Disable if you want the move trigger to detect sub-1-block movements
 raytrace-distance: 80 # The distance that alt_click should check for a location
