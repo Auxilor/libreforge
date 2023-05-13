@@ -13,7 +13,7 @@ class CommandLibreforge(
     false
 ) {
     init {
-        this.addSubcommand(CommandReloadExtensions(plugin))
+        this.addSubcommand(CommandReload(plugin))
     }
 
     override fun onExecute(sender: CommandSender, args: MutableList<String>) {
