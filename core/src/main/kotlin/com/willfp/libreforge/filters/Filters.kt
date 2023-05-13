@@ -12,6 +12,8 @@ import com.willfp.libreforge.filters.impl.FilterFullyCharged
 import com.willfp.libreforge.filters.impl.FilterFullyGrown
 import com.willfp.libreforge.filters.impl.FilterIsBehindVictim
 import com.willfp.libreforge.filters.impl.FilterIsNPC
+import com.willfp.libreforge.filters.impl.FilterItemDurabilityAbove
+import com.willfp.libreforge.filters.impl.FilterItemDurabilityBelow
 import com.willfp.libreforge.filters.impl.FilterItems
 import com.willfp.libreforge.filters.impl.FilterOnMaxHealth
 import com.willfp.libreforge.filters.impl.FilterOnlyBosses
@@ -81,5 +83,7 @@ object Filters : Registry<Filter<*, *>>() {
         register(FilterTextContains)
         register(FilterVictimConditions)
         register(FilterVictimName)
+        register(FilterItemDurabilityAbove)
+        register(FilterItemDurabilityBelow)
     }
 }
