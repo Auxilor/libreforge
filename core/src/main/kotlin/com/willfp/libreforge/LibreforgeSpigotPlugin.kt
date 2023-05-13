@@ -102,8 +102,6 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
         )
     }
 
-    override fun cancelsTasksOnReload() = false
-
     /**
      * Run a runnable when the plugin is enabled.
      */
