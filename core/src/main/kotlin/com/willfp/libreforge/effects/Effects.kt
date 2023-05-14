@@ -86,6 +86,7 @@ import com.willfp.libreforge.effects.impl.EffectPotionDurationMultiplier
 import com.willfp.libreforge.effects.impl.EffectPotionEffect
 import com.willfp.libreforge.effects.impl.EffectPullIn
 import com.willfp.libreforge.effects.impl.EffectPullToLocation
+import com.willfp.libreforge.effects.impl.EffectReelSpeedMultiplier
 import com.willfp.libreforge.effects.impl.EffectRegenMultiplier
 import com.willfp.libreforge.effects.impl.EffectRemoveItem
 import com.willfp.libreforge.effects.impl.EffectRemovePotionEffect
@@ -421,5 +422,6 @@ object Effects : Registry<Effect<*>>() {
         register(EffectDontConsumeXpChance)
         register(EffectGiveGlobalPoints)
         register(EffectMultiplyGlobalPoints)
+        register(EffectReelSpeedMultiplier)
     }
 }
