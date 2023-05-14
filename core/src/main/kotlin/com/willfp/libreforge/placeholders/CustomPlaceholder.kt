@@ -4,6 +4,7 @@ import com.willfp.eco.core.placeholder.context.PlaceholderContext
 import com.willfp.eco.core.placeholder.templates.SimplePlaceholder
 import com.willfp.eco.core.registry.KRegistrable
 import com.willfp.eco.util.evaluateExpression
+import com.willfp.eco.util.formatEco
 import com.willfp.libreforge.plugin
 
 class CustomPlaceholder(
@@ -20,7 +21,7 @@ class CustomPlaceholder(
             return if (asNumber != 0.0) {
                 asNumber.toString()
             } else {
-                expression
+                expression.formatEco(ctx)
             }
         }
     }
