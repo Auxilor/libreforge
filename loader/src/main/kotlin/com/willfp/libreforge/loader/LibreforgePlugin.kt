@@ -168,7 +168,7 @@ abstract class LibreforgePlugin : EcoPlugin() {
         return files.filter { it.endsWith(".yml") }.map { it.removeSuffix(".yml") }
     }
 
-    private fun fetchConfigs(category: ConfigCategory): Set<RegistrableConfig> {
+    private fun fetchConfigs(category: ConfigCategory): List<RegistrableConfig> {
         val configs = mutableSetOf<RegistrableConfig>()
         configs += doFetchConfigs(category, category.directory)
 
@@ -177,6 +177,8 @@ abstract class LibreforgePlugin : EcoPlugin() {
         }
 
         return configs
+            .sortedBy { it.id }
+            .sortedBy { it.config.getInt("load-weight", 100) }
     }
 
     private fun doFetchConfigs(category: ConfigCategory, directory: String): Set<RegistrableConfig> {
