@@ -102,6 +102,10 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
         )
     }
 
+    override fun getMinimumEcoVersion(): String {
+        return "6.58.0"
+    }
+
     /**
      * Run a runnable when the plugin is enabled.
      */
