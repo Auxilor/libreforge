@@ -6,6 +6,7 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
+import com.willfp.libreforge.getProvider
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.event.player.PlayerItemDamageEvent
@@ -25,7 +26,7 @@ object EffectItemDurabilityMultiplier : Effect<NoCompileData>("item_durability_m
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val event = data.event as? PlayerItemDamageEvent ?: return false
-        val item = data.holder.provider as? ItemStack ?: return false
+        val item = data.holder.getProvider<ItemStack>() ?: return false
 
         if (event.item != item) {
             return false
