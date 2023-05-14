@@ -5,6 +5,7 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getIntFromExpression
+import com.willfp.libreforge.getProvider
 import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
@@ -20,7 +21,7 @@ object EffectRepairItem : Effect<NoCompileData>("repair_item") {
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
-        val item = data.holder.provider as? ItemStack ?: data.item ?: return false
+        val item = data.holder.getProvider<ItemStack>() ?: data.item ?: return false
 
         val damage = config.getIntFromExpression("damage", data)
 

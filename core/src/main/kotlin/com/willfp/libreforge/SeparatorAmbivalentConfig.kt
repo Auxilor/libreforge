@@ -10,7 +10,6 @@ import com.willfp.eco.util.NumberUtils
 import com.willfp.eco.util.StringUtils
 import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.entity.Player
-import org.bukkit.inventory.ItemStack
 
 private class SeparatorAmbivalentConfig(
     private val config: Config
@@ -121,7 +120,7 @@ fun Config.toPlaceholderContext(data: TriggerData? = null): PlaceholderContext {
 
     return PlaceholderContext(
         data?._originalPlayer,
-        data?.holder?.provider as? ItemStack ?: data?.item,
+        data?.holder?.getProvider() ?: data?.item,
         this,
         additionalPlayers
     )
