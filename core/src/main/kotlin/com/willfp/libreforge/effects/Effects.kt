@@ -49,6 +49,7 @@ import com.willfp.libreforge.effects.impl.EffectFeatherStep
 import com.willfp.libreforge.effects.impl.EffectFlight
 import com.willfp.libreforge.effects.impl.EffectFoodMultiplier
 import com.willfp.libreforge.effects.impl.EffectGiveFood
+import com.willfp.libreforge.effects.impl.EffectGiveGlobalPoints
 import com.willfp.libreforge.effects.impl.EffectGiveHealth
 import com.willfp.libreforge.effects.impl.EffectGiveItem
 import com.willfp.libreforge.effects.impl.EffectGiveMoney
@@ -72,6 +73,7 @@ import com.willfp.libreforge.effects.impl.EffectMineRadiusOneDeep
 import com.willfp.libreforge.effects.impl.EffectMineVein
 import com.willfp.libreforge.effects.impl.EffectMovementSpeedMultiplier
 import com.willfp.libreforge.effects.impl.EffectMultiplyDrops
+import com.willfp.libreforge.effects.impl.EffectMultiplyGlobalPoints
 import com.willfp.libreforge.effects.impl.EffectMultiplyPoints
 import com.willfp.libreforge.effects.impl.EffectMultiplyVelocity
 import com.willfp.libreforge.effects.impl.EffectParticleAnimation
@@ -180,15 +182,19 @@ object Effects : Registry<Effect<*>>() {
         val permanentEffects = chain.filter { it.effect.isPermanent }
         val triggeredEffects = chain.filterNot { it.effect.isPermanent }
 
-        if (triggers.isNotEmpty() && permanentEffects.isNotEmpty() ) {
+        if (triggers.isNotEmpty() && permanentEffects.isNotEmpty()) {
             context.log(ConfigViolation("triggers", "Triggers are not allowed on permanent " +
-                    "effects: ${permanentEffects.joinToString(", ") { it.effect.id }}!"))
+                    "effects: ${permanentEffects.joinToString(", ") { it.effect.id }}!"
+            )
+            )
             return null
         }
 
         if (triggers.isEmpty() && chain.any { !it.effect.isPermanent }) {
             context.log(ConfigViolation("triggers", "You must specify at least one trigger for " +
-                    "triggered effects: ${triggeredEffects.joinToString(", ") { it.effect.id }}!"))
+                    "triggered effects: ${triggeredEffects.joinToString(", ") { it.effect.id }}!"
+            )
+            )
             return null
         }
 
@@ -413,5 +419,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectPotionDurationMultiplier)
         register(EffectDontConsumeLapisChance)
         register(EffectDontConsumeXpChance)
+        register(EffectGiveGlobalPoints)
+        register(EffectMultiplyGlobalPoints)
     }
 }

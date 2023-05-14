@@ -5,6 +5,7 @@ import com.willfp.eco.core.registry.Registry
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.conditions.impl.ConditionAboveBalance
+import com.willfp.libreforge.conditions.impl.ConditionAboveGlobalPoints
 import com.willfp.libreforge.conditions.impl.ConditionAboveHealthPercent
 import com.willfp.libreforge.conditions.impl.ConditionAboveHungerPercent
 import com.willfp.libreforge.conditions.impl.ConditionAbovePoints
@@ -13,12 +14,14 @@ import com.willfp.libreforge.conditions.impl.ConditionAboveY
 import com.willfp.libreforge.conditions.impl.ConditionAnyOf
 import com.willfp.libreforge.conditions.impl.ConditionAtLeastOf
 import com.willfp.libreforge.conditions.impl.ConditionBelowBalance
+import com.willfp.libreforge.conditions.impl.ConditionBelowGlobalPoints
 import com.willfp.libreforge.conditions.impl.ConditionBelowHealthPercent
 import com.willfp.libreforge.conditions.impl.ConditionBelowHungerPercent
 import com.willfp.libreforge.conditions.impl.ConditionBelowPoints
 import com.willfp.libreforge.conditions.impl.ConditionBelowXPLevel
 import com.willfp.libreforge.conditions.impl.ConditionBelowY
 import com.willfp.libreforge.conditions.impl.ConditionCanAffordPrice
+import com.willfp.libreforge.conditions.impl.ConditionGlobalPointsEqual
 import com.willfp.libreforge.conditions.impl.ConditionHasItem
 import com.willfp.libreforge.conditions.impl.ConditionHasPermission
 import com.willfp.libreforge.conditions.impl.ConditionHasPotionEffect
@@ -152,5 +155,8 @@ object Conditions : Registry<Condition<*>>() {
         register(ConditionWearingHelmet)
         register(ConditionWearingLeggings)
         register(ConditionWithinRadiusOf)
+        register(ConditionAboveGlobalPoints)
+        register(ConditionBelowGlobalPoints)
+        register(ConditionGlobalPointsEqual)
     }
 }

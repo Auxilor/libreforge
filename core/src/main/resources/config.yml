@@ -29,6 +29,16 @@ lrcdb:
 # Show what libreforge is on startup, to explain to new users.
 show-libreforge-info: true
 
+# You can reference these placeholders anywhere, in any plugin that supports
+# PlaceholderAPI, and anywhere in configs. They'll be prefixed with libreforge_,
+# so for example 'level' would be '%libreforge_level%' when used.
+placeholders:
+  - id: "example_placeholder" # The placeholder ID
+    value: "This is an example placeholder!" # The value of the placeholder
+
+  - id: "example_expression_placeholder"
+    value: "%level% * 2" # Mathematical expressions are fully supported!
+
 cooldown:
   message-enabled: true
   in-actionbar: true
