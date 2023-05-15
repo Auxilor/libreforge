@@ -33,16 +33,16 @@ class ConditionalCustomPlaceholder(
     override val placeholder: RegistrablePlaceholder = object : SimplePlaceholder(plugin, id) {
         override fun getValue(args: String, ctx: PlaceholderContext): String? {
             val player = ctx.player ?: run {
-                return defaultExpr?.let { getValue(it, ctx) }
+                return defaultExpr?.let { parseValue(it, ctx) }
             }
 
             val holder = BlankItemHolder(ctx.itemStack)
 
             val value = values
                 .firstOrNull { it.conditions.areMet(player, holder) }
-                ?.expr ?: return defaultExpr?.let { getValue(it, ctx) }
+                ?.expr ?: return defaultExpr?.let { parseValue(it, ctx) }
 
-            return getValue(value, ctx)
+            return parseValue(value, ctx)
         }
     }
 
