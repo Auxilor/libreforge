@@ -11,7 +11,7 @@ abstract class CustomPlaceholder(
 ) : KRegistrable {
     abstract val placeholder: RegistrablePlaceholder
 
-    protected fun getValue(expression: String, ctx: PlaceholderContext): String {
+    protected fun parseValue(expression: String, ctx: PlaceholderContext): String {
         val asNumber = evaluateExpression(
             expression,
             ctx
