@@ -75,7 +75,7 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
         }
 
         for (customPlaceholder in this.configYml.getSubsections("placeholders")) {
-            CustomPlaceholders.load(customPlaceholder)
+            CustomPlaceholders.load(customPlaceholder, this)
         }
 
         hasLoaded = true
