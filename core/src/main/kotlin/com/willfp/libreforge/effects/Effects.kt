@@ -44,6 +44,8 @@ import com.willfp.libreforge.effects.impl.EffectDontConsumeXpChance
 import com.willfp.libreforge.effects.impl.EffectDrill
 import com.willfp.libreforge.effects.impl.EffectDropItem
 import com.willfp.libreforge.effects.impl.EffectDropItemForPlayer
+import com.willfp.libreforge.effects.impl.EffectDropRandomItem
+import com.willfp.libreforge.effects.impl.EffectDropRandomItemForPlayer
 import com.willfp.libreforge.effects.impl.EffectExtinguish
 import com.willfp.libreforge.effects.impl.EffectFeatherStep
 import com.willfp.libreforge.effects.impl.EffectFlight
@@ -423,5 +425,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectGiveGlobalPoints)
         register(EffectMultiplyGlobalPoints)
         register(EffectReelSpeedMultiplier)
+        register(EffectDropRandomItem)
+        register(EffectDropRandomItemForPlayer)
     }
 }
