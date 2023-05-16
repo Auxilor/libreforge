@@ -1,6 +1,8 @@
 package com.willfp.libreforge.counters
 
 import com.willfp.eco.core.map.listMap
+import com.willfp.eco.core.placeholder.context.placeholderContext
+import com.willfp.eco.util.evaluateExpression
 import com.willfp.libreforge.triggers.event.TriggerDispatchEvent
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -16,16 +18,23 @@ internal fun unbindCounter(counter: Counter) {
 }
 
 object CounterHandler : Listener {
+
+    /*
+
+    This isn't particularly clean, but I'll refactor it out eventually.
+
+     */
+
     @EventHandler
     fun handle(event: TriggerDispatchEvent) {
-        val dispatch = event.trigger
-        val data = dispatch.data
+        val trigger = event.trigger
+        val data = trigger.data
 
-        val player = dispatch.player
+        val player = trigger.player
         val value = data.value
 
         val applicableCounters = counters.filter { (counter, _) ->
-            counter.trigger == dispatch.trigger
+            counter.trigger == trigger.trigger
         }
 
         for ((counter, accumulators) in applicableCounters) {
@@ -37,8 +46,34 @@ object CounterHandler : Listener {
                 continue
             }
 
+            val config = counter.config
+
+            // Inject placeholders, totally not stolen from ElementLike
+            listOf(counter.filters, counter.conditions)
+                .flatten()
+                .map { it.config }
+                .plusElement(config)
+                .forEach { it.addInjectablePlaceholder(trigger.placeholders) }
+
+            val (argumentsMet, met, notMet) = counter.arguments.checkMet(counter, trigger)
+
+            if (!argumentsMet) {
+                continue
+            }
+
+            val multiplier = evaluateExpression(
+                counter.multiplierExpression,
+                placeholderContext(
+                    player = player,
+                    injectable = config
+                )
+            )
+
+            met.forEach { it.ifMet(counter, trigger) }
+            notMet.forEach { it.ifNotMet(counter, trigger) }
+
             for (accumulator in accumulators) {
-                accumulator.accept(player, value * counter.multiplier)
+                accumulator.accept(player, value * multiplier)
             }
         }
     }

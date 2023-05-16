@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.conditions.Conditions
+import com.willfp.libreforge.effects.arguments.EffectArguments
 import com.willfp.libreforge.filters.Filters
 import com.willfp.libreforge.separatorAmbivalent
 import com.willfp.libreforge.triggers.Triggers
@@ -36,12 +37,6 @@ object Counters {
             return null
         }
 
-        val multiplier = if (config.has("multiplier")) {
-            config.getDoubleFromExpression("multiplier")
-        } else {
-            1.0
-        }
-
         val conditions = Conditions.compile(
             config.getSubsections("conditions"),
             context.with("conditions")
@@ -52,11 +47,23 @@ object Counters {
             context.with("filters")
         )
 
+        val args = config.getSubsection("args")
+        val arguments = EffectArguments.compile(
+            args,
+            context.with("args")
+        )
+
+        val multiplierExpression = if (config.has("multiplier")) {
+            config.getString("multiplier")
+        } else "1" // lmao
+
         return Counter(
             trigger,
-            multiplier,
             conditions,
-            filters
+            filters,
+            args,
+            arguments,
+            multiplierExpression
         )
     }
 }

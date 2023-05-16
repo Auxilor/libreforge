@@ -4,8 +4,8 @@ import com.willfp.eco.core.price.Prices
 import com.willfp.eco.util.NumberUtils
 import com.willfp.eco.util.PlayerUtils
 import com.willfp.eco.util.StringUtils
+import com.willfp.libreforge.ConfigurableElement
 import com.willfp.libreforge.NoCompileData
-import com.willfp.libreforge.effects.ElementLike
 import com.willfp.libreforge.effects.arguments.EffectArgument
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.toPlaceholderContext
@@ -22,7 +22,7 @@ object ArgumentPrice : EffectArgument<NoCompileData>("price") {
 
      */
 
-    override fun isMet(element: ElementLike, trigger: DispatchedTrigger, compileData: NoCompileData): Boolean {
+    override fun isMet(element: ConfigurableElement, trigger: DispatchedTrigger, compileData: NoCompileData): Boolean {
         val price = Prices.create(
             element.config.getString("price.value"),
             element.config.getString("price.type"),
@@ -32,7 +32,7 @@ object ArgumentPrice : EffectArgument<NoCompileData>("price") {
         return price.canAfford(trigger.player)
     }
 
-    override fun ifMet(element: ElementLike, trigger: DispatchedTrigger, compileData: NoCompileData) {
+    override fun ifMet(element: ConfigurableElement, trigger: DispatchedTrigger, compileData: NoCompileData) {
         val price = Prices.create(
             element.config.getString("price.value"),
             element.config.getString("price.type"),
@@ -42,7 +42,11 @@ object ArgumentPrice : EffectArgument<NoCompileData>("price") {
         price.pay(trigger.player)
     }
 
-    override fun ifNotMet(element: ElementLike, trigger: DispatchedTrigger, compileData: NoCompileData) {
+    override fun ifNotMet(element: ConfigurableElement, trigger: DispatchedTrigger, compileData: NoCompileData) {
+        if (!plugin.configYml.getBool("cannot-afford-price.message-enabled")) {
+            return
+        }
+
         val price = Prices.create(
             element.config.getString("price.value"),
             element.config.getString("price.type"),

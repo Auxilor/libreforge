@@ -18,6 +18,7 @@ import com.willfp.libreforge.integrations.paper.PaperIntegration
 import com.willfp.libreforge.integrations.scyther.ScytherIntegration
 import com.willfp.libreforge.integrations.tmmobcoins.TMMobcoinsIntegration
 import com.willfp.libreforge.integrations.vault.VaultIntegration
+import com.willfp.libreforge.placeholders.CustomPlaceholders
 import org.bukkit.Bukkit
 import org.bukkit.event.Listener
 
@@ -51,6 +52,7 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
         }
 
         pointsPlaceholder(this).register()
+        globalPointsPlaceholder(this).register()
     }
 
     override fun handleReload() {
@@ -70,6 +72,10 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             for (player in Bukkit.getOnlinePlayers()) {
                 player.refreshHolders()
             }
+        }
+
+        for (customPlaceholder in this.configYml.getSubsections("placeholders")) {
+            CustomPlaceholders.load(customPlaceholder, this)
         }
 
         hasLoaded = true
@@ -100,6 +106,10 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             CommandLrcdb(this),
             CommandLibreforge(this)
         )
+    }
+
+    override fun getMinimumEcoVersion(): String {
+        return "6.58.0"
     }
 
     /**

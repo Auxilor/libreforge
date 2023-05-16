@@ -1,18 +1,23 @@
 package com.willfp.libreforge.counters
 
+import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ConfigurableElement
 import com.willfp.libreforge.conditions.ConditionList
+import com.willfp.libreforge.effects.arguments.EffectArgumentList
 import com.willfp.libreforge.filters.FilterList
 import com.willfp.libreforge.triggers.Trigger
 import java.util.Objects
 import java.util.UUID
 
-class Counter(
+class Counter internal constructor(
     val trigger: Trigger,
-    val multiplier: Double,
     val conditions: ConditionList,
-    val filters: FilterList
-) {
-    private val uuid = UUID.randomUUID()
+    val filters: FilterList,
+    override val config: Config,
+    val arguments: EffectArgumentList,
+    val multiplierExpression: String
+) : ConfigurableElement {
+    override val uuid: UUID = UUID.randomUUID()
 
     /**
      * Bind this counter to an [accumulator].

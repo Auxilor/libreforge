@@ -7,6 +7,7 @@ import com.willfp.libreforge.triggers.impl.TriggerBlockItemDrop
 import com.willfp.libreforge.triggers.impl.TriggerBowAttack
 import com.willfp.libreforge.triggers.impl.TriggerBreed
 import com.willfp.libreforge.triggers.impl.TriggerBrew
+import com.willfp.libreforge.triggers.impl.TriggerBrewIngredient
 import com.willfp.libreforge.triggers.impl.TriggerCastRod
 import com.willfp.libreforge.triggers.impl.TriggerCatchEntity
 import com.willfp.libreforge.triggers.impl.TriggerCatchFish
@@ -183,5 +184,6 @@ object Triggers : Registry<Trigger>() {
         register(TriggerDisable)
         register(TriggerTeleport)
         register(TriggerRunCommand)
+        register(TriggerBrewIngredient)
     }
 }

@@ -8,7 +8,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.inventory.BrewEvent
 
- object TriggerBrew : Trigger("brew") {
+object TriggerBrew : Trigger("brew") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,
@@ -22,11 +22,15 @@ import org.bukkit.event.inventory.BrewEvent
             .filterNot { EmptyTestableItem().matches(it) }
             .firstOrNull()
 
+        val amount = (0..2).map { event.contents.getItem(it) }
+            .count { !EmptyTestableItem().matches(it) }
+
         this.dispatch(
             player,
             TriggerData(
                 player = player,
-                item = item
+                item = item,
+                value = amount.toDouble()
             )
         )
     }

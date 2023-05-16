@@ -1,9 +1,12 @@
 package com.willfp.libreforge
 
 import com.willfp.eco.core.EcoPlugin
+import com.willfp.eco.core.data.Profile
+import com.willfp.eco.core.data.ServerProfile
 import com.willfp.eco.core.data.keys.PersistentDataKey
 import com.willfp.eco.core.data.keys.PersistentDataKeyType
 import com.willfp.eco.core.data.profile
+import com.willfp.eco.core.placeholder.DynamicPlaceholder
 import com.willfp.eco.core.placeholder.PlayerDynamicPlaceholder
 import com.willfp.eco.core.placeholder.context.PlaceholderContext
 import com.willfp.eco.core.placeholder.context.PlaceholderContextSupplier
@@ -63,7 +66,7 @@ class PointPriceFactory(private val type: String) : PriceFactory {
 private val initializedPoints = mutableSetOf<String>()
 
 class PointsMap(
-    private val player: Player
+    private val profile: Profile
 ) {
     private fun initializeIfNeeded(type: String) {
         if (type in initializedPoints) {
@@ -83,15 +86,11 @@ class PointsMap(
             0.0
         )
 
-        return player.profile.read(dataKey)
+        return profile.read(dataKey)
     }
 
     operator fun set(key: String, value: Double) {
         initializeIfNeeded(key)
-
-        if (value < 0) {
-            throw IllegalArgumentException("Points cannot be negative! (Tried to set $key to $value)")
-        }
 
         val dataKey = PersistentDataKey(
             NamespacedKeyUtils.createEcoKey("points_${key.lowercase()}"),
@@ -99,7 +98,7 @@ class PointsMap(
             0.0
         )
 
-        player.profile.write(dataKey, value)
+        profile.write(dataKey, value)
     }
 }
 
@@ -115,8 +114,23 @@ fun pointsPlaceholder(
     }
 }
 
+fun globalPointsPlaceholder(
+    plugin: EcoPlugin
+): DynamicPlaceholder {
+    return DynamicPlaceholder(
+        plugin,
+        Pattern.compile("global_points_[a-zA-z_-]+")
+    ) { args ->
+        val type = args.removePrefix("global_points_")
+        globalPoints[type].toNiceString()
+    }
+}
+
+val globalPoints: PointsMap
+    get() = PointsMap(ServerProfile.load())
+
 val Player.points: PointsMap
-    get() = PointsMap(this)
+    get() = PointsMap(this.profile)
 
 fun String.toFriendlyPointName() =
     plugin.configYml.getFormattedString("point-names.$this")

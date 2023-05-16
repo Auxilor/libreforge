@@ -40,6 +40,8 @@ abstract class AttributeEffect(
         val instance = player.getAttribute(attribute) ?: return
         val modifierName = "libreforge:${this.id} - ${identifiers.key.key} (${holder.holder.id})"
 
+        instance.clean(modifierName)
+
         instance.addModifier(
             AttributeModifier(
                 identifiers.uuid,

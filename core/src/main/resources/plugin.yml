@@ -41,13 +41,13 @@ permissions:
     children:
       libreforge.command.lrcdb: true
       libreforge.command.libreforge: true
-      libreforge.command.reloadextensions: true
+      libreforge.command.reload: true
   libreforge.command.lrcdb:
     description: Allows the use of /lrcdb
     default: op
   libreforge.command.libreforge:
     description: Allows the use of /libreforge
     default: op
-  libreforge.command.reloadextensions:
-    description: Allows the use of /libreforge reloadextensions
+  libreforge.command.reload:
+    description: Allows the use of /libreforge reload
     default: op

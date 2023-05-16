@@ -1,7 +1,7 @@
 package com.willfp.libreforge.effects.arguments
 
+import com.willfp.libreforge.ConfigurableElement
 import com.willfp.libreforge.DelegatedList
-import com.willfp.libreforge.effects.ElementLike
 import com.willfp.libreforge.triggers.DispatchedTrigger
 
 /**
@@ -14,7 +14,7 @@ class EffectArgumentList(
         it.argument.runOrder.weight
     }
 ) {
-    fun checkMet(element: ElementLike, trigger: DispatchedTrigger): EffectArgumentResponse {
+    fun checkMet(element: ConfigurableElement, trigger: DispatchedTrigger): EffectArgumentResponse {
         val met = mutableListOf<EffectArgumentBlock<*>>()
         val notMet = mutableListOf<EffectArgumentBlock<*>>()
 

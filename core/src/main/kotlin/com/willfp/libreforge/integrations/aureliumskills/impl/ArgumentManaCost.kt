@@ -4,8 +4,8 @@ import com.archyx.aureliumskills.api.AureliumAPI
 import com.willfp.eco.util.NumberUtils
 import com.willfp.eco.util.PlayerUtils
 import com.willfp.eco.util.StringUtils
+import com.willfp.libreforge.ConfigurableElement
 import com.willfp.libreforge.NoCompileData
-import com.willfp.libreforge.effects.ElementLike
 import com.willfp.libreforge.effects.arguments.EffectArgument
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.plugin
@@ -14,7 +14,7 @@ import com.willfp.libreforge.triggers.DispatchedTrigger
 import org.bukkit.Sound
 
 object ArgumentManaCost : EffectArgument<NoCompileData>("mana_cost") {
-    override fun isMet(element: ElementLike, trigger: DispatchedTrigger, compileData: NoCompileData): Boolean {
+    override fun isMet(element: ConfigurableElement, trigger: DispatchedTrigger, compileData: NoCompileData): Boolean {
         val player = trigger.data.player
 
         val cost = element.config.getDoubleFromExpression("mana_cost", trigger.data)
@@ -22,16 +22,20 @@ object ArgumentManaCost : EffectArgument<NoCompileData>("mana_cost") {
         return AureliumAPI.getMana(player) >= cost
     }
 
-    override fun ifMet(element: ElementLike, trigger: DispatchedTrigger, compileData: NoCompileData) {
+    override fun ifMet(element: ConfigurableElement, trigger: DispatchedTrigger, compileData: NoCompileData) {
         val cost = element.config.getDoubleFromExpression("mana_cost", trigger.data)
 
         AureliumAPI.setMana(trigger.player, AureliumAPI.getMana(trigger.player) - cost)
     }
 
-    override fun ifNotMet(element: ElementLike, trigger: DispatchedTrigger, compileData: NoCompileData) {
+    override fun ifNotMet(element: ConfigurableElement, trigger: DispatchedTrigger, compileData: NoCompileData) {
         val player = trigger.player
 
         val cost = element.config.getDoubleFromExpression("mana_cost", trigger.data)
+
+        if (!plugin.configYml.getBool("cannot-afford-type.message-enabled")) {
+            return
+        }
 
         val message = plugin.langYml.getMessage("cannot-afford-type")
             .replace("%cost%", NumberUtils.format(cost))

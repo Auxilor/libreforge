@@ -29,7 +29,33 @@ lrcdb:
 # Show what libreforge is on startup, to explain to new users.
 show-libreforge-info: true
 
+# You can reference these placeholders anywhere, in any plugin that supports
+# PlaceholderAPI, and anywhere in configs. They'll be prefixed with libreforge_,
+# so for example 'level' would be '%libreforge_level%' when used.
+placeholders:
+  - id: "example_placeholder" # The placeholder ID
+    value: "This is an example placeholder!" # The value of the placeholder
+
+  - id: "example_expression_placeholder"
+    value: "%level% * 2" # Mathematical expressions are fully supported!
+
+  - id: "conditional_placeholder"
+    default: 5 # (Optional) Specify a default value if no conditions are true
+    values:
+      - conditions: # Full condition system support!
+          - id: has_permission
+            args:
+              permission: "ecomc.rank.netherite"
+        value: 20
+
+      - conditions:
+          - id: has_permission
+            args:
+              permission: "ecomc.rank.diamond"
+        value: 10
+
 cooldown:
+  message-enabled: true
   in-actionbar: true
   sound:
     enabled: true
@@ -37,6 +63,7 @@ cooldown:
     pitch: 0.5
 
 cannot-afford:
+  message-enabled: true
   in-actionbar: true
   sound:
     enabled: true
@@ -44,6 +71,7 @@ cannot-afford:
     pitch: 0.5
 
 cannot-afford-type:
+  message-enabled: true
   in-actionbar: true
   sound:
     enabled: true
@@ -51,6 +79,7 @@ cannot-afford-type:
     pitch: 0.5
 
 cannot-afford-price:
+  message-enabled: true
   in-actionbar: true
   sound:
     enabled: true
@@ -60,5 +89,4 @@ cannot-afford-price:
 point-names: # If you have point names that look ugly (e.g. souls) then you can map them to nice names to be shown to players.
   souls: "Souls"
 
-use-faster-move-trigger: true # Disable if you want the move trigger to detect sub-1-block movements
 raytrace-distance: 80 # The distance that alt_click should check for a location

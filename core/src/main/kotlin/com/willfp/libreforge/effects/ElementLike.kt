@@ -1,7 +1,7 @@
 package com.willfp.libreforge.effects
 
-import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
+import com.willfp.libreforge.ConfigurableElement
 import com.willfp.libreforge.DynamicNumericValue
 import com.willfp.libreforge.NamedValue
 import com.willfp.libreforge.conditions.ConditionList
@@ -12,14 +12,11 @@ import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.mutators.MutatorList
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.DispatchedTrigger
-import java.util.UUID
 
 /**
  * Things that are like a chain element (e.g. Blocks, Elements).
  */
-abstract class ElementLike {
-    abstract val uuid: UUID
-    abstract val config: Config
+abstract class ElementLike : ConfigurableElement {
     abstract val arguments: EffectArgumentList
     abstract val conditions: ConditionList
     abstract val mutators: MutatorList

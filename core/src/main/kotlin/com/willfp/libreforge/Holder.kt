@@ -86,6 +86,13 @@ interface ProvidedHolder {
 }
 
 /**
+ * Get the provider cleanly, without casting.
+ */
+inline fun <reified T> ProvidedHolder.getProvider(): T? {
+    return this.provider as? T
+}
+
+/**
  * An empty provided holder is a provided holder with no item.
  *
  * Used internally to provide a default value for TriggerData.

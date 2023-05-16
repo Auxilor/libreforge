@@ -31,7 +31,8 @@ object TriggerCatchFish : Trigger("catch_fish") {
                 player = player,
                 location = event.hook.location,
                 event = event,
-                item = (event.caught as? Item)?.itemStack
+                item = (event.caught as? Item)?.itemStack,
+                value = event.expToDrop.toDouble()
             )
         )
     }

@@ -24,6 +24,7 @@ import com.willfp.libreforge.effects.impl.EffectBleed
 import com.willfp.libreforge.effects.impl.EffectBlockCommands
 import com.willfp.libreforge.effects.impl.EffectBonusHealth
 import com.willfp.libreforge.effects.impl.EffectBreakBlock
+import com.willfp.libreforge.effects.impl.EffectBrewTimeMultiplier
 import com.willfp.libreforge.effects.impl.EffectBroadcast
 import com.willfp.libreforge.effects.impl.EffectCancelEvent
 import com.willfp.libreforge.effects.impl.EffectClearInvulnerability
@@ -32,18 +33,25 @@ import com.willfp.libreforge.effects.impl.EffectCreateExplosion
 import com.willfp.libreforge.effects.impl.EffectCreateHologram
 import com.willfp.libreforge.effects.impl.EffectCritMultiplier
 import com.willfp.libreforge.effects.impl.EffectDamageArmor
+import com.willfp.libreforge.effects.impl.EffectDamageItem
 import com.willfp.libreforge.effects.impl.EffectDamageMainhand
 import com.willfp.libreforge.effects.impl.EffectDamageMultiplier
 import com.willfp.libreforge.effects.impl.EffectDamageNearbyEntities
+import com.willfp.libreforge.effects.impl.EffectDamageTwice
 import com.willfp.libreforge.effects.impl.EffectDamageVictim
+import com.willfp.libreforge.effects.impl.EffectDontConsumeLapisChance
+import com.willfp.libreforge.effects.impl.EffectDontConsumeXpChance
 import com.willfp.libreforge.effects.impl.EffectDrill
 import com.willfp.libreforge.effects.impl.EffectDropItem
 import com.willfp.libreforge.effects.impl.EffectDropItemForPlayer
+import com.willfp.libreforge.effects.impl.EffectDropRandomItem
+import com.willfp.libreforge.effects.impl.EffectDropRandomItemForPlayer
 import com.willfp.libreforge.effects.impl.EffectExtinguish
 import com.willfp.libreforge.effects.impl.EffectFeatherStep
 import com.willfp.libreforge.effects.impl.EffectFlight
 import com.willfp.libreforge.effects.impl.EffectFoodMultiplier
 import com.willfp.libreforge.effects.impl.EffectGiveFood
+import com.willfp.libreforge.effects.impl.EffectGiveGlobalPoints
 import com.willfp.libreforge.effects.impl.EffectGiveHealth
 import com.willfp.libreforge.effects.impl.EffectGiveItem
 import com.willfp.libreforge.effects.impl.EffectGiveMoney
@@ -67,6 +75,7 @@ import com.willfp.libreforge.effects.impl.EffectMineRadiusOneDeep
 import com.willfp.libreforge.effects.impl.EffectMineVein
 import com.willfp.libreforge.effects.impl.EffectMovementSpeedMultiplier
 import com.willfp.libreforge.effects.impl.EffectMultiplyDrops
+import com.willfp.libreforge.effects.impl.EffectMultiplyGlobalPoints
 import com.willfp.libreforge.effects.impl.EffectMultiplyPoints
 import com.willfp.libreforge.effects.impl.EffectMultiplyVelocity
 import com.willfp.libreforge.effects.impl.EffectParticleAnimation
@@ -75,12 +84,15 @@ import com.willfp.libreforge.effects.impl.EffectPayPrice
 import com.willfp.libreforge.effects.impl.EffectPermanentPotionEffect
 import com.willfp.libreforge.effects.impl.EffectPiercing
 import com.willfp.libreforge.effects.impl.EffectPlaySound
+import com.willfp.libreforge.effects.impl.EffectPotionDurationMultiplier
 import com.willfp.libreforge.effects.impl.EffectPotionEffect
 import com.willfp.libreforge.effects.impl.EffectPullIn
 import com.willfp.libreforge.effects.impl.EffectPullToLocation
+import com.willfp.libreforge.effects.impl.EffectReelSpeedMultiplier
 import com.willfp.libreforge.effects.impl.EffectRegenMultiplier
 import com.willfp.libreforge.effects.impl.EffectRemoveItem
 import com.willfp.libreforge.effects.impl.EffectRemovePotionEffect
+import com.willfp.libreforge.effects.impl.EffectRepairItem
 import com.willfp.libreforge.effects.impl.EffectRotate
 import com.willfp.libreforge.effects.impl.EffectRunChain
 import com.willfp.libreforge.effects.impl.EffectRunChainInline
@@ -173,15 +185,19 @@ object Effects : Registry<Effect<*>>() {
         val permanentEffects = chain.filter { it.effect.isPermanent }
         val triggeredEffects = chain.filterNot { it.effect.isPermanent }
 
-        if (triggers.isNotEmpty() && permanentEffects.isNotEmpty() ) {
+        if (triggers.isNotEmpty() && permanentEffects.isNotEmpty()) {
             context.log(ConfigViolation("triggers", "Triggers are not allowed on permanent " +
-                    "effects: ${permanentEffects.joinToString(", ") { it.effect.id }}!"))
+                    "effects: ${permanentEffects.joinToString(", ") { it.effect.id }}!"
+            )
+            )
             return null
         }
 
         if (triggers.isEmpty() && chain.any { !it.effect.isPermanent }) {
             context.log(ConfigViolation("triggers", "You must specify at least one trigger for " +
-                    "triggered effects: ${triggeredEffects.joinToString(", ") { it.effect.id }}!"))
+                    "triggered effects: ${triggeredEffects.joinToString(", ") { it.effect.id }}!"
+            )
+            )
             return null
         }
 
@@ -399,5 +415,17 @@ object Effects : Registry<Effect<*>>() {
         register(EffectClearInvulnerability)
         register(EffectHoming)
         register(EffectPiercing)
+        register(EffectDamageTwice)
+        register(EffectDamageItem)
+        register(EffectRepairItem)
+        register(EffectBrewTimeMultiplier)
+        register(EffectPotionDurationMultiplier)
+        register(EffectDontConsumeLapisChance)
+        register(EffectDontConsumeXpChance)
+        register(EffectGiveGlobalPoints)
+        register(EffectMultiplyGlobalPoints)
+        register(EffectReelSpeedMultiplier)
+        register(EffectDropRandomItem)
+        register(EffectDropRandomItemForPlayer)
     }
 }

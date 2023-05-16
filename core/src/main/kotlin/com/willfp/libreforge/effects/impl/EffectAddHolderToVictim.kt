@@ -25,7 +25,7 @@ object EffectAddHolderToVictim : Effect<HolderTemplate>("add_holder_to_victim") 
 
     override val arguments = arguments {
         require("effects", "You must specify the effects!")
-        require("conditions", "You must specify the conditions!")
+        // require("conditions", "You must specify the conditions!")
         require("duration", "You must specify the duration (in ticks)!")
     }
 
