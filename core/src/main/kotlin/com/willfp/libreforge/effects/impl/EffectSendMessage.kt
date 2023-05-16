@@ -24,6 +24,7 @@ object EffectSendMessage : Effect<NoCompileData>("send_message") {
         val player = data.player ?: return false
 
         val messages = config.getStrings("messages")
+            .toList()
             .plusElement(config.getString("message"))
             .map {
                 it.replace("%player%", player.name)

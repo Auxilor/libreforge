@@ -1,5 +1,6 @@
 package com.willfp.libreforge.triggers
 
+import com.willfp.eco.core.items.HashedItem
 import com.willfp.libreforge.EmptyProvidedHolder
 import com.willfp.libreforge.ProvidedHolder
 import org.bukkit.Location
@@ -10,6 +11,7 @@ import org.bukkit.entity.Projectile
 import org.bukkit.event.Event
 import org.bukkit.inventory.ItemStack
 import org.bukkit.util.Vector
+import java.util.Objects
 
 /**
  * For turning TriggerData into new DispatchedTriggers.
@@ -54,6 +56,26 @@ data class TriggerData(
         BlankTrigger,
         this
     )
+
+    override fun hashCode(): Int {
+        return Objects.hash(
+            holder,
+            player,
+            victim,
+            block,
+            event,
+            location,
+            projectile,
+            velocity,
+            item?.let { HashedItem.of(it) },
+            text,
+            value
+        )
+    }
+
+    override fun equals(other: Any?): Boolean {
+        return other is TriggerData && other.hashCode() == this.hashCode()
+    }
 }
 
 enum class TriggerParameter(

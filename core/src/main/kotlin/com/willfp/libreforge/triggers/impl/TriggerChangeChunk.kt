@@ -19,7 +19,9 @@ object TriggerChangeChunk : Trigger("change_chunk") {
     fun handle(event: PlayerMoveEvent) {
         val player = event.player
 
-        if (event.to.chunk != event.from.chunk) {
+        if (event.to.chunk.x != event.from.chunk.x
+            || event.to.chunk.z != event.from.chunk.z
+        ) {
             return
         }
 

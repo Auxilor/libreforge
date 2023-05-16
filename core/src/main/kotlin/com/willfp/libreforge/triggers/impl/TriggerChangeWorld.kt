@@ -19,7 +19,11 @@ object TriggerChangeWorld : Trigger("change_world") {
     fun handle(event: PlayerMoveEvent) {
         val player = event.player
 
-        if (event.to.world != event.from.world) {
+        if (event.to.world == null || event.from.world == null) {
+            return
+        }
+
+        if (event.to.world?.name != event.from.world?.name) {
             return
         }
 
