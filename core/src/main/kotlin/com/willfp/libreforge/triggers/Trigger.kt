@@ -27,7 +27,7 @@ abstract class Trigger(
         data: TriggerData,
         forceHolders: Collection<ProvidedHolder>? = null
     ) {
-        val dispatch = DispatchedTrigger(player, this, data)
+        val dispatch = plugin.dispatchedTriggerFactory.create(player, this, data) ?: return
         dispatch.generatePlaceholders(data)
 
         val dispatchEvent = TriggerDispatchEvent(player, dispatch)
@@ -64,4 +64,12 @@ abstract class Trigger(
     }
 
     override fun getID() = id
+
+    override fun equals(other: Any?): Boolean {
+        return other is Trigger && other.id == this.id
+    }
+
+    override fun hashCode(): Int {
+        return id.hashCode()
+    }
 }

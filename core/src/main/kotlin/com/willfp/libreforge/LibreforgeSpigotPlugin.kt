@@ -19,6 +19,7 @@ import com.willfp.libreforge.integrations.scyther.ScytherIntegration
 import com.willfp.libreforge.integrations.tmmobcoins.TMMobcoinsIntegration
 import com.willfp.libreforge.integrations.vault.VaultIntegration
 import com.willfp.libreforge.placeholders.CustomPlaceholders
+import com.willfp.libreforge.triggers.DispatchedTriggerFactory
 import org.bukkit.Bukkit
 import org.bukkit.event.Listener
 
@@ -27,6 +28,8 @@ internal lateinit var plugin: LibreforgeSpigotPlugin
 
 class LibreforgeSpigotPlugin : EcoPlugin() {
     val chainsYml = ChainsYml(this)
+
+    val dispatchedTriggerFactory = DispatchedTriggerFactory(this)
 
     private var hasLoaded = false
 
@@ -67,18 +70,22 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             )
         }
 
-        // Poll for changes
-        this.scheduler.runTimer(20, 20) {
-            for (player in Bukkit.getOnlinePlayers()) {
-                player.refreshHolders()
-            }
-        }
-
         for (customPlaceholder in this.configYml.getSubsections("placeholders")) {
             CustomPlaceholders.load(customPlaceholder, this)
         }
 
         hasLoaded = true
+    }
+
+    override fun createTasks() {
+        dispatchedTriggerFactory.startTicking()
+
+        // Poll for changes
+        plugin.scheduler.runTimer(20, 20) {
+            for (player in Bukkit.getOnlinePlayers()) {
+                player.refreshHolders()
+            }
+        }
     }
 
     override fun loadListeners(): List<Listener> {
@@ -109,7 +116,7 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
     }
 
     override fun getMinimumEcoVersion(): String {
-        return "6.58.0"
+        return "6.60.0"
     }
 
     /**
