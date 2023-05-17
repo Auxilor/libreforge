@@ -44,7 +44,7 @@ import com.willfp.libreforge.effects.impl.EffectDontConsumeXpChance
 import com.willfp.libreforge.effects.impl.EffectDrill
 import com.willfp.libreforge.effects.impl.EffectDropItem
 import com.willfp.libreforge.effects.impl.EffectDropItemForPlayer
-import com.willfp.libreforge.effects.impl.EffectDropPriceItem
+import com.willfp.libreforge.effects.impl.EffectDropPickupItem
 import com.willfp.libreforge.effects.impl.EffectDropRandomItem
 import com.willfp.libreforge.effects.impl.EffectDropRandomItemForPlayer
 import com.willfp.libreforge.effects.impl.EffectExtinguish
@@ -432,6 +432,6 @@ object Effects : Registry<Effect<*>>() {
         register(EffectReelSpeedMultiplier)
         register(EffectDropRandomItem)
         register(EffectDropRandomItemForPlayer)
-        register(EffectDropPriceItem)
+        register(EffectDropPickupItem)
     }
 }
