@@ -34,7 +34,7 @@ object EffectSendMessage : Effect<NoCompileData>("send_message") {
         val actionBar = config.getBool("action_bar")
 
         if (actionBar) {
-            player.asAudience().sendMessage(messages.first().toComponent())
+            player.asAudience().sendActionBar(messages.first().toComponent())
         } else {
             for (s in messages) {
                 player.asAudience().sendMessage(s.toComponent())

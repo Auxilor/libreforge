@@ -1,19 +1,28 @@
 package com.willfp.libreforge.loader.internal.configs
 
-import com.willfp.eco.core.config.ConfigType
-import com.willfp.eco.core.config.ExtendableConfig
 import com.willfp.libreforge.loader.LibreforgePlugin
 import com.willfp.libreforge.loader.configs.ConfigCategory
+import java.io.FileOutputStream
 
 internal class FoundConfig(
     name: String,
     category: ConfigCategory,
-    plugin: LibreforgePlugin
-) : ExtendableConfig(
-    name,
-    true,
-    plugin,
-    plugin::class.java,
-    "${category.directory}/",
-    ConfigType.YAML
-)
+    private val plugin: LibreforgePlugin
+) {
+    private val source = plugin::class.java.classLoader
+    private val resourcePath = "${category.directory}/$name.yml"
+
+    fun copy() {
+        val inputStream = source.getResourceAsStream(resourcePath) ?: return
+        val outFile = plugin.dataFolder.resolve(resourcePath)
+
+        if (!outFile.exists()) {
+            outFile.parentFile.mkdirs()
+            FileOutputStream(outFile).use { outStream ->
+                inputStream.copyTo(outStream)
+            }
+        }
+
+        inputStream.close()
+    }
+}
