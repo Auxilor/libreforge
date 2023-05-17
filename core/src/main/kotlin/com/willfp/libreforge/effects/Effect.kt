@@ -259,6 +259,7 @@ abstract class Effect<T>(
 
     final override fun onRegister() {
         plugin.runWhenEnabled {
+            plugin.eventManager.unregisterListener(this)
             plugin.eventManager.registerListener(this)
             postRegister()
         }

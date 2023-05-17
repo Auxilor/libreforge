@@ -18,6 +18,10 @@ object TriggerMineBlock : Trigger("mine_block") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: BlockBreakEvent) {
+        println("-----------------")
+        println(Thread.currentThread().stackTrace.joinToString("\n"))
+        println("-----------------")
+
         val player = event.player
         val block = event.block
 

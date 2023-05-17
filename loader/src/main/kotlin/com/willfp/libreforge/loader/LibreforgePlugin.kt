@@ -147,7 +147,7 @@ abstract class LibreforgePlugin : EcoPlugin() {
         val folder = dataFolder.resolve(category.directory)
         if (!folder.exists()) {
             getDefaultConfigNames(category).forEach { configName ->
-                FoundConfig(configName, category, this)
+                FoundConfig(configName, category, this).copy()
             }
         }
     }

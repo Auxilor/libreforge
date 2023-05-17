@@ -17,6 +17,8 @@ import java.util.UUID
 
 @Suppress("UNCHECKED_CAST")
 object EffectPermanentPotionEffect : Effect<NoCompileData>("permanent_potion_effect") {
+    override val shouldReload = false
+
     override val arguments = arguments {
         require(
             "effect",
