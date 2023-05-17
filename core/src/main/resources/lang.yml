@@ -24,3 +24,5 @@ messages:
   invalid-config-name: "&cInvalid config name!"
 
   plugin-not-installed: "&cYou don't have this plugin installed!"
+
+picked-up-price-item: "&f+%price%"

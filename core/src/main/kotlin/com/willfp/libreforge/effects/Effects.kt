@@ -44,6 +44,7 @@ import com.willfp.libreforge.effects.impl.EffectDontConsumeXpChance
 import com.willfp.libreforge.effects.impl.EffectDrill
 import com.willfp.libreforge.effects.impl.EffectDropItem
 import com.willfp.libreforge.effects.impl.EffectDropItemForPlayer
+import com.willfp.libreforge.effects.impl.EffectDropPriceItem
 import com.willfp.libreforge.effects.impl.EffectDropRandomItem
 import com.willfp.libreforge.effects.impl.EffectDropRandomItemForPlayer
 import com.willfp.libreforge.effects.impl.EffectExtinguish
@@ -186,17 +187,21 @@ object Effects : Registry<Effect<*>>() {
         val triggeredEffects = chain.filterNot { it.effect.isPermanent }
 
         if (triggers.isNotEmpty() && permanentEffects.isNotEmpty()) {
-            context.log(ConfigViolation("triggers", "Triggers are not allowed on permanent " +
-                    "effects: ${permanentEffects.joinToString(", ") { it.effect.id }}!"
-            )
+            context.log(
+                ConfigViolation(
+                    "triggers", "Triggers are not allowed on permanent " +
+                            "effects: ${permanentEffects.joinToString(", ") { it.effect.id }}!"
+                )
             )
             return null
         }
 
         if (triggers.isEmpty() && chain.any { !it.effect.isPermanent }) {
-            context.log(ConfigViolation("triggers", "You must specify at least one trigger for " +
-                    "triggered effects: ${triggeredEffects.joinToString(", ") { it.effect.id }}!"
-            )
+            context.log(
+                ConfigViolation(
+                    "triggers", "You must specify at least one trigger for " +
+                            "triggered effects: ${triggeredEffects.joinToString(", ") { it.effect.id }}!"
+                )
             )
             return null
         }
@@ -427,5 +432,6 @@ object Effects : Registry<Effect<*>>() {
         register(EffectReelSpeedMultiplier)
         register(EffectDropRandomItem)
         register(EffectDropRandomItemForPlayer)
+        register(EffectDropPriceItem)
     }
 }
