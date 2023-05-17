@@ -79,6 +79,7 @@ import com.willfp.libreforge.effects.impl.EffectMultiplyDrops
 import com.willfp.libreforge.effects.impl.EffectMultiplyGlobalPoints
 import com.willfp.libreforge.effects.impl.EffectMultiplyPoints
 import com.willfp.libreforge.effects.impl.EffectMultiplyVelocity
+import com.willfp.libreforge.effects.impl.EffectOpenEnderChest
 import com.willfp.libreforge.effects.impl.EffectParticleAnimation
 import com.willfp.libreforge.effects.impl.EffectParticleLine
 import com.willfp.libreforge.effects.impl.EffectPayPrice
@@ -433,5 +434,6 @@ object Effects : Registry<Effect<*>>() {
         register(EffectDropRandomItem)
         register(EffectDropRandomItemForPlayer)
         register(EffectDropPickupItem)
+        register(EffectOpenEnderChest)
     }
 }
