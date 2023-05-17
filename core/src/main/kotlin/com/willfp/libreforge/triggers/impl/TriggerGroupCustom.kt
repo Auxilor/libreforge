@@ -24,9 +24,10 @@ object TriggerGroupCustom : TriggerGroup("custom") {
         )
 
         fun dispatch(player: Player, data: TriggerData) {
-            this.dispatch(
+            super.dispatch(
                 player,
-                data
+                data,
+                null
             )
         }
     }
