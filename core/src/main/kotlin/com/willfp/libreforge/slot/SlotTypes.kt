@@ -8,7 +8,7 @@ import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerParameter
 
 object SlotTypes : Registry<SlotType>() {
-    operator fun get(id: String?): SlotType {
+    fun getByID(id: String?): SlotType {
         if (id == null) {
             return AnySlotType
         }
