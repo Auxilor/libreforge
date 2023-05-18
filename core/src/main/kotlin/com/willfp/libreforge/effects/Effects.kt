@@ -16,6 +16,7 @@ import com.willfp.libreforge.effects.impl.EffectAddHolderInRadius
 import com.willfp.libreforge.effects.impl.EffectAddHolderToVictim
 import com.willfp.libreforge.effects.impl.EffectAddPermanentHolderInRadius
 import com.willfp.libreforge.effects.impl.EffectAddPoints
+import com.willfp.libreforge.effects.impl.EffectAgeCrop
 import com.willfp.libreforge.effects.impl.EffectAllPlayers
 import com.willfp.libreforge.effects.impl.EffectArmor
 import com.willfp.libreforge.effects.impl.EffectArmorToughness
@@ -443,5 +444,6 @@ object Effects : Registry<Effect<*>>() {
         register(EffectRemoveEnchant)
         register(EffectAllPlayers)
         register(EffectRandomPlayer)
+        register(EffectAgeCrop)
     }
 }
