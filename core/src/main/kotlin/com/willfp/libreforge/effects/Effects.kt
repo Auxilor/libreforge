@@ -16,6 +16,7 @@ import com.willfp.libreforge.effects.impl.EffectAddHolderInRadius
 import com.willfp.libreforge.effects.impl.EffectAddHolderToVictim
 import com.willfp.libreforge.effects.impl.EffectAddPermanentHolderInRadius
 import com.willfp.libreforge.effects.impl.EffectAddPoints
+import com.willfp.libreforge.effects.impl.EffectAllPlayers
 import com.willfp.libreforge.effects.impl.EffectArmor
 import com.willfp.libreforge.effects.impl.EffectArmorToughness
 import com.willfp.libreforge.effects.impl.EffectArrowRing
@@ -91,6 +92,7 @@ import com.willfp.libreforge.effects.impl.EffectPotionDurationMultiplier
 import com.willfp.libreforge.effects.impl.EffectPotionEffect
 import com.willfp.libreforge.effects.impl.EffectPullIn
 import com.willfp.libreforge.effects.impl.EffectPullToLocation
+import com.willfp.libreforge.effects.impl.EffectRandomPlayer
 import com.willfp.libreforge.effects.impl.EffectReelSpeedMultiplier
 import com.willfp.libreforge.effects.impl.EffectRegenMultiplier
 import com.willfp.libreforge.effects.impl.EffectRemoveEnchant
@@ -439,5 +441,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectOpenEnderChest)
         register(EffectAddEnchant)
         register(EffectRemoveEnchant)
+        register(EffectAllPlayers)
+        register(EffectRandomPlayer)
     }
 }
