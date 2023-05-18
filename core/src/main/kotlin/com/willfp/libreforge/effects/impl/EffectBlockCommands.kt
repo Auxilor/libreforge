@@ -2,6 +2,7 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.map.nestedListMap
+import com.willfp.eco.util.formatEco
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
@@ -18,17 +19,25 @@ object EffectBlockCommands : Effect<NoCompileData>("block_commands") {
     }
 
     private val players = nestedListMap<UUID, UUID, String>()
+    private val messages = mutableMapOf<UUID, List<String>?>()
 
-    override fun onEnable(player: Player, config: Config, identifiers: Identifiers, holder: ProvidedHolder, compileData: NoCompileData) {
+    override fun onEnable(
+        player: Player,
+        config: Config,
+        identifiers: Identifiers,
+        holder: ProvidedHolder,
+        compileData: NoCompileData
+    ) {
         val commands = players[player.uniqueId]
         commands[identifiers.uuid] = config.getStrings("commands")
+        messages[identifiers.uuid] = config.getStringsOrNull("messages")
+
         players[player.uniqueId] = commands
     }
 
     override fun onDisable(player: Player, identifiers: Identifiers, holder: ProvidedHolder) {
-        val existing = players[player.uniqueId]
-        existing.remove(identifiers.uuid)
-        players[player.uniqueId] = existing
+        players[player.uniqueId].remove(identifiers.uuid)
+        messages.remove(identifiers.uuid)
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -42,10 +51,19 @@ object EffectBlockCommands : Effect<NoCompileData>("block_commands") {
             command = command.substring(1)
         }
 
-        for (list in effects.values) {
+        for ((uuid, list) in effects) {
             for (s in list) {
                 if (s.equals(command, ignoreCase = true)) {
                     event.isCancelled = true
+                    val messages = messages[uuid] ?: return
+
+                    if (messages.isNotEmpty()) {
+                        for (message in messages) {
+                            player.sendMessage(message.formatEco(player))
+                        }
+                    }
+
+                    return
                 }
             }
         }
