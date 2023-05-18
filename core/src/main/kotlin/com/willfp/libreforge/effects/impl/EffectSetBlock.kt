@@ -1,13 +1,14 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.Material
 
-object EffectSetBlock : Effect<Material>("set_block") {
+object EffectSetBlock : Effect<Material?>("set_block") {
     override val parameters = setOf(
         TriggerParameter.BLOCK
     )
@@ -16,11 +17,16 @@ object EffectSetBlock : Effect<Material>("set_block") {
         require("block", "You must specify the block!")
     }
 
-    override fun onTrigger(config: Config, data: TriggerData, compileData: Material): Boolean {
+    override fun onTrigger(config: Config, data: TriggerData, compileData: Material?): Boolean {
         val block = data.block ?: data.location?.block ?: return false
+        compileData ?: return false
 
         block.type = compileData
 
         return true
+    }
+
+    override fun makeCompileData(config: Config, context: ViolationContext): Material? {
+        return Material.getMaterial(config.getString("block").uppercase())
     }
 }
