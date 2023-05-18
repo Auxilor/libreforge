@@ -20,6 +20,7 @@ softdepend:
   - Scyther
   - TMMobcoins
   - Vault
+  - WorldGuard
 
 commands:
   lrcdb:
