@@ -15,6 +15,7 @@ import com.willfp.libreforge.triggers.impl.TriggerCatchFishFail
 import com.willfp.libreforge.triggers.impl.TriggerChangeArmor
 import com.willfp.libreforge.triggers.impl.TriggerChangeChunk
 import com.willfp.libreforge.triggers.impl.TriggerChangeWorld
+import com.willfp.libreforge.triggers.impl.TriggerClickEntity
 import com.willfp.libreforge.triggers.impl.TriggerConsume
 import com.willfp.libreforge.triggers.impl.TriggerCraft
 import com.willfp.libreforge.triggers.impl.TriggerDamageItem
@@ -185,5 +186,6 @@ object Triggers : Registry<Trigger>() {
         register(TriggerTeleport)
         register(TriggerRunCommand)
         register(TriggerBrewIngredient)
+        register(TriggerClickEntity)
     }
 }
