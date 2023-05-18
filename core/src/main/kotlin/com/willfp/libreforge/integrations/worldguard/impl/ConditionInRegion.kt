@@ -12,7 +12,7 @@ import org.bukkit.entity.Player
 
 object ConditionInRegion : Condition<NoCompileData>("in_region") {
     override val arguments = arguments {
-        require("region", "You must specify the region name!")
+        require("region", "You must specify the allowed region names!")
     }
 
     private val regionContainer = WorldGuard.getInstance().platform.regionContainer
