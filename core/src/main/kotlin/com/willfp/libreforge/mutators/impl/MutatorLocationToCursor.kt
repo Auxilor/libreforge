@@ -36,12 +36,12 @@ object MutatorLocationToCursor : Mutator<NoCompileData>("location_to_cursor") {
             true,
             0.0,
             null
-        ) ?: return data
+        ) ?: return data.copy(location = null)
 
         val location = when {
             target.equals("block", true) -> result.hitBlock?.location
             else -> result.hitEntity?.location
-        } ?: return data
+        } ?: return data.copy(location = null)
 
 
         return data.copy(
