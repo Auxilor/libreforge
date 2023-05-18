@@ -10,6 +10,7 @@ import com.willfp.libreforge.effects.executors.ChainExecutor
 import com.willfp.libreforge.effects.executors.ChainExecutors
 import com.willfp.libreforge.effects.impl.EffectAOE
 import com.willfp.libreforge.effects.impl.EffectAddDamage
+import com.willfp.libreforge.effects.impl.EffectAddEnchant
 import com.willfp.libreforge.effects.impl.EffectAddHolder
 import com.willfp.libreforge.effects.impl.EffectAddHolderInRadius
 import com.willfp.libreforge.effects.impl.EffectAddHolderToVictim
@@ -92,6 +93,7 @@ import com.willfp.libreforge.effects.impl.EffectPullIn
 import com.willfp.libreforge.effects.impl.EffectPullToLocation
 import com.willfp.libreforge.effects.impl.EffectReelSpeedMultiplier
 import com.willfp.libreforge.effects.impl.EffectRegenMultiplier
+import com.willfp.libreforge.effects.impl.EffectRemoveEnchant
 import com.willfp.libreforge.effects.impl.EffectRemoveItem
 import com.willfp.libreforge.effects.impl.EffectRemovePotionEffect
 import com.willfp.libreforge.effects.impl.EffectRepairItem
@@ -435,5 +437,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectDropRandomItemForPlayer)
         register(EffectDropPickupItem)
         register(EffectOpenEnderChest)
+        register(EffectAddEnchant)
+        register(EffectRemoveEnchant)
     }
 }
