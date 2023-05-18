@@ -6,7 +6,7 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.filters.Filter
 import com.willfp.libreforge.triggers.TriggerData
 
-object FilterRegions : Filter<NoCompileData, List<String>>("regions") {
+object FilterRegion : Filter<NoCompileData, List<String>>("region") {
     override fun getValue(config: Config, data: TriggerData?, key: String): List<String> {
         return config.getStrings(key)
     }
