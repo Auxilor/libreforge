@@ -4,7 +4,6 @@ import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.Player
-import org.bukkit.event.EventHandler
 
 object TriggerLeaveRegion : Trigger("leave_region") {
     override val parameters = setOf(
@@ -13,7 +12,6 @@ object TriggerLeaveRegion : Trigger("leave_region") {
         TriggerParameter.EVENT
     )
 
-    @EventHandler
     fun dispatch(player: Player, event: RegionEvent) {
         this.dispatch(
             player,
