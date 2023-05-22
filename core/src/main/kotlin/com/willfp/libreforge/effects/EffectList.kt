@@ -9,8 +9,7 @@ import com.willfp.libreforge.triggers.DispatchedTrigger
 class EffectList(
     effects: List<EffectBlock>
 ) : DelegatedList<EffectBlock>(effects.sortedBy {
-    val total = it.effects.sumOf { element -> element.effect.runOrder.weight }
-    total / it.effects.size.coerceAtLeast(1)
+    it.weight
 }) {
     fun trigger(trigger: DispatchedTrigger) =
         this.forEach { it.trigger(trigger) }

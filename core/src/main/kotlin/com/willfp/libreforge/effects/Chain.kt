@@ -15,6 +15,8 @@ class Chain(
         it.effect.runOrder.weight
     }
 ) {
+    val weight = effects.sumOf { it.effect.runOrder.weight }
+
     fun trigger(
         trigger: DispatchedTrigger,
         executor: ChainExecutor = this.executor

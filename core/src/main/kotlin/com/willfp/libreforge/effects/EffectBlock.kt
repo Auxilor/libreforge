@@ -28,6 +28,8 @@ class EffectBlock internal constructor(
 ) : ElementLike() {
     override val supportsDelay = effects.all { it.supportsDelay }
 
+    val weight = effects.weight
+
     @JvmOverloads
     fun enable(
         player: Player,
