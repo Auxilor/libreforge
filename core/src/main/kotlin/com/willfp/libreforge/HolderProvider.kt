@@ -87,7 +87,11 @@ data class ProvidedEffectBlocks(
 data class ProvidedEffectBlock(
     val effect: EffectBlock,
     val holder: ProvidedHolder
-)
+) : Comparable<ProvidedEffectBlock> {
+    override fun compareTo(other: ProvidedEffectBlock): Int {
+        return this.effect.weight - other.effect.weight
+    }
+}
 
 private val providers = mutableListOf<HolderProvider>()
 
@@ -281,9 +285,10 @@ fun Player.updateEffects() {
     val beforeF = before.flatten()
     val afterF = after.flatten()
 
-    val added = afterF without beforeF
-    val removed = beforeF without afterF
-    val toReload = afterF without added
+    // Permanent effects also have a run order, so we need to sort them.
+    val added = (afterF without beforeF).sorted()
+    val removed = (beforeF without afterF).sorted()
+    val toReload = (afterF without added).sorted()
 
     for ((effect, holder) in removed) {
         effect.disable(this, holder)
@@ -294,6 +299,8 @@ fun Player.updateEffects() {
     }
 
     // Reloading is now done by disabling all, then enabling all. Effect#reload is deprecated.
+    // Since permanent effects are not allowed in chains, they are always done in the correct
+    // order as mixing weights is not a concern.
 
     for ((effect, holder) in toReload) {
         effect.disable(this, holder, isReload = true)
