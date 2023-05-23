@@ -113,6 +113,8 @@ import com.willfp.libreforge.effects.impl.EffectSendMessage
 import com.willfp.libreforge.effects.impl.EffectSendTitle
 import com.willfp.libreforge.effects.impl.EffectSetBlock
 import com.willfp.libreforge.effects.impl.EffectSetFreezeTicks
+import com.willfp.libreforge.effects.impl.EffectSetGlobalPoints
+import com.willfp.libreforge.effects.impl.EffectSetItemPoints
 import com.willfp.libreforge.effects.impl.EffectSetPoints
 import com.willfp.libreforge.effects.impl.EffectSetVelocity
 import com.willfp.libreforge.effects.impl.EffectSetVictimVelocity
@@ -451,5 +453,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectGiveItemPoints)
         register(EffectLevelItem)
         register(EffectMultiplyItemPoints)
+        register(EffectSetGlobalPoints)
+        register(EffectSetItemPoints)
     }
 }
