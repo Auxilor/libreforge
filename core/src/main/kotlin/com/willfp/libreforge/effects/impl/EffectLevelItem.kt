@@ -9,7 +9,6 @@ import com.willfp.libreforge.levels.LevelTypes
 import com.willfp.libreforge.levels.levels
 import com.willfp.libreforge.toPlaceholderContext
 import com.willfp.libreforge.triggers.TriggerData
-import org.bukkit.inventory.ItemStack
 
 object EffectLevelItem : Effect<NoCompileData>("level_item") {
     override val isPermanent = false
@@ -22,7 +21,7 @@ object EffectLevelItem : Effect<NoCompileData>("level_item") {
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
-        val item = data.holder.provider as? ItemStack ?: return false
+        val item = data.foundItem ?: return false
         val level = LevelTypes[config.getString("id")] ?: return false
 
         val xp = config.getDoubleFromExpression("xp", data)

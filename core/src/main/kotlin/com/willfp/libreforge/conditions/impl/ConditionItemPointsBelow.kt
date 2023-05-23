@@ -5,6 +5,7 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
+import com.willfp.libreforge.getProvider
 import com.willfp.libreforge.points
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -16,7 +17,7 @@ object ConditionItemPointsBelow : Condition<NoCompileData>("item_points_below") 
     }
 
     override fun isMet(player: Player, config: Config, holder: ProvidedHolder, compileData: NoCompileData): Boolean {
-        val item = holder.provider as? ItemStack ?: return false
+        val item = holder.getProvider<ItemStack>() ?: return false
         val type = config.getString("type")
         val amount = config.getDoubleFromExpression("type", player)
 

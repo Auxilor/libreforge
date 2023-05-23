@@ -5,6 +5,7 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
+import com.willfp.libreforge.getProvider
 import com.willfp.libreforge.levels.LevelTypes
 import com.willfp.libreforge.levels.levels
 import org.bukkit.entity.Player
@@ -17,7 +18,7 @@ object ConditionItemLevelAbove : Condition<NoCompileData>("item_level_above") {
     }
 
     override fun isMet(player: Player, config: Config, holder: ProvidedHolder, compileData: NoCompileData): Boolean {
-        val item = holder.provider as? ItemStack ?: return false
+        val item = holder.getProvider<ItemStack>() ?: return false
         val type = LevelTypes[config.getString("id")]
         val level = config.getIntFromExpression("level", player)
 
