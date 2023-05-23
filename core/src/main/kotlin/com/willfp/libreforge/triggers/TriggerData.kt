@@ -3,6 +3,7 @@ package com.willfp.libreforge.triggers
 import com.willfp.eco.core.items.HashedItem
 import com.willfp.libreforge.EmptyProvidedHolder
 import com.willfp.libreforge.ProvidedHolder
+import com.willfp.libreforge.getProvider
 import org.bukkit.Location
 import org.bukkit.block.Block
 import org.bukkit.entity.LivingEntity
@@ -48,6 +49,9 @@ data class TriggerData(
      */
     internal val _originalPlayer: Player? = player
 ) {
+    val foundItem: ItemStack?
+        get() = holder.getProvider() ?: item
+
     /**
      * Turn into a dispatched trigger for a [player].
      */
