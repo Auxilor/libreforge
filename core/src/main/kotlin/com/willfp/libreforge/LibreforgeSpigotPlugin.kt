@@ -6,6 +6,7 @@ import com.willfp.eco.core.command.impl.PluginCommand
 import com.willfp.eco.core.integrations.IntegrationLoader
 import com.willfp.libreforge.commands.CommandLibreforge
 import com.willfp.libreforge.configs.ChainsYml
+import com.willfp.libreforge.configs.category.NativeConfigCategory
 import com.willfp.libreforge.configs.lrcdb.CommandLrcdb
 import com.willfp.libreforge.counters.CounterHandler
 import com.willfp.libreforge.effects.Effects
@@ -19,6 +20,12 @@ import com.willfp.libreforge.integrations.scyther.ScytherIntegration
 import com.willfp.libreforge.integrations.tmmobcoins.TMMobcoinsIntegration
 import com.willfp.libreforge.integrations.vault.VaultIntegration
 import com.willfp.libreforge.integrations.worldguard.WorldGuardIntegration
+import com.willfp.libreforge.levels.LevelTypes
+import com.willfp.libreforge.levels.placeholder.ItemLevelPlaceholder
+import com.willfp.libreforge.levels.placeholder.ItemPointsPlaceholder
+import com.willfp.libreforge.levels.placeholder.ItemProgressPlaceholder
+import com.willfp.libreforge.levels.placeholder.ItemXPPlaceholder
+import com.willfp.libreforge.levels.placeholder.ItemXPRequiredPlaceholder
 import com.willfp.libreforge.placeholders.CustomPlaceholders
 import com.willfp.libreforge.triggers.DispatchedTriggerFactory
 import org.bukkit.Bukkit
@@ -34,8 +41,19 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
 
     private var hasLoaded = false
 
+    private val configCategories = listOf<NativeConfigCategory>(
+        LevelTypes
+    )
+
     init {
         plugin = this
+    }
+
+    override fun handleLoad() {
+        for (category in configCategories) {
+            category.copyConfigs(this)
+            category.reload(this)
+        }
     }
 
     override fun handleEnable() {
@@ -57,6 +75,12 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
 
         pointsPlaceholder(this).register()
         globalPointsPlaceholder(this).register()
+        ItemPointsPlaceholder(this).register()
+        ItemLevelPlaceholder(this).register()
+        // Register required first because it technically matches the pattern of "xp"
+        ItemXPRequiredPlaceholder(this).register()
+        ItemXPPlaceholder(this).register()
+        ItemProgressPlaceholder(this).register()
     }
 
     override fun handleReload() {
@@ -73,6 +97,10 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
 
         for (customPlaceholder in this.configYml.getSubsections("placeholders")) {
             CustomPlaceholders.load(customPlaceholder, this)
+        }
+
+        for (category in configCategories) {
+            category.reload(this)
         }
 
         hasLoaded = true

@@ -47,7 +47,6 @@ import com.willfp.libreforge.effects.impl.EffectDontConsumeXpChance
 import com.willfp.libreforge.effects.impl.EffectDrill
 import com.willfp.libreforge.effects.impl.EffectDropItem
 import com.willfp.libreforge.effects.impl.EffectDropItemForPlayer
-import com.willfp.libreforge.integrations.paper.impl.EffectDropPickupItem
 import com.willfp.libreforge.effects.impl.EffectDropRandomItem
 import com.willfp.libreforge.effects.impl.EffectDropRandomItemForPlayer
 import com.willfp.libreforge.effects.impl.EffectExtinguish
@@ -58,6 +57,7 @@ import com.willfp.libreforge.effects.impl.EffectGiveFood
 import com.willfp.libreforge.effects.impl.EffectGiveGlobalPoints
 import com.willfp.libreforge.effects.impl.EffectGiveHealth
 import com.willfp.libreforge.effects.impl.EffectGiveItem
+import com.willfp.libreforge.effects.impl.EffectGiveItemPoints
 import com.willfp.libreforge.effects.impl.EffectGiveMoney
 import com.willfp.libreforge.effects.impl.EffectGiveOxygen
 import com.willfp.libreforge.effects.impl.EffectGivePoints
@@ -73,6 +73,7 @@ import com.willfp.libreforge.effects.impl.EffectKick
 import com.willfp.libreforge.effects.impl.EffectKnockAway
 import com.willfp.libreforge.effects.impl.EffectKnockbackMultiplier
 import com.willfp.libreforge.effects.impl.EffectKnockbackResistanceMultiplier
+import com.willfp.libreforge.effects.impl.EffectLevelItem
 import com.willfp.libreforge.effects.impl.EffectLuckMultiplier
 import com.willfp.libreforge.effects.impl.EffectMineRadius
 import com.willfp.libreforge.effects.impl.EffectMineRadiusOneDeep
@@ -80,6 +81,7 @@ import com.willfp.libreforge.effects.impl.EffectMineVein
 import com.willfp.libreforge.effects.impl.EffectMovementSpeedMultiplier
 import com.willfp.libreforge.effects.impl.EffectMultiplyDrops
 import com.willfp.libreforge.effects.impl.EffectMultiplyGlobalPoints
+import com.willfp.libreforge.effects.impl.EffectMultiplyItemPoints
 import com.willfp.libreforge.effects.impl.EffectMultiplyPoints
 import com.willfp.libreforge.effects.impl.EffectMultiplyVelocity
 import com.willfp.libreforge.effects.impl.EffectOpenEnderChest
@@ -133,6 +135,7 @@ import com.willfp.libreforge.effects.impl.EffectTransmission
 import com.willfp.libreforge.effects.impl.EffectTriggerCustom
 import com.willfp.libreforge.effects.impl.EffectXpMultiplier
 import com.willfp.libreforge.filters.Filters
+import com.willfp.libreforge.integrations.paper.impl.EffectDropPickupItem
 import com.willfp.libreforge.mutators.Mutators
 import com.willfp.libreforge.separatorAmbivalent
 import com.willfp.libreforge.triggers.Triggers
@@ -445,5 +448,8 @@ object Effects : Registry<Effect<*>>() {
         register(EffectAllPlayers)
         register(EffectRandomPlayer)
         register(EffectAgeCrop)
+        register(EffectGiveItemPoints)
+        register(EffectLevelItem)
+        register(EffectMultiplyItemPoints)
     }
 }

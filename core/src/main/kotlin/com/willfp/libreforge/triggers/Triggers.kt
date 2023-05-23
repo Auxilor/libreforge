@@ -47,6 +47,7 @@ import com.willfp.libreforge.triggers.impl.TriggerKill
 import com.willfp.libreforge.triggers.impl.TriggerLeashEntity
 import com.willfp.libreforge.triggers.impl.TriggerLeave
 import com.willfp.libreforge.triggers.impl.TriggerLeaveBed
+import com.willfp.libreforge.triggers.impl.TriggerLevelUpItem
 import com.willfp.libreforge.triggers.impl.TriggerLevelUpXp
 import com.willfp.libreforge.triggers.impl.TriggerLoseHunger
 import com.willfp.libreforge.triggers.impl.TriggerLosePotionEffect
@@ -187,5 +188,6 @@ object Triggers : Registry<Trigger>() {
         register(TriggerRunCommand)
         register(TriggerBrewIngredient)
         register(TriggerClickEntity)
+        register(TriggerLevelUpItem)
     }
 }

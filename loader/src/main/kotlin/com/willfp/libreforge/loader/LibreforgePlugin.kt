@@ -10,13 +10,13 @@ import com.willfp.eco.core.version.Version
 import com.willfp.libreforge.Plugins
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.configs.LibreforgeConfigCategory
+import com.willfp.libreforge.configs.category.FoundConfig
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.executors.impl.NormalExecutorFactory
 import com.willfp.libreforge.loader.configs.ConfigCategory
 import com.willfp.libreforge.loader.internal.InvalidLibreforgePluginError
 import com.willfp.libreforge.loader.internal.LoadedLibreforgePluginImpl
 import com.willfp.libreforge.loader.internal.checkHighestVersion
-import com.willfp.libreforge.loader.internal.configs.FoundConfig
 import com.willfp.libreforge.loader.internal.configs.RegistrableConfig
 import com.willfp.libreforge.loader.internal.loadHighestLibreforgeVersion
 import java.io.File
@@ -147,7 +147,7 @@ abstract class LibreforgePlugin : EcoPlugin() {
         val folder = dataFolder.resolve(category.directory)
         if (!folder.exists()) {
             getDefaultConfigNames(category).forEach { configName ->
-                FoundConfig(configName, category, this).copy()
+                FoundConfig(configName, category.directory, this).copy()
             }
         }
     }

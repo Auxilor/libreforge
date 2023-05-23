@@ -40,6 +40,12 @@ import com.willfp.libreforge.conditions.impl.ConditionIsSneaking
 import com.willfp.libreforge.conditions.impl.ConditionIsSprinting
 import com.willfp.libreforge.conditions.impl.ConditionIsStorm
 import com.willfp.libreforge.conditions.impl.ConditionIsSwimming
+import com.willfp.libreforge.conditions.impl.ConditionItemLevelAbove
+import com.willfp.libreforge.conditions.impl.ConditionItemLevelBelow
+import com.willfp.libreforge.conditions.impl.ConditionItemLevelEquals
+import com.willfp.libreforge.conditions.impl.ConditionItemPointsAbove
+import com.willfp.libreforge.conditions.impl.ConditionItemPointsBelow
+import com.willfp.libreforge.conditions.impl.ConditionItemPointsEqual
 import com.willfp.libreforge.conditions.impl.ConditionNearEntity
 import com.willfp.libreforge.conditions.impl.ConditionOnFire
 import com.willfp.libreforge.conditions.impl.ConditionPlaceholderContains
@@ -158,5 +164,11 @@ object Conditions : Registry<Condition<*>>() {
         register(ConditionAboveGlobalPoints)
         register(ConditionBelowGlobalPoints)
         register(ConditionGlobalPointsEqual)
+        register(ConditionItemLevelAbove)
+        register(ConditionItemLevelBelow)
+        register(ConditionItemLevelEquals)
+        register(ConditionItemPointsAbove)
+        register(ConditionItemPointsBelow)
+        register(ConditionItemPointsEqual)
     }
 }
