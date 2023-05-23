@@ -1,16 +1,15 @@
-package com.willfp.libreforge.loader.internal.configs
+package com.willfp.libreforge.configs.category
 
-import com.willfp.libreforge.loader.LibreforgePlugin
-import com.willfp.libreforge.loader.configs.ConfigCategory
+import com.willfp.eco.core.EcoPlugin
 import java.io.FileOutputStream
 
-internal class FoundConfig(
+class FoundConfig(
     name: String,
-    category: ConfigCategory,
-    private val plugin: LibreforgePlugin
+    directory: String,
+    private val plugin: EcoPlugin
 ) {
     private val source = plugin::class.java.classLoader
-    private val resourcePath = "${category.directory}/$name.yml"
+    private val resourcePath = "$directory/$name.yml"
 
     fun copy() {
         val inputStream = source.getResourceAsStream(resourcePath) ?: return

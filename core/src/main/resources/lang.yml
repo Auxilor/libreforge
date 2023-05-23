@@ -26,3 +26,4 @@ messages:
   plugin-not-installed: "&cYou don't have this plugin installed!"
 
 picked-up-price-item: "&f+%price%"
+infinity: "∞"

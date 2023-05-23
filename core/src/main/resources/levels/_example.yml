@@ -1,0 +1,45 @@
+# To use item points in your item lore / effects / conditions,
+# use these placeholders:
+# %libreforge_item_xp_<type>% - The amount of XP the item has
+# %libreforge_item_level_<type>% - The level of the item
+# %libreforge_item_xp_required_<type>% - The amount of XP required for the next level
+# %libreforge_item_progress_<type>% - The progress to the next level as a percentage
+# %libreforge_item_points_<type>% - The amount of points the item has
+#
+# You can also put _numeral at the end of these to get the number as a roman numeral,
+# e.g. %libreforge_item_level_example_numeral%
+
+# There are two ways to specify level XP requirements:
+#  1. A formula to calculate for infinite levels
+#  2. A list of XP requirements for each level
+
+# Formula
+# xp-formula: (2 ^ %level%) * 25
+# max-level: 10 (Optional: The max level)
+
+# List
+requirements:
+  - 50
+  - 100
+  - 200
+  - 400
+  - 1000
+  - 2000
+  - 5000
+  - 10000
+  - 17500
+  - 40000
+  - 100000
+  - 250000
+
+# Effects to run when an item levels up
+# %level% is the level the item leveled up to.
+level-up-effects:
+  - id: send_message
+    args:
+      message: "&fYou leveled up to &a%level%&f!"
+  - id: play_sound
+    args:
+      sound: entity_player_levelup
+      volume: 1.0
+      pitch: 1.5
