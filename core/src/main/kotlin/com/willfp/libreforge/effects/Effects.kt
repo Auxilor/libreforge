@@ -112,6 +112,7 @@ import com.willfp.libreforge.effects.impl.EffectSellMultiplier
 import com.willfp.libreforge.effects.impl.EffectSendMessage
 import com.willfp.libreforge.effects.impl.EffectSendTitle
 import com.willfp.libreforge.effects.impl.EffectSetBlock
+import com.willfp.libreforge.effects.impl.EffectSetCustomModelData
 import com.willfp.libreforge.effects.impl.EffectSetFreezeTicks
 import com.willfp.libreforge.effects.impl.EffectSetGlobalPoints
 import com.willfp.libreforge.effects.impl.EffectSetItemPoints
@@ -455,5 +456,6 @@ object Effects : Registry<Effect<*>>() {
         register(EffectMultiplyItemPoints)
         register(EffectSetGlobalPoints)
         register(EffectSetItemPoints)
+        register(EffectSetCustomModelData)
     }
 }
