@@ -17,6 +17,10 @@ class DispatchedTriggerFactory(
     private val playerTriggers = listMap<UUID, Int>()
 
     fun create(player: Player, trigger: Trigger, data: TriggerData): DispatchedTrigger? {
+        if (!trigger.isEnabled) {
+            return null
+        }
+
         val hash = (trigger.hashCode() shl 5) xor data.hashCode()
         if (hash in playerTriggers[player.uniqueId]) {
             return null

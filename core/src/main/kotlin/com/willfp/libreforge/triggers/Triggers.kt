@@ -84,8 +84,16 @@ object Triggers : Registry<Trigger>() {
 
     /**
      * Get a trigger by [id].
+     *
+     * This will enable the trigger.
      */
     override fun get(id: String): Trigger? {
+        return doGet(id)?.apply {
+            isEnabled = true
+        }
+    }
+
+    private fun doGet(id: String): Trigger? {
         for (group in groupRegistry.values()) {
             if (id.startsWith("${group.prefix}_")) {
                 return group.create(id.removePrefix("${group.prefix}_"))
