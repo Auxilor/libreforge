@@ -20,6 +20,12 @@ abstract class Trigger(
     abstract val parameters: Set<TriggerParameter>
 
     /**
+     * Whether this trigger is enabled.
+     */
+    var isEnabled: Boolean = false
+        internal set
+
+    /**
      * Dispatch the trigger.
      */
     protected fun dispatch(
