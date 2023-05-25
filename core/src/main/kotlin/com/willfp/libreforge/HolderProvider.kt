@@ -131,13 +131,14 @@ private val holderPlaceholderProviders = mutableListOf<(ProvidedHolder, Player) 
 /**
  * Register a function to generate placeholders for a holder.
  */
+@Deprecated("Use registerPlaceholderProvider instead.", ReplaceWith("registerPlaceholderProvider(provider)"))
 fun registerHolderPlaceholderProvider(provider: (ProvidedHolder) -> Collection<NamedValue>) =
-    registerHolderPlaceholderProvider { providedHolder, _ -> provider(providedHolder) }
+    registerPlaceholderProvider { providedHolder, _ -> provider(providedHolder) }
 
 /**
  * Register a function to generate placeholders for a holder.
  */
-fun registerHolderPlaceholderProvider(provider: (ProvidedHolder, Player) -> Collection<NamedValue>) {
+fun registerPlaceholderProvider(provider: (ProvidedHolder, Player) -> Collection<NamedValue>) {
     holderPlaceholderProviders += provider
 }
 
@@ -145,7 +146,7 @@ fun registerHolderPlaceholderProvider(provider: (ProvidedHolder, Player) -> Coll
  * Register a function to generate placeholders for a holder.
  */
 inline fun <reified T : Holder> registerHolderPlaceholderProvider(crossinline provider: (T, Player) -> Collection<NamedValue>) =
-    registerHolderPlaceholderProvider { providedHolder, player ->
+    registerPlaceholderProvider { providedHolder, player ->
         val holder = providedHolder.holder
         if (holder is T) {
             provider(holder, player)
@@ -158,7 +159,7 @@ inline fun <reified T : Holder> registerHolderPlaceholderProvider(crossinline pr
  * Register a function to generate placeholders for a holder.
  */
 inline fun <reified T : Any> registerProviderPlaceholderProvider(crossinline provider: (T, Player) -> Collection<NamedValue>) =
-    registerHolderPlaceholderProvider { providedHolder, player ->
+    registerPlaceholderProvider { providedHolder, player ->
         val holderProvider = providedHolder.provider
         if (holderProvider is T) {
             provider(holderProvider, player)
