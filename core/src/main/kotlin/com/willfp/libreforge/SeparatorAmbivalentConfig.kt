@@ -126,6 +126,14 @@ fun Config.toPlaceholderContext(data: TriggerData? = null): PlaceholderContext {
     )
 }
 
+fun Config.getStrings(pluralPath: String, singularPath: String): List<String> =
+    this.getStrings(pluralPath) + this.getString(singularPath)
+
+fun Config.getFormattedStrings(
+    pluralPath: String,
+    singularPath: String,
+    data: TriggerData? = null
+) = this.getFormattedStrings(pluralPath, data) + this.getFormattedString(singularPath, data)
 
 fun Config.getIntFromExpression(path: String, data: TriggerData?) = NumberUtils.evaluateExpression(
     this.getString(path), this.toPlaceholderContext(data)

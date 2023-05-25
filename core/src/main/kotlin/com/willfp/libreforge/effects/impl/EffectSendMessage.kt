@@ -7,6 +7,7 @@ import com.willfp.eco.util.toComponent
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getStrings
 import com.willfp.libreforge.toPlaceholderContext
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -23,12 +24,8 @@ object EffectSendMessage : Effect<NoCompileData>("send_message") {
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val player = data.player ?: return false
 
-        val messages = config.getStrings("messages")
-            .toList()
-            .plusElement(config.getString("message"))
-            .map {
-                it.replace("%player%", player.name)
-            }
+        val messages = config.getStrings("messages", "message")
+            .map { it.replace("%player%", player.name) }
             .formatEco(config.toPlaceholderContext(data))
 
         val actionBar = config.getBool("action_bar")

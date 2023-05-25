@@ -6,6 +6,7 @@ import com.willfp.eco.core.items.TestableItem
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
+import com.willfp.libreforge.getStrings
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
@@ -18,8 +19,7 @@ abstract class ItemCondition(id: String) : Condition<Collection<TestableItem>>(i
         getItems(player).any { compileData.any { test -> test.matches(it) } }
 
     override fun makeCompileData(config: Config, context: ViolationContext): Collection<TestableItem> {
-        return config.getStrings("items")
-            .plusElement(config.getString("item"))
+        return config.getStrings("items", "item")
             .filter { it.isNotBlank() }
             .map { Items.lookup(it) }
     }
