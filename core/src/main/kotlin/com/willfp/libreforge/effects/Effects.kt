@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.willfp.libreforge.effects
 
 import com.willfp.eco.core.config.interfaces.Config
@@ -145,7 +147,6 @@ import com.willfp.libreforge.separatorAmbivalent
 import com.willfp.libreforge.triggers.Triggers
 import java.util.UUID
 
-@Suppress("DEPRECATION")
 object Effects : Registry<Effect<*>>() {
     private val identifiedChains = mutableMapOf<String, Chain>()
 
