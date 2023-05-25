@@ -296,6 +296,15 @@ object Effects : Registry<Effect<*>>() {
             return null
         }
 
+        val deprecation = effect::class.java.annotations
+            .firstOrNull { it::class.java == Deprecated::class.java }
+            ?.let { it as? Deprecated }?.message
+
+        if (deprecation != null) {
+            context.log(ConfigViolation("id", "Effect $id is deprecated: $deprecation"))
+            // Continue anyway
+        }
+
         return makeElement(effect, config, context)
     }
 
