@@ -13,6 +13,7 @@ import com.willfp.libreforge.toPlaceholderContext
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
+@Deprecated("Use native chains instead")
 object EffectRunChainInline : Effect<Chain?>("run_chain_inline") {
     override val parameters = setOf(
         TriggerParameter.PLAYER

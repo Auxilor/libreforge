@@ -49,6 +49,7 @@ import com.willfp.libreforge.effects.impl.EffectDropItem
 import com.willfp.libreforge.effects.impl.EffectDropItemForPlayer
 import com.willfp.libreforge.effects.impl.EffectDropRandomItem
 import com.willfp.libreforge.effects.impl.EffectDropRandomItemForPlayer
+import com.willfp.libreforge.effects.impl.EffectDropWeightedRandomItem
 import com.willfp.libreforge.effects.impl.EffectExtinguish
 import com.willfp.libreforge.effects.impl.EffectFeatherStep
 import com.willfp.libreforge.effects.impl.EffectFlight
@@ -144,6 +145,7 @@ import com.willfp.libreforge.separatorAmbivalent
 import com.willfp.libreforge.triggers.Triggers
 import java.util.UUID
 
+@Suppress("DEPRECATION")
 object Effects : Registry<Effect<*>>() {
     private val identifiedChains = mutableMapOf<String, Chain>()
 
@@ -457,5 +459,6 @@ object Effects : Registry<Effect<*>>() {
         register(EffectSetGlobalPoints)
         register(EffectSetItemPoints)
         register(EffectSetCustomModelData)
+        register(EffectDropWeightedRandomItem)
     }
 }

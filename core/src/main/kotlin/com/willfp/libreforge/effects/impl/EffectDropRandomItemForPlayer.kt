@@ -7,17 +7,19 @@ import com.willfp.eco.core.recipe.parts.EmptyTestableItem
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getStrings
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.inventory.ItemStack
 
+@Deprecated("Use EffectDropRandomItem instead")
 object EffectDropRandomItemForPlayer : Effect<List<ItemStack>>("drop_random_item_for_player") {
     override val parameters = setOf(
         TriggerParameter.LOCATION
     )
 
     override val arguments = arguments {
-        require("items", "You must specify the list of items to choose from!")
+        require(listOf("items", "item"), "You must specify the list of items to choose from!")
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: List<ItemStack>): Boolean {
@@ -34,7 +36,7 @@ object EffectDropRandomItemForPlayer : Effect<List<ItemStack>>("drop_random_item
     }
 
     override fun makeCompileData(config: Config, context: ViolationContext): List<ItemStack> {
-        return config.getStrings("item")
+        return config.getStrings("items", "item")
             .map { Items.lookup(it) }
             .filterNot { it is EmptyTestableItem }
             .map { it.item }
