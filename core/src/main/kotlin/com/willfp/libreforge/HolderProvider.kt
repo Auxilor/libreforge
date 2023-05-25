@@ -142,6 +142,32 @@ fun registerHolderPlaceholderProvider(provider: (ProvidedHolder, Player) -> Coll
 }
 
 /**
+ * Register a function to generate placeholders for a holder.
+ */
+inline fun <reified T : Holder> registerHolderPlaceholderProvider(crossinline provider: (T, Player) -> Collection<NamedValue>) =
+    registerHolderPlaceholderProvider { providedHolder, player ->
+        val holder = providedHolder.holder
+        if (holder is T) {
+            provider(holder, player)
+        } else {
+            emptyList()
+        }
+    }
+
+/**
+ * Register a function to generate placeholders for a holder.
+ */
+inline fun <reified T : Any> registerProviderPlaceholderProvider(crossinline provider: (T, Player) -> Collection<NamedValue>) =
+    registerHolderPlaceholderProvider { providedHolder, player ->
+        val holderProvider = providedHolder.provider
+        if (holderProvider is T) {
+            provider(holderProvider, player)
+        } else {
+            emptyList()
+        }
+    }
+
+/**
  * Generate placeholders for a holder.
  */
 fun ProvidedHolder.generatePlaceholders(player: Player): List<NamedValue> {
