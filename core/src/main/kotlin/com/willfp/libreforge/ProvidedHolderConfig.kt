@@ -5,6 +5,7 @@ import com.willfp.eco.core.placeholder.context.PlaceholderContext
 import com.willfp.eco.core.placeholder.context.copy
 import com.willfp.eco.util.NumberUtils
 import com.willfp.eco.util.formatEco
+import org.bukkit.entity.Player
 
 /**
  * A [config] that uses a provided [holder] as a source of placeholders.
@@ -33,7 +34,7 @@ private class ProvidedHolderConfig(
     }
 }
 
-fun Config.applyHolder(providedHolder: ProvidedHolder): Config =
+fun Config.applyHolder(providedHolder: ProvidedHolder, player: Player): Config =
     ProvidedHolderConfig(this, providedHolder).apply {
-        injectPlaceholders(*providedHolder.generatePlaceholders().mapToPlaceholders())
+        injectPlaceholders(*providedHolder.generatePlaceholders(player).mapToPlaceholders())
     }
