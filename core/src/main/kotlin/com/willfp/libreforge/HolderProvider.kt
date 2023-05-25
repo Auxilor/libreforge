@@ -126,20 +126,26 @@ fun Player.refreshHolders() {
     this.updateEffects()
 }
 
-private val holderPlaceholderProviders = mutableListOf<(ProvidedHolder) -> Collection<NamedValue>>()
+private val holderPlaceholderProviders = mutableListOf<(ProvidedHolder, Player) -> Collection<NamedValue>>()
 
 /**
  * Register a function to generate placeholders for a holder.
  */
-fun registerHolderPlaceholderProvider(provider: (ProvidedHolder) -> Collection<NamedValue>) {
+fun registerHolderPlaceholderProvider(provider: (ProvidedHolder) -> Collection<NamedValue>) =
+    registerHolderPlaceholderProvider { providedHolder, _ -> provider(providedHolder) }
+
+/**
+ * Register a function to generate placeholders for a holder.
+ */
+fun registerHolderPlaceholderProvider(provider: (ProvidedHolder, Player) -> Collection<NamedValue>) {
     holderPlaceholderProviders += provider
 }
 
 /**
  * Generate placeholders for a holder.
  */
-fun ProvidedHolder.generatePlaceholders(): List<NamedValue> {
-    return holderPlaceholderProviders.flatMap { it(this) }
+fun ProvidedHolder.generatePlaceholders(player: Player): List<NamedValue> {
+    return holderPlaceholderProviders.flatMap { it(this, player) }
 }
 
 private val previousHolders = mutableMapOf<UUID, Collection<ProvidedHolder>>()
