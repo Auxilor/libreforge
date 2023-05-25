@@ -30,7 +30,7 @@ class ConditionBlock<T> internal constructor(
     }
 
     fun isMet(player: Player, holder: ProvidedHolder): Boolean {
-        val withHolder = config.applyHolder(holder)
+        val withHolder = config.applyHolder(holder, player)
 
         val metWith = condition.isMet(player, withHolder, holder, compileData)
         val metWithout = condition.isMet(player, withHolder, compileData)

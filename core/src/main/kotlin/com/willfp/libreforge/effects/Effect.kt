@@ -85,7 +85,7 @@ abstract class Effect<T>(
         effectCounter[player.uniqueId]++
         val count = effectCounter[player.uniqueId]
 
-        val withHolder = config.config.applyHolder(holder)
+        val withHolder = config.config.applyHolder(holder, player)
 
         onEnable(player, withHolder, identifierFactory.makeIdentifiers(count), holder, config.compileData)
     }

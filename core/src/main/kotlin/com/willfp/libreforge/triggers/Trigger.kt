@@ -48,7 +48,7 @@ abstract class Trigger(
             val withHolder = data.copy(holder = holder)
             val dispatchWithHolder = DispatchedTrigger(player, this, withHolder).inheritPlaceholders(dispatch)
 
-            for (placeholder in holder.generatePlaceholders()) {
+            for (placeholder in holder.generatePlaceholders(player)) {
                 dispatchWithHolder.addPlaceholder(placeholder)
             }
 
