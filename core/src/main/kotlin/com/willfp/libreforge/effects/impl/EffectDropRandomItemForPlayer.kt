@@ -12,7 +12,7 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.inventory.ItemStack
 
-@Deprecated("Use EffectDropRandomItem instead")
+@Deprecated("Use drop_random_item instead")
 object EffectDropRandomItemForPlayer : Effect<List<ItemStack>>("drop_random_item_for_player") {
     override val parameters = setOf(
         TriggerParameter.LOCATION
