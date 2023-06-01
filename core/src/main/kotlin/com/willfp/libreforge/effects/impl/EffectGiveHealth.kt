@@ -24,6 +24,6 @@ object EffectGiveHealth : Effect<NoCompileData>("give_health") {
         player.health = (player.health + config.getDoubleFromExpression("amount", data))
             .coerceAtMost(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)!!.value)
 
-        return false
+        return true
     }
 }
