@@ -44,7 +44,8 @@ class ConditionList(
      * Get all not met lines.
      */
     fun getNotMetLines(player: Player, holder: ProvidedHolder): List<String> =
-        this.filter { !it.isMet(player, holder) }
+        this.filter { it.notMetLines.isNotEmpty() }
+            .filter { !it.isMet(player, holder) }
             .flatMap { it.notMetLines }
             .map { it.formatEco(player, formatPlaceholders = true) }
 
