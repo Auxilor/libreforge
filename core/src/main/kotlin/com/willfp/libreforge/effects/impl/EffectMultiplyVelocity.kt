@@ -6,8 +6,13 @@ import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
+import com.willfp.libreforge.triggers.TriggerParameter
 
 object EffectMultiplyVelocity : Effect<NoCompileData>("multiply_velocity") {
+    override val parameters = setOf(
+        TriggerParameter.PLAYER
+    )
+
     override val arguments = arguments {
         require("multiplier", "You must specify the velocity multiplier!")
     }
