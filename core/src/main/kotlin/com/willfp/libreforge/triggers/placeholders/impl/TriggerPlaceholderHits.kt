@@ -14,7 +14,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import java.util.UUID
 
-object TriggerPlaceholderHits : TriggerPlaceholder("distance") {
+object TriggerPlaceholderHits : TriggerPlaceholder("hits") {
     private const val HITS_META_KEY = "libreforge_tracked_hits"
 
     override fun createPlaceholders(data: TriggerData): Collection<NamedValue> {
