@@ -146,7 +146,7 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
     }
 
     override fun getMinimumEcoVersion(): String {
-        return "6.60.0"
+        return "6.63.0"
     }
 
     /**

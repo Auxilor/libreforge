@@ -3,7 +3,7 @@ package com.willfp.libreforge.placeholders
 import com.willfp.eco.core.placeholder.RegistrablePlaceholder
 import com.willfp.eco.core.placeholder.context.PlaceholderContext
 import com.willfp.eco.core.registry.KRegistrable
-import com.willfp.eco.util.evaluateExpression
+import com.willfp.eco.util.evaluateExpressionOrNull
 import com.willfp.eco.util.formatEco
 import com.willfp.eco.util.toNiceString
 
@@ -13,16 +13,12 @@ abstract class CustomPlaceholder(
     abstract val placeholder: RegistrablePlaceholder
 
     protected fun parseValue(expression: String, ctx: PlaceholderContext): String {
-        val asNumber = evaluateExpression(
+        val asNumber = evaluateExpressionOrNull(
             expression,
             ctx
         )
 
-        return if (asNumber != 0.0) {
-            asNumber.toNiceString()
-        } else {
-            expression.formatEco(ctx)
-        }
+        return asNumber?.toNiceString() ?: expression.formatEco(ctx)
     }
 
     override fun onRegister() {
