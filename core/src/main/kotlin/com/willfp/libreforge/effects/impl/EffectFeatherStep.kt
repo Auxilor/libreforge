@@ -6,6 +6,7 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
+import org.bukkit.Tag
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.block.Action
@@ -15,7 +16,13 @@ import java.util.UUID
 object EffectFeatherStep : Effect<NoCompileData>("feather_step") {
     private val players = listMap<UUID, UUID>()
 
-    override fun onEnable(player: Player, config: Config, identifiers: Identifiers, holder: ProvidedHolder, compileData: NoCompileData) {
+    override fun onEnable(
+        player: Player,
+        config: Config,
+        identifiers: Identifiers,
+        holder: ProvidedHolder,
+        compileData: NoCompileData
+    ) {
         players[player.uniqueId] += identifiers.uuid
     }
 
@@ -30,6 +37,13 @@ object EffectFeatherStep : Effect<NoCompileData>("feather_step") {
         }
 
         val player = event.player
+
+        // Extra check for pressure plates
+        if (player.location.block.type in Tag.PRESSURE_PLATES.values
+            || player.location.subtract(0.0, 1.0, 0.0).block.type in Tag.PRESSURE_PLATES.values
+        ) {
+            return
+        }
 
         if (players[player.uniqueId].isNotEmpty()) {
             event.isCancelled = true
