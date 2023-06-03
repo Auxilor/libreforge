@@ -25,7 +25,7 @@ class ConditionBlock<T> internal constructor(
     val isInverted: Boolean
 ) : Compiled<T> {
     private val syncMetCache = Caffeine.newBuilder()
-        .expireAfterAccess(1, TimeUnit.SECONDS)
+        .expireAfterAccess(10, TimeUnit.SECONDS)
         .build<UUID, Boolean>()
 
     @Deprecated(
