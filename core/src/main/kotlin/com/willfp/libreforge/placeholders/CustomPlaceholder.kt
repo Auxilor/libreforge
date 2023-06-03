@@ -5,6 +5,7 @@ import com.willfp.eco.core.placeholder.context.PlaceholderContext
 import com.willfp.eco.core.registry.KRegistrable
 import com.willfp.eco.util.evaluateExpression
 import com.willfp.eco.util.formatEco
+import com.willfp.eco.util.toNiceString
 
 abstract class CustomPlaceholder(
     override val id: String
@@ -18,7 +19,7 @@ abstract class CustomPlaceholder(
         )
 
         return if (asNumber != 0.0) {
-            asNumber.toString()
+            asNumber.toNiceString()
         } else {
             expression.formatEco(ctx)
         }
