@@ -10,9 +10,9 @@ object NormalExecutorFactory : ChainExecutorFactory("normal") {
 
     object NormalChainExecutor : ChainExecutor {
         override fun execute(chain: Chain, trigger: DispatchedTrigger): Boolean {
-            var success = true
+            var success = false
             chain.forEach {
-                success = success && it.trigger(trigger)
+                if (it.trigger(trigger)) success = true
             }
             return success
         }
