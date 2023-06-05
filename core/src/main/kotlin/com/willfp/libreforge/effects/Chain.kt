@@ -2,7 +2,11 @@ package com.willfp.libreforge.effects
 
 import com.willfp.libreforge.DelegatedList
 import com.willfp.libreforge.effects.executors.ChainExecutor
+import com.willfp.libreforge.triggers.BlankTrigger
 import com.willfp.libreforge.triggers.DispatchedTrigger
+import com.willfp.libreforge.triggers.Trigger
+import com.willfp.libreforge.triggers.TriggerData
+import org.bukkit.entity.Player
 
 /**
  * A list of effect blocks.
@@ -22,5 +26,14 @@ class Chain(
         executor: ChainExecutor = this.executor
     ): Boolean {
         return executor.execute(this, trigger)
+    }
+
+    fun trigger(
+        player: Player,
+        data: TriggerData = TriggerData(player = player),
+        trigger: Trigger = BlankTrigger,
+        executor: ChainExecutor = this.executor
+    ): Boolean {
+        return executor.execute(this, DispatchedTrigger(player, trigger, data))
     }
 }
