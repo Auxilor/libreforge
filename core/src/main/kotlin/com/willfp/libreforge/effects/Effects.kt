@@ -144,6 +144,7 @@ import com.willfp.libreforge.filters.Filters
 import com.willfp.libreforge.integrations.paper.impl.EffectDropPickupItem
 import com.willfp.libreforge.mutators.Mutators
 import com.willfp.libreforge.separatorAmbivalent
+import com.willfp.libreforge.toWeightedList
 import com.willfp.libreforge.triggers.Triggers
 import java.util.UUID
 
@@ -272,7 +273,10 @@ object Effects : Registry<Effect<*>>() {
         context: ViolationContext,
         directIDSpecified: Boolean // If it's configured with 'id', rather than 'effects'
     ): Chain? {
-        val elements = configs.map { it.separatorAmbivalent() }.mapNotNull { compileElement(it, context) }
+        val elements = configs
+            .map { it.separatorAmbivalent() }
+            .mapNotNull { compileElement(it, context) }
+            .toWeightedList()
 
         if ((elements.size > 1 || !directIDSpecified) && elements.any { it.effect.isPermanent }) {
             context.log(
@@ -335,6 +339,8 @@ object Effects : Registry<Effect<*>>() {
         val mutators = Mutators.compile(config.getSubsections("mutators"), context.with("mutators"))
         val filters = Filters.compile(config.getSubsection("filters"), context.with("filters"))
 
+        val weight = config.getDoubleFromExpression("weight")
+
         return ChainElement(
             effect,
             args,
@@ -342,7 +348,8 @@ object Effects : Registry<Effect<*>>() {
             arguments,
             conditions,
             mutators,
-            filters
+            filters,
+            weight
         )
     }
 

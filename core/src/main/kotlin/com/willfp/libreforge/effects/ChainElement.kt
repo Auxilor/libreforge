@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Compiled
 import com.willfp.libreforge.ProvidedHolder
+import com.willfp.libreforge.Weighted
 import com.willfp.libreforge.conditions.ConditionList
 import com.willfp.libreforge.effects.arguments.EffectArgumentList
 import com.willfp.libreforge.effects.events.EffectDisableEvent
@@ -17,15 +18,16 @@ import java.util.UUID
 /**
  * A single effect config block.
  */
-class ChainElement<T>(
+class ChainElement<T> internal constructor(
     val effect: Effect<T>,
     override val config: Config,
     override val compileData: T,
     override val arguments: EffectArgumentList,
     override val conditions: ConditionList,
     override val mutators: MutatorList,
-    override val filters: FilterList
-) : ElementLike(), Compiled<T> {
+    override val filters: FilterList,
+    override val weight: Double
+) : ElementLike(), Compiled<T>, Weighted {
     override val uuid: UUID = UUID.randomUUID()
     override val supportsDelay = effect.supportsDelay
 
