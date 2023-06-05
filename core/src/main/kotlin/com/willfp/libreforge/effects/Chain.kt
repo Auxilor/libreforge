@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects
 
 import com.willfp.libreforge.DelegatedList
+import com.willfp.libreforge.WeightedList
 import com.willfp.libreforge.effects.executors.ChainExecutor
 import com.willfp.libreforge.triggers.BlankTrigger
 import com.willfp.libreforge.triggers.DispatchedTrigger
@@ -11,8 +12,8 @@ import org.bukkit.entity.Player
 /**
  * A list of effect blocks.
  */
-class Chain(
-    effects: List<ChainElement<*>>,
+class Chain internal constructor(
+    effects: WeightedList<ChainElement<*>>,
     private val executor: ChainExecutor
 ) : DelegatedList<ChainElement<*>>(
     effects.sortedBy {

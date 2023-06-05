@@ -27,7 +27,7 @@ object EffectDropWeightedRandomItem : Effect<WeightedList<WeightedItems>>("drop_
         val location = data.location ?: return false
         val player = data.player
         val items = compileData.randomOrNull() ?: return false
-        val item = items.obj.randomOrNull() ?: return false
+        val item = items.items.randomOrNull() ?: return false
 
         if (player != null) {
             DropQueue(player)

@@ -2,19 +2,16 @@ package com.willfp.libreforge
 
 import org.bukkit.inventory.ItemStack
 
-interface Weighted<T> {
-    val obj: T
+interface Weighted {
     val weight: Double
-
-    fun get(): T = obj
 }
 
 data class WeightedItems(
-    override val obj: List<ItemStack>,
+    val items: List<ItemStack>,
     override val weight: Double
-) : Weighted<List<ItemStack>>
+) : Weighted
 
-class WeightedList<T : Weighted<*>>(
+class WeightedList<T : Weighted>(
     list: List<T>
 ) : DelegatedList<T>(list) {
     fun randomOrNull(): T? {
@@ -37,6 +34,5 @@ class WeightedList<T : Weighted<*>>(
     }
 }
 
-inline fun <reified T : Weighted<*>> List<T>.toWeightedList(): WeightedList<T> =
+inline fun <reified T : Weighted> List<T>.toWeightedList(): WeightedList<T> =
     WeightedList(this)
-
