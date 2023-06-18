@@ -187,7 +187,7 @@ object Effects : Registry<Effect<*>>() {
         val filters = Filters.compile(config.getSubsection("filters"), context.with("filters"))
         val triggers = config.getStrings("triggers").mapNotNull {
             Triggers[it]
-        }
+        }.toSet()
 
         val effectConfigs = if (config.has("id")) {
             listOf(config)
