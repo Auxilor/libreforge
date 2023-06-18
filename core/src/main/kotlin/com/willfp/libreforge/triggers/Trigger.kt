@@ -1,6 +1,9 @@
 package com.willfp.libreforge.triggers
 
+import com.sun.tools.javac.jvm.ByteCodes.ret
 import com.willfp.eco.core.registry.KRegistrable
+import com.willfp.libreforge.BlankHolder.effects
+import com.willfp.libreforge.EmptyProvidedHolder.holder
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.generatePlaceholders
 import com.willfp.libreforge.getProvidedActiveEffects
@@ -41,6 +44,7 @@ abstract class Trigger(
         forceHolders: Collection<ProvidedHolder>? = null
     ) {
         val dispatch = plugin.dispatchedTriggerFactory.create(player, this, data) ?: return
+
         dispatch.generatePlaceholders(data)
 
         val dispatchEvent = TriggerDispatchEvent(player, dispatch)
@@ -52,6 +56,11 @@ abstract class Trigger(
         val effects = forceHolders?.getProvidedActiveEffects(player) ?: player.providedActiveEffects
 
         for ((holder, blocks) in effects) {
+            // Avoid generating placeholders for nothing
+            if (blocks.none { it.canBeTriggeredBy(this) }) {
+                continue
+            }
+
             val withHolder = data.copy(holder = holder)
             val dispatchWithHolder = DispatchedTrigger(player, this, withHolder).inheritPlaceholders(dispatch)
 
