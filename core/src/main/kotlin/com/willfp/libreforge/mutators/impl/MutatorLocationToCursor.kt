@@ -4,8 +4,10 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.mutators.Mutator
+import com.willfp.libreforge.mutators.parameterTransformers
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
+import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.FluidCollisionMode
 
 object MutatorLocationToCursor : Mutator<NoCompileData>("location_to_cursor") {
@@ -16,6 +18,11 @@ object MutatorLocationToCursor : Mutator<NoCompileData>("location_to_cursor") {
         require("start", "You must specify a start point! (player or victim)", Config::getString) {
             it in listOf("player", "victim")
         }
+    }
+
+    override val parameterTransformers = parameterTransformers {
+        TriggerParameter.PLAYER becomes TriggerParameter.LOCATION
+        TriggerParameter.VICTIM becomes TriggerParameter.LOCATION
     }
 
     override fun mutate(data: TriggerData, config: Config, compileData: NoCompileData): TriggerData {
