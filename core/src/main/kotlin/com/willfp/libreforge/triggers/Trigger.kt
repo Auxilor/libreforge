@@ -22,8 +22,15 @@ abstract class Trigger(
     /**
      * Whether this trigger is enabled.
      */
-    var isEnabled: Boolean = false
-        internal set
+    open var isEnabled: Boolean = false
+        protected set
+
+    /**
+     * Enable the trigger.
+     */
+    fun enable() {
+        isEnabled = true
+    }
 
     /**
      * Dispatch the trigger.
