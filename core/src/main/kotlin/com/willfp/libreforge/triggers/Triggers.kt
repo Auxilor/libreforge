@@ -89,7 +89,7 @@ object Triggers : Registry<Trigger>() {
      */
     override fun get(id: String): Trigger? {
         return doGet(id)?.apply {
-            isEnabled = true
+            enable()
         }
     }
 
