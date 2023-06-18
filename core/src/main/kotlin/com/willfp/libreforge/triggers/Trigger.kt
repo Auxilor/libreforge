@@ -43,6 +43,13 @@ abstract class Trigger(
         data: TriggerData,
         forceHolders: Collection<ProvidedHolder>? = null
     ) {
+        val effects = forceHolders?.getProvidedActiveEffects(player) ?: player.providedActiveEffects
+
+        // First check if the dispatch would ever succeed to avoid unnecessary processing
+        if (effects.flatMap { it.effects }.none { it.canBeTriggeredBy(this) }) {
+            return
+        }
+
         val dispatch = plugin.dispatchedTriggerFactory.create(player, this, data) ?: return
 
         dispatch.generatePlaceholders(data)
@@ -53,10 +60,8 @@ abstract class Trigger(
             return
         }
 
-        val effects = forceHolders?.getProvidedActiveEffects(player) ?: player.providedActiveEffects
-
         for ((holder, blocks) in effects) {
-            // Avoid generating placeholders for nothing
+            // Check again here to avoid generating placeholders for nothing
             if (blocks.none { it.canBeTriggeredBy(this) }) {
                 continue
             }
