@@ -132,7 +132,9 @@ import com.willfp.libreforge.effects.impl.EffectSpawnParticle
 import com.willfp.libreforge.effects.impl.EffectSpawnPotionCloud
 import com.willfp.libreforge.effects.impl.EffectStrikeLightning
 import com.willfp.libreforge.effects.impl.EffectStripAI
+import com.willfp.libreforge.effects.impl.EffectSwarm
 import com.willfp.libreforge.effects.impl.EffectTakeMoney
+import com.willfp.libreforge.effects.impl.EffectTargetPlayer
 import com.willfp.libreforge.effects.impl.EffectTeleport
 import com.willfp.libreforge.effects.impl.EffectTeleportTo
 import com.willfp.libreforge.effects.impl.EffectTeleportToGround
@@ -485,5 +487,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectSetItemPoints)
         register(EffectSetCustomModelData)
         register(EffectDropWeightedRandomItem)
+        register(EffectSwarm)
+        register(EffectTargetPlayer)
     }
 }
