@@ -5,6 +5,8 @@ import com.willfp.eco.core.map.defaultMap
 import com.willfp.libreforge.Compilable
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.applyHolder
+import com.willfp.libreforge.mutators.MutatorList
+import com.willfp.libreforge.mutators.emptyMutatorList
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.DispatchedTrigger
 import com.willfp.libreforge.triggers.Trigger
@@ -63,7 +65,13 @@ abstract class Effect<T>(
      * If the effect supports a certain [trigger].
      */
     fun supportsTrigger(trigger: Trigger) =
-        Triggers.withParameters(parameters)(trigger)
+        Triggers.withParameters(parameters)(trigger, emptyMutatorList())
+
+    /**
+     * If the effect supports a certain [trigger] after [mutators] are applied to it.
+     */
+    fun supportsTrigger(trigger: Trigger, mutators: MutatorList) =
+        Triggers.withParameters(parameters)(trigger, mutators)
 
     /**
      * Enable a permanent effect.
