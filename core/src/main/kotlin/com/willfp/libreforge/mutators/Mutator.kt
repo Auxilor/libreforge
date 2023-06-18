@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Compilable
 import com.willfp.libreforge.effects.RunOrder
 import com.willfp.libreforge.triggers.TriggerData
+import com.willfp.libreforge.triggers.TriggerParameter
 
 abstract class Mutator<T>(
     override val id: String
@@ -12,6 +13,20 @@ abstract class Mutator<T>(
      * The run order.
      */
     open val runOrder = RunOrder.NORMAL
+
+    /**
+     * The parameter transformers.
+     */
+    protected open val parameterTransformers: Set<TriggerParameterTransformer> = emptySet()
+
+    /**
+     * Transform the parameters.
+     */
+    fun transform(parameters: Set<TriggerParameter>): Set<TriggerParameter> {
+        return parameterTransformers.fold(parameters) { acc, transformer ->
+            transformer.transform(acc)
+        }
+    }
 
     /**
      * Mutate the trigger data.
