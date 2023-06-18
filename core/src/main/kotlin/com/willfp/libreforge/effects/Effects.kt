@@ -227,7 +227,7 @@ object Effects : Registry<Effect<*>>() {
         var isInvalid = false
         for (element in chain) {
             for (trigger in triggers) {
-                if (!element.effect.supportsTrigger(trigger)) {
+                if (!element.effect.supportsTrigger(trigger, mutators)) {
                     isInvalid = true
                     context.log(
                         ConfigViolation(
