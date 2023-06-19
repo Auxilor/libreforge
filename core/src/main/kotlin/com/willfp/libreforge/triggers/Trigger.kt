@@ -1,9 +1,6 @@
 package com.willfp.libreforge.triggers
 
-import com.sun.tools.javac.jvm.ByteCodes.ret
 import com.willfp.eco.core.registry.KRegistrable
-import com.willfp.libreforge.BlankHolder.effects
-import com.willfp.libreforge.EmptyProvidedHolder.holder
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.generatePlaceholders
 import com.willfp.libreforge.getProvidedActiveEffects
