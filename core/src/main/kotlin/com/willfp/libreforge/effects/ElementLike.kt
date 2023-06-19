@@ -73,14 +73,6 @@ abstract class ElementLike : ConfigurableElement {
 
         val data = mutators.mutate(trigger.data)
 
-        // Inject placeholders everywhere after mutation
-        trigger.generatePlaceholders(data)
-        listOf(arguments, conditions, mutators, filters)
-            .flatten()
-            .map { it.config }
-            .plusElement(config)
-            .forEach { it.addInjectablePlaceholder(trigger.placeholders) }
-
         // Antigrief check here - not very clean, but it works.
         if (data.player != null && data.victim != null && data.victim != data.player) {
             if (!config.getBool("disable_antigrief_check")) {
@@ -89,6 +81,14 @@ abstract class ElementLike : ConfigurableElement {
                 }
             }
         }
+
+        // Inject placeholders everywhere after mutation
+        trigger.generatePlaceholders(data)
+        listOf(arguments, conditions, mutators, filters)
+            .flatten()
+            .map { it.config }
+            .plusElement(config)
+            .forEach { it.addInjectablePlaceholder(trigger.placeholders) }
 
         // Filter
         val filterResult = if (config.getBool("filters_before_mutation")) {
