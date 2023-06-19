@@ -1,6 +1,7 @@
 package com.willfp.libreforge.triggers
 
 import com.willfp.eco.core.registry.Registry
+import com.willfp.libreforge.mutators.MutatorList
 import com.willfp.libreforge.triggers.impl.TriggerAltClick
 import com.willfp.libreforge.triggers.impl.TriggerBite
 import com.willfp.libreforge.triggers.impl.TriggerBlockItemDrop
@@ -89,7 +90,7 @@ object Triggers : Registry<Trigger>() {
      */
     override fun get(id: String): Trigger? {
         return doGet(id)?.apply {
-            isEnabled = true
+            enable()
         }
     }
 
@@ -113,15 +114,19 @@ object Triggers : Registry<Trigger>() {
     /**
      * Get a predicate requiring certain trigger parameters.
      */
-    fun withParameters(parameters: Set<TriggerParameter>): (Trigger) -> Boolean {
-        return {
-            it.parameters.flatMap { param -> param.inheritsFrom.toList().plusElement(param) }.containsAll(parameters)
+    fun withParameters(parameters: Set<TriggerParameter>): (Trigger, MutatorList) -> Boolean {
+        return { trigger, mutators ->
+            trigger.parameters
+                .flatMap { param -> param.inheritsFrom.toSet().plusElement(param) }
+                .toSet()
+                .let { mutators.transform(it) }
+                .containsAll(parameters)
         }
     }
 
     init {
         register(TriggerGroupCustom)
-        register(TriggerGroupStatic)
+        //register(TriggerGroupStatic)
         register(TriggerAltClick)
         register(TriggerBite)
         register(TriggerBlockItemDrop)

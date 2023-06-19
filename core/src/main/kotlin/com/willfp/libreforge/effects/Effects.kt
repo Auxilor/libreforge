@@ -132,7 +132,9 @@ import com.willfp.libreforge.effects.impl.EffectSpawnParticle
 import com.willfp.libreforge.effects.impl.EffectSpawnPotionCloud
 import com.willfp.libreforge.effects.impl.EffectStrikeLightning
 import com.willfp.libreforge.effects.impl.EffectStripAI
+import com.willfp.libreforge.effects.impl.EffectSwarm
 import com.willfp.libreforge.effects.impl.EffectTakeMoney
+import com.willfp.libreforge.effects.impl.EffectTargetPlayer
 import com.willfp.libreforge.effects.impl.EffectTeleport
 import com.willfp.libreforge.effects.impl.EffectTeleportTo
 import com.willfp.libreforge.effects.impl.EffectTeleportToGround
@@ -185,7 +187,7 @@ object Effects : Registry<Effect<*>>() {
         val filters = Filters.compile(config.getSubsection("filters"), context.with("filters"))
         val triggers = config.getStrings("triggers").mapNotNull {
             Triggers[it]
-        }
+        }.toSet()
 
         val effectConfigs = if (config.has("id")) {
             listOf(config)
@@ -225,7 +227,7 @@ object Effects : Registry<Effect<*>>() {
         var isInvalid = false
         for (element in chain) {
             for (trigger in triggers) {
-                if (!element.effect.supportsTrigger(trigger)) {
+                if (!element.effect.supportsTrigger(trigger, mutators)) {
                     isInvalid = true
                     context.log(
                         ConfigViolation(
@@ -485,5 +487,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectSetItemPoints)
         register(EffectSetCustomModelData)
         register(EffectDropWeightedRandomItem)
+        register(EffectSwarm)
+        register(EffectTargetPlayer)
     }
 }

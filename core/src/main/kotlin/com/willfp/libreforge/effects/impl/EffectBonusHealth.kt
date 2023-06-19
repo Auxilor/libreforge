@@ -17,7 +17,7 @@ object EffectBonusHealth : AttributeEffect(
     }
 
     override fun getValue(config: Config, player: Player) =
-        config.getIntFromExpression("health", player).toDouble()
+        config.getDoubleFromExpression("health", player)
 
     override fun constrainAttribute(player: Player, value: Double) {
         if (player.health > value) {

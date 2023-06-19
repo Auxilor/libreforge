@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.BlankHolder.effects
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.conditions.ConditionList
 import com.willfp.libreforge.effects.arguments.EffectArgumentList
@@ -19,7 +20,7 @@ class EffectBlock internal constructor(
     override val uuid: UUID,
     override val config: Config,
     val effects: Chain,
-    val triggers: Collection<Trigger>,
+    val triggers: Set<Trigger>,
     override val arguments: EffectArgumentList,
     override val conditions: ConditionList,
     override val mutators: MutatorList,
@@ -45,12 +46,13 @@ class EffectBlock internal constructor(
     ) = effects.forEach { it.disable(player, holder, isReload = isReload) }
 
     fun tryTrigger(trigger: DispatchedTrigger) {
-        if (trigger.trigger !in triggers) {
-            return
+        if (canBeTriggeredBy(trigger.trigger)) {
+            trigger(trigger)
         }
-
-        trigger(trigger)
     }
+
+    fun canBeTriggeredBy(trigger: Trigger) =
+        trigger in triggers
 
     override fun doTrigger(trigger: DispatchedTrigger) =
         effects.trigger(trigger)
