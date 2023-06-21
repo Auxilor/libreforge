@@ -41,11 +41,9 @@ object EffectPotionDurationMultiplier : MultiplierEffect("potion_duration_multip
                 val duration = potionData.duration
                 val delta = (duration * multiplier).toInt() - duration
 
-                meta.persistentDataContainer.set(
-                    plugin.namespacedKeyFactory.create("duration-delta"),
-                    PersistentDataType.INTEGER,
-                    delta
-                )
+                if (delta != 0) {
+                    meta.delta = delta
+                }
 
                 item.itemMeta = meta
             }
@@ -120,10 +118,17 @@ object EffectPotionDurationMultiplier : MultiplierEffect("potion_duration_multip
         }
     }
 
-    private val PotionMeta.delta: Int
+    private var PotionMeta.delta: Int
         get() = this.persistentDataContainer.getOrDefault(
             plugin.createNamespacedKey("duration_delta"),
             PersistentDataType.INTEGER,
             0
         )
+        set(value) {
+            this.persistentDataContainer.set(
+                plugin.createNamespacedKey("duration_delta"),
+                PersistentDataType.INTEGER,
+                value
+            )
+        }
 }
