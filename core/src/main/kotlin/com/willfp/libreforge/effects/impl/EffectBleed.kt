@@ -7,8 +7,10 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.plugin
+import com.willfp.libreforge.triggers.DispatchedTrigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import com.willfp.libreforge.triggers.impl.TriggerKill
 
 
 object EffectBleed : Effect<NoCompileData>("bleed") {
@@ -36,6 +38,13 @@ object EffectBleed : Effect<NoCompileData>("bleed") {
 
             if (damage >= victim.health) {
                 victim.killer = data.player
+
+                if (data.player != null) {
+                    TriggerKill.force(
+                        data.player,
+                        victim
+                    )
+                }
             }
 
             victim.damage(damage)
