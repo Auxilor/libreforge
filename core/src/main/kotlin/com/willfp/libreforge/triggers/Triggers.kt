@@ -126,7 +126,7 @@ object Triggers : Registry<Trigger>() {
 
     init {
         register(TriggerGroupCustom)
-        //register(TriggerGroupStatic)
+        register(TriggerGroupStatic)
         register(TriggerAltClick)
         register(TriggerBite)
         register(TriggerBlockItemDrop)
