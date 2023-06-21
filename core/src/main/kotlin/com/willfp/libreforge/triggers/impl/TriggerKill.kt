@@ -6,6 +6,8 @@ import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.attribute.Attribute
+import org.bukkit.entity.LivingEntity
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 
 object TriggerKill : Trigger("kill") {
@@ -26,6 +28,18 @@ object TriggerKill : Trigger("kill") {
             killer,
             TriggerData(
                 player = killer,
+                victim = victim,
+                location = victim.location,
+                value = victim.getAttribute(Attribute.GENERIC_MAX_HEALTH)!!.value
+            )
+        )
+    }
+
+    fun force(player: Player, victim: LivingEntity) {
+        this.dispatch(
+            player,
+            TriggerData(
+                player = player,
                 victim = victim,
                 location = victim.location,
                 value = victim.getAttribute(Attribute.GENERIC_MAX_HEALTH)!!.value
