@@ -12,15 +12,19 @@ import org.bukkit.entity.Player
 object TriggerGroupStatic : TriggerGroup("static") {
     private val registry = mutableMapOf<Int, TriggerStatic>()
     private var tick = 0
+    private var createdTimer = false
 
     override fun create(value: String): Trigger? {
         val interval = value.toIntOrNull() ?: return null
         val trigger = TriggerStatic(interval)
         registry[interval] = trigger
+        createdTimer = false
         return trigger
     }
 
     override fun postRegister() {
+        if(createdTimer) return
+
         plugin.scheduler.runTimer(1, 1) {
             tick++
 
@@ -32,6 +36,8 @@ object TriggerGroupStatic : TriggerGroup("static") {
                 }
             }
         }
+
+        createdTimer = true
     }
 
     private class TriggerStatic(interval: Int) : Trigger("static_$interval") {
