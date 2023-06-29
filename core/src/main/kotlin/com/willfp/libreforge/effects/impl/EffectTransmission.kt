@@ -40,8 +40,6 @@ object EffectTransmission : Effect<NoCompileData>("transmission") {
         location.pitch = player.location.pitch
         location.yaw = player.location.yaw
 
-        player.teleport(location)
-
-        return true
+        return player.teleport(location)
     }
 }
