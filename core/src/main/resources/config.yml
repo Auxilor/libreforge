@@ -90,3 +90,6 @@ point-names: # If you have point names that look ugly (e.g. souls) then you can 
   souls: "Souls"
 
 raytrace-distance: 80 # The distance that alt_click should check for a location
+
+telekinesis:
+  on-players: true # Whether telekinesis should work on players
