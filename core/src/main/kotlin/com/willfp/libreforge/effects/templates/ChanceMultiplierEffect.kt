@@ -27,7 +27,7 @@ abstract class ChanceMultiplierEffect(id: String) : Effect<NoCompileData>(id) {
         compileData: NoCompileData
     ) {
         modifiers[player.uniqueId] += MultiplierModifier(identifiers.uuid) {
-            config.getDoubleFromExpression("multiplier", player)
+            config.getDoubleFromExpression("chance", player)
         }
     }
 
