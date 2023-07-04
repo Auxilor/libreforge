@@ -360,5 +360,6 @@ object Effects : Registry<Effect<*>>() {
         register(EffectTargetPlayer)
         register(EffectReplaceNear)
         register(EffectCloseInventory)
+        register(EffectTelekinesis)
     }
 }
