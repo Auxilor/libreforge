@@ -41,9 +41,6 @@ class ItemRefreshListener(
     @EventHandler
     fun onChangeSlot(event: PlayerItemHeldEvent) {
         event.player.refreshHolders()
-        plugin.scheduler.run {
-            event.player.refreshHolders()
-        }
     }
 
     @EventHandler
