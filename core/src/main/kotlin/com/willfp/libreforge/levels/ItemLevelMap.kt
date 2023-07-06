@@ -19,20 +19,22 @@ private const val LEVEL_KEY = "level"
 private const val XP_KEY = "xp"
 
 class ItemLevelMap(
-    private val pdc: PersistentDataContainer,
+    private var pdc: PersistentDataContainer?,
     private val parent: PersistentDataContainer,
     private val itemStack: ItemStack
 ) {
     operator fun get(level: LevelType?): LevelData {
-        if (level == null) {
+        if (level == null || pdc == null) {
             return baseLevelData
         }
 
-        if (!pdc.has(level.id, PersistentDataType.TAG_CONTAINER)) {
+        val container = pdc!!
+
+        if (!container.has(level.id, PersistentDataType.TAG_CONTAINER)) {
             return baseLevelData
         }
 
-        val levelContainer = pdc.get(level.id, PersistentDataType.TAG_CONTAINER)!!
+        val levelContainer = container.get(level.id, PersistentDataType.TAG_CONTAINER)!!
 
         return LevelData(
             levelContainer.get(LEVEL_KEY, PersistentDataType.INTEGER)!!,
@@ -44,17 +46,24 @@ class ItemLevelMap(
         require(value.level >= 0) { "Level must be positive" }
         require(value.xp >= 0) { "XP must be positive" }
 
-        if (!pdc.has(level.id, PersistentDataType.TAG_CONTAINER)) {
-            pdc.set(level.id, PersistentDataType.TAG_CONTAINER, newPersistentDataContainer())
+        if (pdc == null) {
+            this.pdc = newPersistentDataContainer()
         }
 
-        val levelContainer = pdc.get(level.id, PersistentDataType.TAG_CONTAINER)!!
+        val container = pdc!!
+
+        if (!container.has(level.id, PersistentDataType.TAG_CONTAINER)) {
+            container.set(level.id, PersistentDataType.TAG_CONTAINER, newPersistentDataContainer())
+        }
+
+        val levelContainer = container.get(level.id, PersistentDataType.TAG_CONTAINER)!!
 
         levelContainer.set(LEVEL_KEY, PersistentDataType.INTEGER, value.level)
         levelContainer.set(XP_KEY, PersistentDataType.DOUBLE, value.xp)
 
-        pdc.set(level.id, PersistentDataType.TAG_CONTAINER, levelContainer)
-        parent.set(key, PersistentDataType.TAG_CONTAINER, pdc)
+        container.set(level.id, PersistentDataType.TAG_CONTAINER, levelContainer)
+
+        parent.set(key, PersistentDataType.TAG_CONTAINER, container)
     }
 
     fun gainXP(level: LevelType, xp: Double, context: PlaceholderContext) {
@@ -76,11 +85,12 @@ val ItemStack.levels: ItemLevelMap
         )
     }
 
-private val FastItemStack.levelsPDC: PersistentDataContainer
+private val FastItemStack.levelsPDC: PersistentDataContainer?
     get() {
         val pdc = this.persistentDataContainer
         if (!pdc.has(key, PersistentDataType.TAG_CONTAINER)) {
-            pdc.set(key, PersistentDataType.TAG_CONTAINER, newPersistentDataContainer())
+            return null
         }
+
         return pdc.get(key, PersistentDataType.TAG_CONTAINER)!!
     }

@@ -27,10 +27,12 @@ abstract class MultiMultiplierEffect<T : Any>(id: String) : Effect<NoCompileData
 
     final override fun onEnable(player: Player, config: Config, identifiers: Identifiers, holder: ProvidedHolder, compileData: NoCompileData) {
         if (config.has(key)) {
-            val element = getElement(config.getString(key)) ?: return
+            val elements = config.getStrings(key).mapNotNull { getElement(it) }
 
-            modifiers[player.uniqueId][element] += MultiplierModifier(identifiers.uuid) {
-                config.getDoubleFromExpression("multiplier", player)
+            for (element in elements) {
+                modifiers[player.uniqueId][element] += MultiplierModifier(identifiers.uuid) {
+                    config.getDoubleFromExpression("multiplier", player)
+                }
             }
         } else {
             globalModifiers[player.uniqueId] += MultiplierModifier(identifiers.uuid) {
