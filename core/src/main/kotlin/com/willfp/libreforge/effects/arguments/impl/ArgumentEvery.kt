@@ -12,7 +12,7 @@ object ArgumentEvery: EffectArgument<NoCompileData>("every") {
     private val everyHandler = nestedMap<UUID, UUID, Int>()
 
     override fun isMet(element: ConfigurableElement, trigger: DispatchedTrigger, compileData: NoCompileData): Boolean {
-        val current = everyHandler[element.uuid][trigger.player.uniqueId] ?: 0
+        val current = everyHandler[element.uuid][trigger.player.uniqueId] ?: 1
 
         return current == 0
     }
@@ -28,7 +28,7 @@ object ArgumentEvery: EffectArgument<NoCompileData>("every") {
     private fun increment(element: ConfigurableElement, trigger: DispatchedTrigger) {
         val every = element.config.getIntFromExpression("every", trigger.data)
 
-        var current = everyHandler[element.uuid][trigger.player.uniqueId] ?: 0
+        var current = everyHandler[element.uuid][trigger.player.uniqueId] ?: 1
 
         current++
 
