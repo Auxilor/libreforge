@@ -362,5 +362,6 @@ object Effects : Registry<Effect<*>>() {
         register(EffectCloseInventory)
         register(EffectTelekinesis)
         register(EffectRapidBows)
+        register(EffectNameEntity)
     }
 }
