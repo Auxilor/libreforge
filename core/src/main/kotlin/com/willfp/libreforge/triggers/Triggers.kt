@@ -73,6 +73,7 @@ import com.willfp.libreforge.triggers.impl.TriggerSmelt
 import com.willfp.libreforge.triggers.impl.TriggerSwapHands
 import com.willfp.libreforge.triggers.impl.TriggerTakeDamage
 import com.willfp.libreforge.triggers.impl.TriggerTakeEntityDamage
+import com.willfp.libreforge.triggers.impl.TriggerTameAnimal
 import com.willfp.libreforge.triggers.impl.TriggerTeleport
 import com.willfp.libreforge.triggers.impl.TriggerToggleFlight
 import com.willfp.libreforge.triggers.impl.TriggerToggleSneak
@@ -202,5 +203,6 @@ object Triggers : Registry<Trigger>() {
         register(TriggerBrewIngredient)
         register(TriggerClickEntity)
         register(TriggerLevelUpItem)
+        register(TriggerTameAnimal)
     }
 }
