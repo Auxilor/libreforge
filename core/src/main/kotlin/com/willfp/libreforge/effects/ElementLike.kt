@@ -47,16 +47,16 @@ abstract class ElementLike : ConfigurableElement {
             return doTrigger(trigger)
         }
 
-        // Extra initial injection, otherwise it's not possible to use injections
-        // in the repeat configs.
-        config.addInjectablePlaceholder(trigger.placeholders)
-
         // It would be nice to abstract repeat/delay away here, but that would be
         // really, really, overengineering it - even for me.
         var repeatTimes = 1
         var repeatIncrement = 0.0
         var repeatCount = 0.0
         if (config.has("repeat")) {
+            // Extra initial injection, otherwise it's not possible to use injections
+            // in the repeat configs.
+            config.addInjectablePlaceholder(trigger.placeholders)
+
             repeatTimes = config.getIntFromExpression("repeat.times", trigger.data).coerceAtLeast(1)
             val repeatStart = config.getDoubleFromExpression("repeat.start", trigger.data)
             repeatIncrement = config.getDoubleFromExpression("repeat.increment", trigger.data)
