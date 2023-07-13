@@ -91,5 +91,15 @@ point-names: # If you have point names that look ugly (e.g. souls) then you can 
 
 raytrace-distance: 80 # The distance that alt_click should check for a location
 
-telekinesis:
-  on-players: true # Whether telekinesis should work on players
+effects:
+  telekinesis:
+    on-players: true # Whether telekinesis should work on players
+
+  # If this is set to true, effects like mine_radius, drill, etc. will simply set the block to air
+  # instead of actually breaking it. This **will** break compatibility with things, but will also majorly
+  # improve performance under load.
+  # Setting this to true means that not only will mine_block and block_item_drop not be triggered, but also
+  # that other plugins will not be able to interact with the event (e.g. no skill experience will be gained).
+  # Only set this option to true if you know what you're doing!
+  use-setblock-break: false
+  
