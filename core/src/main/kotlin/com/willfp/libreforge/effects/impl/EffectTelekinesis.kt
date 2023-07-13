@@ -107,7 +107,7 @@ object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
     fun handle(event: EntityDeathByEntityEvent) {
         val victim = event.victim
 
-        if (victim is Player && plugin.configYml.getBool("telekinesis.on-players")) {
+        if (victim is Player && plugin.configYml.getBool("effects.telekinesis.on-players")) {
             return
         }
 
