@@ -2,6 +2,8 @@ package com.willfp.libreforge.triggers
 
 import com.willfp.eco.core.registry.KRegistrable
 import com.willfp.libreforge.ProvidedHolder
+import com.willfp.libreforge.counters.bind.BoundCounters
+import com.willfp.libreforge.counters.bind.BoundCounters.bindings
 import com.willfp.libreforge.generatePlaceholders
 import com.willfp.libreforge.getProvidedActiveEffects
 import com.willfp.libreforge.plugin
@@ -49,10 +51,19 @@ abstract class Trigger(
 
         val dispatch = plugin.dispatchedTriggerFactory.create(player, this, data) ?: return
 
+        val effects = forceHolders?.getProvidedActiveEffects(player) ?: player.providedActiveEffects
+
+        // Prevent dispatching useless triggers
+        val potentialDestinations = effects.flatMap { it.effects } + BoundCounters.values()
+        if (potentialDestinations.none { it.canBeTriggeredBy(this) }) {
+            return
+        }
+
         dispatch.generatePlaceholders(data)
 
         val dispatchEvent = TriggerDispatchEvent(player, dispatch)
         Bukkit.getPluginManager().callEvent(dispatchEvent)
+
         if (dispatchEvent.isCancelled) {
             return
         }
@@ -73,6 +84,11 @@ abstract class Trigger(
             for (block in blocks) {
                 block.tryTrigger(dispatchWithHolder)
             }
+        }
+
+        // Probably a better way to work with counters, but this works for now.
+        for (counter in BoundCounters.values()) {
+            counter.bindings.forEach { it.accept(dispatch) }
         }
     }
 

@@ -8,6 +8,7 @@ import com.willfp.libreforge.effects.arguments.EffectArgumentList
 import com.willfp.libreforge.filters.FilterList
 import com.willfp.libreforge.mutators.MutatorList
 import com.willfp.libreforge.triggers.DispatchedTrigger
+import com.willfp.libreforge.triggers.PotentiallyTriggerable
 import com.willfp.libreforge.triggers.Trigger
 import org.bukkit.entity.Player
 import java.util.Objects
@@ -26,7 +27,7 @@ class EffectBlock internal constructor(
     override val mutators: MutatorList,
     override val filters: FilterList,
     override val isElementOwnChain: Boolean
-) : ElementLike() {
+) : ElementLike(), PotentiallyTriggerable {
     override val supportsDelay = effects.all { it.supportsDelay }
 
     val weight = effects.weight
@@ -51,7 +52,7 @@ class EffectBlock internal constructor(
         }
     }
 
-    fun canBeTriggeredBy(trigger: Trigger) =
+    override fun canBeTriggeredBy(trigger: Trigger) =
         trigger in triggers
 
     override fun doTrigger(trigger: DispatchedTrigger) =
