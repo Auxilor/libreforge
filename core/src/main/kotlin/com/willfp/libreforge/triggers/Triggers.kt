@@ -16,6 +16,7 @@ import com.willfp.libreforge.triggers.impl.TriggerCatchFishFail
 import com.willfp.libreforge.triggers.impl.TriggerChangeArmor
 import com.willfp.libreforge.triggers.impl.TriggerChangeChunk
 import com.willfp.libreforge.triggers.impl.TriggerChangeWorld
+import com.willfp.libreforge.triggers.impl.TriggerClickBlock
 import com.willfp.libreforge.triggers.impl.TriggerClickEntity
 import com.willfp.libreforge.triggers.impl.TriggerConsume
 import com.willfp.libreforge.triggers.impl.TriggerCraft
@@ -204,5 +205,6 @@ object Triggers : Registry<Trigger>() {
         register(TriggerClickEntity)
         register(TriggerLevelUpItem)
         register(TriggerTameAnimal)
+        register(TriggerClickBlock)
     }
 }
