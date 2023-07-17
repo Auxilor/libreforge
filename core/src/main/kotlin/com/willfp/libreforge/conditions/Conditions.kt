@@ -4,62 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.registry.Registry
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.ViolationContext
-import com.willfp.libreforge.conditions.impl.ConditionAboveBalance
-import com.willfp.libreforge.conditions.impl.ConditionAboveGlobalPoints
-import com.willfp.libreforge.conditions.impl.ConditionAboveHealthPercent
-import com.willfp.libreforge.conditions.impl.ConditionAboveHungerPercent
-import com.willfp.libreforge.conditions.impl.ConditionAbovePoints
-import com.willfp.libreforge.conditions.impl.ConditionAboveXPLevel
-import com.willfp.libreforge.conditions.impl.ConditionAboveY
-import com.willfp.libreforge.conditions.impl.ConditionAnyOf
-import com.willfp.libreforge.conditions.impl.ConditionAtLeastOf
-import com.willfp.libreforge.conditions.impl.ConditionBelowBalance
-import com.willfp.libreforge.conditions.impl.ConditionBelowGlobalPoints
-import com.willfp.libreforge.conditions.impl.ConditionBelowHealthPercent
-import com.willfp.libreforge.conditions.impl.ConditionBelowHungerPercent
-import com.willfp.libreforge.conditions.impl.ConditionBelowPoints
-import com.willfp.libreforge.conditions.impl.ConditionBelowXPLevel
-import com.willfp.libreforge.conditions.impl.ConditionBelowY
-import com.willfp.libreforge.conditions.impl.ConditionCanAffordPrice
-import com.willfp.libreforge.conditions.impl.ConditionGlobalPointsEqual
-import com.willfp.libreforge.conditions.impl.ConditionHasItem
-import com.willfp.libreforge.conditions.impl.ConditionHasPermission
-import com.willfp.libreforge.conditions.impl.ConditionHasPotionEffect
-import com.willfp.libreforge.conditions.impl.ConditionInAir
-import com.willfp.libreforge.conditions.impl.ConditionInBiome
-import com.willfp.libreforge.conditions.impl.ConditionInBlock
-import com.willfp.libreforge.conditions.impl.ConditionInMainhand
-import com.willfp.libreforge.conditions.impl.ConditionInOffhand
-import com.willfp.libreforge.conditions.impl.ConditionInWater
-import com.willfp.libreforge.conditions.impl.ConditionInWorld
-import com.willfp.libreforge.conditions.impl.ConditionIsExpressionTrue
-import com.willfp.libreforge.conditions.impl.ConditionIsFrozen
-import com.willfp.libreforge.conditions.impl.ConditionIsGliding
-import com.willfp.libreforge.conditions.impl.ConditionIsNight
-import com.willfp.libreforge.conditions.impl.ConditionIsSneaking
-import com.willfp.libreforge.conditions.impl.ConditionIsSprinting
-import com.willfp.libreforge.conditions.impl.ConditionIsStorm
-import com.willfp.libreforge.conditions.impl.ConditionIsSwimming
-import com.willfp.libreforge.conditions.impl.ConditionItemLevelAbove
-import com.willfp.libreforge.conditions.impl.ConditionItemLevelBelow
-import com.willfp.libreforge.conditions.impl.ConditionItemLevelEquals
-import com.willfp.libreforge.conditions.impl.ConditionItemPointsAbove
-import com.willfp.libreforge.conditions.impl.ConditionItemPointsBelow
-import com.willfp.libreforge.conditions.impl.ConditionItemPointsEqual
-import com.willfp.libreforge.conditions.impl.ConditionNearEntity
-import com.willfp.libreforge.conditions.impl.ConditionOnFire
-import com.willfp.libreforge.conditions.impl.ConditionPlaceholderContains
-import com.willfp.libreforge.conditions.impl.ConditionPlaceholderEquals
-import com.willfp.libreforge.conditions.impl.ConditionPlaceholderGreaterThan
-import com.willfp.libreforge.conditions.impl.ConditionPlaceholderLessThan
-import com.willfp.libreforge.conditions.impl.ConditionPointsEqual
-import com.willfp.libreforge.conditions.impl.ConditionRidingEntity
-import com.willfp.libreforge.conditions.impl.ConditionStandingOnBlock
-import com.willfp.libreforge.conditions.impl.ConditionWearingBoots
-import com.willfp.libreforge.conditions.impl.ConditionWearingChestplate
-import com.willfp.libreforge.conditions.impl.ConditionWearingHelmet
-import com.willfp.libreforge.conditions.impl.ConditionWearingLeggings
-import com.willfp.libreforge.conditions.impl.ConditionWithinRadiusOf
+import com.willfp.libreforge.conditions.impl.*
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.separatorAmbivalent
 
@@ -170,5 +115,9 @@ object Conditions : Registry<Condition<*>>() {
         register(ConditionItemPointsAbove)
         register(ConditionItemPointsBelow)
         register(ConditionItemPointsEqual)
+        register(ConditionInLava)
+        register(ConditionInRain)
+        register(ConditionInBubble)
+        register(ConditionOnGround)
     }
 }
