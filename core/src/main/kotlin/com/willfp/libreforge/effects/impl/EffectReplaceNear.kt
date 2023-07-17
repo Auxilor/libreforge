@@ -76,8 +76,10 @@ object EffectReplaceNear : MineBlockEffect<NoCompileData>("replace_near") {
 
                     if (duration > 0) {
                         val oldBlock = toReplace.type
+                        val oldBlockData = toReplace.blockData
                         plugin.scheduler.runLater(duration.toLong()) {
                             toReplace.type = oldBlock
+                            toReplace.blockData = oldBlockData
                         }
                     }
 
