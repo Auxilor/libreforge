@@ -102,4 +102,9 @@ effects:
   # that other plugins will not be able to interact with the event (e.g. no skill experience will be gained).
   # Only set this option to true if you know what you're doing!
   use-setblock-break: false
-  
+
+refresh:
+  inventory-click:
+    # Inventory clicks refresh active holders, but a group of malicious users spamming can cause server lag.
+    # Setting a timeout ensures only one click triggers a refresh within the specified time (in milliseconds).
+    timeout: 500
