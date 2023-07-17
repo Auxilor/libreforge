@@ -33,7 +33,7 @@ object EffectReplaceNear : MineBlockEffect<NoCompileData>("replace_near") {
             return false
         }
 
-        val replaceTo = Material.matchMaterial(config.getString("replace_to").uppercase()) ?: Material.APPLE
+        val replaceTo = Material.matchMaterial(config.getString("replace_to").uppercase()) ?: return false
 
         val whitelist = config.getStringsOrNull("whitelist")
 
@@ -66,7 +66,7 @@ object EffectReplaceNear : MineBlockEffect<NoCompileData>("replace_near") {
                         continue
                     }
 
-                    if (!toReplace.getRelative(BlockFace.UP).isEmpty && exposed) {
+                    if (exposed && !toReplace.getRelative(BlockFace.UP, 1).isEmpty) {
                         continue
                     }
 
