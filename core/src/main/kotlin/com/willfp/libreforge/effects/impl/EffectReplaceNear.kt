@@ -7,10 +7,11 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.templates.MineBlockEffect
 import com.willfp.libreforge.getIntFromExpression
+import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.Material
-import org.bukkit.block.Block
+import org.bukkit.block.BlockFace
 
 object EffectReplaceNear : MineBlockEffect<NoCompileData>("replace_near") {
     override val parameters = setOf(
@@ -32,9 +33,13 @@ object EffectReplaceNear : MineBlockEffect<NoCompileData>("replace_near") {
             return false
         }
 
-        val replaceTo = Material.getMaterial(config.getString("replace_to")) ?: return false
+        val replaceTo = Material.matchMaterial(config.getString("replace_to").uppercase()) ?: Material.APPLE
 
         val whitelist = config.getStringsOrNull("whitelist")
+
+        val duration = config.getDoubleFromExpression("duration")
+
+        val exposed = config.getBool("exposed_only")
 
         for (x in (-radius..radius)) {
             for (y in (-radius..radius)) {
@@ -61,8 +66,19 @@ object EffectReplaceNear : MineBlockEffect<NoCompileData>("replace_near") {
                         continue
                     }
 
+                    if (!toReplace.getRelative(BlockFace.UP).isEmpty && exposed) {
+                        continue
+                    }
+
                     if (!AntigriefManager.canBreakBlock(player, toReplace)) {
                         continue
+                    }
+
+                    if (duration > 0) {
+                        val oldBlock = toReplace.type
+                        plugin.scheduler.runLater(duration.toLong()) {
+                            toReplace.type = oldBlock
+                        }
                     }
 
                     toReplace.type = replaceTo
