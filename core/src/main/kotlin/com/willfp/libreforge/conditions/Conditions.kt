@@ -60,9 +60,9 @@ import com.willfp.libreforge.conditions.impl.ConditionWearingChestplate
 import com.willfp.libreforge.conditions.impl.ConditionWearingHelmet
 import com.willfp.libreforge.conditions.impl.ConditionWearingLeggings
 import com.willfp.libreforge.conditions.impl.ConditionWithinRadiusOf
-import com.willfp.libreforge.conditions.impl.ConditionInRain
-import com.willfp.libreforge.conditions.impl.ConditionInBubble
-import com.willfp.libreforge.conditions.impl.ConditionInLava
+import com.willfp.libreforge.integrations.paper.impl.ConditionInRain
+import com.willfp.libreforge.integrations.paper.impl.ConditionInBubble
+import com.willfp.libreforge.integrations.paper.impl.ConditionInLava
 import com.willfp.libreforge.conditions.impl.ConditionOnGround
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.separatorAmbivalent
@@ -185,9 +185,6 @@ object Conditions : Registry<Condition<*>>() {
         register(ConditionItemPointsAbove)
         register(ConditionItemPointsBelow)
         register(ConditionItemPointsEqual)
-        register(ConditionInLava)
-        register(ConditionInRain)
-        register(ConditionInBubble)
         register(ConditionOnGround)
     }
 }

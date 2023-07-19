@@ -2,6 +2,7 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
+import com.willfp.eco.core.items.Items
 import com.willfp.eco.util.containsIgnoreCase
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
@@ -22,9 +23,8 @@ object EffectReplaceNear : MineBlockEffect<NoCompileData>("replace_near") {
     )
 
     override val arguments = arguments {
-        require("radius_x", "You must specify the radius to replace!")
-        require("radius_y", "You must specify the radius to replace!")
-        require("radius_z", "You must specify the radius to replace!")
+        require("radius", "You must specify the radius!")
+        require("radius_y", "You must specify the y radius!")
         require("replace_to", "You must specify the block to replace to!")
     }
 
@@ -32,27 +32,25 @@ object EffectReplaceNear : MineBlockEffect<NoCompileData>("replace_near") {
         val block = data.block ?: data.location?.block ?: return false
         val player = data.player ?: return false
 
-        val radiusX = config.getIntFromExpression("radius_x", data)
+        val radius = config.getIntFromExpression("radius", data)
         val radiusY = config.getIntFromExpression("radius_y", data)
-        val radiusZ = config.getIntFromExpression("radius_z", data)
 
         if (player.isSneaking && config.getBool("disable_on_sneak")) {
             return false
         }
 
-        val replaceTo = Material.getMaterial(config.getString("replace_to").uppercase()) ?: return false
+        val replaceTo = Items.lookup(config.getString("replace_to")).item.type
 
         val whitelist = config.getStringsOrNull("whitelist")
 
-        val duration = config.getDoubleFromExpression("duration")
+        val duration = if (config.has("duration")) config.getIntFromExpression("duration") else null
 
-        val exposed = config.getBool("exposed_only")
+        val exposedBlocksOnly = config.getBool("exposed_only")
+        val sourceBlocksOnly = config.getBool("source_only")
 
-        val flowing = config.getBool("source_only")
-
-        for (x in (-radiusX..radiusX)) {
+        for (x in (-radius..radius)) {
             for (y in (-radiusY..radiusY)) {
-                for (z in (-radiusZ..radiusZ)) {
+                for (z in (-radius..radius)) {
                     if (x == 0 && y == 0 && z == 0) {
                         continue
                     }
@@ -61,7 +59,7 @@ object EffectReplaceNear : MineBlockEffect<NoCompileData>("replace_near") {
                         block.location.clone().add(x.toDouble(), y.toDouble(), z.toDouble())
                     )
 
-                    if (config.getStrings("blacklisted_blocks").containsIgnoreCase(toReplace.type.name)) {
+                    if (config.getStrings("blacklist").containsIgnoreCase(toReplace.type.name)) {
                         continue
                     }
 
@@ -75,11 +73,11 @@ object EffectReplaceNear : MineBlockEffect<NoCompileData>("replace_near") {
                         continue
                     }
 
-                    if (exposed && !toReplace.getRelative(BlockFace.UP, 1).isEmpty) {
+                    if (exposedBlocksOnly && !toReplace.getRelative(BlockFace.UP, 1).isEmpty) {
                         continue
                     }
 
-                    if (flowing && toReplace.isLiquid) {
+                    if (sourceBlocksOnly && toReplace.isLiquid) {
                         val liquidData = toReplace.blockData
                         if (liquidData is Levelled) {
                             if (liquidData.level != 0) {
@@ -88,14 +86,15 @@ object EffectReplaceNear : MineBlockEffect<NoCompileData>("replace_near") {
                         }
                     }
 
-                    if (!AntigriefManager.canBreakBlock(player, toReplace)) {
+                    if (!(AntigriefManager.canBreakBlock(player, toReplace) && AntigriefManager.canPlaceBlock(player, toReplace))) {
                         continue
                     }
 
-                    if (duration > 0) {
+                    if (duration != null && duration > 0) {
                         val oldBlock = toReplace.type
                         val oldBlockData = toReplace.blockData
                         toReplace.setMetadata("rn-block", plugin.createMetadataValue(true))
+
                         plugin.scheduler.runLater(duration.toLong()) {
                             if (toReplace.hasMetadata("rn-block")) {
                                 toReplace.type = oldBlock
