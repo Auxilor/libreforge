@@ -11,6 +11,27 @@ abstract class Condition<T>(
     override val id: String
 ) : Compilable<T>(), Listener {
     /**
+     * Whether this condition is enabled.
+     */
+    open var isEnabled: Boolean = false
+        protected set
+
+    /**
+     * Enable the condition.
+     */
+    fun enable() {
+        // Only register if not enabled before
+        if (!isEnabled) {
+            plugin.runWhenEnabled {
+                plugin.eventManager.unregisterListener(this)
+                plugin.eventManager.registerListener(this)
+            }
+        }
+
+        isEnabled = true
+    }
+
+    /**
      * Get if the condition is met.
      *
      * @param player The player.
@@ -46,8 +67,6 @@ abstract class Condition<T>(
 
     final override fun onRegister() {
         plugin.runWhenEnabled {
-            plugin.eventManager.unregisterListener(this)
-            plugin.eventManager.registerListener(this)
             postRegister()
         }
     }
