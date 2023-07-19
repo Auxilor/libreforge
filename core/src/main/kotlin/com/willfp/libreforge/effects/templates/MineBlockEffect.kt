@@ -6,6 +6,7 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.entity.Player
 
@@ -20,11 +21,15 @@ abstract class MineBlockEffect<T : Any>(id: String) : Effect<T>(id) {
     }
 
     protected fun Player.breakBlocksSafely(blocks: Collection<Block>) {
-        this.runExempted {
-            for (block in blocks) {
-                block.setMetadata("block-ignore", plugin.createMetadataValue(true))
-                this.breakBlock(block)
-                block.removeMetadata("block-ignore", plugin)
+        if (plugin.configYml.getBool("effects.use-setblock-break")) {
+            blocks.forEach { it.type = Material.AIR }
+        } else {
+            this.runExempted {
+                for (block in blocks) {
+                    block.setMetadata("block-ignore", plugin.createMetadataValue(true))
+                    this.breakBlock(block)
+                    block.removeMetadata("block-ignore", plugin)
+                }
             }
         }
     }
