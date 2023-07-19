@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.willfp.libreforge.integrations.paper.impl
 
 import com.willfp.eco.core.config.interfaces.Config
