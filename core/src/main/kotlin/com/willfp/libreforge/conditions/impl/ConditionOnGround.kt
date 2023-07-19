@@ -9,5 +9,4 @@ object ConditionOnGround : Condition<NoCompileData>("on_ground") {
     override fun isMet(player: Player, config: Config, compileData: NoCompileData): Boolean {
         return player.world.getBlockAt(player.location.clone().add(0.0, -1.0, 0.0)).isSolid
     }
-
 }

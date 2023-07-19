@@ -2,8 +2,12 @@ package com.willfp.libreforge.integrations.paper
 
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.util.ClassUtils
+import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.integrations.LoadableIntegration
+import com.willfp.libreforge.integrations.paper.impl.ConditionInBubble
+import com.willfp.libreforge.integrations.paper.impl.ConditionInLava
+import com.willfp.libreforge.integrations.paper.impl.ConditionInRain
 import com.willfp.libreforge.integrations.paper.impl.EffectDropPickupItem
 import com.willfp.libreforge.integrations.paper.impl.EffectElytraBoostSaveChance
 import com.willfp.libreforge.integrations.paper.impl.EffectSendMinimessage
@@ -25,6 +29,9 @@ object PaperIntegration : LoadableIntegration {
         Effects.register(EffectElytraBoostSaveChance)
         Effects.register(EffectDropPickupItem)
         Effects.register(EffectSendMinimessage)
+        Conditions.register(ConditionInBubble)
+        Conditions.register(ConditionInLava)
+        Conditions.register(ConditionInRain)
     }
 
     // I know it's not a plugin but shhhh
