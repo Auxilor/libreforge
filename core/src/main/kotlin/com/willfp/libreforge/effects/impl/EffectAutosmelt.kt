@@ -41,6 +41,7 @@ object EffectAutosmelt : Effect<NoCompileData>("autosmelt") {
                 continue
             }
             val xp = ceil(recipe.experience).toInt()
+            @Suppress("DEPRECATION")
             recipes[recipe.input.type] = Pair(recipe.result.type, xp)
         }
     }

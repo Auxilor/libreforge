@@ -44,6 +44,7 @@ object EffectDamageMainhand : Effect<NoCompileData>("damage_mainhand") {
         }
 
         return if (victim is Player) {
+            @Suppress("DEPRECATION")
             val event = PlayerItemDamageEvent(victim, item, damage)
             Bukkit.getPluginManager().callEvent(event)
             if (!event.isCancelled) {

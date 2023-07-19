@@ -62,6 +62,7 @@ object EffectDamageArmor : Effect<NoCompileData>("damage_armor") {
                 }
 
                 if (victim is Player) {
+                    @Suppress("DEPRECATION")
                     val event = PlayerItemDamageEvent(victim, item, damage)
                     Bukkit.getPluginManager().callEvent(event)
                     if (!event.isCancelled) {
@@ -77,6 +78,7 @@ object EffectDamageArmor : Effect<NoCompileData>("damage_armor") {
                 @Suppress("SENSELESS_COMPARISON")
                 if (item != null && item.itemMeta is Damageable) {
                     if (victim is Player) {
+                        @Suppress("DEPRECATION")
                         val event = PlayerItemDamageEvent(victim, item, damage)
                         Bukkit.getPluginManager().callEvent(event)
                         if (!event.isCancelled) {

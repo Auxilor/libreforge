@@ -21,6 +21,7 @@ object EffectNameEntity : Effect<NoCompileData>("name_entity") {
         val victim = data.victim ?: return false
 
         victim.isCustomNameVisible = true
+        @Suppress("DEPRECATION")
         victim.customName = config.getFormattedString("name", data)
 
         return true
