@@ -8,7 +8,6 @@ import com.willfp.libreforge.commands.CommandLibreforge
 import com.willfp.libreforge.configs.ChainsYml
 import com.willfp.libreforge.configs.category.NativeConfigCategory
 import com.willfp.libreforge.configs.lrcdb.CommandLrcdb
-import com.willfp.libreforge.counters.CounterHandler
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.executors.impl.NormalExecutorFactory
 import com.willfp.libreforge.integrations.aureliumskills.AureliumSkillsIntegration
@@ -120,8 +119,7 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
     override fun loadListeners(): List<Listener> {
         return listOf(
             EffectCollisionFixer,
-            ItemRefreshListener(this),
-            CounterHandler
+            ItemRefreshListener(this)
         )
     }
 

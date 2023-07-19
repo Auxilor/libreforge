@@ -47,26 +47,34 @@ abstract class ElementLike : ConfigurableElement {
             return doTrigger(trigger)
         }
 
-        // Extra initial injection, otherwise it's not possible to use injections
-        // in the repeat configs.
-        config.addInjectablePlaceholder(trigger.placeholders)
-
         // It would be nice to abstract repeat/delay away here, but that would be
         // really, really, overengineering it - even for me.
-        val repeatTimes = config.getIntFromExpression("repeat.times", trigger.data).coerceAtLeast(1)
-        val repeatStart = config.getDoubleFromExpression("repeat.start", trigger.data)
-        val repeatIncrement = config.getDoubleFromExpression("repeat.increment", trigger.data)
-        var repeatCount = repeatStart
+        var repeatTimes = 1
+        var repeatIncrement = 0.0
+        var repeatCount = 0.0
+        if (config.has("repeat")) {
+            // Extra initial injection, otherwise it's not possible to use injections
+            // in the repeat configs.
+            config.addInjectablePlaceholder(trigger.placeholders)
 
-        trigger.addPlaceholder(NamedValue("repeat_times", repeatTimes))
-        trigger.addPlaceholder(NamedValue("repeat_start", repeatStart))
-        trigger.addPlaceholder(NamedValue("repeat_increment", repeatIncrement))
-        trigger.addPlaceholder(DynamicNumericValue("repeat_count") { repeatCount })
+            repeatTimes = config.getIntFromExpression("repeat.times", trigger.data).coerceAtLeast(1)
+            val repeatStart = config.getDoubleFromExpression("repeat.start", trigger.data)
+            repeatIncrement = config.getDoubleFromExpression("repeat.increment", trigger.data)
+            repeatCount = repeatStart
 
-        val delay = config.getIntFromExpression("delay", trigger.data)
-            .coerceAtLeast(0)
-            .let { if (!supportsDelay) 0 else it }
-            .toLong()
+            trigger.addPlaceholder(NamedValue("repeat_times", repeatTimes))
+            trigger.addPlaceholder(NamedValue("repeat_start", repeatStart))
+            trigger.addPlaceholder(NamedValue("repeat_increment", repeatIncrement))
+            trigger.addPlaceholder(DynamicNumericValue("repeat_count") { repeatCount })
+        }
+
+        var delay = 0L
+        if (config.has("delay")) {
+            delay = config.getIntFromExpression("delay", trigger.data)
+                .coerceAtLeast(0)
+                .let { if (!supportsDelay) 0 else it }
+                .toLong()
+        }
 
         // Initial injection into mutators
         mutators.map { it.config }.forEach { it.addInjectablePlaceholder(trigger.placeholders) }
