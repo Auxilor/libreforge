@@ -22,6 +22,9 @@ object ConditionInRegion : Condition<NoCompileData>("in_region") {
         val block = BlockVector3.at(player.location.x, player.location.y, player.location.z)
         val manager = regionContainer[world] ?: return false
 
-        return manager.getApplicableRegionsIDs(block).containsIgnoreCase(config.getString("region"))
+        val inRegions = manager.getApplicableRegionsIDs(block).map { it.lowercase() }.toSet()
+        val allowedRegions = config.getStrings("region").map { it.lowercase() }.toSet()
+
+        return inRegions.intersect(allowedRegions).isNotEmpty()
     }
 }

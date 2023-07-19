@@ -69,6 +69,17 @@ import com.willfp.libreforge.separatorAmbivalent
 
 object Conditions : Registry<Condition<*>>() {
     /**
+     * Get a condition by [id].
+     *
+     * This will enable the condition.
+     */
+    override fun get(id: String): Condition<*>? {
+        return super.get(id)?.apply {
+            enable()
+        }
+    }
+
+    /**
      * Compile a list of [configs] into a ConditionList in a given [context].
      */
     fun compile(configs: Collection<Config>, context: ViolationContext): ConditionList =
