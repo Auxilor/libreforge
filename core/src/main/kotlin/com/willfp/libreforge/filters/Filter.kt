@@ -36,14 +36,9 @@ abstract class Filter<T, V>(
     ): Boolean {
         val cfg = config.config
 
-        val regularPresent = cfg.has(id)
-        val inversePresent = cfg.has("not_$id")
+        val isInverted = config.isInverted ?: return true
 
-        if (!regularPresent && !inversePresent) {
-            return true
-        }
-
-        return if (inversePresent) {
+        return if (isInverted) {
             !isMet(data, getValue(cfg, data, "not_$id"), config.compileData)
         } else {
             isMet(data, getValue(cfg, data, id), config.compileData)

@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects
 
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
+import com.willfp.eco.core.placeholder.InjectablePlaceholder
 import com.willfp.libreforge.ConfigurableElement
 import com.willfp.libreforge.DynamicNumericValue
 import com.willfp.libreforge.NamedValue
@@ -28,6 +29,15 @@ abstract class ElementLike : ConfigurableElement {
      * If the element is its own chain, (e.g. has an ID specified directly at the top level).
      */
     open val isElementOwnChain: Boolean = false
+
+    // Inject placeholders into all config blocks.
+    private fun injectPlaceholders(placeholders: List<InjectablePlaceholder>) {
+        listOf(arguments, conditions, mutators, filters)
+            .flatten()
+            .map { it.config }
+            .plusElement(config)
+            .forEach { it.addInjectablePlaceholder(placeholders) }
+    }
 
     /*
     The replacement for the old ConfiguredEffect#invoke method.
@@ -93,11 +103,7 @@ abstract class ElementLike : ConfigurableElement {
 
         // Inject placeholders everywhere after mutation
         trigger.generatePlaceholders(data)
-        listOf(arguments, conditions, mutators, filters)
-            .flatten()
-            .map { it.config }
-            .plusElement(config)
-            .forEach { it.addInjectablePlaceholder(trigger.placeholders) }
+        injectPlaceholders(trigger.placeholders)
 
         // Filter
         val filterResult = if (config.getBool("filters_before_mutation")) {
@@ -143,6 +149,7 @@ abstract class ElementLike : ConfigurableElement {
 
             // Re-inject new placeholder with different hash
             trigger.addPlaceholder(DynamicNumericValue("repeat_count", repeatCount))
+            injectPlaceholders(DynamicNumericValue("repeat_count", repeatCount).placeholders)
         }
 
         // Can't delay initial execution for things that modify events.
