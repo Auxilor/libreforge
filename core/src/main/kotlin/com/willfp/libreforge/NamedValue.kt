@@ -42,29 +42,29 @@ that give different hashes each time, to force a re-calculation of the expressio
 
 internal class DynamicNumericValue(
     identifiers: Collection<String>,
-    value: () -> Number
-) : NamedValue(identifiers, value()) {
+    value: Number
+) : NamedValue(identifiers, value) {
     constructor(
         identifier: String,
-        value: () -> Number
+        value: Number
     ) : this(listOf(identifier), value)
 
     override val placeholders: List<InjectablePlaceholder> = identifiers.map {
-        DynamicHashPlaceholder(
+        ValueHashPlaceholder(
             it,
             value
         )
     }
 
-    private class DynamicHashPlaceholder(
+    private class ValueHashPlaceholder(
         private val identifier: String,
-        private val fn: () -> Number
+        private val value: Number
     ) : SimpleInjectablePlaceholder(identifier) {
-        override fun getValue(p0: String, p1: PlaceholderContext) = fn().toString()
+        override fun getValue(p0: String, p1: PlaceholderContext) = value.toString()
 
         override fun hashCode(): Int {
             // Use the value of the function to force a re-calculation of the expression
-            return fn().toInt() * 31 + identifier.hashCode()
+            return value.toInt() * 31 + identifier.hashCode()
         }
 
         override fun equals(other: Any?): Boolean {
@@ -72,12 +72,12 @@ internal class DynamicNumericValue(
                 return true
             }
 
-            if (other !is DynamicHashPlaceholder) {
+            if (other !is ValueHashPlaceholder) {
                 return false
             }
 
             return other.identifier == this.identifier
-                    && other.fn() == this.fn()
+                    && other.value == this.value
         }
     }
 }

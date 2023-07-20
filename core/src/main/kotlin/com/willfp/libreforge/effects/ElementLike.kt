@@ -52,6 +52,7 @@ abstract class ElementLike : ConfigurableElement {
         var repeatTimes = 1
         var repeatIncrement = 0.0
         var repeatCount = 0.0
+
         if (config.has("repeat")) {
             // Extra initial injection, otherwise it's not possible to use injections
             // in the repeat configs.
@@ -65,7 +66,7 @@ abstract class ElementLike : ConfigurableElement {
             trigger.addPlaceholder(NamedValue("repeat_times", repeatTimes))
             trigger.addPlaceholder(NamedValue("repeat_start", repeatStart))
             trigger.addPlaceholder(NamedValue("repeat_increment", repeatIncrement))
-            trigger.addPlaceholder(DynamicNumericValue("repeat_count") { repeatCount })
+            trigger.addPlaceholder(DynamicNumericValue("repeat_count", repeatCount))
         }
 
         var delay = 0L
@@ -139,6 +140,9 @@ abstract class ElementLike : ConfigurableElement {
             ) true else didTrigger
 
             repeatCount += repeatIncrement
+
+            // Re-inject new placeholder with different hash
+            trigger.addPlaceholder(DynamicNumericValue("repeat_count", repeatCount))
         }
 
         // Can't delay initial execution for things that modify events.
