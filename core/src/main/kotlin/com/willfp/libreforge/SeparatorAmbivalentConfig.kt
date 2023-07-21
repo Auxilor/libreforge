@@ -99,16 +99,6 @@ private class SeparatorAmbivalentConfig(
 fun Config.separatorAmbivalent(): Config =
     if (this is SeparatorAmbivalentConfig) this else SeparatorAmbivalentConfig(this)
 
-@Deprecated(
-    "Use toPlaceholderContext instead",
-    ReplaceWith("this.toPlaceholderContext(data)"),
-    DeprecationLevel.ERROR
-)
-@Suppress("DEPRECATION")
-fun Config.toMathContext(data: TriggerData? = null): com.willfp.eco.core.math.MathContext {
-    return this.toPlaceholderContext(data).toMathContext()
-}
-
 fun Config.toPlaceholderContext(data: TriggerData? = null): PlaceholderContext {
     val additionalPlayers = mutableListOf<AdditionalPlayer>()
 

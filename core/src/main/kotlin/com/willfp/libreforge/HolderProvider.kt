@@ -131,13 +131,6 @@ private val holderPlaceholderProviders = mutableListOf<(ProvidedHolder, Player) 
 /**
  * Register a function to generate placeholders for a holder.
  */
-@Deprecated("Use registerPlaceholderProvider instead.", ReplaceWith("registerPlaceholderProvider(provider)"))
-fun registerHolderPlaceholderProvider(provider: (ProvidedHolder) -> Collection<NamedValue>) =
-    registerPlaceholderProvider { providedHolder, _ -> provider(providedHolder) }
-
-/**
- * Register a function to generate placeholders for a holder.
- */
 fun registerPlaceholderProvider(provider: (ProvidedHolder, Player) -> Collection<NamedValue>) {
     holderPlaceholderProviders += provider
 }
@@ -268,18 +261,6 @@ fun Collection<ProvidedHolder>.getProvidedActiveEffects(player: Player): List<Pr
 
     return blocks
 }
-
-/**
- * Get active effects for a [player].
- */
-@Deprecated(
-    "Use ProvidedHolder.getActiveEffects instead", ReplaceWith(
-        "SimpleProvidedHolder(this).getActiveEffects(player)",
-        "com.willfp.libreforge.SimpleProvidedHolder"
-    )
-)
-fun Holder.getActiveEffects(player: Player) =
-    SimpleProvidedHolder(this).getActiveEffects(player)
 
 /**
  * Get active effects for a [player].
