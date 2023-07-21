@@ -172,12 +172,6 @@ object Effects : Registry<Effect<*>>() {
             return null
         }
 
-        /*
-
-        This might be useful in the future to warn people about deprecated effects,
-        but currently it would lead to a shit ton of bug reports, especially for
-        run_chain_inline.
-
         val deprecation = effect::class.java.annotations
             .firstOrNull { it::class.java == Deprecated::class.java }
             ?.let { it as? Deprecated }?.message
@@ -186,8 +180,6 @@ object Effects : Registry<Effect<*>>() {
             context.log(ConfigViolation("id", "Effect $id is deprecated: $deprecation"))
             // Continue anyway
         }
-
-         */
 
         return makeElement(effect, config, context)
     }
