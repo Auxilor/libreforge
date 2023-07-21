@@ -28,15 +28,6 @@ class ConditionBlock<T> internal constructor(
         .expireAfterAccess(10, TimeUnit.SECONDS)
         .build<UUID, Boolean>()
 
-    @Deprecated(
-        "Use isMet(player, holder) instead.",
-        ReplaceWith("condition.isMet(player, config, compileData)"),
-        DeprecationLevel.ERROR
-    )
-    fun isMet(player: Player): Boolean {
-        return isMet(player, EmptyProvidedHolder)
-    }
-
     fun isMet(player: Player, holder: ProvidedHolder): Boolean {
         /*
 
