@@ -8,6 +8,11 @@ import com.willfp.eco.core.EcoPlugin
 data class ConfigViolation(val param: String, val message: String)
 
 /**
+ * A non-fatal config warning.
+ */
+data class ConfigWarning(val param: String, val message: String)
+
+/**
  * A logger for violations.
  */
 interface ViolationLogger {
@@ -20,6 +25,16 @@ interface ViolationLogger {
      * Log a violation.
      */
     fun log(context: ViolationContext, violation: ConfigViolation)
+
+    /**
+     * Log a warning.
+     */
+    fun log(context: ViolationContext, property: Compilable<*>, warning: ConfigWarning)
+
+    /**
+     * Log a warning.
+     */
+    fun log(context: ViolationContext, warning: ConfigWarning)
 }
 
 /**
@@ -29,18 +44,34 @@ class PluginViolationLogger(
     private val plugin: EcoPlugin
 ) : ViolationLogger {
     override fun log(context: ViolationContext, property: Compilable<*>, violation: ConfigViolation) {
-        plugin.logger.warning("")
-        plugin.logger.warning("Invalid configuration for ${property.id} found at $context:")
-        plugin.logger.warning("(Cause) Argument '${violation.param}'")
-        plugin.logger.warning("(Reason) ${violation.message}")
-        plugin.logger.warning("")
+        plugin.logger.severe("")
+        plugin.logger.severe("Invalid configuration for ${property.id} found at $context:")
+        plugin.logger.severe("(Cause) Argument '${violation.param}'")
+        plugin.logger.severe("(Reason) ${violation.message}")
+        plugin.logger.severe("")
     }
 
     override fun log(context: ViolationContext, violation: ConfigViolation) {
+        plugin.logger.severe("")
+        plugin.logger.severe("Invalid configuration found at $context:")
+        plugin.logger.severe("(Cause) Argument '${violation.param}'")
+        plugin.logger.severe("(Reason) ${violation.message}")
+        plugin.logger.severe("")
+    }
+
+    override fun log(context: ViolationContext, property: Compilable<*>, warning: ConfigWarning) {
         plugin.logger.warning("")
-        plugin.logger.warning("Invalid configuration found at $context:")
-        plugin.logger.warning("(Cause) Argument '${violation.param}'")
-        plugin.logger.warning("(Reason) ${violation.message}")
+        plugin.logger.warning("Warning for ${property.id} at $context:")
+        plugin.logger.warning("(Cause) Argument '${warning.param}'")
+        plugin.logger.warning("(Reason) ${warning.message}")
+        plugin.logger.warning("")
+    }
+
+    override fun log(context: ViolationContext, warning: ConfigWarning) {
+        plugin.logger.warning("")
+        plugin.logger.warning("Warning at $context:")
+        plugin.logger.warning("(Cause) Argument '${warning.param}'")
+        plugin.logger.warning("(Reason) ${warning.message}")
         plugin.logger.warning("")
     }
 }
@@ -76,6 +107,20 @@ open class ViolationContext internal constructor(
         logger.log(this, violation)
     }
 
+    /**
+     * Log a warning.
+     */
+    fun log(property: Compilable<*>, warning: ConfigWarning) {
+        logger.log(this, property, warning)
+    }
+
+    /**
+     * Log a warning.
+     */
+    fun log(warning: ConfigWarning) {
+        logger.log(this, warning)
+    }
+
     override fun toString(): String {
         return parents.joinToString(" -> ")
     }
@@ -90,6 +135,14 @@ object SilentViolationLogger : ViolationLogger {
     }
 
     override fun log(context: ViolationContext, violation: ConfigViolation) {
+        // Do nothing
+    }
+
+    override fun log(context: ViolationContext, warning: ConfigWarning) {
+        // Do nothing
+    }
+
+    override fun log(context: ViolationContext, property: Compilable<*>, warning: ConfigWarning) {
         // Do nothing
     }
 }
