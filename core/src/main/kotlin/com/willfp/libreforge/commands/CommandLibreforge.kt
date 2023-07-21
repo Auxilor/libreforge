@@ -17,6 +17,7 @@ class CommandLibreforge(
     }
 
     override fun onExecute(sender: CommandSender, args: MutableList<String>) {
+        @Suppress("UsagesOfObsoleteApi")
         sender.sendMessage(plugin.langYml.getMessage("invalid-command"))
     }
 }
