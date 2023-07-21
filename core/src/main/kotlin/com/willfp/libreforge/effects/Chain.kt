@@ -3,10 +3,10 @@ package com.willfp.libreforge.effects
 import com.willfp.libreforge.DelegatedList
 import com.willfp.libreforge.WeightedList
 import com.willfp.libreforge.effects.executors.ChainExecutor
-import com.willfp.libreforge.triggers.BlankTrigger
 import com.willfp.libreforge.triggers.DispatchedTrigger
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
+import com.willfp.libreforge.triggers.impl.TriggerBlank
 import org.bukkit.entity.Player
 
 /**
@@ -32,7 +32,7 @@ class Chain internal constructor(
     fun trigger(
         player: Player,
         data: TriggerData = TriggerData(player = player),
-        trigger: Trigger = BlankTrigger,
+        trigger: Trigger = TriggerBlank,
         executor: ChainExecutor = this.executor
     ): Boolean {
         return executor.execute(this, DispatchedTrigger(player, trigger, data))
