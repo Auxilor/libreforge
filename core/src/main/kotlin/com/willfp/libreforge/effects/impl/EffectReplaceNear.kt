@@ -6,6 +6,7 @@ import com.willfp.eco.core.items.Items
 import com.willfp.eco.util.containsIgnoreCase
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
+import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.templates.MineBlockEffect
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.plugin
@@ -17,7 +18,7 @@ import org.bukkit.block.data.Levelled
 import org.bukkit.event.EventHandler
 import org.bukkit.event.block.BlockBreakEvent
 
-object EffectReplaceNear : MineBlockEffect<NoCompileData>("replace_near") {
+object EffectReplaceNear : Effect<NoCompileData>("replace_near") {
     override val parameters = setOf(
         TriggerParameter.PLAYER
     )
