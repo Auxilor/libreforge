@@ -29,7 +29,7 @@ class ConditionList(
                     return true
                 }
 
-                notMet.forEach { it.notMetEffects.trigger(trigger) }
+                notMet.forEach { it.notMetEffects?.trigger(trigger) }
             }
             .let { false }
 
