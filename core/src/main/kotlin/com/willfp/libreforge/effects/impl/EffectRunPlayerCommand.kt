@@ -17,7 +17,7 @@ object EffectRunPlayerCommand : Effect<NoCompileData>("run_player_command") {
     )
 
     override val arguments = arguments {
-        require("command", "You must specify the command to run!")
+        require(listOf("commands", "command"), "You must specify the command to run!")
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
