@@ -24,7 +24,7 @@ object EffectRunPlayerCommand : Effect<NoCompileData>("run_player_command") {
         val player = data.player ?: return false
         val victim = data.victim as? Player
 
-        var commands = config.getStrings("commands", "command")
+        val commands = config.getStrings("commands", "command")
             .map { it.replace("%player%", player.name)
                 it.replace("%victim%", victim?.name ?: "")}
             .formatEco(config.toPlaceholderContext(data))
