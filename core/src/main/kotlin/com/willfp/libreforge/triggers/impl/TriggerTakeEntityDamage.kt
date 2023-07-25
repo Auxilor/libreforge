@@ -3,7 +3,7 @@ package com.willfp.libreforge.triggers.impl
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import org.bukkit.entity.LivingEntity
+import com.willfp.libreforge.triggers.tryAsLivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageByEntityEvent
@@ -19,11 +19,7 @@ object TriggerTakeEntityDamage : Trigger("take_entity_damage") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityDamageByEntityEvent) {
-        val attacker = event.damager
-
-        if (attacker !is LivingEntity) {
-            return
-        }
+        val attacker = event.damager.tryAsLivingEntity() ?: return
 
         val victim = event.entity
 
