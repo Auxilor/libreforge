@@ -14,6 +14,7 @@ object ConditionPlaceholderContains : Condition<NoCompileData>("placeholder_cont
 
     override fun isMet(player: Player, config: Config, compileData: NoCompileData): Boolean {
         return config.getFormattedString("placeholder", placeholderContext(player = player))
-            .contains(config.getString("value"), ignoreCase = config.getBool("ignore_case"))
+            .contains(config.getFormattedString("value", placeholderContext(player = player)),
+                ignoreCase = config.getBool("ignore_case"))
     }
 }
