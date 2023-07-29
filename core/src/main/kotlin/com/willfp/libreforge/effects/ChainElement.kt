@@ -55,36 +55,6 @@ class ChainElement<T> internal constructor(
         effect.disable(player, holder, isReload = isReload)
     }
 
-    @Deprecated(
-        "Use enable(player, holder) instead",
-        ReplaceWith("enable(player, holder)"),
-        DeprecationLevel.ERROR
-    )
-    @Suppress("UNUSED_PARAMETER")
-    fun enable(player: Player, holder: ProvidedHolder, identifierFactory: IdentifierFactory) {
-        effect.enable(player, holder, this)
-    }
-
-    @Deprecated(
-        "Use disable(player, holder) instead",
-        ReplaceWith("disable(player, holder)"),
-        DeprecationLevel.ERROR
-    )
-    @Suppress("UNUSED_PARAMETER")
-    fun disable(player: Player, holder: ProvidedHolder, identifierFactory: IdentifierFactory) {
-        effect.disable(player, holder)
-    }
-
-    @Deprecated(
-        "Reloading is now handled by effect blocks",
-        ReplaceWith("effectBlock.reload(player, holder)"),
-        DeprecationLevel.ERROR
-    )
-    @Suppress("UNUSED_PARAMETER")
-    fun reload(player: Player, holder: ProvidedHolder, identifierFactory: IdentifierFactory) {
-        // Do nothing.
-    }
-
     override fun doTrigger(trigger: DispatchedTrigger) =
         effect.trigger(trigger, this)
 

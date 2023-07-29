@@ -62,6 +62,10 @@ object EffectDrill : MineBlockEffect<NoCompileData>("drill") {
                 continue
             }
 
+            if (toBreak.type.hardness < 0) {
+                continue
+            }
+
             blocks.add(toBreak)
         }
 

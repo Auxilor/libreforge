@@ -29,7 +29,7 @@ class ConditionList(
                     return true
                 }
 
-                notMet.forEach { it.notMetEffects.trigger(trigger) }
+                notMet.forEach { it.notMetEffects?.trigger(trigger) }
             }
             .let { false }
 
@@ -48,41 +48,6 @@ class ConditionList(
             .filter { !it.isMet(player, holder) }
             .flatMap { it.notMetLines }
             .map { it.formatEco(player, formatPlaceholders = true) }
-
-    /**
-     * Trigger all not met effects.
-     */
-    @Deprecated(
-        "Use areMetAndTrigger(trigger) instead. This will be removed in a future release.",
-        ReplaceWith("this.areMetAndTrigger(trigger)"),
-        DeprecationLevel.ERROR
-    )
-    fun triggerNotMetEffects(trigger: DispatchedTrigger) =
-        this.forEach { it.notMetEffects.trigger(trigger) }
-
-    @Deprecated(
-        "Use getNotMetLines(player, holder) instead. This will be removed in a future release.",
-        ReplaceWith("this.getNotMetLines(player, EmptyProvidedHolder)"),
-        DeprecationLevel.ERROR
-    )
-    fun getNotMetLines(player: Player): List<String> =
-        this.getNotMetLines(player, EmptyProvidedHolder)
-
-    @Deprecated(
-        "Use areMet(player, holder) instead. This will be removed in a future release.",
-        ReplaceWith("this.all { it.isMet(player) }"),
-        DeprecationLevel.ERROR
-    )
-    fun areMet(player: Player): Boolean =
-        this.areMet(player, EmptyProvidedHolder)
-
-    @Deprecated(
-        "Use isShowingAnyNotMet(player, holder) instead. This will be removed in a future release.",
-        ReplaceWith("this.any { it.showNotMet && !it.isMet(player) }"),
-        DeprecationLevel.ERROR
-    )
-    fun isShowingAnyNotMet(player: Player): Boolean =
-        this.isShowingAnyNotMet(player, EmptyProvidedHolder)
 }
 
 /**
