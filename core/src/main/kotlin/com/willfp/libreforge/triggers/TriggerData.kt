@@ -4,6 +4,7 @@ import com.willfp.eco.core.items.HashedItem
 import com.willfp.libreforge.EmptyProvidedHolder
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.getProvider
+import com.willfp.libreforge.triggers.impl.TriggerBlank
 import org.bukkit.Location
 import org.bukkit.block.Block
 import org.bukkit.entity.LivingEntity
@@ -13,13 +14,6 @@ import org.bukkit.event.Event
 import org.bukkit.inventory.ItemStack
 import org.bukkit.util.Vector
 import java.util.Objects
-
-/**
- * For turning TriggerData into new DispatchedTriggers.
- */
-internal object BlankTrigger : Trigger("internal:blank") {
-    override val parameters = TriggerParameter.values().toSet()
-}
 
 data class TriggerData(
     /*
@@ -57,7 +51,7 @@ data class TriggerData(
      */
     fun dispatch(player: Player) = DispatchedTrigger(
         player,
-        BlankTrigger,
+        TriggerBlank,
         this
     )
 

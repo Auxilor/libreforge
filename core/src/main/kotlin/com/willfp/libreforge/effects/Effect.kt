@@ -32,15 +32,6 @@ abstract class Effect<T>(
     open val shouldReload = true
 
     /**
-     * If the effect should disable during reload.
-     *
-     * For example, Attribute-based effects have onEnable logic that does not require onDisable
-     * to be run to prevent a collision / duplication. For these effects, this should be false.
-     */
-    @Deprecated("This caused issues with effects and is no longer used.", ReplaceWith("true"), DeprecationLevel.ERROR)
-    open val disablesDuringReload = true
-
-    /**
      * The run order.
      */
     open val runOrder = RunOrder.NORMAL
@@ -99,28 +90,6 @@ abstract class Effect<T>(
     }
 
     /**
-     * Enable a permanent effect.
-     *
-     * @param player The player.
-     * @param identifierFactory The identifier factory.
-     * @param config The effect config.
-     */
-    @Deprecated(
-        "Use enable(player, holder, config) instead.",
-        ReplaceWith("enable(player, holder, config)"),
-        DeprecationLevel.ERROR
-    )
-    @Suppress("UNUSED_PARAMETER")
-    fun enable(
-        player: Player,
-        identifierFactory: IdentifierFactory,
-        holder: ProvidedHolder,
-        config: ChainElement<T>
-    ) {
-        enable(player, holder, config)
-    }
-
-    /**
      * Handle the enabling of this permanent effect.
      *
      * @param player The player.
@@ -158,26 +127,6 @@ abstract class Effect<T>(
 
         val count = effectCounter[player.uniqueId]--
         onDisable(player, identifierFactory.makeIdentifiers(count), holder)
-    }
-
-    /**
-     * Disable a permanent effect.
-     *
-     * @param player The player.
-     * @param identifierFactory The identifier factory.
-     */
-    @Deprecated(
-        "Use disable(player, holder) instead.",
-        ReplaceWith("disable(player, holder)"),
-        DeprecationLevel.ERROR
-    )
-    @Suppress("UNUSED_PARAMETER")
-    fun disable(
-        player: Player,
-        identifierFactory: IdentifierFactory,
-        holder: ProvidedHolder
-    ) {
-        disable(player, holder)
     }
 
     /**
@@ -241,28 +190,6 @@ abstract class Effect<T>(
         compileData: T
     ): Boolean {
         return true
-    }
-
-    /**
-     * Reload the effect.
-     *
-     * @param player The player.
-     * @param identifierFactory The identifier factory.
-     * @param config The effect config.
-     */
-    @Deprecated(
-        "Reloading is now handled by EffectBlock.",
-        ReplaceWith("effectBlock.reload(player, holder)"),
-        DeprecationLevel.ERROR
-    )
-    @Suppress("UNUSED_PARAMETER")
-    fun reload(
-        player: Player,
-        identifierFactory: IdentifierFactory,
-        holder: ProvidedHolder,
-        config: ChainElement<T>
-    ) {
-        // Do nothing.
     }
 
     final override fun onRegister() {

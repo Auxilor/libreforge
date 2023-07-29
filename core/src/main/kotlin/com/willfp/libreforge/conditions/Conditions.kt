@@ -64,7 +64,9 @@ import com.willfp.libreforge.integrations.paper.impl.ConditionInRain
 import com.willfp.libreforge.integrations.paper.impl.ConditionInBubble
 import com.willfp.libreforge.integrations.paper.impl.ConditionInLava
 import com.willfp.libreforge.conditions.impl.ConditionOnGround
+import com.willfp.libreforge.effects.Chain
 import com.willfp.libreforge.effects.Effects
+import com.willfp.libreforge.effects.executors.impl.NormalExecutorFactory
 import com.willfp.libreforge.separatorAmbivalent
 
 object Conditions : Registry<Condition<*>>() {
@@ -98,11 +100,18 @@ object Conditions : Registry<Condition<*>>() {
             return null
         }
 
-        return makeBlock(condition, config.getSubsection("args"), context.with("args"))
+        val notMetEffects = Effects.compileChain(
+            config.getSubsections("not-met-effects"),
+            NormalExecutorFactory.create(),
+            context.with("not-met-effects")
+        )
+
+        return makeBlock(condition, notMetEffects, config.getSubsection("args"), context.with("args"))
     }
 
     private fun <T> makeBlock(
         condition: Condition<T>,
+        notMetEffects: Chain?,
         config: Config,
         context: ViolationContext
     ): ConditionBlock<T>? {
@@ -111,11 +120,6 @@ object Conditions : Registry<Condition<*>>() {
         }
 
         val compileData = condition.makeCompileData(config, context)
-
-        val notMetEffects = Effects.compile(
-            config.getSubsections("not-met-effects"),
-            context.with("not-met-effects")
-        )
 
         return ConditionBlock(
             condition,

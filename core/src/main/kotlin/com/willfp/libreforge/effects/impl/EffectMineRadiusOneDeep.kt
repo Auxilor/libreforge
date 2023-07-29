@@ -93,6 +93,10 @@ object EffectMineRadiusOneDeep : MineBlockEffect<NoCompileData>("mine_radius_one
                         }
                     }
 
+                    if (toBreak.type.hardness < 0) {
+                        continue
+                    }
+
                     if (toBreak.type == Material.AIR) {
                         continue
                     }

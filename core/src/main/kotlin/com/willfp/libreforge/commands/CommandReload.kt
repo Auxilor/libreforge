@@ -13,6 +13,7 @@ class CommandReload(
     false
 ) {
     override fun onExecute(sender: CommandSender, args: List<String>) {
+        @Suppress("UsagesOfObsoleteApi")
         sender.sendMessage(plugin.langYml.getMessage("reloaded"))
         plugin.reload(false)
     }

@@ -5,6 +5,7 @@ package com.willfp.libreforge.effects
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.registry.Registry
 import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.ConfigWarning
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.effects.arguments.EffectArguments
@@ -164,6 +165,10 @@ object Effects : Registry<Effect<*>>() {
     }
 
     private fun compileElement(config: Config, context: ViolationContext): ChainElement<*>? {
+        if (config.has("effects")) {
+            return compileNestedChain(config, context)
+        }
+
         val id = config.getString("id")
         val effect = this.get(id)
 
@@ -172,30 +177,40 @@ object Effects : Registry<Effect<*>>() {
             return null
         }
 
-        /*
-
-        This might be useful in the future to warn people about deprecated effects,
-        but currently it would lead to a shit ton of bug reports, especially for
-        run_chain_inline.
-
         val deprecation = effect::class.java.annotations
             .firstOrNull { it::class.java == Deprecated::class.java }
             ?.let { it as? Deprecated }?.message
 
         if (deprecation != null) {
-            context.log(ConfigViolation("id", "Effect $id is deprecated: $deprecation"))
-            // Continue anyway
+            context.log(
+                ConfigWarning(
+                    "id",
+                    "Effect $id is deprecated: $deprecation. It will be removed in the future."
+                )
+            )
         }
 
-         */
-
         return makeElement(effect, config, context)
+    }
+
+    private fun compileNestedChain(config: Config, context: ViolationContext): ChainElement<Chain?>? {
+        val compileData = EffectTriggerNestedChain.makeCompileData(config, context)
+
+        return makeElement(
+            EffectTriggerNestedChain,
+            config,
+            context,
+            forceCompileData = compileData
+        )
     }
 
     private fun <T> makeElement(
         effect: Effect<T>,
         config: Config,
-        context: ViolationContext
+        context: ViolationContext,
+
+        // For nested chains
+        forceCompileData: T? = null
     ): ChainElement<T>? {
         val args = config.getSubsection("args")
 
@@ -203,7 +218,7 @@ object Effects : Registry<Effect<*>>() {
             return null
         }
 
-        val compileData = effect.makeCompileData(args, context.with("args"))
+        val compileData = forceCompileData ?: effect.makeCompileData(args, context.with("args"))
 
         val arguments = EffectArguments.compile(args, context.with("args"))
         val conditions = Conditions.compile(config.getSubsections("conditions"), context.with("conditions"))

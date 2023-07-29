@@ -6,6 +6,7 @@ import com.willfp.libreforge.Compiled
 import com.willfp.libreforge.EmptyProvidedHolder
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.applyHolder
+import com.willfp.libreforge.effects.Chain
 import com.willfp.libreforge.effects.EffectList
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
@@ -19,7 +20,7 @@ class ConditionBlock<T> internal constructor(
     val condition: Condition<T>,
     override val config: Config,
     override val compileData: T,
-    val notMetEffects: EffectList,
+    val notMetEffects: Chain?,
     val notMetLines: List<String>,
     val showNotMet: Boolean,
     val isInverted: Boolean
@@ -27,15 +28,6 @@ class ConditionBlock<T> internal constructor(
     private val syncMetCache = Caffeine.newBuilder()
         .expireAfterAccess(10, TimeUnit.SECONDS)
         .build<UUID, Boolean>()
-
-    @Deprecated(
-        "Use isMet(player, holder) instead.",
-        ReplaceWith("condition.isMet(player, config, compileData)"),
-        DeprecationLevel.ERROR
-    )
-    fun isMet(player: Player): Boolean {
-        return isMet(player, EmptyProvidedHolder)
-    }
 
     fun isMet(player: Player, holder: ProvidedHolder): Boolean {
         /*
