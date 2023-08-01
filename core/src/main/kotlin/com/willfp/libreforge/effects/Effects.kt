@@ -294,6 +294,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectMineVein)
         register(EffectMovementSpeedMultiplier)
         register(EffectMultiplyDrops)
+        register(EffectMultiplyFishingDrops)
         register(EffectMultiplyPoints)
         register(EffectMultiplyVelocity)
         register(EffectParticleAnimation)
