@@ -33,8 +33,6 @@ object EffectMultiplyFishingDrops : Effect<NoCompileData>("multiply_fishing_drop
         // Cast the caught entity to an Item
         val caughtItemEntity = event.caught as? Item ?: return true
 
-        println("Caught entity: ${caughtItemEntity::class.simpleName}") // Debug statement
-
         // Calculate the multiplier
         val multiplier = if (config.has("multiplier")) {
             config.getDoubleFromExpression("multiplier", data).roundToInt()
@@ -50,7 +48,6 @@ object EffectMultiplyFishingDrops : Effect<NoCompileData>("multiply_fishing_drop
             Material.PUFFERFISH -> Material.PUFFERFISH
             Material.TROPICAL_FISH -> Material.TROPICAL_FISH
             else -> {
-                println("Caught entity is not a recognized fish") // Debug statement
                 return true
             }
         }
