@@ -378,5 +378,6 @@ object Effects : Registry<Effect<*>>() {
         register(EffectTelekinesis)
         register(EffectRapidBows)
         register(EffectNameEntity)
+        register(EffectTotalDamageMultiplier)
     }
 }
