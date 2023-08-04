@@ -293,7 +293,6 @@ object Effects : Registry<Effect<*>>() {
         register(EffectMineRadiusOneDeep)
         register(EffectMineVein)
         register(EffectMovementSpeedMultiplier)
-        register(EffectMultiplyFishingDrops)
         register(EffectMultiplyDrops)
         register(EffectMultiplyPoints)
         register(EffectMultiplyVelocity)
