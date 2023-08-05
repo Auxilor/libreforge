@@ -1,5 +1,6 @@
 package com.willfp.libreforge.effects.impl
 
+import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
@@ -39,7 +40,9 @@ object EffectBleed : Effect<NoCompileData>("bleed") {
             val killed = damage >= victim.health
 
             if (killed) {
-                victim.killer = data.player
+                if (Prerequisite.HAS_PAPER.isMet) {
+                    victim.killer = data.player
+                }
 
                 if (data.player != null) {
                     TriggerKill.force(
