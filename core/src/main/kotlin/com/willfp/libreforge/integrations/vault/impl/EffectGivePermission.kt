@@ -1,6 +1,7 @@
 package com.willfp.libreforge.integrations.vault.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.map.listMap
 import com.willfp.eco.core.map.nestedMap
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
@@ -18,19 +19,29 @@ class EffectGivePermission(
         require("permission", "You must specify the permission!")
     }
 
-    private val permissions = nestedMap<UUID, UUID, String>()
+    private val permissions = listMap<UUID, GivenPermission>()
 
     override fun onEnable(player: Player, config: Config, identifiers: Identifiers, holder: ProvidedHolder, compileData: NoCompileData) {
         val permission = config.getString("permission")
 
-        permissions[player.uniqueId][identifiers.uuid] += permission
+        permissions[player.uniqueId] += GivenPermission(permission, identifiers.uuid)
         handler.playerAdd(player, permission)
     }
 
     override fun onDisable(player: Player, identifiers: Identifiers, holder: ProvidedHolder) {
-        permissions[player.uniqueId][identifiers.uuid]?.let {
-            handler.playerRemove(player, it)
+        val permission = permissions[player.uniqueId]
+            .firstOrNull { it.uuid == identifiers.uuid } ?: return
+
+        permissions[player.uniqueId].remove(permission)
+
+        // Remove the permission only if no other effect is giving it
+        if (permissions[player.uniqueId].none { it.permission == permission.permission }) {
+            handler.playerRemove(player, permission.permission)
         }
-        permissions[player.uniqueId].remove(identifiers.uuid)
     }
+
+    private data class GivenPermission(
+        val permission: String,
+        val uuid: UUID
+    )
 }
