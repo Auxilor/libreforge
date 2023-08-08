@@ -17,10 +17,10 @@ class Chain internal constructor(
     private val executor: ChainExecutor
 ) : DelegatedList<ChainElement<*>>(
     effects.sortedBy {
-        it.effect.runOrder.weight
+        it.runOrder.weight
     }
 ) {
-    val weight = effects.sumOf { it.effect.runOrder.weight }
+    val weight = effects.sumOf { it.runOrder.weight }
 
     fun trigger(
         trigger: DispatchedTrigger,
