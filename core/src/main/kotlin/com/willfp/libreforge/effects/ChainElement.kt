@@ -26,10 +26,13 @@ class ChainElement<T> internal constructor(
     override val conditions: ConditionList,
     override val mutators: MutatorList,
     override val filters: FilterList,
-    override val weight: Double
+    override val weight: Double,
+    forceRunOrder: RunOrder?
 ) : ElementLike(), Compiled<T>, Weighted {
     override val uuid: UUID = UUID.randomUUID()
     override val supportsDelay = effect.supportsDelay
+
+    val runOrder = forceRunOrder ?: effect.runOrder
 
     fun enable(
         player: Player,
