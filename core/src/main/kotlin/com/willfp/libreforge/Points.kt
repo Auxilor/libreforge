@@ -133,4 +133,4 @@ val Player.points: PointsMap
     get() = PointsMap(this.profile)
 
 fun String.toFriendlyPointName() =
-    plugin.configYml.getFormattedString("point-names.$this")
+    plugin.configYml.getFormattedStringOrNull("point-names.$this") ?: this

@@ -23,6 +23,20 @@ messages:
   must-specify-config-name: "&cYou must specify the config name!"
   invalid-config-name: "&cInvalid config name!"
 
+  must-specify-player: "&cYou must specify the player!"
+  invalid-player: "&cInvalid player name!"
+
+  must-specify-point: "&cYou must specify the point!"
+  invalid-point: "&cInvalid point name!"
+
+  must-specify-amount: "&cYou must specify the amount!"
+  invalid-amount: "&cInvalid amount!"
+
+  points-given: "&e%amount% &rof &a%point% &rwas added to &6%playername%&r!"
+  points-taken: "&e%amount% &rof &a%point% &rwas removed from &6%playername%&r!"
+  points-set: "&e%amount% &rof &a%point% &rwas set to &6%playername%&r!"
+  points-amount: "&6%playername% &rhas &e%amount% &rof &a%point%&r!"
+
   plugin-not-installed: "&cYou don't have this plugin installed!"
 
 picked-up-price-item: "&f+%price%"
