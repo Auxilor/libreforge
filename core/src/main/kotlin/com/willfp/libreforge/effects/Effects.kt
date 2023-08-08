@@ -227,8 +227,8 @@ object Effects : Registry<Effect<*>>() {
 
         val weight = config.getDoubleFromExpression("weight")
 
-        val forceRunOrder = if (config.has("run-order")) {
-            runCatching { enumValueOf<RunOrder>(config.getString("run-order")) }.getOrNull()
+        val forceRunOrder = if (config.has("run_order")) {
+            runCatching { enumValueOf<RunOrder>(config.getString("run_order")) }.getOrNull()
         } else null
 
         return ChainElement(
