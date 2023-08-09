@@ -38,7 +38,7 @@ class Counter internal constructor(
     override fun canBeTriggeredBy(trigger: Trigger) =
         this.trigger == trigger
 
-    override fun clone(): Counter {
+    public override fun clone(): Counter {
         return Counter(
             trigger,
             conditions,
