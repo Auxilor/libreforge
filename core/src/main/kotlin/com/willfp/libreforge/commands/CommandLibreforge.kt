@@ -14,6 +14,7 @@ class CommandLibreforge(
 ) {
     init {
         this.addSubcommand(CommandReload(plugin))
+            .addSubcommand(CommandPoints(plugin))
     }
 
     override fun onExecute(sender: CommandSender, args: MutableList<String>) {
