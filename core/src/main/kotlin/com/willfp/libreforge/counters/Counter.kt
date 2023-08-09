@@ -18,7 +18,7 @@ class Counter internal constructor(
     override val config: Config,
     val arguments: EffectArgumentList,
     val multiplierExpression: String
-) : ConfigurableElement, PotentiallyTriggerable {
+) : ConfigurableElement, PotentiallyTriggerable, Cloneable {
     override val uuid: UUID = UUID.randomUUID()
 
     /**
@@ -37,6 +37,17 @@ class Counter internal constructor(
 
     override fun canBeTriggeredBy(trigger: Trigger) =
         this.trigger == trigger
+
+    override fun clone(): Counter {
+        return Counter(
+            trigger,
+            conditions,
+            filters,
+            config.clone(),
+            arguments,
+            multiplierExpression
+        )
+    }
 
     override fun equals(other: Any?): Boolean {
         if (other !is Counter) {
