@@ -43,6 +43,15 @@ permissions:
       libreforge.command.lrcdb: true
       libreforge.command.libreforge: true
       libreforge.command.reload: true
+      libreforge.command.points.*: true
+  libreforge.command.points.*:
+    description: All points commands
+    default: op
+    children:
+      libreforge.command.points.get: true
+      libreforge.command.points.give: true
+      libreforge.command.points.set: true
+      libreforge.command.points.take: true
   libreforge.command.lrcdb:
     description: Allows the use of /lrcdb
     default: op
@@ -51,4 +60,19 @@ permissions:
     default: op
   libreforge.command.reload:
     description: Allows the use of /libreforge reload
+    default: op
+  libreforge.command.points:
+    description: Allows the use of /libreforge points
+    default: op
+  libreforge.command.points.get:
+    description: Allows the use of /libreforge points get
+    default: op
+  libreforge.command.points.give:
+    description: Allows the use of /libreforge points give
+    default: op
+  libreforge.command.points.set:
+    description: Allows the use of /libreforge points set
+    default: op
+  libreforge.command.points.take:
+    description: Allows the use of /libreforge points take
     default: op

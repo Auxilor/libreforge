@@ -4,6 +4,7 @@ import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.command.impl.Subcommand
 import org.bukkit.command.CommandSender
 
+@Suppress("UsagesOfObsoleteApi")
 class CommandPoints(plugin: EcoPlugin): Subcommand(
     plugin,
     "points",

@@ -9,6 +9,7 @@ import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.util.StringUtil
 
+@Suppress("UsagesOfObsoleteApi")
 class CommandPointsSet(plugin: EcoPlugin): Subcommand(
     plugin,
     "set",
@@ -60,13 +61,14 @@ class CommandPointsSet(plugin: EcoPlugin): Subcommand(
         )
     }
 
-    override fun tabComplete(sender: CommandSender, args: MutableList<String>): MutableList<String> {
+    override fun tabComplete(sender: CommandSender, args: List<String>): List<String> {
         return when(args.size) {
             1 -> StringUtil.copyPartialMatches(
                 args[0],
                 Bukkit.getOnlinePlayers().map { it.name },
                 mutableListOf()
             )
+            2 -> listOf("point")
             3 -> mutableListOf(
                 "1",
                 "5",
