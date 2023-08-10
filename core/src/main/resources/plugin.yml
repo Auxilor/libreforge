@@ -21,6 +21,7 @@ softdepend:
   - TMMobcoins
   - Vault
   - WorldGuard
+  - Citizens
 
 commands:
   lrcdb:
