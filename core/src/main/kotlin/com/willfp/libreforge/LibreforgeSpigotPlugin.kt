@@ -11,6 +11,7 @@ import com.willfp.libreforge.configs.lrcdb.CommandLrcdb
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.executors.impl.NormalExecutorFactory
 import com.willfp.libreforge.integrations.aureliumskills.AureliumSkillsIntegration
+import com.willfp.libreforge.integrations.citizens.CitizensIntegration
 import com.willfp.libreforge.integrations.jobs.JobsIntegration
 import com.willfp.libreforge.integrations.levelledmobs.LevelledMobsIntegration
 import com.willfp.libreforge.integrations.mcmmo.McMMOIntegration
@@ -129,6 +130,7 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             IntegrationLoader("Jobs") { JobsIntegration.load(this) },
             IntegrationLoader("LevelledMobs") { LevelledMobsIntegration.load(this) },
             IntegrationLoader("mcMMO") { McMMOIntegration.load(this) },
+            IntegrationLoader("Citizens") { CitizensIntegration.load(this) },
             IntegrationLoader("Scyther") { ScytherIntegration.load(this) },
             IntegrationLoader("TMMobcoins") { TMMobcoinsIntegration.load(this) },
             IntegrationLoader("Vault") { VaultIntegration.load(this) },
