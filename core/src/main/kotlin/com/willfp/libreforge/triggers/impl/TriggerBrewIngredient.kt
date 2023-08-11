@@ -24,16 +24,15 @@ object TriggerBrewIngredient : Trigger("brew_ingredient") {
 
     @EventHandler
     fun handle(event: InventoryClickEvent) {
-        val inventory = event.clickedInventory as? BrewerInventory ?: return
+        val inventory = event.player.openInventory.topInventory as? BrewerInventory ?: return
         val player = event.player
         val location = inventory.location ?: return
-
-        val item = inventory.getItem(3)
+        val oldContents = inventory.contents
 
         plugin.scheduler.runLater(2) {
-            val newItem = inventory.getItem(3)
+            val newContents = inventory.contents
 
-            if (item != newItem && newItem != null && !newItem.type.isAir) {
+            if (!oldContents.contentEquals(newContents)) {
                 playerCache[location] = player
             }
         }
