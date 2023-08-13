@@ -10,8 +10,10 @@ import com.willfp.libreforge.effects.executors.impl.NormalExecutorFactory
 import com.willfp.libreforge.effects.impl.aoe.AOEBlock
 import com.willfp.libreforge.effects.impl.aoe.AOEShapes
 import com.willfp.libreforge.toFloat3
+import com.willfp.libreforge.triggers.DispatchedTrigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import com.willfp.libreforge.triggers.impl.TriggerBlank
 
 object EffectAOE : Effect<EffectAOE.AOEData>("aoe") {
     override val parameters = setOf(
@@ -36,7 +38,20 @@ object EffectAOE : Effect<EffectAOE.AOEData>("aoe") {
             player.location.world,
             data
         ).filter { it != player }) {
-            compileData.chain?.trigger(data.dispatch(player))
+            compileData.chain?.trigger(DispatchedTrigger(player, TriggerBlank, TriggerData(
+                player = data.player,
+                victim = entity,
+                block = data.block,
+                event = data.event,
+                location = data.location,
+                projectile = data.projectile,
+                velocity = data.velocity,
+                item = data.item,
+                text = data.text,
+                value = data.value,
+                _originalPlayer = data.player
+            )
+            ))
         }
 
         return true
