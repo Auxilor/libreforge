@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Chain
@@ -10,10 +11,8 @@ import com.willfp.libreforge.effects.executors.impl.NormalExecutorFactory
 import com.willfp.libreforge.effects.impl.aoe.AOEBlock
 import com.willfp.libreforge.effects.impl.aoe.AOEShapes
 import com.willfp.libreforge.toFloat3
-import com.willfp.libreforge.triggers.DispatchedTrigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import com.willfp.libreforge.triggers.impl.TriggerBlank
 
 object EffectAOE : Effect<EffectAOE.AOEData>("aoe") {
     override val parameters = setOf(
@@ -39,6 +38,14 @@ object EffectAOE : Effect<EffectAOE.AOEData>("aoe") {
             data
         ).filter { it != player }) {
             compileData.chain?.trigger(data.copy(victim = entity).dispatch(player))
+        }
+        for (block in shape.getBlocks(
+            player.location.toFloat3(),
+            player.eyeLocation.direction.toFloat3(),
+            player.location.world,
+            data
+        ).filter { AntigriefManager.canBreakBlock(player, it) && AntigriefManager.canPlaceBlock(player, it) }) {
+            compileData.chain?.trigger(data.copy(block = block).dispatch(player))
         }
 
         return true
