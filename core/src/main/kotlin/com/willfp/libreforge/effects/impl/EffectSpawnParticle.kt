@@ -6,6 +6,7 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getIntFromExpression
+import com.willfp.libreforge.getOrElse
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
@@ -23,7 +24,7 @@ object EffectSpawnParticle : Effect<NoCompileData>(
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val location = data.location ?: return false
         val particle = Particles.lookup(config.getString("particle"))
-        val amount = if (config.has("amount")) config.getIntFromExpression("amount", data) else 1
+        val amount = config.getOrElse("amount", 1) { getIntFromExpression(it, data) }
         particle.spawn(location, amount)
 
         return true
