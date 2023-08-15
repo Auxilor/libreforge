@@ -19,6 +19,7 @@ import com.willfp.libreforge.loader.internal.LoadedLibreforgePluginImpl
 import com.willfp.libreforge.loader.internal.checkHighestVersion
 import com.willfp.libreforge.loader.internal.configs.RegistrableConfig
 import com.willfp.libreforge.loader.internal.loadHighestLibreforgeVersion
+import com.willfp.libreforge.loader.internal.tryLoadForceVersion
 import java.io.File
 import java.util.zip.ZipFile
 
@@ -34,6 +35,9 @@ abstract class LibreforgePlugin : EcoPlugin() {
 
     init {
         categories.lock(RegistryLock) // Only allow registration through addCategory.
+
+        tryLoadForceVersion(dataFolder.parentFile)
+
         competeForVersion()
 
         onLoad(LifecyclePosition.START) {
