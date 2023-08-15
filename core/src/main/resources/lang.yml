@@ -33,9 +33,9 @@ messages:
   must-specify-amount: "&cYou must specify the amount!"
   invalid-amount: "&cInvalid amount!"
 
-  points-given: "&e%amount% &rof &a%point% &rwas added to &6%playername%&r!"
-  points-taken: "&e%amount% &rof &a%point% &rwas removed from &6%playername%&r!"
-  points-set: "&e%amount% &rof &a%point% &rwas set to &6%playername%&r!"
+  points-given: "&a%amount% &a%point% &fwere added to &a%playername%&f!"
+  points-taken: "&a%amount% &a%point% &fwere removed from &a%playername%&f!"
+  points-set: "&fSet &a%playername%&f to have &a%amount% &a%point%&f!"
   points-amount: "&6%playername% &rhas &e%amount% &rof &a%point%&r!"
 
   plugin-not-installed: "&cYou don't have this plugin installed!"
