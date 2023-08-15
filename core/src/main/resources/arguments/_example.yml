@@ -28,7 +28,7 @@ if-met:
       amount: "- %amount%"
   - id: send_message
     args:
-      message: "-50 %ecoskills_mana_name% &f(%reason%)"
+      message: "-%amount% %ecoskills_mana_name% &f(%reason%)"
 
 # Effects to run if the condition is not met
-if-not-met: [ ]
+if-not-met: []
