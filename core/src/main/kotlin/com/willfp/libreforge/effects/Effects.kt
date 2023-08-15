@@ -385,5 +385,6 @@ object Effects : Registry<Effect<*>>() {
         register(EffectNameEntity)
         register(EffectTotalDamageMultiplier)
         register(EffectVictimMovementMultiplier)
+        register(EffectSetArmorTrim)
     }
 }
