@@ -10,6 +10,7 @@ messages:
   cannot-afford-price: "&cYou can't afford to do this! &fPrice: %price%"
   on-cooldown: "&cThis effect is on cooldown! &fTime left: &a%seconds% seconds"
   cannot-transmit: "&cYou can't transmit here!"
+
   must-specify-lrcdb-id: "&cYou must specify the ID of the config to download! Not sure what this means? Go to &alrcdb.auxilor.io"
   lrcdb-import-error: "&cError importing config: &f%message%"
   lrcdb-import-success: "&fImported &a%name%&f! Reload the plugin to install it"

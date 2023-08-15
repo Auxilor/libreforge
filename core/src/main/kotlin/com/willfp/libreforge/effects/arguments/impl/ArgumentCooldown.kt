@@ -54,7 +54,7 @@ object ArgumentCooldown : EffectArgument<NoCompileData>("cooldown") {
             ?.replace("%seconds%", cooldown.toString())
             ?.formatEco(trigger.player, true)
 
-            ?: plugin.langYml.getMessage("on-cooldown")
+            ?: plugin.langYml.getFormattedString("messages.on-cooldown")
                 .replace("%seconds%", cooldown.toString())
 
         if (plugin.configYml.getBool("cooldown.in-actionbar")) {

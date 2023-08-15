@@ -33,7 +33,7 @@ object ArgumentPointCost : EffectArgument<NoCompileData>("point_cost") {
         val cost = element.config.getDoubleFromExpression("point_cost.cost", trigger.data)
         val type = element.config.getString("point_cost.type")
 
-        val message = plugin.langYml.getMessage("cannot-afford-type")
+        val message = plugin.langYml.getFormattedString("messages.cannot-afford-type")
             .replace("%cost%", NumberUtils.format(cost))
             .replace("%type%", type.toFriendlyPointName())
 
