@@ -37,7 +37,7 @@ object ArgumentManaCost : EffectArgument<NoCompileData>("mana_cost") {
             return
         }
 
-        val message = plugin.langYml.getMessage("cannot-afford-type")
+        val message = plugin.langYml.getFormattedString("messages.cannot-afford-type")
             .replace("%cost%", NumberUtils.format(cost))
             .replace("%type%", "mana".toFriendlyPointName())
 

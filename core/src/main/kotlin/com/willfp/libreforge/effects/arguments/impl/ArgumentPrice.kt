@@ -56,7 +56,7 @@ object ArgumentPrice : EffectArgument<NoCompileData>("price") {
         val display = element.config.getString("price.display")
             .replace("%value%", NumberUtils.format(price.getValue(trigger.player)))
 
-        val message = plugin.langYml.getMessage("cannot-afford-price")
+        val message = plugin.langYml.getFormattedString("messages.cannot-afford-price")
             .replace("%price%", display)
 
         if (plugin.configYml.getBool("cannot-afford-price.in-actionbar")) {

@@ -27,7 +27,8 @@ object ArgumentCost : EffectArgument<NoCompileData>("cost") {
 
         val cost = element.config.getDoubleFromExpression("cost", trigger.data)
 
-        val message = plugin.langYml.getMessage("cannot-afford").replace("%cost%", NumberUtils.format(cost))
+        val message = plugin.langYml.getFormattedString("messages.cannot-afford")
+            .replace("%cost%", NumberUtils.format(cost))
 
         if (plugin.configYml.getBool("cannot-afford.in-actionbar")) {
             PlayerUtils.getAudience(player).sendActionBar(StringUtils.toComponent(message))

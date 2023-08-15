@@ -43,7 +43,7 @@ object EffectTransmission : Effect<NoCompileData>("transmission") {
 
         if (location.block.isSolid || location.toVector().distance(player.location.toVector()) < 0.5) {
             @Suppress("UsagesOfObsoleteApi")
-            player.sendMessage(plugin.langYml.getMessage("cannot-transmit"))
+            player.sendMessage(plugin.langYml.getFormattedString("messages.cannot-transmit"))
             return false
         }
 
