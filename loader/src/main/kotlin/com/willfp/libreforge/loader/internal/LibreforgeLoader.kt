@@ -33,16 +33,23 @@ internal fun checkHighestVersion(plugin: LibreforgePlugin) {
 internal fun loadHighestLibreforgeVersion(pluginFolder: File) {
     if (Bukkit.getPluginManager().plugins.any { it.name == "libreforge" }) return
 
+    val libreforgeFolder = pluginFolder.resolve("libreforge")
+    val versionsFolder = libreforgeFolder.resolve("versions")
+
+    versionsFolder.mkdirs()
+
+    for (file in versionsFolder.walk()) {
+        if (file.name == "libreforge-force.jar") {
+            Bukkit.getPluginManager().loadPlugin(file)
+            return
+        }
+    }
+
     val classLoader = readExternalData<ClassLoader>(HIGHEST_LIBREFORGE_VERSION_CLASSLOADER_KEY)
         ?: throw LibreforgeNotFoundError("No libreforge plugin classloader found")
 
     val version = readExternalData<Version>(HIGHEST_LIBREFORGE_VERSION_KEY)
         ?: throw LibreforgeNotFoundError("No libreforge version found")
-
-    val libreforgeFolder = pluginFolder.resolve("libreforge")
-    val versionsFolder = libreforgeFolder.resolve("versions")
-
-    versionsFolder.mkdirs()
 
     val libreforgeJar = versionsFolder.resolve("libreforge-$version.jar")
     val libreforgeResourceName = "libreforge-$version-shadow.jar"
