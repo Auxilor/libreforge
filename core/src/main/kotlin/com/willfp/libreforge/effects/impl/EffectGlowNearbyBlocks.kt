@@ -2,11 +2,13 @@
 
 package com.willfp.libreforge.effects.impl
 
+import com.gmail.nossr50.config.ChatConfig
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.util.TeamUtils
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.enumValueOfOrNull
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
@@ -47,8 +49,8 @@ object EffectGlowNearbyBlocks : Effect<NoCompileData>("glow_nearby_blocks") {
             val material =
                 Material.matchMaterial(it.uppercase()) ?: Material.APPLE // Why apple? Because it's not a block.
 
-            val color = runCatching { ChatColor.valueOf(config.getString("colors.$it").uppercase()) }.getOrNull()
-                ?: ChatColor.WHITE // Safe default
+            val color = enumValueOfOrNull(config.getString("colors.$it").uppercase())
+                ?: ChatColor.WHITE
 
             Pair(material, color)
         }

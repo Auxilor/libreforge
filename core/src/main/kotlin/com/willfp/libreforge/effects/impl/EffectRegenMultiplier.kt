@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.libreforge.effects.templates.MultiMultiplierEffect
+import com.willfp.libreforge.enumValueOfOrNull
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityRegainHealthEvent
@@ -10,7 +11,7 @@ object EffectRegenMultiplier : MultiMultiplierEffect<RegainReason>("regen_multip
     override val key: String = "reason"
 
     override fun getElement(key: String): RegainReason? =
-        runCatching { enumValueOf<RegainReason>("reason") }.getOrNull()
+        enumValueOfOrNull<RegainReason>("reason")
 
     override fun getAllElements(): Collection<RegainReason> =
         RegainReason.values().toList()

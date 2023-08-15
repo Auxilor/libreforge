@@ -1,10 +1,12 @@
 package com.willfp.libreforge.effects.impl
 
+import com.gamingmesh.jobs.commands.list.fire
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.util.runExempted
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.enumValueOfOrNull
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.AbstractArrow
@@ -27,9 +29,8 @@ object EffectShoot : Effect<NoCompileData>("shoot") {
         val velocity = data.velocity
         val fire = ((data.event as? EntityShootBowEvent)?.projectile?.fireTicks ?: 0) > 0
 
-        val projectileClass = runCatching {
-            EntityType.valueOf(config.getString("projectile").uppercase()).entityClass
-        }.getOrNull() ?: return false
+        val projectileClass = enumValueOfOrNull<EntityType>(config.getString("projectile").uppercase())?.entityClass
+            ?: return false
 
         player.runExempted {
             val projectile = if (velocity == null || !config.getBool("inherit_velocity")) {
