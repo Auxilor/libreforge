@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.arguments
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.registry.Registry
 import com.willfp.libreforge.ViolationContext
+import com.willfp.libreforge.effects.arguments.custom.ArgumentCustom
 import com.willfp.libreforge.effects.arguments.impl.ArgumentChainArgs
 import com.willfp.libreforge.effects.arguments.impl.ArgumentChance
 import com.willfp.libreforge.effects.arguments.impl.ArgumentCooldown
@@ -20,6 +21,14 @@ object EffectArguments : Registry<EffectArgument<*>>() {
         val blocks = mutableListOf<EffectArgumentBlock<*>>()
 
         for (key in config.getKeys(false)) {
+            if (key.startsWith("custom_")) {
+                blocks += makeBlock(
+                    ArgumentCustom(key.removePrefix("custom_")),
+                    config.getSubsection(key),
+                    context.with(key)
+                ) ?: continue
+            }
+
             val argument = get(key) ?: continue
             blocks += makeBlock(argument, config, context) ?: continue
         }
