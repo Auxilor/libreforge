@@ -9,6 +9,7 @@ import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.RunOrder
 import com.willfp.libreforge.getDoubleFromExpression
+import com.willfp.libreforge.getOrElse
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.event.EditableDropEvent
@@ -28,9 +29,7 @@ object EffectSellItems : Effect<Collection<TestableItem>?>("sell_items") {
         val event = data.event as? EditableDropEvent
         val item = data.item
 
-        val multiplier = if (config.has("multiplier")) {
-            config.getDoubleFromExpression("multiplier", data)
-        } else 1.0
+        val multiplier = config.getOrElse("multiplier", 1.0) { getDoubleFromExpression(it, data) }
 
         val items = (event?.items?.map { it.item } ?: listOf(item))
             .filterNotNull()

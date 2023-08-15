@@ -13,7 +13,7 @@ import org.bukkit.inventory.meta.trim.ArmorTrim
 import org.bukkit.inventory.meta.trim.TrimMaterial
 import org.bukkit.inventory.meta.trim.TrimPattern
 
-object EffectSetArmorTrim: Effect<NoCompileData>("set_armor_trim") {
+object EffectSetArmorTrim : Effect<NoCompileData>("set_armor_trim") {
     override val parameters = setOf(
         TriggerParameter.ITEM
     )
@@ -28,19 +28,14 @@ object EffectSetArmorTrim: Effect<NoCompileData>("set_armor_trim") {
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
-        val item = data.item ?: return false
-        val itemMeta = item.itemMeta ?: return false
-        val armorMeta = itemMeta as? ArmorMeta ?: return false
+        val item = data.foundItem ?: return false
+        val meta = item.itemMeta as? ArmorMeta ?: return false
 
-        val material: TrimMaterial? = Registry.TRIM_MATERIAL.get(NamespacedKey.minecraft(config.getString("material")))
-        val pattern: TrimPattern? = Registry.TRIM_PATTERN.get(NamespacedKey.minecraft(config.getString("pattern")))
+        val material = Registry.TRIM_MATERIAL.get(NamespacedKey.minecraft(config.getString("material"))) ?: return false
+        val pattern = Registry.TRIM_PATTERN.get(NamespacedKey.minecraft(config.getString("pattern"))) ?: return false
 
-        if (material == null || pattern == null) {
-            return false
-        }
-
-        armorMeta.trim = ArmorTrim(material, pattern)
-        item.itemMeta = armorMeta
+        meta.trim = ArmorTrim(material, pattern)
+        item.itemMeta = meta
 
         return true
     }

@@ -9,6 +9,7 @@ import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.templates.MineBlockEffect
 import com.willfp.libreforge.getIntFromExpression
+import com.willfp.libreforge.getOrNull
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -44,7 +45,7 @@ object EffectReplaceNear : Effect<NoCompileData>("replace_near") {
 
         val whitelist = config.getStringsOrNull("whitelist")
 
-        val duration = if (config.has("duration")) config.getIntFromExpression("duration") else null
+        val duration = config.getOrNull("duration") { getIntFromExpression(it, data) }
 
         val exposedBlocksOnly = config.getBool("exposed_only")
         val sourceBlocksOnly = config.getBool("source_only")

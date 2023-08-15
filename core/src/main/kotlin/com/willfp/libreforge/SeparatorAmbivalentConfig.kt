@@ -139,6 +139,12 @@ fun Config.getFormattedString(path: String, data: TriggerData?) =
 fun Config.getFormattedStrings(path: String, data: TriggerData?) =
     this.getFormattedStrings(path, this.toPlaceholderContext(data))
 
+inline fun <reified T : Any> Config.getOrNull(path: String, getter: Config.(String) -> T) =
+    this.getOrElse(path, null, getter)
+
+inline fun <reified T> Config.getOrElse(path: String, default: T, getter: Config.(String) -> T) =
+    if (this.has(path)) this.getter(path) else default
+
 private fun String.toCamelCase(): String {
     val words = lowercase().split("_")
 
