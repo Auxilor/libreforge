@@ -48,6 +48,7 @@ import com.willfp.libreforge.conditions.impl.ConditionItemPointsBelow
 import com.willfp.libreforge.conditions.impl.ConditionItemPointsEqual
 import com.willfp.libreforge.conditions.impl.ConditionNearEntity
 import com.willfp.libreforge.conditions.impl.ConditionOnFire
+import com.willfp.libreforge.conditions.impl.ConditionOnGround
 import com.willfp.libreforge.conditions.impl.ConditionPlaceholderContains
 import com.willfp.libreforge.conditions.impl.ConditionPlaceholderEquals
 import com.willfp.libreforge.conditions.impl.ConditionPlaceholderGreaterThan
@@ -60,13 +61,8 @@ import com.willfp.libreforge.conditions.impl.ConditionWearingChestplate
 import com.willfp.libreforge.conditions.impl.ConditionWearingHelmet
 import com.willfp.libreforge.conditions.impl.ConditionWearingLeggings
 import com.willfp.libreforge.conditions.impl.ConditionWithinRadiusOf
-import com.willfp.libreforge.integrations.paper.impl.ConditionInRain
-import com.willfp.libreforge.integrations.paper.impl.ConditionInBubble
-import com.willfp.libreforge.integrations.paper.impl.ConditionInLava
-import com.willfp.libreforge.conditions.impl.ConditionOnGround
 import com.willfp.libreforge.effects.Chain
 import com.willfp.libreforge.effects.Effects
-import com.willfp.libreforge.effects.executors.impl.NormalExecutorFactory
 import com.willfp.libreforge.separatorAmbivalent
 
 object Conditions : Registry<Condition<*>>() {
@@ -102,7 +98,6 @@ object Conditions : Registry<Condition<*>>() {
 
         val notMetEffects = Effects.compileChain(
             config.getSubsections("not-met-effects"),
-            NormalExecutorFactory.create(),
             context.with("not-met-effects")
         )
 

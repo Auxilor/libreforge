@@ -6,11 +6,9 @@ import com.willfp.eco.core.command.impl.PluginCommand
 import com.willfp.eco.core.integrations.IntegrationLoader
 import com.willfp.libreforge.commands.CommandLibreforge
 import com.willfp.libreforge.configs.ChainsYml
-import com.willfp.libreforge.configs.category.NativeConfigCategory
 import com.willfp.libreforge.configs.lrcdb.CommandLrcdb
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.arguments.custom.CustomEffectArguments
-import com.willfp.libreforge.effects.executors.impl.NormalExecutorFactory
 import com.willfp.libreforge.integrations.aureliumskills.AureliumSkillsIntegration
 import com.willfp.libreforge.integrations.citizens.CitizensIntegration
 import com.willfp.libreforge.integrations.jobs.JobsIntegration
@@ -91,7 +89,6 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
                 config.getString("id"),
                 Effects.compileChain(
                     config.getSubsections("effects"),
-                    NormalExecutorFactory.create(),
                     ViolationContext(this, "chains.yml")
                 ) ?: continue
             )
