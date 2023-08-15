@@ -40,8 +40,8 @@ internal fun tryLoadForceVersion(pluginFolder: File) {
 
     for (file in versionsFolder.walk()) {
         if (file.name == "libreforge.jar") {
-            println("Found generic libreforge.jar!")
-            println("This version will be loaded instead of any versions bundled with plugins.")
+            Bukkit.getLogger().info("[libreforge] Found generic libreforge.jar!")
+            Bukkit.getLogger().info("[libreforge] This version will be loaded instead of any versions bundled with plugins.")
 
             Bukkit.getPluginManager().loadPlugin(file)
         }

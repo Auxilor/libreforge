@@ -21,16 +21,16 @@ object EffectArguments : Registry<EffectArgument<*>>() {
         val blocks = mutableListOf<EffectArgumentBlock<*>>()
 
         for (key in config.getKeys(false)) {
-            if (key.startsWith("custom_")) {
-                blocks += makeBlock(
+            blocks += if (key.startsWith("custom_")) {
+                makeBlock(
                     ArgumentCustom(key.removePrefix("custom_")),
                     config.getSubsection(key),
                     context.with(key)
                 ) ?: continue
+            } else {
+                val argument = get(key) ?: continue
+                makeBlock(argument, config, context) ?: continue
             }
-
-            val argument = get(key) ?: continue
-            blocks += makeBlock(argument, config, context) ?: continue
         }
 
         return EffectArgumentList(blocks)
