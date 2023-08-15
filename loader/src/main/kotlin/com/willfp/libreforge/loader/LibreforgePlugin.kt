@@ -193,7 +193,7 @@ abstract class LibreforgePlugin : EcoPlugin() {
     private fun doFetchConfigs(category: ConfigCategory, directory: String): Set<RegistrableConfig> {
         return dataFolder.resolve(directory)
             .walk()
-            .filter { it.isFile && it.name.endsWith(".yml") && it.nameWithoutExtension != "_example" }
+            .filter { it.isFile && it.name.endsWith(".yml") && !it.nameWithoutExtension.startsWith("_") }
             .map { file ->
                 val id = file.nameWithoutExtension
                 val config = file.readConfig()

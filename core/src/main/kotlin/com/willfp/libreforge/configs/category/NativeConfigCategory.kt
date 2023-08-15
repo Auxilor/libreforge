@@ -48,7 +48,7 @@ abstract class NativeConfigCategory(
     private fun fetchConfigs(plugin: EcoPlugin): Set<IdentifiedConfig> {
         return plugin.dataFolder.resolve(directory)
             .walk()
-            .filter { it.isFile && it.name.endsWith(".yml") && it.nameWithoutExtension != "_example" }
+            .filter { it.isFile && it.name.endsWith(".yml") && !it.nameWithoutExtension.startsWith("_") }
             .map { file ->
                 val id = file.nameWithoutExtension
                 val config = file.readConfig()
