@@ -46,6 +46,10 @@ object EffectMineRadius : MineBlockEffect<NoCompileData>("mine_radius") {
                         block.location.clone().add(x.toDouble(), y.toDouble(), z.toDouble())
                     )
 
+                    if (toBreak.location.blockY !in block.world.minHeight..block.world.maxHeight) {
+                        continue
+                    }
+
                     if (config.getStrings("blacklisted_blocks").containsIgnoreCase(toBreak.type.name)) {
                         continue
                     }
