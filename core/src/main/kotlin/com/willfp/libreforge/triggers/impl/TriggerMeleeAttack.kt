@@ -23,10 +23,6 @@ object TriggerMeleeAttack : Trigger("melee_attack") {
         val attacker = event.damager as? Player ?: return
         val victim = event.entity as? LivingEntity ?: return
 
-        if (event.isCancelled) {
-            return
-        }
-
         if (event.cause == EntityDamageEvent.DamageCause.THORNS) {
             return
         }
