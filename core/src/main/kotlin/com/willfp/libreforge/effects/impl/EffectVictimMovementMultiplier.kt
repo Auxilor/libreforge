@@ -8,6 +8,7 @@ import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.attribute.Attribute
+import org.bukkit.scheduler.BukkitTask
 
 object EffectVictimMovementMultiplier: Effect<NoCompileData>("victim_movement_multiplier") {
     override val parameters = setOf(
@@ -24,10 +25,15 @@ object EffectVictimMovementMultiplier: Effect<NoCompileData>("victim_movement_mu
         val attributeValue = attribute.value
         val duration = if (config.has("duration")) config.getIntFromExpression("duration") else null
 
-        attribute.baseValue = attributeValue * config.getDoubleFromExpression("multiplier");
+        if (victim.hasMetadata("libreforge-vms")) {
+            return false
+        }
+        attribute.baseValue = attributeValue * config.getDoubleFromExpression("multiplier")
+        victim.setMetadata("libreforge-vms", plugin.createMetadataValue("1"))
         if (duration != null && duration > 0) {
             plugin.scheduler.runLater(duration.toLong()) {
                 attribute.baseValue = attributeValue
+                victim.removeMetadata("libreforge-vms", plugin)
             }
         }
         return true
