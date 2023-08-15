@@ -6,6 +6,8 @@ import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import org.bukkit.NamespacedKey
+import org.bukkit.Registry
 import org.bukkit.inventory.meta.ArmorMeta
 import org.bukkit.inventory.meta.trim.ArmorTrim
 import org.bukkit.inventory.meta.trim.TrimMaterial
@@ -17,8 +19,12 @@ object EffectSetArmorTrim: Effect<NoCompileData>("set_armor_trim") {
     )
 
     override val arguments = arguments {
-        require("pattern", "You must specify the trim pattern!")
-        require("material", "You must specify the trim material!")
+        require("pattern", "You must specify a valid trim pattern!", Config::getString) {
+            Registry.TRIM_PATTERN.get(NamespacedKey.minecraft(it)) != null
+        }
+        require("material", "You must specify a valid trim material!", Config::getString) {
+            Registry.TRIM_MATERIAL.get(NamespacedKey.minecraft(it)) != null
+        }
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
@@ -26,39 +32,14 @@ object EffectSetArmorTrim: Effect<NoCompileData>("set_armor_trim") {
         val itemMeta = item.itemMeta ?: return false
         val armorMeta = itemMeta as? ArmorMeta ?: return false
 
-        var pattern = TrimPattern.COAST
-        when (config.getString("pattern").lowercase()) {
-            "dune" -> pattern = TrimPattern.DUNE
-            "eye" -> pattern = TrimPattern.EYE
-            "host" -> pattern = TrimPattern.HOST
-            "raiser" -> pattern = TrimPattern.RAISER
-            "rib" -> pattern = TrimPattern.RIB
-            "sentry" -> pattern = TrimPattern.SENTRY
-            "shaper" -> pattern = TrimPattern.SHAPER
-            "silence" -> pattern = TrimPattern.SILENCE
-            "snout" -> pattern = TrimPattern.SNOUT
-            "spire" -> pattern = TrimPattern.SPIRE
-            "tide" -> pattern = TrimPattern.TIDE
-            "vex" -> pattern = TrimPattern.VEX
-            "ward" -> pattern = TrimPattern.WARD
-            "wayfinder" -> pattern = TrimPattern.WAYFINDER
-            "wild" -> pattern = TrimPattern.WILD
-        }
-        var material = TrimMaterial.AMETHYST
-        when (config.getString("material").lowercase()) {
-            "copper" -> material = TrimMaterial.COPPER
-            "diamond" -> material = TrimMaterial.DIAMOND
-            "emerald" -> material = TrimMaterial.EMERALD
-            "gold" -> material = TrimMaterial.GOLD
-            "iron" -> material = TrimMaterial.IRON
-            "lapis" -> material = TrimMaterial.LAPIS
-            "netherite" -> material = TrimMaterial.NETHERITE
-            "quartz" -> material = TrimMaterial.QUARTZ
-            "redstone" -> material = TrimMaterial.REDSTONE
+        val material: TrimMaterial? = Registry.TRIM_MATERIAL.get(NamespacedKey.minecraft(config.getString("material")))
+        val pattern: TrimPattern? = Registry.TRIM_PATTERN.get(NamespacedKey.minecraft(config.getString("pattern")))
+
+        if (material == null || pattern == null) {
+            return false
         }
 
-        val trim = ArmorTrim(material, pattern)
-        armorMeta.trim = trim
+        armorMeta.trim = ArmorTrim(material, pattern)
         item.itemMeta = armorMeta
 
         return true
