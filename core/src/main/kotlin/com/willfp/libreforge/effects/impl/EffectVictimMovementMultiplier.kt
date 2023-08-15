@@ -29,8 +29,8 @@ object EffectVictimMovementMultiplier: Effect<NoCompileData>("victim_movement_mu
             return false
         }
         attribute.baseValue = attributeValue * config.getDoubleFromExpression("multiplier")
-        victim.setMetadata("libreforge-vms", plugin.createMetadataValue("1"))
         if (duration != null && duration > 0) {
+            victim.setMetadata("libreforge-vms", plugin.createMetadataValue("1"))
             plugin.scheduler.runLater(duration.toLong()) {
                 attribute.baseValue = attributeValue
                 victim.removeMetadata("libreforge-vms", plugin)
