@@ -9,6 +9,7 @@ import com.willfp.libreforge.configs.ChainsYml
 import com.willfp.libreforge.configs.category.NativeConfigCategory
 import com.willfp.libreforge.configs.lrcdb.CommandLrcdb
 import com.willfp.libreforge.effects.Effects
+import com.willfp.libreforge.effects.arguments.custom.CustomEffectArguments
 import com.willfp.libreforge.effects.executors.impl.NormalExecutorFactory
 import com.willfp.libreforge.integrations.aureliumskills.AureliumSkillsIntegration
 import com.willfp.libreforge.integrations.citizens.CitizensIntegration
@@ -41,8 +42,9 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
 
     private var hasLoaded = false
 
-    private val configCategories = listOf<NativeConfigCategory>(
-        LevelTypes
+    private val configCategories = listOf(
+        LevelTypes,
+        CustomEffectArguments
     )
 
     init {
