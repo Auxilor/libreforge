@@ -19,12 +19,12 @@ class CustomEffectArgument(
         baseContext.with("is-met")
     )
 
-    val ifMet = Effects.compile(
+    val ifMet = Effects.compileChain(
         config.getSubsections("if-met"),
         baseContext.with("if-met")
     )
 
-    val ifNotMet = Effects.compile(
+    val ifNotMet = Effects.compileChain(
         config.getSubsections("if-not-met"),
         baseContext.with("if-not-met")
     )

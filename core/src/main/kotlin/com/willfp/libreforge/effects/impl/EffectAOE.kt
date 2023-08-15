@@ -10,10 +10,8 @@ import com.willfp.libreforge.effects.executors.impl.NormalExecutorFactory
 import com.willfp.libreforge.effects.impl.aoe.AOEBlock
 import com.willfp.libreforge.effects.impl.aoe.AOEShapes
 import com.willfp.libreforge.toFloat3
-import com.willfp.libreforge.triggers.DispatchedTrigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import com.willfp.libreforge.triggers.impl.TriggerBlank
 
 object EffectAOE : Effect<EffectAOE.AOEData>("aoe") {
     override val parameters = setOf(
@@ -49,7 +47,6 @@ object EffectAOE : Effect<EffectAOE.AOEData>("aoe") {
             AOEShapes.compile(config, context),
             Effects.compileChain(
                 config.getSubsections("effects"),
-                NormalExecutorFactory.create(),
                 context.with("aoe effects")
             )
         )

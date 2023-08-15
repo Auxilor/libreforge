@@ -12,7 +12,6 @@ import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.configs.LibreforgeConfigCategory
 import com.willfp.libreforge.configs.category.FoundConfig
 import com.willfp.libreforge.effects.Effects
-import com.willfp.libreforge.effects.executors.impl.NormalExecutorFactory
 import com.willfp.libreforge.loader.configs.ConfigCategory
 import com.willfp.libreforge.loader.internal.InvalidLibreforgePluginError
 import com.willfp.libreforge.loader.internal.LoadedLibreforgePluginImpl
@@ -69,7 +68,6 @@ abstract class LibreforgePlugin : EcoPlugin() {
                     config.getString("id"),
                     Effects.compileChain(
                         config.getSubsections("effects"),
-                        NormalExecutorFactory.create(),
                         ViolationContext(this, "chains.yml")
                     ) ?: continue
                 )

@@ -11,6 +11,7 @@ import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.effects.arguments.EffectArguments
 import com.willfp.libreforge.effects.executors.ChainExecutor
 import com.willfp.libreforge.effects.executors.ChainExecutors
+import com.willfp.libreforge.effects.executors.impl.NormalExecutorFactory
 import com.willfp.libreforge.effects.impl.*
 import com.willfp.libreforge.filters.Filters
 import com.willfp.libreforge.integrations.paper.impl.EffectDropPickupItem
@@ -129,6 +130,14 @@ object Effects : Registry<Effect<*>>() {
             directIDSpecified
         )
     }
+
+    /**
+     * Compile a list of [configs] into a Chain in a given [context] with a normal executor.
+     */
+    fun compileChain(
+        configs: Collection<Config>,
+        context: ViolationContext
+    ) = compileChain(configs, NormalExecutorFactory.create(), context)
 
     /**
      * Compile a list of [configs] and an [executor] into a Chain in a given [context].

@@ -12,7 +12,6 @@ import com.willfp.eco.util.toNumeral
 import com.willfp.libreforge.NamedValue
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.effects.Effects
-import com.willfp.libreforge.effects.executors.impl.NormalExecutorFactory
 import com.willfp.libreforge.levels.event.ItemLevelUpEvent
 import com.willfp.libreforge.triggers.DispatchedTrigger
 import com.willfp.libreforge.triggers.TriggerData
@@ -33,7 +32,6 @@ class LevelType(
 
     private val levelUpEffects = Effects.compileChain(
         config.getSubsections("level-up-effects"),
-        NormalExecutorFactory.create(),
         ViolationContext(plugin, "level $id level-up-effects")
     )
 
