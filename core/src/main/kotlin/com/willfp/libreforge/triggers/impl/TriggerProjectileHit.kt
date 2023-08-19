@@ -57,8 +57,7 @@ object TriggerProjectileHit : Trigger("projectile_hit") {
                 location = victim.location,
                 event = event,
                 velocity = arrow.velocity,
-                projectile = arrow,
-                value = event.finalDamage
+                projectile = arrow
             )
         )
     }
