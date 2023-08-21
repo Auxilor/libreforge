@@ -36,6 +36,7 @@ object EffectShootArrow : Effect<NoCompileData>("shoot_arrow") {
 
             arrow.pickupStatus = AbstractArrow.PickupStatus.DISALLOWED
             arrow.pierceLevel = 1
+            arrow.setBounce(false)
             if (config.getDoubleOrNull("damage") != null) {
                 arrow.damage = config.getDoubleFromExpression("damage")
             }
