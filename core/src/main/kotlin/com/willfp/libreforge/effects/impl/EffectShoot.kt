@@ -7,12 +7,15 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.enumValueOfOrNull
+import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.AbstractArrow
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Projectile
 import org.bukkit.event.entity.EntityShootBowEvent
+import org.bukkit.potion.PotionEffect
+import org.bukkit.potion.PotionEffectType
 
 @Suppress("UNCHECKED_CAST")
 object EffectShoot : Effect<NoCompileData>("shoot") {
@@ -34,7 +37,7 @@ object EffectShoot : Effect<NoCompileData>("shoot") {
 
         player.runExempted {
             val projectile = if (velocity == null || !config.getBool("inherit_velocity")) {
-                player.launchProjectile(projectileClass as Class<out Projectile>)
+                player.launchProjectile(projectileClass as Class<out Projectile>, player.velocity)
             } else {
                 player.launchProjectile(projectileClass as Class<out Projectile>, velocity)
             }
@@ -45,6 +48,12 @@ object EffectShoot : Effect<NoCompileData>("shoot") {
 
             if (projectile is AbstractArrow) {
                 projectile.pickupStatus = AbstractArrow.PickupStatus.DISALLOWED
+                if (config.getDoubleOrNull("damage") != null) {
+                    projectile.damage = config.getDoubleFromExpression("damage")
+                }
+                else {
+                    projectile.damage = 6.0
+                }
             }
 
             if (fire) {
