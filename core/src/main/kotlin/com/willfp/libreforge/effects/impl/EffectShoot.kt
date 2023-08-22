@@ -33,27 +33,25 @@ object EffectShoot : Effect<NoCompileData>("shoot") {
 
         player.runExempted {
             val projectile = if (velocity == null || !config.getBool("inherit_velocity")) {
-                player.launchProjectile(projectileClass as Class<out Projectile>, player.velocity)
+                player.launchProjectile(projectileClass as Class<out Projectile>)
             } else {
                 player.launchProjectile(projectileClass as Class<out Projectile>, velocity)
             }
 
-            if (config.getBool("launch-at-location") && data.location != null) {
+            if (config.getBool("launch-at-location") && data.location != null && projectile !is AbstractArrow) {
                 projectile.teleportAsync(data.location)
             }
 
             if (projectile is AbstractArrow) {
                 projectile.pickupStatus = AbstractArrow.PickupStatus.DISALLOWED
                 projectile.pierceLevel = 1
-                if (config.getDoubleOrNull("damage") != null) {
-                    projectile.damage = config.getDoubleFromExpression("damage")
+                if (config.getDoubleOrNull("arrow_damage") != null) {
+                    projectile.damage = config.getDoubleFromExpression("arrow_damage")
                 }
                 else {
                     projectile.damage = 6.0
                 }
             }
-
-            projectile.setBounce(false)
 
             if (fire) {
                 projectile.fireTicks = Int.MAX_VALUE

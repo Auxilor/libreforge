@@ -25,20 +25,15 @@ object EffectShootArrow : Effect<NoCompileData>("shoot_arrow") {
 
         player.runExempted {
             val arrow = if (velocity == null || !config.getBool("inherit_velocity")) {
-                player.launchProjectile(Arrow::class.java, player.velocity)
+                player.launchProjectile(Arrow::class.java)
             } else {
                 player.launchProjectile(Arrow::class.java, velocity)
             }
 
-            if (config.getBool("launch-at-location") && data.location != null) {
-                arrow.teleportAsync(data.location)
-            }
-
             arrow.pickupStatus = AbstractArrow.PickupStatus.DISALLOWED
             arrow.pierceLevel = 1
-            arrow.setBounce(false)
-            if (config.getDoubleOrNull("damage") != null) {
-                arrow.damage = config.getDoubleFromExpression("damage")
+            if (config.getDoubleOrNull("arrow_damage") != null) {
+                arrow.damage = config.getDoubleFromExpression("arrow_damage")
             }
             else {
                 arrow.damage = 6.0
