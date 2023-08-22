@@ -45,7 +45,7 @@ object EffectShoot : Effect<NoCompileData>("shoot") {
             if (projectile is AbstractArrow) {
                 projectile.pickupStatus = AbstractArrow.PickupStatus.DISALLOWED
                 projectile.pierceLevel = 1
-                if (config.getDoubleOrNull("arrow_damage") != null) {
+                if (config.getStringOrNull("arrow_damage") != null) {
                     projectile.damage = config.getDoubleFromExpression("arrow_damage")
                 }
                 else {

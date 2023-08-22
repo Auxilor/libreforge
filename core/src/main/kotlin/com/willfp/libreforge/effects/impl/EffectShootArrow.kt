@@ -32,7 +32,7 @@ object EffectShootArrow : Effect<NoCompileData>("shoot_arrow") {
 
             arrow.pickupStatus = AbstractArrow.PickupStatus.DISALLOWED
             arrow.pierceLevel = 1
-            if (config.getDoubleOrNull("arrow_damage") != null) {
+            if (config.getStringOrNull("arrow_damage") != null) {
                 arrow.damage = config.getDoubleFromExpression("arrow_damage")
             }
             else {
