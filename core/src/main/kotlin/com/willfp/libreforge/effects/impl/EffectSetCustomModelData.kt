@@ -18,7 +18,7 @@ object EffectSetCustomModelData : Effect<NoCompileData>("set_custom_model_data")
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
-        val item = data.item ?: return false
+        val item = data.foundItem ?: return false
         val meta = item.itemMeta ?: return false
 
         meta.setCustomModelData(config.getIntFromExpression("model", data))

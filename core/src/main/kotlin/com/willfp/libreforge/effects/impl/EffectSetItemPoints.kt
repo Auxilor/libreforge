@@ -20,7 +20,7 @@ object EffectSetItemPoints : Effect<NoCompileData>("set_item_points") {
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
-        val item = data.item ?: return false
+        val item = data.foundItem ?: return false
         item.points[config.getString("type")] = config.getDoubleFromExpression("amount", data)
 
         return true
