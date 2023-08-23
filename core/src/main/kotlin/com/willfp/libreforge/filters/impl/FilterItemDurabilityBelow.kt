@@ -13,7 +13,7 @@ object FilterItemDurabilityBelow : Filter<NoCompileData, Int>("item_durability_b
     }
 
     override fun isMet(data: TriggerData, value: Int, compileData: NoCompileData): Boolean {
-        val item = data.item ?: return true
+        val item = data.foundItem ?: return true
         val meta = item.itemMeta as? Damageable ?: return true
 
         return (item.type.maxDurability - meta.damage) <= value
