@@ -8,6 +8,7 @@ import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.ConfigWarning
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.conditions.Conditions
+import com.willfp.libreforge.deprecationMessage
 import com.willfp.libreforge.effects.arguments.EffectArguments
 import com.willfp.libreforge.effects.executors.ChainExecutor
 import com.willfp.libreforge.effects.executors.ChainExecutors
@@ -186,15 +187,11 @@ object Effects : Registry<Effect<*>>() {
             return null
         }
 
-        val deprecation = effect::class.java.annotations
-            .firstOrNull { it::class.java == Deprecated::class.java }
-            ?.let { it as? Deprecated }?.message
-
-        if (deprecation != null) {
+        if (effect.deprecationMessage != null) {
             context.log(
                 ConfigWarning(
                     "id",
-                    "Effect $id is deprecated: $deprecation. It will be removed in the future."
+                    "Effect $id is deprecated: ${effect.deprecationMessage}. It will be removed in the future."
                 )
             )
         }

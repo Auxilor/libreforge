@@ -2,9 +2,12 @@ package com.willfp.libreforge.filters
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.registry.Registry
+import com.willfp.libreforge.ConfigWarning
 import com.willfp.libreforge.ViolationContext
+import com.willfp.libreforge.deprecationMessage
 import com.willfp.libreforge.filters.impl.FilterAboveHealthPercent
 import com.willfp.libreforge.filters.impl.FilterBlocks
+import com.willfp.libreforge.filters.impl.FilterIsBoss
 import com.willfp.libreforge.filters.impl.FilterDamageCause
 import com.willfp.libreforge.filters.impl.FilterEntities
 import com.willfp.libreforge.filters.impl.FilterFromSpawner
@@ -27,6 +30,7 @@ import com.willfp.libreforge.filters.impl.FilterTextContains
 import com.willfp.libreforge.filters.impl.FilterVictimConditions
 import com.willfp.libreforge.filters.impl.FilterVictimName
 
+@Suppress("DEPRECATION")
 object Filters : Registry<Filter<*, *>>() {
     /**
      * Compile a [config] into a FilterList a given [context].
@@ -36,6 +40,16 @@ object Filters : Registry<Filter<*, *>>() {
 
         for (key in config.getKeys(false)) {
             val filter = get(key) ?: get(key.removePrefix("not_")) ?: continue
+
+            if (filter.deprecationMessage != null) {
+                context.log(
+                    ConfigWarning(
+                        key,
+                        "Filter $key is deprecated: ${filter.deprecationMessage}. It will be removed in the future."
+                    )
+                )
+            }
+
             blocks += makeBlock(filter, config, context) ?: continue
         }
 
@@ -74,6 +88,7 @@ object Filters : Registry<Filter<*, *>>() {
         register(FilterItems)
         register(FilterOnlyBosses)
         register(FilterOnlyNonBosses)
+        register(FilterIsBoss)
         register(FilterOnMaxHealth)
         register(FilterPlayerName)
         register(FilterPlayerPlaced)
