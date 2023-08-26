@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.willfp.libreforge.filters
 
 import com.willfp.eco.core.config.interfaces.Config
@@ -30,7 +32,6 @@ import com.willfp.libreforge.filters.impl.FilterTextContains
 import com.willfp.libreforge.filters.impl.FilterVictimConditions
 import com.willfp.libreforge.filters.impl.FilterVictimName
 
-@Suppress("DEPRECATION")
 object Filters : Registry<Filter<*, *>>() {
     /**
      * Compile a [config] into a FilterList a given [context].
