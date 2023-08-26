@@ -1,21 +1,18 @@
 package com.willfp.libreforge.slot
 
 import com.willfp.eco.core.registry.Registry
-import com.willfp.libreforge.slot.impl.AnySlotType
-import com.willfp.libreforge.slot.impl.HandSlotType
+import com.willfp.libreforge.slot.impl.SlotTypeAny
+import com.willfp.libreforge.slot.impl.SlotTypeArmor
+import com.willfp.libreforge.slot.impl.SlotTypeBoots
+import com.willfp.libreforge.slot.impl.SlotTypeChestplate
+import com.willfp.libreforge.slot.impl.SlotTypeMainhand
+import com.willfp.libreforge.slot.impl.SlotTypeHands
+import com.willfp.libreforge.slot.impl.SlotTypeHelmet
+import com.willfp.libreforge.slot.impl.SlotTypeLeggings
 import com.willfp.libreforge.slot.impl.NumericSlotType
-import com.willfp.libreforge.triggers.Trigger
-import com.willfp.libreforge.triggers.TriggerParameter
+import com.willfp.libreforge.slot.impl.SlotTypeOffhand
 
 object SlotTypes : Registry<SlotType>() {
-    fun getByID(id: String?): SlotType {
-        if (id == null) {
-            return AnySlotType
-        }
-
-        return get(id)
-    }
-
     override fun get(id: String): SlotType {
         if (id.toIntOrNull() != null) {
             return DelegatedSlotType(NumericSlotType(id.toInt()))
@@ -24,17 +21,15 @@ object SlotTypes : Registry<SlotType>() {
         return DelegatedSlotType(super.get(id))
     }
 
-    /**
-     * Get a predicate requiring certain trigger parameters.
-     */
-    fun withParameters(parameters: Set<TriggerParameter>): (Trigger) -> Boolean {
-        return {
-            it.parameters.flatMap { param -> param.inheritsFrom.toList().plusElement(param) }.containsAll(parameters)
-        }
-    }
-
     init {
-        register(AnySlotType)
-        register(HandSlotType)
+        register(SlotTypeAny)
+        register(SlotTypeArmor)
+        register(SlotTypeBoots)
+        register(SlotTypeChestplate)
+        register(SlotTypeMainhand)
+        register(SlotTypeHands)
+        register(SlotTypeHelmet)
+        register(SlotTypeLeggings)
+        register(SlotTypeOffhand)
     }
 }

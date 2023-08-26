@@ -5,7 +5,7 @@ import com.willfp.libreforge.slot.SlotType
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
-object AnySlotType : SlotType("any") {
+object SlotTypeAny : SlotType("any") {
     override fun addToSlot(player: Player, item: ItemStack): Boolean {
         DropQueue(player)
             .addItem(item)
@@ -13,5 +13,13 @@ object AnySlotType : SlotType("any") {
             .push()
 
         return true
+    }
+
+    override fun getItems(player: Player): List<ItemStack> {
+        return player.inventory.contents.toList().filterNotNull()
+    }
+
+    override fun getItemSlots(player: Player): List<Int> {
+        return (0..45).toList()
     }
 }

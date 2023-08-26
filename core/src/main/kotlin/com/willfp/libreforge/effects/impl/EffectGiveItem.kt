@@ -22,7 +22,7 @@ object EffectGiveItem : Effect<ItemStack>("give_item") {
     override fun onTrigger(config: Config, data: TriggerData, compileData: ItemStack): Boolean {
         val player = data.player ?: return false
 
-        val slotType = SlotTypes.getByID(config.getStringOrNull("slot"))
+        val slotType = SlotTypes[config.getString("slot")]
 
         slotType.addToSlot(player, compileData)
 
