@@ -25,7 +25,7 @@ object EffectPlaySound : Effect<NoCompileData>("play_sound") {
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val player = data.player ?: return false
 
-        val sound = enumValueOfOrNull<Sound>(config.getFormattedString("sound", data)) ?: return false
+        val sound = enumValueOfOrNull<Sound>(config.getFormattedString("sound", data).uppercase()) ?: return false
         val pitch = config.getDoubleFromExpression("pitch", data)
         val volume = config.getDoubleFromExpression("volume", data)
 
