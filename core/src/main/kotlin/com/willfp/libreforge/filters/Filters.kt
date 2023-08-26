@@ -41,16 +41,6 @@ object Filters : Registry<Filter<*, *>>() {
 
         for (key in config.getKeys(false)) {
             val filter = get(key) ?: get(key.removePrefix("not_")) ?: continue
-
-            if (filter.deprecationMessage != null) {
-                context.log(
-                    ConfigWarning(
-                        key,
-                        "Filter $key is deprecated: ${filter.deprecationMessage}. It will be removed in the future."
-                    )
-                )
-            }
-
             blocks += makeBlock(filter, config, context) ?: continue
         }
 
@@ -62,6 +52,15 @@ object Filters : Registry<Filter<*, *>>() {
         config: Config,
         context: ViolationContext
     ): FilterBlock<T, V>? {
+        if (filter.deprecationMessage != null) {
+            context.log(
+                ConfigWarning(
+                    filter.id,
+                    "Filter ${filter.id} is deprecated: ${filter.deprecationMessage}. It will be removed in the future."
+                )
+            )
+        }
+
         if (!filter.checkConfig(config, context)) {
             return null
         }
