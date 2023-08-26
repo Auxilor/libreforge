@@ -6,23 +6,22 @@ import com.willfp.libreforge.slot.SlotType
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
-class NumericSlotType(
-    private val slot: Int
-) : SlotType(slot.toString()) {
+object SlotTypeLeggings : SlotType("leggings") {
     override fun addToSlot(player: Player, item: ItemStack): Boolean {
-        if (!player.inventory.getItem(slot).isEmpty) {
+        if (!player.inventory.leggings.isEmpty) {
             return false
         }
 
-        player.inventory.setItem(slot, item)
+        player.inventory.leggings = item
+
         return true
     }
 
     override fun getItems(player: Player): List<ItemStack> {
-        return player.inventory.getItem(slot).toSingletonList()
+        return player.inventory.leggings.toSingletonList()
     }
 
     override fun getItemSlots(player: Player): List<Int> {
-        return slot.toSingletonList()
+        return 37.toSingletonList()
     }
 }

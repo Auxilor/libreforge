@@ -1,28 +1,23 @@
 package com.willfp.libreforge.slot.impl
 
-import com.willfp.eco.core.items.isEmpty
-import com.willfp.eco.util.toSingletonList
 import com.willfp.libreforge.slot.SlotType
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
-class NumericSlotType(
-    private val slot: Int
-) : SlotType(slot.toString()) {
+object SlotTypeHands : SlotType("hands") {
     override fun addToSlot(player: Player, item: ItemStack): Boolean {
-        if (!player.inventory.getItem(slot).isEmpty) {
-            return false
+        if (!SlotTypeMainhand.addToSlot(player, item)) {
+            return SlotTypeOffhand.addToSlot(player, item)
         }
 
-        player.inventory.setItem(slot, item)
         return true
     }
 
     override fun getItems(player: Player): List<ItemStack> {
-        return player.inventory.getItem(slot).toSingletonList()
+        return SlotTypeOffhand.getItems(player) + SlotTypeMainhand.getItems(player)
     }
 
     override fun getItemSlots(player: Player): List<Int> {
-        return slot.toSingletonList()
+        return SlotTypeOffhand.getItemSlots(player) + SlotTypeMainhand.getItemSlots(player)
     }
 }
