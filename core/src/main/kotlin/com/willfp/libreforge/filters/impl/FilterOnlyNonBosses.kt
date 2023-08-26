@@ -9,6 +9,7 @@ import org.bukkit.entity.Boss
 import org.bukkit.entity.ElderGuardian
 import org.bukkit.persistence.PersistentDataType
 
+@Deprecated("Use 'is_boss' filter instead")
 object FilterOnlyNonBosses : Filter<NoCompileData, Boolean>("only_non_bosses") {
     override fun getValue(config: Config, data: TriggerData?, key: String): Boolean {
         return config.getBool(key)
