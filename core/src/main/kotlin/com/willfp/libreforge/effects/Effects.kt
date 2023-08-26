@@ -108,6 +108,15 @@ object Effects : Registry<Effect<*>>() {
                         )
                     )
                 }
+
+                if (trigger.deprecationMessage != null) {
+                    context.log(
+                        ConfigWarning(
+                            "triggers",
+                            "Trigger ${trigger.id} is deprecated: ${trigger.deprecationMessage}. It will be removed in the future."
+                        )
+                    )
+                }
             }
 
             if (!triggers.all { element.effect.supportsTrigger(it) }) {

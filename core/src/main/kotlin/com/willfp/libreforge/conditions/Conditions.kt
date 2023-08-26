@@ -3,6 +3,7 @@ package com.willfp.libreforge.conditions
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.registry.Registry
 import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.ConfigWarning
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.conditions.impl.ConditionAboveBalance
 import com.willfp.libreforge.conditions.impl.ConditionAboveGlobalPoints
@@ -63,6 +64,7 @@ import com.willfp.libreforge.conditions.impl.ConditionWearingChestplate
 import com.willfp.libreforge.conditions.impl.ConditionWearingHelmet
 import com.willfp.libreforge.conditions.impl.ConditionWearingLeggings
 import com.willfp.libreforge.conditions.impl.ConditionWithinRadiusOf
+import com.willfp.libreforge.deprecationMessage
 import com.willfp.libreforge.effects.Chain
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.separatorAmbivalent
@@ -96,6 +98,15 @@ object Conditions : Registry<Condition<*>>() {
         if (condition == null) {
             context.log(ConfigViolation("id", "Invalid condition ID specified!"))
             return null
+        }
+
+        if (condition.deprecationMessage != null) {
+            context.log(
+                ConfigWarning(
+                    "id",
+                    "Condition ${condition.id} is deprecated: ${condition.deprecationMessage}. It will be removed in the future."
+                )
+            )
         }
 
         val notMetEffects = Effects.compileChain(
