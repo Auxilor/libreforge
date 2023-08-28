@@ -13,7 +13,15 @@ import com.willfp.libreforge.slot.impl.NumericSlotType
 import com.willfp.libreforge.slot.impl.SlotTypeOffhand
 
 object SlotTypes : Registry<SlotType>() {
+    val mainHandSlot = register(SlotTypeMainhand("mainhand"))
+
     override fun get(id: String): SlotType {
+        if (id.contains(",")) {
+            return CombinedSlotTypes(
+                id.split(",").map { get(it) }
+            )
+        }
+
         if (id.toIntOrNull() != null) {
             return DelegatedSlotType(NumericSlotType(id.toInt()))
         }
@@ -27,7 +35,6 @@ object SlotTypes : Registry<SlotType>() {
         register(SlotTypeBoots)
         register(SlotTypeChestplate)
         register(SlotTypeMainhand("hand"))
-        register(SlotTypeMainhand("mainhand"))
         register(SlotTypeHands)
         register(SlotTypeHelmet)
         register(SlotTypeLeggings)
