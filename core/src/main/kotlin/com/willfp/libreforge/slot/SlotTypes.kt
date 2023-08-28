@@ -18,7 +18,8 @@ object SlotTypes : Registry<SlotType>() {
     override fun get(id: String): SlotType {
         if (id.contains(",")) {
             return CombinedSlotTypes(
-                id.split(",").map { get(it) }
+                id.split(",")
+                    .map { get(it.trim()) }
             )
         }
 
