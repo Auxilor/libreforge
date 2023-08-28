@@ -17,7 +17,8 @@ class Counter internal constructor(
     val filters: FilterList,
     override val config: Config,
     val arguments: EffectArgumentList,
-    val multiplierExpression: String
+    val multiplierExpression: String?,
+    val valueExpression: String?
 ) : ConfigurableElement, PotentiallyTriggerable, Cloneable {
     override val uuid: UUID = UUID.randomUUID()
 
@@ -45,7 +46,8 @@ class Counter internal constructor(
             filters,
             config.clone(),
             arguments,
-            multiplierExpression
+            multiplierExpression,
+            valueExpression
         )
     }
 

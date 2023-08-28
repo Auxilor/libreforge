@@ -53,9 +53,20 @@ object Counters {
             context.with("args")
         )
 
-        val multiplierExpression = if (config.has("multiplier")) {
-            config.getString("multiplier")
-        } else "1" // lmao
+        val multiplierExpression = config.getStringOrNull("multiplier")
+
+        val valueExpression = config.getStringOrNull("value")
+
+        if (multiplierExpression != null && valueExpression != null) {
+            context.log(
+                ConfigViolation(
+                    "value",
+                    "Cannot specify both multiplier and value!"
+                )
+            )
+
+            return null
+        }
 
         return Counter(
             trigger,
@@ -63,7 +74,8 @@ object Counters {
             filters,
             args,
             arguments,
-            multiplierExpression
+            multiplierExpression,
+            valueExpression
         )
     }
 }

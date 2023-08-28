@@ -52,16 +52,30 @@ internal data class BoundCounter(
             return
         }
 
-        val multiplier = evaluateExpression(
-            counter.multiplierExpression,
-            placeholderContext(
-                player = player,
-                injectable = config
-            )
-        )
-
         met.forEach { it.ifMet(counter, trigger) }
 
-        accumulator.accept(player, value * multiplier)
+        if (counter.valueExpression != null) {
+            val valueFromExpr = evaluateExpression(
+                counter.valueExpression,
+                placeholderContext(
+                    player = player,
+                    injectable = config
+                )
+            )
+
+            accumulator.accept(player, valueFromExpr)
+        }
+
+        if (counter.multiplierExpression != null) {
+            val multiplier = evaluateExpression(
+                counter.multiplierExpression,
+                placeholderContext(
+                    player = player,
+                    injectable = config
+                )
+            )
+
+            accumulator.accept(player, value * multiplier)
+        }
     }
 }
