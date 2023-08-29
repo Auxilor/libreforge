@@ -15,19 +15,32 @@ import com.willfp.libreforge.slot.impl.SlotTypeOffhand
 object SlotTypes : Registry<SlotType>() {
     val mainHandSlot = register(SlotTypeMainhand("mainhand"))
 
-    override fun get(id: String): SlotType {
+    override fun get(id: String): SlotType? {
+        val existing = super.get(id)
+
+        // Return existing slot type if it exists
+        if (existing != null) {
+            return existing
+        }
+
+        // Create new slot type if it doesn't exist
+        return createNew(id)
+            ?.apply { register(this) }
+    }
+
+    private fun createNew(id: String): SlotType? {
         if (id.contains(",")) {
             return CombinedSlotTypes(
                 id.split(",")
-                    .map { get(it.trim()) }
+                    .mapNotNull { get(it.trim()) }
             )
         }
 
         if (id.toIntOrNull() != null) {
-            return DelegatedSlotType(NumericSlotType(id.toInt()))
+            return NumericSlotType(id.toInt())
         }
 
-        return DelegatedSlotType(super.get(id))
+        return null
     }
 
     init {

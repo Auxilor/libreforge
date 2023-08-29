@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.drops.DropQueue
 import com.willfp.eco.core.items.Items
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
@@ -24,7 +25,12 @@ object EffectGiveItem : Effect<ItemStack>("give_item") {
 
         val slotType = SlotTypes[config.getString("slot")]
 
-        slotType.addToSlot(player, compileData)
+        slotType?.addToSlot(player, compileData) ?: run {
+            DropQueue(player)
+                .addItem(compileData)
+                .forceTelekinesis()
+                .push()
+        }
 
         return true
     }
