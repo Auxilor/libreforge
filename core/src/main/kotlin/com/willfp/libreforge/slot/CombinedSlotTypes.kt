@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack
  */
 internal class CombinedSlotTypes(
     private val types: List<SlotType>
-) : SlotType("delegated") {
+) : SlotType("combined_" + types.hashCode()) {
     override fun addToSlot(player: Player, item: ItemStack): Boolean {
         return types.any { it.addToSlot(player, item) }
     }
