@@ -13,6 +13,7 @@ import org.bukkit.entity.LivingEntity
 import org.bukkit.event.EventHandler
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
+import java.util.UUID
 
 object TriggerAltClick : Trigger("alt_click") {
     override val parameters = setOf(
@@ -57,6 +58,8 @@ object TriggerAltClick : Trigger("alt_click") {
         Material.DROPPER
     )
 
+    private val preventDoubleTriggers = mutableSetOf<UUID>()
+
     init {
         BLOCK_BLACKLIST.addAll(Tag.BUTTONS.values)
         BLOCK_BLACKLIST.addAll(Tag.BEDS.values)
@@ -70,6 +73,11 @@ object TriggerAltClick : Trigger("alt_click") {
     @EventHandler
     fun handle(event: PlayerInteractEvent) {
         val player = event.player
+
+        if (player.uniqueId in preventDoubleTriggers) {
+            return
+        }
+
         val itemStack = player.inventory.itemInMainHand
 
         if (event.action == Action.PHYSICAL) {
@@ -114,6 +122,12 @@ object TriggerAltClick : Trigger("alt_click") {
             }
 
         val victim = entityResult?.hitEntity as? LivingEntity
+
+        preventDoubleTriggers += player.uniqueId
+
+        plugin.scheduler.run {
+            preventDoubleTriggers -= player.uniqueId
+        }
 
         this.dispatch(
             player,
