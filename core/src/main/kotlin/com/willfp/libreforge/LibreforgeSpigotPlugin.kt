@@ -20,6 +20,7 @@ import com.willfp.libreforge.integrations.tmmobcoins.TMMobcoinsIntegration
 import com.willfp.libreforge.integrations.vault.VaultIntegration
 import com.willfp.libreforge.integrations.worldguard.WorldGuardIntegration
 import com.willfp.libreforge.levels.LevelTypes
+import com.willfp.libreforge.levels.placeholder.ItemDataPlaceholder
 import com.willfp.libreforge.levels.placeholder.ItemLevelPlaceholder
 import com.willfp.libreforge.levels.placeholder.ItemPointsPlaceholder
 import com.willfp.libreforge.levels.placeholder.ItemProgressPlaceholder
@@ -81,6 +82,7 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
         ItemXPRequiredPlaceholder(this).register()
         ItemXPPlaceholder(this).register()
         ItemProgressPlaceholder(this).register()
+        ItemDataPlaceholder(this).register()
     }
 
     override fun handleReload() {

@@ -2,6 +2,7 @@ package com.willfp.libreforge.levels.placeholder
 
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.placeholder.context.PlaceholderContext
+import com.willfp.libreforge.itemData
 import com.willfp.libreforge.levels.LevelTypes
 import com.willfp.libreforge.levels.levels
 import com.willfp.libreforge.points
@@ -42,5 +43,12 @@ class ItemProgressPlaceholder(plugin: EcoPlugin) : ItemPointPlaceholder(plugin, 
         val level = LevelTypes[type] ?: return null
 
         return (item.levels[level].xp / level.getXPRequired(item.levels[level].level, context)) * 100
+    }
+}
+
+class ItemDataPlaceholder(plugin: EcoPlugin) : ItemPointPlaceholder(plugin, "data") {
+    override fun getValue(context: PlaceholderContext, type: String): String? {
+        val item = context.itemStack ?: return null
+        return item.itemData[type]
     }
 }
