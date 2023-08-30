@@ -9,6 +9,7 @@ import org.bukkit.event.player.PlayerItemConsumeEvent
 object TriggerConsume : Trigger("consume") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
+        TriggerParameter.LOCATION,
         TriggerParameter.EVENT,
         TriggerParameter.ITEM
     )
@@ -20,6 +21,7 @@ object TriggerConsume : Trigger("consume") {
             player,
             TriggerData(
                 player = player,
+                location = player.location,
                 event = event,
                 item = event.item
             )
