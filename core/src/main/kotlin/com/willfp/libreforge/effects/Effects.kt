@@ -14,6 +14,7 @@ import com.willfp.libreforge.effects.executors.ChainExecutor
 import com.willfp.libreforge.effects.executors.ChainExecutors
 import com.willfp.libreforge.effects.executors.impl.NormalExecutorFactory
 import com.willfp.libreforge.effects.impl.*
+import com.willfp.libreforge.enumValueOfOrNull
 import com.willfp.libreforge.filters.Filters
 import com.willfp.libreforge.integrations.paper.impl.EffectDropPickupItem
 import com.willfp.libreforge.mutators.Mutators
@@ -243,7 +244,7 @@ object Effects : Registry<Effect<*>>() {
         val weight = config.getDoubleFromExpression("weight")
 
         val forceRunOrder = if (args.has("run_order")) {
-            runCatching { enumValueOf<RunOrder>(args.getString("run_order")) }.getOrNull()
+            enumValueOfOrNull<RunOrder>(args.getString("run_order").uppercase())
         } else null
 
         return ChainElement(
