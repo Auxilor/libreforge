@@ -401,5 +401,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectTotalDamageMultiplier)
         register(EffectVictimSpeedMultiplier)
         register(EffectSetArmorTrim)
+        register(EffectSetItemData)
+        register(EffectRemoveItemData)
     }
 }

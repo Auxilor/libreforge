@@ -24,7 +24,7 @@ abstract class ItemPointPlaceholder(
             }
 
             if (isNumeral) {
-                it.toInt().toNumeral()
+                it.toString().toIntOrNull()?.toNumeral()
             } else {
                 it.toNiceString()
             }
@@ -39,5 +39,5 @@ abstract class ItemPointPlaceholder(
         return plugin
     }
 
-    abstract fun getValue(context: PlaceholderContext, type: String): Double?
+    abstract fun getValue(context: PlaceholderContext, type: String): Any?
 }

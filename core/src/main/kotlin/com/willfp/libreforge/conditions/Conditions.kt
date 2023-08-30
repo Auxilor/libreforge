@@ -24,6 +24,7 @@ import com.willfp.libreforge.conditions.impl.ConditionBelowY
 import com.willfp.libreforge.conditions.impl.ConditionCanAffordPrice
 import com.willfp.libreforge.conditions.impl.ConditionGlobalPointsEqual
 import com.willfp.libreforge.conditions.impl.ConditionHasItem
+import com.willfp.libreforge.conditions.impl.ConditionHasItemData
 import com.willfp.libreforge.conditions.impl.ConditionHasPermission
 import com.willfp.libreforge.conditions.impl.ConditionHasPotionEffect
 import com.willfp.libreforge.conditions.impl.ConditionInAir
@@ -43,6 +44,7 @@ import com.willfp.libreforge.conditions.impl.ConditionIsSneaking
 import com.willfp.libreforge.conditions.impl.ConditionIsSprinting
 import com.willfp.libreforge.conditions.impl.ConditionIsStorm
 import com.willfp.libreforge.conditions.impl.ConditionIsSwimming
+import com.willfp.libreforge.conditions.impl.ConditionItemDataEquals
 import com.willfp.libreforge.conditions.impl.ConditionItemLevelAbove
 import com.willfp.libreforge.conditions.impl.ConditionItemLevelBelow
 import com.willfp.libreforge.conditions.impl.ConditionItemLevelEquals
@@ -200,5 +202,7 @@ object Conditions : Registry<Condition<*>>() {
         register(ConditionOnGround)
         register(ConditionIsFalling)
         register(ConditionIsFlying)
+        register(ConditionHasItemData)
+        register(ConditionItemDataEquals)
     }
 }
