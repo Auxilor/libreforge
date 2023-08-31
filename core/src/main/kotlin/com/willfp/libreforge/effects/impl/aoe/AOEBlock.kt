@@ -5,6 +5,7 @@ import com.willfp.libreforge.Compiled
 import com.willfp.libreforge.triggers.TriggerData
 import dev.romainguy.kotlin.math.Float3
 import org.bukkit.World
+import org.bukkit.block.Block
 import org.bukkit.entity.LivingEntity
 
 /**
@@ -22,5 +23,14 @@ class AOEBlock<T>(
         data: TriggerData
     ): Collection<LivingEntity> {
         return shape.getEntities(location, direction, world, config, data, compileData)
+    }
+
+    fun getBlocks(
+        location: Float3,
+        direction: Float3,
+        world: World,
+        data: TriggerData
+    ): Collection<Block> {
+        return shape.getBlocks(location, direction, world, config, data, compileData)
     }
 }

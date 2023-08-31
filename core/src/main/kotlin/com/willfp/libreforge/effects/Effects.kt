@@ -404,5 +404,6 @@ object Effects : Registry<Effect<*>>() {
         register(EffectSetArmorTrim)
         register(EffectSetItemData)
         register(EffectRemoveItemData)
+        register(EffectAOEBlocks)
     }
 }
