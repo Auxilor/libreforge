@@ -37,7 +37,13 @@ object EffectAOE : Effect<AOECompileData>("aoe") {
             player.location.world,
             data
         ).filterNot { it.uniqueId == player.uniqueId }) {
-            compileData.chain?.trigger(data.copy(victim = entity).dispatch(player))
+            compileData.chain
+                ?.trigger(
+                    data.copy(
+                        victim = entity,
+                        location = entity.location
+                    ).dispatch(player)
+                )
         }
 
         return true

@@ -37,7 +37,13 @@ object EffectAOEBlocks : Effect<AOECompileData>("aoe_blocks") {
             player.location.world,
             data
         ).filterNot { it.isEmpty }) {
-            compileData.chain?.trigger(data.copy(block = block).dispatch(player))
+            compileData.chain
+                ?.trigger(
+                    data.copy(
+                        block = block,
+                        location = block.location.add(0.5, 0.5, 0.5)
+                    ).dispatch(player)
+                )
         }
 
         return true
