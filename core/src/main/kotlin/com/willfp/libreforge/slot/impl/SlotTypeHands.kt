@@ -5,10 +5,8 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
 object SlotTypeHands : SlotType("hands") {
-    private val mainhand = SlotTypeMainhand("<internal>")
-
     override fun addToSlot(player: Player, item: ItemStack): Boolean {
-        if (!mainhand.addToSlot(player, item)) {
+        if (!SlotTypeMainhand.addToSlot(player, item)) {
             return SlotTypeOffhand.addToSlot(player, item)
         }
 
@@ -16,10 +14,10 @@ object SlotTypeHands : SlotType("hands") {
     }
 
     override fun getItems(player: Player): List<ItemStack> {
-        return SlotTypeOffhand.getItems(player) + mainhand.getItems(player)
+        return SlotTypeOffhand.getItems(player) + SlotTypeMainhand.getItems(player)
     }
 
     override fun getItemSlots(player: Player): List<Int> {
-        return SlotTypeOffhand.getItemSlots(player) + mainhand.getItemSlots(player)
+        return SlotTypeOffhand.getItemSlots(player) + SlotTypeMainhand.getItemSlots(player)
     }
 }
