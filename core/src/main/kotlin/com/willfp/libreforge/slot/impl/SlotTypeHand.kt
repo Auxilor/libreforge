@@ -6,8 +6,8 @@ import com.willfp.libreforge.slot.SlotType
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
-// Pass in any ID, so you can have both mainhand and hand as valid IDs
-object SlotTypeMainhand : SlotType("mainhand") {
+// I know it's a duplicate, it's fine.
+object SlotTypeHand : SlotType("hand") {
     override fun addToSlot(player: Player, item: ItemStack): Boolean {
         if (!player.inventory.itemInMainHand.isEmpty) {
             return false

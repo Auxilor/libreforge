@@ -10,10 +10,12 @@ import com.willfp.libreforge.slot.impl.SlotTypeHands
 import com.willfp.libreforge.slot.impl.SlotTypeHelmet
 import com.willfp.libreforge.slot.impl.SlotTypeLeggings
 import com.willfp.libreforge.slot.impl.NumericSlotType
+import com.willfp.libreforge.slot.impl.SlotTypeHand
 import com.willfp.libreforge.slot.impl.SlotTypeOffhand
 
 object SlotTypes : Registry<SlotType>() {
-    val mainHandSlot = register(SlotTypeMainhand("mainhand"))
+    @Deprecated("Use SlotTypeMainhand instead", ReplaceWith("SlotTypeMainhand"))
+    val mainHandSlot = register(SlotTypeMainhand)
 
     override fun get(id: String): SlotType? {
         val existing = super.get(id)
@@ -48,7 +50,8 @@ object SlotTypes : Registry<SlotType>() {
         register(SlotTypeArmor)
         register(SlotTypeBoots)
         register(SlotTypeChestplate)
-        register(SlotTypeMainhand("hand"))
+        register(SlotTypeHand)
+        register(SlotTypeMainhand)
         register(SlotTypeHands)
         register(SlotTypeHelmet)
         register(SlotTypeLeggings)
