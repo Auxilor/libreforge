@@ -4,10 +4,12 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.util.runExempted
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.effects.impl.EffectMineVein.breakBlocksSafely
+import com.willfp.libreforge.effects.templates.MineBlockEffect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
-object EffectBreakBlock : Effect<NoCompileData>("break_block") {
+object EffectBreakBlock : MineBlockEffect<NoCompileData>("break_block") {
     override val parameters = setOf(
         TriggerParameter.PLAYER
     )
@@ -17,9 +19,7 @@ object EffectBreakBlock : Effect<NoCompileData>("break_block") {
 
         val player = data.player ?: return false
 
-        player.runExempted {
-            player.breakBlock(block)
-        }
+        player.breakBlocksSafely(listOf(block))
 
         return true
     }
