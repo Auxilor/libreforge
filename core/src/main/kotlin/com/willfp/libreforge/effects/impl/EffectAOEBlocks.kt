@@ -14,7 +14,7 @@ import com.willfp.libreforge.toFloat3
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
-object EffectAOE : Effect<AOECompileData>("aoe") {
+object EffectAOEBlocks : Effect<AOECompileData>("aoe_blocks") {
     override val parameters = setOf(
         TriggerParameter.PLAYER
     )
@@ -31,13 +31,13 @@ object EffectAOE : Effect<AOECompileData>("aoe") {
         val player = data.player ?: return false
         val shape = compileData.shape ?: return false
 
-        for (entity in shape.getEntities(
+        for (block in shape.getBlocks(
             player.location.toFloat3(),
             player.eyeLocation.direction.toFloat3(),
             player.location.world,
             data
-        ).filterNot { it.uniqueId == player.uniqueId }) {
-            compileData.chain?.trigger(data.copy(victim = entity).dispatch(player))
+        ).filterNot { it.isEmpty }) {
+            compileData.chain?.trigger(data.copy(block = block).dispatch(player))
         }
 
         return true
