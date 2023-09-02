@@ -4,6 +4,7 @@ import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.event.EventHandler
+import org.bukkit.event.player.PlayerBucketEmptyEvent
 import org.bukkit.event.player.PlayerBucketFillEvent
 
 object TriggerEmptyBucket : Trigger("empty_bucket") {
@@ -13,7 +14,7 @@ object TriggerEmptyBucket : Trigger("empty_bucket") {
     )
 
     @EventHandler(ignoreCancelled = true)
-    fun handle(event: PlayerBucketFillEvent) {
+    fun handle(event: PlayerBucketEmptyEvent) {
         val player = event.player
 
         this.dispatch(
