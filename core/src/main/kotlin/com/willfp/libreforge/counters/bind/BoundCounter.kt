@@ -64,6 +64,7 @@ internal data class BoundCounter(
             )
 
             accumulator.accept(player, valueFromExpr)
+            return
         }
 
         if (counter.multiplierExpression != null) {
@@ -76,6 +77,9 @@ internal data class BoundCounter(
             )
 
             accumulator.accept(player, value * multiplier)
+            return
         }
+
+        accumulator.accept(player, value)
     }
 }
