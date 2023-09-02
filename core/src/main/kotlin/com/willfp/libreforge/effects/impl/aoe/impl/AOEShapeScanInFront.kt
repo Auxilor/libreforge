@@ -36,7 +36,7 @@ object AOEShapeScanInFront : AOEShape<NoCompileData>("scan_in_front") {
 
         val offset = direction.normalize()
 
-        for (i in 0..maxDistance) {
+        for (i in 1..maxDistance) {
             val entities = (location + offset * i.toFloat()).toLocation(world)
                 .getNearbyEntities(radius, radius, radius)
                 .filterIsInstance<LivingEntity>()

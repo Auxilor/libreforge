@@ -42,7 +42,7 @@ object AOEShapeBeam : AOEShape<NoCompileData>("beam") {
 
         val entities = mutableSetOf<LivingEntity>()
 
-        for (i in 0..distance) {
+        for (i in 1..distance) {
             val center = (location + offset * i.toFloat()).toLocation(world)
 
             val atBeamPoint = center.getNearbyEntities(radius, radius, radius)
