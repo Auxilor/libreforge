@@ -26,9 +26,14 @@ object EffectRunCommand : Effect<NoCompileData>("run_command") {
         val victim = data.victim as? Player
 
         val commands = config.getStrings("commands", "command")
-            .map { it.replace("%player%", player.name)
-            it.replace("%victim%", victim?.name ?: "")
-            it.translatePlaceholders(config.toPlaceholderContext(data))}
+            .filter {
+                it.isNotEmpty()
+            }
+            .map {
+                it.replace("%player%", player.name)
+                it.replace("%victim%", victim?.name ?: "")
+                it.translatePlaceholders(config.toPlaceholderContext(data))
+            }
 
         commands.forEach {
             Bukkit.getServer().dispatchCommand(
