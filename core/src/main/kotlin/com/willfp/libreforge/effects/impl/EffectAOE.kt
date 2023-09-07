@@ -32,7 +32,7 @@ object EffectAOE : Effect<AOECompileData>("aoe") {
         val shape = compileData.shape ?: return false
 
         for (entity in shape.getEntities(
-            player.location.toFloat3(),
+            player.eyeLocation.toFloat3(),
             player.eyeLocation.direction.toFloat3(),
             player.location.world,
             data
