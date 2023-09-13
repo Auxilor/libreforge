@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.placeholder.translatePlaceholders
 import com.willfp.eco.util.formatEco
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
@@ -28,7 +29,7 @@ object EffectRunCommand : Effect<NoCompileData>("run_command") {
         val commands = config.getStrings("commands", "command")
             .map { it.replace("%player%", player.name)
             it.replace("%victim%", victim?.name ?: "")}
-            .formatEco(config.toPlaceholderContext(data))
+            .map { it.translatePlaceholders(config.toPlaceholderContext(data)) }
 
         commands.forEach {
             Bukkit.getServer().dispatchCommand(
