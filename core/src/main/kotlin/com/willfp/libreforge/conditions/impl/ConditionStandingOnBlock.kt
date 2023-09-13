@@ -12,7 +12,11 @@ object ConditionStandingOnBlock : Condition<NoCompileData>("standing_on_block") 
     }
 
     override fun isMet(player: Player, config: Config, compileData: NoCompileData): Boolean {
-        return player.world.getBlockAt(player.location.clone().add(0.0, -1.0, 0.0))
-            .type.name.equals(config.getString("block"), ignoreCase = true)
+        val tests = setOf(
+            player.location.block,
+            player.location.clone().add(0.0, -1.0, 0.0).block
+        )
+
+        return tests.any { it.type.name.equals(config.getString("block"), ignoreCase = true) }
     }
 }
