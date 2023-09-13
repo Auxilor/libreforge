@@ -17,7 +17,7 @@ object TriggerClickEntity : Trigger("click_entity") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerInteractEntityEvent) {
-        val entity = event.rightClicked
+        val entity = event.rightClicked as? LivingEntity ?: return
         val player = event.player
 
         this.dispatch(
@@ -25,7 +25,7 @@ object TriggerClickEntity : Trigger("click_entity") {
             TriggerData(
                 player = player,
                 location = entity.location,
-                victim = entity as? LivingEntity,
+                victim = entity,
                 event = event
             )
         )
