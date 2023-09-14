@@ -4,7 +4,7 @@ import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.command.impl.Subcommand
 import org.bukkit.command.CommandSender
 
-class CommandReload(
+internal class CommandReload(
     plugin: EcoPlugin
 ) : Subcommand(
     plugin,
