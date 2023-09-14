@@ -5,7 +5,7 @@ import com.willfp.eco.core.command.impl.Subcommand
 import org.bukkit.command.CommandSender
 
 @Suppress("UsagesOfObsoleteApi")
-class CommandPoints(plugin: EcoPlugin): Subcommand(
+internal class CommandPoints(plugin: EcoPlugin): Subcommand(
     plugin,
     "points",
     "libreforge.command.points",

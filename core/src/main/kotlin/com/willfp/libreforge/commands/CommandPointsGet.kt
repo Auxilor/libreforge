@@ -10,7 +10,7 @@ import org.bukkit.command.CommandSender
 import org.bukkit.util.StringUtil
 
 @Suppress("UsagesOfObsoleteApi")
-class CommandPointsGet(plugin: EcoPlugin): Subcommand(
+internal class CommandPointsGet(plugin: EcoPlugin): Subcommand(
     plugin,
     "get",
     "libreforge.command.points.get",
