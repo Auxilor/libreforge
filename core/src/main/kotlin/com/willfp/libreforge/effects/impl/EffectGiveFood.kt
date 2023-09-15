@@ -21,11 +21,12 @@ object EffectGiveFood : Effect<NoCompileData>("give_food") {
         val player = data.player ?: return false
 
         if (config.getBool("respect-vanilla-limits")) {
-            if (player.foodLevel >= 20) { player.foodLevel = player.foodLevel } else
+            if (player.foodLevel < 20) {
             player.foodLevel = (player.foodLevel + config.getIntFromExpression("amount", data)).coerceIn(
                 minimumValue = 0,
                 maximumValue = 20
-            )
+            )}
+            else return true
         } else {
             player.foodLevel = player.foodLevel + config.getIntFromExpression("amount", data)
         }
