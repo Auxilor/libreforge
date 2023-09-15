@@ -15,11 +15,23 @@ object EffectGiveSaturation : Effect<NoCompileData>("give_saturation") {
 
     override val arguments = arguments {
         require("amount", "You must specify the amount of saturation to give!")
+
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val player = data.player ?: return false
-        player.saturation = player.saturation + config.getIntFromExpression("amount", data)
+
+        if (config.getBool("respect-vanilla-limits")) {
+            if (player.saturation >= 20.0F) { player.saturation = player.saturation } else
+            player.saturation = (player.saturation + config.getIntFromExpression("amount", data)).coerceIn(
+                minimumValue = 0.0F,
+                maximumValue = (player.foodLevel.toFloat()).coerceAtMost(maximumValue = 20.0F)
+            )
+        } else {
+            player.saturation = player.saturation + config.getIntFromExpression("amount", data)
+        }
+
+
 
         return true
     }
