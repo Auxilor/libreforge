@@ -54,10 +54,8 @@ object Effects : Registry<Effect<*>>() {
 
         val args = config.getSubsection("args")
 
-        val arguments = EffectArguments.compile(args, context.with("args"))
-        val conditions = Conditions.compile(config.getSubsections("conditions"), context.with("conditions"))
-        val mutators = Mutators.compile(config.getSubsections("mutators"), context.with("mutators"))
-        val filters = Filters.compile(config.getSubsection("filters"), context.with("filters"))
+        val (arguments, conditions, mutators, filters) = compileEffectContext(config, context)
+
         val triggers = config.getStrings("triggers").mapNotNull {
             Triggers[it]
         }.toSet()
@@ -159,6 +157,51 @@ object Effects : Registry<Effect<*>>() {
         context: ViolationContext,
     ): Chain? = compileChain(configs, executor, context, false)
 
+    /**
+     * Compile a [config] into a Rich Chain in a given [context].
+     */
+    fun compileRichChain(
+        config: Config,
+        context: ViolationContext
+    ): RichChain? {
+        val args = config.getSubsection("args")
+
+        val chain = compileChain(
+            config.getSubsections("effects"),
+            ChainExecutors.getByID(args.getStringOrNull("run-type")),
+            context.with("effects")
+        ) ?: return null
+
+        val (arguments, conditions, mutators, filters) = compileEffectContext(config, context)
+
+        return RichChain(
+            UUID.randomUUID(),
+            args,
+            chain,
+            arguments,
+            conditions,
+            mutators,
+            filters,
+        )
+    }
+
+    private fun compileEffectContext(
+        config: Config,
+        context: ViolationContext
+    ): EffectContext {
+        val arguments = EffectArguments.compile(config.getSubsection("args"), context.with("args"))
+        val conditions = Conditions.compile(config.getSubsections("conditions"), context.with("conditions"))
+        val mutators = Mutators.compile(config.getSubsections("mutators"), context.with("mutators"))
+        val filters = Filters.compile(config.getSubsection("filters"), context.with("filters"))
+
+        return EffectContext(
+            arguments,
+            conditions,
+            mutators,
+            filters
+        )
+    }
+
     private fun compileChain(
         configs: Collection<Config>,
         executor: ChainExecutor,
@@ -209,7 +252,7 @@ object Effects : Registry<Effect<*>>() {
         return makeElement(effect, config, context)
     }
 
-    private fun compileNestedChain(config: Config, context: ViolationContext): ChainElement<Chain?>? {
+    private fun compileNestedChain(config: Config, context: ViolationContext): ChainElement<RichChain?>? {
         val compileData = EffectTriggerNestedChain.makeCompileData(config, context)
 
         return makeElement(
@@ -236,10 +279,7 @@ object Effects : Registry<Effect<*>>() {
 
         val compileData = forceCompileData ?: effect.makeCompileData(args, context.with("args"))
 
-        val arguments = EffectArguments.compile(args, context.with("args"))
-        val conditions = Conditions.compile(config.getSubsections("conditions"), context.with("conditions"))
-        val mutators = Mutators.compile(config.getSubsections("mutators"), context.with("mutators"))
-        val filters = Filters.compile(config.getSubsection("filters"), context.with("filters"))
+        val (arguments, conditions, mutators, filters) = compileEffectContext(config, context)
 
         val weight = config.getDoubleFromExpression("weight")
 
