@@ -21,8 +21,6 @@ object TriggerCatchFish : Trigger("catch_fish") {
             return
         }
 
-        PlayerFishEvent.State.FAILED_ATTEMPT
-
         val player = event.player
 
         this.dispatch(

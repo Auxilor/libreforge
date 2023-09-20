@@ -1,7 +1,9 @@
 package com.willfp.libreforge
 
+import com.willfp.eco.core.items.Items
 import org.bukkit.Location
 import org.bukkit.block.Block
+import org.bukkit.inventory.ItemStack
 import kotlin.math.roundToInt
 
 inline fun <reified T : Enum<T>> enumValueOfOrNull(name: String): T? {
@@ -44,3 +46,10 @@ fun Location.getNearbyBlocksInSphere(
     radius: Double
 ): Collection<Block> = getNearbyBlocks(radius, radius, radius)
     .filter { it.location.distanceSquared(this) <= radius * radius }
+
+fun Collection<ItemStack?>.filterNotEmpty() =
+    this.filterNot { Items.isEmpty(it) }
+        .filterNotNull()
+
+internal val ItemStack?.isEcoEmpty: Boolean
+    get() = Items.isEmpty(this)

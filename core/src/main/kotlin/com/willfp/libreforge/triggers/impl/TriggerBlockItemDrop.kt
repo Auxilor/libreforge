@@ -2,7 +2,7 @@ package com.willfp.libreforge.triggers.impl
 
 import com.willfp.eco.core.drops.DropQueue
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
-import com.willfp.eco.core.items.isEmpty
+import com.willfp.libreforge.filterNotEmpty
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -43,7 +43,7 @@ object TriggerBlockItemDrop : Trigger("block_item_drop") {
             return
         }
 
-        val originalDrops = event.items.map { it.itemStack }.filterNot { it.isEmpty }
+        val originalDrops = event.items.map { it.itemStack }.filterNotEmpty()
 
         val editableEvent = EditableBlockDropEvent(event)
 

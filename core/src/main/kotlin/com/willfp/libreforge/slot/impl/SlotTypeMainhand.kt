@@ -1,7 +1,7 @@
 package com.willfp.libreforge.slot.impl
 
-import com.willfp.eco.core.items.isEmpty
 import com.willfp.eco.util.toSingletonList
+import com.willfp.libreforge.isEcoEmpty
 import com.willfp.libreforge.slot.SlotType
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack
 // Pass in any ID, so you can have both mainhand and hand as valid IDs
 object SlotTypeMainhand : SlotType("mainhand") {
     override fun addToSlot(player: Player, item: ItemStack): Boolean {
-        if (!player.inventory.itemInMainHand.isEmpty) {
+        if (!player.inventory.itemInMainHand.isEcoEmpty) {
             return false
         }
 

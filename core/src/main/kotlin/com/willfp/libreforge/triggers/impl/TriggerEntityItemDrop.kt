@@ -3,8 +3,8 @@ package com.willfp.libreforge.triggers.impl
 import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.drops.DropQueue
 import com.willfp.eco.core.events.EntityDeathByEntityEvent
-import com.willfp.eco.core.items.isEmpty
 import com.willfp.eco.util.tryAsPlayer
+import com.willfp.libreforge.filterNotEmpty
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -30,7 +30,7 @@ object TriggerEntityItemDrop : Trigger("entity_item_drop") {
 
         val entity = event.victim
         val player = event.killer.tryAsPlayer() ?: return
-        val originalDrops = event.drops.filterNot { it.isEmpty }
+        val originalDrops = event.drops.filterNotEmpty()
 
         val editableEvent = EditableEntityDropEvent(event.deathEvent)
 
