@@ -1,14 +1,14 @@
 package com.willfp.libreforge.slot.impl
 
-import com.willfp.eco.core.items.isEmpty
 import com.willfp.eco.util.toSingletonList
+import com.willfp.libreforge.isEcoEmpty
 import com.willfp.libreforge.slot.SlotType
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
 object SlotTypeHelmet : SlotType("helmet") {
     override fun addToSlot(player: Player, item: ItemStack): Boolean {
-        if (!player.inventory.helmet.isEmpty) {
+        if (!player.inventory.helmet.isEcoEmpty) {
             return false
         }
 

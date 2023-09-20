@@ -1,7 +1,6 @@
 package com.willfp.libreforge.slot.impl
 
-import com.willfp.eco.core.items.isEmpty
-import com.willfp.eco.util.toSingletonList
+import com.willfp.libreforge.isEcoEmpty
 import com.willfp.libreforge.slot.SlotType
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -9,7 +8,7 @@ import org.bukkit.inventory.ItemStack
 object SlotTypeArmor : SlotType("armor") {
     override fun addToSlot(player: Player, item: ItemStack): Boolean {
         for (slot in 36..39) {
-            if (player.inventory.getItem(slot).isEmpty) {
+            if (player.inventory.getItem(slot).isEcoEmpty) {
                 player.inventory.setItem(slot, item)
                 return true
             }

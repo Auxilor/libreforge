@@ -164,27 +164,9 @@ data class HolderTemplate(
     /**
      * Create a holder with a given key from the template.
      */
-    fun toHolder(key: NamespacedKey): Holder = HolderFromTemplate(
+    fun toHolder(key: NamespacedKey): Holder = SimpleHolder(
+        key,
         effects,
-        conditions,
-        key
+        conditions
     )
-
-    private class HolderFromTemplate(
-        override val effects: EffectList,
-        override val conditions: ConditionList,
-        override val id: NamespacedKey
-    ) : Holder {
-        override fun equals(other: Any?): Boolean {
-            if (other !is Holder) {
-                return false
-            }
-
-            return other.id == this.id
-        }
-
-        override fun hashCode(): Int {
-            return Objects.hash(this.id)
-        }
-    }
 }
