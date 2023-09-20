@@ -2,15 +2,12 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.map.listMap
-import com.willfp.eco.core.map.nestedListMap
-import com.willfp.eco.core.map.nestedMap
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.plugin
-import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.block.BlockFace
@@ -29,7 +26,7 @@ object EffectReplantCrops : Effect<NoCompileData>("replant_crops") {
         require("only_fully_grown", "You must specify only fully grown crops should be replanted!")
     }
 
-    private val players = nestedMap<UUID, UUID, ReplantConfig>()
+    private val players = listMap<UUID, ReplantConfig>()
 
     override fun onEnable(
         player: Player,
@@ -38,14 +35,15 @@ object EffectReplantCrops : Effect<NoCompileData>("replant_crops") {
         holder: ProvidedHolder,
         compileData: NoCompileData
     ) {
-        players[player.uniqueId][identifiers.uuid] = ReplantConfig(
+        players[player.uniqueId] += ReplantConfig(
+            identifiers.uuid,
             config.getBool("consume_seeds"),
             config.getBool("only_fully_grown")
         )
     }
 
     override fun onDisable(player: Player, identifiers: Identifiers, holder: ProvidedHolder) {
-        players[player.uniqueId].remove(identifiers.uuid)
+        players[player.uniqueId].removeIf { it.uuid == identifiers.uuid }
     }
 
     @EventHandler(
@@ -79,12 +77,12 @@ object EffectReplantCrops : Effect<NoCompileData>("replant_crops") {
             return
         }
 
-        val consumeSeeds = players[player.uniqueId].any { (_, config) ->
-            config.consumeSeeds
+        val consumeSeeds = players[player.uniqueId].any {
+            it.consumeSeeds
         }
 
-        val onlyFullyGrown = players[player.uniqueId].all { (_, config) ->
-            config.onlyFullyGrown
+        val onlyFullyGrown = players[player.uniqueId].all {
+            it.onlyFullyGrown
         }
 
         if (consumeSeeds) {
@@ -136,6 +134,7 @@ object EffectReplantCrops : Effect<NoCompileData>("replant_crops") {
     }
 
     private data class ReplantConfig(
+        val uuid: UUID,
         val consumeSeeds: Boolean,
         val onlyFullyGrown: Boolean
     )
