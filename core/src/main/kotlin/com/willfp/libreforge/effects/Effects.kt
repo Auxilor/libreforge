@@ -432,6 +432,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectSetItemPoints)
         register(EffectSetCustomModelData)
         register(EffectDropWeightedRandomItem)
+        register(EffectReplenishCrop)
         register(EffectSwarm)
         register(EffectTargetPlayer)
         register(EffectReplaceNear)
