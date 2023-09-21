@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.eco.core.map.listMap
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
@@ -58,6 +59,10 @@ object EffectReplantCrops : Effect<NoCompileData>("replant_crops") {
 
         val block = event.block
         val type = block.type
+
+        if (!AntigriefManager.canPlaceBlock(player, block)) {
+            return
+        }
 
         if (type in arrayOf(
                 Material.GLOW_BERRIES,
