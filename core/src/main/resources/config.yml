@@ -95,6 +95,11 @@ effects:
   telekinesis:
     on-players: true # Whether telekinesis should work on players
 
+    # By default, Telekinesis processes all drops regardless of if telekinesis is active for the player.
+    # This can significantly improve performance under load, however it will prevent telekinesis-like systems
+    # in third-party plugins from working. Disable this if other plugins aren't working properly.
+    always-process-blocks: true
+
   # If this is set to true, effects like mine_radius, drill, etc. will simply set the block to air
   # instead of actually breaking it. This **will** break compatibility with things, but will also majorly
   # improve performance under load.
