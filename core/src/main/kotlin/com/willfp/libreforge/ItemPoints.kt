@@ -1,8 +1,6 @@
 package com.willfp.libreforge
 
-import com.willfp.eco.core.data.get
 import com.willfp.eco.core.data.newPersistentDataContainer
-import com.willfp.eco.core.data.set
 import com.willfp.eco.core.fast.FastItemStack
 import com.willfp.eco.core.fast.fast
 import com.willfp.eco.util.namespacedKeyOf
@@ -11,20 +9,17 @@ import org.bukkit.persistence.PersistentDataContainer
 import org.bukkit.persistence.PersistentDataType
 
 class ItemPointsMap(
-    private val pdc: PersistentDataContainer,
-    private val parent: PersistentDataContainer
+    override val pdc: PersistentDataContainer,
+    override val parent: PersistentDataContainer
+): GenericItemDataMap<Double>(
+    PersistentDataType.DOUBLE,
+    itemPointsRootKey
 ) {
-    operator fun get(type: String): Double {
-        return pdc.get(type, PersistentDataType.DOUBLE) ?: 0.0
-    }
-
-    operator fun set(type: String, value: Double) {
-        pdc.set(type, PersistentDataType.DOUBLE, value)
-        parent.set(key, PersistentDataType.TAG_CONTAINER, pdc)
-    }
+    override operator fun get(key: String): Double =
+        super.get(key) ?: 0.0
 }
 
-private val key = namespacedKeyOf("libreforge", "item_points")
+private val itemPointsRootKey = namespacedKeyOf("libreforge", "item_points")
 
 val ItemStack.points: ItemPointsMap
     get() = this.fast().points
@@ -32,10 +27,10 @@ val ItemStack.points: ItemPointsMap
 private val FastItemStack.pointsPDC: PersistentDataContainer
     get() {
         val pdc = this.persistentDataContainer
-        if (!pdc.has(key, PersistentDataType.TAG_CONTAINER)) {
-            pdc.set(key, PersistentDataType.TAG_CONTAINER, newPersistentDataContainer())
+        if (!pdc.has(itemPointsRootKey, PersistentDataType.TAG_CONTAINER)) {
+            pdc.set(itemPointsRootKey, PersistentDataType.TAG_CONTAINER, newPersistentDataContainer())
         }
-        return pdc.get(key, PersistentDataType.TAG_CONTAINER)!!
+        return pdc.get(itemPointsRootKey, PersistentDataType.TAG_CONTAINER)!!
     }
 
 val FastItemStack.points: ItemPointsMap
