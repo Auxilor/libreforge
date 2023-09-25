@@ -14,8 +14,8 @@ import org.bukkit.persistence.PersistentDataContainer
 import org.bukkit.persistence.PersistentDataType
 
 abstract class GenericItemDataMap<T : Any>(
-    val dataType: PersistentDataType<T, T>,
-    val rootKey: NamespacedKey,
+    private val dataType: PersistentDataType<T, T>,
+    private val rootKey: NamespacedKey,
 ) {
     protected abstract val pdc: PersistentDataContainer
     protected abstract val parent: PersistentDataContainer
