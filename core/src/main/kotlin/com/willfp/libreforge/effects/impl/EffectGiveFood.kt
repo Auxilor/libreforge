@@ -20,17 +20,8 @@ object EffectGiveFood : Effect<NoCompileData>("give_food") {
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val player = data.player ?: return false
 
-        if (config.getBool("respect-vanilla-limits")) {
-            if (player.foodLevel < 20) {
-            player.foodLevel = (player.foodLevel + config.getIntFromExpression("amount", data)).coerceIn(
-                minimumValue = 0,
-                maximumValue = 20
-            )}
-            else return true
-        } else {
-            player.foodLevel = player.foodLevel + config.getIntFromExpression("amount", data)
-        }
-
+        player.foodLevel = (player.foodLevel + config.getIntFromExpression("amount", data))
+            .coerceIn(0..20)
 
         return true
     }
