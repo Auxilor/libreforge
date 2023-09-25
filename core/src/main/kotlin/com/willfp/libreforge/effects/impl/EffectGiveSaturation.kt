@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -20,20 +21,9 @@ object EffectGiveSaturation : Effect<NoCompileData>("give_saturation") {
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val player = data.player ?: return false
-        val maximumSaturation = (player.foodLevel.toFloat()).coerceAtMost(maximumValue = 20.0F)
 
-        if (config.getBool("respect-vanilla-limits")) {
-            if (player.saturation < maximumSaturation) {
-            player.saturation = (player.saturation + config.getIntFromExpression("amount", data)).coerceIn(
-                minimumValue = 0.0F,
-                maximumValue = maximumSaturation
-            )}
-            else return true
-        } else {
-            player.saturation = player.saturation + config.getIntFromExpression("amount", data)
-        }
-
-
+        player.saturation = (player.saturation + config.getDoubleFromExpression("amount", data).toFloat())
+            .coerceIn(0f..20f)
 
         return true
     }
