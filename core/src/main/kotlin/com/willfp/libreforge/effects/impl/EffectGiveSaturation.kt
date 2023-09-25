@@ -8,28 +8,31 @@ import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
-object EffectGiveFood : Effect<NoCompileData>("give_food") {
+object EffectGiveSaturation : Effect<NoCompileData>("give_saturation") {
     override val parameters = setOf(
         TriggerParameter.PLAYER
     )
 
     override val arguments = arguments {
-        require("amount", "You must specify the amount of food to give!")
+        require("amount", "You must specify the amount of saturation to give!")
+
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val player = data.player ?: return false
+        val maximumSaturation = (player.foodLevel.toFloat()).coerceAtMost(maximumValue = 20.0F)
 
         if (config.getBool("respect-vanilla-limits")) {
-            if (player.foodLevel < 20) {
-            player.foodLevel = (player.foodLevel + config.getIntFromExpression("amount", data)).coerceIn(
-                minimumValue = 0,
-                maximumValue = 20
+            if (player.saturation < maximumSaturation) {
+            player.saturation = (player.saturation + config.getIntFromExpression("amount", data)).coerceIn(
+                minimumValue = 0.0F,
+                maximumValue = maximumSaturation
             )}
             else return true
         } else {
-            player.foodLevel = player.foodLevel + config.getIntFromExpression("amount", data)
+            player.saturation = player.saturation + config.getIntFromExpression("amount", data)
         }
+
 
 
         return true

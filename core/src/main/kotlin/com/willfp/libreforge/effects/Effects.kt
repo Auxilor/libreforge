@@ -446,5 +446,8 @@ object Effects : Registry<Effect<*>>() {
         register(EffectSetItemData)
         register(EffectRemoveItemData)
         register(EffectAOEBlocks)
+        register(EffectGiveSaturation)
+        register(EffectSetSaturation)
+        register(EffectSetFood)
     }
 }
