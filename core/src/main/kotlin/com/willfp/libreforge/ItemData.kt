@@ -7,7 +7,6 @@ import com.willfp.eco.core.data.set
 import com.willfp.eco.core.fast.FastItemStack
 import com.willfp.eco.core.fast.fast
 import com.willfp.eco.util.namespacedKeyOf
-import jdk.javadoc.internal.doclets.toolkit.util.DocPath.parent
 import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataContainer
