@@ -10,11 +10,13 @@ import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason
 object EffectRegenMultiplier : MultiMultiplierEffect<RegainReason>("regen_multiplier") {
     override val key: String = "reason"
 
-    override fun getElement(key: String): RegainReason? =
-        enumValueOfOrNull<RegainReason>("reason")
+    override fun getElement(key: String): RegainReason? {
+        return enumValueOfOrNull<RegainReason>(key.uppercase())
+    }
 
-    override fun getAllElements(): Collection<RegainReason> =
-        RegainReason.values().toList()
+    override fun getAllElements(): Collection<RegainReason> {
+        return RegainReason.values().toList()
+    }
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityRegainHealthEvent) {
