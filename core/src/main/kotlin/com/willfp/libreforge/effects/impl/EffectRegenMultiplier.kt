@@ -13,10 +13,8 @@ object EffectRegenMultiplier : MultiMultiplierEffect<RegainReason>("regen_multip
     override fun getElement(key: String): RegainReason? =
         enumValueOfOrNull<RegainReason>(key.uppercase())
 
-
     override fun getAllElements(): Collection<RegainReason> =
         RegainReason.values().toList()
-
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityRegainHealthEvent) {
