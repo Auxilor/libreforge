@@ -53,6 +53,11 @@ object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
         val player = event.player
         val block = event.block
 
+        if (!plugin.configYml.getBool("effects.telekinesis.always-process-blocks")
+            && !TelekinesisUtils.testPlayer(player)) {
+            return
+        }
+
         if (!AntigriefManager.canBreakBlock(player, block)) {
             return
         }
