@@ -8,7 +8,7 @@ import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
-import com.willfp.libreforge.effects.MultiplierModifier
+import com.willfp.libreforge.effects.IdentifiedModifier
 import org.bukkit.entity.Player
 import java.util.UUID
 
@@ -17,7 +17,7 @@ abstract class ChanceMultiplierEffect(id: String) : Effect<NoCompileData>(id) {
         require("chance", "You must specify the chance!")
     }
 
-    private val modifiers = listMap<UUID, MultiplierModifier>()
+    private val modifiers = listMap<UUID, IdentifiedModifier>()
 
     final override fun onEnable(
         player: Player,
@@ -26,7 +26,7 @@ abstract class ChanceMultiplierEffect(id: String) : Effect<NoCompileData>(id) {
         holder: ProvidedHolder,
         compileData: NoCompileData
     ) {
-        modifiers[player.uniqueId] += MultiplierModifier(identifiers.uuid) {
+        modifiers[player.uniqueId] += IdentifiedModifier(identifiers.uuid) {
             config.getDoubleFromExpression("chance", player)
         }
     }
@@ -39,7 +39,7 @@ abstract class ChanceMultiplierEffect(id: String) : Effect<NoCompileData>(id) {
         var chance = 1.0
 
         for (modifier in modifiers[player.uniqueId]) {
-            chance *= (100 - modifier.multiplier) / 100
+            chance *= (100 - modifier.modifier) / 100
         }
 
         return randDouble(0.0, 1.0) > chance
