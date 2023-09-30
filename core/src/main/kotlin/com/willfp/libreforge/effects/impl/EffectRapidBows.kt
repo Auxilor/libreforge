@@ -7,7 +7,7 @@ import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
-import com.willfp.libreforge.effects.MultiplierModifier
+import com.willfp.libreforge.effects.IdentifiedModifier
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
@@ -20,7 +20,7 @@ object EffectRapidBows : Effect<NoCompileData>("rapid_bows") {
         require("percent_faster", "You must specify how many percent faster to make bow pulls!")
     }
 
-    private val modifiers = listMap<UUID, MultiplierModifier>()
+    private val modifiers = listMap<UUID, IdentifiedModifier>()
 
     override fun onEnable(
         player: Player,
@@ -29,7 +29,7 @@ object EffectRapidBows : Effect<NoCompileData>("rapid_bows") {
         holder: ProvidedHolder,
         compileData: NoCompileData
     ) {
-        modifiers[player.uniqueId] += MultiplierModifier(identifiers.uuid) {
+        modifiers[player.uniqueId] += IdentifiedModifier(identifiers.uuid) {
             config.getDoubleFromExpression("percent_faster", player)
         }
     }
@@ -46,7 +46,7 @@ object EffectRapidBows : Effect<NoCompileData>("rapid_bows") {
         val player = event.entity as? Player ?: return
 
         val totalPercentFaster = modifiers[player.uniqueId]
-            .sumOf { it.multiplier }
+            .sumOf { it.modifier }
             .coerceAtMost(100.0)
 
         val multiplier = 1 - totalPercentFaster / 100

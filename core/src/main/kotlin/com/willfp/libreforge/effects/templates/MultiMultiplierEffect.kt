@@ -8,7 +8,7 @@ import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
-import com.willfp.libreforge.effects.MultiplierModifier
+import com.willfp.libreforge.effects.IdentifiedModifier
 import org.bukkit.entity.Player
 import java.util.UUID
 
@@ -17,8 +17,8 @@ abstract class MultiMultiplierEffect<T : Any>(id: String) : Effect<NoCompileData
         require("multiplier", "You must specify the multiplier!")
     }
 
-    private val globalModifiers = listMap<UUID, MultiplierModifier>()
-    private val modifiers = nestedListMap<UUID, T, MultiplierModifier>()
+    private val globalModifiers = listMap<UUID, IdentifiedModifier>()
+    private val modifiers = nestedListMap<UUID, T, IdentifiedModifier>()
 
     /**
      * The key to look for in arguments, e.g. "stat" or "skill".
@@ -30,12 +30,12 @@ abstract class MultiMultiplierEffect<T : Any>(id: String) : Effect<NoCompileData
             val elements = config.getStrings(key).mapNotNull { getElement(it) }
 
             for (element in elements) {
-                modifiers[player.uniqueId][element] += MultiplierModifier(identifiers.uuid) {
+                modifiers[player.uniqueId][element] += IdentifiedModifier(identifiers.uuid) {
                     config.getDoubleFromExpression("multiplier", player)
                 }
             }
         } else {
-            globalModifiers[player.uniqueId] += MultiplierModifier(identifiers.uuid) {
+            globalModifiers[player.uniqueId] += IdentifiedModifier(identifiers.uuid) {
                 config.getDoubleFromExpression("multiplier", player)
             }
         }
@@ -53,11 +53,11 @@ abstract class MultiMultiplierEffect<T : Any>(id: String) : Effect<NoCompileData
         var multiplier = 1.0
 
         for (modifier in globalModifiers[player.uniqueId]) {
-            multiplier *= modifier.multiplier
+            multiplier *= modifier.modifier
         }
 
         for (modifier in modifiers[player.uniqueId][element]) {
-            multiplier *= modifier.multiplier
+            multiplier *= modifier.modifier
         }
 
         return multiplier
