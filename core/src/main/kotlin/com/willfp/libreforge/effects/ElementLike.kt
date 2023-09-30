@@ -137,13 +137,12 @@ abstract class ElementLike : ConfigurableElement {
 
         fun trigger() {
             // Set to true if triggered.
-            didTrigger = if (doTrigger(
-                    trigger.copy(
-                        // Mutate again here for each repeat.
-                        data = mutators.mutate(trigger.data)
-                    )
+            didTrigger = didTrigger or doTrigger(
+                trigger.copy(
+                    // Mutate again here for each repeat.
+                    data = mutators.mutate(trigger.data)
                 )
-            ) true else didTrigger
+            )
 
             repeatCount += repeatIncrement
 
