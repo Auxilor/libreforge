@@ -3,11 +3,8 @@ package com.willfp.libreforge.effects.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
-import com.willfp.libreforge.effects.Chain
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Effects
-import com.willfp.libreforge.effects.executors.impl.NormalExecutorFactory
-import com.willfp.libreforge.effects.impl.aoe.AOEBlock
 import com.willfp.libreforge.effects.impl.aoe.AOECompileData
 import com.willfp.libreforge.effects.impl.aoe.AOEShapes
 import com.willfp.libreforge.toFloat3
@@ -53,8 +50,8 @@ object EffectAOEBlocks : Effect<AOECompileData>("aoe_blocks") {
     override fun makeCompileData(config: Config, context: ViolationContext): AOECompileData {
         return AOECompileData(
             AOEShapes.compile(config, context),
-            Effects.compileChain(
-                config.getSubsections("effects"),
+            Effects.compileRichChain(
+                config,
                 context.with("aoe effects")
             )
         )

@@ -52,8 +52,8 @@ object EffectAOE : Effect<AOECompileData>("aoe") {
     override fun makeCompileData(config: Config, context: ViolationContext): AOECompileData {
         return AOECompileData(
             AOEShapes.compile(config, context),
-            Effects.compileChain(
-                config.getSubsections("effects"),
+            Effects.compileRichChain(
+                config,
                 context.with("aoe effects")
             )
         )
