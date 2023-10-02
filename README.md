@@ -15,7 +15,7 @@ libreforge is a powerful yaml-based 'scripting' language to create powerful conf
 
 ## License
 
-*Click here to read [the entire license](https://github.com/Auxilor/eco/blob/master/LICENSE.md).*
+*Click here to read [the entire license](https://github.com/Auxilor/libreforge/blob/master/LICENSE.md).*
 
 <h1 align="center">
   Check out our partners!
