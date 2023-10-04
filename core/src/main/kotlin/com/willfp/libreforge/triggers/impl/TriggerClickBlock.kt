@@ -29,6 +29,10 @@ object TriggerClickBlock : Trigger("click_block") {
         val block = event.clickedBlock ?: return
         val player = event.player
 
+        if (EquipmentSlot.HAND != event.hand) {
+            return
+        }
+
         if (LEFT_CLICK_ITEMS.contains(event.item?.type)) {
             if (event.action != Action.LEFT_CLICK_BLOCK) {
                 return
