@@ -17,6 +17,7 @@ import com.willfp.libreforge.filters.impl.FilterFullyCharged
 import com.willfp.libreforge.filters.impl.FilterFullyGrown
 import com.willfp.libreforge.filters.impl.FilterIsBehindVictim
 import com.willfp.libreforge.filters.impl.FilterIsNPC
+import com.willfp.libreforge.filters.impl.FilterIsPassive
 import com.willfp.libreforge.filters.impl.FilterItemDurabilityAbove
 import com.willfp.libreforge.filters.impl.FilterItemDurabilityBelow
 import com.willfp.libreforge.filters.impl.FilterItems
@@ -100,5 +101,6 @@ object Filters : Registry<Filter<*, *>>() {
         register(FilterVictimName)
         register(FilterItemDurabilityAbove)
         register(FilterItemDurabilityBelow)
+        register(FilterIsPassive)
     }
 }
