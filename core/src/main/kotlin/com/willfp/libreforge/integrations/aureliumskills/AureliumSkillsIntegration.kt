@@ -12,6 +12,10 @@ import com.willfp.libreforge.integrations.aureliumskills.impl.EffectSkillXpMulti
 
 object AureliumSkillsIntegration : LoadableIntegration {
     override fun load(plugin: EcoPlugin) {
+        if (plugin.server.pluginManager.getPlugin("EcoSkills") != null) {
+            return
+        }
+
         Effects.register(EffectAddStat)
         Conditions.register(ConditionHasMana)
         Effects.register(EffectSkillXpMultiplier)
