@@ -449,5 +449,6 @@ object Effects : Registry<Effect<*>>() {
         register(EffectGiveSaturation)
         register(EffectSetSaturation)
         register(EffectSetFood)
+        register(EffectDamageOffhand)
     }
 }

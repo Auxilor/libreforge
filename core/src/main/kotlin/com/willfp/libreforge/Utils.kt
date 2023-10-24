@@ -1,9 +1,16 @@
 package com.willfp.libreforge
 
 import com.willfp.eco.core.items.Items
+import org.bukkit.Bukkit
 import org.bukkit.Location
+import org.bukkit.Material
+import org.bukkit.Sound
+import org.bukkit.SoundCategory
 import org.bukkit.block.Block
+import org.bukkit.entity.Player
+import org.bukkit.event.player.PlayerItemBreakEvent
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.Damageable
 import kotlin.math.roundToInt
 
 inline fun <reified T : Enum<T>> enumValueOfOrNull(name: String): T? {
@@ -53,3 +60,21 @@ fun Collection<ItemStack?>.filterNotEmpty() =
 
 internal val ItemStack?.isEcoEmpty: Boolean
     get() = Items.isEmpty(this)
+
+fun ItemStack.applyDamage(damage: Int, player: Player?): Boolean {
+    val meta = this.itemMeta as? Damageable ?: return false
+    meta.damage += damage
+    if (meta.damage >= this.type.maxDurability) {
+        meta.damage = this.type.maxDurability.toInt()
+        this.itemMeta = meta
+        if (player != null) {
+            Bukkit.getPluginManager().callEvent(PlayerItemBreakEvent(player, this))
+            player.playSound(player.location, Sound.ENTITY_ITEM_BREAK, SoundCategory.BLOCKS, 1f, 1f)
+        }
+        this.type = Material.AIR
+    } else {
+        this.itemMeta = meta
+    }
+
+    return true
+}

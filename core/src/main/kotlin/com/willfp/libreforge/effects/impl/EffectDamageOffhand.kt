@@ -7,12 +7,12 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.inventory.ItemStack
 
 
-object EffectDamageMainhand : DamageItemEffect("damage_mainhand") {
+object EffectDamageOffhand : DamageItemEffect("damage_offhand") {
     override val parameters = setOf(
         TriggerParameter.VICTIM
     )
 
     override fun getItems(data: TriggerData): List<ItemStack> {
-        return data.victim?.equipment?.itemInMainHand.toSingletonList()
+        return data.victim?.equipment?.itemInOffHand.toSingletonList()
     }
 }
