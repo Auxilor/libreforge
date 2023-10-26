@@ -54,7 +54,7 @@ object TriggerProjectileHit : Trigger("projectile_hit") {
             TriggerData(
                 player = player,
                 victim = victim,
-                location = victim.location,
+                location = arrow.location,
                 event = event,
                 velocity = arrow.velocity,
                 projectile = arrow
