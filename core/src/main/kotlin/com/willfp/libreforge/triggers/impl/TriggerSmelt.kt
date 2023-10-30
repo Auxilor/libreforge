@@ -25,7 +25,8 @@ object TriggerSmelt : Trigger("smelt") {
             player,
             TriggerData(
                 player = player,
-                item = item
+                item = item,
+                value = item.amount.toDouble(),
             )
         )
     }
