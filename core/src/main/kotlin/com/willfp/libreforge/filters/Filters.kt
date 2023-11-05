@@ -19,7 +19,9 @@ import com.willfp.libreforge.filters.impl.FilterIsBehindVictim
 import com.willfp.libreforge.filters.impl.FilterIsNPC
 import com.willfp.libreforge.filters.impl.FilterIsPassive
 import com.willfp.libreforge.filters.impl.FilterItemDurabilityAbove
+import com.willfp.libreforge.filters.impl.FilterItemDurabilityAbovePercent
 import com.willfp.libreforge.filters.impl.FilterItemDurabilityBelow
+import com.willfp.libreforge.filters.impl.FilterItemDurabilityBelowPercent
 import com.willfp.libreforge.filters.impl.FilterItems
 import com.willfp.libreforge.filters.impl.FilterOnMaxHealth
 import com.willfp.libreforge.filters.impl.FilterOnlyBosses
@@ -103,7 +105,9 @@ object Filters : Registry<Filter<*, *>>() {
         register(FilterVictimConditions)
         register(FilterVictimName)
         register(FilterItemDurabilityAbove)
+        register(FilterItemDurabilityAbovePercent)
         register(FilterItemDurabilityBelow)
+        register(FilterItemDurabilityBelowPercent)
         register(FilterIsPassive)
         register(FilterValueAbove)
         register(FilterValueEquals)
