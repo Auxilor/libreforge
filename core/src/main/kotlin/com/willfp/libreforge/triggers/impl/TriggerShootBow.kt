@@ -31,7 +31,7 @@ object TriggerShootBow : Trigger("shoot_bow") {
                 projectile = event.projectile as? Projectile,
                 event = event,
                 velocity = event.projectile.velocity,
-                value = event.force * 100.0
+                value = event.force.toDouble()
             )
         )
     }
