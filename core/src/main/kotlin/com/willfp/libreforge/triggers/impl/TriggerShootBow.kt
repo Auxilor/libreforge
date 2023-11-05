@@ -30,7 +30,8 @@ object TriggerShootBow : Trigger("shoot_bow") {
                 player = shooter,
                 projectile = event.projectile as? Projectile,
                 event = event,
-                velocity = event.projectile.velocity
+                velocity = event.projectile.velocity,
+                value = event.force * 100.0
             )
         )
     }

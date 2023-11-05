@@ -40,6 +40,7 @@ import com.willfp.libreforge.conditions.impl.ConditionIsFlying
 import com.willfp.libreforge.conditions.impl.ConditionIsFrozen
 import com.willfp.libreforge.conditions.impl.ConditionIsGliding
 import com.willfp.libreforge.conditions.impl.ConditionIsNight
+import com.willfp.libreforge.conditions.impl.ConditionIsOp
 import com.willfp.libreforge.conditions.impl.ConditionIsSneaking
 import com.willfp.libreforge.conditions.impl.ConditionIsSprinting
 import com.willfp.libreforge.conditions.impl.ConditionIsStorm
@@ -204,5 +205,6 @@ object Conditions : Registry<Condition<*>>() {
         register(ConditionIsFlying)
         register(ConditionHasItemData)
         register(ConditionItemDataEquals)
+        register(ConditionIsOp)
     }
 }
