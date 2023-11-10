@@ -13,11 +13,21 @@ object TriggerTakeDamage : Trigger("take_damage") {
         TriggerParameter.EVENT
     )
 
+    private val ignoredCauses = setOf(
+        EntityDamageEvent.DamageCause.KILL,
+        EntityDamageEvent.DamageCause.VOID,
+        EntityDamageEvent.DamageCause.SUICIDE
+    )
+
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityDamageEvent) {
         val victim = event.entity
 
         if (victim !is Player) {
+            return
+        }
+
+        if (event.cause in ignoredCauses) {
             return
         }
 
