@@ -22,9 +22,14 @@ class ConditionBlock<T> internal constructor(
     override val compileData: T,
     val notMetEffects: Chain?,
     val notMetLines: List<String>,
-    val showNotMet: Boolean,
+    forceShowNotMet: Boolean,
     val isInverted: Boolean
 ) : Compiled<T> {
+    /**
+     * If the condition should show anything if not met.
+     */
+    val showNotMet = forceShowNotMet || notMetLines.isNotEmpty()
+
     private val syncMetCache = Caffeine.newBuilder()
         .expireAfterAccess(10, TimeUnit.SECONDS)
         .build<UUID, Boolean>()

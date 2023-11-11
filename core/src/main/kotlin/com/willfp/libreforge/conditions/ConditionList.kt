@@ -37,8 +37,7 @@ class ConditionList(
      * Get if any conditions are not met and should be shown.
      */
     fun isShowingAnyNotMet(player: Player, holder: ProvidedHolder): Boolean =
-        this.getNotMetLines(player, holder).isNotEmpty()
-                || this.any { it.showNotMet && !it.isMet(player, holder) }
+        this.any { it.showNotMet && !it.isMet(player, holder) }
 
     /**
      * Get all not met lines.
