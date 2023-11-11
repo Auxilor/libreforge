@@ -450,5 +450,8 @@ object Effects : Registry<Effect<*>>() {
         register(EffectSetSaturation)
         register(EffectSetFood)
         register(EffectDamageOffhand)
+        register(EffectCreateBossBar)
+        register(EffectRemoveBossBar)
+        register(EffectUpdateBossBar)
     }
 }

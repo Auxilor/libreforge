@@ -9,6 +9,7 @@ import com.willfp.libreforge.configs.ChainsYml
 import com.willfp.libreforge.configs.lrcdb.CommandLrcdb
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.arguments.custom.CustomEffectArguments
+import com.willfp.libreforge.effects.impl.bossbar.BossBarProgressPlaceholder
 import com.willfp.libreforge.integrations.aureliumskills.AureliumSkillsIntegration
 import com.willfp.libreforge.integrations.citizens.CitizensIntegration
 import com.willfp.libreforge.integrations.jobs.JobsIntegration
@@ -83,6 +84,7 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
         ItemXPPlaceholder(this).register()
         ItemProgressPlaceholder(this).register()
         ItemDataPlaceholder(this).register()
+        BossBarProgressPlaceholder(this).register()
     }
 
     override fun handleReload() {
