@@ -10,6 +10,7 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.inventory.ItemStack
 
+@Deprecated("Use drop_item instead")
 object EffectDropItemForPlayer : Effect<ItemStack>("drop_item_for_player") {
     override val parameters = setOf(
         TriggerParameter.LOCATION,
