@@ -14,6 +14,10 @@ object BossBars {
     private val registry = listMap<String, RegistrableBossBar>()
 
     fun register(bossBar: RegistrableBossBar) {
+        if (registry[bossBar.id].any { it.uuid == bossBar.uuid }) {
+            return
+        }
+
         registry[bossBar.id] += bossBar
         val player = Bukkit.getPlayer(bossBar.uuid) ?: return
         bossBar.bossBar.addViewer(player.asAudience())
