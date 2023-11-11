@@ -4,6 +4,7 @@ import com.willfp.eco.util.NamespacedKeyUtils
 import com.willfp.libreforge.conditions.ConditionList
 import com.willfp.libreforge.effects.EffectList
 import org.bukkit.NamespacedKey
+import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import java.util.Objects
 import java.util.concurrent.atomic.AtomicInteger
@@ -83,6 +84,18 @@ interface ProvidedHolder {
     // Destructuring support
     operator fun component1() = holder
     operator fun component2() = provider
+
+    /**
+     * Get not met lines for a [player].
+     */
+    fun getNotMetLines(player: Player): List<String> {
+        val lines = mutableListOf<String>()
+
+        lines += holder.conditions.getNotMetLines(player, this)
+        lines += holder.effects.map { it.conditions }.flatMap { it.getNotMetLines(player, this) }
+
+        return lines
+    }
 }
 
 /**
