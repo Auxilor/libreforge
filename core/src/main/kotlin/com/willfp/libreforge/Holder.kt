@@ -96,6 +96,15 @@ interface ProvidedHolder {
 
         return lines
     }
+
+    /**
+     * Get if the holder is showing any not met lines for a [player], or if any
+     * conditions are not met and have showNotMet set to true (e.g. for Enchantment Strikethrough).
+     */
+    fun isShowingAnyNotMet(player: Player): Boolean {
+        return holder.conditions.isShowingAnyNotMet(player, this)
+                || holder.effects.any { it.conditions.isShowingAnyNotMet(player, this) }
+    }
 }
 
 /**
