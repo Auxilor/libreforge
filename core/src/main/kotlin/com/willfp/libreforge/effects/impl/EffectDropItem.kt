@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.drops.DropQueue
 import com.willfp.eco.core.items.Items
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
@@ -20,7 +21,18 @@ object EffectDropItem : Effect<ItemStack>("drop_item") {
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: ItemStack): Boolean {
         val location = data.location ?: return false
-        location.world?.dropItem(location, compileData)
+
+
+        val player = data.player
+
+        if (player == null) {
+            location.world?.dropItem(location, compileData)
+        } else {
+            DropQueue(player)
+                .setLocation(location)
+                .addItem(compileData)
+                .push()
+        }
 
         return true
     }
