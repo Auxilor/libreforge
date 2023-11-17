@@ -13,8 +13,6 @@ object FilterIsExpressionTrue : Filter<Config, String>("is_expression_true") {
     }
 
     override fun isMet(data: TriggerData, value: String, compileData: Config): Boolean {
-        val victim = data.victim ?: return true
-
         return evaluateExpression(value, compileData.toPlaceholderContext(data)) > 0
     }
 
