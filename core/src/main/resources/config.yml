@@ -108,6 +108,14 @@ effects:
   # Only set this option to true if you know what you're doing!
   use-setblock-break: false
 
+conditions:
+  # Item display (things like EcoItem lore, EcoEnchants lore, etc.) are ran on a separate thread,
+  # and condition met state is cached from the main thread. Things like not-met-lines and show-not-met
+  # will assume this value by default (e.g. it will assume the condition is met until the
+  # next time the item is updated). If not-met-lines aren't showing up when you think they should be,
+  # try setting this to false.
+  default-state-off-main-thread: true
+
 refresh:
   inventory-click:
     # Inventory clicks refresh active holders, but a group of malicious users spamming can cause server lag.

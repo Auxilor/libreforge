@@ -8,6 +8,7 @@ import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.applyHolder
 import com.willfp.libreforge.effects.Chain
 import com.willfp.libreforge.effects.EffectList
+import com.willfp.libreforge.plugin
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.util.UUID
@@ -51,9 +52,12 @@ class ConditionBlock<T> internal constructor(
             should default to conditions being met to avoid players being shown incorrect
             information.
 
+            UPDATE: The default state is now configurable in the config.
+
              */
 
-            return syncMetCache.getIfPresent(player.uniqueId) ?: true
+            return syncMetCache.getIfPresent(player.uniqueId)
+                ?: plugin.configYml.getBool("conditions.default-state-off-main-thread")
         }
 
         val withHolder = config.applyHolder(holder, player)
