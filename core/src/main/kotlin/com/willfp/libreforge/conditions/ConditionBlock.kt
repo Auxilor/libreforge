@@ -46,15 +46,17 @@ class ConditionBlock<T> internal constructor(
 
         if (!Bukkit.isPrimaryThread()) {
             /*
-
-            Assume true if not on main thread, because most calls when not on the main thread
-            will be from packet processing threads, for things like not-met-lines, which
-            should default to conditions being met to avoid players being shown incorrect
-            information.
-
-            UPDATE: The default state is now configurable in the config.
-
+            If the value isn't cached, then submit a task to cache it to avoid desync.
              */
+
+            if (!syncMetCache.asMap().containsKey(player.uniqueId)) {
+                plugin.scheduler.run {
+                    // Double check that it isn't cached by the time we run
+                    if (!syncMetCache.asMap().containsKey(player.uniqueId)) {
+                        syncMetCache.put(player.uniqueId, isMet(player, holder))
+                    }
+                }
+            }
 
             return syncMetCache.getIfPresent(player.uniqueId)
                 ?: plugin.configYml.getBool("conditions.default-state-off-main-thread")
