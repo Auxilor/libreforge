@@ -4,7 +4,7 @@ import com.gmail.nossr50.datatypes.skills.PrimarySkillType
 import com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent
 import com.gmail.nossr50.mcMMO
 import com.willfp.libreforge.effects.templates.MultiMultiplierEffect
-import com.willfp.libreforge.PlayerDispatcher
+import com.willfp.libreforge.EntityDispatcher
 import org.bukkit.event.EventHandler
 
 object EffectMcMMOXpMultiplier : MultiMultiplierEffect<PrimarySkillType>("mcmmo_xp_multiplier") {
@@ -22,6 +22,6 @@ object EffectMcMMOXpMultiplier : MultiMultiplierEffect<PrimarySkillType>("mcmmo_
     fun handle(event: McMMOPlayerXpGainEvent) {
         val player = event.player
 
-        event.rawXpGained *= getMultiplier(PlayerDispatcher(player), event.skill).toFloat()
+        event.rawXpGained *= getMultiplier(EntityDispatcher(player), event.skill).toFloat()
     }
 }

@@ -2,7 +2,7 @@ package com.willfp.libreforge.triggers
 
 import com.willfp.eco.core.registry.KRegistrable
 import com.willfp.libreforge.Dispatcher
-import com.willfp.libreforge.PlayerDispatcher
+import com.willfp.libreforge.EntityDispatcher
 import com.willfp.libreforge.ProvidedEffectBlock
 import com.willfp.libreforge.ProvidedEffectBlocks
 import com.willfp.libreforge.ProvidedHolder
@@ -50,7 +50,7 @@ abstract class Trigger(
         player: Player,
         data: TriggerData,
         forceHolders: Collection<ProvidedHolder>? = null
-    ) = dispatch(PlayerDispatcher(player), data, forceHolders)
+    ) = dispatch(EntityDispatcher(player), data, forceHolders)
 
     /**
      * Dispatch the trigger.

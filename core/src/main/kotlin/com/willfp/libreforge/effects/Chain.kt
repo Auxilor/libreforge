@@ -5,7 +5,7 @@ import com.willfp.libreforge.WeightedList
 import com.willfp.libreforge.effects.executors.ChainExecutor
 import com.willfp.libreforge.triggers.DispatchedTrigger
 import com.willfp.libreforge.Dispatcher
-import com.willfp.libreforge.PlayerDispatcher
+import com.willfp.libreforge.EntityDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.get
@@ -52,6 +52,6 @@ class Chain internal constructor(
         trigger: Trigger = TriggerBlank,
         executor: ChainExecutor = this.executor
     ): Boolean {
-        return trigger(PlayerDispatcher(player), data, trigger, executor)
+        return trigger(EntityDispatcher(player), data, trigger, executor)
     }
 }

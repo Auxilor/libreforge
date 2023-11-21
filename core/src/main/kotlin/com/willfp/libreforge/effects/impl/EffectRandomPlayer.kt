@@ -7,7 +7,7 @@ import com.willfp.libreforge.effects.Chain
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.executors.ChainExecutors
-import com.willfp.libreforge.PlayerDispatcher
+import com.willfp.libreforge.EntityDispatcher
 import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.Bukkit
 
@@ -21,7 +21,7 @@ object EffectRandomPlayer : Effect<Chain?>("random_player") {
     override fun onTrigger(config: Config, data: TriggerData, compileData: Chain?): Boolean {
         Bukkit.getOnlinePlayers().randomOrNull()?.let { player ->
             compileData?.trigger(
-                data.dispatch(PlayerDispatcher(player)),
+                data.dispatch(EntityDispatcher(player)),
             )
         }
 

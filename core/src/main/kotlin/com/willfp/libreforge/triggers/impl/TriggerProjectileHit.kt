@@ -1,6 +1,6 @@
 package com.willfp.libreforge.triggers.impl
 
-import com.willfp.libreforge.PlayerDispatcher
+import com.willfp.libreforge.EntityDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -32,7 +32,7 @@ object TriggerProjectileHit : Trigger("projectile_hit") {
         }
 
         this.dispatch(
-            PlayerDispatcher(shooter),
+            EntityDispatcher(shooter),
             TriggerData(
                 player = shooter,
                 projectile = projectile,
@@ -51,7 +51,7 @@ object TriggerProjectileHit : Trigger("projectile_hit") {
         val player = arrow.shooter as? Player ?: return
 
         this.dispatch(
-            PlayerDispatcher(player),
+            EntityDispatcher(player),
             TriggerData(
                 player = player,
                 victim = victim,

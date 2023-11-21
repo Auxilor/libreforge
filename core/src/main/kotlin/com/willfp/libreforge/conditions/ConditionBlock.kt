@@ -8,7 +8,7 @@ import com.willfp.libreforge.applyHolder
 import com.willfp.libreforge.effects.Chain
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.Dispatcher
-import com.willfp.libreforge.PlayerDispatcher
+import com.willfp.libreforge.EntityDispatcher
 import com.willfp.libreforge.get
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
@@ -89,5 +89,5 @@ class ConditionBlock<T> internal constructor(
         DeprecationLevel.ERROR
     )
     fun isMet(player: Player, holder: ProvidedHolder): Boolean =
-        isMet(PlayerDispatcher(player), holder)
+        isMet(EntityDispatcher(player), holder)
 }

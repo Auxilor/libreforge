@@ -3,7 +3,7 @@ package com.willfp.libreforge.triggers
 import com.willfp.eco.core.placeholder.InjectablePlaceholder
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NamedValue
-import com.willfp.libreforge.PlayerDispatcher
+import com.willfp.libreforge.EntityDispatcher
 import com.willfp.libreforge.get
 import com.willfp.libreforge.triggers.placeholders.TriggerPlaceholders
 import org.bukkit.entity.Player
@@ -35,7 +35,7 @@ data class DispatchedTrigger(
         player: Player,
         trigger: Trigger,
         data: TriggerData,
-    ) : this(PlayerDispatcher(player), trigger, data)
+    ) : this(EntityDispatcher(player), trigger, data)
 
     fun addPlaceholder(placeholder: NamedValue) {
         _placeholders += placeholder

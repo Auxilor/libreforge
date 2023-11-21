@@ -1,7 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.libreforge.effects.templates.MultiplierEffect
-import com.willfp.libreforge.PlayerDispatcher
+import com.willfp.libreforge.EntityDispatcher
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.FoodLevelChangeEvent
@@ -18,6 +18,6 @@ object EffectFoodMultiplier : MultiplierEffect("food_multiplier") {
             return
         }
 
-        event.foodLevel = player.foodLevel + ceil(getMultiplier(PlayerDispatcher(player)) * diff).toInt()
+        event.foodLevel = player.foodLevel + ceil(getMultiplier(EntityDispatcher(player)) * diff).toInt()
     }
 }

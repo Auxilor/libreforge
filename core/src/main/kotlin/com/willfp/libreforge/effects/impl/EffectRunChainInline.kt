@@ -10,7 +10,7 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.executors.ChainExecutors
 import com.willfp.libreforge.toPlaceholderContext
-import com.willfp.libreforge.PlayerDispatcher
+import com.willfp.libreforge.EntityDispatcher
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
@@ -27,7 +27,7 @@ object EffectRunChainInline : Effect<Chain?>("run_chain_inline") {
     override fun onTrigger(config: Config, data: TriggerData, compileData: Chain?): Boolean {
         val player = data.player ?: return false
 
-        val dispatch = data.dispatch(PlayerDispatcher(player))
+        val dispatch = data.dispatch(EntityDispatcher(player))
 
         val args = config.getSubsection("chain_args")
 

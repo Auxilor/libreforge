@@ -48,19 +48,6 @@ inline fun <reified T> Dispatcher<*>.ifType(block: (T) -> Unit) {
 }
 
 /**
- * A dispatcher for a player.
- */
-class PlayerDispatcher(
-    override val dispatcher: Player
-) : Dispatcher<Player> {
-    override val uuid
-        get() = dispatcher.uniqueId
-
-    override val location
-        get() = dispatcher.location
-}
-
-/**
  * A dispatcher for an entity.
  */
 class EntityDispatcher(

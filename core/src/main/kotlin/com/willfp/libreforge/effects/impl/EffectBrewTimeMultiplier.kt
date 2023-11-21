@@ -2,7 +2,7 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.libreforge.effects.templates.MultiplierEffect
 import com.willfp.libreforge.plugin
-import com.willfp.libreforge.PlayerDispatcher
+import com.willfp.libreforge.EntityDispatcher
 import org.bukkit.block.BrewingStand
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -15,7 +15,7 @@ object EffectBrewTimeMultiplier : MultiplierEffect("brew_time_multiplier") {
     fun handle(event: InventoryClickEvent) {
         val player = event.whoClicked as? Player ?: return
 
-        val multiplier = getMultiplier(PlayerDispatcher(player))
+        val multiplier = getMultiplier(EntityDispatcher(player))
 
         if (player.openInventory.topInventory.holder !is BrewingStand) {
             return
