@@ -9,6 +9,7 @@ import com.willfp.libreforge.mutators.MutatorList
 import com.willfp.libreforge.mutators.emptyMutatorList
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.DispatchedTrigger
+import com.willfp.libreforge.triggers.PlayerDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -84,7 +85,7 @@ abstract class Effect<T>(
         effectCounter[player.uniqueId]++
         val count = effectCounter[player.uniqueId]
 
-        val withHolder = config.config.applyHolder(holder, player)
+        val withHolder = config.config.applyHolder(holder, PlayerDispatcher(player))
 
         onEnable(player, withHolder, identifierFactory.makeIdentifiers(count), holder, config.compileData)
     }

@@ -8,6 +8,7 @@ import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.triggers.DispatchedTrigger
 import com.willfp.libreforge.triggers.Dispatcher
 import com.willfp.libreforge.triggers.GlobalDispatcher.dispatcher
+import com.willfp.libreforge.triggers.PlayerDispatcher
 import com.willfp.libreforge.triggers.get
 import org.bukkit.entity.Player
 
@@ -20,17 +21,9 @@ class ConditionList(
     /**
      * Get if all conditions are met.
      */
-    fun areMet(player: Player, holder: ProvidedHolder): Boolean =
-        this.all { it.isMet(player, holder) }
+    fun areMet(dispatcher: Dispatcher<*>, holder: ProvidedHolder): Boolean =
+        this.all { it.isMet(dispatcher, holder) }
 
-    /**
-     * Get if all conditions are met.
-     */
-    fun areMet(dispatcher: Dispatcher<*>, holder: ProvidedHolder): Boolean {
-        val player = dispatcher.get<Player>() ?: return false
-
-        return this.all { it.isMet(player, holder) }
-    }
     /**
      * Get if all conditions are met, triggering effects if not.
      */
@@ -48,17 +41,45 @@ class ConditionList(
     /**
      * Get if any conditions are not met and should be shown.
      */
-    fun isShowingAnyNotMet(player: Player, holder: ProvidedHolder): Boolean =
-        this.any { it.showNotMet && !it.isMet(player, holder) }
+    fun isShowingAnyNotMet(dispatcher: Dispatcher<*>, holder: ProvidedHolder): Boolean =
+        this.any { it.showNotMet && !it.isMet(dispatcher, holder) }
 
     /**
      * Get all not met lines.
      */
-    fun getNotMetLines(player: Player, holder: ProvidedHolder): List<String> =
+    fun getNotMetLines(dispatcher: Dispatcher<*>, holder: ProvidedHolder): List<String> =
         this.filter { it.notMetLines.isNotEmpty() }
-            .filter { !it.isMet(player, holder) }
+            .filter { !it.isMet(dispatcher, holder) }
             .flatMap { it.notMetLines }
-            .map { it.formatEco(player, formatPlaceholders = true) }
+            .map { it.formatEco(dispatcher.get(), formatPlaceholders = true) }
+
+
+    @Deprecated(
+        "Use areMet(dispatcher, holder) instead.",
+        ReplaceWith("areMet(dispatcher, holder)"),
+        DeprecationLevel.ERROR
+    )
+    fun areMet(player: Player, holder: ProvidedHolder): Boolean =
+        areMet(PlayerDispatcher(player), holder)
+
+    /**
+     * Get if any conditions are not met and should be shown.
+     */
+    @Deprecated(
+        "Use isShowingAnyNotMet(dispatcher, holder) instead.",
+        ReplaceWith("isShowingAnyNotMet(dispatcher, holder)"),
+        DeprecationLevel.ERROR
+    )
+    fun isShowingAnyNotMet(player: Player, holder: ProvidedHolder): Boolean =
+        isShowingAnyNotMet(PlayerDispatcher(player), holder)
+
+    @Deprecated(
+        "Use getNotMetLines(dispatcher, holder) instead.",
+        ReplaceWith("getNotMetLines(dispatcher, holder)"),
+        DeprecationLevel.ERROR
+    )
+    fun getNotMetLines(player: Player, holder: ProvidedHolder): List<String> =
+        getNotMetLines(PlayerDispatcher(player), holder)
 }
 
 /**

@@ -30,11 +30,11 @@ internal data class BoundCounter(
             return
         }
 
-        if (!counter.conditions.areMet(player, data.holder)) {
+        if (!counter.filters.isMet(data)) {
             return
         }
 
-        if (!counter.filters.isMet(data)) {
+        if (!counter.conditions.areMetAndTrigger(trigger)) {
             return
         }
 

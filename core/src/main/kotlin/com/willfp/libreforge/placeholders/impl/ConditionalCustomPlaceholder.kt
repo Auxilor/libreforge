@@ -11,11 +11,12 @@ import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.conditions.ConditionList
 import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.placeholders.CustomPlaceholder
+import com.willfp.libreforge.triggers.PlayerDispatcher
 import org.bukkit.inventory.ItemStack
 
 class ConditionalCustomPlaceholder(
     id: String,
-    private val config: Config,
+    config: Config,
     plugin: EcoPlugin
 ) : CustomPlaceholder(id) {
     private val defaultExpr = config.getStringOrNull("default")
@@ -39,7 +40,7 @@ class ConditionalCustomPlaceholder(
             val holder = BlankItemHolder(ctx.itemStack)
 
             val value = values
-                .firstOrNull { it.conditions.areMet(player, holder) }
+                .firstOrNull { it.conditions.areMet(PlayerDispatcher(player), holder) }
                 ?.expr ?: return defaultExpr?.let { parseValue(it, ctx) }
 
             return parseValue(value, ctx)

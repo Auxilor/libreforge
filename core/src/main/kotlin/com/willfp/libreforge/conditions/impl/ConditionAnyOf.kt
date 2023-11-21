@@ -7,6 +7,7 @@ import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.conditions.ConditionList
 import com.willfp.libreforge.conditions.Conditions
+import com.willfp.libreforge.triggers.Dispatcher
 import org.bukkit.entity.Player
 
 object ConditionAnyOf : Condition<ConditionList>("any_of") {
@@ -14,8 +15,13 @@ object ConditionAnyOf : Condition<ConditionList>("any_of") {
         require("conditions", "You must specify the conditions that can be met!")
     }
 
-    override fun isMet(player: Player, config: Config, holder: ProvidedHolder, compileData: ConditionList): Boolean {
-        return compileData.any { it.isMet(player, holder) }
+    override fun isMet(
+        dispatcher: Dispatcher<*>,
+        config: Config,
+        holder: ProvidedHolder,
+        compileData: ConditionList
+    ): Boolean {
+        return compileData.any { it.isMet(dispatcher, holder) }
     }
 
     override fun makeCompileData(config: Config, context: ViolationContext): ConditionList {

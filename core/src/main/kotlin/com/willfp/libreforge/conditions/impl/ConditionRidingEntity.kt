@@ -3,10 +3,14 @@ package com.willfp.libreforge.conditions.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.entities.Entities
 import com.willfp.eco.core.entities.TestableEntity
+import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
+import com.willfp.libreforge.triggers.Dispatcher
+import com.willfp.libreforge.triggers.get
 import com.willfp.libreforge.updateEffects
+import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
@@ -18,8 +22,15 @@ object ConditionRidingEntity : Condition<Collection<TestableEntity>>("riding_ent
         require("entities", "You must specify the list of allowed entities!")
     }
 
-    override fun isMet(player: Player, config: Config, compileData: Collection<TestableEntity>): Boolean {
-        return compileData.any { it.matches(player.vehicle) }
+    override fun isMet(
+        dispatcher: Dispatcher<*>,
+        config: Config,
+        holder: ProvidedHolder,
+        compileData: Collection<TestableEntity>
+    ): Boolean {
+        val entity = dispatcher.get<Entity>() ?: return false
+
+        return compileData.any { it.matches(entity.vehicle) }
     }
 
     override fun makeCompileData(config: Config, context: ViolationContext): Collection<TestableEntity> {

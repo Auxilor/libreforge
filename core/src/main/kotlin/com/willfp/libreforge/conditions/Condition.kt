@@ -4,6 +4,8 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Compilable
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.plugin
+import com.willfp.libreforge.triggers.DispatchedTrigger
+import com.willfp.libreforge.triggers.Dispatcher
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
 
@@ -32,13 +34,24 @@ abstract class Condition<T>(
     }
 
     /**
-     * Get if the condition is met.
-     *
-     * @param player The player.
-     * @param config The config.
-     * @param compileData The compile data.
-     * @return If met.
+     * Get if the condition is met for a [dispatcher], with a [config], [holder], and [compileData].
      */
+    open fun isMet(
+        dispatcher: Dispatcher<*>,
+        config: Config,
+        holder: ProvidedHolder,
+        compileData: T
+    ): Boolean {
+        return true
+    }
+
+    /**
+     * Get if the condition is met for a [player], with a [config], and [compileData].
+     */
+    @Deprecated(
+        "Use isMet(dispatcher, config, holder, compileData) instead.",
+        ReplaceWith("true")
+    )
     open fun isMet(
         player: Player,
         config: Config,
@@ -48,14 +61,12 @@ abstract class Condition<T>(
     }
 
     /**
-     * Get if the condition is met.
-     *
-     * @param player The player.
-     * @param config The config.
-     * @param holder The provided holder.
-     * @param compileData The compile data.
-     * @return If met.
+     * Get if the condition is met for a [player], with a [config], [holder], and [compileData].
      */
+    @Deprecated(
+        "Use isMet(dispatcher, config, holder, compileData) instead.",
+        ReplaceWith("true")
+    )
     open fun isMet(
         player: Player,
         config: Config,

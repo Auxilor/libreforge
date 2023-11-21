@@ -2,11 +2,23 @@ package com.willfp.libreforge.conditions.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.conditions.Condition
+import com.willfp.libreforge.getProvider
+import com.willfp.libreforge.triggers.Dispatcher
+import com.willfp.libreforge.triggers.get
+import org.bukkit.block.BlockFace
+import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 
 object ConditionOnGround : Condition<NoCompileData>("on_ground") {
-    override fun isMet(player: Player, config: Config, compileData: NoCompileData): Boolean {
-        return player.world.getBlockAt(player.location.clone().add(0.0, -1.0, 0.0)).isSolid
+    override fun isMet(
+        dispatcher: Dispatcher<*>,
+        config: Config,
+        holder: ProvidedHolder,
+        compileData: NoCompileData
+    ): Boolean {
+        val location = dispatcher.location ?: return false
+        return location.block.getRelative(BlockFace.SOUTH).isSolid
     }
 }

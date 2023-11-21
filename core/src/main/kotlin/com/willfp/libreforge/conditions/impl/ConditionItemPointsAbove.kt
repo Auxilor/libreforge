@@ -7,6 +7,8 @@ import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.getProvider
 import com.willfp.libreforge.points
+import com.willfp.libreforge.triggers.Dispatcher
+import com.willfp.libreforge.triggers.get
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
@@ -16,10 +18,15 @@ object ConditionItemPointsAbove : Condition<NoCompileData>("item_points_above") 
         require("amount", "You must specify minimum amount of points!")
     }
 
-    override fun isMet(player: Player, config: Config, holder: ProvidedHolder, compileData: NoCompileData): Boolean {
+    override fun isMet(
+        dispatcher: Dispatcher<*>,
+        config: Config,
+        holder: ProvidedHolder,
+        compileData: NoCompileData
+    ): Boolean {
         val item = holder.getProvider<ItemStack>() ?: return false
         val type = config.getString("type")
-        val amount = config.getDoubleFromExpression("type", player)
+        val amount = config.getDoubleFromExpression("type", dispatcher.get<Player>())
 
         return item.points[type] >= amount
     }
