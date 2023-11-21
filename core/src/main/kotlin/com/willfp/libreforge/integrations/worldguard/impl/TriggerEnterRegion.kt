@@ -3,7 +3,7 @@ package com.willfp.libreforge.integrations.worldguard.impl
 import com.sk89q.worldedit.bukkit.BukkitAdapter
 import com.sk89q.worldguard.WorldGuard
 import com.willfp.eco.core.Prerequisite
-import com.willfp.libreforge.EntityDispatcher
+import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -55,7 +55,7 @@ object TriggerEnterRegion : Trigger("enter_region") {
 
         for (region in entered) {
             this.dispatch(
-                EntityDispatcher(player),
+                player.toDispatcher(),
                 TriggerData(
                     player = player,
                     location = to,

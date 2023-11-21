@@ -3,9 +3,9 @@ package com.willfp.libreforge.triggers
 import com.willfp.eco.core.items.HashedItem
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.EmptyProvidedHolder
-import com.willfp.libreforge.EntityDispatcher
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.getProvider
+import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.impl.TriggerBlank
 import org.bukkit.Location
 import org.bukkit.block.Block
@@ -53,11 +53,11 @@ data class TriggerData(
      */
     @Deprecated(
         "Use dispatch(dispatcher) instead",
-        ReplaceWith("dispatch(dispatcher)"),
+        ReplaceWith("dispatch(player.toDispatcher())"),
         DeprecationLevel.ERROR
     )
     fun dispatch(player: Player) =
-        dispatch(EntityDispatcher(player))
+        dispatch(player.toDispatcher())
 
     /**
      * Turn into a dispatched trigger for a [dispatcher].

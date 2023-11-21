@@ -1,6 +1,6 @@
 package com.willfp.libreforge.triggers.impl
 
-import com.willfp.libreforge.EntityDispatcher
+import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -21,7 +21,7 @@ object TriggerLeashEntity : Trigger("leash_entity") {
         val player = event.player
 
         this.dispatch(
-            EntityDispatcher(player),
+            player.toDispatcher(),
             TriggerData(
                 player = player,
                 location = event.entity.location,

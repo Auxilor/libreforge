@@ -3,15 +3,15 @@ package com.willfp.libreforge.effects.templates
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.map.listMap
 import com.willfp.eco.core.map.nestedListMap
+import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
-import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.effects.IdentifiedModifier
-import com.willfp.libreforge.Dispatcher
-import com.willfp.libreforge.EntityDispatcher
+import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.get
+import com.willfp.libreforge.toDispatcher
 import org.bukkit.entity.Player
 import java.util.UUID
 
@@ -74,11 +74,11 @@ abstract class MultiMultiplierEffect<T : Any>(id: String) : Effect<NoCompileData
 
     @Deprecated(
         "Use getMultiplier(dispatcher: Dispatcher<*>, element: T) instead.",
-        ReplaceWith("getMultiplier(dispatcher, element)"),
+        ReplaceWith("getMultiplier(player.toDispatcher(), element)"),
         DeprecationLevel.ERROR
     )
     protected fun getMultiplier(player: Player, element: T): Double =
-        getMultiplier(EntityDispatcher(player), element)
+        getMultiplier(player.toDispatcher(), element)
 
     /**
      * Get an element by [key], for example a stat.

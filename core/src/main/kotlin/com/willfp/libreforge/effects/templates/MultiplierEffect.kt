@@ -2,15 +2,15 @@ package com.willfp.libreforge.effects.templates
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.map.listMap
+import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
-import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.effects.IdentifiedModifier
-import com.willfp.libreforge.Dispatcher
-import com.willfp.libreforge.EntityDispatcher
+import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.get
+import com.willfp.libreforge.toDispatcher
 import org.bukkit.entity.Player
 import java.util.UUID
 
@@ -49,9 +49,9 @@ abstract class MultiplierEffect(id: String) : Effect<NoCompileData>(id) {
 
     @Deprecated(
         "Use getMultiplier(dispatcher: Dispatcher<*>) instead.",
-        ReplaceWith("getMultiplier(dispatcher)"),
+        ReplaceWith("getMultiplier(player.toDispatcher())"),
         DeprecationLevel.ERROR
     )
     protected fun getMultiplier(player: Player): Double =
-        getMultiplier(EntityDispatcher(player))
+        getMultiplier(player.toDispatcher())
 }

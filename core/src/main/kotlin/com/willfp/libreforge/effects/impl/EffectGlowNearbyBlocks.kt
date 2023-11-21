@@ -2,7 +2,6 @@
 
 package com.willfp.libreforge.effects.impl
 
-import com.gmail.nossr50.config.ChatConfig
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.util.TeamUtils
 import com.willfp.libreforge.NoCompileData

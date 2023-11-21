@@ -5,7 +5,7 @@ import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.conditions.ConditionList
 import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.filters.Filter
-import com.willfp.libreforge.EntityDispatcher
+import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.TriggerData
 
 object FilterVictimConditions : Filter<ConditionList, Collection<Config>>("victim_conditions") {
@@ -16,7 +16,7 @@ object FilterVictimConditions : Filter<ConditionList, Collection<Config>>("victi
     override fun isMet(data: TriggerData, value: Collection<Config>, compileData: ConditionList): Boolean {
         val victim = data.victim ?: return false
 
-        return compileData.areMet(EntityDispatcher(victim), data.holder)
+        return compileData.areMet(victim.toDispatcher(), data.holder)
     }
 
     override fun makeCompileData(config: Config, context: ViolationContext, values: Collection<Config>): ConditionList {

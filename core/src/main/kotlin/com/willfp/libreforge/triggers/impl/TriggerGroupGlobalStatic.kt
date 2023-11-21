@@ -6,7 +6,6 @@ import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerGroup
 import com.willfp.libreforge.triggers.TriggerParameter
-import org.bukkit.Bukkit
 
 object TriggerGroupGlobalStatic : TriggerGroup("global_static") {
     private val registry = mutableMapOf<Int, TriggerGlobalStatic>()

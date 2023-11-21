@@ -6,7 +6,6 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.impl.bossbar.BossBars
-import com.willfp.libreforge.effects.impl.bossbar.RegistrableBossBar
 import com.willfp.libreforge.toPlaceholderContext
 import com.willfp.libreforge.triggers.TriggerData
 

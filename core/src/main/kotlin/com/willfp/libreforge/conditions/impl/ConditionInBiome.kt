@@ -1,11 +1,11 @@
 package com.willfp.libreforge.conditions.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
-import com.willfp.libreforge.Dispatcher
 
 object ConditionInBiome : Condition<NoCompileData>("in_biome") {
     override val arguments = arguments {

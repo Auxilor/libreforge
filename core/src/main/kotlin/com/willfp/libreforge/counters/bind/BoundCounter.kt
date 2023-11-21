@@ -4,8 +4,8 @@ import com.willfp.eco.core.placeholder.context.placeholderContext
 import com.willfp.eco.util.evaluateExpression
 import com.willfp.libreforge.counters.Accumulator
 import com.willfp.libreforge.counters.Counter
-import com.willfp.libreforge.triggers.DispatchedTrigger
 import com.willfp.libreforge.get
+import com.willfp.libreforge.triggers.DispatchedTrigger
 import org.bukkit.entity.Player
 
 /*

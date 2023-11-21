@@ -14,7 +14,7 @@ import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.plugin
-import com.willfp.libreforge.registerDispatcherHolderProvider
+import com.willfp.libreforge.registerGenericHolderProvider
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.Location
@@ -41,7 +41,7 @@ object EffectAddHolderInRadius : Effect<HolderTemplate>("add_holder_in_radius") 
         .build<UUID, Collection<SimpleProvidedHolder>>()
 
     init {
-        registerDispatcherHolderProvider { dispatcher ->
+        registerGenericHolderProvider { dispatcher ->
             nearbyCache.get(dispatcher.uuid) { _ ->
                 holders.filter { it.canApplyTo(dispatcher) }
                     .map { SimpleProvidedHolder(it.holder) }

@@ -1,13 +1,12 @@
 package com.willfp.libreforge
 
-import io.papermc.paper.math.Position.block
 import org.bukkit.Location
 import org.bukkit.entity.Entity
-import org.bukkit.entity.Player
 import java.util.UUID
 
 /**
- * A dispatcher represents the object that dispatched a trigger (e.g. a player).
+ * A dispatcher represents an object that can execute effects, hold holders,
+ * and be used in conditions, for example a player, entity, block, or server.
  */
 interface Dispatcher<T> {
     /**
@@ -51,7 +50,8 @@ inline fun <reified T> Dispatcher<*>.ifType(block: (T) -> Unit) {
 /**
  * A dispatcher for an entity.
  */
-class EntityDispatcher(
+@JvmInline
+value class EntityDispatcher(
     override val dispatcher: Entity
 ) : Dispatcher<Entity> {
     override val uuid
@@ -60,6 +60,11 @@ class EntityDispatcher(
     override val location
         get() = dispatcher.location
 }
+
+/**
+ * Convert an entity to a dispatcher.
+ */
+fun Entity.toDispatcher(): Dispatcher<Entity> = EntityDispatcher(this)
 
 /**
  * A dispatcher for the global scope.

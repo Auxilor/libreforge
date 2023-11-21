@@ -4,8 +4,6 @@ import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.registry.Registry
 import com.willfp.libreforge.configs.category.NativeConfigCategory
-import com.willfp.libreforge.effects.arguments.EffectArgument
-import com.willfp.libreforge.levels.LevelType
 
 object CustomEffectArguments : NativeConfigCategory("arguments") {
     private val registry = Registry<CustomEffectArgument>()

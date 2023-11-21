@@ -3,14 +3,14 @@ package com.willfp.libreforge.integrations.aureliumskills.impl
 import com.archyx.aureliumskills.api.AureliumAPI
 import com.archyx.aureliumskills.stats.Stats
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
-import com.willfp.libreforge.plugin
-import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.get
+import com.willfp.libreforge.plugin
 import org.bukkit.entity.Player
 
 object EffectAddStat : Effect<NoCompileData>("add_stat") {

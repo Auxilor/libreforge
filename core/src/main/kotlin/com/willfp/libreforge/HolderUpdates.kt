@@ -28,24 +28,24 @@ class ItemRefreshListener(
 
     @EventHandler
     fun onItemPickup(event: EntityPickupItemEvent) {
-        EntityDispatcher(event.entity).refreshHolders()
+        event.entity.toDispatcher().refreshHolders()
     }
 
     @EventHandler
     fun onPlayerJoin(event: PlayerJoinEvent) {
         Bukkit.getServer().onlinePlayers.forEach {
-            EntityDispatcher(it).refreshHolders()
+            it.toDispatcher().refreshHolders()
         }
     }
 
     @EventHandler
     fun onInventoryDrop(event: PlayerDropItemEvent) {
-        EntityDispatcher(event.player).refreshHolders()
+        event.player.toDispatcher().refreshHolders()
     }
 
     @EventHandler
     fun onChangeSlot(event: PlayerItemHeldEvent) {
-        val dispatcher = EntityDispatcher(event.player)
+        val dispatcher = event.player.toDispatcher()
         dispatcher.refreshHolders()
         plugin.scheduler.run {
             dispatcher.refreshHolders()
@@ -54,7 +54,7 @@ class ItemRefreshListener(
 
     @EventHandler
     fun onArmorChange(event: ArmorChangeEvent) {
-        EntityDispatcher(event.player).refreshHolders()
+        event.player.toDispatcher().refreshHolders()
     }
 
     @EventHandler
@@ -67,6 +67,6 @@ class ItemRefreshListener(
 
         inventoryClickTimeouts.put(player.uniqueId, Unit)
 
-        EntityDispatcher(player).refreshHolders()
+        player.toDispatcher().refreshHolders()
     }
 }

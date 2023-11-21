@@ -2,6 +2,7 @@ package com.willfp.libreforge.effects
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Compiled
+import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.Weighted
 import com.willfp.libreforge.conditions.ConditionList
@@ -10,9 +11,8 @@ import com.willfp.libreforge.effects.events.EffectDisableEvent
 import com.willfp.libreforge.effects.events.EffectEnableEvent
 import com.willfp.libreforge.filters.FilterList
 import com.willfp.libreforge.mutators.MutatorList
+import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.DispatchedTrigger
-import com.willfp.libreforge.Dispatcher
-import com.willfp.libreforge.EntityDispatcher
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.util.UUID
@@ -69,23 +69,23 @@ class ChainElement<T> internal constructor(
 
     @Deprecated(
         "Use enable(Dispatcher<*>, ProvidedHolder, Boolean)",
-        ReplaceWith("enable(dispatcher, holder, isReload)"),
+        ReplaceWith("enable(player.toDispatcher(), holder, isReload)"),
         DeprecationLevel.ERROR
     )
     fun enable(
         player: Player,
         holder: ProvidedHolder,
         isReload: Boolean = false
-    ) = enable(EntityDispatcher(player), holder, isReload)
+    ): Unit = enable(player.toDispatcher(), holder, isReload)
 
     @Deprecated(
         "Use disable(Dispatcher<*>, ProvidedHolder, Boolean)",
-        ReplaceWith("disable(dispatcher, holder, isReload)"),
+        ReplaceWith("disable(player.toDispatcher(), holder, isReload)"),
         DeprecationLevel.ERROR
     )
     fun disable(
         player: Player,
         holder: ProvidedHolder,
         isReload: Boolean = false
-    ) = disable(EntityDispatcher(player), holder, isReload)
+    ): Unit = disable(player.toDispatcher(), holder, isReload)
 }

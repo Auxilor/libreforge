@@ -13,7 +13,7 @@ object EffectCollisionFixer : Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     fun clearOnQuit(event: PlayerQuitEvent) {
         val player = event.player
-        val dispatcher = EntityDispatcher(player)
+        val dispatcher = player.toDispatcher()
 
         for ((holder, effects) in dispatcher.providedActiveEffects) {
             for (effect in effects) {
@@ -31,7 +31,7 @@ object EffectCollisionFixer : Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     fun scanOnJoin(event: PlayerJoinEvent) {
         val player = event.player
-        val dispatcher = EntityDispatcher(player)
+        val dispatcher = player.toDispatcher()
 
         // Extra fix for pre-4.2.3
         player.fixAttributes()

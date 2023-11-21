@@ -101,7 +101,7 @@ interface ProvidedHolder {
      * Get not met lines for a [player].
      */
     fun getNotMetLines(player: Player): List<String> =
-        getNotMetLines(EntityDispatcher(player))
+        getNotMetLines(player.toDispatcher())
 
     /**
      * Get if the holder is showing any not met lines for a [dispatcher], or if any
@@ -117,7 +117,7 @@ interface ProvidedHolder {
      * conditions are not met and have showNotMet set to true (e.g. for Enchantment Strikethrough).
      */
     fun isShowingAnyNotMet(player: Player): Boolean =
-        isShowingAnyNotMet(EntityDispatcher(player))
+        isShowingAnyNotMet(player.toDispatcher())
 }
 
 /**

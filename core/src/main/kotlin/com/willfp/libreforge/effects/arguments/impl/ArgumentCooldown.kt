@@ -11,9 +11,9 @@ import com.willfp.libreforge.effects.Chain
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.arguments.EffectArgument
 import com.willfp.libreforge.getDoubleFromExpression
+import com.willfp.libreforge.ifType
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.DispatchedTrigger
-import com.willfp.libreforge.ifType
 import org.bukkit.Sound
 import org.bukkit.entity.Player
 import java.util.UUID

@@ -3,19 +3,19 @@ package com.willfp.libreforge.effects
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.map.defaultMap
 import com.willfp.libreforge.Compilable
+import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.applyHolder
+import com.willfp.libreforge.ifType
 import com.willfp.libreforge.mutators.MutatorList
 import com.willfp.libreforge.mutators.emptyMutatorList
 import com.willfp.libreforge.plugin
+import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.DispatchedTrigger
-import com.willfp.libreforge.Dispatcher
-import com.willfp.libreforge.EntityDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
-import com.willfp.libreforge.ifType
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
 import java.util.UUID
@@ -211,7 +211,7 @@ abstract class Effect<T>(
 
     @Deprecated(
         "Use enable(Dispatcher<*>, ProvidedHolder, ChainElement<T>, Boolean)",
-        ReplaceWith("enable(dispatcher, holder, config, isReload)"),
+        ReplaceWith("enable(player.toDispatcher(), holder, config, isReload)"),
         DeprecationLevel.ERROR
     )
     fun enable(
@@ -219,11 +219,11 @@ abstract class Effect<T>(
         holder: ProvidedHolder,
         config: ChainElement<T>,
         isReload: Boolean = false
-    ) = enable(EntityDispatcher(player), holder, config, isReload)
+    ): Unit = enable(player.toDispatcher(), holder, config, isReload)
 
     @Deprecated(
         "Use enable(Dispatcher<*>, ProvidedHolder, ChainElement<T>, Boolean)",
-        ReplaceWith("enable(dispatcher, holder, config, isReload)")
+        ReplaceWith("enable(player.toDispatcher(), holder, config, isReload)")
     )
     protected open fun onEnable(
         player: Player,
@@ -237,18 +237,18 @@ abstract class Effect<T>(
 
     @Deprecated(
         "Use disable(Dispatcher<*>, ProvidedHolder, Boolean)",
-        ReplaceWith("disable(dispatcher, holder, isReload)"),
+        ReplaceWith("disable(player.toDispatcher(), holder, isReload)"),
         DeprecationLevel.ERROR
     )
     fun disable(
         player: Player,
         holder: ProvidedHolder,
         isReload: Boolean = false
-    ) = disable(EntityDispatcher(player), holder, isReload)
+    ): Unit = disable(player.toDispatcher(), holder, isReload)
 
     @Deprecated(
         "Use disable(Dispatcher<*>, ProvidedHolder, Boolean)",
-        ReplaceWith("disable(dispatcher, holder, isReload)")
+        ReplaceWith("disable(player.toDispatcher(), holder, isReload)")
     )
     protected open fun onDisable(
         player: Player,

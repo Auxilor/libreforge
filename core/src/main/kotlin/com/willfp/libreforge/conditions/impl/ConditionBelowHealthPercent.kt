@@ -1,13 +1,13 @@
 package com.willfp.libreforge.conditions.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
-import com.willfp.libreforge.Dispatcher
-import com.willfp.libreforge.EntityDispatcher
 import com.willfp.libreforge.get
+import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.updateEffects
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.LivingEntity
@@ -38,13 +38,11 @@ object ConditionBelowHealthPercent : Condition<NoCompileData>("below_health_perc
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun handle(event: EntityRegainHealthEvent) {
-        val dispatcher = EntityDispatcher(event.entity)
-        dispatcher.updateEffects()
+        event.entity.toDispatcher().updateEffects()
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun handle(event: EntityDamageEvent) {
-        val dispatcher = EntityDispatcher(event.entity)
-        dispatcher.updateEffects()
+        event.entity.toDispatcher().updateEffects()
     }
 }

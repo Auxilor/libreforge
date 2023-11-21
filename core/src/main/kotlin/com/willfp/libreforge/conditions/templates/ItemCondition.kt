@@ -4,14 +4,14 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.items.Items
 import com.willfp.eco.core.items.TestableItem
 import com.willfp.eco.core.recipe.parts.EmptyTestableItem
+import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.filterNotEmpty
-import com.willfp.libreforge.getStrings
-import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.get
+import com.willfp.libreforge.getStrings
 import org.bukkit.entity.LivingEntity
 import org.bukkit.inventory.ItemStack
 

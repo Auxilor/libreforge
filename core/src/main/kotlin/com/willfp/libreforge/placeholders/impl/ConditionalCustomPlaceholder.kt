@@ -6,12 +6,13 @@ import com.willfp.eco.core.placeholder.RegistrablePlaceholder
 import com.willfp.eco.core.placeholder.context.PlaceholderContext
 import com.willfp.eco.core.placeholder.templates.SimplePlaceholder
 import com.willfp.libreforge.BlankHolder
+import com.willfp.libreforge.EntityDispatcher
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.conditions.ConditionList
 import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.placeholders.CustomPlaceholder
-import com.willfp.libreforge.EntityDispatcher
+import com.willfp.libreforge.toDispatcher
 import org.bukkit.inventory.ItemStack
 
 class ConditionalCustomPlaceholder(
@@ -40,7 +41,7 @@ class ConditionalCustomPlaceholder(
             val holder = BlankItemHolder(ctx.itemStack)
 
             val value = values
-                .firstOrNull { it.conditions.areMet(EntityDispatcher(player), holder) }
+                .firstOrNull { it.conditions.areMet(player.toDispatcher(), holder) }
                 ?.expr ?: return defaultExpr?.let { parseValue(it, ctx) }
 
             return parseValue(value, ctx)
