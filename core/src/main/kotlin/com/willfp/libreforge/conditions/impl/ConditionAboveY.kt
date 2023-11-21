@@ -5,12 +5,8 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
-import com.willfp.libreforge.triggers.Dispatcher
-import com.willfp.libreforge.triggers.get
-import com.willfp.libreforge.triggers.ifType
-import org.bukkit.block.Block
-import org.bukkit.entity.Entity
-import org.bukkit.entity.Player
+import com.willfp.libreforge.Dispatcher
+import com.willfp.libreforge.get
 
 object ConditionAboveY : Condition<NoCompileData>("above_y") {
     override val arguments = arguments {

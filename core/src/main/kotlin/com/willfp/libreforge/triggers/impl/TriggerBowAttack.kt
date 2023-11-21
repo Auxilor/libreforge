@@ -1,11 +1,10 @@
 package com.willfp.libreforge.triggers.impl
 
-import com.willfp.libreforge.triggers.PlayerDispatcher
+import com.willfp.libreforge.PlayerDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.AbstractArrow
-import org.bukkit.entity.Arrow
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.entity.Trident

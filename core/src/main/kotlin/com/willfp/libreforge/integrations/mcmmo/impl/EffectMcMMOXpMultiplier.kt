@@ -4,7 +4,7 @@ import com.gmail.nossr50.datatypes.skills.PrimarySkillType
 import com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent
 import com.gmail.nossr50.mcMMO
 import com.willfp.libreforge.effects.templates.MultiMultiplierEffect
-import com.willfp.libreforge.triggers.PlayerDispatcher
+import com.willfp.libreforge.PlayerDispatcher
 import org.bukkit.event.EventHandler
 
 object EffectMcMMOXpMultiplier : MultiMultiplierEffect<PrimarySkillType>("mcmmo_xp_multiplier") {

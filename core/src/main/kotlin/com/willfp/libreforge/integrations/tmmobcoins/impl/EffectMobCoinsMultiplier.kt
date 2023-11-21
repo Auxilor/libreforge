@@ -1,7 +1,7 @@
 package com.willfp.libreforge.integrations.tmmobcoins.impl
 
 import com.willfp.libreforge.effects.templates.MultiplierEffect
-import com.willfp.libreforge.triggers.PlayerDispatcher
+import com.willfp.libreforge.PlayerDispatcher
 import net.devtm.tmmobcoins.API.MobCoinReceiveEvent
 import org.bukkit.event.EventHandler
 

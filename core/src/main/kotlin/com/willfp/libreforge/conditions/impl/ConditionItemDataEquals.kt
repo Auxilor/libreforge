@@ -6,12 +6,10 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
-import com.willfp.libreforge.getFormattedString
 import com.willfp.libreforge.getProvider
 import com.willfp.libreforge.itemData
-import com.willfp.libreforge.points
-import com.willfp.libreforge.triggers.Dispatcher
-import com.willfp.libreforge.triggers.get
+import com.willfp.libreforge.Dispatcher
+import com.willfp.libreforge.get
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 

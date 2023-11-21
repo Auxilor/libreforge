@@ -1,9 +1,8 @@
-package com.willfp.libreforge.triggers
+package com.willfp.libreforge
 
 import org.bukkit.Location
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
-import java.util.Locale
 import java.util.UUID
 
 /**

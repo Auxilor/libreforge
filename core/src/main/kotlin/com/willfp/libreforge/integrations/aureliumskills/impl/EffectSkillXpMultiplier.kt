@@ -4,7 +4,7 @@ import com.archyx.aureliumskills.api.event.XpGainEvent
 import com.archyx.aureliumskills.skills.Skill
 import com.archyx.aureliumskills.skills.Skills
 import com.willfp.libreforge.effects.templates.MultiMultiplierEffect
-import com.willfp.libreforge.triggers.PlayerDispatcher
+import com.willfp.libreforge.PlayerDispatcher
 import org.bukkit.event.EventHandler
 
 object EffectSkillXpMultiplier : MultiMultiplierEffect<Skill>("skill_xp_multiplier") {

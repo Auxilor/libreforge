@@ -3,8 +3,6 @@ package com.willfp.libreforge
 import com.willfp.eco.util.NamespacedKeyUtils
 import com.willfp.libreforge.conditions.ConditionList
 import com.willfp.libreforge.effects.EffectList
-import com.willfp.libreforge.triggers.Dispatcher
-import com.willfp.libreforge.triggers.PlayerDispatcher
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack

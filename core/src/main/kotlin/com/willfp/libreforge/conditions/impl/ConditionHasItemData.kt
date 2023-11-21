@@ -7,9 +7,7 @@ import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.getProvider
 import com.willfp.libreforge.itemData
-import com.willfp.libreforge.triggers.Dispatcher
-import com.willfp.libreforge.triggers.get
-import org.bukkit.entity.Player
+import com.willfp.libreforge.Dispatcher
 import org.bukkit.inventory.ItemStack
 
 object ConditionHasItemData : Condition<NoCompileData>("has_item_data") {

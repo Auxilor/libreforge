@@ -1,7 +1,9 @@
 package com.willfp.libreforge.triggers
 
 import com.willfp.eco.core.items.HashedItem
+import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.EmptyProvidedHolder
+import com.willfp.libreforge.PlayerDispatcher
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.getProvider
 import com.willfp.libreforge.triggers.impl.TriggerBlank

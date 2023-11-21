@@ -2,7 +2,7 @@ package com.willfp.libreforge.integrations.paper.impl
 
 import com.destroystokyo.paper.event.player.PlayerElytraBoostEvent
 import com.willfp.libreforge.effects.templates.ChanceMultiplierEffect
-import com.willfp.libreforge.triggers.PlayerDispatcher
+import com.willfp.libreforge.PlayerDispatcher
 import org.bukkit.event.EventHandler
 
 object EffectElytraBoostSaveChance : ChanceMultiplierEffect("elytra_boost_save_chance") {

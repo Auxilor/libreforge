@@ -5,7 +5,7 @@ import com.willfp.eco.util.evaluateExpression
 import com.willfp.libreforge.counters.Accumulator
 import com.willfp.libreforge.counters.Counter
 import com.willfp.libreforge.triggers.DispatchedTrigger
-import com.willfp.libreforge.triggers.get
+import com.willfp.libreforge.get
 import org.bukkit.entity.Player
 
 /*

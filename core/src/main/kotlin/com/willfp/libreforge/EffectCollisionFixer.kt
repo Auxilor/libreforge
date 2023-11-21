@@ -1,7 +1,6 @@
 package com.willfp.libreforge
 
 import com.willfp.libreforge.effects.Effects
-import com.willfp.libreforge.triggers.PlayerDispatcher
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler

@@ -8,8 +8,8 @@ import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.getProvider
 import com.willfp.libreforge.levels.LevelTypes
 import com.willfp.libreforge.levels.levels
-import com.willfp.libreforge.triggers.Dispatcher
-import com.willfp.libreforge.triggers.get
+import com.willfp.libreforge.Dispatcher
+import com.willfp.libreforge.get
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
