@@ -2,8 +2,7 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.libreforge.effects.templates.MultiMultiplierEffect
 import com.willfp.libreforge.enumValueOfOrNull
-import com.willfp.libreforge.triggers.EntityDispatcher
-import org.bukkit.entity.Player
+import com.willfp.libreforge.EntityDispatcher
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityRegainHealthEvent
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason

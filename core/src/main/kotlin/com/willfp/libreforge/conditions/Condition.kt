@@ -4,8 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Compilable
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.plugin
-import com.willfp.libreforge.triggers.DispatchedTrigger
-import com.willfp.libreforge.triggers.Dispatcher
+import com.willfp.libreforge.Dispatcher
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
 

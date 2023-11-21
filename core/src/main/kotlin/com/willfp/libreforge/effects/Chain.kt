@@ -4,11 +4,11 @@ import com.willfp.libreforge.DelegatedList
 import com.willfp.libreforge.WeightedList
 import com.willfp.libreforge.effects.executors.ChainExecutor
 import com.willfp.libreforge.triggers.DispatchedTrigger
-import com.willfp.libreforge.triggers.Dispatcher
-import com.willfp.libreforge.triggers.PlayerDispatcher
+import com.willfp.libreforge.Dispatcher
+import com.willfp.libreforge.PlayerDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
-import com.willfp.libreforge.triggers.get
+import com.willfp.libreforge.get
 import com.willfp.libreforge.triggers.impl.TriggerBlank
 import org.bukkit.entity.Player
 

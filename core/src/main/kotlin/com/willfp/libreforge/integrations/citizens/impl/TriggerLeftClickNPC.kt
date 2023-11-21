@@ -1,6 +1,6 @@
 package com.willfp.libreforge.integrations.citizens.impl
 
-import com.willfp.libreforge.triggers.PlayerDispatcher
+import com.willfp.libreforge.PlayerDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter

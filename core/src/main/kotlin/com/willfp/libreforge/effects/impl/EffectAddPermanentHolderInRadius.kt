@@ -13,8 +13,8 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.registerHolderProvider
-import com.willfp.libreforge.triggers.Dispatcher
-import com.willfp.libreforge.triggers.get
+import com.willfp.libreforge.Dispatcher
+import com.willfp.libreforge.get
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.util.Objects

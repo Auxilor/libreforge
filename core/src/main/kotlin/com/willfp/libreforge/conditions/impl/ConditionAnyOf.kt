@@ -7,8 +7,7 @@ import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.conditions.ConditionList
 import com.willfp.libreforge.conditions.Conditions
-import com.willfp.libreforge.triggers.Dispatcher
-import org.bukkit.entity.Player
+import com.willfp.libreforge.Dispatcher
 
 object ConditionAnyOf : Condition<ConditionList>("any_of") {
     override val arguments = arguments {

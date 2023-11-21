@@ -2,12 +2,11 @@ package com.willfp.libreforge.effects.events
 
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.effects.Effect
-import com.willfp.libreforge.triggers.Dispatcher
-import com.willfp.libreforge.triggers.get
+import com.willfp.libreforge.Dispatcher
+import com.willfp.libreforge.get
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.event.HandlerList
-import org.bukkit.event.player.PlayerEvent
 
 class EffectEnableEvent(
     val dispatcher: Dispatcher<*>,

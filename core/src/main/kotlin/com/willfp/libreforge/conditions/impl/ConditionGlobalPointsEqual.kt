@@ -6,8 +6,8 @@ import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.globalPoints
-import com.willfp.libreforge.triggers.Dispatcher
-import com.willfp.libreforge.triggers.get
+import com.willfp.libreforge.Dispatcher
+import com.willfp.libreforge.get
 import org.bukkit.entity.Player
 
 object ConditionGlobalPointsEqual : Condition<NoCompileData>("global_points_equal") {

@@ -2,9 +2,7 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.util.NumberUtils
 import com.willfp.libreforge.effects.templates.MultiplierEffect
-import com.willfp.libreforge.triggers.EntityDispatcher
-import com.willfp.libreforge.triggers.PlayerDispatcher
-import org.bukkit.entity.Player
+import com.willfp.libreforge.EntityDispatcher
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.FoodLevelChangeEvent
 import kotlin.math.ceil

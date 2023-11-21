@@ -11,8 +11,8 @@ import com.willfp.libreforge.effects.events.EffectEnableEvent
 import com.willfp.libreforge.filters.FilterList
 import com.willfp.libreforge.mutators.MutatorList
 import com.willfp.libreforge.triggers.DispatchedTrigger
-import com.willfp.libreforge.triggers.Dispatcher
-import com.willfp.libreforge.triggers.PlayerDispatcher
+import com.willfp.libreforge.Dispatcher
+import com.willfp.libreforge.PlayerDispatcher
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.util.UUID

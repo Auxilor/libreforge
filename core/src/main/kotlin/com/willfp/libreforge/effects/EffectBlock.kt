@@ -1,15 +1,14 @@
 package com.willfp.libreforge.effects
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.BlankHolder.effects
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.conditions.ConditionList
 import com.willfp.libreforge.effects.arguments.EffectArgumentList
 import com.willfp.libreforge.filters.FilterList
 import com.willfp.libreforge.mutators.MutatorList
 import com.willfp.libreforge.triggers.DispatchedTrigger
-import com.willfp.libreforge.triggers.Dispatcher
-import com.willfp.libreforge.triggers.PlayerDispatcher
+import com.willfp.libreforge.Dispatcher
+import com.willfp.libreforge.PlayerDispatcher
 import com.willfp.libreforge.triggers.PotentiallyTriggerable
 import com.willfp.libreforge.triggers.Trigger
 import org.bukkit.entity.Player

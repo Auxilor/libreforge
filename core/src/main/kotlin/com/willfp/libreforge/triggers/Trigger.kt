@@ -1,13 +1,18 @@
 package com.willfp.libreforge.triggers
 
 import com.willfp.eco.core.registry.KRegistrable
+import com.willfp.libreforge.Dispatcher
+import com.willfp.libreforge.PlayerDispatcher
 import com.willfp.libreforge.ProvidedEffectBlock
 import com.willfp.libreforge.ProvidedEffectBlocks
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.counters.bind.BoundCounters
 import com.willfp.libreforge.counters.bind.BoundCounters.bindings
 import com.willfp.libreforge.generatePlaceholders
+import com.willfp.libreforge.get
 import com.willfp.libreforge.getProvidedActiveEffects
+import com.willfp.libreforge.ifType
+import com.willfp.libreforge.isType
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.providedActiveEffects
 import com.willfp.libreforge.triggers.event.TriggerDispatchEvent

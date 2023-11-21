@@ -3,7 +3,7 @@ package com.willfp.libreforge.integrations.worldguard.impl
 import com.sk89q.worldedit.bukkit.BukkitAdapter
 import com.sk89q.worldguard.WorldGuard
 import com.willfp.eco.core.Prerequisite
-import com.willfp.libreforge.triggers.PlayerDispatcher
+import com.willfp.libreforge.PlayerDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter

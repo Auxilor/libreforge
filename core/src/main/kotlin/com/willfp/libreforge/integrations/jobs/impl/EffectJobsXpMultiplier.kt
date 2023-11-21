@@ -4,7 +4,7 @@ import com.gamingmesh.jobs.Jobs
 import com.gamingmesh.jobs.api.JobsExpGainEvent
 import com.gamingmesh.jobs.container.Job
 import com.willfp.libreforge.effects.templates.MultiMultiplierEffect
-import com.willfp.libreforge.triggers.PlayerDispatcher
+import com.willfp.libreforge.PlayerDispatcher
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 

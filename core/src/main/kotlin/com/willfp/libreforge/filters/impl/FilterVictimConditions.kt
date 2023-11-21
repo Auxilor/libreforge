@@ -5,10 +5,8 @@ import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.conditions.ConditionList
 import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.filters.Filter
-import com.willfp.libreforge.triggers.EntityDispatcher
-import com.willfp.libreforge.triggers.PlayerDispatcher
+import com.willfp.libreforge.EntityDispatcher
 import com.willfp.libreforge.triggers.TriggerData
-import org.bukkit.entity.Player
 
 object FilterVictimConditions : Filter<ConditionList, Collection<Config>>("victim_conditions") {
     override fun getValue(config: Config, data: TriggerData?, key: String): Collection<Config> {

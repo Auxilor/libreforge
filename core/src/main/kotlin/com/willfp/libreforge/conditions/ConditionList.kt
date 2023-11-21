@@ -2,14 +2,11 @@ package com.willfp.libreforge.conditions
 
 import com.willfp.eco.util.formatEco
 import com.willfp.libreforge.DelegatedList
-import com.willfp.libreforge.EmptyProvidedHolder
-import com.willfp.libreforge.EmptyProvidedHolder.holder
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.triggers.DispatchedTrigger
-import com.willfp.libreforge.triggers.Dispatcher
-import com.willfp.libreforge.triggers.GlobalDispatcher.dispatcher
-import com.willfp.libreforge.triggers.PlayerDispatcher
-import com.willfp.libreforge.triggers.get
+import com.willfp.libreforge.Dispatcher
+import com.willfp.libreforge.PlayerDispatcher
+import com.willfp.libreforge.get
 import org.bukkit.entity.Player
 
 /**

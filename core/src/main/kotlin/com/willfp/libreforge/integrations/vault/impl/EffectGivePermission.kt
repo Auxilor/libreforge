@@ -2,14 +2,13 @@ package com.willfp.libreforge.integrations.vault.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.map.listMap
-import com.willfp.eco.core.map.nestedMap
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
-import com.willfp.libreforge.triggers.Dispatcher
-import com.willfp.libreforge.triggers.get
+import com.willfp.libreforge.Dispatcher
+import com.willfp.libreforge.get
 import net.milkbowl.vault.permission.Permission
 import org.bukkit.entity.Player
 import java.util.UUID

@@ -3,7 +3,7 @@ package com.willfp.libreforge.integrations.jobs.impl
 import com.gamingmesh.jobs.api.JobsPaymentEvent
 import com.gamingmesh.jobs.container.CurrencyType
 import com.willfp.libreforge.effects.templates.MultiplierEffect
-import com.willfp.libreforge.triggers.PlayerDispatcher
+import com.willfp.libreforge.PlayerDispatcher
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 

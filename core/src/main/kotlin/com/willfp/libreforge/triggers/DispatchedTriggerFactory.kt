@@ -2,6 +2,8 @@ package com.willfp.libreforge.triggers
 
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.map.listMap
+import com.willfp.libreforge.Dispatcher
+import com.willfp.libreforge.PlayerDispatcher
 import org.bukkit.entity.Player
 import java.util.UUID
 

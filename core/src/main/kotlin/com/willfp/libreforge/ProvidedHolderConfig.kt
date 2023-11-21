@@ -5,8 +5,6 @@ import com.willfp.eco.core.placeholder.context.PlaceholderContext
 import com.willfp.eco.core.placeholder.context.copy
 import com.willfp.eco.util.NumberUtils
 import com.willfp.eco.util.formatEco
-import com.willfp.libreforge.triggers.Dispatcher
-import com.willfp.libreforge.triggers.ifType
 import org.bukkit.entity.Player
 
 /**
