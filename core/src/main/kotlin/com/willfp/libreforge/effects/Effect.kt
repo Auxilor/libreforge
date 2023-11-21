@@ -3,17 +3,20 @@ package com.willfp.libreforge.effects
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.map.defaultMap
 import com.willfp.libreforge.Compilable
+import com.willfp.libreforge.EmptyProvidedHolder.holder
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.applyHolder
 import com.willfp.libreforge.mutators.MutatorList
 import com.willfp.libreforge.mutators.emptyMutatorList
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.DispatchedTrigger
+import com.willfp.libreforge.triggers.Dispatcher
 import com.willfp.libreforge.triggers.PlayerDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
+import com.willfp.libreforge.triggers.ifType
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
 import java.util.UUID
@@ -21,7 +24,7 @@ import java.util.UUID
 abstract class Effect<T>(
     final override val id: String
 ) : Compilable<T>(), Listener {
-    // Maps Player UUIDs to the effect count.
+    // Maps Dispatcher UUIDs to the effect count.
     private val effectCounter = defaultMap<UUID, Int>(0)
 
     // The identifier factory.
@@ -66,13 +69,10 @@ abstract class Effect<T>(
         Triggers.withParameters(parameters)(trigger, mutators)
 
     /**
-     * Enable a permanent effect.
-     *
-     * @param player The player.
-     * @param config The effect config.
+     * Enable a permanent effect for a [dispatcher].
      */
     fun enable(
-        player: Player,
+        dispatcher: Dispatcher<*>,
         holder: ProvidedHolder,
         config: ChainElement<T>,
         isReload: Boolean = false
@@ -82,24 +82,25 @@ abstract class Effect<T>(
         }
 
         // Increment first to fix reload bug where effects are applied twice.
-        effectCounter[player.uniqueId]++
-        val count = effectCounter[player.uniqueId]
+        effectCounter[dispatcher.uuid]++
+        val count = effectCounter[dispatcher.uuid]
 
-        val withHolder = config.config.applyHolder(holder, PlayerDispatcher(player))
+        val withHolder = config.config.applyHolder(holder, dispatcher)
 
-        onEnable(player, withHolder, identifierFactory.makeIdentifiers(count), holder, config.compileData)
+        onEnable(dispatcher, withHolder, identifierFactory.makeIdentifiers(count), holder, config.compileData)
+
+        // Legacy support
+        dispatcher.ifType<Player> {
+            @Suppress("DEPRECATION")
+            onEnable(it, withHolder, identifierFactory.makeIdentifiers(count), holder, config.compileData)
+        }
     }
 
     /**
      * Handle the enabling of this permanent effect.
-     *
-     * @param player The player.
-     * @param config The config.
-     * @param identifiers The identifiers.
-     * @param compileData The compile data.
      */
     protected open fun onEnable(
-        player: Player,
+        dispatcher: Dispatcher<*>,
         config: Config,
         identifiers: Identifiers,
         holder: ProvidedHolder,
@@ -109,12 +110,10 @@ abstract class Effect<T>(
     }
 
     /**
-     * Disable a permanent effect.
-     *
-     * @param player The player.
+     * Disable a permanent effect for a [dispatcher].
      */
     fun disable(
-        player: Player,
+        dispatcher: Dispatcher<*>,
         holder: ProvidedHolder,
         isReload: Boolean = false
     ) {
@@ -122,22 +121,26 @@ abstract class Effect<T>(
             return
         }
 
-        if (effectCounter[player.uniqueId] == 0) {
+        if (effectCounter[dispatcher.uuid] == 0) {
             return
         }
 
-        val count = effectCounter[player.uniqueId]--
-        onDisable(player, identifierFactory.makeIdentifiers(count), holder)
+        val count = effectCounter[dispatcher.uuid]--
+
+        onDisable(dispatcher, identifierFactory.makeIdentifiers(count), holder)
+
+        // Legacy support
+        dispatcher.ifType<Player> {
+            @Suppress("DEPRECATION")
+            onDisable(it, identifierFactory.makeIdentifiers(count), holder)
+        }
     }
 
     /**
      * Handle the disabling of this permanent effect.
-     *
-     * @param player The player.
-     * @param identifiers The identifiers.
      */
     protected open fun onDisable(
-        player: Player,
+        dispatcher: Dispatcher<*>,
         identifiers: Identifiers,
         holder: ProvidedHolder
     ) {
@@ -202,6 +205,57 @@ abstract class Effect<T>(
     }
 
     open fun postRegister() {
+        // Override when needed.
+    }
+
+
+
+    @Deprecated(
+        "Use enable(Dispatcher<*>, ProvidedHolder, ChainElement<T>, Boolean)",
+        ReplaceWith("enable(dispatcher, holder, config, isReload)"),
+        DeprecationLevel.ERROR
+    )
+    fun enable(
+        player: Player,
+        holder: ProvidedHolder,
+        config: ChainElement<T>,
+        isReload: Boolean = false
+    ) = enable(PlayerDispatcher(player), holder, config, isReload)
+
+    @Deprecated(
+        "Use enable(Dispatcher<*>, ProvidedHolder, ChainElement<T>, Boolean)",
+        ReplaceWith("enable(dispatcher, holder, config, isReload)")
+    )
+    protected open fun onEnable(
+        player: Player,
+        config: Config,
+        identifiers: Identifiers,
+        holder: ProvidedHolder,
+        compileData: T
+    ) {
+        // Override when needed.
+    }
+
+    @Deprecated(
+        "Use disable(Dispatcher<*>, ProvidedHolder, Boolean)",
+        ReplaceWith("disable(dispatcher, holder, isReload)"),
+        DeprecationLevel.ERROR
+    )
+    fun disable(
+        player: Player,
+        holder: ProvidedHolder,
+        isReload: Boolean = false
+    ) = disable(PlayerDispatcher(player), holder, isReload)
+
+    @Deprecated(
+        "Use disable(Dispatcher<*>, ProvidedHolder, Boolean)",
+        ReplaceWith("disable(dispatcher, holder, isReload)")
+    )
+    protected open fun onDisable(
+        player: Player,
+        identifiers: Identifiers,
+        holder: ProvidedHolder
+    ) {
         // Override when needed.
     }
 }

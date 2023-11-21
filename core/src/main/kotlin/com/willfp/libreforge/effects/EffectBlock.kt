@@ -8,6 +8,8 @@ import com.willfp.libreforge.effects.arguments.EffectArgumentList
 import com.willfp.libreforge.filters.FilterList
 import com.willfp.libreforge.mutators.MutatorList
 import com.willfp.libreforge.triggers.DispatchedTrigger
+import com.willfp.libreforge.triggers.Dispatcher
+import com.willfp.libreforge.triggers.PlayerDispatcher
 import com.willfp.libreforge.triggers.PotentiallyTriggerable
 import com.willfp.libreforge.triggers.Trigger
 import org.bukkit.entity.Player
@@ -26,25 +28,54 @@ class EffectBlock internal constructor(
     override val conditions: ConditionList,
     override val mutators: MutatorList,
     override val filters: FilterList,
-    override val isElementOwnChain: Boolean
+    override val shouldDelegateExecution: Boolean
 ) : ElementLike(), PotentiallyTriggerable {
     override val supportsDelay = effects.all { it.supportsDelay }
 
     val weight = effects.weight
 
+    /**
+     * Enable the effects.
+     */
+    fun enable(
+        dispatcher: Dispatcher<*>,
+        holder: ProvidedHolder,
+        isReload: Boolean = false
+    ) = effects.forEach { it.enable(dispatcher, holder, isReload = isReload) }
+
+    /**
+     * Disable the effects.
+     */
+    fun disable(
+        dispatcher: Dispatcher<*>,
+        holder: ProvidedHolder,
+        isReload: Boolean = false
+    ) = effects.forEach { it.disable(dispatcher, holder, isReload = isReload) }
+
+    @Deprecated(
+        "Use enable(Dispatcher<*>, ProvidedHolder, Boolean)",
+        ReplaceWith("enable(dispatcher, holder, isReload)"),
+        DeprecationLevel.ERROR
+    )
     @JvmOverloads
     fun enable(
         player: Player,
         holder: ProvidedHolder,
         isReload: Boolean = false
-    ) = effects.forEach { it.enable(player, holder, isReload = isReload) }
+    ) = enable(PlayerDispatcher(player), holder, isReload = isReload)
 
+    @Deprecated(
+        "Use disable(Dispatcher<*>, ProvidedHolder, Boolean)",
+        ReplaceWith("disable(dispatcher, holder, isReload)"),
+        DeprecationLevel.ERROR
+    )
     @JvmOverloads
     fun disable(
         player: Player,
         holder: ProvidedHolder,
         isReload: Boolean = false
-    ) = effects.forEach { it.disable(player, holder, isReload = isReload) }
+    ) = disable(PlayerDispatcher(player), holder, isReload = isReload)
+
 
     fun tryTrigger(trigger: DispatchedTrigger) {
         if (canBeTriggeredBy(trigger.trigger)) {

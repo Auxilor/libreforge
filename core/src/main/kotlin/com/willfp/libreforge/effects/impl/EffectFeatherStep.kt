@@ -6,6 +6,7 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
+import com.willfp.libreforge.triggers.Dispatcher
 import org.bukkit.Tag
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -17,17 +18,17 @@ object EffectFeatherStep : Effect<NoCompileData>("feather_step") {
     private val players = listMap<UUID, UUID>()
 
     override fun onEnable(
-        player: Player,
+        dispatcher: Dispatcher<*>,
         config: Config,
         identifiers: Identifiers,
         holder: ProvidedHolder,
         compileData: NoCompileData
     ) {
-        players[player.uniqueId] += identifiers.uuid
+        players[dispatcher.uuid] += identifiers.uuid
     }
 
-    override fun onDisable(player: Player, identifiers: Identifiers, holder: ProvidedHolder) {
-        players[player.uniqueId] -= identifiers.uuid
+    override fun onDisable(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder) {
+        players[dispatcher.uuid] -= identifiers.uuid
     }
 
     @EventHandler(ignoreCancelled = true)

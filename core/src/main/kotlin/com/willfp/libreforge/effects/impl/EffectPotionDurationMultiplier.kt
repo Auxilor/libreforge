@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.impl
 import com.willfp.eco.util.duration
 import com.willfp.libreforge.effects.templates.MultiplierEffect
 import com.willfp.libreforge.plugin
+import com.willfp.libreforge.triggers.PlayerDispatcher
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
@@ -25,7 +26,9 @@ object EffectPotionDurationMultiplier : MultiplierEffect("potion_duration_multip
     fun handle(event: BrewEvent) {
         val player = event.contents.viewers.filterIsInstance<Player>().firstOrNull() ?: return
 
-        val multiplier = getMultiplier(player)
+        val multiplier = getMultiplier(
+            PlayerDispatcher(player)
+        )
 
         plugin.scheduler.run {
             for (i in 0..2) {

@@ -5,6 +5,7 @@ import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.templates.AttributeEffect
 import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeModifier
+import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 
 object EffectLuckMultiplier : AttributeEffect(
@@ -16,6 +17,6 @@ object EffectLuckMultiplier : AttributeEffect(
         require("multiplier", "You must specify the luck multiplier!")
     }
 
-    override fun getValue(config: Config, player: Player) =
-        config.getDoubleFromExpression("multiplier", player) - 1
+    override fun getValue(config: Config, entity: LivingEntity) =
+        config.getDoubleFromExpression("multiplier", entity as? Player) - 1
 }

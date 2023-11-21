@@ -5,6 +5,7 @@ import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.templates.AttributeEffect
 import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeModifier
+import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 
 object EffectArmorToughness : AttributeEffect(
@@ -16,6 +17,6 @@ object EffectArmorToughness : AttributeEffect(
         require("points", "You must specify the amount of points to add/remove!")
     }
 
-    override fun getValue(config: Config, player: Player) =
-        config.getIntFromExpression("points", player).toDouble()
+    override fun getValue(config: Config, entity: LivingEntity): Double =
+        config.getDoubleFromExpression("points", entity as? Player)
 }

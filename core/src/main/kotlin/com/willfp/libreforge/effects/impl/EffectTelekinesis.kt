@@ -12,6 +12,7 @@ import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.plugin
+import com.willfp.libreforge.triggers.Dispatcher
 import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.Tag
@@ -28,17 +29,17 @@ object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
     private val players = listMap<UUID, UUID>()
 
     override fun onEnable(
-        player: Player,
+        dispatcher: Dispatcher<*>,
         config: Config,
         identifiers: Identifiers,
         holder: ProvidedHolder,
         compileData: NoCompileData
     ) {
-        players[player.uniqueId] += identifiers.uuid
+        players[dispatcher.uuid] += identifiers.uuid
     }
 
-    override fun onDisable(player: Player, identifiers: Identifiers, holder: ProvidedHolder) {
-        players[player.uniqueId] -= identifiers.uuid
+    override fun onDisable(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder) {
+        players[dispatcher.uuid] -= identifiers.uuid
     }
 
     override fun postRegister() {

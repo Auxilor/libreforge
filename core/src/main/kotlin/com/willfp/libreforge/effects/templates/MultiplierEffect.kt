@@ -8,6 +8,9 @@ import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.effects.IdentifiedModifier
+import com.willfp.libreforge.triggers.Dispatcher
+import com.willfp.libreforge.triggers.PlayerDispatcher
+import com.willfp.libreforge.triggers.get
 import org.bukkit.entity.Player
 import java.util.UUID
 
@@ -18,23 +21,37 @@ abstract class MultiplierEffect(id: String) : Effect<NoCompileData>(id) {
 
     private val modifiers = listMap<UUID, IdentifiedModifier>()
 
-    final override fun onEnable(player: Player, config: Config, identifiers: Identifiers, holder: ProvidedHolder, compileData: NoCompileData) {
-        modifiers[player.uniqueId] += IdentifiedModifier(identifiers.uuid) {
-            config.getDoubleFromExpression("multiplier", player)
+    override fun onEnable(
+        dispatcher: Dispatcher<*>,
+        config: Config,
+        identifiers: Identifiers,
+        holder: ProvidedHolder,
+        compileData: NoCompileData
+    ) {
+        modifiers[dispatcher.uuid] += IdentifiedModifier(identifiers.uuid) {
+            config.getDoubleFromExpression("multiplier", dispatcher.get<Player>()!!)
         }
     }
 
-    override fun onDisable(player: Player, identifiers: Identifiers, holder: ProvidedHolder) {
-        modifiers[player.uniqueId].removeIf { it.uuid == identifiers.uuid }
+    override fun onDisable(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder) {
+        modifiers[dispatcher.uuid].removeIf { it.uuid == identifiers.uuid }
     }
 
-    protected fun getMultiplier(player: Player): Double {
+    protected fun getMultiplier(dispatcher: Dispatcher<*>): Double {
         var multiplier = 1.0
 
-        for (modifier in modifiers[player.uniqueId]) {
+        for (modifier in modifiers[dispatcher.uuid]) {
             multiplier *= modifier.modifier
         }
 
         return multiplier
     }
+
+    @Deprecated(
+        "Use getMultiplier(dispatcher: Dispatcher<*>) instead.",
+        ReplaceWith("getMultiplier(dispatcher)"),
+        DeprecationLevel.ERROR
+    )
+    protected fun getMultiplier(player: Player): Double =
+        getMultiplier(PlayerDispatcher(player))
 }

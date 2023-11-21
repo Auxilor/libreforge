@@ -8,6 +8,8 @@ import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.points
+import com.willfp.libreforge.triggers.Dispatcher
+import com.willfp.libreforge.triggers.get
 import org.bukkit.entity.Player
 import java.util.UUID
 
@@ -19,7 +21,15 @@ object EffectAddPoints : Effect<NoCompileData>("add_points") {
 
     private val tracker = nestedMap<UUID, UUID, AddedPoint>()
 
-    override fun onEnable(player: Player, config: Config, identifiers: Identifiers, holder: ProvidedHolder, compileData: NoCompileData) {
+    override fun onEnable(
+        dispatcher: Dispatcher<*>,
+        config: Config,
+        identifiers: Identifiers,
+        holder: ProvidedHolder,
+        compileData: NoCompileData
+    ) {
+        val player = dispatcher.get<Player>() ?: return
+
         val added = tracker[player.uniqueId]
         val point = config.getString("type")
         val amount = config.getDoubleFromExpression("amount", player)
@@ -34,7 +44,9 @@ object EffectAddPoints : Effect<NoCompileData>("add_points") {
         tracker[player.uniqueId] = added
     }
 
-    override fun onDisable(player: Player, identifiers: Identifiers, holder: ProvidedHolder) {
+    override fun onDisable(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder) {
+        val player = dispatcher.get<Player>() ?: return
+
         val added = tracker[player.uniqueId]
         val addedPoint = added[identifiers.uuid] ?: return
         added -= identifiers.uuid

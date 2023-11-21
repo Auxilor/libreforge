@@ -9,6 +9,9 @@ import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.effects.IdentifiedModifier
+import com.willfp.libreforge.triggers.Dispatcher
+import com.willfp.libreforge.triggers.PlayerDispatcher
+import com.willfp.libreforge.triggers.get
 import org.bukkit.entity.Player
 import java.util.UUID
 
@@ -19,29 +22,37 @@ abstract class ChanceMultiplierEffect(id: String) : Effect<NoCompileData>(id) {
 
     private val modifiers = listMap<UUID, IdentifiedModifier>()
 
-    final override fun onEnable(
-        player: Player,
+    override fun onEnable(
+        dispatcher: Dispatcher<*>,
         config: Config,
         identifiers: Identifiers,
         holder: ProvidedHolder,
         compileData: NoCompileData
     ) {
-        modifiers[player.uniqueId] += IdentifiedModifier(identifiers.uuid) {
-            config.getDoubleFromExpression("chance", player)
+        modifiers[dispatcher.uuid] += IdentifiedModifier(identifiers.uuid) {
+            config.getDoubleFromExpression("chance", dispatcher.get<Player>()!!)
         }
     }
 
-    override fun onDisable(player: Player, identifiers: Identifiers, holder: ProvidedHolder) {
-        modifiers[player.uniqueId].removeIf { it.uuid == identifiers.uuid }
+    override fun onDisable(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder) {
+        modifiers[dispatcher.uuid].removeIf { it.uuid == identifiers.uuid }
     }
 
-    protected fun passesChance(player: Player): Boolean {
+    protected fun passesChance(dispatcher: Dispatcher<*>): Boolean {
         var chance = 1.0
 
-        for (modifier in modifiers[player.uniqueId]) {
+        for (modifier in modifiers[dispatcher.uuid]) {
             chance *= (100 - modifier.modifier) / 100
         }
 
         return randDouble(0.0, 1.0) > chance
     }
+
+    @Deprecated(
+        "Use passesChance(dispatcher: Dispatcher<*>) instead.",
+        ReplaceWith("passesChance(dispatcher)"),
+        DeprecationLevel.ERROR
+    )
+    protected fun passesChance(player: Player): Boolean =
+        passesChance(PlayerDispatcher(player))
 }
