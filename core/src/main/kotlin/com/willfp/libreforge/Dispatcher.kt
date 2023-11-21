@@ -1,6 +1,7 @@
 package com.willfp.libreforge
 
 import org.bukkit.Location
+import org.bukkit.block.Block
 import org.bukkit.entity.Entity
 import java.util.UUID
 
@@ -65,6 +66,41 @@ value class EntityDispatcher(
  * Convert an entity to a dispatcher.
  */
 fun Entity.toDispatcher(): Dispatcher<Entity> = EntityDispatcher(this)
+
+@JvmInline
+value class BlockDispatcher(
+    override val dispatcher: Block
+) : Dispatcher<Block> {
+    override val uuid
+        get() = UUID(0, 0)
+
+    override val location
+        get() = dispatcher.location
+}
+
+/**
+ * Convert a block to a dispatcher.
+ */
+fun Block.toDispatcher(): Dispatcher<Block> = BlockDispatcher(this)
+
+/**
+ * A dispatcher for a location.
+ */
+@JvmInline
+value class LocationDispatcher(
+    override val dispatcher: Location
+) : Dispatcher<Location> {
+    override val uuid
+        get() = UUID(0, 0)
+
+    override val location
+        get() = dispatcher
+}
+
+/**
+ * Convert a location to a dispatcher.
+ */
+fun Location.toDispatcher(): Dispatcher<Location> = LocationDispatcher(this)
 
 /**
  * A dispatcher for the global scope.
