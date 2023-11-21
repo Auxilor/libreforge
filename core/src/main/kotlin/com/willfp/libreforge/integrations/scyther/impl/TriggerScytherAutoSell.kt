@@ -1,6 +1,6 @@
 package com.willfp.libreforge.integrations.scyther.impl
 
-import com.willfp.libreforge.PlayerDispatcher
+import com.willfp.libreforge.EntityDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -18,7 +18,7 @@ object TriggerScytherAutoSell : Trigger("scyther_auto_sell") {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: ScytherAutosellEvent) {
         this.dispatch(
-            PlayerDispatcher(event.player),
+            EntityDispatcher(event.player),
             TriggerData(
                 player = event.player,
                 block = event.block,

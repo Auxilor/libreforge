@@ -15,7 +15,7 @@ object EffectCollisionFixer : Listener {
         val player = event.player
         for ((holder, effects) in player.providedActiveEffects) {
             for (effect in effects) {
-                effect.disable(PlayerDispatcher(player), holder)
+                effect.disable(EntityDispatcher(player), holder)
             }
         }
 

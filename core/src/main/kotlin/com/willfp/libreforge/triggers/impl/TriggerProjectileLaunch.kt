@@ -1,6 +1,6 @@
 package com.willfp.libreforge.triggers.impl
 
-import com.willfp.libreforge.PlayerDispatcher
+import com.willfp.libreforge.EntityDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -26,7 +26,7 @@ object TriggerProjectileLaunch : Trigger("projectile_launch") {
         }
 
         this.dispatch(
-            PlayerDispatcher(shooter),
+            EntityDispatcher(shooter),
             TriggerData(
                 player = shooter,
                 projectile = event.entity,

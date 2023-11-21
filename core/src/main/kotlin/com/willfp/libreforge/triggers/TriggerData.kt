@@ -3,7 +3,7 @@ package com.willfp.libreforge.triggers
 import com.willfp.eco.core.items.HashedItem
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.EmptyProvidedHolder
-import com.willfp.libreforge.PlayerDispatcher
+import com.willfp.libreforge.EntityDispatcher
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.getProvider
 import com.willfp.libreforge.triggers.impl.TriggerBlank
@@ -57,7 +57,7 @@ data class TriggerData(
         DeprecationLevel.ERROR
     )
     fun dispatch(player: Player) =
-        dispatch(PlayerDispatcher(player))
+        dispatch(EntityDispatcher(player))
 
     /**
      * Turn into a dispatched trigger for a [dispatcher].

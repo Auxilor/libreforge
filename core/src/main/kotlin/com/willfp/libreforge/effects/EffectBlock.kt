@@ -8,7 +8,7 @@ import com.willfp.libreforge.filters.FilterList
 import com.willfp.libreforge.mutators.MutatorList
 import com.willfp.libreforge.triggers.DispatchedTrigger
 import com.willfp.libreforge.Dispatcher
-import com.willfp.libreforge.PlayerDispatcher
+import com.willfp.libreforge.EntityDispatcher
 import com.willfp.libreforge.triggers.PotentiallyTriggerable
 import com.willfp.libreforge.triggers.Trigger
 import org.bukkit.entity.Player
@@ -61,7 +61,7 @@ class EffectBlock internal constructor(
         player: Player,
         holder: ProvidedHolder,
         isReload: Boolean = false
-    ) = enable(PlayerDispatcher(player), holder, isReload = isReload)
+    ) = enable(EntityDispatcher(player), holder, isReload = isReload)
 
     @Deprecated(
         "Use disable(Dispatcher<*>, ProvidedHolder, Boolean)",
@@ -73,7 +73,7 @@ class EffectBlock internal constructor(
         player: Player,
         holder: ProvidedHolder,
         isReload: Boolean = false
-    ) = disable(PlayerDispatcher(player), holder, isReload = isReload)
+    ) = disable(EntityDispatcher(player), holder, isReload = isReload)
 
 
     fun tryTrigger(trigger: DispatchedTrigger) {

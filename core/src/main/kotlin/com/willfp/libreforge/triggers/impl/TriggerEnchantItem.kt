@@ -1,6 +1,6 @@
 package com.willfp.libreforge.triggers.impl
 
-import com.willfp.libreforge.PlayerDispatcher
+import com.willfp.libreforge.EntityDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -20,7 +20,7 @@ object TriggerEnchantItem : Trigger("enchant_item") {
         val item = event.item
 
         this.dispatch(
-            PlayerDispatcher(player),
+            EntityDispatcher(player),
             TriggerData(
                 player = player,
                 item = item,

@@ -12,7 +12,7 @@ import com.willfp.libreforge.filters.FilterList
 import com.willfp.libreforge.mutators.MutatorList
 import com.willfp.libreforge.triggers.DispatchedTrigger
 import com.willfp.libreforge.Dispatcher
-import com.willfp.libreforge.PlayerDispatcher
+import com.willfp.libreforge.EntityDispatcher
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.util.UUID
@@ -76,7 +76,7 @@ class ChainElement<T> internal constructor(
         player: Player,
         holder: ProvidedHolder,
         isReload: Boolean = false
-    ) = enable(PlayerDispatcher(player), holder, isReload)
+    ) = enable(EntityDispatcher(player), holder, isReload)
 
     @Deprecated(
         "Use disable(Dispatcher<*>, ProvidedHolder, Boolean)",
@@ -87,5 +87,5 @@ class ChainElement<T> internal constructor(
         player: Player,
         holder: ProvidedHolder,
         isReload: Boolean = false
-    ) = disable(PlayerDispatcher(player), holder, isReload)
+    ) = disable(EntityDispatcher(player), holder, isReload)
 }

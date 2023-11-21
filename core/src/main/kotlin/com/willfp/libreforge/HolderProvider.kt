@@ -254,7 +254,7 @@ fun Collection<ProvidedHolder>.getProvidedActiveEffects(player: Player): List<Pr
     val blocks = mutableListOf<ProvidedEffectBlocks>()
 
     for (holder in this) {
-        if (holder.holder.conditions.areMet(PlayerDispatcher(player), holder)) {
+        if (holder.holder.conditions.areMet(EntityDispatcher(player), holder)) {
             blocks += ProvidedEffectBlocks(holder, holder.getActiveEffects(player))
         }
     }
@@ -266,7 +266,7 @@ fun Collection<ProvidedHolder>.getProvidedActiveEffects(player: Player): List<Pr
  * Get active effects for a [player].
  */
 fun ProvidedHolder.getActiveEffects(player: Player) =
-    this.holder.effects.filter { it.conditions.areMet(PlayerDispatcher(player), this) }.toSet()
+    this.holder.effects.filter { it.conditions.areMet(EntityDispatcher(player), this) }.toSet()
 
 /**
  * Recalculate active effects.
@@ -304,7 +304,7 @@ fun Player.updateEffects() {
     val removed = (beforeF without afterF).sorted()
     val toReload = (afterF without added).sorted()
 
-    val dispatcher = PlayerDispatcher(this)
+    val dispatcher = EntityDispatcher(this)
 
     for ((effect, holder) in removed) {
         effect.disable(dispatcher, holder)

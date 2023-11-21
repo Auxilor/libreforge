@@ -10,7 +10,7 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.effects.IdentifiedModifier
 import com.willfp.libreforge.Dispatcher
-import com.willfp.libreforge.PlayerDispatcher
+import com.willfp.libreforge.EntityDispatcher
 import com.willfp.libreforge.get
 import org.bukkit.entity.Player
 import java.util.UUID
@@ -54,5 +54,5 @@ abstract class ChanceMultiplierEffect(id: String) : Effect<NoCompileData>(id) {
         DeprecationLevel.ERROR
     )
     protected fun passesChance(player: Player): Boolean =
-        passesChance(PlayerDispatcher(player))
+        passesChance(EntityDispatcher(player))
 }

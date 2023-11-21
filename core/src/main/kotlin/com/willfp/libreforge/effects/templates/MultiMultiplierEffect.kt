@@ -10,7 +10,7 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.effects.IdentifiedModifier
 import com.willfp.libreforge.Dispatcher
-import com.willfp.libreforge.PlayerDispatcher
+import com.willfp.libreforge.EntityDispatcher
 import com.willfp.libreforge.get
 import org.bukkit.entity.Player
 import java.util.UUID
@@ -78,7 +78,7 @@ abstract class MultiMultiplierEffect<T : Any>(id: String) : Effect<NoCompileData
         DeprecationLevel.ERROR
     )
     protected fun getMultiplier(player: Player, element: T): Double =
-        getMultiplier(PlayerDispatcher(player), element)
+        getMultiplier(EntityDispatcher(player), element)
 
     /**
      * Get an element by [key], for example a stat.

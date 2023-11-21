@@ -10,7 +10,7 @@ import com.willfp.libreforge.mutators.emptyMutatorList
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.DispatchedTrigger
 import com.willfp.libreforge.Dispatcher
-import com.willfp.libreforge.PlayerDispatcher
+import com.willfp.libreforge.EntityDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -219,7 +219,7 @@ abstract class Effect<T>(
         holder: ProvidedHolder,
         config: ChainElement<T>,
         isReload: Boolean = false
-    ) = enable(PlayerDispatcher(player), holder, config, isReload)
+    ) = enable(EntityDispatcher(player), holder, config, isReload)
 
     @Deprecated(
         "Use enable(Dispatcher<*>, ProvidedHolder, ChainElement<T>, Boolean)",
@@ -244,7 +244,7 @@ abstract class Effect<T>(
         player: Player,
         holder: ProvidedHolder,
         isReload: Boolean = false
-    ) = disable(PlayerDispatcher(player), holder, isReload)
+    ) = disable(EntityDispatcher(player), holder, isReload)
 
     @Deprecated(
         "Use disable(Dispatcher<*>, ProvidedHolder, Boolean)",

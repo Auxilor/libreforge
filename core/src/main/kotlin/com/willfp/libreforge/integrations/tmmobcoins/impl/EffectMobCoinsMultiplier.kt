@@ -1,7 +1,7 @@
 package com.willfp.libreforge.integrations.tmmobcoins.impl
 
 import com.willfp.libreforge.effects.templates.MultiplierEffect
-import com.willfp.libreforge.PlayerDispatcher
+import com.willfp.libreforge.EntityDispatcher
 import net.devtm.tmmobcoins.API.MobCoinReceiveEvent
 import org.bukkit.event.EventHandler
 
@@ -10,6 +10,6 @@ object EffectMobCoinsMultiplier : MultiplierEffect("mob_coins_multiplier") {
     fun handle(event: MobCoinReceiveEvent) {
         val player = event.player
 
-        event.setDropAmount(event.obtainedAmount * getMultiplier(PlayerDispatcher(player)))
+        event.setDropAmount(event.obtainedAmount * getMultiplier(EntityDispatcher(player)))
     }
 }
