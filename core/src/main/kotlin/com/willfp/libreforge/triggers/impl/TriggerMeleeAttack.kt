@@ -1,5 +1,6 @@
 package com.willfp.libreforge.triggers.impl
 
+import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -28,7 +29,7 @@ object TriggerMeleeAttack : Trigger("melee_attack") {
         }
 
         this.dispatch(
-            attacker,
+            attacker.toDispatcher(),
             TriggerData(
                 player = attacker,
                 victim = victim,

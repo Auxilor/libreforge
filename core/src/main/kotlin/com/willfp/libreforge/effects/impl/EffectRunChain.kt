@@ -8,6 +8,7 @@ import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.executors.ChainExecutors
+import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.toPlaceholderContext
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -24,7 +25,7 @@ object EffectRunChain : Effect<NoCompileData>("run_chain") {
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val player = data.player ?: return false
 
-        val dispatch = data.dispatch(player)
+        val dispatch = data.dispatch(player.toDispatcher())
 
         val args = config.getSubsection("chain_args")
 

@@ -1,5 +1,6 @@
 package com.willfp.libreforge.triggers.impl
 
+import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -20,7 +21,7 @@ object TriggerEntityTarget : Trigger("entity_target") {
         val entity = event.entity as? LivingEntity ?: return
 
         this.dispatch(
-            player,
+            player.toDispatcher(),
             TriggerData(
                 player = player,
                 victim = entity

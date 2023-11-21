@@ -1,10 +1,12 @@
 package com.willfp.libreforge.conditions.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
+import com.willfp.libreforge.get
 import com.willfp.libreforge.getProvider
 import com.willfp.libreforge.points
 import org.bukkit.entity.Player
@@ -16,11 +18,16 @@ object ConditionItemPointsEqual : Condition<NoCompileData>("item_points_equal") 
         require("amount", "You must specify the amount of points!")
     }
 
-    override fun isMet(player: Player, config: Config, holder: ProvidedHolder, compileData: NoCompileData): Boolean {
+    override fun isMet(
+        dispatcher: Dispatcher<*>,
+        config: Config,
+        holder: ProvidedHolder,
+        compileData: NoCompileData
+    ): Boolean {
         val item = holder.getProvider<ItemStack>() ?: return false
         val type = config.getString("type")
-        val amount = config.getDoubleFromExpression("type", player)
+        val amount = config.getDoubleFromExpression("type", dispatcher.get<Player>())
 
-        return (item.points[type] - amount) < 0.0001 // Floating point error.
+        return item.points[type] == amount
     }
 }

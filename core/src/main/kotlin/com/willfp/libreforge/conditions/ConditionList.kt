@@ -2,8 +2,10 @@ package com.willfp.libreforge.conditions
 
 import com.willfp.eco.util.formatEco
 import com.willfp.libreforge.DelegatedList
-import com.willfp.libreforge.EmptyProvidedHolder
+import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.ProvidedHolder
+import com.willfp.libreforge.get
+import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.DispatchedTrigger
 import org.bukkit.entity.Player
 
@@ -16,14 +18,14 @@ class ConditionList(
     /**
      * Get if all conditions are met.
      */
-    fun areMet(player: Player, holder: ProvidedHolder): Boolean =
-        this.all { it.isMet(player, holder) }
+    fun areMet(dispatcher: Dispatcher<*>, holder: ProvidedHolder): Boolean =
+        this.all { it.isMet(dispatcher, holder) }
 
     /**
      * Get if all conditions are met, triggering effects if not.
      */
     fun areMetAndTrigger(trigger: DispatchedTrigger): Boolean =
-        filterNot { it.isMet(trigger.player, trigger.data.holder) }
+        filterNot { it.isMet(trigger.dispatcher, trigger.data.holder) }
             .also { notMet ->
                 if (notMet.isEmpty()) {
                     return true
@@ -36,17 +38,45 @@ class ConditionList(
     /**
      * Get if any conditions are not met and should be shown.
      */
-    fun isShowingAnyNotMet(player: Player, holder: ProvidedHolder): Boolean =
-        this.any { it.showNotMet && !it.isMet(player, holder) }
+    fun isShowingAnyNotMet(dispatcher: Dispatcher<*>, holder: ProvidedHolder): Boolean =
+        this.any { it.showNotMet && !it.isMet(dispatcher, holder) }
 
     /**
      * Get all not met lines.
      */
-    fun getNotMetLines(player: Player, holder: ProvidedHolder): List<String> =
+    fun getNotMetLines(dispatcher: Dispatcher<*>, holder: ProvidedHolder): List<String> =
         this.filter { it.notMetLines.isNotEmpty() }
-            .filter { !it.isMet(player, holder) }
+            .filter { !it.isMet(dispatcher, holder) }
             .flatMap { it.notMetLines }
-            .map { it.formatEco(player, formatPlaceholders = true) }
+            .map { it.formatEco(dispatcher.get(), formatPlaceholders = true) }
+
+
+    @Deprecated(
+        "Use areMet(dispatcher, holder) instead.",
+        ReplaceWith("areMet(player.toDispatcher(), holder)"),
+        DeprecationLevel.ERROR
+    )
+    fun areMet(player: Player, holder: ProvidedHolder): Boolean =
+        areMet(player.toDispatcher(), holder)
+
+    /**
+     * Get if any conditions are not met and should be shown.
+     */
+    @Deprecated(
+        "Use isShowingAnyNotMet(dispatcher, holder) instead.",
+        ReplaceWith("isShowingAnyNotMet(player.toDispatcher(), holder)"),
+        DeprecationLevel.ERROR
+    )
+    fun isShowingAnyNotMet(player: Player, holder: ProvidedHolder): Boolean =
+        isShowingAnyNotMet(player.toDispatcher(), holder)
+
+    @Deprecated(
+        "Use getNotMetLines(dispatcher, holder) instead.",
+        ReplaceWith("getNotMetLines(player.toDispatcher(), holder)"),
+        DeprecationLevel.ERROR
+    )
+    fun getNotMetLines(player: Player, holder: ProvidedHolder): List<String> =
+        getNotMetLines(player.toDispatcher(), holder)
 }
 
 /**

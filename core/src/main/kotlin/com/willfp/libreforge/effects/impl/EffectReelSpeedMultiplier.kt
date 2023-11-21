@@ -2,6 +2,7 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.libreforge.effects.templates.MultiplierEffect
 import com.willfp.libreforge.plugin
+import com.willfp.libreforge.toDispatcher
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.player.PlayerFishEvent
@@ -18,7 +19,7 @@ object EffectReelSpeedMultiplier : MultiplierEffect("reel_speed_multiplier") {
 
         val player = event.player
 
-        val multiplier = getMultiplier(player)
+        val multiplier = getMultiplier(player.toDispatcher())
 
         if (multiplier == 1.0) {
             return

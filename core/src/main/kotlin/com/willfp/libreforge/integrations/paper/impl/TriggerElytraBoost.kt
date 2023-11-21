@@ -1,6 +1,7 @@
 package com.willfp.libreforge.integrations.paper.impl
 
 import com.destroystokyo.paper.event.player.PlayerElytraBoostEvent
+import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -17,7 +18,7 @@ object TriggerElytraBoost : Trigger("elytra_boost") {
         val player = event.player
 
         this.dispatch(
-            player,
+            player.toDispatcher(),
             TriggerData(
                 player = player,
                 location = player.location

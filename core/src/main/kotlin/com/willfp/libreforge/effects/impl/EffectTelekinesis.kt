@@ -7,6 +7,7 @@ import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.eco.core.map.listMap
 import com.willfp.eco.util.TelekinesisUtils
 import com.willfp.eco.util.tryAsPlayer
+import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.effects.Effect
@@ -14,31 +15,28 @@ import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.plugin
 import org.bukkit.GameMode
 import org.bukkit.Material
-import org.bukkit.Tag
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
-import org.bukkit.event.block.Action
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockDropItemEvent
-import org.bukkit.event.player.PlayerInteractEvent
 import java.util.UUID
 
 object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
     private val players = listMap<UUID, UUID>()
 
     override fun onEnable(
-        player: Player,
+        dispatcher: Dispatcher<*>,
         config: Config,
         identifiers: Identifiers,
         holder: ProvidedHolder,
         compileData: NoCompileData
     ) {
-        players[player.uniqueId] += identifiers.uuid
+        players[dispatcher.uuid] += identifiers.uuid
     }
 
-    override fun onDisable(player: Player, identifiers: Identifiers, holder: ProvidedHolder) {
-        players[player.uniqueId] -= identifiers.uuid
+    override fun onDisable(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder) {
+        players[dispatcher.uuid] -= identifiers.uuid
     }
 
     override fun postRegister() {

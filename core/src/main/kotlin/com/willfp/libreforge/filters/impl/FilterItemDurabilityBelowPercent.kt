@@ -4,10 +4,8 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.filters.Filter
 import com.willfp.libreforge.getDoubleFromExpression
-import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.inventory.meta.Damageable
-import java.util.DoubleSummaryStatistics
 
 object FilterItemDurabilityBelowPercent : Filter<NoCompileData, Double>("item_durability_below_percent") {
     override fun getValue(config: Config, data: TriggerData?, key: String): Double {

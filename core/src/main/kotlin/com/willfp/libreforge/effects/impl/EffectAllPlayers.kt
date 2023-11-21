@@ -7,6 +7,7 @@ import com.willfp.libreforge.effects.Chain
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.executors.ChainExecutors
+import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.Bukkit
 
@@ -20,7 +21,7 @@ object EffectAllPlayers : Effect<Chain?>("all_players") {
     override fun onTrigger(config: Config, data: TriggerData, compileData: Chain?): Boolean {
         for (player in Bukkit.getOnlinePlayers()) {
             compileData?.trigger(
-                data.dispatch(player),
+                data.dispatch(player.toDispatcher()),
             )
         }
 

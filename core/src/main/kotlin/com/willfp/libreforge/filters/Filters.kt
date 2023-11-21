@@ -9,13 +9,13 @@ import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.deprecationMessage
 import com.willfp.libreforge.filters.impl.FilterAboveHealthPercent
 import com.willfp.libreforge.filters.impl.FilterBlocks
-import com.willfp.libreforge.filters.impl.FilterIsBoss
 import com.willfp.libreforge.filters.impl.FilterDamageCause
 import com.willfp.libreforge.filters.impl.FilterEntities
 import com.willfp.libreforge.filters.impl.FilterFromSpawner
 import com.willfp.libreforge.filters.impl.FilterFullyCharged
 import com.willfp.libreforge.filters.impl.FilterFullyGrown
 import com.willfp.libreforge.filters.impl.FilterIsBehindVictim
+import com.willfp.libreforge.filters.impl.FilterIsBoss
 import com.willfp.libreforge.filters.impl.FilterIsExpressionTrue
 import com.willfp.libreforge.filters.impl.FilterIsNPC
 import com.willfp.libreforge.filters.impl.FilterIsPassive

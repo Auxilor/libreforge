@@ -2,13 +2,11 @@ package com.willfp.libreforge.filters.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.NoCompileData
-import com.willfp.libreforge.angle
 import com.willfp.libreforge.dot
 import com.willfp.libreforge.filters.Filter
 import com.willfp.libreforge.toFloat3
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.xz
-import kotlin.math.roundToInt
 
 object FilterIsBehindVictim : Filter<NoCompileData, Boolean>("is_behind_victim") {
     override fun getValue(config: Config, data: TriggerData?, key: String): Boolean {

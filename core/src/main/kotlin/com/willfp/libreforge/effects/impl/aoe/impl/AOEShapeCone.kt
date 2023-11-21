@@ -6,7 +6,6 @@ import com.willfp.libreforge.angle
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.impl.aoe.AOEShape
 import com.willfp.libreforge.getDoubleFromExpression
-import com.willfp.libreforge.getNearbyBlocks
 import com.willfp.libreforge.getNearbyBlocksInSphere
 import com.willfp.libreforge.toFloat3
 import com.willfp.libreforge.toLocation

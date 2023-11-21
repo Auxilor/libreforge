@@ -8,22 +8,19 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.toPlaceholderContext
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import net.tmmobcoins.lib.CBA.CBAMethods.name
 import org.bukkit.Bukkit
 
 object EffectBroadcast : Effect<NoCompileData>("broadcast") {
-    override val parameters = setOf(
-        TriggerParameter.PLAYER
-    )
+    override val isPermanent = false
 
     override val arguments = arguments {
         require("message", "You must specify the message to send!")
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
-        val player = data.player ?: return false
-
         val message = config.getString("message")
-            .replace("%player%", player.name)
+            .replace("%player%", data.player?.name ?: "%player%")
             .formatEco(config.toPlaceholderContext(data))
 
         @Suppress("DEPRECATION")

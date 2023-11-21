@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.eco.core.map.listMap
+import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
@@ -13,7 +14,6 @@ import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.block.BlockFace
 import org.bukkit.block.data.Ageable
-import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockPlaceEvent
@@ -30,21 +30,21 @@ object EffectReplantCrops : Effect<NoCompileData>("replant_crops") {
     private val players = listMap<UUID, ReplantConfig>()
 
     override fun onEnable(
-        player: Player,
+        dispatcher: Dispatcher<*>,
         config: Config,
         identifiers: Identifiers,
         holder: ProvidedHolder,
         compileData: NoCompileData
     ) {
-        players[player.uniqueId] += ReplantConfig(
+        players[dispatcher.uuid] += ReplantConfig(
             identifiers.uuid,
             config.getBool("consume_seeds"),
             config.getBool("only_fully_grown")
         )
     }
 
-    override fun onDisable(player: Player, identifiers: Identifiers, holder: ProvidedHolder) {
-        players[player.uniqueId].removeIf { it.uuid == identifiers.uuid }
+    override fun onDisable(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder) {
+        players[dispatcher.uuid].removeIf { it.uuid == identifiers.uuid }
     }
 
     @EventHandler(

@@ -1,9 +1,9 @@
 package com.willfp.libreforge.integrations.citizens.impl
 
+import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import net.citizensnpcs.api.event.NPCLeftClickEvent
 import net.citizensnpcs.api.event.NPCRightClickEvent
 import org.bukkit.event.EventHandler
 
@@ -18,7 +18,7 @@ object TriggerRightClickNPC : Trigger("right_click_npc") {
         val player = event.clicker ?: return
 
         this.dispatch(
-            player,
+            player.toDispatcher(),
             TriggerData(
                 player = player,
                 event = event

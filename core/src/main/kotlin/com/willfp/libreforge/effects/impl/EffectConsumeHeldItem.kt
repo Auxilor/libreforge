@@ -5,6 +5,7 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getIntFromExpression
+import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.updateHolders
@@ -35,7 +36,7 @@ object EffectConsumeHeldItem : Effect<NoCompileData>("consume_held_item") {
 
         player.inventory.setItemInMainHand(item)
 
-        player.updateHolders()
+        player.toDispatcher().updateHolders()
 
         return true
     }

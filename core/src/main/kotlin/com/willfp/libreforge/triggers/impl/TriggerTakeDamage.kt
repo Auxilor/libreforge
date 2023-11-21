@@ -1,6 +1,7 @@
 package com.willfp.libreforge.triggers.impl
 
 import com.willfp.eco.core.Prerequisite
+import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -38,7 +39,7 @@ object TriggerTakeDamage : Trigger("take_damage") {
         }
 
         this.dispatch(
-            victim,
+            victim.toDispatcher(),
             TriggerData(
                 player = victim,
                 event = event,

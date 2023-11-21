@@ -2,6 +2,7 @@ package com.willfp.libreforge.triggers.impl
 
 import com.willfp.eco.core.events.EntityDeathByEntityEvent
 import com.willfp.eco.util.tryAsPlayer
+import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -25,7 +26,7 @@ object TriggerKill : Trigger("kill") {
         val victim = event.victim
 
         this.dispatch(
-            killer,
+            killer.toDispatcher(),
             TriggerData(
                 player = killer,
                 victim = victim,
@@ -37,7 +38,7 @@ object TriggerKill : Trigger("kill") {
 
     fun force(player: Player, victim: LivingEntity) {
         this.dispatch(
-            player,
+            player.toDispatcher(),
             TriggerData(
                 player = player,
                 victim = victim,

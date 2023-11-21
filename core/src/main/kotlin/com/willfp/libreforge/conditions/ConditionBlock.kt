@@ -3,12 +3,13 @@ package com.willfp.libreforge.conditions
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Compiled
-import com.willfp.libreforge.EmptyProvidedHolder
+import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.applyHolder
 import com.willfp.libreforge.effects.Chain
-import com.willfp.libreforge.effects.EffectList
+import com.willfp.libreforge.get
 import com.willfp.libreforge.plugin
+import com.willfp.libreforge.toDispatcher
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.util.UUID
@@ -35,7 +36,10 @@ class ConditionBlock<T> internal constructor(
         .expireAfterAccess(10, TimeUnit.SECONDS)
         .build<UUID, Boolean>()
 
-    fun isMet(player: Player, holder: ProvidedHolder): Boolean {
+    /**
+     * Check if the condition is met for a [dispatcher].
+     */
+    fun isMet(dispatcher: Dispatcher<*>, holder: ProvidedHolder): Boolean {
         /*
 
         Conditions are not thread-safe, so we must run them on the main thread.
@@ -49,28 +53,41 @@ class ConditionBlock<T> internal constructor(
             If the value isn't cached, then submit a task to cache it to avoid desync.
              */
 
-            if (!syncMetCache.asMap().containsKey(player.uniqueId)) {
+            if (!syncMetCache.asMap().containsKey(dispatcher.uuid)) {
                 plugin.scheduler.run {
                     // Double check that it isn't cached by the time we run
-                    if (!syncMetCache.asMap().containsKey(player.uniqueId)) {
-                        syncMetCache.put(player.uniqueId, isMet(player, holder))
+                    if (!syncMetCache.asMap().containsKey(dispatcher.uuid)) {
+                        syncMetCache.put(dispatcher.uuid, isMet(dispatcher, holder))
                     }
                 }
             }
 
-            return syncMetCache.getIfPresent(player.uniqueId)
+            return syncMetCache.getIfPresent(dispatcher.uuid)
                 ?: plugin.configYml.getBool("conditions.default-state-off-main-thread")
         }
 
-        val withHolder = config.applyHolder(holder, player)
+        val withHolder = config.applyHolder(holder, dispatcher)
 
-        val metWith = condition.isMet(player, withHolder, holder, compileData)
-        val metWithout = condition.isMet(player, withHolder, compileData)
+        val dispatcherMet = condition.isMet(dispatcher, withHolder, holder, compileData)
 
-        val isMet = (metWith && metWithout) xor isInverted
+        // Support for legacy conditions
+        @Suppress("DEPRECATION")
+        val metWith = dispatcher.get<Player>()?.let { condition.isMet(it, withHolder, holder, compileData) } ?: true
+        @Suppress("DEPRECATION")
+        val metWithout = dispatcher.get<Player>()?.let { condition.isMet(it, withHolder, compileData) } ?: true
 
-        syncMetCache.put(player.uniqueId, isMet)
+        val isMet = (metWith && metWithout && dispatcherMet) xor isInverted
+
+        syncMetCache.put(dispatcher.uuid, isMet)
 
         return isMet
     }
+
+    @Deprecated(
+        "Use isMet(dispatcher, holder) instead",
+        ReplaceWith("isMet(player.toDispatcher(), holder)"),
+        DeprecationLevel.ERROR
+    )
+    fun isMet(player: Player, holder: ProvidedHolder): Boolean =
+        isMet(player.toDispatcher(), holder)
 }

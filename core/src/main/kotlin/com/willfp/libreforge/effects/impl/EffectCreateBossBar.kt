@@ -1,13 +1,9 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.drops.DropQueue
-import com.willfp.eco.core.items.Items
 import com.willfp.eco.core.placeholder.translatePlaceholders
-import com.willfp.eco.util.asAudience
 import com.willfp.eco.util.toComponent
 import com.willfp.libreforge.NoCompileData
-import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.impl.bossbar.BossBars
@@ -19,7 +15,6 @@ import com.willfp.libreforge.toPlaceholderContext
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import net.kyori.adventure.bossbar.BossBar
-import org.bukkit.inventory.ItemStack
 
 object EffectCreateBossBar : Effect<NoCompileData>("create_boss_bar") {
     override val parameters = setOf(

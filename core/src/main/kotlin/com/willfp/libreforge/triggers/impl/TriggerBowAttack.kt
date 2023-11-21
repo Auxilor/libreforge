@@ -1,10 +1,10 @@
 package com.willfp.libreforge.triggers.impl
 
+import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.AbstractArrow
-import org.bukkit.entity.Arrow
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.entity.Trident
@@ -45,7 +45,7 @@ object TriggerBowAttack : Trigger("bow_attack") {
         }
 
         this.dispatch(
-            shooter,
+            shooter.toDispatcher(),
             TriggerData(
                 player = shooter,
                 victim = victim,
