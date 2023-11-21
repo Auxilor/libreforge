@@ -1,6 +1,5 @@
 package com.willfp.libreforge.effects.impl
 
-import com.gamingmesh.jobs.commands.list.fire
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.util.runExempted
 import com.willfp.libreforge.NoCompileData

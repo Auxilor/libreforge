@@ -3,9 +3,12 @@ package com.willfp.libreforge.conditions.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.price.Price
 import com.willfp.eco.core.price.Prices
+import com.willfp.libreforge.Dispatcher
+import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
+import com.willfp.libreforge.get
 import com.willfp.libreforge.toPlaceholderContext
 import org.bukkit.entity.Player
 
@@ -15,7 +18,9 @@ object ConditionCanAffordPrice : Condition<Price>("can_afford_price") {
         require("type", "You must specify the type of price (coins, xpl, etc.)!")
     }
 
-    override fun isMet(player: Player, config: Config, compileData: Price): Boolean {
+    override fun isMet(dispatcher: Dispatcher<*>, config: Config, holder: ProvidedHolder, compileData: Price): Boolean {
+        val player = dispatcher.get<Player>() ?: return false
+
         return compileData.canAfford(player)
     }
 

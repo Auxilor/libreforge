@@ -1,6 +1,7 @@
 package com.willfp.libreforge.triggers.impl
 
 import com.willfp.libreforge.plugin
+import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -18,7 +19,7 @@ object TriggerTeleport : Trigger("teleport") {
     fun handle(event: PlayerTeleportEvent) {
         plugin.scheduler.run {
             this.dispatch(
-                event.player,
+                event.player.toDispatcher(),
                 TriggerData(
                     player = event.player,
                     location = event.to,

@@ -3,6 +3,7 @@ package com.willfp.libreforge.triggers.impl
 import com.willfp.eco.core.drops.DropQueue
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.libreforge.filterNotEmpty
+import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -48,7 +49,7 @@ object TriggerBlockItemDrop : Trigger("block_item_drop") {
         val editableEvent = EditableBlockDropEvent(event)
 
         this.dispatch(
-            player,
+            player.toDispatcher(),
             TriggerData(
                 player = player,
                 block = BrokenBlock(block, event.blockState.type), // Fixes the type always being AIR

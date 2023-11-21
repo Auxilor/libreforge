@@ -1,16 +1,11 @@
 package com.willfp.libreforge.effects
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.BlankHolder.effects
-import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.conditions.ConditionList
 import com.willfp.libreforge.effects.arguments.EffectArgumentList
 import com.willfp.libreforge.filters.FilterList
 import com.willfp.libreforge.mutators.MutatorList
 import com.willfp.libreforge.triggers.DispatchedTrigger
-import com.willfp.libreforge.triggers.PotentiallyTriggerable
-import com.willfp.libreforge.triggers.Trigger
-import org.bukkit.entity.Player
 import java.util.Objects
 import java.util.UUID
 
@@ -26,7 +21,7 @@ class RichChain internal constructor(
     override val mutators: MutatorList,
     override val filters: FilterList
 ) : ElementLike() {
-    override val isElementOwnChain = false
+    override val shouldDelegateExecution = false
 
     override val supportsDelay = effects.all { it.supportsDelay }
 

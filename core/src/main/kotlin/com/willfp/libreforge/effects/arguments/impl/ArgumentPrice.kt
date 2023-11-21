@@ -7,10 +7,12 @@ import com.willfp.eco.util.StringUtils
 import com.willfp.libreforge.ConfigurableElement
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.effects.arguments.EffectArgument
+import com.willfp.libreforge.get
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.toPlaceholderContext
 import com.willfp.libreforge.triggers.DispatchedTrigger
 import org.bukkit.Sound
+import org.bukkit.entity.Player
 
 object ArgumentPrice : EffectArgument<NoCompileData>("price") {
 
@@ -23,26 +25,32 @@ object ArgumentPrice : EffectArgument<NoCompileData>("price") {
      */
 
     override fun isMet(element: ConfigurableElement, trigger: DispatchedTrigger, compileData: NoCompileData): Boolean {
+        val player = trigger.dispatcher.get<Player>() ?: return false
+
         val price = Prices.create(
             element.config.getString("price.value"),
             element.config.getString("price.type"),
             element.config.toPlaceholderContext(trigger.data)
         )
 
-        return price.canAfford(trigger.player)
+        return price.canAfford(player)
     }
 
     override fun ifMet(element: ConfigurableElement, trigger: DispatchedTrigger, compileData: NoCompileData) {
+        val player = trigger.dispatcher.get<Player>() ?: return
+
         val price = Prices.create(
             element.config.getString("price.value"),
             element.config.getString("price.type"),
             element.config.toPlaceholderContext(trigger.data)
         )
 
-        price.pay(trigger.player)
+        price.pay(player)
     }
 
     override fun ifNotMet(element: ConfigurableElement, trigger: DispatchedTrigger, compileData: NoCompileData) {
+        val player = trigger.dispatcher.get<Player>() ?: return
+
         if (!plugin.configYml.getBool("cannot-afford-price.message-enabled")) {
             return
         }
@@ -54,20 +62,20 @@ object ArgumentPrice : EffectArgument<NoCompileData>("price") {
         )
 
         val display = element.config.getString("price.display")
-            .replace("%value%", NumberUtils.format(price.getValue(trigger.player)))
+            .replace("%value%", NumberUtils.format(price.getValue(player)))
 
         val message = plugin.langYml.getFormattedString("messages.cannot-afford-price")
             .replace("%price%", display)
 
         if (plugin.configYml.getBool("cannot-afford-price.in-actionbar")) {
-            PlayerUtils.getAudience(trigger.player).sendActionBar(StringUtils.toComponent(message))
+            PlayerUtils.getAudience(player).sendActionBar(StringUtils.toComponent(message))
         } else {
-            trigger.player.sendMessage(message)
+            player.sendMessage(message)
         }
 
         if (plugin.configYml.getBool("cannot-afford-price.sound.enabled")) {
-            trigger.player.playSound(
-                trigger.player.location,
+            player.playSound(
+                player.location,
                 Sound.valueOf(plugin.configYml.getString("cannot-afford-price.sound.sound").uppercase()),
                 1.0f,
                 plugin.configYml.getDouble("cannot-afford-price.sound.pitch").toFloat()

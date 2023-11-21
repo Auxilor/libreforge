@@ -1,9 +1,12 @@
 package com.willfp.libreforge.conditions.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
+import com.willfp.libreforge.get
 import org.bukkit.entity.Player
 
 object ConditionStandingOnBlock : Condition<NoCompileData>("standing_on_block") {
@@ -11,7 +14,14 @@ object ConditionStandingOnBlock : Condition<NoCompileData>("standing_on_block") 
         require("block", "You must specify the type of block!")
     }
 
-    override fun isMet(player: Player, config: Config, compileData: NoCompileData): Boolean {
+    override fun isMet(
+        dispatcher: Dispatcher<*>,
+        config: Config,
+        holder: ProvidedHolder,
+        compileData: NoCompileData
+    ): Boolean {
+        val player = dispatcher.get<Player>() ?: return false
+
         val tests = setOf(
             player.location.block,
             player.location.clone().add(0.0, -1.0, 0.0).block

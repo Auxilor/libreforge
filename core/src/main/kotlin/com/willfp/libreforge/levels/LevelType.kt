@@ -13,6 +13,7 @@ import com.willfp.libreforge.NamedValue
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.levels.event.ItemLevelUpEvent
+import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.DispatchedTrigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.impl.TriggerLevelUpItem
@@ -63,7 +64,7 @@ class LevelType(
 
         levelUpEffects?.trigger(
             DispatchedTrigger(
-                player,
+                player.toDispatcher(),
                 TriggerLevelUpItem,
                 TriggerData(
                     player = player,

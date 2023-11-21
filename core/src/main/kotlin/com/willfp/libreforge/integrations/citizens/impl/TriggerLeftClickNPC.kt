@@ -1,5 +1,6 @@
 package com.willfp.libreforge.integrations.citizens.impl
 
+import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -17,7 +18,7 @@ object TriggerLeftClickNPC : Trigger("left_click_npc") {
         val player = event.clicker ?: return
 
         this.dispatch(
-            player,
+            player.toDispatcher(),
             TriggerData(
                 player = player,
                 event = event

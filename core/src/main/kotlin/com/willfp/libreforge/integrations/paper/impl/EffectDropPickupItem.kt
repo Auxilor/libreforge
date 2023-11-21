@@ -12,6 +12,7 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.executors.ChainExecutors
 import com.willfp.libreforge.plugin
+import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.DispatchedTrigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -48,7 +49,7 @@ object EffectDropPickupItem : Effect<Chain?>("drop_pickup_item") {
 
         val meta = Meta(
             chain,
-            data.dispatch(player),
+            data.dispatch(player.toDispatcher()),
             glowColor?.let { TeamUtils.fromChatColor(it) }
         )
 

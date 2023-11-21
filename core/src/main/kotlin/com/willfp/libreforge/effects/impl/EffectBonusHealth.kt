@@ -5,6 +5,7 @@ import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.templates.AttributeEffect
 import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeModifier
+import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 
 object EffectBonusHealth : AttributeEffect(
@@ -16,12 +17,12 @@ object EffectBonusHealth : AttributeEffect(
         require("health", "You must specify the bonus health to give!")
     }
 
-    override fun getValue(config: Config, player: Player) =
-        config.getDoubleFromExpression("health", player)
+    override fun getValue(config: Config, entity: LivingEntity) =
+        config.getDoubleFromExpression("health", entity as? Player)
 
-    override fun constrainAttribute(player: Player, value: Double) {
-        if (player.health > value) {
-            player.health = value
+    override fun constrainAttribute(entity: LivingEntity, value: Double) {
+        if (entity.health > value) {
+            entity.health = value
         }
     }
 }

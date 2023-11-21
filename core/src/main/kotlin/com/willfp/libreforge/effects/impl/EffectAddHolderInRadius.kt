@@ -2,6 +2,7 @@ package com.willfp.libreforge.effects.impl
 
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.Holder
 import com.willfp.libreforge.HolderTemplate
 import com.willfp.libreforge.SimpleProvidedHolder
@@ -13,11 +14,10 @@ import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.plugin
-import com.willfp.libreforge.registerHolderProvider
+import com.willfp.libreforge.registerGenericHolderProvider
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.Location
-import org.bukkit.entity.Player
 import java.util.Objects
 import java.util.UUID
 import java.util.concurrent.TimeUnit
@@ -41,9 +41,9 @@ object EffectAddHolderInRadius : Effect<HolderTemplate>("add_holder_in_radius") 
         .build<UUID, Collection<SimpleProvidedHolder>>()
 
     init {
-        registerHolderProvider { player ->
-            nearbyCache.get(player.uniqueId) { _ ->
-                holders.filter { it.canApplyTo(player) }
+        registerGenericHolderProvider { dispatcher ->
+            nearbyCache.get(dispatcher.uuid) { _ ->
+                holders.filter { it.canApplyTo(dispatcher) }
                     .map { SimpleProvidedHolder(it.holder) }
             }
         }
@@ -97,16 +97,18 @@ object EffectAddHolderInRadius : Effect<HolderTemplate>("add_holder_in_radius") 
         val uuid: UUID,
         val applyToSelf: Boolean
     ) {
-        fun canApplyTo(player: Player): Boolean {
-            if (location.world != player.world) {
+        fun canApplyTo(dispatcher: Dispatcher<*>): Boolean {
+            val location = dispatcher.location ?: return false
+
+            if (location.world != location.world) {
                 return false
             }
 
-            if (player.uniqueId == uuid && !applyToSelf) {
+            if (dispatcher.uuid == uuid && !applyToSelf) {
                 return false
             }
 
-            if (player.location.toVector().distanceSquared(location.toVector()) > radius * radius) {
+            if (location.toVector().distanceSquared(location.toVector()) > radius * radius) {
                 return false
             }
 

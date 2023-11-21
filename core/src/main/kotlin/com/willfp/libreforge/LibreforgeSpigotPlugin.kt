@@ -30,6 +30,7 @@ import com.willfp.libreforge.levels.placeholder.ItemXPRequiredPlaceholder
 import com.willfp.libreforge.placeholders.CustomPlaceholders
 import com.willfp.libreforge.triggers.DispatchedTriggerFactory
 import org.bukkit.Bukkit
+import org.bukkit.entity.LivingEntity
 import org.bukkit.event.Listener
 
 internal lateinit var plugin: LibreforgeSpigotPlugin
@@ -115,8 +116,29 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
         // Poll for changes
         plugin.scheduler.runTimer(20, 20) {
             for (player in Bukkit.getOnlinePlayers()) {
-                player.refreshHolders()
+                player.toDispatcher().refreshHolders()
             }
+        }
+
+        /*
+        Poll for changes in entities
+        Each world is offset by 3 ticks to prevent lag spikes
+         */
+        var currentOffset = 30L
+        for (world in Bukkit.getWorlds()) {
+            plugin.scheduler.runTimer(currentOffset, 60) {
+                for (entity in world.entities) {
+                    if (entity is LivingEntity) {
+                        entity.toDispatcher().refreshHolders()
+                    }
+                }
+            }
+            currentOffset += 3
+        }
+
+        // Poll for changes in global holders
+        this.scheduler.runTimer(25, 20) {
+            GlobalDispatcher.refreshHolders()
         }
     }
 

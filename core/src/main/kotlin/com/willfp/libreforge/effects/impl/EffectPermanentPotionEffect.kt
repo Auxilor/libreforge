@@ -2,11 +2,13 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
+import com.willfp.libreforge.get
 import com.willfp.libreforge.plugin
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -63,12 +65,14 @@ object EffectPermanentPotionEffect : Effect<NoCompileData>("permanent_potion_eff
     }
 
     override fun onEnable(
-        player: Player,
+        dispatcher: Dispatcher<*>,
         config: Config,
         identifiers: Identifiers,
         holder: ProvidedHolder,
         compileData: NoCompileData
     ) {
+        val player = dispatcher.get<Player>() ?: return
+
         val effectType = PotionEffectType.getByName(config.getString("effect").uppercase())
             ?: PotionEffectType.INCREASE_DAMAGE
 
@@ -93,7 +97,9 @@ object EffectPermanentPotionEffect : Effect<NoCompileData>("permanent_potion_eff
         player.setMetadata(metaKey, plugin.metadataValueFactory.create(meta))
     }
 
-    override fun onDisable(player: Player, identifiers: Identifiers, holder: ProvidedHolder) {
+    override fun onDisable(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder) {
+        val player = dispatcher.get<Player>() ?: return
+
         val meta = player.getMetadata(metaKey).firstOrNull()?.value()
                 as? MutableMap<UUID, Pair<PotionEffectType, Int>> ?: mutableMapOf()
 

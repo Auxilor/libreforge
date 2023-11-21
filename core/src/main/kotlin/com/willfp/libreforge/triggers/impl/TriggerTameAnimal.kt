@@ -1,12 +1,12 @@
 package com.willfp.libreforge.triggers.impl
 
+import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityTameEvent
-import org.bukkit.event.player.PlayerSwapHandItemsEvent
 
 object TriggerTameAnimal : Trigger("tame_animal") {
     override val parameters = setOf(
@@ -21,7 +21,7 @@ object TriggerTameAnimal : Trigger("tame_animal") {
         val player = event.owner as? Player ?: return
 
         this.dispatch(
-            player,
+            player.toDispatcher(),
             TriggerData(
                 player = player,
                 victim = event.entity,

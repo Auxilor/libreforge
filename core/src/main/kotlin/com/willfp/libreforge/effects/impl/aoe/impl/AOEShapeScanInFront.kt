@@ -6,7 +6,6 @@ import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.impl.aoe.AOEShape
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.getIntFromExpression
-import com.willfp.libreforge.getNearbyBlocks
 import com.willfp.libreforge.getNearbyBlocksInSphere
 import com.willfp.libreforge.normalize
 import com.willfp.libreforge.plusAssign

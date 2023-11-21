@@ -3,13 +3,11 @@ package com.willfp.libreforge.effects.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
-import com.willfp.libreforge.effects.Chain
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Effects
-import com.willfp.libreforge.effects.executors.impl.NormalExecutorFactory
-import com.willfp.libreforge.effects.impl.aoe.AOEBlock
 import com.willfp.libreforge.effects.impl.aoe.AOECompileData
 import com.willfp.libreforge.effects.impl.aoe.AOEShapes
+import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.toFloat3
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -42,7 +40,7 @@ object EffectAOE : Effect<AOECompileData>("aoe") {
                     data.copy(
                         victim = entity,
                         location = entity.location
-                    ).dispatch(player)
+                    ).dispatch(player.toDispatcher())
                 )
         }
 

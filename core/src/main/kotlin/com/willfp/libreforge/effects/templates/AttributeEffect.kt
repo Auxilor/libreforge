@@ -1,22 +1,24 @@
 package com.willfp.libreforge.effects.templates
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
+import com.willfp.libreforge.get
 import com.willfp.libreforge.plugin
 import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeInstance
 import org.bukkit.attribute.AttributeModifier
-import org.bukkit.entity.Player
+import org.bukkit.entity.LivingEntity
 
 abstract class AttributeEffect(
     id: String,
     private val attribute: Attribute,
     private val operation: AttributeModifier.Operation
 ) : Effect<NoCompileData>(id) {
-    protected abstract fun getValue(config: Config, player: Player): Double
+    protected abstract fun getValue(config: Config, entity: LivingEntity): Double
 
     private fun AttributeInstance.clean(name: String) {
         for (modifier in this.modifiers.toList()) {
@@ -26,18 +28,19 @@ abstract class AttributeEffect(
         }
     }
 
-    open fun constrainAttribute(player: Player, value: Double) {
+    open fun constrainAttribute(entity: LivingEntity, value: Double) {
         // Override this to constrain the attribute value, e.g. to set health below max health.
     }
 
-    final override fun onEnable(
-        player: Player,
+    override fun onEnable(
+        dispatcher: Dispatcher<*>,
         config: Config,
         identifiers: Identifiers,
         holder: ProvidedHolder,
         compileData: NoCompileData
     ) {
-        val instance = player.getAttribute(attribute) ?: return
+        val entity = dispatcher.get<LivingEntity>() ?: return
+        val instance = entity.getAttribute(attribute) ?: return
         val modifierName = "libreforge:${this.id} - ${identifiers.key.key} (${holder.holder.id})"
 
         instance.clean(modifierName)
@@ -46,29 +49,22 @@ abstract class AttributeEffect(
             AttributeModifier(
                 identifiers.uuid,
                 modifierName,
-                getValue(config, player),
+                getValue(config, entity),
                 operation
             )
         )
     }
 
-    final override fun onDisable(player: Player, identifiers: Identifiers, holder: ProvidedHolder) {
-        val instance = player.getAttribute(attribute) ?: return
+    override fun onDisable(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder) {
+        val entity = dispatcher.get<LivingEntity>() ?: return
+        val instance = entity.getAttribute(attribute) ?: return
         val modifierName = "libreforge:${this.id} - ${identifiers.key.key} (${holder.holder.id})"
-        instance.clean(modifierName)
 
-        instance.removeModifier(
-            AttributeModifier(
-                identifiers.uuid,
-                modifierName,
-                0.0,
-                operation
-            )
-        )
+        instance.clean(modifierName)
 
         // Run on next tick to prevent constraining to the lower value during reloads.
         plugin.scheduler.run {
-            constrainAttribute(player, instance.value)
+            constrainAttribute(entity, instance.value)
         }
     }
 }

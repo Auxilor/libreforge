@@ -1,14 +1,9 @@
 package com.willfp.libreforge.effects.impl.bossbar
 
 import com.willfp.eco.core.map.listMap
-import com.willfp.eco.core.placeholder.DynamicPlaceholder
 import com.willfp.eco.util.asAudience
-import com.willfp.eco.util.toNiceString
-import com.willfp.libreforge.effects.executors.ChainExecutors.getByID
-import com.willfp.libreforge.plugin
 import net.kyori.adventure.bossbar.BossBar
 import org.bukkit.Bukkit
-import java.util.regex.Pattern
 
 object BossBars {
     private val registry = listMap<String, RegistrableBossBar>()

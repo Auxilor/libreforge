@@ -86,25 +86,38 @@ interface ProvidedHolder {
     operator fun component2() = provider
 
     /**
-     * Get not met lines for a [player].
+     * Get not met lines for a [dispatcher].
      */
-    fun getNotMetLines(player: Player): List<String> {
+    fun getNotMetLines(dispatcher: Dispatcher<*>): List<String> {
         val lines = mutableListOf<String>()
 
-        lines += holder.conditions.getNotMetLines(player, this)
-        lines += holder.effects.map { it.conditions }.flatMap { it.getNotMetLines(player, this) }
+        lines += holder.conditions.getNotMetLines(dispatcher, this)
+        lines += holder.effects.map { it.conditions }.flatMap { it.getNotMetLines(dispatcher, this) }
 
         return lines
+    }
+
+    /**
+     * Get not met lines for a [player].
+     */
+    fun getNotMetLines(player: Player): List<String> =
+        getNotMetLines(player.toDispatcher())
+
+    /**
+     * Get if the holder is showing any not met lines for a [dispatcher], or if any
+     * conditions are not met and have showNotMet set to true (e.g. for Enchantment Strikethrough).
+     */
+    fun isShowingAnyNotMet(dispatcher: Dispatcher<*>): Boolean {
+        return holder.conditions.isShowingAnyNotMet(dispatcher, this)
+                || holder.effects.any { it.conditions.isShowingAnyNotMet(dispatcher, this) }
     }
 
     /**
      * Get if the holder is showing any not met lines for a [player], or if any
      * conditions are not met and have showNotMet set to true (e.g. for Enchantment Strikethrough).
      */
-    fun isShowingAnyNotMet(player: Player): Boolean {
-        return holder.conditions.isShowingAnyNotMet(player, this)
-                || holder.effects.any { it.conditions.isShowingAnyNotMet(player, this) }
-    }
+    fun isShowingAnyNotMet(player: Player): Boolean =
+        isShowingAnyNotMet(player.toDispatcher())
 }
 
 /**

@@ -5,7 +5,6 @@ import com.willfp.eco.core.particle.Particles
 import com.willfp.eco.core.particle.SpawnableParticle
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
-import com.willfp.libreforge.distance
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.getIntFromExpression

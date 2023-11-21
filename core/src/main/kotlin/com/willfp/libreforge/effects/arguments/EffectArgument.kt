@@ -2,7 +2,6 @@ package com.willfp.libreforge.effects.arguments
 
 import com.willfp.libreforge.Compilable
 import com.willfp.libreforge.ConfigurableElement
-import com.willfp.libreforge.effects.ElementLike
 import com.willfp.libreforge.effects.RunOrder
 import com.willfp.libreforge.triggers.DispatchedTrigger
 
