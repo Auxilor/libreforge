@@ -1,5 +1,6 @@
 package com.willfp.libreforge.integrations.scyther.impl
 
+import com.willfp.libreforge.triggers.PlayerDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -17,7 +18,7 @@ object TriggerScytherAutoCollect : Trigger("scyther_auto_collect") {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: ScytherAutocollectEvent) {
         this.dispatch(
-            event.player,
+            PlayerDispatcher(event.player),
             TriggerData(
                 player = event.player,
                 block = event.block,

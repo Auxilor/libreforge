@@ -6,6 +6,7 @@ import com.willfp.libreforge.NamedValue
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.effects.arguments.EffectArgument
 import com.willfp.libreforge.triggers.DispatchedTrigger
+import com.willfp.libreforge.triggers.get
 
 object ArgumentChainArgs : EffectArgument<NoCompileData>("chain_args") {
     // Misusing arguments a bit here but it's surprisingly clean
@@ -19,7 +20,7 @@ object ArgumentChainArgs : EffectArgument<NoCompileData>("chain_args") {
                 NamedValue(
                     listOf(arg, arg.replace("_", "")),
                     config.getFormattedString(arg, placeholderContext(
-                        player = trigger.player,
+                        player = trigger.dispatcher.get(),
                     ))
                 )
             )

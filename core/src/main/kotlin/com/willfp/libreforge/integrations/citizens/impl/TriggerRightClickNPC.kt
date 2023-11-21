@@ -1,5 +1,6 @@
 package com.willfp.libreforge.integrations.citizens.impl
 
+import com.willfp.libreforge.triggers.PlayerDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -18,7 +19,7 @@ object TriggerRightClickNPC : Trigger("right_click_npc") {
         val player = event.clicker ?: return
 
         this.dispatch(
-            player,
+            PlayerDispatcher(player),
             TriggerData(
                 player = player,
                 event = event

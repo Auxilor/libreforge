@@ -49,8 +49,19 @@ data class TriggerData(
     /**
      * Turn into a dispatched trigger for a [player].
      */
-    fun dispatch(player: Player) = DispatchedTrigger(
-        player,
+    @Deprecated(
+        "Use dispatch(dispatcher) instead",
+        ReplaceWith("dispatch(dispatcher)"),
+        DeprecationLevel.ERROR
+    )
+    fun dispatch(player: Player) =
+        dispatch(PlayerDispatcher(player))
+
+    /**
+     * Turn into a dispatched trigger for a [dispatcher].
+     */
+    fun dispatch(dispatcher: Dispatcher<*>) = DispatchedTrigger(
+        dispatcher,
         TriggerBlank,
         this
     )

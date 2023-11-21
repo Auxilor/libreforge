@@ -14,6 +14,7 @@ import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.levels.event.ItemLevelUpEvent
 import com.willfp.libreforge.triggers.DispatchedTrigger
+import com.willfp.libreforge.triggers.PlayerDispatcher
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.impl.TriggerLevelUpItem
 import org.bukkit.Bukkit
@@ -63,7 +64,7 @@ class LevelType(
 
         levelUpEffects?.trigger(
             DispatchedTrigger(
-                player,
+                PlayerDispatcher(player),
                 TriggerLevelUpItem,
                 TriggerData(
                     player = player,

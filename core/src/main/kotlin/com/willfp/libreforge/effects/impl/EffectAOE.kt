@@ -11,6 +11,7 @@ import com.willfp.libreforge.effects.impl.aoe.AOEBlock
 import com.willfp.libreforge.effects.impl.aoe.AOECompileData
 import com.willfp.libreforge.effects.impl.aoe.AOEShapes
 import com.willfp.libreforge.toFloat3
+import com.willfp.libreforge.triggers.PlayerDispatcher
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
@@ -42,7 +43,7 @@ object EffectAOE : Effect<AOECompileData>("aoe") {
                     data.copy(
                         victim = entity,
                         location = entity.location
-                    ).dispatch(player)
+                    ).dispatch(PlayerDispatcher(player))
                 )
         }
 

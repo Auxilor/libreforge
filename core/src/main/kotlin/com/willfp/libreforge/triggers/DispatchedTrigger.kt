@@ -6,7 +6,7 @@ import com.willfp.libreforge.triggers.placeholders.TriggerPlaceholders
 import org.bukkit.entity.Player
 
 data class DispatchedTrigger(
-    val player: Player,
+    val dispatcher: Dispatcher<*>,
     val trigger: Trigger,
     val data: TriggerData
 ) {
@@ -14,6 +14,25 @@ data class DispatchedTrigger(
 
     val placeholders: List<InjectablePlaceholder>
         get() = _placeholders.flatMap { it.placeholders }
+
+    @Deprecated(
+        "Use dispatcher instead",
+        ReplaceWith("dispatcher.get()"),
+        DeprecationLevel.ERROR
+    )
+    val player: Player?
+        get() = dispatcher.get()
+
+    @Deprecated(
+        "DispatchedTrigger should be constructed with a Dispatcher",
+        ReplaceWith("DispatchedTrigger(dispatcher, trigger, data)"),
+        DeprecationLevel.ERROR
+    )
+    constructor(
+        player: Player,
+        trigger: Trigger,
+        data: TriggerData,
+    ) : this(PlayerDispatcher(player), trigger, data)
 
     fun addPlaceholder(placeholder: NamedValue) {
         _placeholders += placeholder

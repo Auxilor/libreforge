@@ -1,6 +1,7 @@
 package com.willfp.libreforge.integrations.jobs.impl
 
 import com.gamingmesh.jobs.api.JobsLevelUpEvent
+import com.willfp.libreforge.triggers.PlayerDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -17,7 +18,7 @@ object TriggerJobsLevelUp : Trigger("jobs_level_up") {
         val player = event.player.player
 
         this.dispatch(
-            player,
+            PlayerDispatcher(player),
             TriggerData(
                 player = player,
                 location = player.location,

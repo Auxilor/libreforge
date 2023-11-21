@@ -5,6 +5,8 @@ import com.willfp.eco.util.evaluateExpression
 import com.willfp.libreforge.counters.Accumulator
 import com.willfp.libreforge.counters.Counter
 import com.willfp.libreforge.triggers.DispatchedTrigger
+import com.willfp.libreforge.triggers.get
+import org.bukkit.entity.Player
 
 /*
 
@@ -21,7 +23,7 @@ internal data class BoundCounter(
     fun accept(trigger: DispatchedTrigger) {
         val data = trigger.data
 
-        val player = trigger.player
+        val player = trigger.dispatcher.get<Player>() ?: return
         val value = data.value
 
         if (!counter.canBeTriggeredBy(trigger.trigger)) {

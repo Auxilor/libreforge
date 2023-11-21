@@ -9,6 +9,8 @@ import com.willfp.libreforge.applyHolder
 import com.willfp.libreforge.effects.Chain
 import com.willfp.libreforge.effects.EffectList
 import com.willfp.libreforge.plugin
+import com.willfp.libreforge.triggers.Dispatcher
+import com.willfp.libreforge.triggers.get
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.util.UUID
@@ -34,6 +36,12 @@ class ConditionBlock<T> internal constructor(
     private val syncMetCache = Caffeine.newBuilder()
         .expireAfterAccess(10, TimeUnit.SECONDS)
         .build<UUID, Boolean>()
+
+    fun isMet(dispatcher: Dispatcher<*>, holder: ProvidedHolder): Boolean {
+        val player = dispatcher.get<Player>() ?: return false
+
+        return isMet(player, holder)
+    }
 
     fun isMet(player: Player, holder: ProvidedHolder): Boolean {
         /*

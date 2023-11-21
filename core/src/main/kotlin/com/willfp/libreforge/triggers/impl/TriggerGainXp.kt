@@ -1,6 +1,7 @@
 package com.willfp.libreforge.triggers.impl
 
 import com.willfp.eco.core.events.NaturalExpGainEvent
+import com.willfp.libreforge.triggers.PlayerDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -17,7 +18,7 @@ object TriggerGainXp : Trigger("gain_xp") {
         val player = event.expChangeEvent.player
 
         this.dispatch(
-            player,
+            PlayerDispatcher(player),
             TriggerData(
                 player = player,
                 event = event.expChangeEvent,

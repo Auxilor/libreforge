@@ -10,20 +10,23 @@ import com.willfp.libreforge.effects.arguments.EffectArgument
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.DispatchedTrigger
+import com.willfp.libreforge.triggers.get
 import org.bukkit.Sound
+import org.bukkit.entity.Player
 
 object ArgumentCost : EffectArgument<NoCompileData>("cost") {
     override fun isMet(element: ConfigurableElement, trigger: DispatchedTrigger, compileData: NoCompileData): Boolean {
-        val player = trigger.player
+        val player = trigger.dispatcher.get<Player>() ?: return false
+
         return player.balance >= element.config.getDoubleFromExpression("cost", trigger.data)
     }
 
     override fun ifNotMet(element: ConfigurableElement, trigger: DispatchedTrigger, compileData: NoCompileData) {
+        val player = trigger.dispatcher.get<Player>() ?: return
+
         if (!plugin.configYml.getBool("cannot-afford.message-enabled")) {
             return
         }
-
-        val player = trigger.player
 
         val cost = element.config.getDoubleFromExpression("cost", trigger.data)
 
@@ -47,6 +50,8 @@ object ArgumentCost : EffectArgument<NoCompileData>("cost") {
     }
 
     override fun ifMet(element: ConfigurableElement, trigger: DispatchedTrigger, compileData: NoCompileData) {
-        trigger.player.balance -= element.config.getDoubleFromExpression("cost", trigger.data)
+        val player = trigger.dispatcher.get<Player>() ?: return
+
+        player.balance -= element.config.getDoubleFromExpression("cost", trigger.data)
     }
 }

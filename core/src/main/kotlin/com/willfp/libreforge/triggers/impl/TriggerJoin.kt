@@ -1,5 +1,6 @@
 package com.willfp.libreforge.triggers.impl
 
+import com.willfp.libreforge.triggers.PlayerDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -15,7 +16,7 @@ object TriggerJoin : Trigger("join") {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerJoinEvent) {
         this.dispatch(
-            event.player,
+            PlayerDispatcher(event.player),
             TriggerData(
                 player = event.player,
                 location = event.player.location
