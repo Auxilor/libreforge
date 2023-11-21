@@ -2,6 +2,7 @@ package com.willfp.libreforge
 
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.willfp.eco.core.map.listMap
+import com.willfp.libreforge.EmptyProvidedHolder.holder
 import com.willfp.libreforge.GlobalDispatcher.dispatcher
 import com.willfp.libreforge.effects.EffectBlock
 import org.bukkit.Bukkit
@@ -128,6 +129,21 @@ fun registerDispatcherHolderProvider(provider: (Dispatcher<*>) -> Collection<Pro
         override fun provide(dispatcher: Dispatcher<*>) = provider(dispatcher)
     })
 
+/**
+ * Register a new holder provider for a specific type of dispatcher.
+ */
+inline fun <reified T> registerSpecificHolderProvider(crossinline provider: (Dispatcher<T>) -> Collection<ProvidedHolder>) =
+    registerHolderProvider(object : HolderProvider {
+        override fun provide(dispatcher: Dispatcher<*>): Collection<ProvidedHolder> {
+            return if (dispatcher.isType<T>()) {
+                @Suppress("UNCHECKED_CAST")
+                provider(dispatcher as Dispatcher<T>)
+            } else {
+                emptyList()
+            }
+        }
+    })
+
 private val refreshFunctions = mutableListOf<(Dispatcher<*>) -> Unit>()
 
 /**
@@ -179,8 +195,9 @@ fun registerPlaceholderProvider(provider: (ProvidedHolder, Dispatcher<*>) -> Col
 /**
  * Register a function to generate placeholders for a holder.
  */
-inline fun <reified T: ProvidedHolder> registerHolderPlaceholderProvider(crossinline provider: (T, Dispatcher<*>) -> Collection<NamedValue>) {
-    registerPlaceholderProvider { holder, dispatcher ->
+inline fun <reified T: Holder> registerHolderPlaceholderProvider(crossinline provider: (T, Dispatcher<*>) -> Collection<NamedValue>) {
+    registerPlaceholderProvider { provided, dispatcher ->
+        val holder = provided.holder
         if (holder is T) {
             provider(holder, dispatcher)
         } else {
