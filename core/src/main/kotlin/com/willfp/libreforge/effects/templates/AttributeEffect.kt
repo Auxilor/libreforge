@@ -62,6 +62,15 @@ abstract class AttributeEffect(
 
         instance.clean(modifierName)
 
+        instance.removeModifier(
+            AttributeModifier(
+                identifiers.uuid,
+                modifierName,
+                0.0,
+                operation
+            )
+        )
+
         // Run on next tick to prevent constraining to the lower value during reloads.
         plugin.scheduler.run {
             constrainAttribute(entity, instance.value)
