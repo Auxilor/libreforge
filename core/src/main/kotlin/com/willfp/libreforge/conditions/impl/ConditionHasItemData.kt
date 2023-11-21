@@ -7,6 +7,8 @@ import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.getProvider
 import com.willfp.libreforge.itemData
+import com.willfp.libreforge.triggers.Dispatcher
+import com.willfp.libreforge.triggers.get
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
@@ -15,7 +17,12 @@ object ConditionHasItemData : Condition<NoCompileData>("has_item_data") {
         require("key", "You must specify the data key!")
     }
 
-    override fun isMet(player: Player, config: Config, holder: ProvidedHolder, compileData: NoCompileData): Boolean {
+    override fun isMet(
+        dispatcher: Dispatcher<*>,
+        config: Config,
+        holder: ProvidedHolder,
+        compileData: NoCompileData
+    ): Boolean {
         val item = holder.getProvider<ItemStack>() ?: return false
         val key = config.getString("key")
 

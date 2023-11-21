@@ -5,6 +5,8 @@ import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.conditions.ConditionList
 import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.filters.Filter
+import com.willfp.libreforge.triggers.EntityDispatcher
+import com.willfp.libreforge.triggers.PlayerDispatcher
 import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.entity.Player
 
@@ -14,9 +16,9 @@ object FilterVictimConditions : Filter<ConditionList, Collection<Config>>("victi
     }
 
     override fun isMet(data: TriggerData, value: Collection<Config>, compileData: ConditionList): Boolean {
-        val victim = data.victim as? Player ?: return true
+        val victim = data.victim ?: return false
 
-        return compileData.areMet(victim, data.holder)
+        return compileData.areMet(EntityDispatcher(victim), data.holder)
     }
 
     override fun makeCompileData(config: Config, context: ViolationContext, values: Collection<Config>): ConditionList {

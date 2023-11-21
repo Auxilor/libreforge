@@ -2,8 +2,12 @@ package com.willfp.libreforge.conditions.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
+import com.willfp.libreforge.triggers.Dispatcher
+import com.willfp.libreforge.triggers.get
+import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 
 object ConditionBelowY : Condition<NoCompileData>("below_y") {
@@ -11,7 +15,13 @@ object ConditionBelowY : Condition<NoCompileData>("below_y") {
         require("y", "You must specify the y level!")
     }
 
-    override fun isMet(player: Player, config: Config, compileData: NoCompileData): Boolean {
-        return player.location.y < config.getDoubleFromExpression("y", player)
+    override fun isMet(
+        dispatcher: Dispatcher<*>,
+        config: Config,
+        holder: ProvidedHolder,
+        compileData: NoCompileData
+    ): Boolean {
+        val location = dispatcher.location ?: return false
+        return location.y < config.getDoubleFromExpression("y", dispatcher.get())
     }
 }

@@ -3,6 +3,7 @@ package com.willfp.libreforge
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.willfp.eco.core.map.listMap
 import com.willfp.libreforge.effects.EffectBlock
+import com.willfp.libreforge.triggers.PlayerDispatcher
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.HandlerList
@@ -254,7 +255,7 @@ fun Collection<ProvidedHolder>.getProvidedActiveEffects(player: Player): List<Pr
     val blocks = mutableListOf<ProvidedEffectBlocks>()
 
     for (holder in this) {
-        if (holder.holder.conditions.areMet(player, holder)) {
+        if (holder.holder.conditions.areMet(PlayerDispatcher(player), holder)) {
             blocks += ProvidedEffectBlocks(holder, holder.getActiveEffects(player))
         }
     }
@@ -266,7 +267,7 @@ fun Collection<ProvidedHolder>.getProvidedActiveEffects(player: Player): List<Pr
  * Get active effects for a [player].
  */
 fun ProvidedHolder.getActiveEffects(player: Player) =
-    this.holder.effects.filter { it.conditions.areMet(player, this) }.toSet()
+    this.holder.effects.filter { it.conditions.areMet(PlayerDispatcher(player), this) }.toSet()
 
 /**
  * Recalculate active effects.

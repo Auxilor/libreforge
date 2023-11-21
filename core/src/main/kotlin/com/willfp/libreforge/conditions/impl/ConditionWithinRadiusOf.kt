@@ -2,8 +2,12 @@ package com.willfp.libreforge.conditions.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
+import com.willfp.libreforge.triggers.Dispatcher
+import com.willfp.libreforge.triggers.get
+import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.util.Vector
 import kotlin.math.pow
@@ -16,15 +20,22 @@ object ConditionWithinRadiusOf : Condition<NoCompileData>("within_radius_of") {
         require("radius", "You must specify the radius!")
     }
 
-    override fun isMet(player: Player, config: Config, compileData: NoCompileData): Boolean {
+    override fun isMet(
+        dispatcher: Dispatcher<*>,
+        config: Config,
+        holder: ProvidedHolder,
+        compileData: NoCompileData
+    ): Boolean {
+        val location = dispatcher.location ?: return false
+
         val vector = Vector(
-            config.getDoubleFromExpression("x", player),
-            config.getDoubleFromExpression("y", player),
-            config.getDoubleFromExpression("z", player)
+            config.getDoubleFromExpression("x", dispatcher.get()),
+            config.getDoubleFromExpression("y", dispatcher.get()),
+            config.getDoubleFromExpression("z", dispatcher.get())
         )
 
-        val dist = config.getDoubleFromExpression("radius", player).pow(2)
+        val dist = config.getDoubleFromExpression("radius", dispatcher.get()).pow(2)
 
-        return player.location.toVector().distanceSquared(vector) <= dist
+        return location.toVector().distanceSquared(vector) <= dist
     }
 }

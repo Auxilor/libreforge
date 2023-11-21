@@ -10,6 +10,8 @@ import com.willfp.libreforge.getFormattedString
 import com.willfp.libreforge.getProvider
 import com.willfp.libreforge.itemData
 import com.willfp.libreforge.points
+import com.willfp.libreforge.triggers.Dispatcher
+import com.willfp.libreforge.triggers.get
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
@@ -19,10 +21,15 @@ object ConditionItemDataEquals : Condition<NoCompileData>("item_data_equals") {
         require("value", "You must specify the data value to equal!")
     }
 
-    override fun isMet(player: Player, config: Config, holder: ProvidedHolder, compileData: NoCompileData): Boolean {
+    override fun isMet(
+        dispatcher: Dispatcher<*>,
+        config: Config,
+        holder: ProvidedHolder,
+        compileData: NoCompileData
+    ): Boolean {
         val item = holder.getProvider<ItemStack>() ?: return false
         val key = config.getString("key")
-        val value = config.getFormattedString("value", placeholderContext(player = player))
+        val value = config.getFormattedString("value", placeholderContext(player = dispatcher.get<Player>()))
 
         return item.itemData[key] == value
     }

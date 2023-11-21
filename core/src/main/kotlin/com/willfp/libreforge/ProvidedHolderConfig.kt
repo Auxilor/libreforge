@@ -5,6 +5,8 @@ import com.willfp.eco.core.placeholder.context.PlaceholderContext
 import com.willfp.eco.core.placeholder.context.copy
 import com.willfp.eco.util.NumberUtils
 import com.willfp.eco.util.formatEco
+import com.willfp.libreforge.triggers.Dispatcher
+import com.willfp.libreforge.triggers.ifType
 import org.bukkit.entity.Player
 
 /**
@@ -34,7 +36,9 @@ private class ProvidedHolderConfig(
     }
 }
 
-fun Config.applyHolder(providedHolder: ProvidedHolder, player: Player): Config =
+fun Config.applyHolder(providedHolder: ProvidedHolder, dispatcher: Dispatcher<*>): Config =
     ProvidedHolderConfig(this, providedHolder).apply {
-        injectPlaceholders(*providedHolder.generatePlaceholders(player).mapToPlaceholders())
+        dispatcher.ifType<Player> {
+            injectPlaceholders(*providedHolder.generatePlaceholders(it).mapToPlaceholders())
+        }
     }

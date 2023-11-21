@@ -3,8 +3,11 @@ package com.willfp.libreforge.conditions.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.economy.EconomyManager
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
+import com.willfp.libreforge.triggers.Dispatcher
+import com.willfp.libreforge.triggers.get
 import org.bukkit.entity.Player
 
 object ConditionBelowBalance : Condition<NoCompileData>("below_balance") {
@@ -12,7 +15,14 @@ object ConditionBelowBalance : Condition<NoCompileData>("below_balance") {
         require("balance", "You must specify the maximum balance!")
     }
 
-    override fun isMet(player: Player, config: Config, compileData: NoCompileData): Boolean {
-        return !EconomyManager.hasAmount(player, config.getDoubleFromExpression("balance", player))
+    override fun isMet(
+        dispatcher: Dispatcher<*>,
+        config: Config,
+        holder: ProvidedHolder,
+        compileData: NoCompileData
+    ): Boolean {
+        val player = dispatcher.get<Player>() ?: return false
+
+        return EconomyManager.hasAmount(player, config.getDoubleFromExpression("balance", player))
     }
 }

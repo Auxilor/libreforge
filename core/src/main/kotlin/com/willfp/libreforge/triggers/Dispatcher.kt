@@ -1,6 +1,9 @@
 package com.willfp.libreforge.triggers
 
+import org.bukkit.Location
+import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
+import java.util.Locale
 import java.util.UUID
 
 /**
@@ -16,6 +19,11 @@ interface Dispatcher<T> {
      * The dispatcher itself.
      */
     val dispatcher: T
+
+    /**
+     * The location of the dispatcher.
+     */
+    val location: Location?
 }
 
 /**
@@ -48,6 +56,22 @@ class PlayerDispatcher(
 ) : Dispatcher<Player> {
     override val uuid
         get() = dispatcher.uniqueId
+
+    override val location
+        get() = dispatcher.location
+}
+
+/**
+ * A dispatcher for an entity.
+ */
+class EntityDispatcher(
+    override val dispatcher: Entity
+) : Dispatcher<Entity> {
+    override val uuid
+        get() = dispatcher.uniqueId
+
+    override val location
+        get() = dispatcher.location
 }
 
 /**
@@ -56,4 +80,5 @@ class PlayerDispatcher(
 object GlobalDispatcher : Dispatcher<Unit> {
     override val uuid = UUID(0, 0)
     override val dispatcher = Unit
+    override val location = null
 }
