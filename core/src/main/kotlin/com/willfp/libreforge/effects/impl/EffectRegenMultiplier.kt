@@ -2,7 +2,7 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.libreforge.effects.templates.MultiMultiplierEffect
 import com.willfp.libreforge.enumValueOfOrNull
-import com.willfp.libreforge.EntityDispatcher
+import com.willfp.libreforge.toDispatcher
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityRegainHealthEvent
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason
@@ -18,6 +18,6 @@ object EffectRegenMultiplier : MultiMultiplierEffect<RegainReason>("regen_multip
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityRegainHealthEvent) {
-        event.amount *= getMultiplier(EntityDispatcher(event.entity), event.regainReason)
+        event.amount *= getMultiplier(event.entity.toDispatcher(), event.regainReason)
     }
 }

@@ -1,8 +1,8 @@
 package com.willfp.libreforge.effects.events
 
+import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.effects.Effect
-import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.get
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
@@ -17,7 +17,7 @@ class EffectEnableEvent(
 
     @Deprecated(
         "Use dispatcher.get()",
-        ReplaceWith("dispatcher.get()"),
+        ReplaceWith("toDispatcher().get()"),
         DeprecationLevel.ERROR
     )
     val player: Player?

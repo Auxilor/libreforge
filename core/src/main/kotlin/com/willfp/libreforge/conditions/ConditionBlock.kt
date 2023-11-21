@@ -3,13 +3,13 @@ package com.willfp.libreforge.conditions
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Compiled
+import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.applyHolder
 import com.willfp.libreforge.effects.Chain
-import com.willfp.libreforge.plugin
-import com.willfp.libreforge.Dispatcher
-import com.willfp.libreforge.EntityDispatcher
 import com.willfp.libreforge.get
+import com.willfp.libreforge.plugin
+import com.willfp.libreforge.toDispatcher
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.util.UUID
@@ -85,9 +85,9 @@ class ConditionBlock<T> internal constructor(
 
     @Deprecated(
         "Use isMet(dispatcher, holder) instead",
-        ReplaceWith("isMet(dispatcher, holder)"),
+        ReplaceWith("isMet(player.toDispatcher(), holder)"),
         DeprecationLevel.ERROR
     )
     fun isMet(player: Player, holder: ProvidedHolder): Boolean =
-        isMet(EntityDispatcher(player), holder)
+        isMet(player.toDispatcher(), holder)
 }

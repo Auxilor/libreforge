@@ -4,11 +4,11 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter
 import com.sk89q.worldedit.math.BlockVector3
 import com.sk89q.worldguard.WorldGuard
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
-import com.willfp.libreforge.Dispatcher
 
 object ConditionInRegion : Condition<NoCompileData>("in_region") {
     override val arguments = arguments {

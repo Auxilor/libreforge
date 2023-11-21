@@ -2,14 +2,14 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
-import com.willfp.libreforge.plugin
-import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.get
+import com.willfp.libreforge.plugin
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerRespawnEvent

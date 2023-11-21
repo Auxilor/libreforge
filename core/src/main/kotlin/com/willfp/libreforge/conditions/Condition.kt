@@ -2,9 +2,9 @@ package com.willfp.libreforge.conditions
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Compilable
+import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.plugin
-import com.willfp.libreforge.Dispatcher
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
 
@@ -49,7 +49,7 @@ abstract class Condition<T>(
      */
     @Deprecated(
         "Use isMet(dispatcher, config, holder, compileData) instead.",
-        ReplaceWith("true")
+        ReplaceWith("isMet(player.toDispatcher(), config, holder, compileData)"),
     )
     open fun isMet(
         player: Player,
@@ -64,7 +64,7 @@ abstract class Condition<T>(
      */
     @Deprecated(
         "Use isMet(dispatcher, config, holder, compileData) instead.",
-        ReplaceWith("true")
+        ReplaceWith("isMet(player.toDispatcher(), config, holder, compileData)"),
     )
     open fun isMet(
         player: Player,

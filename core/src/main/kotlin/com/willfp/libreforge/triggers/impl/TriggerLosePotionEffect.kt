@@ -1,6 +1,6 @@
 package com.willfp.libreforge.triggers.impl
 
-import com.willfp.libreforge.EntityDispatcher
+import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -28,7 +28,7 @@ object TriggerLosePotionEffect : Trigger("lose_potion_effect") {
         val player = event.entity as? Player ?: return
 
         this.dispatch(
-            EntityDispatcher(player),
+            player.toDispatcher(),
             TriggerData(
                 player = player,
                 location = player.location,

@@ -5,7 +5,7 @@ import com.willfp.eco.core.drops.DropQueue
 import com.willfp.eco.core.events.EntityDeathByEntityEvent
 import com.willfp.eco.util.tryAsPlayer
 import com.willfp.libreforge.filterNotEmpty
-import com.willfp.libreforge.EntityDispatcher
+import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -36,7 +36,7 @@ object TriggerEntityItemDrop : Trigger("entity_item_drop") {
         val editableEvent = EditableEntityDropEvent(event.deathEvent)
 
         this.dispatch(
-            EntityDispatcher(player),
+            player.toDispatcher(),
             TriggerData(
                 player = player,
                 victim = entity,

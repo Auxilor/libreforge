@@ -3,16 +3,15 @@ package com.willfp.libreforge.conditions.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.entities.Entities
 import com.willfp.eco.core.entities.TestableEntity
+import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
-import com.willfp.libreforge.Dispatcher
-import com.willfp.libreforge.EntityDispatcher
 import com.willfp.libreforge.get
+import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.updateEffects
 import org.bukkit.entity.Entity
-import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.spigotmc.event.entity.EntityDismountEvent
@@ -42,13 +41,11 @@ object ConditionRidingEntity : Condition<Collection<TestableEntity>>("riding_ent
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun handle(event: EntityDismountEvent) {
-        val dispatcher = EntityDispatcher(event.entity)
-        dispatcher.updateEffects()
+        event.entity.toDispatcher().updateEffects()
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun handle(event: EntityMountEvent) {
-        val dispatcher = EntityDispatcher(event.entity)
-        dispatcher.updateEffects()
+        event.entity.toDispatcher().updateEffects()
     }
 }

@@ -7,12 +7,12 @@ import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.eco.core.map.listMap
 import com.willfp.eco.util.TelekinesisUtils
 import com.willfp.eco.util.tryAsPlayer
+import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.plugin
-import com.willfp.libreforge.Dispatcher
 import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.entity.Player

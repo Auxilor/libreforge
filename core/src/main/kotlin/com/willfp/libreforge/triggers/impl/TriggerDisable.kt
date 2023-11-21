@@ -1,7 +1,6 @@
 package com.willfp.libreforge.triggers.impl
 
 import com.willfp.libreforge.HolderDisableEvent
-import com.willfp.libreforge.EntityDispatcher
 import com.willfp.libreforge.get
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData

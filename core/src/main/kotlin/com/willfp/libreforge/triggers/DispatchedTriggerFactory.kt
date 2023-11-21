@@ -3,7 +3,7 @@ package com.willfp.libreforge.triggers
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.map.listMap
 import com.willfp.libreforge.Dispatcher
-import com.willfp.libreforge.EntityDispatcher
+import com.willfp.libreforge.toDispatcher
 import org.bukkit.entity.Player
 import java.util.UUID
 
@@ -24,7 +24,7 @@ class DispatchedTriggerFactory(
         DeprecationLevel.ERROR
     )
     fun create(player: Player, trigger: Trigger, data: TriggerData): DispatchedTrigger? {
-        return create(EntityDispatcher(player), trigger, data)
+        return create(player.toDispatcher(), trigger, data)
     }
 
     fun create(dispatcher: Dispatcher<*>, trigger: Trigger, data: TriggerData): DispatchedTrigger? {

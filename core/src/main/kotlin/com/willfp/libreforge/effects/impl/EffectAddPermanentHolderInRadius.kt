@@ -2,6 +2,7 @@ package com.willfp.libreforge.effects.impl
 
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.Holder
 import com.willfp.libreforge.HolderTemplate
 import com.willfp.libreforge.ProvidedHolder
@@ -12,9 +13,8 @@ import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.Identifiers
-import com.willfp.libreforge.registerDispatcherHolderProvider
-import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.get
+import com.willfp.libreforge.registerGenericHolderProvider
 import org.bukkit.Bukkit
 import java.util.Objects
 import java.util.UUID
@@ -34,7 +34,7 @@ object EffectAddPermanentHolderInRadius : Effect<HolderTemplate>("add_permanent_
         .build<UUID, Collection<SimpleProvidedHolder>>()
 
     init {
-        registerDispatcherHolderProvider { dispatcher ->
+        registerGenericHolderProvider { dispatcher ->
             nearbyCache.get(dispatcher.uuid) { _ ->
                 holders.filter { it.canApplyTo(dispatcher) }
                     .map { SimpleProvidedHolder(it.holder) }

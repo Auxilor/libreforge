@@ -1,6 +1,6 @@
 package com.willfp.libreforge.integrations.worldguard.impl
 
-import com.willfp.libreforge.EntityDispatcher
+import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -15,7 +15,7 @@ object TriggerLeaveRegion : Trigger("leave_region") {
 
     fun dispatch(player: Player, event: RegionEvent) {
         this.dispatch(
-            EntityDispatcher(player),
+            player.toDispatcher(),
             TriggerData(
                 player = player,
                 location = event.location,

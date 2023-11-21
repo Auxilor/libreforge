@@ -2,19 +2,16 @@ package com.willfp.libreforge.triggers
 
 import com.willfp.eco.core.registry.KRegistrable
 import com.willfp.libreforge.Dispatcher
-import com.willfp.libreforge.EntityDispatcher
 import com.willfp.libreforge.ProvidedEffectBlock
 import com.willfp.libreforge.ProvidedEffectBlocks
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.counters.bind.BoundCounters
 import com.willfp.libreforge.counters.bind.BoundCounters.bindings
 import com.willfp.libreforge.generatePlaceholders
-import com.willfp.libreforge.get
 import com.willfp.libreforge.getProvidedActiveEffects
-import com.willfp.libreforge.ifType
-import com.willfp.libreforge.isType
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.providedActiveEffects
+import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.event.TriggerDispatchEvent
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
@@ -43,14 +40,14 @@ abstract class Trigger(
 
     @Deprecated(
         "Use dispatch(dispatcher, data, forceHolders) instead",
-        ReplaceWith("dispatch(dispatcher, data, forceHolders)"),
+        ReplaceWith("dispatch(player.toDispatcher(), data, forceHolders)"),
         DeprecationLevel.ERROR
     )
     fun dispatch(
         player: Player,
         data: TriggerData,
         forceHolders: Collection<ProvidedHolder>? = null
-    ) = dispatch(EntityDispatcher(player), data, forceHolders)
+    ) = dispatch(player.toDispatcher(), data, forceHolders)
 
     /**
      * Dispatch the trigger.

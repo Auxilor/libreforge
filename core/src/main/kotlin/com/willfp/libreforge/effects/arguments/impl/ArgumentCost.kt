@@ -7,10 +7,10 @@ import com.willfp.eco.util.StringUtils
 import com.willfp.libreforge.ConfigurableElement
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.effects.arguments.EffectArgument
+import com.willfp.libreforge.get
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.DispatchedTrigger
-import com.willfp.libreforge.get
 import org.bukkit.Sound
 import org.bukkit.entity.Player
 

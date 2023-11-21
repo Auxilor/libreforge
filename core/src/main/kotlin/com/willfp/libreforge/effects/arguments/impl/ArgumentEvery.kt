@@ -1,9 +1,9 @@
 package com.willfp.libreforge.effects.arguments.impl
 
 import com.willfp.eco.core.map.nestedMap
+import com.willfp.libreforge.ConfigurableElement
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.effects.arguments.EffectArgument
-import com.willfp.libreforge.ConfigurableElement
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.DispatchedTrigger
 import java.util.UUID

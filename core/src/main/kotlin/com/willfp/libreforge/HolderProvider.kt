@@ -2,7 +2,6 @@ package com.willfp.libreforge
 
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.willfp.eco.core.map.listMap
-import com.willfp.libreforge.EmptyProvidedHolder.holder
 import com.willfp.libreforge.GlobalDispatcher.dispatcher
 import com.willfp.libreforge.effects.EffectBlock
 import org.bukkit.Bukkit
@@ -106,8 +105,8 @@ fun registerHolderProvider(provider: HolderProvider) = providers.add(provider)
  * Register a new holder provider.
  */
 @Deprecated(
-    "Use registerHolderProvider instead",
-    ReplaceWith("registerHolderProvider(provider)"),
+    "Use registerSpecificHolderProvider<Player> instead",
+    ReplaceWith("registerSpecificHolderProvider<Player>(provider)"),
     DeprecationLevel.ERROR
 )
 fun registerHolderProvider(provider: (Player) -> Collection<ProvidedHolder>) =
@@ -122,9 +121,9 @@ fun registerHolderProvider(provider: (Player) -> Collection<ProvidedHolder>) =
     })
 
 /**
- * Register a new holder provider.
+ * Register a new holder provider for all possible dispatchers.
  */
-fun registerDispatcherHolderProvider(provider: (Dispatcher<*>) -> Collection<ProvidedHolder>) =
+fun registerGenericHolderProvider(provider: (Dispatcher<*>) -> Collection<ProvidedHolder>) =
     registerHolderProvider(object : HolderProvider {
         override fun provide(dispatcher: Dispatcher<*>) = provider(dispatcher)
     })
@@ -132,12 +131,11 @@ fun registerDispatcherHolderProvider(provider: (Dispatcher<*>) -> Collection<Pro
 /**
  * Register a new holder provider for a specific type of dispatcher.
  */
-inline fun <reified T> registerSpecificHolderProvider(crossinline provider: (Dispatcher<T>) -> Collection<ProvidedHolder>) =
+inline fun <reified T> registerSpecificHolderProvider(crossinline provider: (T) -> Collection<ProvidedHolder>) =
     registerHolderProvider(object : HolderProvider {
         override fun provide(dispatcher: Dispatcher<*>): Collection<ProvidedHolder> {
             return if (dispatcher.isType<T>()) {
-                @Suppress("UNCHECKED_CAST")
-                provider(dispatcher as Dispatcher<T>)
+                provider(dispatcher.get<T>()!!)
             } else {
                 emptyList()
             }
@@ -177,11 +175,11 @@ fun Dispatcher<*>.refreshHolders() {
 
 @Deprecated(
     "Use refreshHolders on a dispatcher instead",
-    ReplaceWith("refreshHolders()"),
+    ReplaceWith("toDispatcher().refreshHolders()"),
     DeprecationLevel.ERROR
 )
 fun Player.refreshHolders() =
-    EntityDispatcher(this).refreshHolders()
+    this.toDispatcher().refreshHolders()
 
 private val holderPlaceholderProviders = mutableListOf<(ProvidedHolder, Dispatcher<*>) -> Collection<NamedValue>>()
 
@@ -193,13 +191,27 @@ fun registerPlaceholderProvider(provider: (ProvidedHolder, Dispatcher<*>) -> Col
 }
 
 /**
- * Register a function to generate placeholders for a holder.
+ * Register a function to generate placeholders for a holder for any dispatcher.
  */
 inline fun <reified T: Holder> registerHolderPlaceholderProvider(crossinline provider: (T, Dispatcher<*>) -> Collection<NamedValue>) {
     registerPlaceholderProvider { provided, dispatcher ->
         val holder = provided.holder
         if (holder is T) {
             provider(holder, dispatcher)
+        } else {
+            emptyList()
+        }
+    }
+}
+
+/**
+ * Register a function to generate placeholders for a holder for a specific dispatcher.
+ */
+inline fun <reified T: Holder, reified R> registerSpecificHolderPlaceholderProvider(crossinline provider: (T, R) -> Collection<NamedValue>) {
+    registerPlaceholderProvider { provided, dispatcher ->
+        val holder = provided.holder
+        if (holder is T && dispatcher.isType<R>()) {
+            provider(holder, dispatcher.get<R>()!!)
         } else {
             emptyList()
         }
@@ -260,11 +272,11 @@ val Dispatcher<*>.holders: Collection<ProvidedHolder>
 
 @Deprecated(
     "Use a dispatcher instead of a player",
-    ReplaceWith("holders"),
+    ReplaceWith("toDispatcher().holders"),
     DeprecationLevel.ERROR
 )
 val Player.holders: Collection<ProvidedHolder>
-    get() = EntityDispatcher(this).holders
+    get() = this.toDispatcher().holders
 
 /**
  * Invalidate holder cache to force rescan.
@@ -275,11 +287,11 @@ fun Dispatcher<*>.updateHolders() {
 
 @Deprecated(
     "Use updateHolders on a dispatcher instead",
-    ReplaceWith("updateHolders()"),
+    ReplaceWith("toDispatcher().updateHolders()"),
     DeprecationLevel.ERROR
 )
 fun Player.updateHolders() =
-    EntityDispatcher(this).updateHolders()
+    this.toDispatcher().updateHolders()
 
 fun Dispatcher<*>.purgePreviousHolders() {
     previousHolders.remove(this.uuid)
@@ -322,11 +334,11 @@ fun Collection<ProvidedHolder>.getProvidedActiveEffects(dispatcher: Dispatcher<*
 
 @Deprecated(
     "Use getProvidedActiveEffects on a dispatcher instead",
-    ReplaceWith("getProvidedActiveEffects(dispatcher)"),
+    ReplaceWith("getProvidedActiveEffects(player.toDispatcher())"),
     DeprecationLevel.ERROR
 )
 fun Collection<ProvidedHolder>.getProvidedActiveEffects(player: Player): List<ProvidedEffectBlocks> =
-    this.getProvidedActiveEffects(EntityDispatcher(player))
+    this.getProvidedActiveEffects(player.toDispatcher())
 
 /**
  * Get active effects for a [dispatcher].
@@ -336,11 +348,11 @@ fun ProvidedHolder.getActiveEffects(dispatcher: Dispatcher<*>) =
 
 @Deprecated(
     "Use getActiveEffects on a dispatcher instead",
-    ReplaceWith("getActiveEffects(dispatcher)"),
+    ReplaceWith("getActiveEffects(player.toDispatcher())"),
     DeprecationLevel.ERROR
 )
 fun ProvidedHolder.getActiveEffects(player: Player) =
-    getActiveEffects(EntityDispatcher(player))
+    getActiveEffects(player.toDispatcher())
 
 /**
  * Recalculate active effects.
@@ -350,11 +362,11 @@ fun Dispatcher<*>.calculateActiveEffects() =
 
 @Deprecated(
     "Use calculateActiveEffects on a dispatcher instead",
-    ReplaceWith("calculateActiveEffects()"),
+    ReplaceWith("toDispatcher().calculateActiveEffects()"),
     DeprecationLevel.ERROR
 )
 fun Player.calculateActiveEffects() =
-    EntityDispatcher(this).calculateActiveEffects()
+    this.toDispatcher().calculateActiveEffects()
 
 /**
  * The active effects.
@@ -364,11 +376,11 @@ val Dispatcher<*>.activeEffects: List<EffectBlock>
 
 @Deprecated(
     "Use activeEffects on a dispatcher instead",
-    ReplaceWith("activeEffects"),
+    ReplaceWith("toDispatcher().activeEffects"),
     DeprecationLevel.ERROR
 )
 val Player.activeEffects: List<EffectBlock>
-    get() = EntityDispatcher(this).activeEffects
+    get() = this.toDispatcher().activeEffects
 
 /**
  * The active effects mapped to the holder that provided them.
@@ -378,11 +390,11 @@ val Dispatcher<*>.providedActiveEffects: List<ProvidedEffectBlocks>
 
 @Deprecated(
     "Use providedActiveEffects on a dispatcher instead",
-    ReplaceWith("providedActiveEffects"),
+    ReplaceWith("toDispatcher().providedActiveEffects"),
     DeprecationLevel.ERROR
 )
 val Player.providedActiveEffects: List<ProvidedEffectBlocks>
-    get() = EntityDispatcher(this).providedActiveEffects
+    get() = this.toDispatcher().providedActiveEffects
 
 /**
  * Update the active effects.
@@ -425,11 +437,11 @@ fun Dispatcher<*>.updateEffects() {
 
 @Deprecated(
     "Use updateEffects on a dispatcher instead",
-    ReplaceWith("updateEffects()"),
+    ReplaceWith("toDispatcher().updateEffects()"),
     DeprecationLevel.ERROR
 )
 fun Player.updateEffects() =
-    EntityDispatcher(this).updateEffects()
+    this.toDispatcher().updateEffects()
 
 /**
  * Removes all elements from the given [other] list that are contained in this list.

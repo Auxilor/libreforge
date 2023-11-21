@@ -5,7 +5,7 @@ import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.RichChain
-import com.willfp.libreforge.EntityDispatcher
+import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
@@ -24,7 +24,7 @@ object EffectTriggerNestedChain : Effect<RichChain?>("trigger_nested_chain") {
     override fun onTrigger(config: Config, data: TriggerData, compileData: RichChain?): Boolean {
         val player = data.player ?: return false
 
-        val dispatch = data.dispatch(EntityDispatcher(player))
+        val dispatch = data.dispatch(player.toDispatcher())
         return compileData?.trigger(dispatch) == true
     }
 

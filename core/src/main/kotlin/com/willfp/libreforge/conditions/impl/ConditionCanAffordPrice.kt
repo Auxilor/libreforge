@@ -3,13 +3,13 @@ package com.willfp.libreforge.conditions.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.price.Price
 import com.willfp.eco.core.price.Prices
+import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
-import com.willfp.libreforge.toPlaceholderContext
-import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.get
+import com.willfp.libreforge.toPlaceholderContext
 import org.bukkit.entity.Player
 
 object ConditionCanAffordPrice : Condition<Price>("can_afford_price") {

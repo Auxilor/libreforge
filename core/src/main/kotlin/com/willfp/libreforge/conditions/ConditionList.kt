@@ -2,11 +2,11 @@ package com.willfp.libreforge.conditions
 
 import com.willfp.eco.util.formatEco
 import com.willfp.libreforge.DelegatedList
-import com.willfp.libreforge.ProvidedHolder
-import com.willfp.libreforge.triggers.DispatchedTrigger
 import com.willfp.libreforge.Dispatcher
-import com.willfp.libreforge.EntityDispatcher
+import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.get
+import com.willfp.libreforge.toDispatcher
+import com.willfp.libreforge.triggers.DispatchedTrigger
 import org.bukkit.entity.Player
 
 /**
@@ -53,30 +53,30 @@ class ConditionList(
 
     @Deprecated(
         "Use areMet(dispatcher, holder) instead.",
-        ReplaceWith("areMet(dispatcher, holder)"),
+        ReplaceWith("areMet(player.toDispatcher(), holder)"),
         DeprecationLevel.ERROR
     )
     fun areMet(player: Player, holder: ProvidedHolder): Boolean =
-        areMet(EntityDispatcher(player), holder)
+        areMet(player.toDispatcher(), holder)
 
     /**
      * Get if any conditions are not met and should be shown.
      */
     @Deprecated(
         "Use isShowingAnyNotMet(dispatcher, holder) instead.",
-        ReplaceWith("isShowingAnyNotMet(dispatcher, holder)"),
+        ReplaceWith("isShowingAnyNotMet(player.toDispatcher(), holder)"),
         DeprecationLevel.ERROR
     )
     fun isShowingAnyNotMet(player: Player, holder: ProvidedHolder): Boolean =
-        isShowingAnyNotMet(EntityDispatcher(player), holder)
+        isShowingAnyNotMet(player.toDispatcher(), holder)
 
     @Deprecated(
         "Use getNotMetLines(dispatcher, holder) instead.",
-        ReplaceWith("getNotMetLines(dispatcher, holder)"),
+        ReplaceWith("getNotMetLines(player.toDispatcher(), holder)"),
         DeprecationLevel.ERROR
     )
     fun getNotMetLines(player: Player, holder: ProvidedHolder): List<String> =
-        getNotMetLines(EntityDispatcher(player), holder)
+        getNotMetLines(player.toDispatcher(), holder)
 }
 
 /**

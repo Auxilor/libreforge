@@ -12,7 +12,7 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.plugin
-import com.willfp.libreforge.registerDispatcherHolderProvider
+import com.willfp.libreforge.registerGenericHolderProvider
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.Player
@@ -32,7 +32,7 @@ object EffectAddHolderToVictim : Effect<HolderTemplate>("add_holder_to_victim") 
     private val holders = listMap<UUID, Holder>()
 
     init {
-        registerDispatcherHolderProvider { holders[it.uuid].map { h -> SimpleProvidedHolder(h) } }
+        registerGenericHolderProvider { holders[it.uuid].map { h -> SimpleProvidedHolder(h) } }
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: HolderTemplate): Boolean {
