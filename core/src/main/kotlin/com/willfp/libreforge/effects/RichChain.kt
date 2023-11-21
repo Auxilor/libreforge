@@ -26,7 +26,7 @@ class RichChain internal constructor(
     override val mutators: MutatorList,
     override val filters: FilterList
 ) : ElementLike() {
-    override val isElementOwnChain = false
+    override val shouldDelegateExecution = false
 
     override val supportsDelay = effects.all { it.supportsDelay }
 

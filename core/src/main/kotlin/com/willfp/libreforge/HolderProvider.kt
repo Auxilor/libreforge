@@ -305,12 +305,14 @@ fun Player.updateEffects() {
     val removed = (beforeF without afterF).sorted()
     val toReload = (afterF without added).sorted()
 
+    val dispatcher = PlayerDispatcher(this)
+
     for ((effect, holder) in removed) {
-        effect.disable(this, holder)
+        effect.disable(dispatcher, holder)
     }
 
     for ((effect, holder) in added) {
-        effect.enable(this, holder)
+        effect.enable(dispatcher, holder)
     }
 
     // Reloading is now done by disabling all, then enabling all. Effect#reload is deprecated.
@@ -318,11 +320,11 @@ fun Player.updateEffects() {
     // order as mixing weights is not a concern.
 
     for ((effect, holder) in toReload) {
-        effect.disable(this, holder, isReload = true)
+        effect.disable(dispatcher, holder, isReload = true)
     }
 
     for ((effect, holder) in toReload) {
-        effect.enable(this, holder, isReload = true)
+        effect.enable(dispatcher, holder, isReload = true)
     }
 }
 

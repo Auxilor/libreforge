@@ -4,6 +4,7 @@ import com.archyx.aureliumskills.api.event.XpGainEvent
 import com.archyx.aureliumskills.skills.Skill
 import com.archyx.aureliumskills.skills.Skills
 import com.willfp.libreforge.effects.templates.MultiMultiplierEffect
+import com.willfp.libreforge.triggers.PlayerDispatcher
 import org.bukkit.event.EventHandler
 
 object EffectSkillXpMultiplier : MultiMultiplierEffect<Skill>("skill_xp_multiplier") {
@@ -21,7 +22,7 @@ object EffectSkillXpMultiplier : MultiMultiplierEffect<Skill>("skill_xp_multipli
     fun handle(event: XpGainEvent) {
         val player = event.player
 
-        val multiplier = getMultiplier(player, event.skill)
+        val multiplier = getMultiplier(PlayerDispatcher(player), event.skill)
 
         event.amount *= multiplier
     }

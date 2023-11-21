@@ -11,6 +11,8 @@ import com.willfp.libreforge.effects.events.EffectEnableEvent
 import com.willfp.libreforge.filters.FilterList
 import com.willfp.libreforge.mutators.MutatorList
 import com.willfp.libreforge.triggers.DispatchedTrigger
+import com.willfp.libreforge.triggers.Dispatcher
+import com.willfp.libreforge.triggers.PlayerDispatcher
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.util.UUID
@@ -35,27 +37,27 @@ class ChainElement<T> internal constructor(
     val runOrder = forceRunOrder ?: effect.runOrder
 
     fun enable(
-        player: Player,
+        dispatcher: Dispatcher<*>,
         holder: ProvidedHolder,
         isReload: Boolean = false
     ) {
         if (!isReload) {
-            Bukkit.getPluginManager().callEvent(EffectEnableEvent(player, effect, holder))
+            Bukkit.getPluginManager().callEvent(EffectEnableEvent(dispatcher, effect, holder))
         }
 
-        effect.enable(player, holder, this, isReload = isReload)
+        effect.enable(dispatcher, holder, this, isReload = isReload)
     }
 
     fun disable(
-        player: Player,
+        dispatcher: Dispatcher<*>,
         holder: ProvidedHolder,
         isReload: Boolean = false
     ) {
         if (!isReload) {
-            Bukkit.getPluginManager().callEvent(EffectDisableEvent(player, effect, holder))
+            Bukkit.getPluginManager().callEvent(EffectDisableEvent(dispatcher, effect, holder))
         }
 
-        effect.disable(player, holder, isReload = isReload)
+        effect.disable(dispatcher, holder, isReload = isReload)
     }
 
     override fun doTrigger(trigger: DispatchedTrigger) =
@@ -63,4 +65,27 @@ class ChainElement<T> internal constructor(
 
     override fun shouldTrigger(trigger: DispatchedTrigger): Boolean =
         effect.shouldTrigger(trigger, this)
+
+
+    @Deprecated(
+        "Use enable(Dispatcher<*>, ProvidedHolder, Boolean)",
+        ReplaceWith("enable(dispatcher, holder, isReload)"),
+        DeprecationLevel.ERROR
+    )
+    fun enable(
+        player: Player,
+        holder: ProvidedHolder,
+        isReload: Boolean = false
+    ) = enable(PlayerDispatcher(player), holder, isReload)
+
+    @Deprecated(
+        "Use disable(Dispatcher<*>, ProvidedHolder, Boolean)",
+        ReplaceWith("disable(dispatcher, holder, isReload)"),
+        DeprecationLevel.ERROR
+    )
+    fun disable(
+        player: Player,
+        holder: ProvidedHolder,
+        isReload: Boolean = false
+    ) = disable(PlayerDispatcher(player), holder, isReload)
 }

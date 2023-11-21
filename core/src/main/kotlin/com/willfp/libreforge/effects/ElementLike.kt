@@ -28,7 +28,7 @@ abstract class ElementLike : ConfigurableElement {
     /**
      * If the element is its own chain, (e.g. has an ID specified directly at the top level).
      */
-    open val isElementOwnChain: Boolean = false
+    open val shouldDelegateExecution: Boolean = false
 
     // Inject placeholders into all config blocks.
     private fun injectPlaceholders(placeholders: List<InjectablePlaceholder>) {
@@ -53,7 +53,7 @@ abstract class ElementLike : ConfigurableElement {
      */
     fun trigger(trigger: DispatchedTrigger): Boolean {
         // If own chain, defer all to elements.
-        if (isElementOwnChain) {
+        if (shouldDelegateExecution) {
             return doTrigger(trigger)
         }
 

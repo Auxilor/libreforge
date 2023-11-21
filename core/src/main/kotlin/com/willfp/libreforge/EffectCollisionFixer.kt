@@ -1,6 +1,7 @@
 package com.willfp.libreforge
 
 import com.willfp.libreforge.effects.Effects
+import com.willfp.libreforge.triggers.PlayerDispatcher
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -15,7 +16,7 @@ object EffectCollisionFixer : Listener {
         val player = event.player
         for ((holder, effects) in player.providedActiveEffects) {
             for (effect in effects) {
-                effect.disable(player, holder)
+                effect.disable(PlayerDispatcher(player), holder)
             }
         }
 

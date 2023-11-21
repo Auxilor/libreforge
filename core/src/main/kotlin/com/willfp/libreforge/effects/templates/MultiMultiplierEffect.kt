@@ -9,6 +9,9 @@ import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.effects.IdentifiedModifier
+import com.willfp.libreforge.triggers.Dispatcher
+import com.willfp.libreforge.triggers.PlayerDispatcher
+import com.willfp.libreforge.triggers.get
 import org.bukkit.entity.Player
 import java.util.UUID
 
@@ -25,43 +28,57 @@ abstract class MultiMultiplierEffect<T : Any>(id: String) : Effect<NoCompileData
      */
     abstract val key: String
 
-    final override fun onEnable(player: Player, config: Config, identifiers: Identifiers, holder: ProvidedHolder, compileData: NoCompileData) {
+    override fun onEnable(
+        dispatcher: Dispatcher<*>,
+        config: Config,
+        identifiers: Identifiers,
+        holder: ProvidedHolder,
+        compileData: NoCompileData
+    ) {
         if (config.has(key)) {
             val elements = config.getStrings(key).mapNotNull { getElement(it) }
 
             for (element in elements) {
-                modifiers[player.uniqueId][element] += IdentifiedModifier(identifiers.uuid) {
-                    config.getDoubleFromExpression("multiplier", player)
+                modifiers[dispatcher.uuid][element] += IdentifiedModifier(identifiers.uuid) {
+                    config.getDoubleFromExpression("multiplier", dispatcher.get())
                 }
             }
         } else {
-            globalModifiers[player.uniqueId] += IdentifiedModifier(identifiers.uuid) {
-                config.getDoubleFromExpression("multiplier", player)
+            globalModifiers[dispatcher.uuid] += IdentifiedModifier(identifiers.uuid) {
+                config.getDoubleFromExpression("multiplier", dispatcher.get())
             }
         }
     }
 
-    final override fun onDisable(player: Player, identifiers: Identifiers, holder: ProvidedHolder) {
-        globalModifiers[player.uniqueId].removeIf { it.uuid == identifiers.uuid }
+    override fun onDisable(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder) {
+        globalModifiers[dispatcher.uuid].removeIf { it.uuid == identifiers.uuid }
 
         for (element in getAllElements()) {
-            modifiers[player.uniqueId][element].removeIf { it.uuid == identifiers.uuid }
+            modifiers[dispatcher.uuid][element].removeIf { it.uuid == identifiers.uuid }
         }
     }
 
-    protected fun getMultiplier(player: Player, element: T): Double {
+    protected fun getMultiplier(dispatcher: Dispatcher<*>, element: T): Double {
         var multiplier = 1.0
 
-        for (modifier in globalModifiers[player.uniqueId]) {
+        for (modifier in globalModifiers[dispatcher.uuid]) {
             multiplier *= modifier.modifier
         }
 
-        for (modifier in modifiers[player.uniqueId][element]) {
+        for (modifier in modifiers[dispatcher.uuid][element]) {
             multiplier *= modifier.modifier
         }
 
         return multiplier
     }
+
+    @Deprecated(
+        "Use getMultiplier(dispatcher: Dispatcher<*>, element: T) instead.",
+        ReplaceWith("getMultiplier(dispatcher, element)"),
+        DeprecationLevel.ERROR
+    )
+    protected fun getMultiplier(player: Player, element: T): Double =
+        getMultiplier(PlayerDispatcher(player), element)
 
     /**
      * Get an element by [key], for example a stat.

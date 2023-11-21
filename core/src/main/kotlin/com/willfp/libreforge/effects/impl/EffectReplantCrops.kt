@@ -9,6 +9,7 @@ import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.plugin
+import com.willfp.libreforge.triggers.Dispatcher
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.block.BlockFace
@@ -30,21 +31,21 @@ object EffectReplantCrops : Effect<NoCompileData>("replant_crops") {
     private val players = listMap<UUID, ReplantConfig>()
 
     override fun onEnable(
-        player: Player,
+        dispatcher: Dispatcher<*>,
         config: Config,
         identifiers: Identifiers,
         holder: ProvidedHolder,
         compileData: NoCompileData
     ) {
-        players[player.uniqueId] += ReplantConfig(
+        players[dispatcher.uuid] += ReplantConfig(
             identifiers.uuid,
             config.getBool("consume_seeds"),
             config.getBool("only_fully_grown")
         )
     }
 
-    override fun onDisable(player: Player, identifiers: Identifiers, holder: ProvidedHolder) {
-        players[player.uniqueId].removeIf { it.uuid == identifiers.uuid }
+    override fun onDisable(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder) {
+        players[dispatcher.uuid].removeIf { it.uuid == identifiers.uuid }
     }
 
     @EventHandler(

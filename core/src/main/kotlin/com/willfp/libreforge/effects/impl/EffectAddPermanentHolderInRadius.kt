@@ -13,6 +13,8 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.registerHolderProvider
+import com.willfp.libreforge.triggers.Dispatcher
+import com.willfp.libreforge.triggers.get
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.util.Objects
@@ -41,21 +43,27 @@ object EffectAddPermanentHolderInRadius : Effect<HolderTemplate>("add_permanent_
         }
     }
 
-    override fun onEnable(player: Player, config: Config, identifiers: Identifiers, holder: ProvidedHolder, compileData: HolderTemplate) {
-        val radius = config.getDoubleFromExpression("radius", player)
+    override fun onEnable(
+        dispatcher: Dispatcher<*>,
+        config: Config,
+        identifiers: Identifiers,
+        holder: ProvidedHolder,
+        compileData: HolderTemplate
+    ) {
+        val radius = config.getDoubleFromExpression("radius", dispatcher.get())
         val applyToSelf = config.getBool("apply-to-self")
 
         val nearbyHolder = PermanentNearbyHolder(
             compileData.toHolder(identifiers.key),
             radius,
-            player.uniqueId,
+            dispatcher.uuid,
             applyToSelf
         )
 
         holders += nearbyHolder
     }
 
-    override fun onDisable(player: Player, identifiers: Identifiers, holder: ProvidedHolder) {
+    override fun onDisable(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder) {
         holders.removeIf { it.holder.id == identifiers.key }
     }
 
