@@ -4,8 +4,11 @@ import com.willfp.libreforge.DelegatedList
 import com.willfp.libreforge.WeightedList
 import com.willfp.libreforge.effects.executors.ChainExecutor
 import com.willfp.libreforge.triggers.DispatchedTrigger
+import com.willfp.libreforge.triggers.Dispatcher
+import com.willfp.libreforge.triggers.PlayerDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
+import com.willfp.libreforge.triggers.get
 import com.willfp.libreforge.triggers.impl.TriggerBlank
 import org.bukkit.entity.Player
 
@@ -30,11 +33,25 @@ class Chain internal constructor(
     }
 
     fun trigger(
+        dispatcher: Dispatcher<*>,
+        data: TriggerData = TriggerData(player = dispatcher.get()),
+        trigger: Trigger = TriggerBlank,
+        executor: ChainExecutor = this.executor
+    ): Boolean {
+        return executor.execute(this, DispatchedTrigger(dispatcher, trigger, data))
+    }
+
+    @Deprecated(
+        "Use trigger(Dispatcher<*>, TriggerData, Trigger, ChainExecutor)",
+        ReplaceWith("trigger(dispatcher, data, trigger, executor)"),
+        DeprecationLevel.ERROR
+    )
+    fun trigger(
         player: Player,
         data: TriggerData = TriggerData(player = player),
         trigger: Trigger = TriggerBlank,
         executor: ChainExecutor = this.executor
     ): Boolean {
-        return executor.execute(this, DispatchedTrigger(player, trigger, data))
+        return trigger(PlayerDispatcher(player), data, trigger, executor)
     }
 }

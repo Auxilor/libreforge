@@ -1,5 +1,6 @@
 package com.willfp.libreforge.triggers.impl
 
+import com.willfp.libreforge.triggers.PlayerDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -16,7 +17,7 @@ object TriggerWinRaid : Trigger("win_raid") {
     fun handle(event: RaidFinishEvent) {
         for (player in event.winners) {
             this.dispatch(
-                player,
+                PlayerDispatcher(player),
                 TriggerData(
                     player = player,
                     location = event.raid.location,

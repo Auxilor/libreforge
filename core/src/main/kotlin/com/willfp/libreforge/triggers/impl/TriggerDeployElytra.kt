@@ -1,5 +1,6 @@
 package com.willfp.libreforge.triggers.impl
 
+import com.willfp.libreforge.triggers.PlayerDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -19,7 +20,7 @@ object TriggerDeployElytra : Trigger("deploy_elytra") {
         val player = event.entity as? Player ?: return
 
         this.dispatch(
-            player,
+            PlayerDispatcher(player),
             TriggerData(
                 player = player,
                 location = player.location,

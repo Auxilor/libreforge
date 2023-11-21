@@ -1,6 +1,8 @@
 package com.willfp.libreforge.triggers
 
 import com.willfp.eco.core.registry.KRegistrable
+import com.willfp.libreforge.ProvidedEffectBlock
+import com.willfp.libreforge.ProvidedEffectBlocks
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.counters.bind.BoundCounters
 import com.willfp.libreforge.counters.bind.BoundCounters.bindings
@@ -34,17 +36,43 @@ abstract class Trigger(
         isEnabled = true
     }
 
-    /**
-     * Dispatch the trigger.
-     */
-    protected fun dispatch(
+    @Deprecated(
+        "Use dispatch(dispatcher, data, forceHolders) instead",
+        ReplaceWith("dispatch(dispatcher, data, forceHolders)"),
+        DeprecationLevel.ERROR
+    )
+    fun dispatch(
         player: Player,
         data: TriggerData,
         forceHolders: Collection<ProvidedHolder>? = null
-    ) {
-        val dispatch = plugin.dispatchedTriggerFactory.create(player, this, data) ?: return
+    ) = dispatch(PlayerDispatcher(player), data, forceHolders)
 
-        val effects = forceHolders?.getProvidedActiveEffects(player) ?: player.providedActiveEffects
+    /**
+     * Dispatch the trigger.
+     */
+    fun dispatch(
+        dispatcher: Dispatcher<*>,
+        data: TriggerData,
+        forceHolders: Collection<ProvidedHolder>? = null
+    ) {
+        if (dispatcher.isType<Player>()) {
+            val player = dispatcher.get<Player>()!!
+            val effects = forceHolders?.getProvidedActiveEffects(player) ?: player.providedActiveEffects
+            dispatchOnEffects(dispatcher, data, effects)
+        } else {
+            dispatchOnEffects(dispatcher, data, emptyList())
+        }
+    }
+
+    /**
+     * Dispatch the trigger on a collection of [ProvidedEffectBlock]s.
+     */
+    fun dispatchOnEffects(
+        dispatcher: Dispatcher<*>,
+        data: TriggerData,
+        effects: Collection<ProvidedEffectBlocks>
+    ) {
+        val dispatch = plugin.dispatchedTriggerFactory.create(dispatcher, this, data) ?: return
 
         // Prevent dispatching useless triggers
         val potentialDestinations = effects.flatMap { it.effects } + BoundCounters.values()
@@ -54,7 +82,7 @@ abstract class Trigger(
 
         dispatch.generatePlaceholders(data)
 
-        val dispatchEvent = TriggerDispatchEvent(player, dispatch)
+        val dispatchEvent = TriggerDispatchEvent(dispatcher, dispatch)
         Bukkit.getPluginManager().callEvent(dispatchEvent)
 
         if (dispatchEvent.isCancelled) {
@@ -68,10 +96,12 @@ abstract class Trigger(
             }
 
             val withHolder = data.copy(holder = holder)
-            val dispatchWithHolder = DispatchedTrigger(player, this, withHolder).inheritPlaceholders(dispatch)
+            val dispatchWithHolder = DispatchedTrigger(dispatcher, this, withHolder).inheritPlaceholders(dispatch)
 
-            for (placeholder in holder.generatePlaceholders(player)) {
-                dispatchWithHolder.addPlaceholder(placeholder)
+            dispatcher.ifType<Player> { player ->
+                for (placeholder in holder.generatePlaceholders(player)) {
+                    dispatchWithHolder.addPlaceholder(placeholder)
+                }
             }
 
             for (block in blocks) {
@@ -84,6 +114,7 @@ abstract class Trigger(
             counter.bindings.forEach { it.accept(dispatch) }
         }
     }
+
 
     final override fun onRegister() {
         plugin.runWhenEnabled {

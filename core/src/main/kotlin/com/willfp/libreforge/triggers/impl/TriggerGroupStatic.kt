@@ -2,6 +2,7 @@ package com.willfp.libreforge.triggers.impl
 
 import com.willfp.eco.core.Prerequisite
 import com.willfp.libreforge.plugin
+import com.willfp.libreforge.triggers.PlayerDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerGroup
@@ -51,7 +52,7 @@ object TriggerGroupStatic : TriggerGroup("static") {
             } else null
 
             this.dispatch(
-                player,
+                PlayerDispatcher(player),
                 TriggerData(
                     player = player,
                     location = player.location,

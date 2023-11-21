@@ -1,5 +1,6 @@
 package com.willfp.libreforge.triggers.impl
 
+import com.willfp.libreforge.triggers.PlayerDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -27,7 +28,7 @@ object TriggerFallDamage : Trigger("fall_damage") {
         }
 
         this.dispatch(
-            victim,
+            PlayerDispatcher(victim),
             TriggerData(
                 player = victim,
                 location = victim.location,

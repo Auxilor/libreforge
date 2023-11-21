@@ -1,6 +1,7 @@
 package com.willfp.libreforge.integrations.paper.impl
 
 import com.destroystokyo.paper.event.block.BeaconEffectEvent
+import com.willfp.libreforge.triggers.PlayerDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -18,7 +19,7 @@ object TriggerBeaconEffect : Trigger("beacon_effect") {
         val player = event.player
 
         this.dispatch(
-            player,
+            PlayerDispatcher(player),
             TriggerData(
                 player = player,
                 location = player.location,

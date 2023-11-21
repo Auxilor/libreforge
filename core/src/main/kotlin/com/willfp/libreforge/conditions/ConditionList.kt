@@ -3,8 +3,12 @@ package com.willfp.libreforge.conditions
 import com.willfp.eco.util.formatEco
 import com.willfp.libreforge.DelegatedList
 import com.willfp.libreforge.EmptyProvidedHolder
+import com.willfp.libreforge.EmptyProvidedHolder.holder
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.triggers.DispatchedTrigger
+import com.willfp.libreforge.triggers.Dispatcher
+import com.willfp.libreforge.triggers.GlobalDispatcher.dispatcher
+import com.willfp.libreforge.triggers.get
 import org.bukkit.entity.Player
 
 /**
@@ -20,10 +24,18 @@ class ConditionList(
         this.all { it.isMet(player, holder) }
 
     /**
+     * Get if all conditions are met.
+     */
+    fun areMet(dispatcher: Dispatcher<*>, holder: ProvidedHolder): Boolean {
+        val player = dispatcher.get<Player>() ?: return false
+
+        return this.all { it.isMet(player, holder) }
+    }
+    /**
      * Get if all conditions are met, triggering effects if not.
      */
     fun areMetAndTrigger(trigger: DispatchedTrigger): Boolean =
-        filterNot { it.isMet(trigger.player, trigger.data.holder) }
+        filterNot { it.isMet(trigger.dispatcher, trigger.data.holder) }
             .also { notMet ->
                 if (notMet.isEmpty()) {
                     return true

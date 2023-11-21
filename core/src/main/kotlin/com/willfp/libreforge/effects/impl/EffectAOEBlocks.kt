@@ -8,6 +8,7 @@ import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.impl.aoe.AOECompileData
 import com.willfp.libreforge.effects.impl.aoe.AOEShapes
 import com.willfp.libreforge.toFloat3
+import com.willfp.libreforge.triggers.PlayerDispatcher
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
@@ -40,7 +41,7 @@ object EffectAOEBlocks : Effect<AOECompileData>("aoe_blocks") {
                     data.copy(
                         block = block,
                         location = block.location.add(0.5, 0.5, 0.5)
-                    ).dispatch(player)
+                    ).dispatch(PlayerDispatcher(player))
                 )
         }
 
