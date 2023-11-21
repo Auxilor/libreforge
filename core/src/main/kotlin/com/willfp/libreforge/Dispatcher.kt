@@ -1,5 +1,6 @@
 package com.willfp.libreforge
 
+import io.papermc.paper.math.Position.block
 import org.bukkit.Location
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
@@ -44,7 +45,7 @@ inline fun <reified T> Dispatcher<*>.isType(): Boolean {
  */
 inline fun <reified T> Dispatcher<*>.ifType(block: (T) -> Unit) {
     val dispatcher = this.dispatcher as? T ?: return
-    block(dispatcher)
+    return block(dispatcher)
 }
 
 /**

@@ -12,7 +12,7 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.plugin
-import com.willfp.libreforge.registerHolderProvider
+import com.willfp.libreforge.registerDispatcherHolderProvider
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import java.util.UUID
@@ -31,8 +31,8 @@ object EffectAddHolder : Effect<HolderTemplate>("add_holder") {
     private val holders = listMap<UUID, Holder>()
 
     init {
-        registerHolderProvider {
-            holders[it.uniqueId].map { h -> SimpleProvidedHolder(h) }
+        registerDispatcherHolderProvider {
+            holders[it.uuid].map { h -> SimpleProvidedHolder(h) }
         }
     }
 

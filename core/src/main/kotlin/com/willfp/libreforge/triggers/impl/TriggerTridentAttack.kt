@@ -29,7 +29,7 @@ object TriggerTridentAttack : Trigger("trident_attack") {
 
     @EventHandler(ignoreCancelled = true)
     fun onProjectileLaunch(event: ProjectileLaunchEvent) {
-        val shooter = event.entity.shooter as? Player ?: return
+        val shooter = event.entity.shooter as? LivingEntity ?: return
         val trident = event.entity
 
         if (trident !is Trident) {
@@ -39,7 +39,7 @@ object TriggerTridentAttack : Trigger("trident_attack") {
         trident.setMetadata(
             META_KEY,
             plugin.metadataValueFactory.create(
-                shooter.holders
+                EntityDispatcher(shooter).holders
             )
         )
     }

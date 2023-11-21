@@ -5,6 +5,7 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.Dispatcher
+import com.willfp.libreforge.EntityDispatcher
 import com.willfp.libreforge.get
 import com.willfp.libreforge.updateEffects
 import org.bukkit.entity.Entity
@@ -27,8 +28,6 @@ object ConditionOnFire : Condition<NoCompileData>("on_fire") {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun handle(event: EntityDamageEvent) {
-        val player = event.entity as? Player ?: return
-
         if (event.cause != EntityDamageEvent.DamageCause.FIRE
             && event.cause != EntityDamageEvent.DamageCause.FIRE_TICK
             && event.cause != EntityDamageEvent.DamageCause.HOT_FLOOR
@@ -37,6 +36,7 @@ object ConditionOnFire : Condition<NoCompileData>("on_fire") {
             return
         }
 
-        player.updateEffects()
+        val dispatcher = EntityDispatcher(event.entity)
+        dispatcher.updateEffects()
     }
 }

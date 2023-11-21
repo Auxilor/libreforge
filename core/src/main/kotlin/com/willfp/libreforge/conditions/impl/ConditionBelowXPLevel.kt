@@ -6,6 +6,7 @@ import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.Dispatcher
+import com.willfp.libreforge.EntityDispatcher
 import com.willfp.libreforge.get
 import com.willfp.libreforge.updateEffects
 import org.bukkit.entity.Player
@@ -32,7 +33,7 @@ object ConditionBelowXPLevel : Condition<NoCompileData>("below_xp_level") {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun handle(event: PlayerExpChangeEvent) {
-        val player = event.player
-        player.updateEffects()
+        val dispatcher = EntityDispatcher(event.player)
+        dispatcher.updateEffects()
     }
 }

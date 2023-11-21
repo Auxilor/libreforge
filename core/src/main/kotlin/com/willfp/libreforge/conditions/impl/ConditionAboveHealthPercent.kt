@@ -6,6 +6,7 @@ import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.Dispatcher
+import com.willfp.libreforge.EntityDispatcher
 import com.willfp.libreforge.get
 import com.willfp.libreforge.updateEffects
 import org.bukkit.attribute.Attribute
@@ -37,13 +38,13 @@ object ConditionAboveHealthPercent : Condition<NoCompileData>("above_health_perc
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun handle(event: EntityRegainHealthEvent) {
-        val player = event.entity as? Player ?: return
-        player.updateEffects()
+        val dispatcher = EntityDispatcher(event.entity)
+        dispatcher.updateEffects()
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun handle(event: EntityDamageEvent) {
-        val player = event.entity as? Player ?: return
-        player.updateEffects()
+        val dispatcher = EntityDispatcher(event.entity)
+        dispatcher.updateEffects()
     }
 }

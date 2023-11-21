@@ -36,7 +36,5 @@ private class ProvidedHolderConfig(
 
 fun Config.applyHolder(providedHolder: ProvidedHolder, dispatcher: Dispatcher<*>): Config =
     ProvidedHolderConfig(this, providedHolder).apply {
-        dispatcher.ifType<Player> {
-            injectPlaceholders(*providedHolder.generatePlaceholders(it).mapToPlaceholders())
-        }
+        injectPlaceholders(*providedHolder.generatePlaceholders(dispatcher).mapToPlaceholders())
     }

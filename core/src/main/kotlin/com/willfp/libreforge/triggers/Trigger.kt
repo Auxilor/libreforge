@@ -59,16 +59,11 @@ abstract class Trigger(
         dispatcher: Dispatcher<*>,
         data: TriggerData,
         forceHolders: Collection<ProvidedHolder>? = null
-    ) {
-
-        if (dispatcher.isType<Player>()) {
-            val player = dispatcher.get<Player>()!!
-            val effects = forceHolders?.getProvidedActiveEffects(player) ?: player.providedActiveEffects
-            dispatchOnEffects(dispatcher, data, effects)
-        } else {
-            dispatchOnEffects(dispatcher, data, emptyList())
-        }
-    }
+    ) = dispatchOnEffects(
+        dispatcher,
+        data,
+        forceHolders?.getProvidedActiveEffects(dispatcher) ?: dispatcher.providedActiveEffects
+    )
 
     /**
      * Dispatch the trigger on a collection of [ProvidedEffectBlock]s.
@@ -104,10 +99,8 @@ abstract class Trigger(
             val withHolder = data.copy(holder = holder)
             val dispatchWithHolder = DispatchedTrigger(dispatcher, this, withHolder).inheritPlaceholders(dispatch)
 
-            dispatcher.ifType<Player> { player ->
-                for (placeholder in holder.generatePlaceholders(player)) {
-                    dispatchWithHolder.addPlaceholder(placeholder)
-                }
+            for (placeholder in holder.generatePlaceholders(dispatcher)) {
+                dispatchWithHolder.addPlaceholder(placeholder)
             }
 
             for (block in blocks) {

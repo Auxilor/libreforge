@@ -6,6 +6,7 @@ import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.Dispatcher
+import com.willfp.libreforge.EntityDispatcher
 import com.willfp.libreforge.get
 import com.willfp.libreforge.updateEffects
 import org.bukkit.entity.Player
@@ -32,7 +33,7 @@ object ConditionAboveHungerPercent : Condition<NoCompileData>("above_hunger_perc
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun handle(event: FoodLevelChangeEvent) {
-        val player = event.entity as? Player ?: return
-        player.updateEffects()
+        val dispatcher = EntityDispatcher(event.entity)
+        dispatcher.updateEffects()
     }
 }
