@@ -13,30 +13,33 @@ object EffectCollisionFixer : Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     fun clearOnQuit(event: PlayerQuitEvent) {
         val player = event.player
-        for ((holder, effects) in player.providedActiveEffects) {
+        val dispatcher = EntityDispatcher(player)
+
+        for ((holder, effects) in dispatcher.providedActiveEffects) {
             for (effect in effects) {
-                effect.disable(EntityDispatcher(player), holder)
+                effect.disable(dispatcher, holder)
             }
         }
 
         // Extra fix for pre-4.2.3
         player.fixAttributes()
 
-        player.updateHolders()
-        player.purgePreviousHolders()
+        dispatcher.updateHolders()
+        dispatcher.purgePreviousHolders()
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     fun scanOnJoin(event: PlayerJoinEvent) {
         val player = event.player
+        val dispatcher = EntityDispatcher(player)
 
         // Extra fix for pre-4.2.3
         player.fixAttributes()
 
-        player.updateHolders()
+        dispatcher.updateHolders()
 
         plugin.scheduler.run {
-            player.updateEffects()
+            dispatcher.updateEffects()
         }
     }
 

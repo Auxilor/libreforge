@@ -1,12 +1,14 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.EntityDispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import com.willfp.libreforge.updateEffects
 import com.willfp.libreforge.updateHolders
 import org.bukkit.Material
 
@@ -35,7 +37,7 @@ object EffectConsumeHeldItem : Effect<NoCompileData>("consume_held_item") {
 
         player.inventory.setItemInMainHand(item)
 
-        player.updateHolders()
+        EntityDispatcher(player).updateHolders()
 
         return true
     }

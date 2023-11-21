@@ -37,6 +37,7 @@ import com.willfp.libreforge.triggers.impl.TriggerFillBucket
 import com.willfp.libreforge.triggers.impl.TriggerGainHunger
 import com.willfp.libreforge.triggers.impl.TriggerGainXp
 import com.willfp.libreforge.triggers.impl.TriggerGroupCustom
+import com.willfp.libreforge.triggers.impl.TriggerGroupGlobalStatic
 import com.willfp.libreforge.triggers.impl.TriggerGroupStatic
 import com.willfp.libreforge.triggers.impl.TriggerHeadshot
 import com.willfp.libreforge.triggers.impl.TriggerHeal
@@ -129,6 +130,7 @@ object Triggers : Registry<Trigger>() {
     init {
         register(TriggerGroupCustom)
         register(TriggerGroupStatic)
+        register(TriggerGroupGlobalStatic)
         register(TriggerAltClick)
         register(TriggerBite)
         register(TriggerBlockItemDrop)
