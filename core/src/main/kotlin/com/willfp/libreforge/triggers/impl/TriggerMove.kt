@@ -5,8 +5,9 @@ import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import io.papermc.paper.event.entity.EntityMoveEvent
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
-import org.bukkit.event.player.PlayerMoveEvent
 
 object TriggerMove : Trigger("move") {
     override val parameters = setOf(
@@ -18,8 +19,8 @@ object TriggerMove : Trigger("move") {
     )
 
     @EventHandler(ignoreCancelled = true)
-    fun handle(event: PlayerMoveEvent) {
-        val player = event.player
+    fun handle(event: EntityMoveEvent) {
+        val entity = event.entity
 
         if (Prerequisite.HAS_PAPER.isMet) {
             if (!event.hasChangedBlock()) {
@@ -34,13 +35,13 @@ object TriggerMove : Trigger("move") {
         }
 
         this.dispatch(
-            player.toDispatcher(),
+            entity.toDispatcher(),
             TriggerData(
-                player = player,
-                location = player.location,
-                velocity = player.velocity,
+                player = entity as? Player,
+                location = entity.location,
+                velocity = entity.velocity,
                 event = event,
-                item = player.inventory.itemInMainHand,
+                item = entity.equipment?.itemInMainHand,
                 value = distance
             )
         )

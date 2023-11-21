@@ -135,6 +135,11 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             }
             currentOffset += 3
         }
+
+        // Poll for changes in global holders
+        this.scheduler.runTimer(25, 20) {
+            GlobalDispatcher.refreshHolders()
+        }
     }
 
     override fun loadListeners(): List<Listener> {

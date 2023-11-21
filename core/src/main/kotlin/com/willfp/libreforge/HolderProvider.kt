@@ -152,14 +152,25 @@ fun registerRefreshFunction(function: (Dispatcher<*>) -> Unit) {
 }
 
 @Deprecated(
-    "Use registerRefreshFunction instead",
-    ReplaceWith("registerRefreshFunction(function)"),
+    "Use registerSpecificRefreshFunction<Player> instead",
+    ReplaceWith("registerSpecificRefreshFunction<Player>(function)"),
     DeprecationLevel.ERROR
 )
 fun registerPlayerRefreshFunction(function: (Player) -> Unit) {
     refreshFunctions += {
         it.get<Player>()?.let { player ->
             function(player)
+        }
+    }
+}
+
+/**
+ * Register a function to be called when a dispatcher's holders are refreshed for a specific dispatcher.
+ */
+inline fun <reified T> registerSpecificRefreshFunction(crossinline function: (T) -> Unit) {
+    registerRefreshFunction {
+        it.get<T>()?.let { t ->
+            function(t)
         }
     }
 }
