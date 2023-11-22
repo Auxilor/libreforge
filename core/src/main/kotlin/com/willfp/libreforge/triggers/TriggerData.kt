@@ -25,6 +25,7 @@ data class TriggerData(
     Trigger#dispatch by copying over the trigger data.
      */
     val holder: ProvidedHolder = EmptyProvidedHolder,
+    val dispatcher: Dispatcher<*> = GlobalDispatcher,
 
     val player: Player? = null,
     val victim: LivingEntity? = null,
@@ -45,9 +46,6 @@ data class TriggerData(
     It's really not very nice, but it's good enough. Just don't think about it.
      */
     internal val _originalPlayer: Player? = player,
-
-    // The dispatcher is here at the end so that it works nicely with @JvmOverloads
-    val dispatcher: Dispatcher<*> = GlobalDispatcher,
 ) {
     val foundItem: ItemStack?
         get() = holder.getProvider() ?: item
@@ -125,6 +123,7 @@ data class TriggerData(
         internal2: kotlin.jvm.internal.DefaultConstructorMarker?
     ) : this(
         holder ?: EmptyProvidedHolder,
+        GlobalDispatcher,
         player,
         victim,
         block,
@@ -135,8 +134,7 @@ data class TriggerData(
         item,
         text,
         value,
-        _originalPlayer,
-        GlobalDispatcher
+        _originalPlayer
     )
 }
 
