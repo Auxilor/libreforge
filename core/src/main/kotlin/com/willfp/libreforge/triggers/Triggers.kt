@@ -222,7 +222,6 @@ object Triggers : Registry<Trigger>() {
         register(TriggerEntityDamage)
         register(TriggerEntityDamageByEntity)
         register(TriggerEntityDeath)
-        register(TriggerEntityItemPickup)
         register(TriggerEntitySpawn)
         register(TriggerEntityTeleport)
     }
