@@ -71,8 +71,13 @@ fun Entity.toDispatcher(): Dispatcher<Entity> = EntityDispatcher(this)
 value class BlockDispatcher(
     override val dispatcher: Block
 ) : Dispatcher<Block> {
-    override val uuid
-        get() = UUID(0, 0)
+    override val uuid: UUID
+        get() {
+            val blockType = dispatcher.type.hashCode()
+            val location = dispatcher.location.hashCode()
+
+            return UUID(blockType.toLong(), location.toLong())
+        }
 
     override val location
         get() = dispatcher.location
@@ -90,8 +95,12 @@ fun Block.toDispatcher(): Dispatcher<Block> = BlockDispatcher(this)
 value class LocationDispatcher(
     override val dispatcher: Location
 ) : Dispatcher<Location> {
-    override val uuid
-        get() = UUID(0, 0)
+    override val uuid: UUID
+        get() {
+            val location = dispatcher.hashCode()
+
+            return UUID(location.toLong(), location.toLong())
+        }
 
     override val location
         get() = dispatcher
