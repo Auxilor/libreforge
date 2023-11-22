@@ -10,10 +10,6 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.Player
 
 object MutatorVictimAsDispatcher : Mutator<NoCompileData>("victim_as_dispatcher") {
-    override val parameterTransformers = parameterTransformers {
-        TriggerParameter.VICTIM becomes TriggerParameter.PLAYER
-    }
-
     override fun mutate(data: TriggerData, config: Config, compileData: NoCompileData): TriggerData {
         return data.copy(
             dispatcher = data.victim?.toDispatcher() ?: return data
