@@ -11,17 +11,20 @@ import org.bukkit.event.entity.EntityPickupItemEvent
 object TriggerPickUpItem : Trigger("pick_up_item") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.ITEM
+        TriggerParameter.VICTIM,
+        TriggerParameter.ITEM,
+        TriggerParameter.VALUE
     )
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityPickupItemEvent) {
-        val player = event.entity as? Player ?: return
+        val entity = event.entity
 
         this.dispatch(
-            player.toDispatcher(),
+            entity.toDispatcher(),
             TriggerData(
-                player = player,
+                player = entity as? Player,
+                victim = entity,
                 item = event.item.itemStack,
                 value = event.item.itemStack.amount.toDouble()
             )

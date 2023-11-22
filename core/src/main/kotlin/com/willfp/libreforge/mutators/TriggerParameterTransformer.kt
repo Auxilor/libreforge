@@ -3,11 +3,11 @@ package com.willfp.libreforge.mutators
 import com.willfp.libreforge.triggers.TriggerParameter
 
 data class TriggerParameterTransformer(
-    val parameterIn: TriggerParameter,
+    val parameterIn: TriggerParameter?,
     val parameterOut: TriggerParameter
 ) {
     fun transform(parameters: Set<TriggerParameter>): Set<TriggerParameter> {
-        return parameters.fold(mutableSetOf()) { acc, parameter ->
+        return parameters.fold<TriggerParameter, MutableSet<TriggerParameter>>(mutableSetOf()) { acc, parameter ->
             if (parameter == parameterIn) {
                 acc.apply {
                     add(parameterIn)
@@ -16,7 +16,7 @@ data class TriggerParameterTransformer(
             } else {
                 acc.apply { add(parameter) }
             }
-        }
+        }.plus(parameterOut)
     }
 }
 
@@ -25,6 +25,10 @@ class TriggerParameterBuilder {
 
     infix fun TriggerParameter.becomes(other: TriggerParameter) {
         set += TriggerParameterTransformer(this, other)
+    }
+
+    fun adds(other: TriggerParameter) {
+        set += TriggerParameterTransformer(null, other)
     }
 
     internal fun toSet(): Set<TriggerParameterTransformer> {

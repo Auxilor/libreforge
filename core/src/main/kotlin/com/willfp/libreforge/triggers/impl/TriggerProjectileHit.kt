@@ -25,16 +25,12 @@ object TriggerProjectileHit : Trigger("projectile_hit") {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: ProjectileHitEvent) {
         val projectile = event.entity
-        val shooter = projectile.shooter
-
-        if (shooter !is Player) {
-            return
-        }
+        val shooter = projectile.shooter as? LivingEntity ?: return
 
         this.dispatch(
             shooter.toDispatcher(),
             TriggerData(
-                player = shooter,
+                player = shooter as? Player,
                 projectile = projectile,
                 location = projectile.location,
                 block = event.hitBlock,
@@ -48,12 +44,12 @@ object TriggerProjectileHit : Trigger("projectile_hit") {
     fun handle(event: EntityDamageByEntityEvent) {
         val arrow = event.damager as? Arrow ?: return
         val victim = event.entity as? LivingEntity ?: return
-        val player = arrow.shooter as? Player ?: return
+        val shooter = arrow.shooter as? LivingEntity ?: return
 
         this.dispatch(
-            player.toDispatcher(),
+            shooter.toDispatcher(),
             TriggerData(
-                player = player,
+                player = shooter as? Player,
                 victim = victim,
                 location = arrow.location,
                 event = event,

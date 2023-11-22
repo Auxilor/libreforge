@@ -5,6 +5,8 @@ import com.willfp.eco.core.registry.Registry
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.mutators.impl.MutatorBlockToLocation
+import com.willfp.libreforge.mutators.impl.MutatorDispatcherAsPlayer
+import com.willfp.libreforge.mutators.impl.MutatorDispatcherAsVictim
 import com.willfp.libreforge.mutators.impl.MutatorLocationToBlock
 import com.willfp.libreforge.mutators.impl.MutatorLocationToCursor
 import com.willfp.libreforge.mutators.impl.MutatorLocationToPlayer
@@ -72,5 +74,7 @@ object Mutators: Registry<Mutator<*>>() {
         register(MutatorVictimAsPlayer)
         register(MutatorVictimToOwner)
         register(MutatorVictimAsDispatcher)
+        register(MutatorDispatcherAsPlayer)
+        register(MutatorDispatcherAsVictim)
     }
 }

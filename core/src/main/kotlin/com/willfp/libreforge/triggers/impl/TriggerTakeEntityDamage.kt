@@ -24,14 +24,6 @@ object TriggerTakeEntityDamage : Trigger("take_entity_damage") {
 
         val victim = event.entity
 
-        if (victim !is Player) {
-            return
-        }
-
-        if (event.isCancelled) {
-            return
-        }
-
         if (event.cause == EntityDamageEvent.DamageCause.THORNS) {
             return
         }
@@ -39,7 +31,7 @@ object TriggerTakeEntityDamage : Trigger("take_entity_damage") {
         this.dispatch(
             victim.toDispatcher(),
             TriggerData(
-                player = victim,
+                player = victim as? Player,
                 victim = attacker,
                 location = attacker.location,
                 event = event,

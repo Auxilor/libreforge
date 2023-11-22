@@ -5,6 +5,7 @@ import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageEvent
@@ -12,7 +13,9 @@ import org.bukkit.event.entity.EntityDamageEvent
 object TriggerTakeDamage : Trigger("take_damage") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.EVENT
+        TriggerParameter.VICTIM,
+        TriggerParameter.EVENT,
+        TriggerParameter.VALUE
     )
 
     private val ignoredCauses = mutableSetOf(
@@ -30,10 +33,6 @@ object TriggerTakeDamage : Trigger("take_damage") {
     fun handle(event: EntityDamageEvent) {
         val victim = event.entity
 
-        if (victim !is Player) {
-            return
-        }
-
         if (event.cause in ignoredCauses) {
             return
         }
@@ -41,7 +40,8 @@ object TriggerTakeDamage : Trigger("take_damage") {
         this.dispatch(
             victim.toDispatcher(),
             TriggerData(
-                player = victim,
+                player = victim as? Player,
+                victim = victim as? LivingEntity,
                 event = event,
                 value = event.finalDamage
             )

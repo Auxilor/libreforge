@@ -3,13 +3,14 @@ package com.willfp.libreforge.triggers.impl
 import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.drops.DropQueue
 import com.willfp.eco.core.events.EntityDeathByEntityEvent
-import com.willfp.eco.util.tryAsPlayer
 import com.willfp.libreforge.filterNotEmpty
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.event.EditableEntityDropEvent
+import com.willfp.libreforge.triggers.tryAsLivingEntity
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 
 
@@ -30,15 +31,15 @@ object TriggerEntityItemDrop : Trigger("entity_item_drop") {
         }
 
         val entity = event.victim
-        val player = event.killer.tryAsPlayer() ?: return
+        val killer = event.killer.tryAsLivingEntity() ?: return
         val originalDrops = event.drops.filterNotEmpty()
 
         val editableEvent = EditableEntityDropEvent(event.deathEvent)
 
         this.dispatch(
-            player.toDispatcher(),
+            killer.toDispatcher(),
             TriggerData(
-                player = player,
+                player = killer as? Player,
                 victim = entity,
                 location = entity.location,
                 event = editableEvent,
@@ -51,11 +52,13 @@ object TriggerEntityItemDrop : Trigger("entity_item_drop") {
         event.drops.clear()
         event.drops.addAll(newDrops.map { it.item })
 
-        if (newDrops.sumOf { it.xp } > 0) {
-            DropQueue(player)
-                .setLocation(entity.location)
-                .addXP(newDrops.sumOf { it.xp })
-                .push()
+        if (killer is Player) {
+            if (newDrops.sumOf { it.xp } > 0) {
+                DropQueue(killer)
+                    .setLocation(entity.location)
+                    .addXP(newDrops.sumOf { it.xp })
+                    .push()
+            }
         }
     }
 }

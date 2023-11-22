@@ -37,7 +37,6 @@ import com.willfp.libreforge.triggers.impl.TriggerEntityDamage
 import com.willfp.libreforge.triggers.impl.TriggerEntityDamageByEntity
 import com.willfp.libreforge.triggers.impl.TriggerEntityDeath
 import com.willfp.libreforge.triggers.impl.TriggerEntityItemDrop
-import com.willfp.libreforge.triggers.impl.TriggerEntityItemPickup
 import com.willfp.libreforge.triggers.impl.TriggerEntitySpawn
 import com.willfp.libreforge.triggers.impl.TriggerEntityTarget
 import com.willfp.libreforge.triggers.impl.TriggerEntityTeleport

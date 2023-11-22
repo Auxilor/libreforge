@@ -1,11 +1,11 @@
 package com.willfp.libreforge.triggers.impl
 
 import com.willfp.eco.core.events.EntityDeathByEntityEvent
-import com.willfp.eco.util.tryAsPlayer
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import com.willfp.libreforge.triggers.tryAsLivingEntity
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
@@ -21,14 +21,14 @@ object TriggerKill : Trigger("kill") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityDeathByEntityEvent) {
-        val killer = event.killer.tryAsPlayer() ?: return
+        val killer = event.killer.tryAsLivingEntity() ?: return
 
         val victim = event.victim
 
         this.dispatch(
             killer.toDispatcher(),
             TriggerData(
-                player = killer,
+                player = killer as? Player,
                 victim = victim,
                 location = victim.location,
                 value = victim.getAttribute(Attribute.GENERIC_MAX_HEALTH)!!.value

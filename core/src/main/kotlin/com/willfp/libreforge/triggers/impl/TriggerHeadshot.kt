@@ -23,7 +23,7 @@ object TriggerHeadshot : Trigger("headshot") {
     fun handle(event: EntityDamageByEntityEvent) {
         val projectile = event.damager as? Projectile ?: return
         val victim = event.entity as? LivingEntity ?: return
-        val shooter = projectile.shooter as? Player ?: return
+        val shooter = projectile.shooter as? LivingEntity ?: return
 
         // Filter out non-headshots
         if (projectile.location.y < victim.location.y + victim.eyeHeight - 0.22) {
@@ -33,7 +33,7 @@ object TriggerHeadshot : Trigger("headshot") {
         this.dispatch(
             shooter.toDispatcher(),
             TriggerData(
-                player = shooter,
+                player = shooter as? Player,
                 victim = victim,
                 location = victim.location,
                 event = event,

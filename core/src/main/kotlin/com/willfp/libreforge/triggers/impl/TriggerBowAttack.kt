@@ -24,30 +24,18 @@ object TriggerBowAttack : Trigger("bow_attack") {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityDamageByEntityEvent) {
         val arrow = event.damager
-        val victim = event.entity
+        val victim = event.entity as? LivingEntity ?: return
 
         if (arrow !is AbstractArrow || arrow is Trident) {
             return
         }
 
-        if (victim !is LivingEntity) {
-            return
-        }
-
-        val shooter = arrow.shooter
-
-        if (shooter !is Player) {
-            return
-        }
-
-        if (event.isCancelled) {
-            return
-        }
+        val shooter = arrow.shooter as? LivingEntity ?: return
 
         this.dispatch(
             shooter.toDispatcher(),
             TriggerData(
-                player = shooter,
+                player = shooter as? Player,
                 victim = victim,
                 location = victim.location,
                 event = event,

@@ -21,16 +21,11 @@ object TriggerShieldBlock : Trigger("shield_block") {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityDamageByEntityEvent) {
         val attacker = event.damager as? LivingEntity ?: return
-        val victim = event.entity as? Player ?: return
+        val victim = event.entity as? LivingEntity ?: return
 
         if (event.isCancelled) {
             return
         }
-
-        if (!victim.isBlocking) {
-            return
-        }
-
         if (event.cause == EntityDamageEvent.DamageCause.THORNS) {
             return
         }
@@ -38,7 +33,7 @@ object TriggerShieldBlock : Trigger("shield_block") {
         this.dispatch(
             victim.toDispatcher(),
             TriggerData(
-                player = victim,
+                player = victim as? Player,
                 victim = attacker,
                 location = attacker.location,
                 event = event,

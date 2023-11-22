@@ -5,12 +5,14 @@ import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import io.papermc.paper.event.entity.EntityMoveEvent
+import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 
 object TriggerChangeChunk : Trigger("change_chunk") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
+        TriggerParameter.VICTIM,
         TriggerParameter.LOCATION,
         TriggerParameter.VELOCITY,
         TriggerParameter.EVENT,
@@ -31,6 +33,7 @@ object TriggerChangeChunk : Trigger("change_chunk") {
             entity.toDispatcher(),
             TriggerData(
                 player = entity as? Player,
+                victim = entity as? LivingEntity,
                 location = event.to,
                 velocity = entity.velocity,
                 event = event,

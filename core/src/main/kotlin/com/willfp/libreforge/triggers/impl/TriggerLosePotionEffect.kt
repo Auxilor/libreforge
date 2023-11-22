@@ -4,6 +4,7 @@ import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityPotionEffectEvent
@@ -11,6 +12,7 @@ import org.bukkit.event.entity.EntityPotionEffectEvent
 object TriggerLosePotionEffect : Trigger("lose_potion_effect") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
+        TriggerParameter.VICTIM,
         TriggerParameter.LOCATION,
         TriggerParameter.EVENT
     )
@@ -25,13 +27,14 @@ object TriggerLosePotionEffect : Trigger("lose_potion_effect") {
             return
         }
 
-        val player = event.entity as? Player ?: return
+        val entity = event.entity as? LivingEntity ?: return
 
         this.dispatch(
-            player.toDispatcher(),
+            entity.toDispatcher(),
             TriggerData(
-                player = player,
-                location = player.location,
+                player = entity as? Player,
+                victim = entity,
+                location = entity.location,
                 event = event
             )
         )

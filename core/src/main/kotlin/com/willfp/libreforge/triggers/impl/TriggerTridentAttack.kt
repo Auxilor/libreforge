@@ -30,11 +30,7 @@ object TriggerTridentAttack : Trigger("trident_attack") {
     @EventHandler(ignoreCancelled = true)
     fun onProjectileLaunch(event: ProjectileLaunchEvent) {
         val shooter = event.entity.shooter as? LivingEntity ?: return
-        val trident = event.entity
-
-        if (trident !is Trident) {
-            return
-        }
+        val trident = event.entity as? Trident ?: return
 
         trident.setMetadata(
             META_KEY,
@@ -47,13 +43,13 @@ object TriggerTridentAttack : Trigger("trident_attack") {
         val trident = event.damager as? Trident ?: return
         val victim = event.entity as? LivingEntity ?: return
 
-        val shooter = trident.shooter as? Player ?: return
+        val shooter = trident.shooter as? LivingEntity ?: return
 
         @Suppress("UNCHECKED_CAST")
         this.dispatch(
             shooter.toDispatcher(),
             TriggerData(
-                player = shooter,
+                player = shooter as? Player,
                 victim = victim,
                 projectile = trident,
                 location = trident.location,

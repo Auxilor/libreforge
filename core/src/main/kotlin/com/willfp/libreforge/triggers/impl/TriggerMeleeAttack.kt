@@ -21,7 +21,7 @@ object TriggerMeleeAttack : Trigger("melee_attack") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityDamageByEntityEvent) {
-        val attacker = event.damager as? Player ?: return
+        val attacker = event.damager as? LivingEntity ?: return
         val victim = event.entity as? LivingEntity ?: return
 
         if (event.cause == EntityDamageEvent.DamageCause.THORNS) {
@@ -31,11 +31,11 @@ object TriggerMeleeAttack : Trigger("melee_attack") {
         this.dispatch(
             attacker.toDispatcher(),
             TriggerData(
-                player = attacker,
+                player = attacker as? Player,
                 victim = victim,
                 location = victim.location,
                 event = event,
-                item = attacker.inventory.itemInMainHand,
+                item = attacker.equipment?.itemInMainHand,
                 value = event.finalDamage
             )
         )
