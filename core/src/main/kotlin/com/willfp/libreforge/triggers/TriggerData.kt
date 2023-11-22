@@ -65,12 +65,6 @@ data class TriggerData @JvmOverloads constructor(
         dispatch(player.toDispatcher())
 
     /**
-     * Turn into a dispatched trigger for the same [dispatcher].
-     */
-    fun dispatch() =
-        dispatch(dispatcher)
-
-    /**
      * Turn into a dispatched trigger for a new [dispatcher].
      */
     fun dispatch(dispatcher: Dispatcher<*>) = DispatchedTrigger(

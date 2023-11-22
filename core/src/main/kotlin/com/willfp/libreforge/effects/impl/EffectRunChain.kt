@@ -14,18 +14,14 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
 object EffectRunChain : Effect<NoCompileData>("run_chain") {
-    override val parameters = setOf(
-        TriggerParameter.PLAYER
-    )
+    override val isPermanent = false
 
     override val arguments = arguments {
         require("chain", "You must specify the chain to run!")
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
-        val player = data.player ?: return false
-
-        val dispatch = data.dispatch(player.toDispatcher())
+        val dispatch = data.dispatch(data.dispatcher)
 
         val args = config.getSubsection("chain_args")
 
