@@ -5,26 +5,25 @@ import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.LivingEntity
-import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
-import org.bukkit.event.entity.EntityTargetEvent
+import org.bukkit.event.entity.EntityCombustByBlockEvent
+import org.bukkit.event.entity.EntityCombustEvent
 
-object TriggerEntityTarget : Trigger("entity_target") {
+object TriggerEntityCatchFireFromBlock : Trigger("entity_catch_fire_from_block") {
     override val parameters = setOf(
-        TriggerParameter.PLAYER,
-        TriggerParameter.VICTIM
+        TriggerParameter.VICTIM,
+        TriggerParameter.LOCATION
     )
 
     @EventHandler(ignoreCancelled = true)
-    fun handle(event: EntityTargetEvent) {
-        val target = event.target ?: return
-        val entity = event.entity as? LivingEntity ?: return
+    fun handle(event: EntityCombustByBlockEvent) {
+        val entity = event.entity
 
         this.dispatch(
-            target.toDispatcher(),
+            entity.toDispatcher(),
             TriggerData(
-                player = target as? Player,
-                victim = entity
+                victim = entity as? LivingEntity,
+                location = entity.location,
             )
         )
     }

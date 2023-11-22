@@ -30,8 +30,17 @@ import com.willfp.libreforge.triggers.impl.TriggerEmptyBucket
 import com.willfp.libreforge.triggers.impl.TriggerEnable
 import com.willfp.libreforge.triggers.impl.TriggerEnchantItem
 import com.willfp.libreforge.triggers.impl.TriggerEnterBed
+import com.willfp.libreforge.triggers.impl.TriggerEntityBreakDoor
+import com.willfp.libreforge.triggers.impl.TriggerEntityCatchFireFromBlock
+import com.willfp.libreforge.triggers.impl.TriggerEntityCatchFireFromEntity
+import com.willfp.libreforge.triggers.impl.TriggerEntityDamage
+import com.willfp.libreforge.triggers.impl.TriggerEntityDamageByEntity
+import com.willfp.libreforge.triggers.impl.TriggerEntityDeath
 import com.willfp.libreforge.triggers.impl.TriggerEntityItemDrop
+import com.willfp.libreforge.triggers.impl.TriggerEntityItemPickup
+import com.willfp.libreforge.triggers.impl.TriggerEntitySpawn
 import com.willfp.libreforge.triggers.impl.TriggerEntityTarget
+import com.willfp.libreforge.triggers.impl.TriggerEntityTeleport
 import com.willfp.libreforge.triggers.impl.TriggerFallDamage
 import com.willfp.libreforge.triggers.impl.TriggerFillBucket
 import com.willfp.libreforge.triggers.impl.TriggerGainHunger
@@ -208,5 +217,14 @@ object Triggers : Registry<Trigger>() {
         register(TriggerLevelUpItem)
         register(TriggerTameAnimal)
         register(TriggerClickBlock)
+        register(TriggerEntityBreakDoor)
+        register(TriggerEntityCatchFireFromBlock)
+        register(TriggerEntityCatchFireFromEntity)
+        register(TriggerEntityDamage)
+        register(TriggerEntityDamageByEntity)
+        register(TriggerEntityDeath)
+        register(TriggerEntityItemPickup)
+        register(TriggerEntitySpawn)
+        register(TriggerEntityTeleport)
     }
 }

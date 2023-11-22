@@ -5,26 +5,26 @@ import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.LivingEntity
-import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
-import org.bukkit.event.entity.EntityTargetEvent
+import org.bukkit.event.EventPriority
+import org.bukkit.event.entity.EntityBreakDoorEvent
+import org.bukkit.event.entity.EntitySpawnEvent
 
-object TriggerEntityTarget : Trigger("entity_target") {
+object TriggerEntityBreakDoor : Trigger("entity_break_door") {
     override val parameters = setOf(
-        TriggerParameter.PLAYER,
-        TriggerParameter.VICTIM
+        TriggerParameter.VICTIM,
+        TriggerParameter.LOCATION
     )
 
     @EventHandler(ignoreCancelled = true)
-    fun handle(event: EntityTargetEvent) {
-        val target = event.target ?: return
-        val entity = event.entity as? LivingEntity ?: return
+    fun handle(event: EntityBreakDoorEvent) {
+        val entity = event.entity
 
         this.dispatch(
-            target.toDispatcher(),
+            entity.toDispatcher(),
             TriggerData(
-                player = target as? Player,
-                victim = entity
+                victim = entity as? LivingEntity,
+                location = entity.location,
             )
         )
     }
