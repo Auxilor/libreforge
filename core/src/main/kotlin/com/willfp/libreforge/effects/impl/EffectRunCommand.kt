@@ -13,20 +13,18 @@ import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
 object EffectRunCommand : Effect<NoCompileData>("run_command") {
-    override val parameters = setOf(
-        TriggerParameter.PLAYER
-    )
+    override val isPermanent = false
 
     override val arguments = arguments {
         require(listOf("commands", "command"), "You must specify the command(s) to run!")
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
-        val player = data.player ?: return false
+        val player = data.player
         val victim = data.victim as? Player
 
         val commands = config.getStrings("commands", "command")
-            .map { it.replace("%player%", player.name)
+            .map { it.replace("%player%", player?.name ?: "%player")
             it.replace("%victim%", victim?.name ?: "")}
             .map { it.translatePlaceholders(config.toPlaceholderContext(data)) }
 
