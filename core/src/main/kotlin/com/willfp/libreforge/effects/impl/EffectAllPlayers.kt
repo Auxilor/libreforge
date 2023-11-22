@@ -21,7 +21,8 @@ object EffectAllPlayers : Effect<Chain?>("all_players") {
     override fun onTrigger(config: Config, data: TriggerData, compileData: Chain?): Boolean {
         for (player in Bukkit.getOnlinePlayers()) {
             compileData?.trigger(
-                data.dispatch(player.toDispatcher()),
+                data.copy(player = player)
+                    .dispatch(player.toDispatcher()),
             )
         }
 

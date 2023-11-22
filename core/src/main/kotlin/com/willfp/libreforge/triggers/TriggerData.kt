@@ -3,6 +3,7 @@ package com.willfp.libreforge.triggers
 import com.willfp.eco.core.items.HashedItem
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.EmptyProvidedHolder
+import com.willfp.libreforge.GlobalDispatcher
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.getProvider
 import com.willfp.libreforge.toDispatcher
@@ -15,12 +16,13 @@ import org.bukkit.entity.Projectile
 import org.bukkit.event.Event
 import org.bukkit.inventory.ItemStack
 import org.bukkit.util.Vector
+import org.mozilla.javascript.tools.shell.Global
 import java.util.Objects
 
-data class TriggerData(
+data class TriggerData @JvmOverloads constructor(
     /*
-    In order to get the holder from the trigger data without
-    having to pass it around everywhere, we just pass it in
+    In order to get the holder and dispatcher from the trigger data without
+    having to pass them around everywhere, we just pass them in
     Trigger#dispatch by copying over the trigger data.
      */
     val holder: ProvidedHolder = EmptyProvidedHolder,
@@ -43,7 +45,10 @@ data class TriggerData(
 
     It's really not very nice, but it's good enough. Just don't think about it.
      */
-    internal val _originalPlayer: Player? = player
+    internal val _originalPlayer: Player? = player,
+
+    // The dispatcher is here at the end so that it works nicely with @JvmOverloads
+    val dispatcher: Dispatcher<*> = GlobalDispatcher,
 ) {
     val foundItem: ItemStack?
         get() = holder.getProvider() ?: item
@@ -60,7 +65,13 @@ data class TriggerData(
         dispatch(player.toDispatcher())
 
     /**
-     * Turn into a dispatched trigger for a [dispatcher].
+     * Turn into a dispatched trigger for the same [dispatcher].
+     */
+    fun dispatch() =
+        dispatch(dispatcher)
+
+    /**
+     * Turn into a dispatched trigger for a new [dispatcher].
      */
     fun dispatch(dispatcher: Dispatcher<*>) = DispatchedTrigger(
         dispatcher,

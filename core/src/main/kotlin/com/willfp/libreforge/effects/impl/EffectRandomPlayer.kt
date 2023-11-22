@@ -21,7 +21,8 @@ object EffectRandomPlayer : Effect<Chain?>("random_player") {
     override fun onTrigger(config: Config, data: TriggerData, compileData: Chain?): Boolean {
         Bukkit.getOnlinePlayers().randomOrNull()?.let { player ->
             compileData?.trigger(
-                data.dispatch(player.toDispatcher()),
+                data.copy(player = player)
+                    .dispatch(player.toDispatcher()),
             )
         }
 

@@ -38,7 +38,7 @@ class DispatchedTriggerFactory(
         }
 
         dispatcherTriggers[dispatcher.uuid] += hash
-        return DispatchedTrigger(dispatcher, trigger, data)
+        return DispatchedTrigger(dispatcher, trigger, data.copy(dispatcher = dispatcher))
     }
 
     internal fun startTicking() {

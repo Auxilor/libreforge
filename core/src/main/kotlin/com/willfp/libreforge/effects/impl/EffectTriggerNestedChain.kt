@@ -17,14 +17,10 @@ as an internal component. It's used to make nested chains work.
  */
 
 object EffectTriggerNestedChain : Effect<RichChain?>("trigger_nested_chain") {
-    override val parameters = setOf(
-        TriggerParameter.PLAYER
-    )
+    override val isPermanent = false
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: RichChain?): Boolean {
-        val player = data.player ?: return false
-
-        val dispatch = data.dispatch(player.toDispatcher())
+        val dispatch = data.dispatch(data.dispatcher)
         return compileData?.trigger(dispatch) == true
     }
 

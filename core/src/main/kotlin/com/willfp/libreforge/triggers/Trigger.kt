@@ -78,7 +78,7 @@ abstract class Trigger(
             return
         }
 
-        dispatch.generatePlaceholders(data)
+        dispatch.generatePlaceholders()
 
         val dispatchEvent = TriggerDispatchEvent(dispatcher, dispatch)
         Bukkit.getPluginManager().callEvent(dispatchEvent)
