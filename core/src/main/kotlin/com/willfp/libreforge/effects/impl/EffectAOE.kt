@@ -15,9 +15,7 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.LivingEntity
 
 object EffectAOE : Effect<AOECompileData>("aoe") {
-    override val parameters = setOf(
-        TriggerParameter.PLAYER
-    )
+    override val isPermanent = false
 
     override val arguments = arguments {
         require("effects", "You must specify the effects!")
