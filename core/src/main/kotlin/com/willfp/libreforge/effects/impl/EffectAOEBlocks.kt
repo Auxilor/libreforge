@@ -24,9 +24,20 @@ object EffectAOEBlocks : Effect<AOECompileData>("aoe_blocks") {
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: AOECompileData): Boolean {
-        val location = data.dispatcher.get<LivingEntity>()?.eyeLocation
-            ?: data.dispatcher.location
+        val location = data.location?.clone()
+            ?: data.dispatcher.location?.clone()
             ?: return false
+
+        val dispatcherLocation = data.dispatcher.location
+
+        if (dispatcherLocation != null) {
+            if (location.world == dispatcherLocation.world
+                && location.distanceSquared(dispatcherLocation) <= 1.0
+            ) {
+                location.add(0.0, data.dispatcher.get<LivingEntity>()?.eyeHeight ?: 0.0, 0.0)
+                location.direction = dispatcherLocation.direction
+            }
+        }
 
         val shape = compileData.shape ?: return false
 
