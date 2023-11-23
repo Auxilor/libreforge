@@ -117,6 +117,15 @@ conditions:
   default-state-off-main-thread: true
 
 refresh:
+  entities:
+    # If entities should be polled for updates, and how often (in ticks).
+    # If you don't have any effects that run from entities, you can disable this to save performance.
+    enabled: true
+
+    # How often to poll entities for updates (in ticks). Higher values will save performance, but
+    # can make effects feel less responsive.
+    interval: 60
+
   inventory-click:
     # Inventory clicks refresh active holders, but a group of malicious users spamming can cause server lag.
     # Setting a timeout ensures only one click triggers a refresh within the specified time (in milliseconds).

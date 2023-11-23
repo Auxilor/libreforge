@@ -120,20 +120,22 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             }
         }
 
-        /*
-        Poll for changes in entities
-        Each world is offset by 3 ticks to prevent lag spikes
-         */
-        var currentOffset = 30L
-        for (world in Bukkit.getWorlds()) {
-            plugin.scheduler.runTimer(currentOffset, 60) {
-                for (entity in world.entities) {
-                    if (entity is LivingEntity) {
-                        entity.toDispatcher().refreshHolders()
+        if (configYml.getBool("refresh.entities.enabled")) {
+            /*
+            Poll for changes in entities
+            Each world is offset by 3 ticks to prevent lag spikes
+             */
+            var currentOffset = 30L
+            for (world in Bukkit.getWorlds()) {
+                plugin.scheduler.runTimer(currentOffset, configYml.getInt("refresh.entities.interval").toLong()) {
+                    for (entity in world.entities) {
+                        if (entity is LivingEntity) {
+                            entity.toDispatcher().refreshHolders()
+                        }
                     }
                 }
+                currentOffset += 3
             }
-            currentOffset += 3
         }
 
         // Poll for changes in global holders
