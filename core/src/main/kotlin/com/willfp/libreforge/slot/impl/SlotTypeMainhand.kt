@@ -7,7 +7,7 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
 // Pass in any ID, so you can have both mainhand and hand as valid IDs
-object SlotTypeMainhand : SlotType("mainhand") {
+open class SlotTypeMainhand(id: String) : SlotType(id) {
     override fun addToSlot(player: Player, item: ItemStack): Boolean {
         if (!player.inventory.itemInMainHand.isEcoEmpty) {
             return false
