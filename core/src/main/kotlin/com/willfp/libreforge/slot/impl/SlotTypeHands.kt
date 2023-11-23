@@ -6,7 +6,7 @@ import org.bukkit.inventory.ItemStack
 
 object SlotTypeHands : SlotType("hands") {
     override fun addToSlot(player: Player, item: ItemStack): Boolean {
-        if (!SlotTypeMainhand.addToSlot(player, item)) {
+        if (!SlotTypeHand.addToSlot(player, item)) {
             return SlotTypeOffhand.addToSlot(player, item)
         }
 
