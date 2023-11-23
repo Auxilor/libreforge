@@ -7,6 +7,7 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.LivingEntity
 import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerInteractEntityEvent
+import org.bukkit.inventory.EquipmentSlot
 
 object TriggerClickEntity : Trigger("click_entity") {
     override val parameters = setOf(
@@ -20,6 +21,10 @@ object TriggerClickEntity : Trigger("click_entity") {
     fun handle(event: PlayerInteractEntityEvent) {
         val entity = event.rightClicked as? LivingEntity ?: return
         val player = event.player
+
+        if (event.hand != EquipmentSlot.HAND) {
+            return
+        }
 
         this.dispatch(
             player.toDispatcher(),

@@ -8,6 +8,7 @@ import org.bukkit.Material
 import org.bukkit.event.EventHandler
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.inventory.EquipmentSlot
 
 object TriggerClickBlock : Trigger("click_block") {
     override val parameters = setOf(
@@ -28,6 +29,10 @@ object TriggerClickBlock : Trigger("click_block") {
     fun handle(event: PlayerInteractEvent) {
         val block = event.clickedBlock ?: return
         val player = event.player
+
+        if (event.hand != EquipmentSlot.HAND) {
+            return
+        }
 
         if (LEFT_CLICK_ITEMS.contains(event.item?.type)) {
             if (event.action != Action.LEFT_CLICK_BLOCK) {
