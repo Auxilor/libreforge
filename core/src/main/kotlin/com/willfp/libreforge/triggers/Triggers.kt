@@ -81,6 +81,7 @@ import com.willfp.libreforge.triggers.impl.TriggerShearEntity
 import com.willfp.libreforge.triggers.impl.TriggerShieldBlock
 import com.willfp.libreforge.triggers.impl.TriggerShootBow
 import com.willfp.libreforge.triggers.impl.TriggerSmelt
+import com.willfp.libreforge.triggers.impl.TriggerSmithItem
 import com.willfp.libreforge.triggers.impl.TriggerSwapHands
 import com.willfp.libreforge.triggers.impl.TriggerTakeDamage
 import com.willfp.libreforge.triggers.impl.TriggerTakeEntityDamage
@@ -226,5 +227,6 @@ object Triggers : Registry<Trigger>() {
         register(TriggerEntitySpawn)
         register(TriggerEntityTeleport)
         register(TriggerCompleteAdvancement)
+        register(TriggerSmithItem)
     }
 }
