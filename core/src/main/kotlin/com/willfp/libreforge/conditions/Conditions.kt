@@ -23,6 +23,7 @@ import com.willfp.libreforge.conditions.impl.ConditionBelowXPLevel
 import com.willfp.libreforge.conditions.impl.ConditionBelowY
 import com.willfp.libreforge.conditions.impl.ConditionCanAffordPrice
 import com.willfp.libreforge.conditions.impl.ConditionGlobalPointsEqual
+import com.willfp.libreforge.conditions.impl.ConditionHasCompletedAdvancement
 import com.willfp.libreforge.conditions.impl.ConditionHasItem
 import com.willfp.libreforge.conditions.impl.ConditionHasItemData
 import com.willfp.libreforge.conditions.impl.ConditionHasPermission
@@ -206,5 +207,6 @@ object Conditions : Registry<Condition<*>>() {
         register(ConditionHasItemData)
         register(ConditionItemDataEquals)
         register(ConditionIsOp)
+        register(ConditionHasCompletedAdvancement)
     }
 }
