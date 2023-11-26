@@ -8,6 +8,7 @@ import com.willfp.libreforge.ConfigWarning
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.deprecationMessage
 import com.willfp.libreforge.filters.impl.FilterAboveHealthPercent
+import com.willfp.libreforge.filters.impl.FilterAdvancements
 import com.willfp.libreforge.filters.impl.FilterBlocks
 import com.willfp.libreforge.filters.impl.FilterDamageCause
 import com.willfp.libreforge.filters.impl.FilterEntities
@@ -114,5 +115,6 @@ object Filters : Registry<Filter<*, *>>() {
         register(FilterValueEquals)
         register(FilterValueBelow)
         register(FilterIsExpressionTrue)
+        register(FilterAdvancements)
     }
 }

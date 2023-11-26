@@ -18,6 +18,7 @@ import com.willfp.libreforge.triggers.impl.TriggerChangeChunk
 import com.willfp.libreforge.triggers.impl.TriggerChangeWorld
 import com.willfp.libreforge.triggers.impl.TriggerClickBlock
 import com.willfp.libreforge.triggers.impl.TriggerClickEntity
+import com.willfp.libreforge.triggers.impl.TriggerCompleteAdvancement
 import com.willfp.libreforge.triggers.impl.TriggerConsume
 import com.willfp.libreforge.triggers.impl.TriggerCraft
 import com.willfp.libreforge.triggers.impl.TriggerDamageItem
@@ -224,5 +225,6 @@ object Triggers : Registry<Trigger>() {
         register(TriggerEntityDeath)
         register(TriggerEntitySpawn)
         register(TriggerEntityTeleport)
+        register(TriggerCompleteAdvancement)
     }
 }
