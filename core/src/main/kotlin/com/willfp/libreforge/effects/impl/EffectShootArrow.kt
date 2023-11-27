@@ -4,6 +4,8 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.util.runExempted
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getDoubleFromExpression
+import com.willfp.libreforge.getOrNull
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.AbstractArrow
@@ -27,8 +29,9 @@ object EffectShootArrow : Effect<NoCompileData>("shoot_arrow") {
                 player.launchProjectile(Arrow::class.java, velocity)
             }
 
-            if (config.getBool("launch-at-location") && data.location != null) {
-                arrow.teleportAsync(data.location)
+            val damage = config.getOrNull("arrow_damage") { getDoubleFromExpression(it, data) }
+            if (damage != null) {
+                arrow.damage = damage
             }
 
             arrow.pickupStatus = AbstractArrow.PickupStatus.DISALLOWED

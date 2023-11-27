@@ -38,7 +38,7 @@ object EffectShoot : Effect<NoCompileData>("shoot") {
                 player.launchProjectile(projectileClass as Class<out Projectile>, velocity)
             }
 
-            if (config.getBool("launch-at-location") && data.location != null) {
+            if (config.getBool("launch-at-location") && data.location != null && projectile !is AbstractArrow) {
                 projectile.teleportAsync(data.location)
             }
 
