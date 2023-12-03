@@ -6,6 +6,7 @@ import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.block.BlockBreakEvent
 
 object TriggerMineBlock : Trigger("mine_block") {
@@ -17,7 +18,7 @@ object TriggerMineBlock : Trigger("mine_block") {
         TriggerParameter.ITEM
     )
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     fun handle(event: BlockBreakEvent) {
         val player = event.player
         val block = event.block
