@@ -37,8 +37,8 @@ object EffectCreateBossBar : Effect<NoCompileData>("create_boss_bar") {
         val player = data.player ?: return false
 
         val name = config.getFormattedString("name", data)
-        val color = enumValueOfOrNull<BossBar.Color>(config.getFormattedString("color").uppercase()) ?: return false
-        val style = enumValueOfOrNull<BossBar.Overlay>(config.getFormattedString("style").uppercase()) ?: return false
+        val color = enumValueOfOrNull<BossBar.Color>(config.getFormattedString("color", data).uppercase()) ?: return false
+        val style = enumValueOfOrNull<BossBar.Overlay>(config.getFormattedString("style", data).uppercase()) ?: return false
         val progress = config.getDoubleFromExpression("progress", data).coerceIn(0.0, 100.0).toFloat() / 100f
 
         val bossBar = BossBar.bossBar(

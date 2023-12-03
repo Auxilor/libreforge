@@ -455,6 +455,6 @@ object Effects : Registry<Effect<*>>() {
         register(EffectUpdateBossBar)
         register(EffectOpenCrafting)
         register(EffectAddGlobalPoints)
-        register(EffectDropSlotItem)
+        register(EffectDropItemSlot)
     }
 }
