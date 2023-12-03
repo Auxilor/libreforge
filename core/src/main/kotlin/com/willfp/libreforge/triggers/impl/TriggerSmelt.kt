@@ -41,7 +41,10 @@ object TriggerSmelt : Trigger("smelt") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: FurnaceSmeltEvent) {
-        val furnace = event.block.state as? Furnace ?: return
+        if (event.block.state !is Furnace) {
+            return
+        }
+
         val player = playerCache[event.block.location] ?: return
         val item = event.result
 
