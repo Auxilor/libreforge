@@ -24,10 +24,10 @@ object EffectCreateBossBar : Effect<NoCompileData>("create_boss_bar") {
     override val arguments = arguments {
         require("id", "You must specify the id of the boss bar!")
         require("name", "You must specify the name of the boss bar!")
-        require("color", "You must specify a valid boss bar color!", Config::getString) {
+        require("color", "You must specify a valid boss bar color!", Config::getFormattedString) {
             enumValueOfOrNull<BossBar.Color>(it.uppercase()) != null
         }
-        require("style", "You must specify a valid boss bar style!", Config::getString) {
+        require("style", "You must specify a valid boss bar style!", Config::getFormattedString) {
             enumValueOfOrNull<BossBar.Overlay>(it.uppercase()) != null
         }
         require("progress", "You must specify the boss bar progress percentage!")
@@ -37,8 +37,8 @@ object EffectCreateBossBar : Effect<NoCompileData>("create_boss_bar") {
         val player = data.player ?: return false
 
         val name = config.getFormattedString("name", data)
-        val color = enumValueOfOrNull<BossBar.Color>(config.getString("color").uppercase()) ?: return false
-        val style = enumValueOfOrNull<BossBar.Overlay>(config.getString("style").uppercase()) ?: return false
+        val color = enumValueOfOrNull<BossBar.Color>(config.getFormattedString("color").uppercase()) ?: return false
+        val style = enumValueOfOrNull<BossBar.Overlay>(config.getFormattedString("style").uppercase()) ?: return false
         val progress = config.getDoubleFromExpression("progress", data).coerceIn(0.0, 100.0).toFloat() / 100f
 
         val bossBar = BossBar.bossBar(

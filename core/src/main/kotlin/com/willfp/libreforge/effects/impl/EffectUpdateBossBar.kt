@@ -41,7 +41,7 @@ object EffectUpdateBossBar : Effect<NoCompileData>("update_boss_bar") {
         }
 
         if (config.has("color")) {
-            val color = enumValueOfOrNull<BossBar.Color>(config.getString("name").uppercase())
+            val color = enumValueOfOrNull<BossBar.Color>(config.getFormattedString("color").uppercase())
 
             if (color != null) {
                 BossBars.update(id) {
@@ -51,7 +51,7 @@ object EffectUpdateBossBar : Effect<NoCompileData>("update_boss_bar") {
         }
 
         if (config.has("style")) {
-            val style = enumValueOfOrNull<BossBar.Overlay>(config.getString("style").uppercase())
+            val style = enumValueOfOrNull<BossBar.Overlay>(config.getFormattedString("style").uppercase())
 
             if (style != null) {
                 BossBars.update(id) {
