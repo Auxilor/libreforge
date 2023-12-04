@@ -12,6 +12,7 @@ import com.willfp.libreforge.effects.arguments.custom.CustomEffectArguments
 import com.willfp.libreforge.effects.impl.bossbar.BossBarProgressPlaceholder
 import com.willfp.libreforge.integrations.aureliumskills.AureliumSkillsIntegration
 import com.willfp.libreforge.integrations.citizens.CitizensIntegration
+import com.willfp.libreforge.integrations.custombiomes.impl.CustomBiomesTerra
 import com.willfp.libreforge.integrations.jobs.JobsIntegration
 import com.willfp.libreforge.integrations.levelledmobs.LevelledMobsIntegration
 import com.willfp.libreforge.integrations.mcmmo.McMMOIntegration
@@ -164,6 +165,7 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             IntegrationLoader("Vault") { VaultIntegration.load(this) },
             IntegrationLoader("WorldGuard") { WorldGuardIntegration.load(this) },
             IntegrationLoader("TAB") { TabIntegration.load(this) },
+            IntegrationLoader("Terra") { CustomBiomesTerra.load(this) }
         )
     }
 
