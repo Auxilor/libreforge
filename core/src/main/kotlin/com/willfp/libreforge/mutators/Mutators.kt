@@ -4,21 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.registry.Registry
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.ViolationContext
-import com.willfp.libreforge.mutators.impl.MutatorBlockToLocation
-import com.willfp.libreforge.mutators.impl.MutatorDispatcherAsPlayer
-import com.willfp.libreforge.mutators.impl.MutatorDispatcherAsVictim
-import com.willfp.libreforge.mutators.impl.MutatorLocationToBlock
-import com.willfp.libreforge.mutators.impl.MutatorLocationToCursor
-import com.willfp.libreforge.mutators.impl.MutatorLocationToPlayer
-import com.willfp.libreforge.mutators.impl.MutatorLocationToProjectile
-import com.willfp.libreforge.mutators.impl.MutatorLocationToVictim
-import com.willfp.libreforge.mutators.impl.MutatorPlayerAsVictim
-import com.willfp.libreforge.mutators.impl.MutatorSpinLocation
-import com.willfp.libreforge.mutators.impl.MutatorSpinVelocity
-import com.willfp.libreforge.mutators.impl.MutatorTranslateLocation
-import com.willfp.libreforge.mutators.impl.MutatorVictimAsDispatcher
-import com.willfp.libreforge.mutators.impl.MutatorVictimAsPlayer
-import com.willfp.libreforge.mutators.impl.MutatorVictimToOwner
+import com.willfp.libreforge.mutators.impl.*
 
 object Mutators: Registry<Mutator<*>>() {
     /**
@@ -76,5 +62,6 @@ object Mutators: Registry<Mutator<*>>() {
         register(MutatorVictimAsDispatcher)
         register(MutatorDispatcherAsPlayer)
         register(MutatorDispatcherAsVictim)
+        register(MutatorLocationToDrop)
     }
 }
