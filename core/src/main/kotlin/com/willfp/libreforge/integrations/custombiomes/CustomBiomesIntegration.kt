@@ -10,5 +10,5 @@ interface CustomBiomesIntegration: LoadableIntegration {
      * @param location The location to get the biome at.
      * @return         The found biome, null otherwise
      */
-    fun getBiome(location: Location?): CustomBiome?
+    fun getBiome(location: Location?): NamedBiome?
 }

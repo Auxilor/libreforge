@@ -7,7 +7,7 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
-import com.willfp.libreforge.integrations.custombiomes.CustomBiomesManager
+import com.willfp.libreforge.integrations.custombiomes.namedBiome
 
 object ConditionInBiome : Condition<NoCompileData>("in_biome") {
     override val arguments = arguments {
@@ -21,8 +21,8 @@ object ConditionInBiome : Condition<NoCompileData>("in_biome") {
         compileData: NoCompileData
     ): Boolean {
         val location = dispatcher.location ?: return false
-        return config.getStrings("biomes").containsIgnoreCase(
-            CustomBiomesManager.getBiomeAt(location)?.name ?: return false
-        )
+
+        return config.getStrings("biomes")
+            .containsIgnoreCase(location.namedBiome?.name ?: return false)
     }
 }

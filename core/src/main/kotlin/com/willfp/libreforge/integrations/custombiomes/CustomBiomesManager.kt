@@ -5,37 +5,18 @@ import com.willfp.libreforge.plugin
 import org.bukkit.Location
 import org.bukkit.event.Listener
 
-object CustomBiomesManager {
-    /**
-     * A set of all registered biomes.
-     */
-    private val REGISTRY = IntegrationRegistry<CustomBiomesIntegration>()
+val customBiomesIntegrations = IntegrationRegistry<CustomBiomesIntegration>()
 
-    /**
-     * Register a new biomes integration.
-     *
-     * @param biomesIntegration The biomes integration to register.
-     */
-    fun register(biomesIntegration: CustomBiomesIntegration) {
-        if (biomesIntegration is Listener) {
-            plugin.eventManager.registerListener((biomesIntegration as Listener))
-        }
-        REGISTRY.register(biomesIntegration)
-    }
+val Location.namedBiome: NamedBiome?
+    get() {
+        val world = this.world ?: return null
+        val vanilla = world.getBiome(this)
 
-    fun getBiomeAt(location: Location): CustomBiome? {
-        val world = location.world ?: return null
-        val vanilla = world.getBiome(location)
-        return if (vanilla.name.equals("custom", ignoreCase = true)) {
-            for (integration in REGISTRY) {
-                val biome = integration.getBiome(location)
-                if (biome != null) {
-                    return biome
-                }
-            }
-            null
+        return if (vanilla.name.lowercase() == "biome") {
+            customBiomesIntegrations
+                .firstOrNull { it.getBiome(this) != null }
+                ?.getBiome(this)
         } else {
-            CustomBiome(vanilla.name)
+            VanillaNamedBiome(vanilla)
         }
     }
-}

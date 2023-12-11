@@ -1,18 +1,19 @@
 package com.willfp.libreforge.integrations.custombiomes.impl
 
+import com.dfsek.terra.api.world.biome.Biome
 import com.dfsek.terra.bukkit.world.BukkitAdapter
 import com.willfp.eco.core.EcoPlugin
-import com.willfp.libreforge.integrations.custombiomes.CustomBiome
 import com.willfp.libreforge.integrations.custombiomes.CustomBiomesIntegration
-import com.willfp.libreforge.integrations.custombiomes.CustomBiomesManager
+import com.willfp.libreforge.integrations.custombiomes.NamedBiome
+import com.willfp.libreforge.integrations.custombiomes.customBiomesIntegrations
 import org.bukkit.Location
 
-object CustomBiomesTerra: CustomBiomesIntegration {
+object CustomBiomesTerra : CustomBiomesIntegration {
     override fun getPluginName(): String {
         return "Terra"
     }
 
-    override fun getBiome(location: Location?): CustomBiome? {
+    override fun getBiome(location: Location?): NamedBiome? {
         if (location == null || location.world == null) {
             return null
         }
@@ -22,10 +23,16 @@ object CustomBiomesTerra: CustomBiomesIntegration {
         val biomeProvider = terraWorld.biomeProvider ?: return null
         val biome = biomeProvider.getBiome(terraLocation, terraWorld.seed) ?: return null
 
-        return CustomBiome(biome.id)
+        return TerraNamedBiome(biome)
     }
 
     override fun load(plugin: EcoPlugin) {
-        CustomBiomesManager.register(this)
+        customBiomesIntegrations.register(this)
+    }
+
+    private class TerraNamedBiome(
+        biome: Biome
+    ) : NamedBiome {
+        override val name: String = biome.id
     }
 }
