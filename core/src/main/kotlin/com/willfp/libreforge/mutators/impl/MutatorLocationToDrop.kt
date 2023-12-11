@@ -2,14 +2,11 @@ package com.willfp.libreforge.mutators.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.NoCompileData
-import com.willfp.libreforge.arguments
 import com.willfp.libreforge.mutators.Mutator
 import com.willfp.libreforge.mutators.parameterTransformers
-import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import org.bukkit.FluidCollisionMode
-import org.bukkit.event.player.PlayerDropItemEvent
+import com.willfp.libreforge.triggers.event.EditableDropEvent
 
 object MutatorLocationToDrop : Mutator<NoCompileData>("location_to_drop") {
     override val parameterTransformers = parameterTransformers {
@@ -17,11 +14,10 @@ object MutatorLocationToDrop : Mutator<NoCompileData>("location_to_drop") {
     }
 
     override fun mutate(data: TriggerData, config: Config, compileData: NoCompileData): TriggerData {
-        val event = data.event as? PlayerDropItemEvent ?: return data
-
+        val event = data.event as? EditableDropEvent ?: return data
 
         return data.copy(
-            location = event.itemDrop.location
+            location = event.dropLocation
         )
     }
 }
