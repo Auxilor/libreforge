@@ -11,7 +11,8 @@ object TriggerDropItem : Trigger("drop_item") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.ITEM,
-        TriggerParameter.EVENT
+        TriggerParameter.EVENT,
+        TriggerParameter.LOCATION
     )
 
     @EventHandler(ignoreCancelled = true)
@@ -24,7 +25,8 @@ object TriggerDropItem : Trigger("drop_item") {
                 player = player,
                 item = event.itemDrop.itemStack,
                 value = event.itemDrop.itemStack.amount.toDouble(),
-                event = event
+                event = event,
+                location = event.itemDrop.location
             )
         )
     }

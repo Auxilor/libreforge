@@ -22,6 +22,7 @@ dependencies {
     compileOnly("net.citizensnpcs:citizens-main:2.0.31-SNAPSHOT") {
         exclude(group = "net.byteflux", module = "libby-bukkit")
     }
+    compileOnly("com.dfsek.terra:common:6.4.1-BETA+3aef97738")
 
     compileOnly(fileTree("../lib") {
         include("*.jar")
