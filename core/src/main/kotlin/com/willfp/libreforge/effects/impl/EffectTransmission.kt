@@ -37,8 +37,7 @@ object EffectTransmission : Effect<NoCompileData>("transmission") {
             val hitBlockFace = ray.hitBlockFace ?: return false
 
             location = hitBlock.getRelative(hitBlockFace).location
-                .add(0.5, 0.5, 0.5)
-                .add(0.5, -player.eyeHeight, 0.5)
+                .add(0.5, 0.5 - player.eyeHeight, 0.5)
         }
 
         if (location.block.isSolid || location.toVector().distance(player.location.toVector()) < 0.5) {
