@@ -4,6 +4,7 @@ import com.github.benmanes.caffeine.cache.Caffeine
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.EmptyProvidedHolder.holder
+import com.willfp.libreforge.GlobalDispatcher.location
 import com.willfp.libreforge.Holder
 import com.willfp.libreforge.HolderTemplate
 import com.willfp.libreforge.SimpleProvidedHolder
@@ -25,13 +26,10 @@ import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 object EffectAddHolderInRadius : Effect<HolderTemplate>("add_holder_in_radius") {
-    override val parameters = setOf(
-        TriggerParameter.PLAYER
-    )
+    override val isPermanent = false
 
     override val arguments = arguments {
         require("effects", "You must specify the effects!")
-        // require("conditions", "You must specify the conditions!")
         require("duration", "You must specify the duration (in ticks)!")
         require("radius", "You must specify the radius!")
     }
@@ -52,8 +50,8 @@ object EffectAddHolderInRadius : Effect<HolderTemplate>("add_holder_in_radius") 
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: HolderTemplate): Boolean {
-        val player = data.player ?: return false
-        val location = data.location ?: return false
+        val dispatcher = data.dispatcher
+        val location = dispatcher.location ?: return false
 
         val radius = config.getDoubleFromExpression("radius", data)
         val duration = config.getIntFromExpression("duration", data)
@@ -63,7 +61,7 @@ object EffectAddHolderInRadius : Effect<HolderTemplate>("add_holder_in_radius") 
             compileData.toHolder().nest(data.holder),
             location,
             radius,
-            player.uniqueId,
+            dispatcher.uuid,
             applyToSelf
         )
 

@@ -24,7 +24,6 @@ import java.util.concurrent.TimeUnit
 object EffectAddPermanentHolderInRadius : Effect<HolderTemplate>("add_permanent_holder_in_radius") {
     override val arguments = arguments {
         require("effects", "You must specify the effects!")
-        // require("conditions", "You must specify the conditions!")
         require("radius", "You must specify the radius!")
     }
 

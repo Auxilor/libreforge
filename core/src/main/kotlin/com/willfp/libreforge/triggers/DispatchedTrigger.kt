@@ -8,7 +8,7 @@ import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.placeholders.TriggerPlaceholders
 import org.bukkit.entity.Player
 
-data class DispatchedTrigger(
+class DispatchedTrigger(
     val dispatcher: Dispatcher<*>,
     val trigger: Trigger,
     val data: TriggerData
@@ -61,4 +61,13 @@ data class DispatchedTrigger(
             _placeholders += placeholder.createPlaceholders(data)
         }
     }
+
+    /**
+     * Copy this [DispatchedTrigger], optionally overriding some values.
+     */
+    fun copy(
+        dispatcher: Dispatcher<*> = this.dispatcher,
+        trigger: Trigger = this.trigger,
+        data: TriggerData = this.data
+    ): DispatchedTrigger = DispatchedTrigger(dispatcher, trigger, data).inheritPlaceholders(this)
 }
