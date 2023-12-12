@@ -1,8 +1,10 @@
 package com.willfp.libreforge
 
 import com.willfp.eco.util.NamespacedKeyUtils
+import com.willfp.libreforge.EmptyProvidedHolder.holder
 import com.willfp.libreforge.conditions.ConditionList
 import com.willfp.libreforge.effects.EffectList
+import jdk.javadoc.internal.doclets.toolkit.util.DocPath.parent
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -205,3 +207,21 @@ data class HolderTemplate(
         conditions
     )
 }
+
+/**
+ * A nested holder has a parent, to allow passing through placeholders.
+ */
+class NestedHolder(
+    private val holder: Holder,
+    val parent: ProvidedHolder
+) : Holder by holder {
+    companion object {
+        init {
+            registerHolderPlaceholderProvider<NestedHolder> { h, dispatcher ->
+                h.parent.generatePlaceholders(dispatcher)
+            }
+        }
+    }
+}
+
+fun Holder.nest(parent: ProvidedHolder) = NestedHolder(this, parent)

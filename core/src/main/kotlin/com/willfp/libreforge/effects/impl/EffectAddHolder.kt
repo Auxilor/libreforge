@@ -10,7 +10,9 @@ import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Effects
+import com.willfp.libreforge.generatePlaceholders
 import com.willfp.libreforge.getIntFromExpression
+import com.willfp.libreforge.nest
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.registerGenericHolderProvider
 import com.willfp.libreforge.triggers.TriggerData
@@ -40,7 +42,7 @@ object EffectAddHolder : Effect<HolderTemplate>("add_holder") {
         val player = data.player ?: return false
 
         val duration = config.getIntFromExpression("duration", data)
-        val holder = compileData.toHolder()
+        val holder = compileData.toHolder().nest(data.holder)
 
         holders[player.uniqueId] += holder
 

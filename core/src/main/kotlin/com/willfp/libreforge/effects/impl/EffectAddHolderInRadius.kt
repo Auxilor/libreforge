@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.impl
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Dispatcher
+import com.willfp.libreforge.EmptyProvidedHolder.holder
 import com.willfp.libreforge.Holder
 import com.willfp.libreforge.HolderTemplate
 import com.willfp.libreforge.SimpleProvidedHolder
@@ -13,6 +14,7 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.getIntFromExpression
+import com.willfp.libreforge.nest
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.registerGenericHolderProvider
 import com.willfp.libreforge.triggers.TriggerData
@@ -58,7 +60,7 @@ object EffectAddHolderInRadius : Effect<HolderTemplate>("add_holder_in_radius") 
         val applyToSelf = config.getBool("apply-to-self")
 
         val holder = NearbyHolder(
-            compileData.toHolder(),
+            compileData.toHolder().nest(data.holder),
             location,
             radius,
             player.uniqueId,

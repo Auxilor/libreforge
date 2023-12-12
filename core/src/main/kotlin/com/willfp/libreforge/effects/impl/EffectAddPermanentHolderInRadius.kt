@@ -14,6 +14,7 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.get
+import com.willfp.libreforge.nest
 import com.willfp.libreforge.registerGenericHolderProvider
 import org.bukkit.Bukkit
 import java.util.Objects
@@ -53,7 +54,7 @@ object EffectAddPermanentHolderInRadius : Effect<HolderTemplate>("add_permanent_
         val applyToSelf = config.getBool("apply-to-self")
 
         val nearbyHolder = PermanentNearbyHolder(
-            compileData.toHolder(identifiers.key),
+            compileData.toHolder(identifiers.key).nest(holder),
             radius,
             dispatcher.uuid,
             applyToSelf
