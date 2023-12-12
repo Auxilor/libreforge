@@ -77,17 +77,21 @@ private class SeparatorAmbivalentConfig(
 
     override fun getType(): ConfigType = config.type
 
-    override fun addInjectablePlaceholder(placeholders: Iterable<InjectablePlaceholder>) =
-        config.addInjectablePlaceholder(placeholders)
-
-    override fun clearInjectedPlaceholders() = config.clearInjectedPlaceholders()
-
-    override fun getPlaceholderInjections(): List<InjectablePlaceholder> = config.placeholderInjections
-
-    override fun injectPlaceholders(vararg placeholders: StaticPlaceholder) = config.injectPlaceholders(*placeholders)
-
+    // Adding them all, because I'm lazy
     override fun injectPlaceholders(vararg placeholders: InjectablePlaceholder) =
         config.injectPlaceholders(*placeholders)
+
+    override fun injectPlaceholders(vararg placeholders: StaticPlaceholder) =
+        config.injectPlaceholders(*placeholders)
+
+    override fun addInjectablePlaceholder(placeholders: MutableIterable<InjectablePlaceholder>) =
+        config.addInjectablePlaceholder(placeholders)
+
+    override fun getPlaceholderInjections(): List<InjectablePlaceholder> =
+        config.placeholderInjections
+
+    override fun clearInjectedPlaceholders() =
+        config.clearInjectedPlaceholders()
 
     override fun equals(other: Any?) =
         config == other
