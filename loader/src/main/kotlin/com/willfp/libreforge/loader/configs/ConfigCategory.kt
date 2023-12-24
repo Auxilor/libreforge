@@ -43,13 +43,6 @@ abstract class ConfigCategory(
     }
 
     /**
-     * Run before configs begin to be accepted.
-     */
-    open fun beforeAcceptCycle(plugin: LibreforgePlugin) {
-        // Override when needed.
-    }
-
-    /**
      * Run after reloading.
      */
     open fun afterReload(plugin: LibreforgePlugin) {
