@@ -456,5 +456,6 @@ object Effects : Registry<Effect<*>>() {
         register(EffectOpenCrafting)
         register(EffectAddGlobalPoints)
         register(EffectDropItemSlot)
+        register(EffectKeepLevel)
     }
 }
