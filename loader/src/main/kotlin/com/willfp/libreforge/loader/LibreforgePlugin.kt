@@ -100,6 +100,10 @@ abstract class LibreforgePlugin : EcoPlugin() {
             category.handle.clear()
         }
 
+        withLogs(category, "before accept cycle") {
+            category.beforeAcceptCycle(this)
+        }
+
         for (config in fetchConfigs(category)) {
             withLogs(category, "loading config ${config.id}") {
                 category.handle.register(config.handle)
