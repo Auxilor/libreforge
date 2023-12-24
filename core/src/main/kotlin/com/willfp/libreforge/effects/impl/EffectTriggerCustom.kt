@@ -16,11 +16,11 @@ object EffectTriggerCustom : Effect<NoCompileData>("trigger_custom") {
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
-        val player = data.player ?: return false
+        val dispatcher = data.dispatcher
         val trigger = TriggerGroupCustom.create(config.getString("trigger"))
         val value = config.getDoubleFromExpression("value", data)
 
-        trigger.dispatch(player, data.copy(value = value))
+        trigger.dispatch(dispatcher, data.copy(value = value))
 
         return true
     }

@@ -45,7 +45,7 @@ object EffectDropPickupItem : Effect<Chain?>("drop_pickup_item") {
 
         val itemStack = Items.lookup(config.getString("item")).item
 
-        val item = world.dropItem(location, itemStack)
+        val item = world.dropItemNaturally(location, itemStack)
 
         val meta = Meta(
             chain,

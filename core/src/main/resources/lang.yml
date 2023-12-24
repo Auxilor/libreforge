@@ -40,5 +40,10 @@ messages:
 
   plugin-not-installed: "&cYou don't have this plugin installed!"
 
+  must-specify-dispatcher: "&cYou must specify the dispatcher!"
+  invalid-dispatcher: "&cInvalid dispatcher!"
+  must-specify-trigger: "&cYou must specify the trigger!"
+  triggered: "custom_%id% was triggered!"
+
 picked-up-price-item: "&f+%price%"
 infinity: "∞"
