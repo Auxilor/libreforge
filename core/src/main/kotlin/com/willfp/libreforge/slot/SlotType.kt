@@ -23,6 +23,11 @@ abstract class SlotType(
      */
     abstract fun getItemSlots(player: Player): List<Int>
 
+    /**
+     * Exists for backwards compatibility.
+     */
+    fun getItems(player: Player) = getItems(player as LivingEntity)
+
     override fun equals(other: Any?): Boolean {
         return other is SlotType && other.id == this.id
     }
