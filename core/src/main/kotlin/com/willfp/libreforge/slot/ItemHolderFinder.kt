@@ -14,6 +14,18 @@ import org.bukkit.inventory.ItemStack
  */
 abstract class ItemHolderFinder<T : Holder> {
     /**
+     * The provider for this finder.
+     */
+    val provider = object : HolderProvider {
+        override fun provide(dispatcher: Dispatcher<*>): Collection<ProvidedHolder> {
+            val entity = dispatcher.get<LivingEntity>() ?: return emptyList()
+
+            return SlotTypes.values()
+                .flatMap { slot -> findHolders(entity, slot) }
+        }
+    }
+
+    /**
      * Find holders on an [item].
      */
     abstract fun find(item: ItemStack): List<T>
@@ -36,19 +48,5 @@ abstract class ItemHolderFinder<T : Holder> {
         }.flatten()
 
         return holders
-    }
-
-    /**
-     * Convert this finder to a [HolderProvider].
-     */
-    fun toHolderProvider(): HolderProvider {
-        return object : HolderProvider {
-            override fun provide(dispatcher: Dispatcher<*>): Collection<ProvidedHolder> {
-                val entity = dispatcher.get<LivingEntity>() ?: return emptyList()
-
-                return SlotTypes.values()
-                    .flatMap { slot -> findHolders(entity, slot) }
-            }
-        }
     }
 }
