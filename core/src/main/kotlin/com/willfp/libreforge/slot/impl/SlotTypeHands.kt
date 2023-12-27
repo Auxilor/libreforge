@@ -1,6 +1,7 @@
 package com.willfp.libreforge.slot.impl
 
 import com.willfp.libreforge.slot.SlotType
+import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
@@ -13,8 +14,8 @@ object SlotTypeHands : SlotType("hands") {
         return true
     }
 
-    override fun getItems(player: Player): List<ItemStack> {
-        return SlotTypeOffhand.getItems(player) + SlotTypeMainhand.getItems(player)
+    override fun getItems(entity: LivingEntity): List<ItemStack> {
+        return SlotTypeOffhand.getItems(entity) + SlotTypeMainhand.getItems(entity)
     }
 
     override fun getItemSlots(player: Player): List<Int> {

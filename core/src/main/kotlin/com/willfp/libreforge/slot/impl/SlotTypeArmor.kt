@@ -2,6 +2,7 @@ package com.willfp.libreforge.slot.impl
 
 import com.willfp.libreforge.isEcoEmpty
 import com.willfp.libreforge.slot.SlotType
+import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
@@ -17,8 +18,8 @@ object SlotTypeArmor : SlotType("armor") {
         return false
     }
 
-    override fun getItems(player: Player): List<ItemStack> {
-        return player.inventory.armorContents.filterNotNull()
+    override fun getItems(entity: LivingEntity): List<ItemStack> {
+        return entity.equipment?.armorContents?.filterNotNull() ?: emptyList()
     }
 
     override fun getItemSlots(player: Player): List<Int> {

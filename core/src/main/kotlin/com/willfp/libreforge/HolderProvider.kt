@@ -2,9 +2,11 @@ package com.willfp.libreforge
 
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.willfp.eco.core.map.listMap
-import com.willfp.libreforge.GlobalDispatcher.dispatcher
 import com.willfp.libreforge.effects.EffectBlock
+import com.willfp.libreforge.slot.ItemHolderFinder
+import com.willfp.libreforge.slot.SlotTypes
 import org.bukkit.Bukkit
+import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.event.HandlerList
@@ -141,6 +143,12 @@ inline fun <reified T> registerSpecificHolderProvider(crossinline provider: (T) 
             }
         }
     })
+
+fun registerSlotHolderFinderAsProvider(finder: ItemHolderFinder<*>) =
+    registerSpecificHolderProvider<LivingEntity> {
+        SlotTypes.values()
+            .flatMap { slot -> finder.findHolders(it, slot) }
+    }
 
 private val refreshFunctions = mutableListOf<(Dispatcher<*>) -> Unit>()
 

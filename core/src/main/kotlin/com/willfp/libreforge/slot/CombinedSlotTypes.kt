@@ -1,5 +1,6 @@
 package com.willfp.libreforge.slot
 
+import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
@@ -15,11 +16,11 @@ internal class CombinedSlotTypes(
         return types.any { it.addToSlot(player, item) }
     }
 
-    override fun getItems(player: Player): List<ItemStack> {
+    override fun getItems(entity: LivingEntity): List<ItemStack> {
         val items = mutableSetOf<ItemStack>()
 
         return items.apply {
-            types.flatMapTo(this) { it.getItems(player) }
+            types.flatMapTo(this) { it.getItems(entity) }
         }.toList()
     }
 
