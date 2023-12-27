@@ -4,6 +4,7 @@ import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import com.willfp.libreforge.triggers.event.EditablePlayerDropEvent
 import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerDropItemEvent
 
@@ -25,7 +26,7 @@ object TriggerDropItem : Trigger("drop_item") {
                 player = player,
                 item = event.itemDrop.itemStack,
                 value = event.itemDrop.itemStack.amount.toDouble(),
-                event = event,
+                event = EditablePlayerDropEvent(event),
                 location = event.itemDrop.location
             )
         )
