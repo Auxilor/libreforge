@@ -19,9 +19,9 @@ abstract class ItemHolderFinder<T : Holder> {
     abstract fun find(item: ItemStack): List<T>
 
     /**
-     * Filter a list of [holders] to only those that are valid for a given [slot].
+     * Check if a given [holder] is valid for a given [slot].
      */
-    abstract fun filter(holders: List<T>, slot: SlotType): List<T>
+    abstract fun isValidInSlot(holder: T, slot: SlotType): Boolean
 
     /**
      * Find holders on an [entity] for a given [slot].
@@ -30,9 +30,9 @@ abstract class ItemHolderFinder<T : Holder> {
         val items = slot.getItems(entity)
 
         val holders = items.map { item ->
-            filter(this.find(item), slot).map { holder ->
-                ItemProvidedHolder(holder, item)
-            }
+            this.find(item)
+                .filter { holder -> isValidInSlot(holder, slot) }
+                .map { holder -> ItemProvidedHolder(holder, item) }
         }.flatten()
 
         return holders
