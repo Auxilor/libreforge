@@ -296,6 +296,13 @@ val Dispatcher<*>.holders: Collection<ProvidedHolder>
         holders
     }
 
+/**
+ * Get holders of a specific type.
+ */
+inline fun <reified T: Holder> Dispatcher<*>.getHoldersOfType(): Collection<T> {
+    return this.holders.mapNotNull { it.holder as? T }
+}
+
 @Deprecated(
     "Use a dispatcher instead of a player",
     ReplaceWith("toDispatcher().holders"),
