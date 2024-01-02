@@ -16,7 +16,7 @@ object EffectBroadcast : Effect<NoCompileData>("broadcast") {
     override val isPermanent = false
 
     override val arguments = arguments {
-        require("message", "You must specify the message to send!")
+        require(listOf("message", "messages"), "You must specify the message(s) to send!")
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
