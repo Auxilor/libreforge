@@ -16,6 +16,7 @@ class CommandLibreforge(
         this.addSubcommand(CommandReload(plugin))
             .addSubcommand(CommandPoints(plugin))
             .addSubcommand(CommandTrigger(plugin))
+            .addSubcommand(CommandDebug(plugin))
     }
 
     override fun onExecute(sender: CommandSender, args: MutableList<String>) {

@@ -45,5 +45,7 @@ messages:
   must-specify-trigger: "&cYou must specify the trigger!"
   triggered: "custom_%id% was triggered!"
 
+  debug: "Logged information to server console"
+
 picked-up-price-item: "&f+%price%"
 infinity: "∞"
