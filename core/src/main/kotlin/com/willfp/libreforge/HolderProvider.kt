@@ -23,6 +23,13 @@ interface HolderProvider {
     fun provide(dispatcher: Dispatcher<*>): Collection<ProvidedHolder>
 }
 
+/**
+ * A typed holder provider.
+ */
+interface TypedHolderProvider<T: Holder> : HolderProvider {
+    override fun provide(dispatcher: Dispatcher<*>): Collection<TypedProvidedHolder<T>>
+}
+
 class HolderProvideEvent(
     val dispatcher: Dispatcher<*>,
     val holders: Collection<ProvidedHolder>

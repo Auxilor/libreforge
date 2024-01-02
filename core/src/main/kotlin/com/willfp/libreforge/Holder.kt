@@ -121,6 +121,13 @@ interface ProvidedHolder {
 }
 
 /**
+ * A provided holder with a known type.
+ */
+interface TypedProvidedHolder<T : Holder> : ProvidedHolder {
+    override val holder: T
+}
+
+/**
  * Get the provider cleanly, without casting.
  */
 inline fun <reified T> ProvidedHolder.getProvider(): T? {
@@ -140,7 +147,7 @@ object EmptyProvidedHolder : ProvidedHolder {
 /**
  * Provided holder for nothing.
  */
-class SimpleProvidedHolder(
+open class SimpleProvidedHolder(
     override val holder: Holder
 ) : ProvidedHolder {
     override val provider = null
@@ -161,7 +168,7 @@ class SimpleProvidedHolder(
 /**
  * A provided holder for an ItemStack.
  */
-class ItemProvidedHolder(
+open class ItemProvidedHolder(
     override val holder: Holder,
     override val provider: ItemStack
 ) : ProvidedHolder {
