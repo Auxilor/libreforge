@@ -48,7 +48,7 @@ abstract class ItemHolderFinder<T : Holder> {
     /**
      * Convert this finder to a [HolderProvider].
      */
-    fun toHolderProvider(): HolderProvider {
+    fun toHolderProvider(): TypedHolderProvider<T> {
         return provider
     }
 
