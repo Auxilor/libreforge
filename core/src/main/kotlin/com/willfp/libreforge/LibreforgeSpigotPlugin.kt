@@ -147,10 +147,16 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
     }
 
     override fun loadListeners(): List<Listener> {
-        return listOf(
-            EffectCollisionFixer,
+        val listeners = mutableListOf(
+            EffectDataFixer,
             ItemRefreshListener(this)
         )
+
+        if (Prerequisite.HAS_PAPER.isMet) {
+            listeners += PaperEffectDataFixer
+        }
+
+        return listeners
     }
 
     override fun loadIntegrationLoaders(): List<IntegrationLoader> {

@@ -326,8 +326,10 @@ fun Dispatcher<*>.updateHolders() {
 fun Player.updateHolders() =
     this.toDispatcher().updateHolders()
 
-fun Dispatcher<*>.purgePreviousHolders() {
+internal fun Dispatcher<*>.purgePreviousHolders() {
     previousHolders.remove(this.uuid)
+    previousStates.remove(this.uuid)
+    flattenedPreviousStates.remove(this.uuid)
 }
 
 // Effects that were active on previous update
