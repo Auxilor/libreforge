@@ -93,7 +93,10 @@ abstract class Trigger(
                 continue
             }
 
-            val withHolder = dispatch.data.copy(holder = holder)
+            val withHolder = dispatch.data.copy().apply {
+                this.holder = holder
+            }
+
             val dispatchWithHolder = DispatchedTrigger(dispatcher, this, withHolder).inheritPlaceholders(dispatch)
 
             for (placeholder in holder.generatePlaceholders(dispatcher)) {

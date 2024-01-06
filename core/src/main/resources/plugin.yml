@@ -24,6 +24,7 @@ softdepend:
   - Citizens
   - TAB
   - Terra
+  - TerraformGenerator
 
 commands:
   lrcdb:
@@ -46,6 +47,7 @@ permissions:
       libreforge.command.lrcdb: true
       libreforge.command.libreforge: true
       libreforge.command.reload: true
+      libreforge.command.debug: true
       libreforge.command.trigger: true
       libreforge.command.points.*: true
   libreforge.command.points.*:
@@ -64,6 +66,9 @@ permissions:
     default: op
   libreforge.command.reload:
     description: Allows the use of /libreforge reload
+    default: op
+  libreforge.command.debug:
+    description: Allows the use of /libreforge debug
     default: op
   libreforge.command.trigger:
     description: Allows the use of /libreforge trigger

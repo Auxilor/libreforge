@@ -1,5 +1,6 @@
 package com.willfp.libreforge
 
+import com.destroystokyo.paper.event.entity.EntityRemoveFromWorldEvent
 import com.willfp.libreforge.effects.Effects
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.Player
@@ -9,7 +10,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 
-object EffectCollisionFixer : Listener {
+object EffectDataFixer : Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     fun clearOnQuit(event: PlayerQuitEvent) {
         val player = event.player
@@ -67,5 +68,17 @@ object EffectCollisionFixer : Listener {
                 }
             }
         }
+    }
+}
+
+object PaperEffectDataFixer: Listener {
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    fun purgeOnRemove(event: EntityRemoveFromWorldEvent) {
+        if (event.entity is Player) {
+            return
+        }
+
+        val dispatcher = event.entity.toDispatcher()
+        dispatcher.purgePreviousHolders()
     }
 }

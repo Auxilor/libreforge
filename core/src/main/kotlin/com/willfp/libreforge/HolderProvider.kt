@@ -23,6 +23,13 @@ interface HolderProvider {
     fun provide(dispatcher: Dispatcher<*>): Collection<ProvidedHolder>
 }
 
+/**
+ * A typed holder provider.
+ */
+interface TypedHolderProvider<T: Holder> : HolderProvider {
+    override fun provide(dispatcher: Dispatcher<*>): Collection<TypedProvidedHolder<T>>
+}
+
 class HolderProvideEvent(
     val dispatcher: Dispatcher<*>,
     val holders: Collection<ProvidedHolder>
@@ -289,6 +296,13 @@ val Dispatcher<*>.holders: Collection<ProvidedHolder>
         holders
     }
 
+/**
+ * Get holders of a specific type.
+ */
+inline fun <reified T: Holder> Dispatcher<*>.getHoldersOfType(): Collection<T> {
+    return this.holders.mapNotNull { it.holder as? T }
+}
+
 @Deprecated(
     "Use a dispatcher instead of a player",
     ReplaceWith("toDispatcher().holders"),
@@ -312,8 +326,10 @@ fun Dispatcher<*>.updateHolders() {
 fun Player.updateHolders() =
     this.toDispatcher().updateHolders()
 
-fun Dispatcher<*>.purgePreviousHolders() {
+internal fun Dispatcher<*>.purgePreviousHolders() {
     previousHolders.remove(this.uuid)
+    previousStates.remove(this.uuid)
+    flattenedPreviousStates.remove(this.uuid)
 }
 
 // Effects that were active on previous update

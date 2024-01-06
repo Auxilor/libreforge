@@ -113,7 +113,7 @@ fun Config.toPlaceholderContext(data: TriggerData? = null): PlaceholderContext {
     }
 
     return PlaceholderContext(
-        data?._originalPlayer,
+        data?.originalPlayer,
         data?.holder?.getProvider() ?: data?.item,
         this,
         additionalPlayers

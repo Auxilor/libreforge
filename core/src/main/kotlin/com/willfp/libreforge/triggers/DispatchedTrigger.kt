@@ -15,6 +15,9 @@ class DispatchedTrigger(
 ) {
     private val _placeholders = mutableListOf<NamedValue>()
 
+    val rawPlaceholders: List<NamedValue>
+        get() = _placeholders
+
     val placeholders: List<InjectablePlaceholder>
         get() = _placeholders.flatMap { it.placeholders }
 
