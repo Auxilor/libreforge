@@ -17,6 +17,7 @@ import com.willfp.libreforge.integrations.custombiomes.impl.CustomBiomesTerrafor
 import com.willfp.libreforge.integrations.jobs.JobsIntegration
 import com.willfp.libreforge.integrations.levelledmobs.LevelledMobsIntegration
 import com.willfp.libreforge.integrations.mcmmo.McMMOIntegration
+import com.willfp.libreforge.integrations.modelengine.ModelEngineIntegration
 import com.willfp.libreforge.integrations.paper.PaperIntegration
 import com.willfp.libreforge.integrations.scyther.ScytherIntegration
 import com.willfp.libreforge.integrations.tab.TabIntegration
@@ -173,7 +174,8 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             IntegrationLoader("WorldGuard") { WorldGuardIntegration.load(this) },
             IntegrationLoader("TAB") { TabIntegration.load(this) },
             IntegrationLoader("Terra") { CustomBiomesTerra.load(this) },
-            IntegrationLoader("TerraformGenerator") { CustomBiomesTerraformGenerator.load(this) }
+            IntegrationLoader("TerraformGenerator") { CustomBiomesTerraformGenerator.load(this) },
+            IntegrationLoader("ModelEngine") { ModelEngineIntegration.load(this) }
         )
     }
 

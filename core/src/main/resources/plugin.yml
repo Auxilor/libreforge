@@ -25,6 +25,7 @@ softdepend:
   - TAB
   - Terra
   - TerraformGenerator
+  - ModelEngine
 
 commands:
   lrcdb:
