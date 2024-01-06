@@ -19,6 +19,11 @@ abstract class SlotType(
     abstract fun getItems(entity: LivingEntity): List<ItemStack>
 
     /**
+     * Exists for backwards compatibility.
+     */
+    fun getItems(player: Player) = getItems(player as LivingEntity)
+
+    /**
      * Get the slots that this slot type uses.
      */
     abstract fun getItemSlots(player: Player): List<Int>
