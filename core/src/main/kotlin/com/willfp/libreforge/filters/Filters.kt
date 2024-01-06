@@ -34,6 +34,7 @@ import com.willfp.libreforge.filters.impl.FilterPotionEffect
 import com.willfp.libreforge.filters.impl.FilterProjectiles
 import com.willfp.libreforge.filters.impl.FilterText
 import com.willfp.libreforge.filters.impl.FilterTextContains
+import com.willfp.libreforge.filters.impl.FilterThisItem
 import com.willfp.libreforge.filters.impl.FilterValueAbove
 import com.willfp.libreforge.filters.impl.FilterValueBelow
 import com.willfp.libreforge.filters.impl.FilterValueEquals
@@ -116,5 +117,6 @@ object Filters : Registry<Filter<*, *>>() {
         register(FilterValueBelow)
         register(FilterIsExpressionTrue)
         register(FilterAdvancements)
+        register(FilterThisItem)
     }
 }
