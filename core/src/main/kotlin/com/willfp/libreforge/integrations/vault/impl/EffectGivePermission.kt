@@ -31,6 +31,11 @@ class EffectGivePermission(
     ) {
         val player = dispatcher.get<Player>() ?: return
 
+        // UUID Version 2 = NPC
+        if (player.uniqueId.version() == 2) {
+            return
+        }
+
         val permission = config.getString("permission")
 
         permissions[dispatcher.uuid] += GivenPermission(permission, identifiers.uuid)
@@ -47,6 +52,11 @@ class EffectGivePermission(
 
         // Remove the permission only if no other effect is giving it
         if (permissions[dispatcher.uuid].none { it.permission == permission.permission }) {
+            // UUID Version 2 = NPC
+            if (player.uniqueId.version() == 2) {
+                return
+            }
+
             handler.playerRemove(player, permission.permission)
         }
     }
