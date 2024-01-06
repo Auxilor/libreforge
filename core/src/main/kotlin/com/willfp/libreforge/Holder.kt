@@ -4,6 +4,8 @@ import com.willfp.eco.util.NamespacedKeyUtils
 import com.willfp.libreforge.conditions.ConditionList
 import com.willfp.libreforge.effects.EffectList
 import org.bukkit.NamespacedKey
+import org.bukkit.entity.Entity
+import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import java.util.Objects
@@ -178,6 +180,27 @@ open class ItemProvidedHolder(
 
     override fun equals(other: Any?): Boolean {
         if (other !is ItemProvidedHolder) {
+            return false
+        }
+
+        return other.holder == this.holder
+                && other.provider == this.provider
+    }
+}
+
+/**
+ * A provided holder for an entity.
+ */
+open class EntityProvidedHolder(
+    override val holder: Holder,
+    override val provider: Entity
+) : ProvidedHolder {
+    override fun hashCode(): Int {
+        return Objects.hash(holder, provider)
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (other !is EntityProvidedHolder) {
             return false
         }
 
