@@ -23,9 +23,11 @@ object TriggerChangeChunk : Trigger("change_chunk") {
     fun handle(event: EntityMoveEvent) {
         val entity = event.entity
 
-        if (event.to.chunk.x != event.from.chunk.x
-            || event.to.chunk.z != event.from.chunk.z
-        ) {
+        if (!event.hasExplicitlyChangedBlock()) {
+            return
+        }
+
+        if (event.to.chunk.chunkKey != event.from.chunk.chunkKey) {
             return
         }
 
