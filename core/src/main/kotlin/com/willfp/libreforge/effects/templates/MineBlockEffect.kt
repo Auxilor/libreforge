@@ -11,13 +11,15 @@ import org.bukkit.block.Block
 import org.bukkit.entity.Player
 
 abstract class MineBlockEffect<T : Any>(id: String) : Effect<T>(id) {
+    private val ignoreKey = "blockbreakevent-ignore"
+
     override val parameters = setOf(
         TriggerParameter.PLAYER
     )
 
     override fun shouldTrigger(config: Config, data: TriggerData, compileData: T): Boolean {
         val block = data.block ?: data.location?.block ?: return false
-        return !block.hasMetadata("block-ignore")
+        return !block.hasMetadata(ignoreKey)
     }
 
     protected fun Player.breakBlocksSafely(blocks: Collection<Block>) {
@@ -26,9 +28,9 @@ abstract class MineBlockEffect<T : Any>(id: String) : Effect<T>(id) {
         } else {
             this.runExempted {
                 for (block in blocks) {
-                    block.setMetadata("block-ignore", plugin.createMetadataValue(true))
+                    block.setMetadata(ignoreKey, plugin.createMetadataValue(true))
                     this.breakBlock(block)
-                    block.removeMetadata("block-ignore", plugin)
+                    block.removeMetadata(ignoreKey, plugin)
                 }
             }
         }
