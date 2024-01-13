@@ -10,7 +10,7 @@ import dev.romainguy.kotlin.math.Float2
 import dev.romainguy.kotlin.math.Float3
 import org.bukkit.entity.Player
 
-object AnimationTrace : ParticleAnimation<NoCompileData>("trace") {
+object ParticleAnimationTrace : ParticleAnimation<NoCompileData>("trace") {
     override val arguments = arguments {
         require("spacing", "You must specify the spacing!")
     }

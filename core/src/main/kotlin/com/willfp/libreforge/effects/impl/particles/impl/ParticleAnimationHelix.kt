@@ -10,7 +10,7 @@ import dev.romainguy.kotlin.math.Float3
 import org.bukkit.entity.Player
 import kotlin.math.PI
 
-object AnimationDoubleHelix : ParticleAnimation<NoCompileData>("double_helix") {
+object ParticleAnimationHelix : ParticleAnimation<NoCompileData>("helix") {
     override val arguments = arguments {
         require("height", "You must specify the height!")
         require("duration", "You must specify the duration!")
@@ -32,15 +32,11 @@ object AnimationDoubleHelix : ParticleAnimation<NoCompileData>("double_helix") {
         val speed = config.getDoubleFromExpression("speed", player)
         val radius = config.getDoubleFromExpression("radius", player)
 
-        val vector = Float3(
-            (NumberUtils.fastCos(tick / (2 * PI) * speed) * radius).toFloat(),
-            (height * (tick % duration) / duration).toFloat(),
-            (NumberUtils.fastSin(tick / (2 * PI) * speed) * radius).toFloat(),
-        )
+        val x = NumberUtils.fastCos(tick / (2 * PI) * speed) * radius
+        val y = height * (tick % duration) / duration
+        val z = NumberUtils.fastSin(tick / (2 * PI) * speed) * radius
 
-        return arrayOf(-1f, 1f).map {
-            location + vector * it
-        }
+        return setOf(location + Float3(x.toFloat(), y.toFloat(), z.toFloat()))
     }
 
     override fun shouldStopTicking(

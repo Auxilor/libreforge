@@ -11,7 +11,7 @@ import dev.romainguy.kotlin.math.Float3
 import org.bukkit.entity.Player
 import kotlin.math.PI
 
-object AnimationTwirl : ParticleAnimation<NoCompileData>("twirl") {
+object ParticleAnimationTwirl : ParticleAnimation<NoCompileData>("twirl") {
     override val arguments = arguments {
         require("small-radius", "You must specify the small radius!")
         require("large-radius", "You must specify the large radius!")

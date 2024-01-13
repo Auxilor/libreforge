@@ -4,12 +4,12 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.registry.Registry
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.ViolationContext
-import com.willfp.libreforge.effects.impl.particles.impl.AnimationCircle
-import com.willfp.libreforge.effects.impl.particles.impl.AnimationDoubleHelix
-import com.willfp.libreforge.effects.impl.particles.impl.AnimationGroundSpiral
-import com.willfp.libreforge.effects.impl.particles.impl.AnimationHelix
-import com.willfp.libreforge.effects.impl.particles.impl.AnimationTrace
-import com.willfp.libreforge.effects.impl.particles.impl.AnimationTwirl
+import com.willfp.libreforge.effects.impl.particles.impl.ParticleAnimationCircle
+import com.willfp.libreforge.effects.impl.particles.impl.ParticleAnimationDoubleHelix
+import com.willfp.libreforge.effects.impl.particles.impl.ParticleAnimationGroundSpiral
+import com.willfp.libreforge.effects.impl.particles.impl.ParticleAnimationHelix
+import com.willfp.libreforge.effects.impl.particles.impl.ParticleAnimationTrace
+import com.willfp.libreforge.effects.impl.particles.impl.ParticleAnimationTwirl
 
 @Suppress("UNUSED")
 object ParticleAnimations : Registry<ParticleAnimation<*>>() {
@@ -47,11 +47,11 @@ object ParticleAnimations : Registry<ParticleAnimation<*>>() {
     }
 
     init {
-        register(AnimationCircle)
-        register(AnimationDoubleHelix)
-        register(AnimationGroundSpiral)
-        register(AnimationHelix)
-        register(AnimationTrace)
-        register(AnimationTwirl)
+        register(ParticleAnimationCircle)
+        register(ParticleAnimationDoubleHelix)
+        register(ParticleAnimationGroundSpiral)
+        register(ParticleAnimationHelix)
+        register(ParticleAnimationTrace)
+        register(ParticleAnimationTwirl)
     }
 }

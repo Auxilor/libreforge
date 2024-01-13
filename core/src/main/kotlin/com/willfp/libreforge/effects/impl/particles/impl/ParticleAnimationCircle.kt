@@ -12,7 +12,7 @@ import dev.romainguy.kotlin.math.Float3
 import org.bukkit.entity.Player
 import kotlin.math.PI
 
-object AnimationCircle : ParticleAnimation<NoCompileData>("circle") {
+object ParticleAnimationCircle : ParticleAnimation<NoCompileData>("circle") {
     override val arguments = arguments {
         require("radius", "You must specify the radius!")
         require("duration", "You must specify the duration!")
