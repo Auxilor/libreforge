@@ -457,5 +457,6 @@ object Effects : Registry<Effect<*>>() {
         register(EffectAddGlobalPoints)
         register(EffectDropItemSlot)
         register(EffectKeepLevel)
+        register(EffectAnimation)
     }
 }
