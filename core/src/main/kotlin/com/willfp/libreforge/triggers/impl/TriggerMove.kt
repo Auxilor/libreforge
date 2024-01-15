@@ -23,10 +23,12 @@ object TriggerMove : Trigger("move") {
     fun handle(event: EntityMoveEvent) {
         val entity = event.entity
 
-        if (Prerequisite.HAS_PAPER.isMet) {
-            if (!event.hasChangedBlock()) {
-                return
-            }
+        if (entity is Player) {
+            return
+        }
+
+        if (!event.hasChangedBlock()) {
+            return
         }
 
         val distance = if (event.to.world == event.from.world) {
