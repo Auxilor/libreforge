@@ -28,18 +28,8 @@ object TriggerChangeChunk : Trigger("change_chunk") {
             return
         }
 
-        if (Prerequisite.HAS_PAPER.isMet) {
-            if (event.to.chunk.chunkKey != event.from.chunk.chunkKey) {
-                return
-            }
-        } else {
-            if (event.to.chunk.x != event.from.chunk.x) {
-                return
-            }
-
-            if (event.to.chunk.z != event.from.chunk.z) {
-                return
-            }
+        if (event.to.chunk.chunkKey != event.from.chunk.chunkKey) {
+            return
         }
 
         this.dispatch(
