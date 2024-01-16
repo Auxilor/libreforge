@@ -3,6 +3,7 @@ package com.willfp.libreforge.loader.internal
 import com.willfp.eco.core.data.readExternalData
 import com.willfp.eco.core.data.writeExternalData
 import com.willfp.eco.core.version.Version
+import com.willfp.libreforge.LibreforgeSpigotPlugin
 import com.willfp.libreforge.loader.LibreforgePlugin
 import org.bukkit.Bukkit
 import java.io.File
@@ -18,6 +19,8 @@ private class LibreforgeNotFoundError(
 internal class InvalidLibreforgePluginError(
     override val message: String
 ) : Error(message)
+
+internal lateinit var libreforgeSpigotPlugin: LibreforgeSpigotPlugin
 
 internal fun checkHighestVersion(plugin: LibreforgePlugin) {
     val currentHighestVersion = readExternalData(HIGHEST_LIBREFORGE_VERSION_KEY) {
@@ -72,5 +75,5 @@ internal fun loadHighestLibreforgeVersion(pluginFolder: File) {
         }
     }
 
-    Bukkit.getPluginManager().loadPlugin(libreforgeJar)
+    libreforgeSpigotPlugin = Bukkit.getPluginManager().loadPlugin(libreforgeJar) as LibreforgeSpigotPlugin
 }
