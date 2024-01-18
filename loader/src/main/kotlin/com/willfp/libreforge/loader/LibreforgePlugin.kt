@@ -18,7 +18,6 @@ import com.willfp.libreforge.loader.internal.LoadedLibreforgePluginImpl
 import com.willfp.libreforge.loader.internal.checkHighestVersion
 import com.willfp.libreforge.loader.internal.configs.RegistrableConfig
 import com.willfp.libreforge.loader.internal.loadHighestLibreforgeVersion
-import com.willfp.libreforge.loader.internal.libreforgeSpigotPlugin
 import com.willfp.libreforge.loader.internal.tryLoadForceVersion
 import java.io.File
 import java.util.zip.ZipFile
@@ -165,10 +164,8 @@ abstract class LibreforgePlugin : EcoPlugin() {
             }
         }
 
-        if (libreforgeSpigotPlugin.configYml.getBool("update-example-configs")) {
-            for (exampleConfigs in configNames.filter { it.startsWith("_") }) {
-                FoundConfig(exampleConfigs, category.directory, this).copy()
-            }
+        for (exampleConfigs in configNames.filter { it.startsWith("_") }) {
+            FoundConfig(exampleConfigs, category.directory, this).copy()
         }
     }
 

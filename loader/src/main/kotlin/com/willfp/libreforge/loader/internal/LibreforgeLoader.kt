@@ -20,8 +20,6 @@ internal class InvalidLibreforgePluginError(
     override val message: String
 ) : Error(message)
 
-internal lateinit var libreforgeSpigotPlugin: LibreforgeSpigotPlugin
-
 internal fun checkHighestVersion(plugin: LibreforgePlugin) {
     val currentHighestVersion = readExternalData(HIGHEST_LIBREFORGE_VERSION_KEY) {
         Version("0.0.0")
@@ -75,5 +73,5 @@ internal fun loadHighestLibreforgeVersion(pluginFolder: File) {
         }
     }
 
-    libreforgeSpigotPlugin = Bukkit.getPluginManager().loadPlugin(libreforgeJar) as LibreforgeSpigotPlugin
+    Bukkit.getPluginManager().loadPlugin(libreforgeJar) as LibreforgeSpigotPlugin
 }

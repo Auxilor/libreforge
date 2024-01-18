@@ -29,9 +29,6 @@ lrcdb:
 # Show what libreforge is on startup, to explain to new users.
 show-libreforge-info: true
 
-# If _example.yml's should always be updated to the latest version.
-update-example-configs: true
-
 # You can reference these placeholders anywhere, in any plugin that supports
 # PlaceholderAPI, and anywhere in configs. They'll be prefixed with libreforge_,
 # so for example 'level' would be '%libreforge_level%' when used.
