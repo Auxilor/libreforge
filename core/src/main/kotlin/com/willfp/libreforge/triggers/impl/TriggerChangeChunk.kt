@@ -1,11 +1,11 @@
 package com.willfp.libreforge.triggers.impl
 
 import com.willfp.eco.core.Prerequisite
+import com.willfp.libreforge.internal.api.AsyncEntityMoveEvent
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import io.papermc.paper.event.entity.EntityMoveEvent
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -21,7 +21,7 @@ object TriggerChangeChunk : Trigger("change_chunk") {
     )
 
     @EventHandler(ignoreCancelled = true)
-    fun handle(event: EntityMoveEvent) {
+    fun handle(event: AsyncEntityMoveEvent) {
         val entity = event.entity
 
         if (!event.hasExplicitlyChangedBlock()) {

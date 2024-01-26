@@ -24,6 +24,7 @@ import com.willfp.libreforge.integrations.tab.TabIntegration
 import com.willfp.libreforge.integrations.tmmobcoins.TMMobcoinsIntegration
 import com.willfp.libreforge.integrations.vault.VaultIntegration
 import com.willfp.libreforge.integrations.worldguard.WorldGuardIntegration
+import com.willfp.libreforge.internal.EntityMoveRunnable
 import com.willfp.libreforge.levels.LevelTypes
 import com.willfp.libreforge.levels.placeholder.ItemDataPlaceholder
 import com.willfp.libreforge.levels.placeholder.ItemLevelPlaceholder
@@ -79,6 +80,8 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
         if (Prerequisite.HAS_PAPER.isMet) {
             PaperIntegration.load(this)
         }
+
+        plugin.scheduler.runAsyncTimer(1, 1, EntityMoveRunnable())
 
         pointsPlaceholder(this).register()
         globalPointsPlaceholder(this).register()

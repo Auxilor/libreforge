@@ -1,14 +1,14 @@
 package com.willfp.libreforge.triggers.impl
 
 import com.willfp.eco.core.Prerequisite
+import com.willfp.libreforge.internal.api.AsyncEntityMoveEvent
+import com.willfp.libreforge.internal.api.AsyncPlayerMoveEvent
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import io.papermc.paper.event.entity.EntityMoveEvent
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
-import org.bukkit.event.player.PlayerMoveEvent
 
 object TriggerMove : Trigger("move") {
     override val parameters = setOf(
@@ -20,14 +20,14 @@ object TriggerMove : Trigger("move") {
     )
 
     @EventHandler(ignoreCancelled = true)
-    fun handle(event: EntityMoveEvent) {
+    fun handle(event: AsyncEntityMoveEvent) {
         val entity = event.entity
 
         if (entity is Player) {
             return
         }
 
-        if (!event.hasChangedBlock()) {
+        if (!event.hasExplicitlyChangedBlock()) {
             return
         }
 
@@ -51,11 +51,11 @@ object TriggerMove : Trigger("move") {
     }
 
     @EventHandler(ignoreCancelled = true)
-    fun handle(event: PlayerMoveEvent) {
+    fun handle(event: AsyncPlayerMoveEvent) {
         val player = event.player
 
         if (Prerequisite.HAS_PAPER.isMet) {
-            if (!event.hasChangedBlock()) {
+            if (!event.hasExplicitlyChangedBlock()) {
                 return
             }
         }
