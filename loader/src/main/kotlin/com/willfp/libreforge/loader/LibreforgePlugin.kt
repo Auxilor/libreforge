@@ -79,15 +79,6 @@ abstract class LibreforgePlugin : EcoPlugin() {
                 loadCategory(category)
             }
         }
-
-        onDisable(LifecyclePosition.END) {
-            for (category in loaderCategories) {
-                withLogs(category, "clear") {
-                    category.clear(this)
-                    category.handle.clear()
-                }
-            }
-        }
     }
 
     private fun loadCategory(category: ConfigCategory, preload: Boolean = false) {
