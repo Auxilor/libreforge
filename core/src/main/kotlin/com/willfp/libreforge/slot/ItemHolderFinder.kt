@@ -1,5 +1,7 @@
 package com.willfp.libreforge.slot
 
+import com.github.benmanes.caffeine.cache.Cache
+import com.github.benmanes.caffeine.cache.Caffeine
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.Holder
 import com.willfp.libreforge.HolderProvider
@@ -9,11 +11,17 @@ import com.willfp.libreforge.TypedProvidedHolder
 import com.willfp.libreforge.get
 import org.bukkit.entity.LivingEntity
 import org.bukkit.inventory.ItemStack
+import java.util.UUID
+import java.util.concurrent.TimeUnit
 
 /**
  * Finds holders on items for entities, allows for easy implementation of [HolderProvider].
  */
 abstract class ItemHolderFinder<T : Holder> {
+    private val cache: Cache<UUID, List<TypedProvidedHolder<T>>> = Caffeine.newBuilder()
+        .expireAfterWrite(500, TimeUnit.MILLISECONDS)
+        .build()
+
     /**
      * The [HolderProvider] for this finder.
      */
@@ -33,6 +41,12 @@ abstract class ItemHolderFinder<T : Holder> {
      * Find holders on an [entity] for a given [slot].
      */
     fun findHolders(entity: LivingEntity, slot: SlotType): List<TypedProvidedHolder<T>> {
+        return cache.get(entity.uniqueId) {
+            doFindHolders(entity, slot)
+        }
+    }
+
+    private fun doFindHolders(entity: LivingEntity, slot: SlotType): List<TypedProvidedHolder<T>> {
         val items = slot.getItems(entity)
 
         val holders = items.map { item ->
