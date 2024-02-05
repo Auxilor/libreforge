@@ -2,10 +2,13 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.drops.DropQueue
+import com.willfp.eco.core.entities.impl.EmptyTestableEntity
 import com.willfp.eco.core.items.Items
+import com.willfp.eco.core.recipe.parts.EmptyTestableItem
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getStrings
 import com.willfp.libreforge.slot.SlotTypes
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -38,10 +41,8 @@ object EffectGiveItem : Effect<List<ItemStack>>("give_item") {
     }
 
     override fun makeCompileData(config: Config, context: ViolationContext): List<ItemStack> {
-        val list = config.getStrings("items").map { Items.lookup(it).item }.toMutableList()
-        config.getStringOrNull("item")?.let {
-            list.add(Items.lookup(it).item)
-        }
-        return list
+        return config.getStrings("items", "item").map {
+            Items.lookup(it)
+        }.filter { it !is EmptyTestableItem }.map { it.item }
     }
 }
