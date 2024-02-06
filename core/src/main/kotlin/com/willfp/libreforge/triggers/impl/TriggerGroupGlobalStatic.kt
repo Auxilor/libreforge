@@ -13,9 +13,11 @@ object TriggerGroupGlobalStatic : TriggerGroup("global_static") {
 
     override fun create(value: String): Trigger? {
         val interval = value.toIntOrNull() ?: return null
-        val trigger = TriggerGlobalStatic(interval)
-        registry[interval] = trigger
-        return trigger
+        if (interval < 1) {
+            return null
+        }
+
+        return registry.getOrPut(interval) { TriggerGlobalStatic(interval) }
     }
 
     override fun postRegister() {
