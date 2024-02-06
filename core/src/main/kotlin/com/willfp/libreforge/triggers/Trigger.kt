@@ -3,12 +3,12 @@ package com.willfp.libreforge.triggers
 import com.willfp.eco.core.registry.KRegistrable
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.ProvidedEffectBlock
-import com.willfp.libreforge.ProvidedEffectBlocks
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.counters.bind.BoundCounters
 import com.willfp.libreforge.counters.bind.BoundCounters.bindings
 import com.willfp.libreforge.generatePlaceholders
 import com.willfp.libreforge.getProvidedActiveEffects
+import com.willfp.libreforge.notNullMutableMapOf
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.providedActiveEffects
 import com.willfp.libreforge.toDispatcher
@@ -66,15 +66,15 @@ abstract class Trigger(
     /**
      * Dispatch the trigger on a collection of [ProvidedEffectBlock]s.
      */
-    fun dispatchOnEffects(
+    private fun dispatchOnEffects(
         dispatcher: Dispatcher<*>,
         data: TriggerData,
-        effects: Collection<ProvidedEffectBlocks>
+        effects: List<ProvidedEffectBlock>
     ) {
         val dispatch = plugin.dispatchedTriggerFactory.create(dispatcher, this, data) ?: return
 
         // Prevent dispatching useless triggers
-        val potentialDestinations = effects.flatMap { it.effects } + BoundCounters.values()
+        val potentialDestinations = effects.map { it.effect } + BoundCounters.values()
         if (potentialDestinations.none { it.canBeTriggeredBy(this) }) {
             return
         }
@@ -88,30 +88,46 @@ abstract class Trigger(
             return
         }
 
-        for ((holder, blocks) in effects) {
-            // Check again here to avoid generating placeholders for nothing
-            if (blocks.none { it.canBeTriggeredBy(this) }) {
-                continue
-            }
+        // Filter out effects that can't be triggered by this trigger as an optimization
+        val triggerableEffects = mutableListOf<ProvidedEffectBlock>()
 
+        for (block in effects) {
+            if (block.effect.canBeTriggeredBy(this)) {
+                // Effects are already sorted by priority
+                triggerableEffects.add(block)
+            }
+        }
+
+        // Only calculate placeholders once per holder
+        val holderDispatches = notNullMutableMapOf<ProvidedHolder, DispatchedTrigger>()
+
+        for (block in triggerableEffects) {
+            val holder = block.holder
             val withHolder = dispatch.data.copy().apply {
                 this.holder = holder
             }
 
-            val dispatchWithHolder = DispatchedTrigger(dispatcher, this, withHolder).inheritPlaceholders(dispatch)
+            val dispatchWithHolder = holderDispatches.getOrPut(holder) {
+                DispatchedTrigger(dispatcher, this, withHolder).inheritPlaceholders(dispatch)
+            }
 
             for (placeholder in holder.generatePlaceholders(dispatcher)) {
                 dispatchWithHolder.addPlaceholder(placeholder)
             }
 
-            for (block in blocks) {
-                // Fixes cancel_event not working
-                if (data.event is Cancellable && data.event.isCancelled) {
-                    return
-                }
+            holderDispatches[holder] = dispatchWithHolder
+        }
 
-                block.tryTrigger(dispatchWithHolder)
+        // Finally, trigger effects
+        for ((block, holder) in triggerableEffects) {
+            // Fixes cancel_event not working
+            if (data.event is Cancellable && data.event.isCancelled) {
+                return
             }
+
+            val dispatchWithHolder = holderDispatches[holder]
+
+            block.tryTrigger(dispatchWithHolder)
         }
 
         // Probably a better way to work with counters, but this works for now.

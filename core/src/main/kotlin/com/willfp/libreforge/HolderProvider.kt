@@ -80,12 +80,11 @@ class HolderDisableEvent(
     }
 }
 
-/**
- * EffectBlocks provided by a holder.
- *
- * Previously this was done with maps but this led to bugs where
- * multiple identical holders were not recognised.
- */
+@Deprecated(
+    "Use ProvidedEffectBlock instead, this is no longer used and will be removed in a future version.",
+    ReplaceWith("ProvidedEffectBlock"),
+    DeprecationLevel.ERROR
+)
 data class ProvidedEffectBlocks(
     val holder: ProvidedHolder,
     val effects: Set<EffectBlock>
@@ -329,51 +328,28 @@ fun Player.updateHolders() =
 internal fun Dispatcher<*>.purgePreviousHolders() {
     previousHolders.remove(this.uuid)
     previousStates.remove(this.uuid)
-    flattenedPreviousStates.remove(this.uuid)
 }
 
 // Effects that were active on previous update
-private val previousStates = listMap<UUID, ProvidedEffectBlocks>()
-private val flattenedPreviousStates = listMap<UUID, ProvidedEffectBlock>() // Optimisation.
-
-/**
- * Flatten down to the effects.
- */
-fun Collection<ProvidedEffectBlocks>.flatten(): List<ProvidedEffectBlock> {
-    val list = mutableListOf<ProvidedEffectBlock>()
-
-    for ((holder, effects) in this) {
-        for (effect in effects) {
-            list += ProvidedEffectBlock(effect, holder)
-        }
-    }
-
-    return list
-}
+private val previousStates = listMap<UUID, ProvidedEffectBlock>() // Optimisation.
 
 /**
  * Get active effects for a [dispatcher] from holders mapped to the holder
  * that has provided them.
  */
-fun Collection<ProvidedHolder>.getProvidedActiveEffects(dispatcher: Dispatcher<*>): List<ProvidedEffectBlocks> {
-    val blocks = mutableListOf<ProvidedEffectBlocks>()
+fun Collection<ProvidedHolder>.getProvidedActiveEffects(dispatcher: Dispatcher<*>): List<ProvidedEffectBlock> {
+    val blocks = mutableListOf<ProvidedEffectBlock>()
 
     for (holder in this) {
         if (holder.holder.conditions.areMet(dispatcher, holder)) {
-            blocks += ProvidedEffectBlocks(holder, holder.getActiveEffects(dispatcher))
+            for (block in holder.getActiveEffects(dispatcher)) {
+                blocks += ProvidedEffectBlock(block, holder)
+            }
         }
     }
 
-    return blocks
+    return blocks.sorted()
 }
-
-@Deprecated(
-    "Use getProvidedActiveEffects on a dispatcher instead",
-    ReplaceWith("getProvidedActiveEffects(player.toDispatcher())"),
-    DeprecationLevel.ERROR
-)
-fun Collection<ProvidedHolder>.getProvidedActiveEffects(player: Player): List<ProvidedEffectBlocks> =
-    this.getProvidedActiveEffects(player.toDispatcher())
 
 /**
  * Get active effects for a [dispatcher].
@@ -407,7 +383,7 @@ fun Player.calculateActiveEffects() =
  * The active effects.
  */
 val Dispatcher<*>.activeEffects: List<EffectBlock>
-    get() = flattenedPreviousStates[this.uuid].map { it.effect }
+    get() = previousStates[this.uuid].map { it.effect }
 
 @Deprecated(
     "Use activeEffects on a dispatcher instead",
@@ -420,16 +396,8 @@ val Player.activeEffects: List<EffectBlock>
 /**
  * The active effects mapped to the holder that provided them.
  */
-val Dispatcher<*>.providedActiveEffects: List<ProvidedEffectBlocks>
+val Dispatcher<*>.providedActiveEffects: List<ProvidedEffectBlock>
     get() = previousStates[this.uuid]
-
-@Deprecated(
-    "Use providedActiveEffects on a dispatcher instead",
-    ReplaceWith("toDispatcher().providedActiveEffects"),
-    DeprecationLevel.ERROR
-)
-val Player.providedActiveEffects: List<ProvidedEffectBlocks>
-    get() = this.toDispatcher().providedActiveEffects
 
 /**
  * Update the active effects.
@@ -438,16 +406,12 @@ fun Dispatcher<*>.updateEffects() {
     val before = this.providedActiveEffects
     val after = this.calculateActiveEffects()
 
-    previousStates[this.uuid] = after
-    flattenedPreviousStates[this.uuid] = after.flatten()
-
-    val beforeF = before.flatten()
-    val afterF = after.flatten()
+    previousStates[this.uuid] = after.sorted()
 
     // Permanent effects also have a run order, so we need to sort them.
-    val added = (afterF without beforeF).sorted()
-    val removed = (beforeF without afterF).sorted()
-    val toReload = (afterF without added).sorted()
+    val added = (after without before).sorted()
+    val removed = (before without after).sorted()
+    val toReload = (after without added).sorted()
 
     for ((effect, holder) in removed) {
         effect.disable(this, holder)
