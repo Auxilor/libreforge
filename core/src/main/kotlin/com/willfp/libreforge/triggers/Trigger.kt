@@ -15,6 +15,7 @@ import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.event.TriggerDispatchEvent
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import org.bukkit.event.Cancellable
 import org.bukkit.event.Listener
 
 abstract class Trigger(
@@ -105,6 +106,11 @@ abstract class Trigger(
 
             for (block in blocks) {
                 block.tryTrigger(dispatchWithHolder)
+
+                // Fixes cancel_event not working
+                if (data.event is Cancellable && data.event.isCancelled) {
+                    return
+                }
             }
         }
 
