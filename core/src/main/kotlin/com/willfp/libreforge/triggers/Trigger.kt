@@ -105,12 +105,12 @@ abstract class Trigger(
             }
 
             for (block in blocks) {
-                block.tryTrigger(dispatchWithHolder)
-
                 // Fixes cancel_event not working
                 if (data.event is Cancellable && data.event.isCancelled) {
                     return
                 }
+
+                block.tryTrigger(dispatchWithHolder)
             }
         }
 
