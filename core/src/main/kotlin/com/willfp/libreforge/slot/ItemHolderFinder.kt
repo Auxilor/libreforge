@@ -3,6 +3,7 @@ package com.willfp.libreforge.slot
 import com.github.benmanes.caffeine.cache.Cache
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.willfp.libreforge.Dispatcher
+import com.willfp.libreforge.EmptyProvidedHolder.provider
 import com.willfp.libreforge.Holder
 import com.willfp.libreforge.HolderProvider
 import com.willfp.libreforge.ItemProvidedHolder
@@ -18,10 +19,6 @@ import java.util.concurrent.TimeUnit
  * Finds holders on items for entities, allows for easy implementation of [HolderProvider].
  */
 abstract class ItemHolderFinder<T : Holder> {
-    private val cache: Cache<UUID, List<TypedProvidedHolder<T>>> = Caffeine.newBuilder()
-        .expireAfterWrite(500, TimeUnit.MILLISECONDS)
-        .build()
-
     /**
      * The [HolderProvider] for this finder.
      */
@@ -41,12 +38,6 @@ abstract class ItemHolderFinder<T : Holder> {
      * Find holders on an [entity] for a given [slot].
      */
     fun findHolders(entity: LivingEntity, slot: SlotType): List<TypedProvidedHolder<T>> {
-        return cache.get(entity.uniqueId) {
-            doFindHolders(entity, slot)
-        }
-    }
-
-    private fun doFindHolders(entity: LivingEntity, slot: SlotType): List<TypedProvidedHolder<T>> {
         val items = slot.getItems(entity)
 
         val holders = items.map { item ->
@@ -74,11 +65,17 @@ abstract class ItemHolderFinder<T : Holder> {
     ), TypedProvidedHolder<T>
 
     private inner class ItemHolderFinderProvider: TypedHolderProvider<T> {
-        override fun provide(dispatcher: Dispatcher<*>): Collection<TypedProvidedHolder<T>> {
-            val entity = dispatcher.get<LivingEntity>() ?: return emptyList()
+        private val cache: Cache<UUID, List<TypedProvidedHolder<T>>> = Caffeine.newBuilder()
+            .expireAfterWrite(500, TimeUnit.MILLISECONDS)
+            .build()
 
-            return SlotTypes.values()
-                .flatMap { slot -> findHolders(entity, slot) }
+        override fun provide(dispatcher: Dispatcher<*>): Collection<TypedProvidedHolder<T>> {
+            return cache.get(dispatcher.uuid) {
+                val entity = dispatcher.get<LivingEntity>() ?: return@get emptyList()
+
+                SlotTypes.values()
+                    .flatMap { slot -> findHolders(entity, slot) }
+            }
         }
     }
 }
