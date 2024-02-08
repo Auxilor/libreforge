@@ -2,6 +2,7 @@ package com.willfp.libreforge.triggers
 
 import com.willfp.eco.core.registry.KRegistrable
 import com.willfp.libreforge.Dispatcher
+import com.willfp.libreforge.EmptyProvidedHolder.holder
 import com.willfp.libreforge.ProvidedEffectBlock
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.counters.bind.BoundCounters
@@ -101,15 +102,12 @@ abstract class Trigger(
         // Only calculate placeholders once per holder
         val holderDispatches = notNullMutableMapOf<ProvidedHolder, DispatchedTrigger>()
 
-        for (block in triggerableEffects) {
-            val holder = block.holder
+        for (holder in triggerableEffects.map { it.holder }.toSet()) {
             val withHolder = dispatch.data.copy().apply {
                 this.holder = holder
             }
 
-            val dispatchWithHolder = holderDispatches.getOrPut(holder) {
-                DispatchedTrigger(dispatcher, this, withHolder).inheritPlaceholders(dispatch)
-            }
+            val dispatchWithHolder = DispatchedTrigger(dispatcher, this, withHolder).inheritPlaceholders(dispatch)
 
             for (placeholder in holder.generatePlaceholders(dispatcher)) {
                 dispatchWithHolder.addPlaceholder(placeholder)
