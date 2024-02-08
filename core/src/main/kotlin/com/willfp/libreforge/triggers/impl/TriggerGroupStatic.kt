@@ -10,6 +10,7 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.Bukkit
 import org.bukkit.FluidCollisionMode
 import org.bukkit.entity.Player
+import java.lang.RuntimeException
 
 object TriggerGroupStatic : TriggerGroup("static") {
     private val registry = mutableMapOf<Int, TriggerStatic>()

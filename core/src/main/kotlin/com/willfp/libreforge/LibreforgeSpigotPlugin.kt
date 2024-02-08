@@ -187,7 +187,7 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
     }
 
     override fun getMinimumEcoVersion(): String {
-        return "6.65.0"
+        return "6.69.0"
     }
 
     /**
@@ -197,7 +197,7 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
         if (hasLoaded) {
             runnable()
         } else {
-            onReload(runnable)
+            onCreateTasks(runnable)
         }
     }
 }

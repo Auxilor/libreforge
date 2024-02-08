@@ -77,7 +77,6 @@ internal class CommandTrigger(
         }
 
         sender.sendMessage(plugin.langYml.getMessage("triggered").replace("%id%", trigger))
-        plugin.reload(false)
     }
 
     override fun tabComplete(sender: CommandSender, args: List<String>): List<String> {
