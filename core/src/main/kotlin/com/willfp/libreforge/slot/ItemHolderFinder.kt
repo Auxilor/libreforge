@@ -10,6 +10,7 @@ import com.willfp.libreforge.ItemProvidedHolder
 import com.willfp.libreforge.TypedHolderProvider
 import com.willfp.libreforge.TypedProvidedHolder
 import com.willfp.libreforge.get
+import com.willfp.libreforge.registerRefreshFunction
 import org.bukkit.entity.LivingEntity
 import org.bukkit.inventory.ItemStack
 import java.util.UUID
@@ -68,6 +69,12 @@ abstract class ItemHolderFinder<T : Holder> {
         private val cache: Cache<UUID, List<TypedProvidedHolder<T>>> = Caffeine.newBuilder()
             .expireAfterWrite(500, TimeUnit.MILLISECONDS)
             .build()
+
+        init {
+            registerRefreshFunction {
+                cache.invalidate(it.uuid)
+            }
+        }
 
         override fun provide(dispatcher: Dispatcher<*>): Collection<TypedProvidedHolder<T>> {
             return cache.get(dispatcher.uuid) {
