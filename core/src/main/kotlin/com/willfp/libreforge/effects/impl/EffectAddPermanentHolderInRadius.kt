@@ -35,6 +35,8 @@ object EffectAddPermanentHolderInRadius : Effect<HolderTemplate>("add_permanent_
 
     init {
         registerGenericHolderProvider { dispatcher ->
+            if (holders.isEmpty()) return@registerGenericHolderProvider emptyList()
+
             nearbyCache.get(dispatcher.uuid) { _ ->
                 holders.filter { it.canApplyTo(dispatcher) }
                     .map { SimpleProvidedHolder(it.holder) }
