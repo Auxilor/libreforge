@@ -6,6 +6,7 @@ import com.willfp.eco.core.events.ArmorChangeEvent
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityPickupItemEvent
 import org.bukkit.event.inventory.InventoryClickEvent
@@ -26,7 +27,7 @@ class ItemRefreshListener(
         )
         .build<UUID, Unit>()
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     fun onItemPickup(event: EntityPickupItemEvent) {
         if (plugin.configYml.getBool("refresh.pickup.require-meta")) {
             if (!event.item.itemStack.hasItemMeta()) {
@@ -37,19 +38,19 @@ class ItemRefreshListener(
         event.entity.toDispatcher().refreshHolders()
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     fun onPlayerJoin(event: PlayerJoinEvent) {
         Bukkit.getServer().onlinePlayers.forEach {
             it.toDispatcher().refreshHolders()
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     fun onInventoryDrop(event: PlayerDropItemEvent) {
         event.player.toDispatcher().refreshHolders()
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     fun onChangeSlot(event: PlayerItemHeldEvent) {
         val dispatcher = event.player.toDispatcher()
         dispatcher.refreshHolders()
@@ -63,7 +64,7 @@ class ItemRefreshListener(
         event.player.toDispatcher().refreshHolders()
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     fun onInventoryClick(event: InventoryClickEvent) {
         val player = event.whoClicked as? Player ?: return
 
