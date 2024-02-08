@@ -1,6 +1,7 @@
 package com.willfp.libreforge
 
 import com.destroystokyo.paper.event.entity.EntityRemoveFromWorldEvent
+import com.willfp.libreforge.EmptyProvidedHolder.holder
 import com.willfp.libreforge.effects.Effects
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.Player
@@ -16,10 +17,8 @@ object EffectDataFixer : Listener {
         val player = event.player
         val dispatcher = player.toDispatcher()
 
-        for ((holder, effects) in dispatcher.providedActiveEffects) {
-            for (effect in effects) {
-                effect.disable(dispatcher, holder)
-            }
+        for ((effect, holder) in dispatcher.providedActiveEffects) {
+            effect.disable(dispatcher, holder)
         }
 
         // Extra fix for pre-4.2.3
@@ -71,7 +70,7 @@ object EffectDataFixer : Listener {
     }
 }
 
-object PaperEffectDataFixer: Listener {
+object PaperEffectDataFixer : Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     fun purgeOnRemove(event: EntityRemoveFromWorldEvent) {
         if (event.entity is Player) {
