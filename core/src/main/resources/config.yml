@@ -117,6 +117,10 @@ conditions:
   default-state-off-main-thread: true
 
 refresh:
+  pickup:
+    # If picked up items must have item meta (NBT Data) in order to trigger a refresh
+    require-meta: true
+
   entities:
     # If entities should be polled for updates, and how often (in ticks).
     # If you don't have any effects that run from entities, you can disable this to save performance.

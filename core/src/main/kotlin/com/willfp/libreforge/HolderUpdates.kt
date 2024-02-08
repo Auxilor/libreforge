@@ -28,6 +28,12 @@ class ItemRefreshListener(
 
     @EventHandler
     fun onItemPickup(event: EntityPickupItemEvent) {
+        if (plugin.configYml.getBool("refresh.pickup.require-meta")) {
+            if (!event.item.itemStack.hasItemMeta()) {
+                return
+            }
+        }
+
         event.entity.toDispatcher().refreshHolders()
     }
 
