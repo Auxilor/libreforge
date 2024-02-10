@@ -26,7 +26,7 @@ object ConditionItemPointsBelow : Condition<NoCompileData>("item_points_below") 
     ): Boolean {
         val item = holder.getProvider<ItemStack>() ?: return false
         val type = config.getString("type")
-        val amount = config.getDoubleFromExpression("type", dispatcher.get<Player>())
+        val amount = config.getDoubleFromExpression("amount", dispatcher.get<Player>())
 
         return item.points[type] <= amount
     }
