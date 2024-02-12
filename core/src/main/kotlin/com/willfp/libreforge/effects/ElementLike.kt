@@ -32,11 +32,12 @@ abstract class ElementLike : ConfigurableElement {
 
     // Inject placeholders into all config blocks.
     private fun injectPlaceholders(placeholders: List<InjectablePlaceholder>) {
-        listOf(arguments, conditions, mutators, filters)
-            .flatten()
-            .map { it.config }
-            .plusElement(config)
-            .forEach { it.addInjectablePlaceholder(placeholders) }
+        arguments.forEach { it.config.addInjectablePlaceholder(placeholders) }
+        conditions.forEach { it.config.addInjectablePlaceholder(placeholders) }
+        mutators.forEach { it.config.addInjectablePlaceholder(placeholders) }
+        filters.forEach { it.config.addInjectablePlaceholder(placeholders) }
+
+        config.addInjectablePlaceholder(placeholders)
     }
 
     /*
@@ -79,13 +80,12 @@ abstract class ElementLike : ConfigurableElement {
             trigger.addPlaceholder(DynamicNumericValue("repeat_count", repeatCount))
         }
 
-        var delay = 0L
-        if (config.has("delay")) {
-            delay = config.getIntFromExpression("delay", trigger.data)
+        val delay = if (config.has("delay")) {
+            config.getIntFromExpression("delay", trigger.data)
                 .coerceAtLeast(0)
                 .let { if (!supportsDelay) 0 else it }
                 .toLong()
-        }
+        } else { 0L }
 
         // Initial injection into mutators
         mutators.map { it.config }.forEach { it.addInjectablePlaceholder(trigger.placeholders) }
@@ -102,7 +102,9 @@ abstract class ElementLike : ConfigurableElement {
         }
 
         // Inject placeholders everywhere after mutation
-        trigger.generatePlaceholders(data)
+        if (config.has("mutators")) {
+            trigger.generatePlaceholders(data)
+        }
         injectPlaceholders(trigger.placeholders)
 
         // Filter
@@ -146,9 +148,11 @@ abstract class ElementLike : ConfigurableElement {
 
             repeatCount += repeatIncrement
 
-            // Re-inject new placeholder with different hash
-            trigger.addPlaceholder(DynamicNumericValue("repeat_count", repeatCount))
-            injectPlaceholders(DynamicNumericValue("repeat_count", repeatCount).placeholders)
+            if (config.has("repeat")) {
+                // Re-inject new placeholder with different hash
+                trigger.addPlaceholder(DynamicNumericValue("repeat_count", repeatCount))
+                injectPlaceholders(DynamicNumericValue("repeat_count", repeatCount).placeholders)
+            }
         }
 
         // Can't delay initial execution for things that modify events.

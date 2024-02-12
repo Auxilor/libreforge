@@ -17,6 +17,8 @@ object TriggerToggleSneak : Trigger("toggle_sneak") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerToggleSneakEvent) {
+        if (!this.isEnabled) return
+
         val player = event.player
 
         this.dispatch(

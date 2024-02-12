@@ -3,7 +3,6 @@ package com.willfp.libreforge.slot
 import com.github.benmanes.caffeine.cache.Cache
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.willfp.libreforge.Dispatcher
-import com.willfp.libreforge.EmptyProvidedHolder.provider
 import com.willfp.libreforge.Holder
 import com.willfp.libreforge.HolderProvider
 import com.willfp.libreforge.ItemProvidedHolder
@@ -11,6 +10,7 @@ import com.willfp.libreforge.TypedHolderProvider
 import com.willfp.libreforge.TypedProvidedHolder
 import com.willfp.libreforge.get
 import com.willfp.libreforge.registerRefreshFunction
+import com.willfp.libreforge.plugin
 import org.bukkit.entity.LivingEntity
 import org.bukkit.inventory.ItemStack
 import java.util.UUID
@@ -67,21 +67,28 @@ abstract class ItemHolderFinder<T : Holder> {
 
     private inner class ItemHolderFinderProvider: TypedHolderProvider<T> {
         private val cache: Cache<UUID, List<TypedProvidedHolder<T>>> = Caffeine.newBuilder()
-            .expireAfterWrite(500, TimeUnit.MILLISECONDS)
+            .expireAfterWrite(2, TimeUnit.SECONDS)
             .build()
+        private val slotTypes = SlotTypes.values()
 
         init {
             registerRefreshFunction {
-                cache.invalidate(it.uuid)
+                update(it)
             }
         }
 
         override fun provide(dispatcher: Dispatcher<*>): Collection<TypedProvidedHolder<T>> {
-            return cache.get(dispatcher.uuid) {
-                val entity = dispatcher.get<LivingEntity>() ?: return@get emptyList()
+            val entity = dispatcher.get<LivingEntity>() ?: return emptyList()
 
-                SlotTypes.values()
-                    .flatMap { slot -> findHolders(entity, slot) }
+            update(dispatcher)
+
+            return cache.getIfPresent(dispatcher.uuid) ?: slotTypes.flatMap { slot -> findHolders(entity, slot) }
+        }
+
+        fun update(dispatcher: Dispatcher<*>) {
+            val entity = dispatcher.get<LivingEntity>() ?: return
+            plugin.scheduler.runAsync {
+                cache.put(dispatcher.uuid, slotTypes.flatMap { slot -> findHolders(entity, slot) })
             }
         }
     }

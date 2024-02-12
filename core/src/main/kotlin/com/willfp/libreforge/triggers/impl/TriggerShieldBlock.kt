@@ -20,6 +20,8 @@ object TriggerShieldBlock : Trigger("shield_block") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityDamageByEntityEvent) {
+        if (!this.isEnabled) return
+
         val attacker = event.damager as? LivingEntity ?: return
         val victim = event.entity as? LivingEntity ?: return
 

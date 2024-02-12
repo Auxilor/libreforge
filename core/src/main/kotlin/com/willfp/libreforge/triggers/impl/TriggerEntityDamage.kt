@@ -7,9 +7,6 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.LivingEntity
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
-import org.bukkit.event.entity.EntityCombustByBlockEvent
-import org.bukkit.event.entity.EntityCombustByEntityEvent
-import org.bukkit.event.entity.EntityCombustEvent
 import org.bukkit.event.entity.EntityDamageEvent
 
 object TriggerEntityDamage : Trigger("entity_damage") {
@@ -20,6 +17,8 @@ object TriggerEntityDamage : Trigger("entity_damage") {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     fun handle(event: EntityDamageEvent) {
+        if (!this.isEnabled) return
+
         val entity = event.entity
 
         this.dispatch(

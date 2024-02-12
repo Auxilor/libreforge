@@ -20,6 +20,8 @@ object TriggerPotionEffect : Trigger("potion_effect") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityPotionEffectEvent) {
+        if (!this.isEnabled) return
+
         if (event.newEffect == null) {
             return
         }

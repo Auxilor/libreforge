@@ -15,6 +15,8 @@ object TriggerSwing : Trigger("swing") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerArmSwingEvent) {
+        if (!isEnabled) return
+
         val player = event.player
 
         this.dispatch(

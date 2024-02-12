@@ -19,6 +19,8 @@ object TriggerBreed : Trigger("breed") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityBreedEvent) {
+        if (!this.isEnabled) return
+
         val breeder = event.breeder
 
         this.dispatch(

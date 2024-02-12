@@ -15,6 +15,8 @@ object TriggerChangeArmor : Trigger("change_armor") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: ArmorChangeEvent) {
+        if (!this.isEnabled) return
+
         val player = event.player
 
         this.dispatch(

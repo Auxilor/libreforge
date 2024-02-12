@@ -1,7 +1,6 @@
 package com.willfp.libreforge.slot.impl
 
 import com.willfp.eco.core.drops.DropQueue
-import com.willfp.eco.util.toSingletonList
 import com.willfp.libreforge.slot.SlotType
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
@@ -19,7 +18,7 @@ object SlotTypeAny : SlotType("any") {
 
     override fun getItems(entity: LivingEntity): List<ItemStack> {
         return if (entity is Player) {
-            entity.inventory.contents.toList().filterNotNull()
+            entity.inventory.contents.filterNotNull()
         } else {
             listOfNotNull(
                 entity.equipment?.helmet,

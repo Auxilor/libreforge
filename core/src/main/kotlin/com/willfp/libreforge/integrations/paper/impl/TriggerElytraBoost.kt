@@ -15,6 +15,8 @@ object TriggerElytraBoost : Trigger("elytra_boost") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerElytraBoostEvent) {
+        if (!isEnabled) return
+
         val player = event.player
 
         this.dispatch(

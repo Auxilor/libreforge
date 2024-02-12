@@ -18,6 +18,8 @@ object TriggerReelIn : Trigger("reel_in") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerFishEvent) {
+        if (!this.isEnabled) return
+
         if (event.state != PlayerFishEvent.State.REEL_IN) {
             return
         }

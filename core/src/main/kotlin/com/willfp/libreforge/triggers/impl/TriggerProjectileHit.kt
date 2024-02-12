@@ -24,6 +24,8 @@ object TriggerProjectileHit : Trigger("projectile_hit") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: ProjectileHitEvent) {
+        if (!this.isEnabled) return
+
         val projectile = event.entity
         val shooter = projectile.shooter as? LivingEntity ?: return
 
@@ -42,6 +44,8 @@ object TriggerProjectileHit : Trigger("projectile_hit") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityDamageByEntityEvent) {
+        if (!this.isEnabled) return
+
         val arrow = event.damager as? Arrow ?: return
         val victim = event.entity as? LivingEntity ?: return
         val shooter = arrow.shooter as? LivingEntity ?: return

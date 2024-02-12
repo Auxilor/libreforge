@@ -22,6 +22,8 @@ object TriggerChangeChunk : Trigger("change_chunk") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityMoveEvent) {
+        if (!this.isEnabled) return
+
         val entity = event.entity
 
         if (!event.hasExplicitlyChangedBlock()) {

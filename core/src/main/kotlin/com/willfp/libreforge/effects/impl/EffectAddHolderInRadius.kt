@@ -3,8 +3,6 @@ package com.willfp.libreforge.effects.impl
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Dispatcher
-import com.willfp.libreforge.EmptyProvidedHolder.holder
-import com.willfp.libreforge.GlobalDispatcher.location
 import com.willfp.libreforge.Holder
 import com.willfp.libreforge.HolderTemplate
 import com.willfp.libreforge.SimpleProvidedHolder
@@ -19,7 +17,6 @@ import com.willfp.libreforge.nest
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.registerGenericHolderProvider
 import com.willfp.libreforge.triggers.TriggerData
-import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.Location
 import java.util.Objects
 import java.util.UUID

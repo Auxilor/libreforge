@@ -16,6 +16,8 @@ object TriggerDeath : Trigger("death") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerDeathEvent) {
+        if (!this.isEnabled) return
+
         val player = event.entity
 
         this.dispatch(

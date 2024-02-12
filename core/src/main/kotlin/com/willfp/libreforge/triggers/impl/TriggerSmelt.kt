@@ -25,6 +25,8 @@ object TriggerSmelt : Trigger("smelt") {
 
     @EventHandler
     fun handle(event: InventoryClickEvent) {
+        if (!this.isEnabled) return
+
         val inventory = event.player.openInventory.topInventory as? FurnaceInventory ?: return
         val player = event.player
         val location = inventory.location ?: return
@@ -41,6 +43,8 @@ object TriggerSmelt : Trigger("smelt") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: FurnaceSmeltEvent) {
+        if (!this.isEnabled) return
+
         if (event.block.state !is Furnace) {
             return
         }

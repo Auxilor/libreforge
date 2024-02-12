@@ -15,6 +15,8 @@ object TriggerEnterBed : Trigger("enter_bed") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerBedEnterEvent) {
+        if (!this.isEnabled) return
+
         val player = event.player
 
         this.dispatch(

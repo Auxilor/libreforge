@@ -6,9 +6,7 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.LivingEntity
 import org.bukkit.event.EventHandler
-import org.bukkit.event.entity.EntityCombustByBlockEvent
 import org.bukkit.event.entity.EntityCombustByEntityEvent
-import org.bukkit.event.entity.EntityCombustEvent
 
 object TriggerEntityCatchFireFromEntity : Trigger("entity_catch_fire_from_entity") {
     override val parameters = setOf(
@@ -18,6 +16,8 @@ object TriggerEntityCatchFireFromEntity : Trigger("entity_catch_fire_from_entity
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityCombustByEntityEvent) {
+        if (!this.isEnabled) return
+
         val entity = event.entity
 
         this.dispatch(

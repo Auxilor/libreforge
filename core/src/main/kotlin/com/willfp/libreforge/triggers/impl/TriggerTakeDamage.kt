@@ -31,6 +31,8 @@ object TriggerTakeDamage : Trigger("take_damage") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityDamageEvent) {
+        if (!this.isEnabled) return
+
         val victim = event.entity
 
         if (event.cause in ignoredCauses) {
