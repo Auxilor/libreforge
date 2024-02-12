@@ -57,7 +57,7 @@ class ItemRefreshListener(
         if (plugin.configYml.getBool("refresh.held.require-meta")) {
             val oldItem = player.inventory.getItem(event.previousSlot)
             val newItem = player.inventory.getItem(event.newSlot)
-            if ((oldItem?.hasItemMeta() == true) || (newItem?.hasItemMeta() == true)) {
+            if (((oldItem == null) || !oldItem.hasItemMeta()) && ((newItem == null) || !newItem.hasItemMeta())) {
                 return
             }
         }
