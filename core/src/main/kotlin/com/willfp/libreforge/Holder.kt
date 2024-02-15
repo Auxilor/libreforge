@@ -5,7 +5,6 @@ import com.willfp.libreforge.conditions.ConditionList
 import com.willfp.libreforge.effects.EffectList
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.Entity
-import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import java.util.Objects
@@ -153,14 +152,16 @@ open class SimpleProvidedHolder(
     override val holder: Holder
 ) : ProvidedHolder {
     override val provider = null
-    private val cachedHashCode = calculateHashCode()
+
+    // Cache the hashcode
+    private val hash = calculateHashCode()
 
     private fun calculateHashCode(): Int {
-        return Objects.hash(holder)
+        return holder.hashCode()
     }
 
     override fun hashCode(): Int {
-        return cachedHashCode
+        return hash
     }
 
     override fun equals(other: Any?): Boolean {

@@ -85,7 +85,9 @@ abstract class ElementLike : ConfigurableElement {
                 .coerceAtLeast(0)
                 .let { if (!supportsDelay) 0 else it }
                 .toLong()
-        } else { 0L }
+        } else {
+            0L
+        }
 
         // Initial injection into mutators
         mutators.map { it.config }.forEach { it.addInjectablePlaceholder(trigger.placeholders) }
@@ -102,9 +104,7 @@ abstract class ElementLike : ConfigurableElement {
         }
 
         // Inject placeholders everywhere after mutation
-        if (config.has("mutators")) {
-            trigger.generatePlaceholders(data)
-        }
+        trigger.generatePlaceholders(data)
         injectPlaceholders(trigger.placeholders)
 
         // Filter

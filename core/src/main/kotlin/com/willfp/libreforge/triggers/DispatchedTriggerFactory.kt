@@ -28,6 +28,9 @@ class DispatchedTriggerFactory(
     }
 
     fun create(dispatcher: Dispatcher<*>, trigger: Trigger, data: TriggerData): DispatchedTrigger? {
+        if (!trigger.isEnabled) {
+            return null
+        }
 
         val hash = (trigger.hashCode() shl 5) xor data.hashCode()
         if (hash in dispatcherTriggers[dispatcher.uuid]) {

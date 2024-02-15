@@ -26,7 +26,7 @@ interface HolderProvider {
 /**
  * A typed holder provider.
  */
-interface TypedHolderProvider<T: Holder> : HolderProvider {
+interface TypedHolderProvider<T : Holder> : HolderProvider {
     override fun provide(dispatcher: Dispatcher<*>): Collection<TypedProvidedHolder<T>>
 }
 
@@ -189,17 +189,13 @@ inline fun <reified T> registerSpecificRefreshFunction(crossinline function: (T)
     }
 }
 
-private val updateDelay = plugin.configYml.getInt("refresh.holders.update-delay").toLong()
-
 /**
  * Update holders, effects, and call refresh functions.
  */
 fun Dispatcher<*>.refreshHolders() {
     refreshFunctions.forEach { it(this) }
-    plugin.scheduler.runLater({ //run with delay for wait itemHolder update
-        this.updateHolders()
-        this.updateEffects()
-    }, updateDelay)
+    this.updateHolders()
+    this.updateEffects()
 }
 
 @Deprecated(
@@ -222,7 +218,7 @@ fun registerPlaceholderProvider(provider: (ProvidedHolder, Dispatcher<*>) -> Col
 /**
  * Register a function to generate placeholders for a holder for any dispatcher.
  */
-inline fun <reified T: Holder> registerHolderPlaceholderProvider(crossinline provider: (T, Dispatcher<*>) -> Collection<NamedValue>) {
+inline fun <reified T : Holder> registerHolderPlaceholderProvider(crossinline provider: (T, Dispatcher<*>) -> Collection<NamedValue>) {
     registerPlaceholderProvider { provided, dispatcher ->
         val holder = provided.holder
         if (holder is T) {
@@ -236,7 +232,7 @@ inline fun <reified T: Holder> registerHolderPlaceholderProvider(crossinline pro
 /**
  * Register a function to generate placeholders for a holder for a specific dispatcher.
  */
-inline fun <reified T: Holder, reified R> registerSpecificHolderPlaceholderProvider(crossinline provider: (T, R) -> Collection<NamedValue>) {
+inline fun <reified T : Holder, reified R> registerSpecificHolderPlaceholderProvider(crossinline provider: (T, R) -> Collection<NamedValue>) {
     registerPlaceholderProvider { provided, dispatcher ->
         val holder = provided.holder
         if (holder is T && dispatcher.isType<R>()) {
@@ -302,7 +298,7 @@ val Dispatcher<*>.holders: Collection<ProvidedHolder>
 /**
  * Get holders of a specific type.
  */
-inline fun <reified T: Holder> Dispatcher<*>.getHoldersOfType(): Collection<T> {
+inline fun <reified T : Holder> Dispatcher<*>.getHoldersOfType(): Collection<T> {
     return this.holders.mapNotNull { it.holder as? T }
 }
 

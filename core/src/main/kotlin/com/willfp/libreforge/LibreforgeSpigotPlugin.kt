@@ -1,5 +1,6 @@
 package com.willfp.libreforge
 
+import com.gmail.nossr50.mcMMO.p
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.command.impl.PluginCommand
@@ -121,12 +122,11 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
         // Poll for changes
         val skipAFKPlayers = configYml.getBool("refresh.players.skip-afk-players")
         plugin.scheduler.runTimer(20, 20) {
-            val onlinePlayers = Bukkit.getOnlinePlayers().let { players ->
-                if (skipAFKPlayers) players.filter { !AFKManager.isAfk(it) }
-                else players
-            }
+            for (player in Bukkit.getOnlinePlayers()) {
+                if (skipAFKPlayers && AFKManager.isAfk(player)) {
+                    continue
+                }
 
-            for (player in onlinePlayers) {
                 player.toDispatcher().refreshHolders()
             }
         }

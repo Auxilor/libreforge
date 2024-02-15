@@ -23,6 +23,7 @@ object EffectSpawnParticle : Effect<NoCompileData>(
         val location = data.location ?: return false
         val particle = Particles.lookup(config.getString("particle"))
         val amount = config.getOrElse("amount", 1) { getIntFromExpression(it, data) }
+
         plugin.scheduler.runAsync {
             particle.spawn(location, amount)
         }

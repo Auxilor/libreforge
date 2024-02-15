@@ -57,19 +57,18 @@ abstract class ItemHolderFinder<T : Holder> {
         return provider
     }
 
-    private class TypedItemProvidedHolder<T: Holder>(
+    private class TypedItemProvidedHolder<T : Holder>(
         override val holder: T,
         provider: ItemStack
-    ): ItemProvidedHolder(
+    ) : ItemProvidedHolder(
         holder,
         provider
     ), TypedProvidedHolder<T>
 
-    private inner class ItemHolderFinderProvider: TypedHolderProvider<T> {
+    private inner class ItemHolderFinderProvider : TypedHolderProvider<T> {
         private val cache: Cache<UUID, List<TypedProvidedHolder<T>>> = Caffeine.newBuilder()
             .expireAfterWrite(2, TimeUnit.SECONDS)
             .build()
-        private val slotTypes = SlotTypes.values()
 
         init {
             registerRefreshFunction {
@@ -82,14 +81,13 @@ abstract class ItemHolderFinder<T : Holder> {
 
             update(dispatcher)
 
-            return cache.getIfPresent(dispatcher.uuid) ?: slotTypes.flatMap { slot -> findHolders(entity, slot) }
+            return cache.getIfPresent(dispatcher.uuid) ?: SlotTypes.values()
+                .flatMap { slot -> findHolders(entity, slot) }
         }
 
-        fun update(dispatcher: Dispatcher<*>) {
+        private fun update(dispatcher: Dispatcher<*>) {
             val entity = dispatcher.get<LivingEntity>() ?: return
-            plugin.scheduler.runAsync {
-                cache.put(dispatcher.uuid, slotTypes.flatMap { slot -> findHolders(entity, slot) })
-            }
+            cache.put(dispatcher.uuid, SlotTypes.values().flatMap { slot -> findHolders(entity, slot) })
         }
     }
 }

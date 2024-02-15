@@ -143,9 +143,3 @@ refresh:
     # Inventory clicks refresh active holders, but a group of malicious users spamming can cause server lag.
     # Setting a timeout ensures only one click triggers a refresh within the specified time (in milliseconds).
     timeout: 500
-
-  holders:
-    # Delay in ticks for refreshing holders and effects after inventory updates.
-    # You can increase value, if your server not fast enough to update inventories in async.
-    # It is recommended not to set the value lower than 2; otherwise, the server may not have sufficient time to update data.
-    update-delay: 2
