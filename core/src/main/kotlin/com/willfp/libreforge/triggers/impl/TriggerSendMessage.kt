@@ -20,10 +20,9 @@ object TriggerSendMessage : Trigger("send_message") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: AsyncPlayerChatEvent) {
+        if (!this.isEnabled) return
+
         val player = event.player
-        if (event.isCancelled) {
-            return
-        }
 
         plugin.scheduler.run {
             this.dispatch(

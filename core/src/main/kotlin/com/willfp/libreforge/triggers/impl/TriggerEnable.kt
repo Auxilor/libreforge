@@ -15,6 +15,8 @@ object TriggerEnable : Trigger("enable") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: HolderEnableEvent) {
+        if (!this.isEnabled) return
+
         val dispatcher = event.dispatcher
 
         this.dispatch(

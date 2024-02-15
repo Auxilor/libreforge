@@ -15,6 +15,8 @@ object TriggerLeaveBed : Trigger("leave_bed") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerBedLeaveEvent) {
+        if (!this.isEnabled) return
+
         val player = event.player
 
         this.dispatch(

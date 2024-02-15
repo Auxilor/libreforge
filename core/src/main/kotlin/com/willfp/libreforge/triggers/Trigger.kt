@@ -2,7 +2,6 @@ package com.willfp.libreforge.triggers
 
 import com.willfp.eco.core.registry.KRegistrable
 import com.willfp.libreforge.Dispatcher
-import com.willfp.libreforge.EmptyProvidedHolder.holder
 import com.willfp.libreforge.ProvidedEffectBlock
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.counters.bind.BoundCounters
@@ -72,13 +71,15 @@ abstract class Trigger(
         data: TriggerData,
         effects: List<ProvidedEffectBlock>
     ) {
-        val dispatch = plugin.dispatchedTriggerFactory.create(dispatcher, this, data) ?: return
+        val counters = BoundCounters.values()
 
         // Prevent dispatching useless triggers
-        val potentialDestinations = effects.map { it.effect } + BoundCounters.values()
+        val potentialDestinations = effects.map { it.effect } + counters
         if (potentialDestinations.none { it.canBeTriggeredBy(this) }) {
             return
         }
+
+        val dispatch = plugin.dispatchedTriggerFactory.create(dispatcher, this, data) ?: return
 
         dispatch.generatePlaceholders()
 
@@ -102,15 +103,17 @@ abstract class Trigger(
         // Only calculate placeholders once per holder
         val holderDispatches = notNullMutableMapOf<ProvidedHolder, DispatchedTrigger>()
 
-        for (holder in triggerableEffects.map { it.holder }.toSet()) {
+        triggerableEffects.forEach { effect ->
+            val holder = effect.holder
+
             val withHolder = dispatch.data.copy().apply {
                 this.holder = holder
             }
 
             val dispatchWithHolder = DispatchedTrigger(dispatcher, this, withHolder).inheritPlaceholders(dispatch)
 
-            for (placeholder in holder.generatePlaceholders(dispatcher)) {
-                dispatchWithHolder.addPlaceholder(placeholder)
+            holder.generatePlaceholders(dispatcher).forEach {
+                dispatchWithHolder.addPlaceholder(it)
             }
 
             holderDispatches[holder] = dispatchWithHolder
@@ -129,7 +132,7 @@ abstract class Trigger(
         }
 
         // Probably a better way to work with counters, but this works for now.
-        for (counter in BoundCounters.values()) {
+        for (counter in counters) {
             counter.bindings.forEach { it.accept(dispatch) }
         }
     }

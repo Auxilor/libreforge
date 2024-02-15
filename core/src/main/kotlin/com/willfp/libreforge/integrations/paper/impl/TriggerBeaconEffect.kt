@@ -16,6 +16,8 @@ object TriggerBeaconEffect : Trigger("beacon_effect") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: BeaconEffectEvent) {
+        if (!isEnabled) return
+
         val player = event.player
 
         this.dispatch(

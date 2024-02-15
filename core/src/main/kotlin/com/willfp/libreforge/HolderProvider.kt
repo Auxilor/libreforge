@@ -189,13 +189,17 @@ inline fun <reified T> registerSpecificRefreshFunction(crossinline function: (T)
     }
 }
 
+private val updateDelay = plugin.configYml.getInt("refresh.holders.update-delay").toLong()
+
 /**
  * Update holders, effects, and call refresh functions.
  */
 fun Dispatcher<*>.refreshHolders() {
     refreshFunctions.forEach { it(this) }
-    this.updateHolders()
-    this.updateEffects()
+    plugin.scheduler.runLater({ //run with delay for wait itemHolder update
+        this.updateHolders()
+        this.updateEffects()
+    }, updateDelay)
 }
 
 @Deprecated(

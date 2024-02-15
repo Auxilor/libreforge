@@ -16,6 +16,8 @@ object TriggerGainHunger : Trigger("gain_hunger") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: FoodLevelChangeEvent) {
+        if (!this.isEnabled) return
+
         val player = event.entity as? Player ?: return
 
         if (event.foodLevel < player.foodLevel) {

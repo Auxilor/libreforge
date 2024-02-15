@@ -17,6 +17,8 @@ object TriggerRunCommand : Trigger("run_command") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerCommandPreprocessEvent) {
+        if (!this.isEnabled) return
+
         val player = event.player
 
         plugin.scheduler.run {

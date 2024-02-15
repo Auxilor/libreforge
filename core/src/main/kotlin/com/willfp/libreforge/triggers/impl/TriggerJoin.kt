@@ -15,6 +15,8 @@ object TriggerJoin : Trigger("join") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerJoinEvent) {
+        if (!this.isEnabled) return
+
         this.dispatch(
             event.player.toDispatcher(),
             TriggerData(

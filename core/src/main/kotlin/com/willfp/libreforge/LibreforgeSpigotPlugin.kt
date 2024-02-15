@@ -4,6 +4,7 @@ import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.command.impl.PluginCommand
 import com.willfp.eco.core.integrations.IntegrationLoader
+import com.willfp.eco.core.integrations.afk.AFKManager
 import com.willfp.libreforge.commands.CommandLibreforge
 import com.willfp.libreforge.configs.ChainsYml
 import com.willfp.libreforge.configs.lrcdb.CommandLrcdb
@@ -118,8 +119,14 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
         dispatchedTriggerFactory.startTicking()
 
         // Poll for changes
+        val skipAFKPlayers = configYml.getBool("refresh.players.skip-afk-players")
         plugin.scheduler.runTimer(20, 20) {
-            for (player in Bukkit.getOnlinePlayers()) {
+            val onlinePlayers = Bukkit.getOnlinePlayers().let { players ->
+                if (skipAFKPlayers) players.filter { !AFKManager.isAfk(it) }
+                else players
+            }
+
+            for (player in onlinePlayers) {
                 player.toDispatcher().refreshHolders()
             }
         }

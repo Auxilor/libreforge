@@ -17,6 +17,8 @@ object TriggerTeleport : Trigger("teleport") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerTeleportEvent) {
+        if (!this.isEnabled) return
+
         plugin.scheduler.run {
             this.dispatch(
                 event.player.toDispatcher(),

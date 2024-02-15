@@ -21,6 +21,8 @@ object TriggerProjectileLaunch : Trigger("projectile_launch") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: ProjectileLaunchEvent) {
+        if (!this.isEnabled) return
+
         val shooter = event.entity.shooter as? LivingEntity ?: return
 
         this.dispatch(

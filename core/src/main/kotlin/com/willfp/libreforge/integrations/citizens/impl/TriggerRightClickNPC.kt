@@ -15,6 +15,8 @@ object TriggerRightClickNPC : Trigger("right_click_npc") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: NPCRightClickEvent) {
+        if (!isEnabled) return
+
         val player = event.clicker ?: return
 
         this.dispatch(

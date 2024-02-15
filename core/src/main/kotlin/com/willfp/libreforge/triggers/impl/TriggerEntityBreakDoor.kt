@@ -6,9 +6,7 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.LivingEntity
 import org.bukkit.event.EventHandler
-import org.bukkit.event.EventPriority
 import org.bukkit.event.entity.EntityBreakDoorEvent
-import org.bukkit.event.entity.EntitySpawnEvent
 
 object TriggerEntityBreakDoor : Trigger("entity_break_door") {
     override val parameters = setOf(
@@ -18,6 +16,8 @@ object TriggerEntityBreakDoor : Trigger("entity_break_door") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityBreakDoorEvent) {
+        if (!this.isEnabled) return
+
         val entity = event.entity
 
         this.dispatch(

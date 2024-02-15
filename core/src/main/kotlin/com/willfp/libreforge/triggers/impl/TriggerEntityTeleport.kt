@@ -6,9 +6,6 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.LivingEntity
 import org.bukkit.event.EventHandler
-import org.bukkit.event.EventPriority
-import org.bukkit.event.entity.EntityDeathEvent
-import org.bukkit.event.entity.EntityPickupItemEvent
 import org.bukkit.event.entity.EntityTeleportEvent
 
 object TriggerEntityTeleport : Trigger("entity_teleport") {
@@ -19,6 +16,8 @@ object TriggerEntityTeleport : Trigger("entity_teleport") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityTeleportEvent) {
+        if (!this.isEnabled) return
+
         val entity = event.entity
 
         this.dispatch(

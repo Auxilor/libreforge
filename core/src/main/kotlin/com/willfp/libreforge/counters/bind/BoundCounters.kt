@@ -15,9 +15,9 @@ internal object BoundCounters {
         bindings.remove(counter)
     }
 
-    fun values(): List<Counter> =
-        bindings.keys.toList()
+    fun values(): Set<Counter> =
+        bindings.keys
 
     val Counter.bindings: List<BoundCounter>
-        get() = BoundCounters.bindings[this].toList()
+        get() = BoundCounters.bindings[this]
 }

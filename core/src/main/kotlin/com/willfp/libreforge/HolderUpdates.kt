@@ -52,8 +52,18 @@ class ItemRefreshListener(
 
     @EventHandler(priority = EventPriority.LOWEST)
     fun onChangeSlot(event: PlayerItemHeldEvent) {
-        val dispatcher = event.player.toDispatcher()
-        dispatcher.refreshHolders()
+        val player = event.player
+
+        if (plugin.configYml.getBool("refresh.held.require-meta")) {
+            val oldItem = player.inventory.getItem(event.previousSlot)
+            val newItem = player.inventory.getItem(event.newSlot)
+            if (((oldItem == null) || !oldItem.hasItemMeta()) && ((newItem == null) || !newItem.hasItemMeta())) {
+                return
+            }
+        }
+
+        val dispatcher = player.toDispatcher()
+
         plugin.scheduler.run {
             dispatcher.refreshHolders()
         }

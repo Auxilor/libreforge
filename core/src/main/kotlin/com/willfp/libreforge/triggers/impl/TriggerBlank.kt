@@ -10,5 +10,5 @@ import com.willfp.libreforge.triggers.TriggerParameter
 object TriggerBlank : Trigger("blank") {
     override var isEnabled = true
 
-    override val parameters = TriggerParameter.values().toSet()
+    override val parameters = TriggerParameter.entries.toSet()
 }

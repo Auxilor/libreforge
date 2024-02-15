@@ -15,6 +15,8 @@ object TriggerLeave : Trigger("leave") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerQuitEvent) {
+        if (!this.isEnabled) return
+
         this.dispatch(
             event.player.toDispatcher(),
             TriggerData(

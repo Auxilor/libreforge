@@ -21,6 +21,8 @@ object TriggerCatchEntity : Trigger("catch_entity") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerFishEvent) {
+        if (!this.isEnabled) return
+
         if (event.state != PlayerFishEvent.State.CAUGHT_ENTITY) {
             return
         }

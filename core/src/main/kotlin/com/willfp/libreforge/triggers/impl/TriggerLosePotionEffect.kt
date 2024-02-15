@@ -19,6 +19,8 @@ object TriggerLosePotionEffect : Trigger("lose_potion_effect") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityPotionEffectEvent) {
+        if (!this.isEnabled) return
+
         if (event.oldEffect == null) {
             return
         }

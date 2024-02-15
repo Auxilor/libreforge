@@ -19,6 +19,8 @@ object TriggerShearEntity : Trigger("shear_entity") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerShearEntityEvent) {
+        if (!this.isEnabled) return
+
         val entity = event.entity as? LivingEntity ?: return
 
         if (entity.type !in listOf(EntityType.SHEEP, EntityType.MUSHROOM_COW)) {

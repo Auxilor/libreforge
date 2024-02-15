@@ -19,6 +19,8 @@ object TriggerClickEntity : Trigger("click_entity") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerInteractEntityEvent) {
+        if (!this.isEnabled) return
+
         val entity = event.rightClicked as? LivingEntity ?: return
         val player = event.player
 

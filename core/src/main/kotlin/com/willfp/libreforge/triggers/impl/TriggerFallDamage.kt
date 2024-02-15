@@ -1,6 +1,5 @@
 package com.willfp.libreforge.triggers.impl
 
-import com.willfp.libreforge.GlobalDispatcher.location
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData

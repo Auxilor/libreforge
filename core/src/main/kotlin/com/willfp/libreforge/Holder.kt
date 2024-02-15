@@ -153,9 +153,14 @@ open class SimpleProvidedHolder(
     override val holder: Holder
 ) : ProvidedHolder {
     override val provider = null
+    private val cachedHashCode = calculateHashCode()
+
+    private fun calculateHashCode(): Int {
+        return Objects.hash(holder)
+    }
 
     override fun hashCode(): Int {
-        return Objects.hash(holder)
+        return cachedHashCode
     }
 
     override fun equals(other: Any?): Boolean {
@@ -174,8 +179,14 @@ open class ItemProvidedHolder(
     override val holder: Holder,
     override val provider: ItemStack
 ) : ProvidedHolder {
-    override fun hashCode(): Int {
+    private val cachedHashCode = calculateHashCode()
+
+    private fun calculateHashCode(): Int {
         return Objects.hash(holder, provider)
+    }
+
+    override fun hashCode(): Int {
+        return cachedHashCode
     }
 
     override fun equals(other: Any?): Boolean {

@@ -1,6 +1,5 @@
 package com.willfp.libreforge.conditions
 
-import com.github.benmanes.caffeine.cache.Caffeine
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Compiled
 import com.willfp.libreforge.Dispatcher
@@ -12,8 +11,6 @@ import com.willfp.libreforge.plugin
 import com.willfp.libreforge.toDispatcher
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
-import java.util.UUID
-import java.util.concurrent.TimeUnit
 
 /**
  * A single condition config block.
@@ -32,10 +29,6 @@ class ConditionBlock<T> internal constructor(
      */
     val showNotMet = forceShowNotMet || notMetLines.isNotEmpty()
 
-    private val syncMetCache = Caffeine.newBuilder()
-        .expireAfterAccess(10, TimeUnit.SECONDS)
-        .build<UUID, Boolean>()
-
     /**
      * Check if the condition is met for a [dispatcher].
      */
@@ -53,17 +46,7 @@ class ConditionBlock<T> internal constructor(
             If the value isn't cached, then submit a task to cache it to avoid desync.
              */
 
-            if (!syncMetCache.asMap().containsKey(dispatcher.uuid)) {
-                plugin.scheduler.run {
-                    // Double check that it isn't cached by the time we run
-                    if (!syncMetCache.asMap().containsKey(dispatcher.uuid)) {
-                        syncMetCache.put(dispatcher.uuid, isMet(dispatcher, holder))
-                    }
-                }
-            }
-
-            return syncMetCache.getIfPresent(dispatcher.uuid)
-                ?: plugin.configYml.getBool("conditions.default-state-off-main-thread")
+            return plugin.configYml.getBool("conditions.default-state-off-main-thread")
         }
 
         val withHolder = config.applyHolder(holder, dispatcher)
@@ -76,11 +59,7 @@ class ConditionBlock<T> internal constructor(
         @Suppress("DEPRECATION")
         val metWithout = dispatcher.get<Player>()?.let { condition.isMet(it, withHolder, compileData) } ?: true
 
-        val isMet = (metWith && metWithout && dispatcherMet) xor isInverted
-
-        syncMetCache.put(dispatcher.uuid, isMet)
-
-        return isMet
+        return (metWith && metWithout && dispatcherMet) xor isInverted
     }
 
     @Deprecated(

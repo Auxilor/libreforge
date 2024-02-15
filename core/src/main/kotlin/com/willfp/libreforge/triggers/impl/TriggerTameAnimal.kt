@@ -18,6 +18,8 @@ object TriggerTameAnimal : Trigger("tame_animal") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityTameEvent) {
+        if (!this.isEnabled) return
+
         val player = event.owner as? Player ?: return
 
         this.dispatch(
