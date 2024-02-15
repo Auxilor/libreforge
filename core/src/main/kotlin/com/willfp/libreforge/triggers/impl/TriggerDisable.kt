@@ -15,8 +15,6 @@ object TriggerDisable : Trigger("disable") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: HolderDisableEvent) {
-        if (!this.isEnabled) return
-
         val dispatcher = event.dispatcher
 
         this.dispatch(

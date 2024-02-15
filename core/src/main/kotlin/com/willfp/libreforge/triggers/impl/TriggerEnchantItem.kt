@@ -16,8 +16,6 @@ object TriggerEnchantItem : Trigger("enchant_item") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EnchantItemEvent) {
-        if (!this.isEnabled) return
-
         val player = event.enchanter
         val item = event.item
 

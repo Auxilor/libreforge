@@ -29,8 +29,6 @@ object TriggerBlockItemDrop : Trigger("block_item_drop") {
         priority = EventPriority.LOW
     )
     fun handle(event: BlockDropItemEvent) {
-        if (!this.isEnabled) return
-
         val player = event.player
         val block = event.block
 

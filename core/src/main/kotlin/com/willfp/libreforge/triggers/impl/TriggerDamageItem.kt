@@ -18,8 +18,6 @@ object TriggerDamageItem : Trigger("damage_item") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerItemDamageEvent) {
-        if (!this.isEnabled) return
-
         val player = event.player
 
         this.dispatch(

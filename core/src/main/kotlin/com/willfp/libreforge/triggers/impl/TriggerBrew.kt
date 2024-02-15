@@ -41,8 +41,6 @@ object TriggerBrew : Trigger("brew") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: BrewEvent) {
-        if (!this.isEnabled) return
-
         val location = event.block.location
 
         val player = playerCache[location] ?: return

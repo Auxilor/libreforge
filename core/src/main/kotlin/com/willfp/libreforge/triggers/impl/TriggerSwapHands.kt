@@ -17,8 +17,6 @@ object TriggerSwapHands : Trigger("swap_hands") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerSwapHandItemsEvent) {
-        if (!this.isEnabled) return
-
         val player = event.player
 
         this.dispatch(

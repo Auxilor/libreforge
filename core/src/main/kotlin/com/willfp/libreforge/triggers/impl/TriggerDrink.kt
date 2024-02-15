@@ -27,8 +27,6 @@ object TriggerDrink : Trigger("drink") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerItemConsumeEvent) {
-        if (!this.isEnabled) return
-
         if (!event.item.type.isDrink()) {
             return
         }

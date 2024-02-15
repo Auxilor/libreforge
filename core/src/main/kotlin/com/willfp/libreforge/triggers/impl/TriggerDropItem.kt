@@ -18,8 +18,6 @@ object TriggerDropItem : Trigger("drop_item") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerDropItemEvent) {
-        if (!this.isEnabled) return
-
         val player = event.player
 
         this.dispatch(

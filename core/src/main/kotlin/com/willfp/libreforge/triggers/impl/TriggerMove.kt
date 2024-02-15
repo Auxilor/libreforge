@@ -21,8 +21,6 @@ object TriggerMove : Trigger("move") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityMoveEvent) {
-        if (!this.isEnabled) return
-
         val entity = event.entity
 
         if (entity is Player) {
@@ -54,8 +52,6 @@ object TriggerMove : Trigger("move") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerMoveEvent) {
-        if (!this.isEnabled) return
-
         val player = event.player
 
         if (Prerequisite.HAS_PAPER.isMet) {

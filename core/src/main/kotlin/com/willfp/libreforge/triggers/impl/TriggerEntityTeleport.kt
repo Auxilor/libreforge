@@ -16,8 +16,6 @@ object TriggerEntityTeleport : Trigger("entity_teleport") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityTeleportEvent) {
-        if (!this.isEnabled) return
-
         val entity = event.entity
 
         this.dispatch(

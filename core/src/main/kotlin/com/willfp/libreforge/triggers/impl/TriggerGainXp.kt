@@ -15,8 +15,6 @@ object TriggerGainXp : Trigger("gain_xp") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: NaturalExpGainEvent) {
-        if (!this.isEnabled) return
-
         val player = event.expChangeEvent.player
 
         this.dispatch(

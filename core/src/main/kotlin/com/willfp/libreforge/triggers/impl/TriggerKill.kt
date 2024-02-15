@@ -21,8 +21,6 @@ object TriggerKill : Trigger("kill") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityDeathByEntityEvent) {
-        if (!this.isEnabled) return
-
         val killer = event.killer.tryAsLivingEntity() ?: return
 
         val victim = event.victim

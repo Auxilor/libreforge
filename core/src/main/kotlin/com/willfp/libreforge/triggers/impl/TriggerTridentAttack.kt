@@ -29,8 +29,6 @@ object TriggerTridentAttack : Trigger("trident_attack") {
 
     @EventHandler(ignoreCancelled = true)
     fun onProjectileLaunch(event: ProjectileLaunchEvent) {
-        if (!this.isEnabled) return
-
         val shooter = event.entity.shooter as? LivingEntity ?: return
         val trident = event.entity as? Trident ?: return
 
@@ -42,8 +40,6 @@ object TriggerTridentAttack : Trigger("trident_attack") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityDamageByEntityEvent) {
-        if (!this.isEnabled) return
-
         val trident = event.damager as? Trident ?: return
         val victim = event.entity as? LivingEntity ?: return
 

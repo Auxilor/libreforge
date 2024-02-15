@@ -15,8 +15,6 @@ object TriggerLevelUpItem : Trigger("level_up_item") {
 
     @EventHandler
     fun handle(event: ItemLevelUpEvent) {
-        if (!this.isEnabled) return
-
         this.dispatch(
             event.player.toDispatcher(),
             TriggerData(

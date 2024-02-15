@@ -17,8 +17,6 @@ object TriggerJump : Trigger("jump") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerJumpEvent) {
-        if (!this.isEnabled) return
-
         val player = event.player
 
         this.dispatch(

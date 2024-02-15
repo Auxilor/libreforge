@@ -18,8 +18,6 @@ object TriggerCastRod : Trigger("cast_rod") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerFishEvent) {
-        if (!this.isEnabled) return
-
         if (event.state != PlayerFishEvent.State.FISHING) {
             return
         }

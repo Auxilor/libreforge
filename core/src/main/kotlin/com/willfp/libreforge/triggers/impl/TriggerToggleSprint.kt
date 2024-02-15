@@ -17,8 +17,6 @@ object TriggerToggleSprint : Trigger("toggle_sprint") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerToggleSprintEvent) {
-        if (!this.isEnabled) return
-
         val player = event.player
 
         this.dispatch(

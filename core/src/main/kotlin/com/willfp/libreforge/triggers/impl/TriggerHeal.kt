@@ -16,8 +16,6 @@ object TriggerHeal : Trigger("heal") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityRegainHealthEvent) {
-        if (!this.isEnabled) return
-
         val player = event.entity
 
         if (player !is Player) {

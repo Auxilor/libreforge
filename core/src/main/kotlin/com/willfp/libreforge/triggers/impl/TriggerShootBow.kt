@@ -21,8 +21,6 @@ object TriggerShootBow : Trigger("shoot_bow") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityShootBowEvent) {
-        if (!this.isEnabled) return
-
         val shooter = event.entity as? LivingEntity ?: return
 
         this.dispatch(

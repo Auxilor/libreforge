@@ -17,8 +17,6 @@ object TriggerSmithItem : Trigger("smith_item") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: SmithItemEvent) {
-        if (!this.isEnabled) return
-
         val player = event.player
         val item = event.inventory.result
 
