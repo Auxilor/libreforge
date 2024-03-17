@@ -24,7 +24,7 @@ import java.util.UUID
 object EffectReplantCrops : Effect<NoCompileData>("replant_crops") {
     override val arguments = arguments {
         require("consume_seeds", "You must specify if seeds should be consumed!")
-        require("only_fully_grown", "You must specify only fully grown crops should be replanted!")
+        require("only_fully_grown", "You must specify if only fully grown crops should be replanted!")
     }
 
     private val players = listMap<UUID, ReplantConfig>()
