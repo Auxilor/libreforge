@@ -14,6 +14,7 @@ import org.bukkit.event.HandlerList
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 
+
 /**
  * Provides the holders that are held by a player.
  */
@@ -190,22 +191,17 @@ inline fun <reified T> registerSpecificRefreshFunction(crossinline function: (T)
     }
 }
 
-var holderCooldown: Cache<UUID, Void>? = null
+var holderCooldown: Cache<UUID, Void>? = if (plugin.configYml.getInt("refresh.holder.cooldown", 0) > 0)
+        Caffeine.newBuilder()
+            .expireAfterWrite(plugin.configYml.getInt("refresh.holder.cooldown", 0).toLong(), TimeUnit.MILLISECONDS)
+            .build()
+        else null
 
 /**
  * Update holders, effects, and call refresh functions.
  */
 fun Dispatcher<*>.refreshHolders() {
-    if (plugin.configYml.getInt("refresh.holder.cooldown", 0) > 0) {
-        if (holderCooldown == null) {
-            holderCooldown = Caffeine.newBuilder()
-                .expireAfterWrite(
-                    plugin.configYml.getInt("refresh.holder.cooldown", 0).toLong(),
-                    TimeUnit.MILLISECONDS
-                )
-                .build()
-        }
-
+    if (holderCooldown != null) {
         holderCooldown?.getIfPresent(this.uuid) ?: return
         holderCooldown?.put(this.uuid, null)
     }
