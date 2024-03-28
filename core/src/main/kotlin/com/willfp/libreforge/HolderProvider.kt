@@ -191,7 +191,7 @@ inline fun <reified T> registerSpecificRefreshFunction(crossinline function: (T)
     }
 }
 
-var holderCooldown: Cache<UUID, Void>? = if (plugin.configYml.getInt("refresh.holder.cooldown", 0) > 0)
+var holderCooldown: Cache<UUID, Unit>? = if (plugin.configYml.getInt("refresh.holder.cooldown", 0) > 0)
         Caffeine.newBuilder()
             .expireAfterWrite(plugin.configYml.getInt("refresh.holder.cooldown", 0).toLong(), TimeUnit.MILLISECONDS)
             .build()
@@ -203,7 +203,7 @@ var holderCooldown: Cache<UUID, Void>? = if (plugin.configYml.getInt("refresh.ho
 fun Dispatcher<*>.refreshHolders() {
     if (holderCooldown != null) {
         holderCooldown?.getIfPresent(this.uuid) ?: return
-        holderCooldown?.put(this.uuid, null)
+        holderCooldown?.put(this.uuid, Unit)
     }
 
     refreshFunctions.forEach { it(this) }
