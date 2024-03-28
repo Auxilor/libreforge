@@ -17,7 +17,6 @@ object TriggerToggleFlight : Trigger("toggle_flight") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerToggleFlightEvent) {
-        if (!isEnabled) return
         val player = event.player
 
         this.dispatch(

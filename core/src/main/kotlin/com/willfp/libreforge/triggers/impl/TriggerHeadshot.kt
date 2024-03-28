@@ -21,7 +21,6 @@ object TriggerHeadshot : Trigger("headshot") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityDamageByEntityEvent) {
-        if (!isEnabled) return
         val projectile = event.damager as? Projectile ?: return
         val victim = event.entity as? LivingEntity ?: return
         val shooter = projectile.shooter as? LivingEntity ?: return

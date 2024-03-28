@@ -24,7 +24,6 @@ object TriggerEntityItemDrop : Trigger("entity_item_drop") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityDeathByEntityEvent) {
-        if (!isEnabled) return
         if (Prerequisite.HAS_PAPER.isMet) {
             if (event.deathEvent.isCancelled) {
                 return

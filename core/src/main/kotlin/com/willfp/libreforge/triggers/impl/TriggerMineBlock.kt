@@ -20,7 +20,6 @@ object TriggerMineBlock : Trigger("mine_block") {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     fun handle(event: BlockBreakEvent) {
-        if (!isEnabled) return
         val player = event.player
         val block = event.block
 

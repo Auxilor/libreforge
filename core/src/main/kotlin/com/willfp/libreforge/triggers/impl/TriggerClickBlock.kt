@@ -27,7 +27,6 @@ object TriggerClickBlock : Trigger("click_block") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerInteractEvent) {
-        if (!isEnabled) return
         val block = event.clickedBlock ?: return
         val player = event.player
 

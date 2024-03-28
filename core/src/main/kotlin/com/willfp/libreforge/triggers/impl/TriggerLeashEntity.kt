@@ -18,7 +18,6 @@ object TriggerLeashEntity : Trigger("leash_entity") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerLeashEntityEvent) {
-        if (!isEnabled) return
         val player = event.player
 
         this.dispatch(

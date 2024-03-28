@@ -16,7 +16,6 @@ object TriggerItemBreak : Trigger("item_break") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerItemBreakEvent) {
-        if (!isEnabled) return
         val player = event.player
 
         this.dispatch(

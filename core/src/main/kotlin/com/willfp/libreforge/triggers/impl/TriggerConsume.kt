@@ -17,7 +17,6 @@ object TriggerConsume : Trigger("consume") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerItemConsumeEvent) {
-        if (!isEnabled) return
         val player = event.player
         this.dispatch(
             player.toDispatcher(),

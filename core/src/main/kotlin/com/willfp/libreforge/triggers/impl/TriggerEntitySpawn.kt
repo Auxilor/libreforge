@@ -17,7 +17,6 @@ object TriggerEntitySpawn : Trigger("entity_spawn") {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     fun handle(event: EntitySpawnEvent) {
-        if (!isEnabled) return
         val entity = event.entity
 
         this.dispatch(

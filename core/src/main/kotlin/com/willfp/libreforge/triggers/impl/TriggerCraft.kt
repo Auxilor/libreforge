@@ -23,7 +23,6 @@ object TriggerCraft : Trigger("craft") {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     fun handle(event: CraftItemEvent) {
-        if (!isEnabled) return
         if (event.result == Event.Result.DENY) {
             return
         }

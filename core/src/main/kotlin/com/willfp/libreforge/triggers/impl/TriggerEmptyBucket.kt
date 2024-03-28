@@ -15,7 +15,6 @@ object TriggerEmptyBucket : Trigger("empty_bucket") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerBucketEmptyEvent) {
-        if (!isEnabled) return
         val player = event.player
 
         this.dispatch(

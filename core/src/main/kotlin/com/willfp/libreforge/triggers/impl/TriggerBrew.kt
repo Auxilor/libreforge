@@ -28,7 +28,6 @@ object TriggerBrew : Trigger("brew") {
 
     @EventHandler
     fun handle(event: InventoryClickEvent) {
-        if (!isEnabled) return
 
         val inventory = event.player.openInventory.topInventory as? BrewerInventory ?: return
         val player = event.player
@@ -46,7 +45,6 @@ object TriggerBrew : Trigger("brew") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: BrewEvent) {
-        if (!isEnabled) return
 
         val location = event.block.location
 
