@@ -33,10 +33,24 @@ abstract class Trigger(
         protected set
 
     /**
+     * If the listener is registered.
+     */
+    private var isListenerRegistered = false
+
+    /**
      * Enable the trigger.
      */
     fun enable() {
         isEnabled = true
+
+        if (!this.isListenerRegistered) {
+            this.isListenerRegistered = true
+            plugin.runWhenEnabled {
+                plugin.eventManager.unregisterListener(this)
+                plugin.eventManager.registerListener(this)
+                postRegister()
+            }
+        }
     }
 
     @Deprecated(
@@ -137,14 +151,6 @@ abstract class Trigger(
         // Probably a better way to work with counters, but this works for now.
         for (counter in counters) {
             counter.bindings.forEach { it.accept(dispatch) }
-        }
-    }
-
-    final override fun onRegister() {
-        plugin.runWhenEnabled {
-            plugin.eventManager.unregisterListener(this)
-            plugin.eventManager.registerListener(this)
-            postRegister()
         }
     }
 
