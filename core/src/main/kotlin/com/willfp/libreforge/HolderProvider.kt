@@ -1,5 +1,6 @@
 package com.willfp.libreforge
 
+import com.github.benmanes.caffeine.cache.Cache
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.willfp.eco.core.map.listMap
 import com.willfp.libreforge.effects.EffectBlock
@@ -189,10 +190,26 @@ inline fun <reified T> registerSpecificRefreshFunction(crossinline function: (T)
     }
 }
 
+var holderCooldown: Cache<UUID, Void>? = null
+
 /**
  * Update holders, effects, and call refresh functions.
  */
 fun Dispatcher<*>.refreshHolders() {
+    if (plugin.configYml.getInt("refresh.holder.cooldown", 0) > 0) {
+        if (holderCooldown == null) {
+            holderCooldown = Caffeine.newBuilder()
+                .expireAfterWrite(
+                    plugin.configYml.getInt("refresh.holder.cooldown", 0).toLong(),
+                    TimeUnit.MILLISECONDS
+                )
+                .build()
+        }
+
+        holderCooldown?.getIfPresent(this.uuid) ?: return
+        holderCooldown?.put(this.uuid, null)
+    }
+
     refreshFunctions.forEach { it(this) }
     this.updateHolders()
     this.updateEffects()

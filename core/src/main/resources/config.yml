@@ -125,6 +125,9 @@ conditions:
   default-state-off-main-thread: true
 
 refresh:
+  holder:
+    cooldown: 0 # How often to refresh holders (in milliseconds). Higher values will save performance, but can make effects feel less responsive. Set to 0 to disable.
+
   pickup:
     # If picked up items must have item meta (NBT Data) in order to trigger a refresh
     require-meta: true
