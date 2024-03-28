@@ -38,6 +38,13 @@ abstract class Trigger(
     private var isListenerRegistered = false
 
     /**
+     * The cached hashcode.
+     */
+    private val hashCode by lazy {
+        id.hashCode()
+    }
+
+    /**
      * Enable the trigger.
      */
     fun enable() {
@@ -165,6 +172,6 @@ abstract class Trigger(
     }
 
     override fun hashCode(): Int {
-        return id.hashCode()
+        return hashCode
     }
 }
