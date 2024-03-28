@@ -16,6 +16,7 @@ object TriggerEntityBreakDoor : Trigger("entity_break_door") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityBreakDoorEvent) {
+        if (!isEnabled) return
         val entity = event.entity
 
         this.dispatch(

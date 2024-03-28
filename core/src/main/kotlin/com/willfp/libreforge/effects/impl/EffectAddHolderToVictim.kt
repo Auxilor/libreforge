@@ -2,22 +2,14 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.map.listMap
-import com.willfp.libreforge.Holder
-import com.willfp.libreforge.HolderTemplate
-import com.willfp.libreforge.SimpleProvidedHolder
-import com.willfp.libreforge.ViolationContext
-import com.willfp.libreforge.arguments
+import com.willfp.libreforge.*
 import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Effects
-import com.willfp.libreforge.getIntFromExpression
-import com.willfp.libreforge.nest
-import com.willfp.libreforge.plugin
-import com.willfp.libreforge.registerGenericHolderProvider
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.Player
-import java.util.UUID
+import java.util.*
 
 object EffectAddHolderToVictim : Effect<HolderTemplate>("add_holder_to_victim") {
     override val parameters = setOf(
@@ -38,8 +30,12 @@ object EffectAddHolderToVictim : Effect<HolderTemplate>("add_holder_to_victim") 
     override fun onTrigger(config: Config, data: TriggerData, compileData: HolderTemplate): Boolean {
         val player = data.victim as? Player ?: return false
 
-        val duration = config.getIntFromExpression("duration", data)
+        var duration = config.getIntFromExpression("duration", data)
         val holder = compileData.toHolder().nest(data.holder)
+
+        if (duration < 0) {
+            duration = 0
+        }
 
         holders[player.uniqueId] += holder
 
@@ -49,6 +45,7 @@ object EffectAddHolderToVictim : Effect<HolderTemplate>("add_holder_to_victim") 
                 holders -= player.uniqueId
             }
         }
+
 
         return true
     }

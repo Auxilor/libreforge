@@ -17,6 +17,7 @@ object TriggerCompleteAdvancement : Trigger("complete_advancement") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerAdvancementDoneEvent) {
+        if (!isEnabled) return
         if (event.advancement.key.key.startsWith("recipes/")) {
             return
         }

@@ -15,6 +15,7 @@ object TriggerRespawn : Trigger("respawn") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerRespawnEvent) {
+        if (!isEnabled) return
         this.dispatch(
             event.player.toDispatcher(),
             TriggerData(

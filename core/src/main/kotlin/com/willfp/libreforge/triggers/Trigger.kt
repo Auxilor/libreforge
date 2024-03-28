@@ -32,6 +32,8 @@ abstract class Trigger(
     open var isEnabled: Boolean = false
         protected set
 
+    var hashCode: Int? = null
+
     /**
      * Enable the trigger.
      */
@@ -159,6 +161,10 @@ abstract class Trigger(
     }
 
     override fun hashCode(): Int {
-        return id.hashCode()
+        if (hashCode != null) {
+            return hashCode!!
+        }
+        hashCode = id.hashCode()
+        return hashCode!!
     }
 }

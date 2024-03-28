@@ -16,6 +16,7 @@ object TriggerEntityCatchFireFromEntity : Trigger("entity_catch_fire_from_entity
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityCombustByEntityEvent) {
+        if (!isEnabled) return
         val entity = event.entity
 
         this.dispatch(

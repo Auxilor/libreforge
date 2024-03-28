@@ -18,6 +18,7 @@ object TriggerPickUpItem : Trigger("pick_up_item") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityPickupItemEvent) {
+        if (!isEnabled) return
         val entity = event.entity
 
         this.dispatch(

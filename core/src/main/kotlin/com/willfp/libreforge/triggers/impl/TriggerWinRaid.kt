@@ -15,6 +15,7 @@ object TriggerWinRaid : Trigger("win_raid") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: RaidFinishEvent) {
+        if (!isEnabled) return
         for (player in event.winners) {
             this.dispatch(
                 player.toDispatcher(),

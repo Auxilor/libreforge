@@ -76,6 +76,11 @@ class TriggerData(
         get() = holder.getProvider() ?: item
 
     /**
+     * Cached hashcode value for performance.
+     */
+    var cachedHashCode: Int? = null
+
+    /**
      * Turn into a dispatched trigger for a [player].
      */
     @Deprecated(
@@ -137,19 +142,23 @@ class TriggerData(
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            holder,
-            player,
-            victim,
-            block,
-            event,
-            location,
-            projectile,
-            velocity,
-            item?.let { HashedItem.of(it) },
-            text,
-            value
-        )
+        if (cachedHashCode == null) {
+            cachedHashCode = Objects.hash(
+                dispatcher,
+                player,
+                victim,
+                block,
+                event,
+                location,
+                projectile,
+                velocity,
+                item,
+                text,
+                value
+            )
+        }
+
+        return cachedHashCode as Int
     }
 
     override fun equals(other: Any?): Boolean {
