@@ -18,6 +18,7 @@ object TriggerMineBlockProgress : Trigger("mine_block_progress") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: BlockDamageEvent) {
+        if (!isEnabled) return
         val player = event.player
         val block = event.block
 

@@ -17,6 +17,7 @@ object TriggerHoldItem : Trigger("hold_item") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerItemHeldEvent) {
+        if (!isEnabled) return
         val player = event.player
         if (event.isCancelled) {
             return

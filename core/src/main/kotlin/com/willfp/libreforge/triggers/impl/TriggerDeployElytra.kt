@@ -19,6 +19,7 @@ object TriggerDeployElytra : Trigger("deploy_elytra") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityToggleGlideEvent) {
+        if (!isEnabled) return
         val entity = event.entity as? LivingEntity ?: return
 
         this.dispatch(

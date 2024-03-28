@@ -17,6 +17,7 @@ object TriggerEntityDeath : Trigger("entity_death") {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     fun handle(event: EntityDeathEvent) {
+        if (!isEnabled) return
         val entity = event.entity as? LivingEntity ?: return
 
         this.dispatch(

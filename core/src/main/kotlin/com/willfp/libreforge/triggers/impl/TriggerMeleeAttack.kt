@@ -21,6 +21,7 @@ object TriggerMeleeAttack : Trigger("melee_attack") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityDamageByEntityEvent) {
+        if (!isEnabled) return
         val attacker = event.damager as? LivingEntity ?: return
         val victim = event.entity as? LivingEntity ?: return
 

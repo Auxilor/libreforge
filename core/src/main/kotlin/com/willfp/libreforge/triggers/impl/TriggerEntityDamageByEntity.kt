@@ -17,6 +17,7 @@ object TriggerEntityDamageByEntity : Trigger("entity_damage_by_entity") {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     fun handle(event: EntityDamageByEntityEvent) {
+        if (!isEnabled) return
         val entity = event.entity
         val damager = event.damager as? LivingEntity ?: return
 

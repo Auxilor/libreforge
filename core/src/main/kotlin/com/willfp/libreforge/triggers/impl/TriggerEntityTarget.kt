@@ -17,6 +17,7 @@ object TriggerEntityTarget : Trigger("entity_target") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityTargetEvent) {
+        if (!isEnabled) return
         val target = event.target ?: return
         val entity = event.entity as? LivingEntity ?: return
 

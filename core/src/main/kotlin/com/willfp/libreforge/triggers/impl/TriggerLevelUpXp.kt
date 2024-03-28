@@ -15,6 +15,7 @@ object TriggerLevelUpXp : Trigger("level_up_xp") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerLevelChangeEvent) {
+        if (!isEnabled) return
         val player = event.player
 
         if (event.newLevel < event.oldLevel) {

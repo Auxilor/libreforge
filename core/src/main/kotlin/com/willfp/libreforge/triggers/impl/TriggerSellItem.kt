@@ -16,6 +16,7 @@ object TriggerSellItem : Trigger("sell_item") {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     fun handle(event: ShopSellEvent) {
+        if (!isEnabled) return
         val player = event.player
         val item = event.item
 

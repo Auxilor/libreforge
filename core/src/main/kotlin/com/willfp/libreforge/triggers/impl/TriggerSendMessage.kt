@@ -20,6 +20,7 @@ object TriggerSendMessage : Trigger("send_message") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: AsyncPlayerChatEvent) {
+        if (!isEnabled) return
         val player = event.player
 
         plugin.scheduler.run {
