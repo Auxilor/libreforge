@@ -19,7 +19,6 @@ object TriggerChangeWorld : Trigger("change_world") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerChangedWorldEvent) {
-        if (!isEnabled) return
         val player = event.player
 
         this.dispatch(

@@ -16,7 +16,6 @@ object TriggerVillagerTrade : Trigger("villager_trade") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerTradeEvent) {
-        if (!isEnabled) return
 
         val player = event.player
 

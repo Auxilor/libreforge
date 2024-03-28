@@ -19,7 +19,6 @@ object TriggerFallDamage : Trigger("fall_damage") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityDamageEvent) {
-        if (!isEnabled) return
         if (event.cause != EntityDamageEvent.DamageCause.FALL) {
             return
         }

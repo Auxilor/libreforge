@@ -18,7 +18,6 @@ object TriggerHookInGround : Trigger("hook_in_ground") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerFishEvent) {
-        if (!isEnabled) return
         if (event.state != PlayerFishEvent.State.IN_GROUND) {
             return
         }

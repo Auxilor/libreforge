@@ -17,7 +17,6 @@ object TriggerEntityDamage : Trigger("entity_damage") {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     fun handle(event: EntityDamageEvent) {
-        if (!isEnabled) return
         val entity = event.entity
 
         this.dispatch(

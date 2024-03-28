@@ -19,7 +19,6 @@ object TriggerPlaceBlock : Trigger("place_block") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: BlockPlaceEvent) {
-        if (!isEnabled) return
         val player = event.player
         val block = event.blockPlaced
 
