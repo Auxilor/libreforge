@@ -32,8 +32,6 @@ abstract class Trigger(
     open var isEnabled: Boolean = false
         protected set
 
-    var hashCode: Int? = null
-
     /**
      * If the listener is registered.
      */
