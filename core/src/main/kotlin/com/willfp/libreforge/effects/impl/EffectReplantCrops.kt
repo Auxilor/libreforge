@@ -97,6 +97,7 @@ object EffectReplantCrops : Effect<NoCompileData>("replant_crops") {
                     Material.POTATOES -> Material.POTATO
                     Material.CARROTS -> Material.CARROT
                     Material.BEETROOTS -> Material.BEETROOT_SEEDS
+                    Material.COCOA -> Material.COCOA_BEANS
                     else -> type
                 }
             )

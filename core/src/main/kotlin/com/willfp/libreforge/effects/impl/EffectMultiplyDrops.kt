@@ -2,11 +2,14 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.items.Items
+import com.willfp.eco.core.items.TestableItem
+import com.willfp.eco.core.items.matches
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.getIntFromExpression
+import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.event.DropResult
@@ -22,8 +25,20 @@ object EffectMultiplyDrops : Effect<NoCompileData>("multiply_drops") {
         require(listOf("multiplier", "fortune"), "You must specify a multiplier or level of fortune to mimic!")
     }
 
+    private val whitelist = mutableListOf<TestableItem>()
+
+    override fun postRegister() {
+        plugin.onReload {
+            whitelist.clear()
+            whitelist.addAll(plugin.configYml.getStrings("effects.multiply_drops.whitelist").map { Items.lookup(it) })
+        }
+    }
+
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val event = data.event as? EditableDropEvent ?: return false
+
+        val isBlacklisting = plugin.configYml.getBool("effects.multiply_drops.prevent-duplication")
+        val whitelist = plugin.configYml.getStrings("effects.multiply_drops.whitelist").map { Items.lookup(it) }
 
         val multiplier = if (config.has("fortune")) {
             val fortune = config.getIntFromExpression("fortune", data)
@@ -40,6 +55,10 @@ object EffectMultiplyDrops : Effect<NoCompileData>("multiply_drops") {
             }
 
             if (it.maxStackSize > 1 && matches) {
+                if (it.type.isOccluding && isBlacklisting && !whitelist.matches(it)) {
+                    return@addModifier DropResult(it, 0)
+                }
+
                 it.amount *= multiplier
             }
 

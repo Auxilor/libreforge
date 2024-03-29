@@ -1,6 +1,5 @@
 package com.willfp.libreforge
 
-import com.gmail.nossr50.mcMMO.p
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.command.impl.PluginCommand
@@ -12,6 +11,7 @@ import com.willfp.libreforge.configs.lrcdb.CommandLrcdb
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.arguments.custom.CustomEffectArguments
 import com.willfp.libreforge.effects.impl.bossbar.BossBarProgressPlaceholder
+import com.willfp.libreforge.integrations.auraskills.AuraSkillsIntegration
 import com.willfp.libreforge.integrations.aureliumskills.AureliumSkillsIntegration
 import com.willfp.libreforge.integrations.citizens.CitizensIntegration
 import com.willfp.libreforge.integrations.custombiomes.impl.CustomBiomesTerra
@@ -27,12 +27,7 @@ import com.willfp.libreforge.integrations.tmmobcoins.TMMobcoinsIntegration
 import com.willfp.libreforge.integrations.vault.VaultIntegration
 import com.willfp.libreforge.integrations.worldguard.WorldGuardIntegration
 import com.willfp.libreforge.levels.LevelTypes
-import com.willfp.libreforge.levels.placeholder.ItemDataPlaceholder
-import com.willfp.libreforge.levels.placeholder.ItemLevelPlaceholder
-import com.willfp.libreforge.levels.placeholder.ItemPointsPlaceholder
-import com.willfp.libreforge.levels.placeholder.ItemProgressPlaceholder
-import com.willfp.libreforge.levels.placeholder.ItemXPPlaceholder
-import com.willfp.libreforge.levels.placeholder.ItemXPRequiredPlaceholder
+import com.willfp.libreforge.levels.placeholder.*
 import com.willfp.libreforge.placeholders.CustomPlaceholders
 import com.willfp.libreforge.triggers.DispatchedTriggerFactory
 import org.bukkit.Bukkit
@@ -170,6 +165,7 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
 
     override fun loadIntegrationLoaders(): List<IntegrationLoader> {
         return listOf(
+            IntegrationLoader("AuraSkills") { AuraSkillsIntegration.load(this) },
             IntegrationLoader("AureliumSkills") { AureliumSkillsIntegration.load(this) },
             IntegrationLoader("Jobs") { JobsIntegration.load(this) },
             IntegrationLoader("LevelledMobs") { LevelledMobsIntegration.load(this) },

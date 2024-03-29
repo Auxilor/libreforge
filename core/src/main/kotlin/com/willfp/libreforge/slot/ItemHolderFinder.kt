@@ -3,6 +3,7 @@ package com.willfp.libreforge.slot
 import com.github.benmanes.caffeine.cache.Cache
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.willfp.libreforge.Dispatcher
+import com.willfp.libreforge.EmptyProvidedHolder.provider
 import com.willfp.libreforge.Holder
 import com.willfp.libreforge.HolderProvider
 import com.willfp.libreforge.ItemProvidedHolder
@@ -10,7 +11,6 @@ import com.willfp.libreforge.TypedHolderProvider
 import com.willfp.libreforge.TypedProvidedHolder
 import com.willfp.libreforge.get
 import com.willfp.libreforge.registerRefreshFunction
-import com.willfp.libreforge.plugin
 import org.bukkit.entity.LivingEntity
 import org.bukkit.inventory.ItemStack
 import java.util.UUID
@@ -57,37 +57,32 @@ abstract class ItemHolderFinder<T : Holder> {
         return provider
     }
 
-    private class TypedItemProvidedHolder<T : Holder>(
+    private class TypedItemProvidedHolder<T: Holder>(
         override val holder: T,
         provider: ItemStack
-    ) : ItemProvidedHolder(
+    ): ItemProvidedHolder(
         holder,
         provider
     ), TypedProvidedHolder<T>
 
-    private inner class ItemHolderFinderProvider : TypedHolderProvider<T> {
+    private inner class ItemHolderFinderProvider: TypedHolderProvider<T> {
         private val cache: Cache<UUID, List<TypedProvidedHolder<T>>> = Caffeine.newBuilder()
-            .expireAfterWrite(2, TimeUnit.SECONDS)
+            .expireAfterWrite(500, TimeUnit.MILLISECONDS)
             .build()
 
         init {
             registerRefreshFunction {
-                update(it)
+                cache.invalidate(it.uuid)
             }
         }
 
         override fun provide(dispatcher: Dispatcher<*>): Collection<TypedProvidedHolder<T>> {
-            val entity = dispatcher.get<LivingEntity>() ?: return emptyList()
+            return cache.get(dispatcher.uuid) {
+                val entity = dispatcher.get<LivingEntity>() ?: return@get emptyList()
 
-            update(dispatcher)
-
-            return cache.getIfPresent(dispatcher.uuid) ?: SlotTypes.values()
-                .flatMap { slot -> findHolders(entity, slot) }
-        }
-
-        private fun update(dispatcher: Dispatcher<*>) {
-            val entity = dispatcher.get<LivingEntity>() ?: return
-            cache.put(dispatcher.uuid, SlotTypes.values().flatMap { slot -> findHolders(entity, slot) })
+                SlotTypes.values()
+                    .flatMap { slot -> findHolders(entity, slot) }
+            }
         }
     }
 }

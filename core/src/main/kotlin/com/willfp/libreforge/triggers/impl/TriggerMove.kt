@@ -6,6 +6,7 @@ import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import io.papermc.paper.event.entity.EntityMoveEvent
+import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerMoveEvent
@@ -21,7 +22,7 @@ object TriggerMove : Trigger("move") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityMoveEvent) {
-        val entity = event.entity
+        val entity = event.entity as? LivingEntity ?: return
 
         if (entity is Player) {
             return
@@ -40,7 +41,6 @@ object TriggerMove : Trigger("move") {
         this.dispatch(
             entity.toDispatcher(),
             TriggerData(
-                player = entity as? Player,
                 location = entity.location,
                 velocity = entity.velocity,
                 event = event,

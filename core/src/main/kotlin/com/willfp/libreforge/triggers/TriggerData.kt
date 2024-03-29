@@ -75,6 +75,22 @@ class TriggerData(
     val foundItem: ItemStack?
         get() = holder.getProvider() ?: item
 
+    private val hashCode by lazy {
+        Objects.hash(
+            holder,
+            player,
+            victim,
+            block,
+            event,
+            location,
+            projectile,
+            velocity,
+            item?.let { HashedItem.of(it) },
+            text,
+            value
+        )
+    }
+
     /**
      * Turn into a dispatched trigger for a [player].
      */
@@ -137,19 +153,7 @@ class TriggerData(
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            holder,
-            player,
-            victim,
-            block,
-            event,
-            location,
-            projectile,
-            velocity,
-            item?.let { HashedItem.of(it) },
-            text,
-            value
-        )
+        return hashCode
     }
 
     override fun equals(other: Any?): Boolean {

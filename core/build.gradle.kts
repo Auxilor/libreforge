@@ -8,6 +8,7 @@ dependencies {
     compileOnly("io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT")
     compileOnly("net.kyori:adventure-text-minimessage:4.14.0")
 
+    compileOnly("dev.aurelium:auraskills-api-bukkit:2.0.0")
     compileOnly("com.github.Archy-X:AureliumSkills:Beta1.2.4")
     compileOnly("com.gmail.nossr50.mcMMO:mcMMO:2.1.202") {
         exclude(group = "com.sk89q.worldedit", module = "worldedit-core")
