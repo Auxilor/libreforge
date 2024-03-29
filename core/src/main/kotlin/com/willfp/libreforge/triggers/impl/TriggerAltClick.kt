@@ -73,6 +73,7 @@ object TriggerAltClick : Trigger("alt_click") {
 
     @EventHandler
     fun handle(event: PlayerInteractEvent) {
+
         val player = event.player
 
         if (player.uniqueId in preventDoubleTriggers) {

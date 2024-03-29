@@ -1,5 +1,7 @@
 package com.willfp.libreforge.triggers.impl
 
+import com.github.benmanes.caffeine.cache.Cache
+import com.github.benmanes.caffeine.cache.Caffeine
 import com.willfp.eco.core.gui.player
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.toDispatcher
@@ -13,9 +15,10 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.inventory.FurnaceSmeltEvent
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.inventory.FurnaceInventory
+import java.util.concurrent.TimeUnit
 
 object TriggerSmelt : Trigger("smelt") {
-    private val playerCache = mutableMapOf<Location, Player>()
+    private val playerCache = Caffeine.newBuilder().expireAfterWrite(10, TimeUnit.MINUTES).build<Location, Player>()
 
     override val parameters = setOf(
         TriggerParameter.PLAYER,
@@ -34,7 +37,7 @@ object TriggerSmelt : Trigger("smelt") {
             val newContents = inventory.contents
 
             if (!oldContents.contentEquals(newContents)) {
-                playerCache[location] = player
+                playerCache.put(location, player)
             }
         }
     }
@@ -45,7 +48,13 @@ object TriggerSmelt : Trigger("smelt") {
             return
         }
 
-        val player = playerCache[event.block.location] ?: return
+        val player = playerCache.getIfPresent(event.block.location) ?: return
+        if (!player.isOnline) {
+            return
+        }
+
+        playerCache.put(event.block.location, player) // Refresh cache
+
         val item = event.result
 
         this.dispatch(

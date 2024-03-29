@@ -1,5 +1,6 @@
 package com.willfp.libreforge
 
+import com.github.benmanes.caffeine.cache.Cache
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.willfp.eco.core.map.listMap
 import com.willfp.libreforge.effects.EffectBlock
@@ -12,6 +13,7 @@ import org.bukkit.event.Event
 import org.bukkit.event.HandlerList
 import java.util.UUID
 import java.util.concurrent.TimeUnit
+
 
 /**
  * Provides the holders that are held by a player.
@@ -189,10 +191,21 @@ inline fun <reified T> registerSpecificRefreshFunction(crossinline function: (T)
     }
 }
 
+var holderCooldown: Cache<UUID, Unit>? = if (plugin.configYml.getInt("refresh.holder.cooldown", 0) > 0)
+        Caffeine.newBuilder()
+            .expireAfterWrite(plugin.configYml.getInt("refresh.holder.cooldown", 0).toLong(), TimeUnit.MILLISECONDS)
+            .build()
+        else null
+
 /**
  * Update holders, effects, and call refresh functions.
  */
 fun Dispatcher<*>.refreshHolders() {
+    if (holderCooldown != null) {
+        holderCooldown?.getIfPresent(this.uuid) ?: return
+        holderCooldown?.put(this.uuid, Unit)
+    }
+
     refreshFunctions.forEach { it(this) }
     this.updateHolders()
     this.updateEffects()
