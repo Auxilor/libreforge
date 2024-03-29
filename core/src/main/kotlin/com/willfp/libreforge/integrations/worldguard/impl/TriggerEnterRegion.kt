@@ -21,7 +21,6 @@ object TriggerEnterRegion : Trigger("enter_region") {
 
     @EventHandler
     fun handle(event: PlayerMoveEvent) {
-
         val player = event.player
 
         if (Prerequisite.HAS_PAPER.isMet && !event.hasChangedBlock()) {

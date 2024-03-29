@@ -114,7 +114,7 @@ effects:
     prevent-duplication: true
 
     # If you notice that some items are not being multiplied when you want them to be, you can add them to this list.
-    whitelist: []
+    whitelist: [ ]
 
 conditions:
   # Item display (things like EcoItem lore, EcoEnchants lore, etc.) are ran on a separate thread,
@@ -125,8 +125,10 @@ conditions:
   default-state-off-main-thread: true
 
 refresh:
-  holder:
-    cooldown: 0 # How often to refresh holders (in milliseconds). Higher values will save performance, but can make effects feel less responsive. Set to 0 to disable.
+  # Reduces lag by only allowing holders to refresh every X milliseconds.
+  # Higher values will save performance, but can make effects feel less responsive.
+  # Set to 0 to disable.
+  cooldown: 250
 
   pickup:
     # If picked up items must have item meta (NBT Data) in order to trigger a refresh

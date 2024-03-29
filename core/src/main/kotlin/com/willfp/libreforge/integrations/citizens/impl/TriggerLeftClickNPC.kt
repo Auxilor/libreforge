@@ -15,7 +15,6 @@ object TriggerLeftClickNPC : Trigger("left_click_npc") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: NPCLeftClickEvent) {
-
         val player = event.clicker ?: return
 
         this.dispatch(

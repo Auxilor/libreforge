@@ -92,11 +92,6 @@ class TriggerData(
     }
 
     /**
-     * Cached hashcode value for performance.
-     */
-    var cachedHashCode: Int? = null
-
-    /**
      * Turn into a dispatched trigger for a [player].
      */
     @Deprecated(

@@ -15,7 +15,6 @@ object TriggerElytraBoost : Trigger("elytra_boost") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerElytraBoostEvent) {
-
         val player = event.player
 
         this.dispatch(

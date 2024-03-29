@@ -23,7 +23,6 @@ object TriggerBowAttack : Trigger("bow_attack") {
     
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityDamageByEntityEvent) {
-
         val arrow = event.damager
         val victim = event.entity as? LivingEntity ?: return
 

@@ -20,17 +20,6 @@ import java.util.concurrent.TimeUnit
 class ItemRefreshListener(
     private val plugin: EcoPlugin
 ) : Listener {
-
-    init {
-        if (plugin.configYml.getInt("refresh.holder.cooldown", 0) > 0) {
-            plugin.scheduler.runTimer(20, 1 + (plugin.configYml.getInt("refresh.holder.cooldown", 0).toLong() / 50)) {
-                Bukkit.getServer().onlinePlayers.forEach {
-                    it.toDispatcher().refreshHolders()
-                }
-            }
-        }
-    }
-
     private val inventoryClickTimeouts = Caffeine.newBuilder()
         .expireAfterWrite(
             plugin.configYml.getInt("refresh.inventory-click.timeout").toLong(),

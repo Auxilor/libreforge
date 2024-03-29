@@ -15,7 +15,6 @@ object TriggerJobsLevelUp : Trigger("jobs_level_up") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: JobsLevelUpEvent) {
-
         val player = event.player.player
 
         this.dispatch(

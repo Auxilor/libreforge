@@ -53,7 +53,7 @@ object EffectAddHolderInRadius : Effect<HolderTemplate>("add_holder_in_radius") 
         val location = dispatcher.location ?: return false
 
         val radius = config.getDoubleFromExpression("radius", data)
-        val duration = config.getIntFromExpression("duration", data)
+        val duration = config.getIntFromExpression("duration", data).coerceAtLeast(1)
         val applyToSelf = config.getBool("apply-to-self")
 
         val holder = NearbyHolder(

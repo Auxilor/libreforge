@@ -1,6 +1,5 @@
 package com.willfp.libreforge.triggers.impl
 
-import com.github.benmanes.caffeine.cache.Cache
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.willfp.eco.core.gui.player
 import com.willfp.libreforge.plugin
@@ -18,7 +17,10 @@ import org.bukkit.inventory.FurnaceInventory
 import java.util.concurrent.TimeUnit
 
 object TriggerSmelt : Trigger("smelt") {
-    private val playerCache = Caffeine.newBuilder().expireAfterWrite(10, TimeUnit.MINUTES).build<Location, Player>()
+    private val playerCache = Caffeine.newBuilder()
+        // Arbitrary long time
+        .expireAfterWrite(15, TimeUnit.MINUTES)
+        .build<Location, Player>()
 
     override val parameters = setOf(
         TriggerParameter.PLAYER,

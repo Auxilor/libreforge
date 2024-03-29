@@ -15,7 +15,6 @@ object TriggerRightClickNPC : Trigger("right_click_npc") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: NPCRightClickEvent) {
-
         val player = event.clicker ?: return
 
         this.dispatch(

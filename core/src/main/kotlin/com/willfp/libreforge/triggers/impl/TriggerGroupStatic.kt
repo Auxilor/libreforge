@@ -30,10 +30,6 @@ object TriggerGroupStatic : TriggerGroup("static") {
         plugin.scheduler.runTimer(1, 1) {
             tick++
 
-            if (registry.isEmpty()) {
-                return@runTimer
-            }
-
             for ((interval, trigger) in registry) {
                 if (tick % interval == 0) {
                     for (player in Bukkit.getOnlinePlayers()) {

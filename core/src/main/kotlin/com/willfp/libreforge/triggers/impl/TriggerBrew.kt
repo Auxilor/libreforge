@@ -1,6 +1,5 @@
 package com.willfp.libreforge.triggers.impl
 
-import com.github.benmanes.caffeine.cache.Cache
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.willfp.eco.core.gui.player
 import com.willfp.eco.core.recipe.parts.EmptyTestableItem
@@ -18,7 +17,10 @@ import org.bukkit.inventory.BrewerInventory
 import java.util.concurrent.TimeUnit
 
 object TriggerBrew : Trigger("brew") {
-    private val playerCache: Cache<Location, Player> = Caffeine.newBuilder().expireAfterWrite(15, TimeUnit.MINUTES).build()
+    private val playerCache = Caffeine.newBuilder()
+        // Arbitrary long time
+        .expireAfterWrite(15, TimeUnit.MINUTES)
+        .build<Location, Player>()
 
     override val parameters = setOf(
         TriggerParameter.PLAYER,
@@ -28,7 +30,6 @@ object TriggerBrew : Trigger("brew") {
 
     @EventHandler
     fun handle(event: InventoryClickEvent) {
-
         val inventory = event.player.openInventory.topInventory as? BrewerInventory ?: return
         val player = event.player
         val location = inventory.location ?: return
