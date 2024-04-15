@@ -26,7 +26,7 @@ object ConditionInSlot : Condition<List<SlotType>>("in_slot") {
             return false
         }
 
-        return compileData.any { it.isOrContains(holder.slotType) }
+        return compileData.any { holder.slotType.isOrContains(it) }
     }
 
     override fun makeCompileData(config: Config, context: ViolationContext): List<SlotType> {

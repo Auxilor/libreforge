@@ -3,6 +3,7 @@ package com.willfp.libreforge.slot
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import kotlin.math.abs
 
 /**
  * A slot type that delegates to another slot type if possible.
@@ -10,8 +11,9 @@ import org.bukkit.inventory.ItemStack
  * If the delegate is null, then it will add to any slot and get no items.
  */
 internal class CombinedSlotTypes(
-    private val types: List<SlotType>
-) : SlotType("combined_" + types.hashCode()) {
+    val types: List<SlotType>
+    // Use abs to prevent negative hash codes, which violate the ID pattern
+) : SlotType("combined_" + abs(types.hashCode())) {
     override fun addToSlot(player: Player, item: ItemStack): Boolean {
         return types.any { it.addToSlot(player, item) }
     }
@@ -31,7 +33,12 @@ internal class CombinedSlotTypes(
             types.flatMapTo(this) { it.getItemSlots(player) }
         }.toList()
     }
+
     override fun isOrContains(slotType: SlotType): Boolean {
+        if (this == slotType) {
+            return true
+        }
+
         if (slotType is CombinedSlotTypes) {
             return slotType.types.all { isOrContains(it) }
         }
