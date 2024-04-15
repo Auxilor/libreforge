@@ -44,7 +44,7 @@ abstract class ItemHolderFinder<T : Holder> {
         val holders = items.map { item ->
             this.find(item)
                 .filter { holder -> isValidInSlot(holder, slot) }
-                .map { holder -> TypedItemProvidedHolder(holder, item) }
+                .map { holder -> SlotItemProvidedHolder(holder, item, slot) }
         }.flatten()
 
         return holders
@@ -56,14 +56,6 @@ abstract class ItemHolderFinder<T : Holder> {
     fun toHolderProvider(): TypedHolderProvider<T> {
         return provider
     }
-
-    private class TypedItemProvidedHolder<T: Holder>(
-        override val holder: T,
-        provider: ItemStack
-    ): ItemProvidedHolder(
-        holder,
-        provider
-    ), TypedProvidedHolder<T>
 
     private inner class ItemHolderFinderProvider: TypedHolderProvider<T> {
         private val cache: Cache<UUID, List<TypedProvidedHolder<T>>> = Caffeine.newBuilder()

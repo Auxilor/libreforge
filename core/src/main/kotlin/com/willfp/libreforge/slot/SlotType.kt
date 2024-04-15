@@ -24,6 +24,12 @@ abstract class SlotType(
     fun getItems(player: Player) = getItems(player as LivingEntity)
 
     /**
+     * Check if this is or contains a certain [slotType] for compatibility with [CombinedSlotTypes].
+     */
+    open fun isOrContains(slotType: SlotType): Boolean =
+        this == slotType
+
+    /**
      * Get the slots that this slot type uses.
      */
     abstract fun getItemSlots(player: Player): List<Int>

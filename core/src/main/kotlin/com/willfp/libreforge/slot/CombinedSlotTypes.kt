@@ -31,4 +31,11 @@ internal class CombinedSlotTypes(
             types.flatMapTo(this) { it.getItemSlots(player) }
         }.toList()
     }
+    override fun isOrContains(slotType: SlotType): Boolean {
+        if (slotType is CombinedSlotTypes) {
+            return slotType.types.all { isOrContains(it) }
+        }
+        
+        return types.contains(slotType)
+    }
 }

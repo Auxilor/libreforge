@@ -33,6 +33,7 @@ import com.willfp.libreforge.conditions.impl.ConditionInBiome
 import com.willfp.libreforge.conditions.impl.ConditionInBlock
 import com.willfp.libreforge.conditions.impl.ConditionInMainhand
 import com.willfp.libreforge.conditions.impl.ConditionInOffhand
+import com.willfp.libreforge.conditions.impl.ConditionInSlot
 import com.willfp.libreforge.conditions.impl.ConditionInWater
 import com.willfp.libreforge.conditions.impl.ConditionInWorld
 import com.willfp.libreforge.conditions.impl.ConditionIsExpressionTrue
@@ -210,5 +211,6 @@ object Conditions : Registry<Condition<*>>() {
         register(ConditionIsOp)
         register(ConditionHasCompletedAdvancement)
         register(ConditionLightLevelBelow)
+        register(ConditionInSlot)
     }
 }
