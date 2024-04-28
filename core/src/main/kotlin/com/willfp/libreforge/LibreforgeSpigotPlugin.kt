@@ -13,6 +13,7 @@ import com.willfp.libreforge.effects.arguments.custom.CustomEffectArguments
 import com.willfp.libreforge.effects.impl.bossbar.BossBarProgressPlaceholder
 import com.willfp.libreforge.integrations.auraskills.AuraSkillsIntegration
 import com.willfp.libreforge.integrations.aureliumskills.AureliumSkillsIntegration
+import com.willfp.libreforge.integrations.axenvoy.AxEnvoyIntegration
 import com.willfp.libreforge.integrations.citizens.CitizensIntegration
 import com.willfp.libreforge.integrations.custombiomes.impl.CustomBiomesTerra
 import com.willfp.libreforge.integrations.custombiomes.impl.CustomBiomesTerraformGenerator
@@ -178,6 +179,7 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             IntegrationLoader("TAB") { TabIntegration.load(this) },
             IntegrationLoader("Terra") { CustomBiomesTerra.load(this) },
             IntegrationLoader("TerraformGenerator") { CustomBiomesTerraformGenerator.load(this) },
+            IntegrationLoader("AxEnvoy") { AxEnvoyIntegration.load(this) },
             IntegrationLoader("ModelEngine") { ModelEngineIntegration.load(this) }
         )
     }
