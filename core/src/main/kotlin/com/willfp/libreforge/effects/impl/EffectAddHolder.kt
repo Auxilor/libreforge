@@ -27,6 +27,10 @@ object EffectAddHolder : Effect<HolderTemplate>("add_holder") {
 
     private val holders = listMap<UUID, Holder>()
 
+    fun getHolders(): Map<UUID, List<Holder>> {
+        return holders
+    }
+
     init {
         registerGenericHolderProvider {
             holders[it.uuid].map { h -> SimpleProvidedHolder(h) }
