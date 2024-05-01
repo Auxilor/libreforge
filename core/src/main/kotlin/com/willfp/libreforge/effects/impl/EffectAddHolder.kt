@@ -15,6 +15,10 @@ import com.willfp.libreforge.nest
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.registerGenericHolderProvider
 import com.willfp.libreforge.triggers.TriggerData
+import org.bukkit.entity.Player
+import org.bukkit.event.EventHandler
+import org.bukkit.event.entity.EntityDeathEvent
+import org.bukkit.event.player.PlayerQuitEvent
 import java.util.UUID
 
 object EffectAddHolder : Effect<HolderTemplate>("add_holder") {
@@ -69,5 +73,16 @@ object EffectAddHolder : Effect<HolderTemplate>("add_holder") {
             effects,
             conditions
         )
+    }
+
+    @EventHandler
+    fun onPlayerLogout(event: PlayerQuitEvent) {
+        holders.remove(event.player.uniqueId)
+    }
+
+    @EventHandler
+    fun onEntityDeath(event: EntityDeathEvent) {
+        if (event.entity is Player) return
+        holders.remove(event.entity.uniqueId)
     }
 }

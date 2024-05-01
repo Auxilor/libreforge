@@ -214,6 +214,7 @@ fun Dispatcher<*>.refreshHolders() {
  * Forcibly refresh holders, ignoring cooldown.
  */
 fun Dispatcher<*>.forceRefreshHolders() {
+
     refreshFunctions.forEach { it(this) }
     this.updateHolders()
     this.updateEffects()
@@ -282,6 +283,10 @@ private val holderCache = Caffeine.newBuilder()
  */
 val Dispatcher<*>.holders: Collection<ProvidedHolder>
     get() = holderCache.get(this.uuid) {
+        if (this is EntityDispatcher && this.dispatcher !is Player && !plugin.configYml.getBool("refresh.entities.enabled")) {
+            return@get emptyList()
+        }
+
         val holders = providers.flatMap { it.provide(this) }
 
         Bukkit.getPluginManager().callEvent(
