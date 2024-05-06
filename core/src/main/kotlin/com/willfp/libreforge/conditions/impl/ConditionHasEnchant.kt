@@ -6,8 +6,6 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
-import com.willfp.libreforge.enchants.EnchantmentWithLevel
-import com.willfp.libreforge.enchants.doesItemHaveEnchantmentAtLevel
 import com.willfp.libreforge.get
 import com.willfp.libreforge.getStrings
 import com.willfp.libreforge.slot.SlotType
@@ -84,3 +82,10 @@ object ConditionHasEnchant : Condition<NoCompileData>("has_enchant") {
     }
 
 }
+data class EnchantmentWithLevel(
+    val enchantment: Enchantment,
+    val levels: List<Int> = emptyList()
+)
+
+fun EnchantmentWithLevel.doesItemHaveEnchantmentAtLevel(item: ItemStack): Boolean =
+    item.containsEnchantment(enchantment) && (levels.isEmpty() || item.getEnchantmentLevel(enchantment) in levels)
