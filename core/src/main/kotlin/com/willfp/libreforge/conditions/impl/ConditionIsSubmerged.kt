@@ -21,15 +21,16 @@ object ConditionIsSubmerged: Condition<NoCompileData>("is_submerged") {
     ): Boolean {
         val livingEntity = dispatcher.get<LivingEntity>() ?: return false
 
-        val entityIsPlayerAndHasNoAir = livingEntity is Player && (livingEntity.gameMode == GameMode.CREATIVE || livingEntity.gameMode == GameMode.SPECTATOR)
-        val isCurrentlyUnderwater = livingEntity.remainingAir != livingEntity.maximumAir || entityIsPlayerAndHasNoAir
-        val isInWater = livingEntity.isInWater
-        val areLocationsBothWater = listOf(livingEntity.location, livingEntity.eyeLocation).all { location ->
+        val box = livingEntity.boundingBox
+        val max = box.max.toLocation(livingEntity.world)
+        val min = box.min.toLocation(livingEntity.world)
+        val center = box.center.toLocation(livingEntity.world)
+
+        val areLocationsBothLiquid = listOf(livingEntity.location, livingEntity.eyeLocation, max, min, center).all { location ->
             val locationMaterial = location.block.type
             locationMaterial == Material.WATER || locationMaterial == Material.LAVA
         }
-
-        return isCurrentlyUnderwater && isInWater && areLocationsBothWater
+        return areLocationsBothLiquid
     }
 
 }
