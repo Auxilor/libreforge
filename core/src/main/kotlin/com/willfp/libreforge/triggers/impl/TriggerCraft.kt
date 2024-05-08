@@ -13,8 +13,12 @@ import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.CraftItemEvent
 import org.bukkit.event.inventory.InventoryAction
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.PlayerInventory
 
 object TriggerCraft : Trigger("craft") {
+
+    private const val CRAFTING_FAILED = 0
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,
@@ -26,78 +30,93 @@ object TriggerCraft : Trigger("craft") {
         if (event.result == Event.Result.DENY) {
             return
         }
-
         if (event.action == InventoryAction.NOTHING || event.inventory.result == null) {
             return
         }
-
         val player = event.whoClicked as? Player ?: return
         val item = event.recipe.result
-        val cursor: ItemStack? = event.cursor
-        var recipeRepetitions = 1
-        val click = event.click
-
-        if (click == ClickType.NUMBER_KEY) {
-            // Hotbar crafting fails if cursor contains item, or hotbar destination is not empty.
-            if (cursor != null && cursor.type != Material.AIR) {
-                recipeRepetitions = 0
-            } else if (player.inventory.getItem(event.hotbarButton) != null) {
-                recipeRepetitions = 0
-            }
-
-        } else if (click == ClickType.DROP || click == ClickType.CONTROL_DROP) {
-            // Drop crafting with Q fails if cursor is full
-            if (cursor != null && cursor.type != Material.AIR) {
-                recipeRepetitions = 0
-            }
-
-        } else if (click == ClickType.SWAP_OFFHAND) {
-            // Can't craft into off-hand if off-hand is full.
-            if (player.inventory.itemInOffHand.type != Material.AIR) {
-                recipeRepetitions = 0
-            }
-
-        } else if (click == ClickType.SHIFT_RIGHT || click == ClickType.SHIFT_LEFT) {
-            // This relies on the fact we can only craft as many as our smallest material stack.
-            recipeRepetitions = Integer.MAX_VALUE
-            for (istack: ItemStack? in event.inventory.matrix) {
-                if (istack != null && istack.amount < recipeRepetitions) {
-                    recipeRepetitions = istack.amount
-                }
-            }
-
-            if (recipeRepetitions == Integer.MAX_VALUE) {
-                recipeRepetitions = 0
-            } else if (item.amount > 0) {
-                // Determine how many of this stack we can fit in our inventory...
-                var capacity = 0
-
-                for (istack: ItemStack? in event.view.bottomInventory.storageContents) {
-                    if (istack == null) {
-                        capacity += item.maxStackSize
-                    } else if (istack.isSimilar(item)) {
-                        capacity += (item.maxStackSize - istack.amount).coerceAtLeast(0)
-                    }
-                }
-
-                // If we can't fit everything, round up to the next full recipe amount.
-                if (capacity < recipeRepetitions * item.amount) {
-                    recipeRepetitions = ((capacity + item.amount - 1) / item.amount)
-                }
-            }
+        val cursor = event.cursor
+        val recipeRepetitions = when (event.click) {
+            ClickType.NUMBER_KEY -> handleNumberKeyCompletion(cursor, player, event)
+            ClickType.DROP, ClickType.CONTROL_DROP -> handleDropCompletion(cursor)
+            ClickType.SWAP_OFFHAND -> handleSwapOffhandCompletion(player)
+            ClickType.SHIFT_RIGHT, ClickType.SHIFT_LEFT -> handleShiftClickCompletion(event, item)
+            else -> 1
         }
-
-        if (recipeRepetitions == 0) {
+        if (recipeRepetitions == CRAFTING_FAILED) {
             return
         }
-
+        val totalItemsCrafted = item.amount * recipeRepetitions
         this.dispatch(
             player.toDispatcher(),
             TriggerData(
                 player = player,
                 item = item,
-                value = recipeRepetitions.toDouble()
+                value = totalItemsCrafted.toDouble()
             )
         )
     }
+
+    private fun handleShiftClickCompletion(event: CraftItemEvent, result: ItemStack): Int {
+        val inventoryContent = event.view.topInventory.storageContents.toList().filterNot { item ->
+            item == null || item.type.isAir
+        }.drop(1)
+
+        val playerInventory = event.view.bottomInventory as PlayerInventory
+        val contents = playerInventory.storageContents.toList()
+        val totalPossibleSlotsForItems = contents.sumOf { item ->
+            val slotIsBlank = item == null || item.type.isAir
+            if (slotIsBlank) {
+                return@sumOf result.maxStackSize
+            }
+            val itemIsResult = item!!.isSimilar(result)
+            if (itemIsResult) {
+                return@sumOf result.maxStackSize - item.amount
+            }
+            0
+        }
+
+        if (totalPossibleSlotsForItems == 0) {
+            return CRAFTING_FAILED
+        }
+
+        val totalCraftableItems = inventoryContent.minOf { it!!.amount }
+        return if (totalCraftableItems <= totalPossibleSlotsForItems) {
+            totalCraftableItems
+        } else {
+            totalPossibleSlotsForItems / result.amount
+        }
+    }
+
+    private fun handleSwapOffhandCompletion(player: Player): Int {
+        val playerOffhandIsNotEmpty = player.inventory.itemInOffHand.type != Material.AIR
+        // Can't craft into off-hand if off-hand is full.
+        return if (playerOffhandIsNotEmpty) {
+            CRAFTING_FAILED
+        } else {
+            1
+        }
+    }
+
+    private fun handleDropCompletion(cursor: ItemStack?): Int {
+        // Drop crafting with Q fails if cursor is full
+        val curseIsNotEmpty = cursor != null && cursor.type != Material.AIR
+        return if (curseIsNotEmpty) {
+            CRAFTING_FAILED
+        } else {
+            1
+        }
+    }
+
+    private fun handleNumberKeyCompletion(cursor: ItemStack?, player: Player, event: CraftItemEvent): Int {
+        val cursorIsNotEmpty = cursor != null && cursor.type != Material.AIR
+        val playerHasItemInSlot = player.inventory.getItem(event.hotbarButton) != null
+        // Hotbar crafting fails if cursor contains item, or hotbar destination is not empty.
+        return if (cursorIsNotEmpty || playerHasItemInSlot) {
+            CRAFTING_FAILED
+        } else {
+            1
+        }
+    }
+
 }
