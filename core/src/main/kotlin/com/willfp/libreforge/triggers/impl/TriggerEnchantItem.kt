@@ -11,6 +11,7 @@ object TriggerEnchantItem : Trigger("enchant_item") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,
+        TriggerParameter.EVENT,
         TriggerParameter.ITEM
     )
 
@@ -24,6 +25,7 @@ object TriggerEnchantItem : Trigger("enchant_item") {
             TriggerData(
                 player = player,
                 item = item,
+                event = event,
                 value = event.expLevelCost.toDouble()
             )
         )
