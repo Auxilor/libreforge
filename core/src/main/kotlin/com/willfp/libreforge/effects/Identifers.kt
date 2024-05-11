@@ -2,6 +2,7 @@ package com.willfp.libreforge.effects
 
 import com.willfp.eco.util.NamespacedKeyUtils
 import org.bukkit.NamespacedKey
+import kotlin.math.abs
 import java.util.UUID
 
 /**
@@ -19,7 +20,7 @@ class IdentifierFactory(
         UUID.nameUUIDFromBytes("$uuid$offset".toByteArray())
 
     private fun makeKey(offset: Int) =
-        NamespacedKeyUtils.createEcoKey("${uuid.hashCode()}_$offset")
+        NamespacedKeyUtils.createEcoKey("${abs(uuid.hashCode())}_$offset")
 
     override fun toString(): String {
         return "IdentifierFactory(uuid=$uuid)"

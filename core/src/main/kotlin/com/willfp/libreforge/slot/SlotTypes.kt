@@ -32,7 +32,7 @@ object SlotTypes : Registry<SlotType>() {
 
     private fun createNew(id: String): SlotType? {
         if (id.contains(",")) {
-            return CombinedSlotTypes(
+            return CustomCombinedSlotTypes(
                 id.split(",")
                     .mapNotNull { get(it.trim()) }
             )

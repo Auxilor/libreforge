@@ -1,7 +1,9 @@
 package com.willfp.libreforge.slot.impl
 
 import com.willfp.eco.core.drops.DropQueue
+import com.willfp.libreforge.slot.CombinedSlotTypes
 import com.willfp.libreforge.slot.SlotType
+import com.willfp.libreforge.slot.SlotTypes
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -33,5 +35,9 @@ object SlotTypeAny : SlotType("any") {
 
     override fun getItemSlots(player: Player): List<Int> {
         return (0..45).toList()
+    }
+
+    override fun isOrContains(slotType: SlotType): Boolean {
+        return true
     }
 }
