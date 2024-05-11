@@ -36,6 +36,7 @@ import com.willfp.libreforge.conditions.impl.ConditionInOffhand
 import com.willfp.libreforge.conditions.impl.ConditionInSlot
 import com.willfp.libreforge.conditions.impl.ConditionInWater
 import com.willfp.libreforge.conditions.impl.ConditionInWorld
+import com.willfp.libreforge.conditions.impl.ConditionIsAlive
 import com.willfp.libreforge.conditions.impl.ConditionIsExpressionTrue
 import com.willfp.libreforge.conditions.impl.ConditionIsFalling
 import com.willfp.libreforge.conditions.impl.ConditionIsFlying
@@ -46,6 +47,7 @@ import com.willfp.libreforge.conditions.impl.ConditionIsOp
 import com.willfp.libreforge.conditions.impl.ConditionIsSneaking
 import com.willfp.libreforge.conditions.impl.ConditionIsSprinting
 import com.willfp.libreforge.conditions.impl.ConditionIsStorm
+import com.willfp.libreforge.conditions.impl.ConditionIsSubmerged
 import com.willfp.libreforge.conditions.impl.ConditionIsSwimming
 import com.willfp.libreforge.conditions.impl.ConditionItemDataEquals
 import com.willfp.libreforge.conditions.impl.ConditionItemLevelAbove
@@ -212,5 +214,7 @@ object Conditions : Registry<Condition<*>>() {
         register(ConditionHasCompletedAdvancement)
         register(ConditionLightLevelBelow)
         register(ConditionInSlot)
+        register(ConditionIsAlive)
+        register(ConditionIsSubmerged)
     }
 }

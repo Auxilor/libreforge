@@ -100,6 +100,12 @@ class PointsMap(
 
         profile.write(dataKey, value)
     }
+
+    override fun toString(): String {
+        return initializedPoints.joinToString(", ") {
+            "$it -> ${get(it)}"
+        }
+    }
 }
 
 fun pointsPlaceholder(

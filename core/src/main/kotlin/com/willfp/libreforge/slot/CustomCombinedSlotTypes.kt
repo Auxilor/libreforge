@@ -5,17 +5,11 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import kotlin.math.abs
 
-/**
- * A slot type that functions as a collection of other slot types.
- */
-abstract class CombinedSlotTypes(
-    id: String
-) : SlotType(id) {
-    /**
-     * The types to combine.
-     */
-    abstract val types: List<SlotType>
+internal class CustomCombinedSlotTypes(
+    override val types: List<SlotType>
 
+    // Use abs to prevent negative hash codes, which violate the ID pattern
+) : CombinedSlotTypes("combined_" + abs(types.hashCode())) {
     override fun addToSlot(player: Player, item: ItemStack): Boolean {
         return types.any { it.addToSlot(player, item) }
     }
@@ -41,10 +35,10 @@ abstract class CombinedSlotTypes(
             return true
         }
 
-        if (slotType is CombinedSlotTypes) {
+        if (slotType is CustomCombinedSlotTypes) {
             return slotType.types.all { isOrContains(it) }
         }
-        
+
         return types.contains(slotType)
     }
 }
