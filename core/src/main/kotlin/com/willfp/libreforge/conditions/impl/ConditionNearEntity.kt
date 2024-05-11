@@ -27,7 +27,7 @@ object ConditionNearEntity : Condition<Collection<TestableEntity>>("near_entity"
         val radius = config.getDoubleFromExpression("radius", dispatcher.get())
 
         // Default to require there to be at least 1 entity if no minimum is defined by the user.
-        val nearbyEntityMinimumRequirement = config.getIntOrNull("amount") ?: 1
+        val nearbyEntityMinimumRequirement = config.getIntFromExpression("amount", dispatcher.get()).coerceAtLeast(1)
         val nearbyEntitiesWhichMatchCriteria = location.world.getNearbyEntities(location, radius, radius, radius).count {
             compileData.any { test -> test.matches(it) }
         }
