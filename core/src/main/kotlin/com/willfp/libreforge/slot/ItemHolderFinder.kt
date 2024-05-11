@@ -43,8 +43,6 @@ abstract class ItemHolderFinder<T : Holder> {
     private fun doFindHolders(entity: LivingEntity, slot: SlotType): List<TypedProvidedHolder<T>> {
         val items = slot.getItems(entity)
 
-        // FIXME: This will lead to holders with the 'any' slot being double-counted.
-
         val holders = items.map { item ->
             this.find(item)
                 .filter { holder -> isValidInSlot(holder, slot) }
@@ -77,8 +75,7 @@ abstract class ItemHolderFinder<T : Holder> {
                 val entity = dispatcher.get<LivingEntity>() ?: return@get emptyList()
 
                 // Only check for non-combined slot types
-                val slots = SlotTypes.values().filterNot { it is CombinedSlotType }
-                slots.flatMap { slot -> findHolders(entity, slot) }
+                SlotTypes.baseTypes.flatMap { slot -> findHolders(entity, slot) }
             }
         }
     }

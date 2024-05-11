@@ -1,12 +1,17 @@
 package com.willfp.libreforge.slot.impl
 
 import com.willfp.eco.core.drops.DropQueue
+import com.willfp.libreforge.slot.CombinedSlotType
 import com.willfp.libreforge.slot.SlotType
+import com.willfp.libreforge.slot.SlotTypes
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
-object SlotTypeAny : SlotType("any") {
+object SlotTypeAny : CombinedSlotType("any") {
+    override val types: List<SlotType>
+        get() = SlotTypes.baseTypes
+
     override fun addToSlot(player: Player, item: ItemStack): Boolean {
         DropQueue(player)
             .addItem(item)
