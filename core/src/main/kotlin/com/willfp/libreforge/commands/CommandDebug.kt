@@ -3,13 +3,18 @@ package com.willfp.libreforge.commands
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.command.impl.Subcommand
 import com.willfp.libreforge.Plugins
+import com.willfp.libreforge.activeEffects
 import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.filters.Filters
+import com.willfp.libreforge.holders
 import com.willfp.libreforge.mutators.Mutators
+import com.willfp.libreforge.points
 import com.willfp.libreforge.slot.SlotTypes
+import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Triggers
 import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
 
 internal class CommandDebug(
     plugin: EcoPlugin
@@ -45,6 +50,17 @@ internal class CommandDebug(
         for (loadedPlugin in Plugins.values()) {
             plugin.logger.info("- ${loadedPlugin.plugin.name} v${loadedPlugin.plugin.description.version} " +
                     "[${loadedPlugin.id}] (${loadedPlugin.categories.values().joinToString(", ") { it.id }})")
+        }
+
+        if (sender is Player) {
+            plugin.logger.info("Player holders:")
+            plugin.logger.info(sender.toDispatcher().holders.joinToString(", ") { it.holder.id.toString() })
+
+            plugin.logger.info("Player active effects:")
+            plugin.logger.info(sender.toDispatcher().activeEffects.flatMap { it.effects.map { it.effect.id } }.joinToString(", "))
+
+            plugin.logger.info("Player points:")
+            plugin.logger.info(sender.points.toString())
         }
 
         @Suppress("UsagesOfObsoleteApi")
