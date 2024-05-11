@@ -34,10 +34,6 @@ object EffectAddHolderToVictim : Effect<HolderTemplate>("add_holder_to_victim") 
 
     private val holders = listMap<UUID, Holder>()
 
-    fun getHolders(): Map<UUID, List<Holder>> {
-        return holders
-    }
-
     init {
         registerGenericHolderProvider { holders[it.uuid].map { h -> SimpleProvidedHolder(h) } }
     }
@@ -75,6 +71,10 @@ object EffectAddHolderToVictim : Effect<HolderTemplate>("add_holder_to_victim") 
             effects,
             conditions
         )
+    }
+
+    internal fun getHolders(): Map<UUID, List<Holder>> {
+        return holders
     }
 
     @EventHandler
