@@ -1,12 +1,8 @@
 package com.willfp.libreforge.slot.impl
 
-import com.willfp.libreforge.slot.CombinedSlotTypes
-import com.willfp.libreforge.slot.SlotType
-import org.bukkit.entity.LivingEntity
-import org.bukkit.entity.Player
-import org.bukkit.inventory.ItemStack
+import com.willfp.libreforge.slot.CombinedSlotType
 
-object SlotTypeHands : CombinedSlotTypes("hands") {
+object SlotTypeHands : CombinedSlotType("hands") {
     override val types = listOf(
         SlotTypeMainhand,
         SlotTypeOffhand

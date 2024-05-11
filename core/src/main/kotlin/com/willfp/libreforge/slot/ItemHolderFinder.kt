@@ -3,11 +3,8 @@ package com.willfp.libreforge.slot
 import com.github.benmanes.caffeine.cache.Cache
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.willfp.libreforge.Dispatcher
-import com.willfp.libreforge.EmptyProvidedHolder.holder
-import com.willfp.libreforge.EmptyProvidedHolder.provider
 import com.willfp.libreforge.Holder
 import com.willfp.libreforge.HolderProvider
-import com.willfp.libreforge.ItemProvidedHolder
 import com.willfp.libreforge.TypedHolderProvider
 import com.willfp.libreforge.TypedProvidedHolder
 import com.willfp.libreforge.get
@@ -80,7 +77,7 @@ abstract class ItemHolderFinder<T : Holder> {
                 val entity = dispatcher.get<LivingEntity>() ?: return@get emptyList()
 
                 // Only check for non-combined slot types
-                val slots = SlotTypes.values().filterNot { it is CombinedSlotTypes }
+                val slots = SlotTypes.values().filterNot { it is CombinedSlotType }
                 slots.flatMap { slot -> findHolders(entity, slot) }
             }
         }

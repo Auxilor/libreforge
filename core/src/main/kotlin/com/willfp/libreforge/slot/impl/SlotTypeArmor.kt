@@ -1,13 +1,8 @@
 package com.willfp.libreforge.slot.impl
 
-import com.willfp.libreforge.isEcoEmpty
-import com.willfp.libreforge.slot.CombinedSlotTypes
-import com.willfp.libreforge.slot.SlotType
-import org.bukkit.entity.LivingEntity
-import org.bukkit.entity.Player
-import org.bukkit.inventory.ItemStack
+import com.willfp.libreforge.slot.CombinedSlotType
 
-object SlotTypeArmor : CombinedSlotTypes("armor") {
+object SlotTypeArmor : CombinedSlotType("armor") {
     override val types = listOf(
         SlotTypeHelmet,
         SlotTypeChestplate,
