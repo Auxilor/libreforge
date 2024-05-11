@@ -10,6 +10,8 @@ import org.bukkit.inventory.ItemStack
 class NumericSlotType(
     private val slot: Int
 ) : SlotType(slot.toString()) {
+    private val slotList = slot.toSingletonList()
+
     override fun addToSlot(player: Player, item: ItemStack): Boolean {
         if (!player.inventory.getItem(slot).isEcoEmpty) {
             return false
@@ -28,6 +30,6 @@ class NumericSlotType(
     }
 
     override fun getItemSlots(player: Player): List<Int> {
-        return slot.toSingletonList()
+        return slotList
     }
 }

@@ -8,8 +8,12 @@ import com.willfp.libreforge.HolderProvider
 import com.willfp.libreforge.TypedHolderProvider
 import com.willfp.libreforge.TypedProvidedHolder
 import com.willfp.libreforge.get
+import com.willfp.libreforge.ifType
+import com.willfp.libreforge.isType
 import com.willfp.libreforge.registerRefreshFunction
+import com.willfp.libreforge.slot.impl.NumericSlotType
 import org.bukkit.entity.LivingEntity
+import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import java.util.UUID
 import java.util.concurrent.TimeUnit
@@ -37,10 +41,6 @@ abstract class ItemHolderFinder<T : Holder> {
      * Find holders on an [entity] for a given [slot].
      */
     fun findHolders(entity: LivingEntity, slot: SlotType): List<TypedProvidedHolder<T>> {
-        return doFindHolders(entity, slot)
-    }
-
-    private fun doFindHolders(entity: LivingEntity, slot: SlotType): List<TypedProvidedHolder<T>> {
         val items = slot.getItems(entity)
 
         val holders = items.map { item ->
@@ -74,8 +74,15 @@ abstract class ItemHolderFinder<T : Holder> {
             return cache.get(dispatcher.uuid) {
                 val entity = dispatcher.get<LivingEntity>() ?: return@get emptyList()
 
+                val slots = SlotTypes.baseTypes.toMutableSet()
+
+                // Prevents double scanning of held item slot
+                dispatcher.ifType<Player> {
+                    slots.remove(NumericSlotType(it.inventory.heldItemSlot))
+                }
+
                 // Only check for non-combined slot types
-                SlotTypes.baseTypes.flatMap { slot -> findHolders(entity, slot) }
+                slots.flatMap { slot -> findHolders(entity, slot) }
             }
         }
     }
