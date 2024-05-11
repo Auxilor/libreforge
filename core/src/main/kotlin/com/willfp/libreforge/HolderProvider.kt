@@ -153,10 +153,7 @@ inline fun <reified T> registerSpecificHolderProvider(crossinline provider: (T) 
     })
 
 fun registerSlotHolderFinderAsProvider(finder: ItemHolderFinder<*>) =
-    registerSpecificHolderProvider<LivingEntity> {
-        SlotTypes.values()
-            .flatMap { slot -> finder.findHolders(it, slot) }
-    }
+    registerHolderProvider(finder.toHolderProvider())
 
 private val refreshFunctions = mutableListOf<(Dispatcher<*>) -> Unit>()
 
