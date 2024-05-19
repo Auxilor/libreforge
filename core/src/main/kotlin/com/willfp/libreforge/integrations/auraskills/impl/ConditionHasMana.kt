@@ -1,6 +1,6 @@
 package com.willfp.libreforge.integrations.auraskills.impl
 
-import com.archyx.aureliumskills.api.event.ManaRegenerateEvent
+import dev.aurelium.auraskills.api.event.mana.ManaRegenerateEvent
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.*
 import com.willfp.libreforge.conditions.Condition
