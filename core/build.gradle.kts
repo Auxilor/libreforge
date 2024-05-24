@@ -25,7 +25,6 @@ dependencies {
         exclude(group = "net.byteflux", module = "libby-bukkit")
     }
     compileOnly("com.dfsek.terra:common:6.4.1-BETA+3aef97738")
-    compileOnly("io.github.arcaneplugins:levelledmobs-plugin:4.0.2")
 
     compileOnly(fileTree("../lib") {
         include("*.jar")
