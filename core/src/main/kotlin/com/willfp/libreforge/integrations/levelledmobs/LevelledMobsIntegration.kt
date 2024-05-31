@@ -6,7 +6,6 @@ import com.willfp.libreforge.integrations.levelledmobs.impl.LevelledMobsPlacehol
 
 object LevelledMobsIntegration : LoadableIntegration {
     override fun load(plugin: EcoPlugin) {
-        LevelledMobsPlaceholderListener.load()
         plugin.eventManager.registerListener(LevelledMobsPlaceholderListener)
     }
 
