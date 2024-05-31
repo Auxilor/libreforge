@@ -17,7 +17,6 @@ object FilterEntities : Filter<Collection<TestableEntity>, List<String>>("entiti
         val victim = data.victim ?: return true
 
         return value.containsIgnoreCase(victim.type.name)
-                || value.containsIgnoreCase(victim.category.name)
                 || compileData.any { it.matches(victim) }
     }
 
