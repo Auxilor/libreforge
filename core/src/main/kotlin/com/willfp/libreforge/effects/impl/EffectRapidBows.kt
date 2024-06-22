@@ -1,5 +1,6 @@
 package com.willfp.libreforge.effects.impl
 
+import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.map.listMap
 import com.willfp.libreforge.Dispatcher
@@ -22,6 +23,12 @@ object EffectRapidBows : Effect<NoCompileData>("rapid_bows") {
     }
 
     private val modifiers = listMap<UUID, IdentifiedModifier>()
+
+    private val maxForce = if (Prerequisite.HAS_1_20_5.isMet) {
+        3.0
+    } else {
+        1.0
+    }
 
     override fun onEnable(
         dispatcher: Dispatcher<*>,
@@ -52,11 +59,13 @@ object EffectRapidBows : Effect<NoCompileData>("rapid_bows") {
 
         val multiplier = 1 - totalPercentFaster / 100
 
-        if (event.force < multiplier) {
+        val bowForce = event.force / maxForce
+
+        if (bowForce < multiplier) {
             return
         }
 
-        val force = min(1.0 / event.force, Double.MAX_VALUE)
+        val force = min(1.0 / bowForce, Double.MAX_VALUE)
         var velocity = event.projectile.velocity.multiply(force)
 
         if (velocity.length() > 3) {
