@@ -70,7 +70,7 @@ object EffectReplaceNear : Effect<NoCompileData>("replace_near") {
                         }
                     }
 
-                    if (toReplace.type == Material.AIR) {
+                    if (toReplace.type == Material.AIR && whitelist?.containsIgnoreCase("air") != true) {
                         continue
                     }
 
