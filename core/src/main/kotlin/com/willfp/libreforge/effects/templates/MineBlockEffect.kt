@@ -28,6 +28,10 @@ abstract class MineBlockEffect<T : Any>(id: String) : Effect<T>(id) {
         } else {
             this.runExempted {
                 for (block in blocks) {
+                    if (block.world != this.world) {
+                        continue
+                    }
+
                     block.setMetadata(ignoreKey, plugin.createMetadataValue(true))
                     this.breakBlock(block)
                     block.removeMetadata(ignoreKey, plugin)
