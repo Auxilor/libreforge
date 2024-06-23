@@ -93,6 +93,8 @@ raytrace-distance: 80 # The distance that alt_click should check for a location
 
 # Options for item display
 display:
+  # These options will not be applied on all items unless you also set display-without-meta to true
+  # in /plugins/eco/config.yml. There may be a minor performance impact if you enable this option.
   enabled: false
 
   # Add certain item flags to all items.
