@@ -53,7 +53,7 @@ class ItemFlagDisplay(
 
         fis.persistentDataContainer.set(pdcKey, PersistentDataType.STRING, flags.joinToString(","))
 
-        flags.forEach { fis.addItemFlags(it) }
+        fis.addItemFlags(*flags.toTypedArray())
     }
 
     override fun revert(itemStack: ItemStack) {
