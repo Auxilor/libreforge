@@ -12,6 +12,7 @@ import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeInstance
 import org.bukkit.attribute.AttributeModifier
 import org.bukkit.entity.LivingEntity
+import java.util.UUID
 
 abstract class AttributeEffect(
     id: String,
@@ -45,14 +46,16 @@ abstract class AttributeEffect(
 
         instance.clean(modifierName)
 
-        instance.addModifier(
-            AttributeModifier(
-                identifiers.uuid,
-                modifierName,
-                getValue(config, entity),
-                operation
-            )
+        val modifier = AttributeModifier(
+            identifiers.uuid,
+            modifierName,
+            getValue(config, entity),
+            operation
         )
+
+        // Extra check to prevent adding the same modifier twice.
+        instance.removeModifier(modifier)
+        instance.addModifier(modifier)
     }
 
     override fun onDisable(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder) {
