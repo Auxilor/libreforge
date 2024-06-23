@@ -3,11 +3,13 @@ package com.willfp.libreforge
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.command.impl.PluginCommand
+import com.willfp.eco.core.display.DisplayModule
 import com.willfp.eco.core.integrations.IntegrationLoader
 import com.willfp.eco.core.integrations.afk.AFKManager
 import com.willfp.libreforge.commands.CommandLibreforge
 import com.willfp.libreforge.configs.ChainsYml
 import com.willfp.libreforge.configs.lrcdb.CommandLrcdb
+import com.willfp.libreforge.display.AttributeHider
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.arguments.custom.CustomEffectArguments
 import com.willfp.libreforge.effects.impl.bossbar.BossBarProgressPlaceholder
@@ -187,6 +189,10 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             CommandLrcdb(this),
             CommandLibreforge(this)
         )
+    }
+
+    override fun createDisplayModule(): DisplayModule {
+        return AttributeHider(this)
     }
 
     override fun getMinimumEcoVersion(): String {
