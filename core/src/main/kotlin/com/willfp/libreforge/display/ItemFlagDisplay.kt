@@ -13,6 +13,8 @@ class ItemFlagDisplay(
 ) : DisplayModule(plugin, DisplayPriority.HIGHEST) {
     private val flags = mutableSetOf<ItemFlag>()
 
+    private var enabled = false
+
     private val pdcKey = plugin.createNamespacedKey("display_flags")
 
     init {
@@ -20,6 +22,8 @@ class ItemFlagDisplay(
     }
 
     internal fun reload() {
+        enabled = plugin.configYml.getBool("display.enabled")
+
         flags.clear()
 
         for (flagName in plugin.configYml.getStrings("display.item-flags")) {
@@ -33,7 +37,7 @@ class ItemFlagDisplay(
     }
 
     override fun display(itemStack: ItemStack, vararg args: Any) {
-        if (flags.isEmpty()) {
+        if (!enabled) {
             return
         }
 
@@ -53,7 +57,7 @@ class ItemFlagDisplay(
     }
 
     override fun revert(itemStack: ItemStack) {
-        if (flags.isEmpty()) {
+        if (!enabled) {
             return
         }
 
