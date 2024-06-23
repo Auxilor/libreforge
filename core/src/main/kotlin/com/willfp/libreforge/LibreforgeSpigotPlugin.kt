@@ -9,7 +9,7 @@ import com.willfp.eco.core.integrations.afk.AFKManager
 import com.willfp.libreforge.commands.CommandLibreforge
 import com.willfp.libreforge.configs.ChainsYml
 import com.willfp.libreforge.configs.lrcdb.CommandLrcdb
-import com.willfp.libreforge.display.AttributeHider
+import com.willfp.libreforge.display.ItemFlagDisplay
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.arguments.custom.CustomEffectArguments
 import com.willfp.libreforge.effects.impl.bossbar.BossBarProgressPlaceholder
@@ -50,6 +50,8 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
         LevelTypes,
         CustomEffectArguments
     )
+
+    private val displayModule = ItemFlagDisplay(this)
 
     init {
         plugin = this
@@ -109,6 +111,8 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
         for (category in configCategories) {
             category.reload(this)
         }
+
+        displayModule.reload()
 
         hasLoaded = true
     }
@@ -192,7 +196,7 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
     }
 
     override fun createDisplayModule(): DisplayModule {
-        return AttributeHider(this)
+        return displayModule
     }
 
     override fun getMinimumEcoVersion(): String {
