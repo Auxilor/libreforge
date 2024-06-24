@@ -1,5 +1,6 @@
 package com.willfp.libreforge.effects.templates
 
+import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
@@ -12,6 +13,7 @@ import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeInstance
 import org.bukkit.attribute.AttributeModifier
 import org.bukkit.entity.LivingEntity
+import org.bukkit.inventory.EquipmentSlotGroup
 import java.util.UUID
 
 abstract class AttributeEffect(
@@ -46,8 +48,8 @@ abstract class AttributeEffect(
 
         instance.clean(modifierName)
 
-        val modifier = AttributeModifier(
-            identifiers.uuid,
+        val modifier = attributeModifier(
+            identifiers,
             modifierName,
             getValue(config, entity),
             operation
@@ -66,8 +68,8 @@ abstract class AttributeEffect(
         instance.clean(modifierName)
 
         instance.removeModifier(
-            AttributeModifier(
-                identifiers.uuid,
+            attributeModifier(
+                identifiers,
                 modifierName,
                 0.0,
                 operation
@@ -77,6 +79,31 @@ abstract class AttributeEffect(
         // Run on next tick to prevent constraining to the lower value during reloads.
         plugin.scheduler.run {
             constrainAttribute(entity, instance.value)
+        }
+    }
+
+    private fun attributeModifier(
+        identifiers: Identifiers,
+        name: String,
+        value: Double,
+        operation: AttributeModifier.Operation
+    ): AttributeModifier {
+        return if (Prerequisite.HAS_1_21.isMet) {
+            @Suppress("UnstableApiUsage")
+            AttributeModifier(
+                identifiers.key,
+                value,
+                operation,
+                EquipmentSlotGroup.ANY
+            )
+        } else {
+            @Suppress("DEPRECATION", "REMOVAL")
+            AttributeModifier(
+                UUID.randomUUID(),
+                name,
+                value,
+                operation
+            )
         }
     }
 }

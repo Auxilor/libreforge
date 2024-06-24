@@ -28,6 +28,7 @@ object EffectPermanentPotionEffect : Effect<NoCompileData>("permanent_potion_eff
                     "https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/potion/PotionEffectType.html",
             Config::getString
         ) {
+            @Suppress("DEPRECATION")
             PotionEffectType.getByName(it.uppercase()) != null
         }
         require("level", "You must specify the effect level!")
@@ -73,8 +74,9 @@ object EffectPermanentPotionEffect : Effect<NoCompileData>("permanent_potion_eff
     ) {
         val player = dispatcher.get<Player>() ?: return
 
+        @Suppress("DEPRECATION")
         val effectType = PotionEffectType.getByName(config.getString("effect").uppercase())
-            ?: PotionEffectType.INCREASE_DAMAGE
+            ?: PotionEffectType.LUCK
 
         val level = config.getIntFromExpression("level", player) - 1
 

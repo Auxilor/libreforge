@@ -90,7 +90,7 @@ import com.willfp.libreforge.triggers.impl.TriggerTeleport
 import com.willfp.libreforge.triggers.impl.TriggerToggleFlight
 import com.willfp.libreforge.triggers.impl.TriggerToggleSneak
 import com.willfp.libreforge.triggers.impl.TriggerToggleSprint
-import com.willfp.libreforge.triggers.impl.TriggerTridentAttack
+import com.willfp.libreforge.integrations.paper.impl.TriggerTridentAttack
 import com.willfp.libreforge.triggers.impl.TriggerWinRaid
 
 object Triggers : Registry<Trigger>() {
@@ -205,7 +205,6 @@ object Triggers : Registry<Trigger>() {
         register(TriggerToggleFlight)
         register(TriggerToggleSneak)
         register(TriggerToggleSprint)
-        register(TriggerTridentAttack)
         register(TriggerWinRaid)
         register(TriggerDrink)
         register(TriggerChangeChunk)

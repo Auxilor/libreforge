@@ -39,6 +39,7 @@ object EffectSellItems : Effect<Collection<TestableItem>?>("sell_items") {
 
         for (soldItem in sold) {
             if (item == soldItem) {
+                @Suppress("DEPRECATION")
                 item.type = Material.AIR
                 item.amount = 0
             }

@@ -1,4 +1,4 @@
-package com.willfp.libreforge.triggers.impl
+package com.willfp.libreforge.integrations.paper.impl
 
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.holders
@@ -54,7 +54,7 @@ object TriggerTridentAttack : Trigger("trident_attack") {
                 projectile = trident,
                 location = trident.location,
                 event = event,
-                item = trident.item,
+                item = trident.itemStack,
                 velocity = trident.velocity,
                 value = event.finalDamage
             ),

@@ -26,6 +26,7 @@ object EffectSpawnPotionCloud : Effect<NoCompileData>("spawn_potion_cloud") {
         val location = data.location ?: return false
         val world = location.world ?: return false
 
+        @Suppress("DEPRECATION")
         val effect = PotionEffectType.getByName(config.getString("effect").uppercase()) ?: return false
         val level = config.getIntFromExpression("level", data)
         val duration = config.getIntFromExpression("duration", data)

@@ -22,6 +22,7 @@ object EffectPotionEffect : Effect<NoCompileData>("potion_effect") {
                     "https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/potion/PotionEffectType.html",
             Config::getString
         ) {
+            @Suppress("DEPRECATION")
             PotionEffectType.getByName(it.uppercase()) != null
         }
         require("level", "You must specify the effect level!")
@@ -37,8 +38,9 @@ object EffectPotionEffect : Effect<NoCompileData>("potion_effect") {
 
         toApply.addPotionEffect(
             PotionEffect(
+                @Suppress("DEPRECATION")
                 PotionEffectType.getByName(config.getString("effect").uppercase())
-                    ?: PotionEffectType.INCREASE_DAMAGE,
+                    ?: PotionEffectType.LUCK,
                 config.getIntFromExpression("duration", data),
                 config.getIntFromExpression("level", data) - 1,
                 true,

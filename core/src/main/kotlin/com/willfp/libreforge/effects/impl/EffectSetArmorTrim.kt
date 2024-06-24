@@ -18,9 +18,11 @@ object EffectSetArmorTrim : Effect<NoCompileData>("set_armor_trim") {
 
     override val arguments = arguments {
         require("pattern", "You must specify a valid trim pattern!", Config::getString) {
+            @Suppress("DEPRECATION")
             Registry.TRIM_PATTERN.get(NamespacedKey.minecraft(it)) != null
         }
         require("material", "You must specify a valid trim material!", Config::getString) {
+            @Suppress("DEPRECATION")
             Registry.TRIM_MATERIAL.get(NamespacedKey.minecraft(it)) != null
         }
     }
@@ -29,7 +31,9 @@ object EffectSetArmorTrim : Effect<NoCompileData>("set_armor_trim") {
         val item = data.foundItem ?: return false
         val meta = item.itemMeta as? ArmorMeta ?: return false
 
+        @Suppress("DEPRECATION")
         val material = Registry.TRIM_MATERIAL.get(NamespacedKey.minecraft(config.getString("material"))) ?: return false
+        @Suppress("DEPRECATION")
         val pattern = Registry.TRIM_PATTERN.get(NamespacedKey.minecraft(config.getString("pattern"))) ?: return false
 
         meta.trim = ArmorTrim(material, pattern)

@@ -1,5 +1,6 @@
 package com.willfp.libreforge.triggers.impl
 
+import com.willfp.eco.core.Prerequisite
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
@@ -17,11 +18,17 @@ object TriggerShearEntity : Trigger("shear_entity") {
         TriggerParameter.LOCATION
     )
 
+    private val mooshroom = if (Prerequisite.HAS_1_21.isMet) {
+        EntityType.MOOSHROOM
+    } else {
+        EntityType.valueOf("MUSHROOM_COW")
+    }
+
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerShearEntityEvent) {
         val entity = event.entity as? LivingEntity ?: return
 
-        if (entity.type !in listOf(EntityType.SHEEP, EntityType.MUSHROOM_COW)) {
+        if (entity.type !in listOf(EntityType.SHEEP, mooshroom)) {
             return
         }
 

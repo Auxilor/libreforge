@@ -21,6 +21,7 @@ object EffectRemovePotionEffect : Effect<NoCompileData>("remove_potion_effect") 
                     "https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/potion/PotionEffectType.html",
             Config::getString
         ) {
+            @Suppress("DEPRECATION")
             PotionEffectType.getByName(it.uppercase()) != null
         }
     }
@@ -34,8 +35,9 @@ object EffectRemovePotionEffect : Effect<NoCompileData>("remove_potion_effect") 
 
         plugin.scheduler.run {
             toApply.removePotionEffect(
+                @Suppress("DEPRECATION")
                 PotionEffectType.getByName(config.getString("effect").uppercase())
-                    ?: PotionEffectType.INCREASE_DAMAGE
+                    ?: PotionEffectType.LUCK
             )
         }
 

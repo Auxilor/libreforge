@@ -29,6 +29,7 @@ object EffectConsumeHeldItem : Effect<NoCompileData>("consume_held_item") {
 
         val newAmount = item.amount - amount
         if (newAmount <= 0) {
+            @Suppress("DEPRECATION")
             item.type = Material.AIR
         } else {
             item.amount = newAmount

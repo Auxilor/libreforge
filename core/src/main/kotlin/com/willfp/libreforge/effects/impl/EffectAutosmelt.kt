@@ -5,6 +5,7 @@ import com.willfp.eco.core.fast.FastItemStack
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getEnchantment
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.event.DropResult
 import com.willfp.libreforge.triggers.event.EditableBlockDropEvent
@@ -70,10 +71,11 @@ object EffectAutosmelt : Effect<NoCompileData>("autosmelt") {
 
     private fun handleEvent(player: Player, event: EditableDropEvent, config: Config) {
         val fortune = FastItemStack.wrap(player.inventory.itemInMainHand)
-            .getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS, false)
+            .getEnchantmentLevel(getEnchantment("fortune")!!, false)
 
         event.addModifier {
             var (type, xp) = getOutput(it.type)
+            @Suppress("DEPRECATION")
             it.type = type
 
             if (fortune > 0 && it.maxStackSize > 1 && event is EditableBlockDropEvent && fortuneMaterials.contains(type)) {
@@ -91,6 +93,7 @@ object EffectAutosmelt : Effect<NoCompileData>("autosmelt") {
 
     private fun handleItem(item: ItemStack) {
         val (type, _) = getOutput(item.type)
+        @Suppress("DEPRECATION")
         item.type = type
     }
 }

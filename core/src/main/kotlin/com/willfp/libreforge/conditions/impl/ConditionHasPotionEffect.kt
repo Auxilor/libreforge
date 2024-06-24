@@ -23,7 +23,7 @@ object ConditionHasPotionEffect : Condition<NoCompileData>("has_potion_effect") 
     ): Boolean {
         val livingEntity = dispatcher.get<LivingEntity>() ?: return false
 
-        return livingEntity.activePotionEffects.map { it.type.name }.containsIgnoreCase(
+        return livingEntity.activePotionEffects.map { it.type.key.key }.containsIgnoreCase(
             config.getString("effect")
         )
     }

@@ -11,6 +11,7 @@ import org.bukkit.command.CommandSender
 import java.io.BufferedReader
 import java.io.File
 import java.net.HttpURLConnection
+import java.net.URI
 import java.net.URL
 
 class CommandLrcdbImport(plugin: EcoPlugin) : Subcommand(
@@ -28,7 +29,7 @@ class CommandLrcdbImport(plugin: EcoPlugin) : Subcommand(
         val id = args[0]
 
         onLrcdbThread {
-            val url = URL("https://lrcdb.auxilor.io/api/v1/getConfigByID?id=$id&isDownload=true")
+            val url = URI("https://lrcdb.auxilor.io/api/v1/getConfigByID?id=$id&isDownload=true").toURL()
             val connection = url.openConnection() as HttpURLConnection
             val code = connection.responseCode
 

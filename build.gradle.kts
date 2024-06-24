@@ -11,7 +11,7 @@ buildscript {
 plugins {
     java
     id("java-library")
-    id("com.github.johnrengelman.shadow") version "7.0.0"
+    id("io.github.goooler.shadow") version "8.1.7"
     id("maven-publish")
 }
 
@@ -23,7 +23,7 @@ allprojects {
     apply(plugin = "kotlin")
     apply(plugin = "java")
     apply(plugin = "maven-publish")
-    apply(plugin = "com.github.johnrengelman.shadow")
+    apply(plugin = "io.github.goooler.shadow")
 
     repositories {
         mavenCentral()
@@ -70,12 +70,12 @@ allprojects {
 
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         kotlinOptions {
-            jvmTarget = "17"
+            jvmTarget = "21"
         }
     }
 
-    java.sourceCompatibility = JavaVersion.VERSION_17
-    java.targetCompatibility = JavaVersion.VERSION_17
+    java.sourceCompatibility = JavaVersion.VERSION_21
+    java.targetCompatibility = JavaVersion.VERSION_21
 
     tasks {
         compileJava {

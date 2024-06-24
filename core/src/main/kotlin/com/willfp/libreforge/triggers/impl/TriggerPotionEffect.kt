@@ -33,7 +33,7 @@ object TriggerPotionEffect : Trigger("potion_effect") {
                 victim = entity,
                 location = entity.location,
                 event = event,
-                text = event.newEffect?.type?.name?.lowercase()
+                text = event.newEffect?.type?.key?.key?.lowercase()
             )
         )
     }

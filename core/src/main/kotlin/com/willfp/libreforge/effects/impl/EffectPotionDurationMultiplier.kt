@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION", "REMOVAL")
+
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.util.duration
@@ -18,8 +20,7 @@ import org.bukkit.potion.PotionType
 
 object EffectPotionDurationMultiplier : MultiplierEffect("potion_duration_multiplier") {
     private val cannotExtend = setOf(
-        PotionType.INSTANT_DAMAGE, PotionType.INSTANT_HEAL, PotionType.AWKWARD,
-        PotionType.MUNDANE, PotionType.THICK, PotionType.WATER
+        PotionType.AWKWARD, PotionType.MUNDANE, PotionType.THICK, PotionType.WATER
     )
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -33,7 +34,7 @@ object EffectPotionDurationMultiplier : MultiplierEffect("potion_duration_multip
                 val item = event.contents.getItem(i) ?: continue
                 val meta = item.itemMeta as? PotionMeta ?: continue
 
-                val potionData = meta.basePotionData
+                val potionData = meta.basePotionData ?: continue
 
                 if (potionData.type in cannotExtend) {
                     continue
@@ -62,15 +63,17 @@ object EffectPotionDurationMultiplier : MultiplierEffect("potion_duration_multip
         }
 
         val delta = meta.delta
-        val data = meta.basePotionData
+        val data = meta.basePotionData ?: return
+
+        val type = data.type
 
         val effects = mutableMapOf<PotionEffectType, Int>()
 
-        if (data.type == PotionType.TURTLE_MASTER) {
-            effects[PotionEffectType.SLOW] = 4
-            effects[PotionEffectType.DAMAGE_RESISTANCE] = 2
+        if (type == PotionType.TURTLE_MASTER) {
+            effects[PotionEffectType.SLOWNESS] = 4
+            effects[PotionEffectType.RESISTANCE] = 2
         } else {
-            val effectType = data.type.effectType ?: return
+            val effectType = type.effectType ?: return
             effects[effectType] = if (data.isUpgraded) 2 else 1
         }
 
@@ -93,13 +96,13 @@ object EffectPotionDurationMultiplier : MultiplierEffect("potion_duration_multip
         val item = event.potion.item
 
         val meta = item.itemMeta as? PotionMeta ?: return
-        val data = meta.basePotionData
+        val data = meta.basePotionData ?: return
 
         val effects = mutableMapOf<PotionEffectType, Int>()
 
         if (data.type == PotionType.TURTLE_MASTER) {
-            effects[PotionEffectType.SLOW] = 4
-            effects[PotionEffectType.DAMAGE_RESISTANCE] = 2
+            effects[PotionEffectType.SLOWNESS] = 4
+            effects[PotionEffectType.RESISTANCE] = 2
         } else {
             effects[data.type.effectType ?: return] = if (data.isUpgraded) 2 else 1
         }

@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getEnchantment
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.NamespacedKey
@@ -19,7 +20,7 @@ object EffectRemoveEnchant : Effect<NoCompileData>("remove_enchant") {
 
         val meta = item.itemMeta ?: return false
 
-        val enchant = Enchantment.getByKey(NamespacedKey.minecraft(config.getString("enchant"))) ?: return false
+        val enchant = getEnchantment(config.getString("enchant")) ?: return false
 
         if (meta is EnchantmentStorageMeta) {
             meta.removeStoredEnchant(enchant)

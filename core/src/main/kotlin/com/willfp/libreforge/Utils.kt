@@ -4,9 +4,11 @@ import com.willfp.eco.core.items.Items
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
+import org.bukkit.NamespacedKey
 import org.bukkit.Sound
 import org.bukkit.SoundCategory
 import org.bukkit.block.Block
+import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.AbstractArrow
 import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
@@ -75,6 +77,7 @@ fun ItemStack.applyDamage(damage: Int, player: Player?): Boolean {
             Bukkit.getPluginManager().callEvent(PlayerItemBreakEvent(player, this))
             player.playSound(player.location, Sound.ENTITY_ITEM_BREAK, SoundCategory.BLOCKS, 1f, 1f)
         }
+        @Suppress("DEPRECATION")
         this.type = Material.AIR
     } else {
         this.itemMeta = meta
@@ -82,3 +85,7 @@ fun ItemStack.applyDamage(damage: Int, player: Player?): Boolean {
 
     return true
 }
+
+@Suppress("DEPRECATION")
+fun getEnchantment(id: String): Enchantment? =
+    Enchantment.getByKey(NamespacedKey.minecraft(id))
