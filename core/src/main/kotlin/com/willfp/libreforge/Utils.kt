@@ -11,10 +11,12 @@ import org.bukkit.block.Block
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.AbstractArrow
 import org.bukkit.entity.Entity
+import org.bukkit.entity.HumanEntity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
 import org.bukkit.event.player.PlayerItemBreakEvent
+import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
 import kotlin.math.roundToInt
@@ -89,3 +91,17 @@ fun ItemStack.applyDamage(damage: Int, player: Player?): Boolean {
 @Suppress("DEPRECATION")
 fun getEnchantment(id: String): Enchantment? =
     Enchantment.getByKey(NamespacedKey.minecraft(id))
+
+private val openInventoryMethod = HumanEntity::class.java
+    .getDeclaredMethod("getOpenInventory")
+    .apply { isAccessible = true }
+
+private val topInventoryMethod = openInventoryMethod.returnType
+    .getDeclaredMethod("getTopInventory")
+    .apply { isAccessible = true }
+
+val Player.topInventory: Inventory
+    get() {
+        val openInventory = openInventoryMethod.invoke(this)
+        return topInventoryMethod.invoke(openInventory) as Inventory
+    }

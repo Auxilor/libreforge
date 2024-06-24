@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.impl
 import com.willfp.libreforge.effects.templates.MultiplierEffect
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.toDispatcher
+import com.willfp.libreforge.topInventory
 import org.bukkit.block.BrewingStand
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -17,14 +18,14 @@ object EffectBrewTimeMultiplier : MultiplierEffect("brew_time_multiplier") {
 
         val multiplier = getMultiplier(player.toDispatcher())
 
-        if (player.openInventory.topInventory.holder !is BrewingStand) {
+        if (player.topInventory.holder !is BrewingStand) {
             return
         }
 
         // 2 seconds later to allow for the brewing stand to update, I guess.
         // This is from old EcoSkills code
         plugin.scheduler.runLater(2) {
-            val stand = player.openInventory.topInventory.holder
+            val stand = player.topInventory.holder
 
             if (stand is BrewingStand) {
                 if (stand.brewingTime == 400) {
