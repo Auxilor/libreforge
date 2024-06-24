@@ -462,7 +462,7 @@ object Effects : Registry<Effect<*>>() {
 
         if (Prerequisite.HAS_1_21.isMet) {
             register(EffectBlockReach)
-            register(EffectEfficiency)
+            register(EffectMiningEfficiency)
             register(EffectEntityReach)
             register(EffectGravityMultiplier)
             register(EffectIncreaseStepHeight)

@@ -8,8 +8,8 @@ import org.bukkit.attribute.AttributeModifier
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 
-object EffectEfficiency : AttributeEffect(
-    "efficiency",
+object EffectMiningEfficiency : AttributeEffect(
+    "mining_efficiency",
     Attribute.PLAYER_MINING_EFFICIENCY,
     AttributeModifier.Operation.ADD_NUMBER
 ) {
