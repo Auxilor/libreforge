@@ -23,9 +23,11 @@ abstract class AttributeEffect(
 ) : Effect<NoCompileData>(id) {
     protected abstract fun getValue(config: Config, entity: LivingEntity): Double
 
-    private fun AttributeInstance.clean(name: String) {
+    protected open fun canApplyTo(entity: LivingEntity): Boolean = true
+
+    private fun AttributeInstance.clean(name: String, identifiers: Identifiers) {
         for (modifier in this.modifiers.toList()) {
-            if (modifier.name == id || modifier.name == name) {
+            if (modifier.name == id || modifier.name == name || modifier.name == identifiers.key.key) {
                 this.removeModifier(modifier)
             }
         }
@@ -43,10 +45,15 @@ abstract class AttributeEffect(
         compileData: NoCompileData
     ) {
         val entity = dispatcher.get<LivingEntity>() ?: return
+
+        if (!canApplyTo(entity)) {
+            return
+        }
+
         val instance = entity.getAttribute(attribute) ?: return
         val modifierName = "libreforge:${this.id} - ${identifiers.key.key} (${holder.holder.id})"
 
-        instance.clean(modifierName)
+        instance.clean(modifierName, identifiers)
 
         val modifier = attributeModifier(
             identifiers,
@@ -62,10 +69,15 @@ abstract class AttributeEffect(
 
     override fun onDisable(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder) {
         val entity = dispatcher.get<LivingEntity>() ?: return
+
+        if (!canApplyTo(entity)) {
+            return
+        }
+
         val instance = entity.getAttribute(attribute) ?: return
         val modifierName = "libreforge:${this.id} - ${identifiers.key.key} (${holder.holder.id})"
 
-        instance.clean(modifierName)
+        instance.clean(modifierName, identifiers)
 
         instance.removeModifier(
             attributeModifier(

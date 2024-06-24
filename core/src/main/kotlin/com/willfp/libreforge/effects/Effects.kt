@@ -2,6 +2,7 @@
 
 package com.willfp.libreforge.effects
 
+import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.registry.Registry
 import com.willfp.libreforge.ConfigViolation
@@ -458,5 +459,18 @@ object Effects : Registry<Effect<*>>() {
         register(EffectDropItemSlot)
         register(EffectKeepLevel)
         register(EffectAnimation)
+
+        if (Prerequisite.HAS_1_21.isMet) {
+            register(EffectBlockReach)
+            register(EffectEfficiency)
+            register(EffectEntityReach)
+            register(EffectGravityMultiplier)
+            register(EffectIncreaseStepHeight)
+            register(EffectJumpStrengthMultiplier)
+            register(EffectMiningSpeedMultiplier)
+            register(EffectMovementEfficiencyMultiplier)
+            register(EffectSneakingSpeedMultiplier)
+            register(EffectUnderwaterMiningSpeedMultiplier)
+        }
     }
 }
