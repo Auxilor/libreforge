@@ -8,8 +8,8 @@ import org.bukkit.attribute.AttributeModifier
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 
-object EffectIncreaseSafeFallDistance : AttributeEffect(
-    "increase_safe_fall_distance",
+object EffectSafeFallDistance : AttributeEffect(
+    "safe_fall_distance",
     Attribute.GENERIC_SAFE_FALL_DISTANCE,
     AttributeModifier.Operation.ADD_NUMBER
 ) {
