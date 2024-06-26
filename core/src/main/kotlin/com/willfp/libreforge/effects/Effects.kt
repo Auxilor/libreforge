@@ -471,6 +471,7 @@ object Effects : Registry<Effect<*>>() {
             register(EffectMovementEfficiencyMultiplier)
             register(EffectSneakingSpeedMultiplier)
             register(EffectUnderwaterMiningSpeedMultiplier)
+            register(EffectIncreaseSafeFallDistance)
         }
     }
 }
