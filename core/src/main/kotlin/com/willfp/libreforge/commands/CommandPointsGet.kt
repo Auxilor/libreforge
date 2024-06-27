@@ -3,6 +3,7 @@ package com.willfp.libreforge.commands
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.command.impl.Subcommand
 import com.willfp.eco.util.toNiceString
+import com.willfp.libreforge.globalPoints
 import com.willfp.libreforge.points
 import com.willfp.libreforge.toFriendlyPointName
 import org.bukkit.Bukkit
@@ -26,7 +27,7 @@ internal class CommandPointsGet(plugin: EcoPlugin): Subcommand(
 
         val player = Bukkit.getPlayer(playerString)
 
-        if (player == null) {
+        if (player == null && playerString.equals("global", ignoreCase = true)) {
             sender.sendMessage(plugin.langYml.getMessage("invalid-player"))
             return
         }
@@ -38,10 +39,10 @@ internal class CommandPointsGet(plugin: EcoPlugin): Subcommand(
             return
         }
 
-        val amountNum = player.points[pointString]
+        val amountNum = player?.points?.get(pointString) ?: globalPoints[pointString]
 
         sender.sendMessage(plugin.langYml.getMessage("points-amount")
-            .replace("%playername%", player.name)
+            .replace("%playername%", player?.name ?: "server")
             .replace("%point%", pointString.toFriendlyPointName())
             .replace("%amount%", amountNum.toNiceString())
         )
@@ -52,7 +53,7 @@ internal class CommandPointsGet(plugin: EcoPlugin): Subcommand(
             1 -> StringUtil.copyPartialMatches(
                 args[0],
                 Bukkit.getOnlinePlayers().map { it.name },
-                mutableListOf()
+                mutableListOf("global")
             )
             2 -> listOf("point")
             3 -> mutableListOf(
