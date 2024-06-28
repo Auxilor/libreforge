@@ -8,9 +8,9 @@ import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
-object EffectRotate : Effect<NoCompileData>("rotate") {
+object EffectRotateVictim : Effect<NoCompileData>("rotate_victim") {
     override val parameters = setOf(
-        TriggerParameter.PLAYER
+        TriggerParameter.VICTIM
     )
 
     override val arguments = arguments {
@@ -18,12 +18,12 @@ object EffectRotate : Effect<NoCompileData>("rotate") {
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
-        val player = data.player ?: return false
-        val yaw = player.location.yaw + config.getDoubleFromExpression("angle", data).toFloat()
+        val victim = data.victim ?: return false
+        val yaw = victim.location.yaw + config.getDoubleFromExpression("angle", data).toFloat()
 
-        player.setRotation(
+        victim.setRotation(
             yaw % 360f,
-            player.location.pitch
+            victim.location.pitch
         )
 
         return true

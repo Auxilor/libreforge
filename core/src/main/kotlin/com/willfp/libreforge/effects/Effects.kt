@@ -459,6 +459,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectDropItemSlot)
         register(EffectKeepLevel)
         register(EffectAnimation)
+        register(EffectRotateVictim)
 
         if (Prerequisite.HAS_1_21.isMet) {
             register(EffectBlockReach)
