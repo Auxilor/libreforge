@@ -30,12 +30,17 @@ object TriggerCraft : Trigger("craft") {
         if (event.result == Event.Result.DENY) {
             return
         }
+
         if (event.action == InventoryAction.NOTHING || event.inventory.result == null) {
             return
         }
+
         val player = event.whoClicked as? Player ?: return
+
         val item = event.recipe.result
+
         val cursor = event.cursor
+
         val recipeRepetitions = when (event.click) {
             ClickType.NUMBER_KEY -> handleNumberKeyCompletion(cursor, player, event)
             ClickType.DROP, ClickType.CONTROL_DROP -> handleDropCompletion(cursor)
@@ -43,10 +48,13 @@ object TriggerCraft : Trigger("craft") {
             ClickType.SHIFT_RIGHT, ClickType.SHIFT_LEFT -> handleShiftClickCompletion(event, item)
             else -> 1
         }
+
         if (recipeRepetitions == CRAFTING_FAILED) {
             return
         }
+
         val totalItemsCrafted = item.amount * recipeRepetitions
+
         this.dispatch(
             player.toDispatcher(),
             TriggerData(
@@ -63,16 +71,22 @@ object TriggerCraft : Trigger("craft") {
         }.drop(1)
 
         val playerInventory = event.view.bottomInventory as PlayerInventory
+
         val contents = playerInventory.storageContents.toList()
+
         val totalPossibleSlotsForItems = contents.sumOf { item ->
             val slotIsBlank = item == null || item.type.isAir
+
             if (slotIsBlank) {
                 return@sumOf result.maxStackSize
             }
+
             val itemIsResult = item!!.isSimilar(result)
+
             if (itemIsResult) {
                 return@sumOf result.maxStackSize - item.amount
             }
+
             0
         }
 
@@ -80,7 +94,12 @@ object TriggerCraft : Trigger("craft") {
             return CRAFTING_FAILED
         }
 
+        if (inventoryContent.isEmpty()) {
+            return 0
+        }
+
         val totalCraftableItems = inventoryContent.minOf { it!!.amount }
+
         return if (totalCraftableItems <= totalPossibleSlotsForItems) {
             totalCraftableItems
         } else {
@@ -118,5 +137,4 @@ object TriggerCraft : Trigger("craft") {
             1
         }
     }
-
 }
