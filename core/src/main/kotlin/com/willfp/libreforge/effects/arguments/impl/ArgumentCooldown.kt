@@ -20,15 +20,17 @@ import java.util.UUID
 import kotlin.math.ceil
 
 object ArgumentCooldown : EffectArgument<Chain?>("cooldown") {
-    // Maps ConfiguredEffect UUIDs to Player UUIDs mapped to expiry time
-    private val cooldownTracker = mutableMapOf<UUID, MutableMap<UUID, Long>>()
+    // Maps cooldown groups to Player UUIDs mapped to expiry time
+    private val cooldownTracker = mutableMapOf<String, MutableMap<UUID, Long>>()
 
     override fun isMet(element: ConfigurableElement, trigger: DispatchedTrigger, compileData: Chain?): Boolean {
         return getCooldown(element, trigger) <= 0
     }
 
     private fun getCooldown(element: ConfigurableElement, trigger: DispatchedTrigger): Int {
-        val effectEndTimes = cooldownTracker[element.uuid] ?: return 0
+        val group = element.config.getStringOrNull("cooldown_group") ?: element.uuid.toString()
+
+        val effectEndTimes = cooldownTracker[group] ?: return 0
         val endTime = effectEndTimes[trigger.dispatcher.uuid] ?: return 0
 
         val msLeft = endTime - System.currentTimeMillis()
@@ -37,10 +39,12 @@ object ArgumentCooldown : EffectArgument<Chain?>("cooldown") {
     }
 
     override fun ifMet(element: ConfigurableElement, trigger: DispatchedTrigger, compileData: Chain?) {
-        val effectEndTimes = cooldownTracker[element.uuid] ?: mutableMapOf()
+        val group = element.config.getStringOrNull("cooldown_group") ?: element.uuid.toString()
+
+        val effectEndTimes = cooldownTracker[group] ?: mutableMapOf()
         effectEndTimes[trigger.dispatcher.uuid] = System.currentTimeMillis() +
                 (element.config.getDoubleFromExpression("cooldown", trigger.data) * 1000L).toLong()
-        cooldownTracker[element.uuid] = effectEndTimes
+        cooldownTracker[group] = effectEndTimes
     }
 
     override fun ifNotMet(element: ConfigurableElement, trigger: DispatchedTrigger, compileData: Chain?) {
