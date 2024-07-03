@@ -26,6 +26,8 @@ softdepend:
   - Terra
   - TerraformGenerator
   - ModelEngine
+  - AxEnvoy
+  - Votifier
 
 commands:
   lrcdb:
