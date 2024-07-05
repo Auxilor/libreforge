@@ -111,7 +111,7 @@ abstract class AttributeEffect(
         } else {
             @Suppress("DEPRECATION", "REMOVAL")
             AttributeModifier(
-                UUID.randomUUID(),
+                identifiers.uuid,
                 name,
                 value,
                 operation
