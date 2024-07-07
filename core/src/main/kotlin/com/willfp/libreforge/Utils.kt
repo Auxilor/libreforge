@@ -15,6 +15,8 @@ import org.bukkit.entity.HumanEntity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
+import org.bukkit.event.inventory.CraftItemEvent
+import org.bukkit.event.inventory.InventoryEvent
 import org.bukkit.event.player.PlayerItemBreakEvent
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
@@ -104,4 +106,28 @@ val Player.topInventory: Inventory
     get() {
         val openInventory = openInventoryMethod.invoke(this)
         return topInventoryMethod.invoke(openInventory) as Inventory
+    }
+
+private val viewMethod = InventoryEvent::class.java
+    .getDeclaredMethod("getView")
+    .apply { isAccessible = true }
+
+private val viewTopInventoryMethod = viewMethod.returnType
+    .getDeclaredMethod("getTopInventory")
+    .apply { isAccessible = true }
+
+private val viewBottomInventoryMethod = viewMethod.returnType
+    .getDeclaredMethod("getBottomInventory")
+    .apply { isAccessible = true }
+
+val CraftItemEvent.topInventory: Inventory
+    get() {
+        val view = viewMethod.invoke(this)
+        return viewTopInventoryMethod.invoke(view) as Inventory
+    }
+
+val CraftItemEvent.bottomInventory: Inventory
+    get() {
+        val view = viewMethod.invoke(this)
+        return viewBottomInventoryMethod.invoke(view) as Inventory
     }
