@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 buildscript {
     repositories {
         mavenCentral()
@@ -13,10 +15,6 @@ plugins {
     id("java-library")
     id("io.github.goooler.shadow") version "8.1.7"
     id("maven-publish")
-}
-
-dependencies {
-    implementation(project(":core"))
 }
 
 allprojects {
@@ -58,28 +56,25 @@ allprojects {
         }
     }
 
-    tasks.withType<JavaCompile> {
-        options.encoding = "UTF-8"
-    }
-
-    tasks.processResources {
-        filesMatching(listOf("**plugin.yml")) {
-            expand("projectVersion" to rootProject.version)
-        }
-    }
-
-    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions {
-            jvmTarget = "21"
-        }
-    }
-
-    java.sourceCompatibility = JavaVersion.VERSION_21
-    java.targetCompatibility = JavaVersion.VERSION_21
-
     tasks {
-        compileJava {
+        processResources {
+            filesMatching(listOf("**plugin.yml")) {
+                expand("projectVersion" to rootProject.version)
+            }
+        }
+
+        withType<JavaCompile> {
             options.encoding = "UTF-8"
+            options.release = 17
+        }
+
+        withType<KotlinCompile> {
+            kotlinOptions {
+                jvmTarget = "17"
+            }
+        }
+
+        compileJava {
             dependsOn(clean)
         }
 
@@ -88,16 +83,14 @@ allprojects {
             dependsOn(publishToMavenLocal)
         }
     }
+
+    java {
+        withSourcesJar()
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(21)
+        }
+    }
 }
 
 group = "com.willfp"
 version = findProperty("version")!!
-
-tasks.compileJava {
-    options.encoding = "UTF-8"
-}
-
-tasks.build {
-    dependsOn("shadowJar")
-    dependsOn("publishToMavenLocal")
-}
