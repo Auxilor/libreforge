@@ -1,6 +1,8 @@
 package com.willfp.libreforge
 
 import com.willfp.eco.core.items.Items
+import com.willfp.libreforge.proxy.Proxy
+import com.willfp.libreforge.proxy.loadProxy
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
@@ -90,44 +92,22 @@ fun ItemStack.applyDamage(damage: Int, player: Player?): Boolean {
     return true
 }
 
-@Suppress("DEPRECATION")
+// 1.21 compat
 fun getEnchantment(id: String): Enchantment? =
     Enchantment.getByKey(NamespacedKey.minecraft(id))
 
-private val openInventoryMethod = HumanEntity::class.java
-    .getDeclaredMethod("getOpenInventory")
-    .apply { isAccessible = true }
-
-private val topInventoryMethod = openInventoryMethod.returnType
-    .getDeclaredMethod("getTopInventory")
-    .apply { isAccessible = true }
+@Proxy("OpenInventoryAccessorImpl")
+interface OpenInventoryAccessor {
+    fun getTopInventory(player: Player): Inventory
+    fun getTopInventory(event: CraftItemEvent): Inventory
+    fun getBottomInventory(event: CraftItemEvent): Inventory
+}
 
 val Player.topInventory: Inventory
-    get() {
-        val openInventory = openInventoryMethod.invoke(this)
-        return topInventoryMethod.invoke(openInventory) as Inventory
-    }
-
-private val viewMethod = InventoryEvent::class.java
-    .getDeclaredMethod("getView")
-    .apply { isAccessible = true }
-
-private val viewTopInventoryMethod = viewMethod.returnType
-    .getDeclaredMethod("getTopInventory")
-    .apply { isAccessible = true }
-
-private val viewBottomInventoryMethod = viewMethod.returnType
-    .getDeclaredMethod("getBottomInventory")
-    .apply { isAccessible = true }
+    get() = loadProxy(OpenInventoryAccessor::class.java).getTopInventory(this)
 
 val CraftItemEvent.topInventory: Inventory
-    get() {
-        val view = viewMethod.invoke(this)
-        return viewTopInventoryMethod.invoke(view) as Inventory
-    }
+    get() = loadProxy(OpenInventoryAccessor::class.java).getTopInventory(this)
 
 val CraftItemEvent.bottomInventory: Inventory
-    get() {
-        val view = viewMethod.invoke(this)
-        return viewBottomInventoryMethod.invoke(view) as Inventory
-    }
+    get() = loadProxy(OpenInventoryAccessor::class.java).getBottomInventory(this)
