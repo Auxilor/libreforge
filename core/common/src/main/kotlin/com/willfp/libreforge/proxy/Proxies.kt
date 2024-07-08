@@ -30,8 +30,13 @@ private fun loadProxyUncached(clazz: Class<*>): Any {
 
     try {
         val found = Class.forName(className)
+
         val constructor = found.getConstructor()
         val instance = constructor.newInstance()
+
+        if (!clazz.isInstance(instance)) {
+            throw InvalidProxyException("Proxy class $className does not implement ${clazz.name}")
+        }
 
         return instance
     } catch (e: ClassNotFoundException) {
