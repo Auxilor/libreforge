@@ -12,7 +12,7 @@ internal annotation class Proxy(
     val location: String
 )
 
-private class InvalidProxyException(message: String) : Exception(message)
+class InvalidProxyException(message: String) : Exception(message)
 
 private val cache = mutableMapOf<Class<*>, Any>()
 
