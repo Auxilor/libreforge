@@ -17,16 +17,13 @@ import java.util.UUID
 object TriggerPlaceholderHits : TriggerPlaceholder("hits") {
     private const val HITS_META_KEY = "libreforge_tracked_hits"
 
+    private val placeholdersHits = plugin.triggersPlaceholdersYml.getStringsOrNull("placeholders.${this.id}.aliases.hits") ?: emptyList()
+
     override fun createPlaceholders(data: TriggerData): Collection<NamedValue> {
         val victim = data.victim ?: return emptyList()
         val player = data.player ?: return emptyList()
 
-        return listOf(
-            NamedValue(
-                "hits",
-                victim.getHits(player)
-            )
-        )
+        return listOfNotNull(if (placeholdersHits.isNotEmpty()) NamedValue(placeholdersHits, victim.getHits(player)) else null)
     }
 
     @EventHandler

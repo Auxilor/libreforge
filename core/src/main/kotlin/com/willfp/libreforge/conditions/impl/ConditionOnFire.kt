@@ -7,6 +7,7 @@ import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.get
 import com.willfp.libreforge.toDispatcher
+import com.willfp.libreforge.triggers.hasCondition
 import com.willfp.libreforge.updateEffects
 import org.bukkit.entity.Entity
 import org.bukkit.event.EventHandler
@@ -35,6 +36,10 @@ object ConditionOnFire : Condition<NoCompileData>("on_fire") {
             return
         }
 
-        event.entity.toDispatcher().updateEffects()
+        val entity = event.entity.toDispatcher()
+
+        if (!entity.hasCondition(this)) return
+
+        entity.updateEffects()
     }
 }

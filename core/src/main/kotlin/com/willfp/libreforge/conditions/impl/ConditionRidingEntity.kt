@@ -10,6 +10,7 @@ import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.get
 import com.willfp.libreforge.toDispatcher
+import com.willfp.libreforge.triggers.hasCondition
 import com.willfp.libreforge.updateEffects
 import org.bukkit.entity.Entity
 import org.bukkit.event.EventHandler
@@ -41,11 +42,19 @@ object ConditionRidingEntity : Condition<Collection<TestableEntity>>("riding_ent
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun handle(event: EntityDismountEvent) {
-        event.entity.toDispatcher().updateEffects()
+        val entity = event.entity.toDispatcher()
+
+        if (!entity.hasCondition(this)) return
+
+        entity.updateEffects()
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun handle(event: EntityMountEvent) {
-        event.entity.toDispatcher().updateEffects()
+        val entity = event.entity.toDispatcher()
+
+        if (!entity.hasCondition(this)) return
+
+        entity.updateEffects()
     }
 }

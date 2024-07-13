@@ -6,6 +6,7 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.toDispatcher
+import com.willfp.libreforge.triggers.hasCondition
 import com.willfp.libreforge.updateEffects
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
@@ -25,7 +26,11 @@ object ConditionIsStorm: Condition<NoCompileData>("is_storm") {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun handle(event: WeatherChangeEvent) {
         for (entity in event.world.entities) {
-            entity.toDispatcher().updateEffects()
+            val dispatcher = entity.toDispatcher()
+
+            if (!dispatcher.hasCondition(this)) return
+
+            dispatcher.updateEffects()
         }
     }
 }

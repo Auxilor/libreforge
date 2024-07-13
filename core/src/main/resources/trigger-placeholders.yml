@@ -1,0 +1,76 @@
+#In this section you can add / change / remove aliases for trigger placeholders
+#If you remove all aliases from placeholder, this placeholder will be not parsed.
+#You can use this section as for optimization by removing unnecessary placeholders
+#or improve placeholder naming for your need.
+#List of placeholders that have aliases: https://plugins.auxilor.io/effects/configuring-an-effect#placeholders
+
+placeholders:
+  location:
+    aliases:
+      x:
+        - "location_x"
+        - "loc_x"
+        - "x"
+      y:
+        - "location_y"
+        - "loc_y"
+        - "y"
+      z:
+        - "location_z"
+        - "loc_z"
+        - "z"
+      xBlock:
+        - "location_block_x"
+        - "loc_b_x"
+        - "block_x"
+        - "bx"
+      yBlock:
+        - "location_block_y"
+        - "loc_b_y"
+        - "block_y"
+        - "by"
+      zBlock:
+        - "location_block_z"
+        - "loc_b_z"
+        - "block_z"
+        - "bz"
+      world:
+        - "location_world"
+        - "loc_w"
+        - "world"
+  player:
+    aliases:
+      name:
+        - "player"
+      uuid:
+        - "player_uuid"
+  text:
+    aliases:
+      text:
+        - "text"
+        - "string"
+        - "message"
+  trigger_value:
+    aliases:
+      value:
+        - "trigger_value"
+        - "triggervalue"
+        - "trigger"
+        - "value"
+        - "tv"
+        - "v"
+        - "t"
+  victim:
+    aliases:
+      health:
+        - "victim_health"
+      max_health:
+        - "victim_max_health"
+  hits:
+    aliases:
+      hits:
+        - "hits"
+  distance:
+    aliases:
+      distance:
+        - "distance"

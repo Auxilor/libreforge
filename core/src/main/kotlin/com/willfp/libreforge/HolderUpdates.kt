@@ -29,6 +29,7 @@ class ItemRefreshListener(
 
     @EventHandler(priority = EventPriority.LOWEST)
     fun onItemPickup(event: EntityPickupItemEvent) {
+        if (!plugin.configYml.getBool("refresh.pickup.enabled")) return
         if (plugin.configYml.getBool("refresh.pickup.require-meta")) {
             if (!event.item.itemStack.hasItemMeta()) {
                 return
@@ -47,6 +48,13 @@ class ItemRefreshListener(
 
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onInventoryDrop(event: PlayerDropItemEvent) {
+        if (!plugin.configYml.getBool("refresh.drop.enabled")) return
+        if (plugin.configYml.getBool("refresh.drop.require-meta")) {
+            if (!event.itemDrop.itemStack.hasItemMeta()) {
+                return
+            }
+        }
+
         event.player.toDispatcher().refreshHolders()
     }
 

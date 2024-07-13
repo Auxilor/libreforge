@@ -7,6 +7,7 @@ import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.get
 import com.willfp.libreforge.toDispatcher
+import com.willfp.libreforge.triggers.hasCondition
 import com.willfp.libreforge.updateEffects
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -27,6 +28,11 @@ object ConditionIsSneaking : Condition<NoCompileData>("is_sneaking") {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun handle(event: PlayerToggleSneakEvent) {
+
+        val player = event.player.toDispatcher()
+
+        if (!player.hasCondition(this)) return
+
         event.player.toDispatcher().updateEffects()
     }
 }

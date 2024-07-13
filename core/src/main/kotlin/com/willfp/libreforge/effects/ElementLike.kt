@@ -104,7 +104,7 @@ abstract class ElementLike : ConfigurableElement {
         }
 
         // Inject placeholders everywhere after mutation
-        trigger.generatePlaceholders(data)
+        if (mutators.isNotEmpty()) trigger.generatePlaceholders(data)
         injectPlaceholders(trigger.placeholders)
 
         // Filter

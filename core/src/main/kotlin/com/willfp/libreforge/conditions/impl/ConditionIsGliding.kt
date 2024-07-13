@@ -7,6 +7,7 @@ import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.get
 import com.willfp.libreforge.toDispatcher
+import com.willfp.libreforge.triggers.hasCondition
 import com.willfp.libreforge.updateEffects
 import org.bukkit.entity.LivingEntity
 import org.bukkit.event.EventHandler
@@ -27,6 +28,10 @@ object ConditionIsGliding : Condition<NoCompileData>("is_gliding") {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun handle(event: EntityToggleGlideEvent) {
-        event.entity.toDispatcher().updateEffects()
+        val entity = event.entity.toDispatcher()
+
+        if (!entity.hasCondition(this)) return
+
+        entity.updateEffects()
     }
 }

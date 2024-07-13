@@ -8,6 +8,7 @@ import com.willfp.eco.core.integrations.IntegrationLoader
 import com.willfp.eco.core.integrations.afk.AFKManager
 import com.willfp.libreforge.commands.CommandLibreforge
 import com.willfp.libreforge.configs.ChainsYml
+import com.willfp.libreforge.configs.TriggerPlaceholdersYml
 import com.willfp.libreforge.configs.lrcdb.CommandLrcdb
 import com.willfp.libreforge.display.ItemFlagDisplay
 import com.willfp.libreforge.effects.Effects
@@ -43,6 +44,7 @@ internal lateinit var plugin: LibreforgeSpigotPlugin
 
 class LibreforgeSpigotPlugin : EcoPlugin() {
     val chainsYml = ChainsYml(this)
+    val triggersPlaceholdersYml = TriggerPlaceholdersYml(this)
 
     val dispatchedTriggerFactory = DispatchedTriggerFactory(this)
 

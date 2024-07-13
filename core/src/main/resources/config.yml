@@ -140,7 +140,15 @@ refresh:
   # Set to 0 to disable.
   cooldown: 250
 
+  drop:
+    # Dropping items should trigger a refresh
+    enabled: true
+    # If dropped items must have item meta (NBT Data) in order to trigger a refresh
+    require-meta: true
+
   pickup:
+    # Picking up items should trigger a refresh
+    enabled: true
     # If picked up items must have item meta (NBT Data) in order to trigger a refresh
     require-meta: true
 
