@@ -11,5 +11,8 @@ plugins {
 rootProject.name = "libreforge"
 
 include(":core")
+include(":core:common")
+include(":core:modern")
+include(":core:legacy")
 include(":loader")
 include(":gradle-plugin")
