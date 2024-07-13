@@ -18,5 +18,5 @@ object EffectSafeFallDistance : AttributeEffect(
     }
 
     override fun getValue(config: Config, entity: LivingEntity) =
-        config.getDoubleFromExpression("amount", entity as? Player)
+        config.getDoubleFromExpression("distance", entity as? Player)
 }
