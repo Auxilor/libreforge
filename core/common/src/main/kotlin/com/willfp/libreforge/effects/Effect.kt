@@ -88,7 +88,7 @@ abstract class Effect<T>(
 
         val withHolder = config.config.applyHolder(holder, dispatcher)
 
-        onEnable(dispatcher, withHolder, identifierFactory.makeIdentifiers(count), holder, config.compileData)
+        onEnable(dispatcher, withHolder, identifierFactory.makeIdentifiers(count), holder, config.compileData, isReload)
 
         // Legacy support
         dispatcher.ifType<Player> {
@@ -105,9 +105,24 @@ abstract class Effect<T>(
         config: Config,
         identifiers: Identifiers,
         holder: ProvidedHolder,
-        compileData: T
+        compileData: T,
     ) {
         // Override when needed.
+    }
+
+    /**
+     * Handle the enabling of this permanent effect.
+     */
+    protected open fun onEnable(
+        dispatcher: Dispatcher<*>,
+        config: Config,
+        identifiers: Identifiers,
+        holder: ProvidedHolder,
+        compileData: T,
+        isReload: Boolean = false
+    ) {
+        // Override when needed.
+        onEnable(dispatcher, config, identifiers, holder, compileData)
     }
 
     /**
@@ -128,7 +143,7 @@ abstract class Effect<T>(
 
         val count = effectCounter[dispatcher.uuid]--
 
-        onDisable(dispatcher, identifierFactory.makeIdentifiers(count), holder)
+        onDisable(dispatcher, identifierFactory.makeIdentifiers(count), holder, isReload)
 
         // Legacy support
         dispatcher.ifType<Player> {
@@ -143,9 +158,22 @@ abstract class Effect<T>(
     protected open fun onDisable(
         dispatcher: Dispatcher<*>,
         identifiers: Identifiers,
-        holder: ProvidedHolder
+        holder: ProvidedHolder,
     ) {
         // Override when needed.
+    }
+
+    /**
+     * Handle the disabling of this permanent effect.
+     */
+    protected open fun onDisable(
+        dispatcher: Dispatcher<*>,
+        identifiers: Identifiers,
+        holder: ProvidedHolder,
+        isReload: Boolean = false
+    ) {
+        // Override when needed.
+        onDisable(dispatcher, identifiers, holder)
     }
 
     /**
