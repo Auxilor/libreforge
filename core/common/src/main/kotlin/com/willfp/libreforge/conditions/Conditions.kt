@@ -31,6 +31,7 @@ import com.willfp.libreforge.conditions.impl.ConditionHasPotionEffect
 import com.willfp.libreforge.conditions.impl.ConditionInAir
 import com.willfp.libreforge.conditions.impl.ConditionInBiome
 import com.willfp.libreforge.conditions.impl.ConditionInBlock
+import com.willfp.libreforge.conditions.impl.ConditionInGamemode
 import com.willfp.libreforge.conditions.impl.ConditionInMainhand
 import com.willfp.libreforge.conditions.impl.ConditionInOffhand
 import com.willfp.libreforge.conditions.impl.ConditionInSlot
@@ -216,5 +217,6 @@ object Conditions : Registry<Condition<*>>() {
         register(ConditionInSlot)
         register(ConditionIsAlive)
         register(ConditionIsSubmerged)
+        register(ConditionInGamemode)
     }
 }
