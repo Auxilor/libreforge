@@ -17,6 +17,8 @@ object EffectBonusHealth : AttributeEffect(
         require("health", "You must specify the bonus health to give!")
     }
 
+    override val shouldReload = false
+
     override fun getValue(config: Config, entity: LivingEntity) =
         config.getDoubleFromExpression("health", entity as? Player)
 
