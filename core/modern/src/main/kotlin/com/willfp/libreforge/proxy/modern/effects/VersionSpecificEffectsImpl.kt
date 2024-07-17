@@ -2,6 +2,7 @@ package com.willfp.libreforge.proxy.modern.effects
 
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.VersionSpecificEffects
+import com.willfp.libreforge.proxy.modern.effects.impl.EffectAddDurability
 import com.willfp.libreforge.proxy.modern.effects.impl.EffectBlockReach
 import com.willfp.libreforge.proxy.modern.effects.impl.EffectEntityReach
 import com.willfp.libreforge.proxy.modern.effects.impl.EffectGravityMultiplier
@@ -28,6 +29,7 @@ class VersionSpecificEffectsImpl: VersionSpecificEffects {
             register(EffectSneakingSpeedMultiplier)
             register(EffectUnderwaterMiningSpeedMultiplier)
             register(EffectSafeFallDistance)
+            register(EffectAddDurability)
         }
     }
 }
