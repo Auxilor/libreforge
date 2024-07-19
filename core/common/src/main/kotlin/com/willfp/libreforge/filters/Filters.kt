@@ -11,6 +11,7 @@ import com.willfp.libreforge.filters.impl.FilterAboveHealthPercent
 import com.willfp.libreforge.filters.impl.FilterAdvancements
 import com.willfp.libreforge.filters.impl.FilterBlocks
 import com.willfp.libreforge.filters.impl.FilterDamageCause
+import com.willfp.libreforge.filters.impl.FilterEnchant
 import com.willfp.libreforge.filters.impl.FilterEntities
 import com.willfp.libreforge.filters.impl.FilterFromSpawner
 import com.willfp.libreforge.filters.impl.FilterFullyCharged
@@ -118,5 +119,6 @@ object Filters : Registry<Filter<*, *>>() {
         register(FilterIsExpressionTrue)
         register(FilterAdvancements)
         register(FilterThisItem)
+        register(FilterEnchant)
     }
 }

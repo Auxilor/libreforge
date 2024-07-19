@@ -215,6 +215,7 @@ object Conditions : Registry<Condition<*>>() {
         register(ConditionHasCompletedAdvancement)
         register(ConditionLightLevelBelow)
         register(ConditionInSlot)
+        register(ConditionHasEnchant)
         register(ConditionIsAlive)
         register(ConditionIsSubmerged)
         register(ConditionInGamemode)
