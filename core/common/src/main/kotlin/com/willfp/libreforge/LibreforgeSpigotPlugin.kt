@@ -199,12 +199,14 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
         )
     }
 
-    override fun createDisplayModule(): DisplayModule {
-        return displayModule
+    override fun loadDisplayModules(): List<DisplayModule> {
+        return listOf(
+            displayModule
+        )
     }
 
     override fun getMinimumEcoVersion(): String {
-        return "6.70.0"
+        return "6.73.0"
     }
 
     /**
