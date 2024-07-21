@@ -6,8 +6,10 @@ import com.willfp.eco.core.command.impl.PluginCommand
 import com.willfp.eco.core.display.DisplayModule
 import com.willfp.eco.core.integrations.IntegrationLoader
 import com.willfp.eco.core.integrations.afk.AFKManager
+import com.willfp.eco.core.items.Items
 import com.willfp.libreforge.commands.CommandLibreforge
 import com.willfp.libreforge.configs.ChainsYml
+import com.willfp.libreforge.configs.TagsYml
 import com.willfp.libreforge.configs.lrcdb.CommandLrcdb
 import com.willfp.libreforge.display.ItemFlagDisplay
 import com.willfp.libreforge.effects.Effects
@@ -33,6 +35,7 @@ import com.willfp.libreforge.integrations.worldguard.WorldGuardIntegration
 import com.willfp.libreforge.levels.LevelTypes
 import com.willfp.libreforge.levels.placeholder.*
 import com.willfp.libreforge.placeholders.CustomPlaceholders
+import com.willfp.libreforge.tags.CustomTag
 import com.willfp.libreforge.triggers.DispatchedTriggerFactory
 import org.bukkit.Bukkit
 import org.bukkit.entity.LivingEntity
@@ -43,6 +46,7 @@ internal lateinit var plugin: LibreforgeSpigotPlugin
 
 class LibreforgeSpigotPlugin : EcoPlugin() {
     val chainsYml = ChainsYml(this)
+    val tagsYml = TagsYml(this)
 
     val dispatchedTriggerFactory = DispatchedTriggerFactory(this)
 
@@ -104,6 +108,10 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
                     ViolationContext(this, "chains.yml")
                 ) ?: continue
             )
+        }
+
+        for (config in tagsYml.getSubsections("tags")) {
+            Items.registerTag(CustomTag(config, this))
         }
 
         for (customPlaceholder in this.configYml.getSubsections("placeholders")) {

@@ -1,0 +1,8 @@
+# Custom item tags, read here for more: https://plugins.auxilor.io/all-plugins/the-item-lookup-system#item-tags
+# You can use these tags in the item lookup system with "#libreforge:<tag_id>"
+
+tags:
+  - id: example_tag
+    items:
+      - "netherite_sword"
+      - "diamond_sword"
