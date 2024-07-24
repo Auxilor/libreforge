@@ -33,6 +33,7 @@ import com.willfp.libreforge.filters.impl.FilterPlayerName
 import com.willfp.libreforge.filters.impl.FilterPlayerPlaced
 import com.willfp.libreforge.filters.impl.FilterPotionEffect
 import com.willfp.libreforge.filters.impl.FilterProjectiles
+import com.willfp.libreforge.filters.impl.FilterSpawnerEntity
 import com.willfp.libreforge.filters.impl.FilterText
 import com.willfp.libreforge.filters.impl.FilterTextContains
 import com.willfp.libreforge.filters.impl.FilterThisItem
@@ -120,5 +121,6 @@ object Filters : Registry<Filter<*, *>>() {
         register(FilterAdvancements)
         register(FilterThisItem)
         register(FilterEnchant)
+        register(FilterSpawnerEntity)
     }
 }
