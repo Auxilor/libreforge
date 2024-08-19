@@ -1,14 +1,11 @@
 package com.willfp.libreforge.integrations.custombiomes.impl
 
-import com.dfsek.terra.api.world.biome.Biome
-import com.dfsek.terra.bukkit.world.BukkitAdapter
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.libreforge.integrations.custombiomes.CustomBiomesIntegration
 import com.willfp.libreforge.integrations.custombiomes.NamedBiome
 import com.willfp.libreforge.integrations.custombiomes.customBiomesIntegrations
 import org.bukkit.Location
 import org.terraform.biome.BiomeBank
-import org.terraform.coregen.bukkit.TerraformGenerator
 import org.terraform.data.TerraformWorld
 
 object CustomBiomesTerraformGenerator : CustomBiomesIntegration {

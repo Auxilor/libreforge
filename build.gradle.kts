@@ -25,7 +25,6 @@ allprojects {
 
     repositories {
         mavenCentral()
-        mavenLocal()
         maven("https://repo.auxilor.io/repository/maven-public/")
         maven("https://repo.papermc.io/repository/maven-public/")
         maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
@@ -33,7 +32,6 @@ allprojects {
         maven("https://maven.enginehub.org/repo/")
         maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
         maven("https://maven.citizensnpcs.co/repo")
-        maven("https://nexuslite.gcnt.net/repos/other/")
     }
 
     dependencies {
