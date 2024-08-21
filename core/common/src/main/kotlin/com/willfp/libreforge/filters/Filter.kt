@@ -36,13 +36,18 @@ abstract class Filter<T, V>(
     ): Boolean {
         val cfg = config.config
 
-        val isInverted = config.isInverted ?: return true
+        val types = config.types
+        val results = mutableSetOf<Boolean>()
 
-        return if (isInverted) {
-            !isMet(data, getValue(cfg, data, "not_$id"), config.compileData)
-        } else {
-            isMet(data, getValue(cfg, data, id), config.compileData)
+        if (FilterType.REGULAR in types) {
+            results += isMet(data, getValue(cfg, data, id), config.compileData)
         }
+
+        if (FilterType.INVERTED in types) {
+            results += !isMet(data, getValue(cfg, data, "not_$id"), config.compileData)
+        }
+
+        return results.all { it }
     }
 
     /**
