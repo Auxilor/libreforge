@@ -36,9 +36,7 @@ abstract class Filter<T, V>(
     ): Boolean {
         val cfg = config.config
 
-        val isInverted = config.isInverted ?: return true
-
-        return if (isInverted) {
+        return if (config.isInverted) {
             !isMet(data, getValue(cfg, data, "not_$id"), config.compileData)
         } else {
             isMet(data, getValue(cfg, data, id), config.compileData)

@@ -10,21 +10,9 @@ import com.willfp.libreforge.triggers.TriggerData
 class FilterBlock<T, V> internal constructor(
     val filter: Filter<T, V>,
     override val config: Config,
-    override val compileData: T
+    override val compileData: T,
+    val isInverted: Boolean
 ) : Compiled<T> {
-    val isInverted: Boolean? by lazy {
-        val cfg = config
-
-        val regularPresent = cfg.has(filter.id)
-        val inversePresent = cfg.has("not_${filter.id}")
-
-        if (!regularPresent && !inversePresent) {
-            null
-        } else {
-            inversePresent
-        }
-    }
-
     fun isMet(data: TriggerData) =
         filter.isMet(data, this)
 }

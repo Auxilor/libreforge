@@ -52,8 +52,13 @@ object Filters : Registry<Filter<*, *>>() {
         val blocks = mutableListOf<FilterBlock<*, *>>()
 
         for (key in config.getKeys(false)) {
-            val filter = get(key) ?: get(key.removePrefix("not_")) ?: continue
-            blocks += makeBlock(filter, config, context) ?: continue
+            if (key.startsWith("not_")) {
+                val filter = get(key.removePrefix("not_")) ?: continue
+                blocks += makeBlock(filter, config, true, context) ?: continue
+            } else {
+                val filter = get(key) ?: continue
+                blocks += makeBlock(filter, config, false, context) ?: continue
+            }
         }
 
         return FilterList(blocks)
@@ -62,6 +67,7 @@ object Filters : Registry<Filter<*, *>>() {
     private fun <T, V> makeBlock(
         filter: Filter<T, V>,
         config: Config,
+        inverted: Boolean,
         context: ViolationContext
     ): FilterBlock<T, V>? {
         if (filter.deprecationMessage != null) {
@@ -77,14 +83,14 @@ object Filters : Registry<Filter<*, *>>() {
             return null
         }
 
-        val configKey = if (config.has("not_${filter.id}")) {
+        val configKey = if (inverted) {
             "not_${filter.id}"
         } else {
             filter.id
         }
 
         val compileData = filter.makeCompileData(config, context, filter.getValue(config, null, configKey))
-        return FilterBlock(filter, config, compileData)
+        return FilterBlock(filter, config, compileData, inverted)
     }
 
     init {
