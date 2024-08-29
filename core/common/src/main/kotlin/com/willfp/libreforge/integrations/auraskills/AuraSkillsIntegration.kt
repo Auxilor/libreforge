@@ -7,11 +7,11 @@ import com.willfp.libreforge.effects.arguments.EffectArguments
 import com.willfp.libreforge.integrations.LoadableIntegration
 import com.willfp.libreforge.integrations.auraskills.impl.ArgumentManaCost
 import com.willfp.libreforge.integrations.auraskills.impl.ConditionHasMana
+import com.willfp.libreforge.integrations.auraskills.impl.ConditionHasSkillLevel
 import com.willfp.libreforge.integrations.auraskills.impl.EffectAddStat
 import com.willfp.libreforge.integrations.auraskills.impl.EffectSkillXpMultiplier
 
 object AuraSkillsIntegration : LoadableIntegration {
-
     override fun load(plugin: EcoPlugin) {
         if (plugin.server.pluginManager.getPlugin("EcoSkills") != null) {
             return
@@ -19,6 +19,7 @@ object AuraSkillsIntegration : LoadableIntegration {
 
         Effects.register(EffectAddStat)
         Conditions.register(ConditionHasMana)
+        Conditions.register(ConditionHasSkillLevel)
         Effects.register(EffectSkillXpMultiplier)
         EffectArguments.register(ArgumentManaCost)
     }
