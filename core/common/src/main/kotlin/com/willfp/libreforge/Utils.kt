@@ -1,6 +1,7 @@
 package com.willfp.libreforge
 
 import com.willfp.eco.core.items.Items
+import com.willfp.eco.util.namespacedKeyOf
 import com.willfp.libreforge.proxy.Proxy
 import com.willfp.libreforge.proxy.loadProxy
 import org.bukkit.Bukkit
@@ -93,8 +94,14 @@ fun ItemStack.applyDamage(damage: Int, player: Player?): Boolean {
 }
 
 // 1.21 compat
-fun getEnchantment(id: String): Enchantment? =
-    Enchantment.getByKey(NamespacedKey.minecraft(id))
+fun getEnchantment(id: String): Enchantment? {
+    if (id.contains(':')) {
+        val key = namespacedKeyOf(id)
+        return Enchantment.getByKey(key)
+    } else {
+        return Enchantment.getByKey(NamespacedKey.minecraft(id))
+    }
+}
 
 @Proxy("OpenInventoryAccessorImpl")
 interface OpenInventoryAccessor {
