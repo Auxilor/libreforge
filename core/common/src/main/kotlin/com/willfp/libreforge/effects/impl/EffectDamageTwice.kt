@@ -23,6 +23,7 @@ object EffectDamageTwice : Effect<NoCompileData>("damage_twice") {
         val victim = data.victim ?: return false
 
         if (victim.hasMetadata(META_KEY)) {
+            victim.removeMetadata(META_KEY, plugin)
             return false
         }
 
