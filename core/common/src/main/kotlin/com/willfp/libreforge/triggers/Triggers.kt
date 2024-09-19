@@ -138,7 +138,5 @@ object Triggers : Registry<Trigger>() {
         register(TriggerEntityTeleport)
         register(TriggerCompleteAdvancement)
         register(TriggerSmithItem)
-        register(TriggerCollectHoneycomb)
-        register(TriggerCollectHoney)
     }
 }
