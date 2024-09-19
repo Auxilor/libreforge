@@ -9,7 +9,7 @@ import org.bukkit.block.data.type.Beehive
 
 object FilterHoneyLevelFull : Filter<NoCompileData, Boolean>("honey_level_full") {
     override fun getValue(config: Config, data: TriggerData?, key: String): Boolean {
-        return true // This filter checks for maximum honey level (5)
+        return true
     }
 
     override fun isMet(data: TriggerData, value: Boolean, compileData: NoCompileData): Boolean {
