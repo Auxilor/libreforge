@@ -139,5 +139,6 @@ object Triggers : Registry<Trigger>() {
         register(TriggerCompleteAdvancement)
         register(TriggerSmithItem)
         register(TriggerCollectHoneycomb)
+        register(TriggerCollectHoney)
     }
 }
