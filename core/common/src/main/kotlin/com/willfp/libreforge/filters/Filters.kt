@@ -96,5 +96,6 @@ object Filters : Registry<Filter<*, *>>() {
         register(FilterSpawnerEntity)
         register(FilterSwept)
         register(FilterHoneyLevelFull)
+        register(FilterEntityColor)
     }
 }
