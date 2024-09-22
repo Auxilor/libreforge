@@ -12,6 +12,7 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.Material
 import org.bukkit.block.Block
+import org.bukkit.block.BlockFace
 import kotlin.math.abs
 
 object EffectMineRadiusOneDeep : MineBlockEffect<NoCompileData>("mine_radius_one_deep") {
@@ -35,27 +36,32 @@ object EffectMineRadiusOneDeep : MineBlockEffect<NoCompileData>("mine_radius_one
 
         val whitelist = config.getStringsOrNull("whitelist")
 
+        // Get the block face the player is interacting with
+        val targetBlock = player.getTargetBlockExact(5) ?: return false
+        val blockFace = block.getFace(targetBlock) ?: return false
+
         val blocks = mutableSetOf<Block>()
 
-        val ignoreVector = player.location.direction.simplify()
+        // Determine the range and direction based on the block face
+        val (xRange, yRange, zRange) = when (blockFace) {
+            BlockFace.UP, BlockFace.DOWN -> {
+                val yRange = if (blockFace == BlockFace.UP) 0..radius else -radius..0
+                Triple(-radius..radius, yRange, -radius..radius)
+            }
+            BlockFace.NORTH, BlockFace.SOUTH -> {
+                val zRange = if (blockFace == BlockFace.NORTH) -radius..0 else 0..radius
+                Triple(-radius..radius, -radius..radius, zRange)
+            }
+            BlockFace.EAST, BlockFace.WEST -> {
+                val xRange = if (blockFace == BlockFace.EAST) 0..radius else -radius..0
+                Triple(xRange, -radius..radius, -radius..radius)
+            }
+            else -> return false  // In case of invalid or unexpected block face
+        }
 
-        for (x in (-radius..radius)) {
-            for (y in (-radius..radius)) {
-                for (z in (-radius..radius)) {
-                    // Jank
-                    if (ignoreVector.x != 0.0 && x != 0) {
-                        continue
-                    }
-
-                    if (ignoreVector.y != 0.0 && y != 0) {
-                        continue
-                    }
-
-                    if (ignoreVector.z != 0.0 && z != 0) {
-                        continue
-                    }
-                    // End Jank
-
+        for (x in xRange) {
+            for (y in yRange) {
+                for (z in zRange) {
                     if (x == 0 && y == 0 && z == 0) {
                         continue
                     }
@@ -118,4 +124,5 @@ object EffectMineRadiusOneDeep : MineBlockEffect<NoCompileData>("mine_radius_one
 
         return true
     }
+
 }
