@@ -27,7 +27,7 @@ internal class CommandPointsTake(plugin: EcoPlugin): Subcommand(
 
         val player = Bukkit.getPlayer(playerString)
 
-        if (player == null && playerString.equals("global", ignoreCase = true)) {
+        if (player == null && !playerString.equals("global", ignoreCase = true)) {
             sender.sendMessage(plugin.langYml.getMessage("invalid-player"))
             return
         }
