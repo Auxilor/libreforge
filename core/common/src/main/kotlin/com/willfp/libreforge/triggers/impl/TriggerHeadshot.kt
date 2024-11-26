@@ -38,7 +38,8 @@ object TriggerHeadshot : Trigger("headshot") {
                 location = victim.location,
                 event = event,
                 velocity = projectile.velocity,
-                value = event.finalDamage
+                value = event.finalDamage,
+                projectile = projectile
             )
         )
     }
