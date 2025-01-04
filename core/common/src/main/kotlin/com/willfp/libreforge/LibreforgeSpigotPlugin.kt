@@ -19,9 +19,9 @@ import com.willfp.libreforge.integrations.auraskills.AuraSkillsIntegration
 import com.willfp.libreforge.integrations.aureliumskills.AureliumSkillsIntegration
 import com.willfp.libreforge.integrations.axenvoy.AxEnvoyIntegration
 import com.willfp.libreforge.integrations.citizens.CitizensIntegration
-import com.willfp.libreforge.integrations.votifier.VotifierIntegration
 import com.willfp.libreforge.integrations.custombiomes.impl.CustomBiomesTerra
 import com.willfp.libreforge.integrations.custombiomes.impl.CustomBiomesTerraformGenerator
+import com.willfp.libreforge.integrations.fancynpcs.FancyNPCsIntegration
 import com.willfp.libreforge.integrations.jobs.JobsIntegration
 import com.willfp.libreforge.integrations.levelledmobs.LevelledMobsIntegration
 import com.willfp.libreforge.integrations.mcmmo.McMMOIntegration
@@ -31,6 +31,7 @@ import com.willfp.libreforge.integrations.scyther.ScytherIntegration
 import com.willfp.libreforge.integrations.tab.TabIntegration
 import com.willfp.libreforge.integrations.tmmobcoins.TMMobcoinsIntegration
 import com.willfp.libreforge.integrations.vault.VaultIntegration
+import com.willfp.libreforge.integrations.votifier.VotifierIntegration
 import com.willfp.libreforge.integrations.worldguard.WorldGuardIntegration
 import com.willfp.libreforge.levels.LevelTypes
 import com.willfp.libreforge.levels.placeholder.*
@@ -195,8 +196,9 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             IntegrationLoader("Terra") { CustomBiomesTerra.load(this) },
             IntegrationLoader("TerraformGenerator") { CustomBiomesTerraformGenerator.load(this) },
             IntegrationLoader("AxEnvoy") { AxEnvoyIntegration.load(this) },
-            IntegrationLoader("Votifier") { VotifierIntegration.load(this)},
-            IntegrationLoader("ModelEngine") { ModelEngineIntegration.load(this) }
+            IntegrationLoader("Votifier") { VotifierIntegration.load(this) },
+            IntegrationLoader("ModelEngine") { ModelEngineIntegration.load(this) },
+            IntegrationLoader("FancyNpcs") { FancyNPCsIntegration.load(this) }
         )
     }
 
