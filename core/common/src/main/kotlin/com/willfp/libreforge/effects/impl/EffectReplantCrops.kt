@@ -82,12 +82,12 @@ object EffectReplantCrops : Effect<NoCompileData>("replant_crops") {
             return
         }
 
-        val consumeSeeds = players[player.uniqueId].any {
-            it.consumeSeeds
-        }
+        val playerConfigs = players[player.uniqueId]
+        val consumeSeeds = playerConfigs.any { it.consumeSeeds }
+        val onlyFullyGrown = playerConfigs.all { it.onlyFullyGrown }
 
-        val onlyFullyGrown = players[player.uniqueId].all {
-            it.onlyFullyGrown
+        if (onlyFullyGrown && data.age != data.maximumAge) {
+            return
         }
 
         if (consumeSeeds) {
