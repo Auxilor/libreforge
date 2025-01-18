@@ -2,6 +2,7 @@ package com.willfp.libreforge.commands
 
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.command.impl.Subcommand
+import com.willfp.eco.util.formatEco
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.GlobalDispatcher
 import com.willfp.libreforge.get
@@ -62,7 +63,8 @@ internal class CommandTrigger(
             return
         }
 
-        val value = args.getOrNull(2)?.toDoubleOrNull()
+        val value = args.getOrNull(2)?.formatEco(Bukkit.getPlayer(dispatcherName), true)
+            ?.toDoubleOrNull()
 
         for (dispatcher in dispatchers) {
             TriggerGroupCustom.create(trigger).dispatch(
