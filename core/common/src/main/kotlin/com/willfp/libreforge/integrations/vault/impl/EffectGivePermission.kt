@@ -38,7 +38,7 @@ class EffectGivePermission(
 
         val permission = config.getString("permission")
 
-        permissions[dispatcher.uuid] += GivenPermission(permission, identifiers.uuid)
+        permissions[dispatcher.uuid].add(GivenPermission(permission, identifiers.uuid))
         handler.playerAdd(player, permission)
     }
 

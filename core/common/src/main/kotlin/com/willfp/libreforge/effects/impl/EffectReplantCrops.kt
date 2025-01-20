@@ -36,11 +36,11 @@ object EffectReplantCrops : Effect<NoCompileData>("replant_crops") {
         holder: ProvidedHolder,
         compileData: NoCompileData
     ) {
-        players[dispatcher.uuid] += ReplantConfig(
+        players[dispatcher.uuid].add(ReplantConfig(
             identifiers.uuid,
             config.getBool("consume_seeds"),
             config.getBool("only_fully_grown")
-        )
+        ))
     }
 
     override fun onDisable(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder) {

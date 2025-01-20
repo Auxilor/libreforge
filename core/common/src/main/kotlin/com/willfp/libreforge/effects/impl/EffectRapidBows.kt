@@ -37,9 +37,9 @@ object EffectRapidBows : Effect<NoCompileData>("rapid_bows") {
         holder: ProvidedHolder,
         compileData: NoCompileData
     ) {
-        modifiers[dispatcher.uuid] += IdentifiedModifier(identifiers.uuid) {
+        modifiers[dispatcher.uuid].add(IdentifiedModifier(identifiers.uuid) {
             config.getDoubleFromExpression("percent_faster", dispatcher.get())
-        }
+        })
     }
 
     override fun onDisable(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder) {

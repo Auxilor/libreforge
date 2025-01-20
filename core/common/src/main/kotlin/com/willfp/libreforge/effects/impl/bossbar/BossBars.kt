@@ -13,7 +13,7 @@ object BossBars {
             return
         }
 
-        registry[bossBar.id] += bossBar
+        registry[bossBar.id].add(bossBar)
         val player = Bukkit.getPlayer(bossBar.uuid) ?: return
         bossBar.bossBar.addViewer(player.asAudience())
     }
