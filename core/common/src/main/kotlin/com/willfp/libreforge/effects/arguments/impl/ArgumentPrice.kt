@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.arguments.impl
 import com.willfp.eco.core.price.Prices
 import com.willfp.eco.util.NumberUtils
 import com.willfp.eco.util.PlayerUtils
+import com.willfp.eco.util.SoundUtils
 import com.willfp.eco.util.StringUtils
 import com.willfp.libreforge.ConfigurableElement
 import com.willfp.libreforge.NoCompileData
@@ -76,7 +77,7 @@ object ArgumentPrice : EffectArgument<NoCompileData>("price") {
         if (plugin.configYml.getBool("cannot-afford-price.sound.enabled")) {
             player.playSound(
                 player.location,
-                Sound.valueOf(plugin.configYml.getString("cannot-afford-price.sound.sound").uppercase()),
+                SoundUtils.getSound(plugin.configYml.getString("cannot-afford-price.sound.sound"))!!,
                 1.0f,
                 plugin.configYml.getDouble("cannot-afford-price.sound.pitch").toFloat()
             )

@@ -24,6 +24,7 @@ allprojects {
     apply(plugin = "io.github.goooler.shadow")
 
     repositories {
+        mavenLocal() // TODO: REMOVE
         mavenCentral()
         maven("https://repo.auxilor.io/repository/maven-public/")
         maven("https://repo.papermc.io/repository/maven-public/")
