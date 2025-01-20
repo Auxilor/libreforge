@@ -13,8 +13,8 @@ object FilterEnvoyType : Filter<NoCompileData, Collection<String>>("envoy_type")
 
     override fun isMet(data: TriggerData, value: Collection<String>, compileData: NoCompileData): Boolean {
         val event = data.event as? EnvoyCrateCollectEvent ?: return true
-
         val crateType = event.crate?.handle?.name ?: return true
+
         return value.contains(crateType)
     }
 }
