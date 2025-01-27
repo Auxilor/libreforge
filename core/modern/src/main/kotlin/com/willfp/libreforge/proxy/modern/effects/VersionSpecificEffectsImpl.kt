@@ -30,6 +30,7 @@ class VersionSpecificEffectsImpl: VersionSpecificEffects {
             register(EffectUnderwaterMiningSpeedMultiplier)
             register(EffectSafeFallDistance)
             register(EffectAddDurability)
+            register(EffectScaleMultiplier)
         }
     }
 }
