@@ -32,6 +32,8 @@ internal fun checkHighestVersion(plugin: LibreforgePlugin) {
 }
 
 internal fun tryLoadForceVersion(pluginFolder: File) {
+    if (Bukkit.getPluginManager().plugins.any { it.name == "libreforge" }) return
+
     val libreforgeFolder = pluginFolder.resolve("libreforge")
     val versionsFolder = libreforgeFolder.resolve("versions")
 
