@@ -11,9 +11,11 @@ data class WeightedItems(
     override val weight: Double
 ) : Weighted
 
-class WeightedList<T : Weighted>(
+open class WeightedList<T : Weighted>(
     list: List<T>
 ) : DelegatedList<T>(list) {
+    fun random() = this.randomOrNull() ?: throw NoSuchElementException("List is empty")
+
     fun randomOrNull(): T? {
         if (this.isEmpty()) {
             return null

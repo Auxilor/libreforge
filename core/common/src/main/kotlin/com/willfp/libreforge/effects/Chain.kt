@@ -1,6 +1,5 @@
 package com.willfp.libreforge.effects
 
-import com.willfp.libreforge.DelegatedList
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.WeightedList
 import com.willfp.libreforge.effects.executors.ChainExecutor
@@ -18,7 +17,7 @@ import org.bukkit.entity.Player
 class Chain internal constructor(
     effects: WeightedList<ChainElement<*>>,
     private val executor: ChainExecutor
-) : DelegatedList<ChainElement<*>>(
+) : WeightedList<ChainElement<*>>(
     effects.sortedBy {
         it.runOrder.weight
     }
