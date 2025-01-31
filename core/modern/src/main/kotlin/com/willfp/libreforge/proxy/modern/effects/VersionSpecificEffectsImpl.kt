@@ -12,7 +12,7 @@ import com.willfp.libreforge.proxy.modern.effects.impl.EffectMiningEfficiency
 import com.willfp.libreforge.proxy.modern.effects.impl.EffectMiningSpeedMultiplier
 import com.willfp.libreforge.proxy.modern.effects.impl.EffectMovementEfficiencyMultiplier
 import com.willfp.libreforge.proxy.modern.effects.impl.EffectSafeFallDistance
-import com.willfp.libreforge.proxy.modern.effects.impl.EffectScaleMultiplier
+import com.willfp.libreforge.proxy.modern.effects.impl.EffectScale
 import com.willfp.libreforge.proxy.modern.effects.impl.EffectSneakingSpeedMultiplier
 import com.willfp.libreforge.proxy.modern.effects.impl.EffectUnderwaterMiningSpeedMultiplier
 
@@ -31,7 +31,7 @@ class VersionSpecificEffectsImpl: VersionSpecificEffects {
             register(EffectUnderwaterMiningSpeedMultiplier)
             register(EffectSafeFallDistance)
             register(EffectAddDurability)
-            register(EffectScaleMultiplier)
+            register(EffectScale)
         }
     }
 }

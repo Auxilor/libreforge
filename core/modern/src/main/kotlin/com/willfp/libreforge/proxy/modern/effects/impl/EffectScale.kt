@@ -8,8 +8,8 @@ import org.bukkit.attribute.AttributeModifier
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 
-object EffectScaleMultiplier : AttributeEffect(
-    "scale_multiplier",
+object EffectScale : AttributeEffect(
+    "scale",
     Attribute.GENERIC_SCALE,
     AttributeModifier.Operation.MULTIPLY_SCALAR_1
 ) {
