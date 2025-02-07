@@ -25,7 +25,7 @@ object ConditionPlaceholderGreaterThan : Condition<NoCompileData>("placeholder_g
     ): Boolean {
         val player = dispatcher.get<Player>()
 
-        return (config.getDoubleFromExpression("placeholder", placeholderContext(player = player))
-                ) >= config.getDoubleFromExpression("value", player)
+        return (config.getDoubleFromExpression("placeholder", placeholderContext(player = player))) >=
+                config.getDoubleFromExpression("value", placeholderContext(player = player))
     }
 }
