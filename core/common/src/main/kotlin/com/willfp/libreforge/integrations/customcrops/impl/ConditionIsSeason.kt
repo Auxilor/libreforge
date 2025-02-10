@@ -24,12 +24,8 @@ object ConditionIsSeason : Condition<NoCompileData>("is_season") {
         val player = dispatcher.get<Player>() ?: return false
         val season = BukkitCustomCropsPlugin.getInstance().worldManager.getSeason(player.world)
 
-        // Retrieve the list of seasons from the config
-        val seasonsList = config.getStrings("seasons").map { it.uppercase() }
-
-        // Check if the current season is in the list
-        return seasonsList.contains(season.name.uppercase())
-    }
-}
+        return config.getStrings("seasons")
+            .map { it.uppercase() }
+            .contains(season.name.uppercase())
     }
 }
