@@ -12,7 +12,7 @@ import org.bukkit.entity.Player
 
 object ConditionIsSeason : Condition<NoCompileData>("is_season") {
     override val arguments = arguments {
-        require("seasons", "You must specify the season!")
+        require(listOf("season", "seasons"), "You must specify the season(s)!")
     }
 
     override fun isMet(
@@ -24,7 +24,11 @@ object ConditionIsSeason : Condition<NoCompileData>("is_season") {
         val player = dispatcher.get<Player>() ?: return false
         val season = BukkitCustomCropsPlugin.getInstance().worldManager.getSeason(player.world)
 
-        return config.getStrings("seasons")
+        val seasons = mutableListOf<String>()
+        config.getString("season")?.let { seasons.add(it) }
+        seasons.addAll(config.getStrings("seasons"))
+
+        return seasons
             .map { it.uppercase() }
             .contains(season.name.uppercase())
     }
