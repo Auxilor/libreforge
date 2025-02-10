@@ -7,7 +7,6 @@ import com.willfp.libreforge.integrations.LoadableIntegration
 import com.willfp.libreforge.integrations.customcrops.impl.ConditionIsSeason
 import com.willfp.libreforge.integrations.customcrops.impl.FilterCropType
 import com.willfp.libreforge.integrations.customcrops.impl.FilterFertilizerType
-import com.willfp.libreforge.integrations.customcrops.impl.FilterFullyGrown
 import com.willfp.libreforge.integrations.customcrops.impl.FilterWateringCanType
 import com.willfp.libreforge.integrations.customcrops.impl.TriggerBonemealCrop
 import com.willfp.libreforge.integrations.customcrops.impl.TriggerHarvestCrop
@@ -21,7 +20,6 @@ object CustomCropsIntegration : LoadableIntegration {
         Conditions.register(ConditionIsSeason)
         Filters.register(FilterCropType)
         Filters.register(FilterFertilizerType)
-        Filters.register(FilterFullyGrown)
         Filters.register(FilterWateringCanType)
         Triggers.register(TriggerHarvestCrop)
         Triggers.register(TriggerPlantCrop)

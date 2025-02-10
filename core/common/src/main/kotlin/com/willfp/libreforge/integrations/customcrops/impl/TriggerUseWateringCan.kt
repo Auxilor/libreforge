@@ -4,12 +4,8 @@ import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import net.momirealms.customcrops.api.event.CropBreakEvent
-import net.momirealms.customcrops.api.event.CropPlantEvent
-import net.momirealms.customcrops.api.event.FertilizerUseEvent
 import net.momirealms.customcrops.api.event.WateringCanWaterPotEvent
 import net.momirealms.customcrops.api.event.WateringCanWaterSprinklerEvent
-import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 
 object TriggerUseWateringCan : Trigger("use_watering_can") {

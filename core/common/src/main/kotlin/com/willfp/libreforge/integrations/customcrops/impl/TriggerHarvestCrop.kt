@@ -22,11 +22,6 @@ object TriggerHarvestCrop : Trigger("harvest_crop") {
         val location = event.location() ?: return
         val crop = event.cropConfig().id() ?: return
 
-        println("Harvested crop: $crop")
-        println("Location: $location")
-        println("Stage: ${event.cropStageItemID()}")
-        println("Stages: ${event.cropConfig().stageIDs()}")
-
         this.dispatch(
             player.toDispatcher(),
             TriggerData(
