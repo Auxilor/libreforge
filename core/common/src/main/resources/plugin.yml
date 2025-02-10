@@ -29,6 +29,7 @@ softdepend:
   - AxEnvoy
   - Votifier
   - FancyNpcs
+  - CustomCrops
 
 commands:
   lrcdb:
