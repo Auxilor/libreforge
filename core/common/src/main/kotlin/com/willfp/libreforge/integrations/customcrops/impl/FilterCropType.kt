@@ -13,14 +13,13 @@ object FilterCropType : Filter<NoCompileData, Collection<String>>("crop_type") {
     }
 
     override fun isMet(data: TriggerData, value: Collection<String>, compileData: NoCompileData): Boolean {
-        return when (val event = data.event) {
-            is CropBreakEvent -> {
-                value.contains(event.cropConfig().id())
-            }
-            is CropPlantEvent -> {
-                value.contains(event.cropConfig().id())
-            }
-            else -> true
+        val event = data.event
+        val cropId = when (event) {
+            is CropBreakEvent -> event.cropConfig().id()
+            is CropPlantEvent -> event.cropConfig().id()
+            else -> return true
         }
+
+        return value.contains(cropId)
     }
 }
