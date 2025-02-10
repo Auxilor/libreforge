@@ -12,7 +12,7 @@ import org.bukkit.entity.Player
 
 object ConditionIsSeason : Condition<NoCompileData>("is_season") {
     override val arguments = arguments {
-        require("season", "You must specify the season!")
+        require("seasons", "You must specify the season!")
     }
 
     override fun isMet(
