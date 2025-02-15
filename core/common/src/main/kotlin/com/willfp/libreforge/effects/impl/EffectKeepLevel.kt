@@ -21,11 +21,11 @@ object EffectKeepLevel : Effect<NoCompileData>("keep_level") {
         holder: ProvidedHolder,
         compileData: NoCompileData
     ) {
-        players[dispatcher.uuid] += identifiers.uuid
+        players[dispatcher.uuid].add(identifiers.uuid)
     }
 
     override fun onDisable(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder) {
-        players[dispatcher.uuid] -= identifiers.uuid
+        players[dispatcher.uuid].remove(identifiers.uuid)
     }
 
     @EventHandler(ignoreCancelled = true)

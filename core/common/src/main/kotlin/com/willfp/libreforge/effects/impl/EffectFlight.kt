@@ -25,14 +25,14 @@ object EffectFlight : Effect<NoCompileData>("flight") {
     ) {
         val player = dispatcher.get<Player>() ?: return
 
-        players[player.uniqueId] += identifiers.uuid
+        players[player.uniqueId].add(identifiers.uuid)
         player.allowFlight = players[player.uniqueId].isNotEmpty()
     }
 
     override fun onDisable(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder) {
         val player = dispatcher.get<Player>() ?: return
 
-        players[player.uniqueId] -= identifiers.uuid
+        players[player.uniqueId].remove(identifiers.uuid)
         player.allowFlight = players[player.uniqueId].isNotEmpty()
     }
 }

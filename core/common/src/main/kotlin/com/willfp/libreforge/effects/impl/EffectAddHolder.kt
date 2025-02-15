@@ -42,12 +42,12 @@ object EffectAddHolder : Effect<HolderTemplate>("add_holder") {
         val duration = config.getIntFromExpression("duration", data).coerceAtLeast(1)
         val holder = compileData.toHolder().nest(data.holder)
 
-        holders[dispatcher.uuid] += holder
+        holders[dispatcher.uuid].add(holder)
 
         plugin.scheduler.runLater(duration.toLong()) {
-            holders[dispatcher.uuid] -= holder
+            holders[dispatcher.uuid].remove(holder)
             if (holders[dispatcher.uuid].isEmpty()) {
-                holders -= dispatcher.uuid
+                holders.remove(dispatcher.uuid)
             }
         }
 

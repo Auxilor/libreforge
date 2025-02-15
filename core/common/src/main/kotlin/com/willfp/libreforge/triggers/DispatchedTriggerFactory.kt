@@ -37,7 +37,7 @@ class DispatchedTriggerFactory(
             return null
         }
 
-        dispatcherTriggers[dispatcher.uuid] += hash
+        dispatcherTriggers[dispatcher.uuid].add(hash)
         return DispatchedTrigger(dispatcher, trigger, data.copy(dispatcher = dispatcher))
     }
 

@@ -9,6 +9,7 @@ import com.willfp.libreforge.mutators.MutatorList
  * EffectContext exists in order to abstract out some compile logic between
  * element compilation and rich chain compilation.
  */
+@ConsistentCopyVisibility
 data class EffectContext internal constructor(
     val arguments: EffectArgumentList,
     val conditions: ConditionList,

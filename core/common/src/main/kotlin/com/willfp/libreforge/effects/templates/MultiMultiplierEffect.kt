@@ -39,14 +39,14 @@ abstract class MultiMultiplierEffect<T : Any>(id: String) : Effect<NoCompileData
             val elements = config.getStrings(key).mapNotNull { getElement(it) }
 
             for (element in elements) {
-                modifiers[dispatcher.uuid][element] += IdentifiedModifier(identifiers.uuid) {
+                modifiers[dispatcher.uuid][element].add(IdentifiedModifier(identifiers.uuid) {
                     config.getDoubleFromExpression("multiplier", dispatcher.get())
-                }
+                })
             }
         } else {
-            globalModifiers[dispatcher.uuid] += IdentifiedModifier(identifiers.uuid) {
+            globalModifiers[dispatcher.uuid].add(IdentifiedModifier(identifiers.uuid) {
                 config.getDoubleFromExpression("multiplier", dispatcher.get())
-            }
+            })
         }
     }
 

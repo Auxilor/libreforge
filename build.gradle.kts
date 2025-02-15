@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
@@ -6,14 +7,14 @@ buildscript {
     }
 
     dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.20")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:2.1.0")
     }
 }
 
 plugins {
     java
     id("java-library")
-    id("io.github.goooler.shadow") version "8.1.7"
+    id("com.gradleup.shadow") version "8.3.5"
     id("maven-publish")
 }
 
@@ -21,9 +22,10 @@ allprojects {
     apply(plugin = "kotlin")
     apply(plugin = "java")
     apply(plugin = "maven-publish")
-    apply(plugin = "io.github.goooler.shadow")
+    apply(plugin = "com.gradleup.shadow")
 
     repositories {
+        mavenLocal() // TODO: REMOVE
         mavenCentral()
         maven("https://repo.auxilor.io/repository/maven-public/")
         maven("https://repo.papermc.io/repository/maven-public/")
@@ -36,7 +38,7 @@ allprojects {
 
     dependencies {
         compileOnly("org.jetbrains:annotations:23.0.0")
-        compileOnly("org.jetbrains.kotlin:kotlin-stdlib:1.9.20")
+        compileOnly(kotlin("stdlib", version = "2.1.0"))
 
         compileOnly(fileTree("lib") { include("*.jar") })
     }
@@ -67,8 +69,8 @@ allprojects {
         }
 
         withType<KotlinCompile> {
-            kotlinOptions {
-                jvmTarget = "17"
+            compilerOptions {
+                jvmTarget.set(JvmTarget.JVM_17)
             }
         }
 

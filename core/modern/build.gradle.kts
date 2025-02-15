@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 dependencies {
     compileOnly(project(":core:common"))
 
@@ -10,8 +12,8 @@ tasks {
     }
 
     compileKotlin {
-        kotlinOptions {
-            jvmTarget = "21"
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_21)
         }
     }
 }

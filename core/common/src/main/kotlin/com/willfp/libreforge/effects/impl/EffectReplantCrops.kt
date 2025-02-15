@@ -36,11 +36,11 @@ object EffectReplantCrops : Effect<NoCompileData>("replant_crops") {
         holder: ProvidedHolder,
         compileData: NoCompileData
     ) {
-        players[dispatcher.uuid] += ReplantConfig(
+        players[dispatcher.uuid].add(ReplantConfig(
             identifiers.uuid,
             config.getBool("consume_seeds"),
             config.getBool("only_fully_grown")
-        )
+        ))
     }
 
     override fun onDisable(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder) {
@@ -82,12 +82,12 @@ object EffectReplantCrops : Effect<NoCompileData>("replant_crops") {
             return
         }
 
-        val consumeSeeds = players[player.uniqueId].any {
-            it.consumeSeeds
-        }
+        val playerConfigs = players[player.uniqueId]
+        val consumeSeeds = playerConfigs.any { it.consumeSeeds }
+        val onlyFullyGrown = playerConfigs.all { it.onlyFullyGrown }
 
-        val onlyFullyGrown = players[player.uniqueId].all {
-            it.onlyFullyGrown
+        if (onlyFullyGrown && data.age != data.maximumAge) {
+            return
         }
 
         if (consumeSeeds) {

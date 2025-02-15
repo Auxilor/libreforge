@@ -29,9 +29,9 @@ abstract class ChanceMultiplierEffect(id: String) : Effect<NoCompileData>(id) {
         holder: ProvidedHolder,
         compileData: NoCompileData
     ) {
-        modifiers[dispatcher.uuid] += IdentifiedModifier(identifiers.uuid) {
+        modifiers[dispatcher.uuid].add(IdentifiedModifier(identifiers.uuid) {
             config.getDoubleFromExpression("chance", dispatcher.get<Player>()!!)
-        }
+        })
     }
 
     override fun onDisable(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder) {
