@@ -27,6 +27,7 @@ object EffectSendMessage : Effect<NoCompileData>("send_message") {
         val messages = config.getStrings("messages", "message")
             .map { it.replace("%player%", player.name) }
             .formatEco(config.toPlaceholderContext(data))
+            .dropLastWhile { it.isEmpty() }
 
         val actionBar = config.getBool("action_bar")
 
