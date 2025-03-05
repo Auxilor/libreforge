@@ -12,8 +12,11 @@ import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.LivingEntity
+import java.util.UUID
 
 object EffectDamageNearbyEntities : Effect<Collection<TestableEntity>>("damage_nearby_entities") {
+    private val damagedEntities = mutableSetOf<UUID>()
+
     override val parameters = setOf(
         TriggerParameter.LOCATION, TriggerParameter.PLAYER
     )
@@ -35,7 +38,7 @@ object EffectDamageNearbyEntities : Effect<Collection<TestableEntity>>("damage_n
         val damageSelf = config.getBoolOrNull("damage_self") ?: true
 
         for (entity in world.getNearbyEntities(location, radius, radius, radius)) {
-            if (entity.hasMetadata("ignore-nearby-damage")) {
+            if (entity.hasMetadata("ignore-nearby-damage") || damagedEntities.contains(entity.uniqueId)) {
                 continue
             }
 
@@ -60,12 +63,16 @@ object EffectDamageNearbyEntities : Effect<Collection<TestableEntity>>("damage_n
                 continue
             }
 
+            damagedEntities.add(entity.uniqueId)
+
             if (damageAsPlayer) {
                 entity.damage(damage, player)
             } else {
                 entity.damage(damage)
             }
         }
+
+        damagedEntities.clear()
 
         return true
     }
