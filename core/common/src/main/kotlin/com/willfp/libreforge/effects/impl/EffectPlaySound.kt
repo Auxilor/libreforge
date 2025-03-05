@@ -9,6 +9,8 @@ import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.getFormattedString
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import org.bukkit.Sound
+import org.bukkit.Bukkit
 
 object EffectPlaySound : Effect<NoCompileData>("play_sound") {
     override val parameters = setOf(
@@ -24,7 +26,14 @@ object EffectPlaySound : Effect<NoCompileData>("play_sound") {
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val player = data.player ?: return false
 
-        val sound = SoundUtils.getSound(config.getFormattedString("sound", data)) ?: return false
+        val soundName = config.getFormattedString("sound", data)
+        val sound: Sound = try {
+            Sound.valueOf(soundName)
+        } catch (e: IllegalArgumentException) {
+            Bukkit.getLogger().warning("Sound $soundName not found")
+            return false
+        }
+
         val pitch = config.getDoubleFromExpression("pitch", data)
         val volume = config.getDoubleFromExpression("volume", data)
 
