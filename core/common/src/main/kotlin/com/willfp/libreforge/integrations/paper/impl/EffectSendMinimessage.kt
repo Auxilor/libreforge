@@ -28,6 +28,7 @@ object EffectSendMinimessage : Effect<NoCompileData>("send_minimessage") {
         val messages = config.getStrings("messages", "message")
             .map { it.replace("%player%", player.name) }
             .map { PlaceholderManager.translatePlaceholders(it, config.toPlaceholderContext(data)) }
+            .dropLastWhile { it.isEmpty() }
             .map { miniMessage.deserialize(it) }
 
         val actionBar = config.getBool("action_bar")
