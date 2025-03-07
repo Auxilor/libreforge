@@ -23,7 +23,7 @@ class EntityRefreshListener(
     }
 
     private fun removeEcoAttributeModifiers(entity: LivingEntity) {
-        for (attribute in Attribute.entries) {
+        for (attribute in Attribute.values()) {
             val attributeInstance: AttributeInstance = entity.getAttribute(attribute) ?: continue
 
             attributeInstance.modifiers
