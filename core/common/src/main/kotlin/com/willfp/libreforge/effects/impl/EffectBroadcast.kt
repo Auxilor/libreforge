@@ -23,6 +23,7 @@ object EffectBroadcast : Effect<NoCompileData>("broadcast") {
         val messages = config.getStrings("messages", "message")
             .map { it.replace("%player%", data.player?.name ?: "%player%") }
             .formatEco(config.toPlaceholderContext(data))
+            .dropLastWhile { it.isEmpty() }
 
         for (message in messages) {
             @Suppress("DEPRECATION")

@@ -9,6 +9,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
+import java.util.UUID
 
 object TriggerMeleeAttack : Trigger("melee_attack") {
     override val parameters = setOf(
@@ -19,6 +20,8 @@ object TriggerMeleeAttack : Trigger("melee_attack") {
         TriggerParameter.ITEM
     )
 
+    private val processedEvents = mutableSetOf<UUID>()
+
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityDamageByEntityEvent) {
         val attacker = event.damager as? LivingEntity ?: return
@@ -27,6 +30,12 @@ object TriggerMeleeAttack : Trigger("melee_attack") {
         if (event.cause == EntityDamageEvent.DamageCause.THORNS) {
             return
         }
+
+        if (processedEvents.contains(event.entity.uniqueId)) {
+            return
+        }
+
+        processedEvents.add(event.entity.uniqueId)
 
         this.dispatch(
             attacker.toDispatcher(),
@@ -39,5 +48,7 @@ object TriggerMeleeAttack : Trigger("melee_attack") {
                 value = event.finalDamage
             )
         )
+
+        processedEvents.clear()
     }
 }

@@ -27,6 +27,7 @@ object EffectRunCommand : Effect<NoCompileData>("run_command") {
             .map { it.replace("%player%", player?.name ?: "%player")
             it.replace("%victim%", victim?.name ?: "")}
             .map { it.translatePlaceholders(config.toPlaceholderContext(data)) }
+            .dropLastWhile { it.isEmpty() }
 
         commands.forEach {
             Bukkit.getServer().dispatchCommand(
