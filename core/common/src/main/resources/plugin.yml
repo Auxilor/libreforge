@@ -29,6 +29,8 @@ softdepend:
   - AxEnvoy
   - Votifier
   - FancyNpcs
+  - HuskTowns
+  - HuskClaims
 
 commands:
   lrcdb:

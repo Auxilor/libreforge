@@ -34,6 +34,7 @@ allprojects {
         maven("https://maven.enginehub.org/repo/")
         maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
         maven("https://maven.citizensnpcs.co/repo")
+        maven("https://repo.william278.net/releases")
     }
 
     dependencies {
