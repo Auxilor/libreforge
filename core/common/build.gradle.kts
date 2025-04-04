@@ -23,6 +23,7 @@ dependencies {
     compileOnly("net.citizensnpcs:citizens-main:2.0.31-SNAPSHOT") {
         exclude(group = "net.byteflux", module = "libby-bukkit")
     }
+    compileOnly("nl.chimpgamer.ultimatemobcoins:paper:1.4.0")
 
     compileOnly(fileTree("../../lib") {
         include("*.jar")
