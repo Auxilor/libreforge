@@ -122,7 +122,11 @@ class EditableBlockDropEvent(
         get() = event.items.map { it.itemStack }
 
     override val items: List<DropResult>
-        get() = originalItems.map { modifiers.modify(it) }
+        get(): List<DropResult> {
+            val res = originalItems.map { modifiers.modify(it) }
+            modifiers.clear()
+            return res
+        }
 
     override val dropLocation: Location
         get() = event.items.first().location
