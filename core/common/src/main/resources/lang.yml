@@ -1,0 +1,51 @@
+messages:
+  prefix: "&#b4ff33&lEffects&r &8» &r"
+  no-permission: "&cYou don't have permission to do this!"
+  not-player: "&cThis command must be run by a player"
+  invalid-command: "&cUnknown subcommand!"
+  reloaded: "Reloaded!"
+
+  cannot-afford: "&cYou can't afford to do this! &fCost: &a$$%cost%"
+  cannot-afford-type: "&cYou can't afford to do this! &fCost: &a%cost% %type%"
+  cannot-afford-price: "&cYou can't afford to do this! &fPrice: %price%"
+  on-cooldown: "&cThis effect is on cooldown! &fTime left: &a%seconds% seconds"
+  cannot-transmit: "&cYou can't transmit here!"
+
+  must-specify-lrcdb-id: "&cYou must specify the ID of the config to download! Not sure what this means? Go to &alrcdb.auxilor.io"
+  lrcdb-import-error: "&cError importing config: &f%message%"
+  lrcdb-import-success: "&fImported &a%name%&f! Reload the plugin to install it"
+  lrcdb-export-error: "&cError exporting config: &f%message%"
+  lrcdb-export-success: "&fExported &a%name%&f! View it on &alrcdb.auxilor.io&f, or share your config ID: &f%id%"
+
+  must-specify-plugin: "&cYou must specify the plugin!"
+  invalid-plugin: "&cInvalid plugin name!"
+  must-specify-category: "&cYou must specify the category!"
+  invalid-category: "&cInvalid category!"
+  must-specify-config-name: "&cYou must specify the config name!"
+  invalid-config-name: "&cInvalid config name!"
+
+  must-specify-player: "&cYou must specify the player!"
+  invalid-player: "&cInvalid player name!"
+
+  must-specify-point: "&cYou must specify the point!"
+  invalid-point: "&cInvalid point name!"
+
+  must-specify-amount: "&cYou must specify the amount!"
+  invalid-amount: "&cInvalid amount!"
+
+  points-given: "&a%amount% &a%point% &fwere added to &a%playername%&f!"
+  points-taken: "&a%amount% &a%point% &fwere removed from &a%playername%&f!"
+  points-set: "&fSet &a%playername%&f to have &a%amount% &a%point%&f!"
+  points-amount: "&6%playername% &rhas &e%amount% &rof &a%point%&r!"
+
+  plugin-not-installed: "&cYou don't have this plugin installed!"
+
+  must-specify-dispatcher: "&cYou must specify the dispatcher!"
+  invalid-dispatcher: "&cInvalid dispatcher!"
+  must-specify-trigger: "&cYou must specify the trigger!"
+  triggered: "custom_%id% was triggered!"
+
+  debug: "Logged information to server console"
+
+picked-up-price-item: "&f+%price%"
+infinity: "∞"

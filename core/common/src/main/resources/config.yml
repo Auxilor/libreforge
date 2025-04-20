@@ -1,0 +1,170 @@
+# Options for lrcdb (https://lrcdb.auxilor.io), a website to share configs
+# with other server owners, so you can get more configs without making them
+# yourself!
+lrcdb:
+  author: "Unknown Author" # The name attached to configs you export
+
+  # Your key is what will identify you to lrcdb - it works like a password.
+  # Make sure to keep it secret, make it long, hard to guess, and try
+  # to make it something unique so that other people can't guess it.
+  # You won't be able to export configs if you don't have a key set.
+
+  key: ""
+
+  # Options about automatically sharing configs you create
+  share-configs:
+    # If you want all your configs to automatically be publicly available,
+    # set this to true. This really helps out other users!
+    publicly: false
+
+    # If you don't want your configs to be usable to gather information about
+    # plugin usage or to improve the plugins in the future, disable this.
+    # Nothing identifying is shared.
+    enabled: true
+
+  # If you disable share-configs, you can still share select configs publicly
+  # with /lrcdb export <config>.
+
+
+# Show what libreforge is on startup, to explain to new users.
+show-libreforge-info: true
+
+# You can reference these placeholders anywhere, in any plugin that supports
+# PlaceholderAPI, and anywhere in configs. They'll be prefixed with libreforge_,
+# so for example 'level' would be '%libreforge_level%' when used.
+placeholders:
+  - id: "example_placeholder" # The placeholder ID
+    value: "This is an example placeholder!" # The value of the placeholder
+
+  - id: "example_expression_placeholder"
+    value: "%level% * 2" # Mathematical expressions are fully supported!
+
+  - id: "conditional_placeholder"
+    default: 5 # (Optional) Specify a default value if no conditions are true
+    values:
+      - conditions: # Full condition system support!
+          - id: has_permission
+            args:
+              permission: "ecomc.rank.netherite"
+        value: 20
+
+      - conditions:
+          - id: has_permission
+            args:
+              permission: "ecomc.rank.diamond"
+        value: 10
+
+cooldown:
+  message-enabled: true
+  in-actionbar: true
+  sound:
+    enabled: true
+    sound: "BLOCK_NOTE_BLOCK_PLING"
+    pitch: 0.5
+
+cannot-afford:
+  message-enabled: true
+  in-actionbar: true
+  sound:
+    enabled: true
+    sound: "BLOCK_NOTE_BLOCK_PLING"
+    pitch: 0.5
+
+cannot-afford-type:
+  message-enabled: true
+  in-actionbar: true
+  sound:
+    enabled: true
+    sound: "BLOCK_NOTE_BLOCK_PLING"
+    pitch: 0.5
+
+cannot-afford-price:
+  message-enabled: true
+  in-actionbar: true
+  sound:
+    enabled: true
+    sound: "BLOCK_NOTE_BLOCK_PLING"
+    pitch: 0.5
+
+point-names: # If you have point names that look ugly (e.g. souls) then you can map them to nice names to be shown to players.
+  souls: "Souls"
+
+raytrace-distance: 80 # The distance that alt_click should check for a location
+
+# Options for item display
+display:
+  # These options will not be applied on all items unless you also set display-without-meta to true
+  # in /plugins/eco/config.yml. There may be a minor performance impact if you enable this option.
+  enabled: false
+
+  # Add certain item flags to all items.
+  item-flags:
+    - hide_attributes
+
+effects:
+  telekinesis:
+    on-players: true # Whether telekinesis should work on players
+
+    # By default, Telekinesis processes all drops regardless of if telekinesis is active for the player.
+    # This can significantly improve performance under load, however it will prevent telekinesis-like systems
+    # in third-party plugins from working. Disable this if other plugins aren't working properly.
+    always-process-blocks: true
+
+  # If this is set to true, effects like mine_radius, drill, etc. will simply set the block to air
+  # instead of actually breaking it. This **will** break compatibility with things, but will also majorly
+  # improve performance under load.
+  # Setting this to true means that not only will mine_block and block_item_drop not be triggered, but also
+  # that other plugins will not be able to interact with the event (e.g. no skill experience will be gained).
+  # Only set this option to true if you know what you're doing!
+  use-setblock-break: false
+
+  multiply_drops:
+    # Some items can be duplicated if they are placed on other blocks, e.g. torches, lanterns, etc.
+    # This option will prevent this from happening by blacklisting certain blocks from being multiplied.
+    prevent-duplication: true
+
+    # If you notice that some items are not being multiplied when you want them to be, you can add them to this list.
+    whitelist: [ ]
+
+conditions:
+  # Item display (things like EcoItem lore, EcoEnchants lore, etc.) are ran on a separate thread,
+  # and condition met state is cached from the main thread. Things like not-met-lines and show-not-met
+  # will assume this value by default (e.g. it will assume the condition is met until the
+  # next time the item is updated). If not-met-lines aren't showing up when you think they should be,
+  # try setting this to false.
+  default-state-off-main-thread: true
+
+refresh:
+  # Reduces lag by only allowing holders to refresh every X milliseconds.
+  # Higher values will save performance, but can make effects feel less responsive.
+  # Set to 0 to disable.
+  cooldown: 250
+
+  pickup:
+    # If picked up items should trigger a refresh
+    enabled: true
+    # If picked up items must have item meta (NBT Data) in order to trigger a refresh
+    require-meta: true
+
+  held:
+    # If swap items in HotBar must have item meta (NBT Data) in order to trigger a refresh
+    require-meta: true
+
+  entities:
+    # If entities should be polled for updates, and how often (in ticks).
+    # If you don't have any effects that run from entities, you can disable this to save performance.
+    enabled: true
+
+    # How often to poll entities for updates (in ticks). Higher values will save performance, but
+    # can make effects feel less responsive.
+    interval: 60
+
+  players:
+    # Skip AFK players for effect updates for performance reasons.
+    # If you need to update effects on AFK players, you can set false.
+    skip-afk-players: true
+
+  inventory-click:
+    # Inventory clicks refresh active holders, but a group of malicious users spamming can cause server lag.
+    # Setting a timeout ensures only one click triggers a refresh within the specified time (in milliseconds).
+    timeout: 500

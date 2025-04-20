@@ -1,0 +1,34 @@
+# You can create custom effect arguments using effects and conditions,
+# and use them wherever you want in effects.
+
+# In effect configs, they look like this:
+# args:
+#  custom_<id>:
+#    <arg1>: <value>
+#    <arg2>: <value>
+#    ... etc
+
+# You can use %arg1%, %arg2%, etc in the value to get the value of the argument.
+
+# The ID of the argument is the name of the .yml file, so for example
+# named_mana.yml would have an ID of named_mana.
+
+# Conditions to check if the argument is met
+is-met:
+  - id: above_magic
+    args:
+      type: mana
+      amount: "%amount%"
+
+# Effects to run if the condition is met
+if-met:
+  - id: give_magic
+    args:
+      type: mana
+      amount: "- %amount%"
+  - id: send_message
+    args:
+      message: "-%amount% %ecoskills_mana_name% &f(%reason%)"
+
+# Effects to run if the condition is not met
+if-not-met: []

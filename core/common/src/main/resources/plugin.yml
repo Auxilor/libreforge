@@ -1,0 +1,94 @@
+name: libreforge
+version: ${projectVersion}
+main: com.willfp.libreforge.LibreforgeSpigotPlugin
+api-version: 1.17
+authors: [ Auxilor ]
+website: willfp.com
+
+# eco is written as a softdepend because otherwise the plugin
+# loader will complain about it not being installed.
+
+# I also can't use paper-plugin.yml because that doesn't support
+# being loaded at runtime.
+
+softdepend:
+  - eco
+  - AureliumSkills
+  - Jobs
+  - LevelledMobs
+  - mcMMO
+  - Scyther
+  - TMMobcoins
+  - Vault
+  - WorldGuard
+  - Citizens
+  - TAB
+  - Terra
+  - TerraformGenerator
+  - ModelEngine
+  - AxEnvoy
+  - Votifier
+  - FancyNpcs
+
+commands:
+  lrcdb:
+    description: Handles lrcdb
+    permission: libreforge.command.lrcdb
+  libreforge:
+    description: Base libreforge command
+    permission: libreforge.command.libreforge
+
+permissions:
+  libreforge.*:
+    description: All libreforge permissions
+    default: op
+    children:
+      libreforge.command.*: true
+  libreforge.command.*:
+    description: All commands
+    default: op
+    children:
+      libreforge.command.lrcdb: true
+      libreforge.command.libreforge: true
+      libreforge.command.reload: true
+      libreforge.command.debug: true
+      libreforge.command.trigger: true
+      libreforge.command.points.*: true
+  libreforge.command.points.*:
+    description: All points commands
+    default: op
+    children:
+      libreforge.command.points.get: true
+      libreforge.command.points.give: true
+      libreforge.command.points.set: true
+      libreforge.command.points.take: true
+  libreforge.command.lrcdb:
+    description: Allows the use of /lrcdb
+    default: op
+  libreforge.command.libreforge:
+    description: Allows the use of /libreforge
+    default: op
+  libreforge.command.reload:
+    description: Allows the use of /libreforge reload
+    default: op
+  libreforge.command.debug:
+    description: Allows the use of /libreforge debug
+    default: op
+  libreforge.command.trigger:
+    description: Allows the use of /libreforge trigger
+    default: op
+  libreforge.command.points:
+    description: Allows the use of /libreforge points
+    default: op
+  libreforge.command.points.get:
+    description: Allows the use of /libreforge points get
+    default: op
+  libreforge.command.points.give:
+    description: Allows the use of /libreforge points give
+    default: op
+  libreforge.command.points.set:
+    description: Allows the use of /libreforge points set
+    default: op
+  libreforge.command.points.take:
+    description: Allows the use of /libreforge points take
+    default: op
