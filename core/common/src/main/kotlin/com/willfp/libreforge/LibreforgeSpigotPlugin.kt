@@ -53,7 +53,7 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
 
     private var hasLoaded = false
 
-    var isDisabling:Boolean = false;
+    var wasDisabled:Boolean = false;
 
     private val configCategories = listOf(
         LevelTypes,
@@ -74,7 +74,7 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
     }
 
     override fun handleEnable() {
-        isDisabling = false;
+        wasDisabled = false;
 
         if (this.configYml.getBool("show-libreforge-info")) {
             this.logger.info("")
@@ -135,11 +135,11 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
     }
 
     override fun handleDisable(){
-        isDisabling = true;
+        wasDisabled = true;
     }
 
-    fun isDisabling():Boolean{
-        return isDisabling
+    fun wasDisabled() :Boolean{
+        return wasDisabled
     }
 
 
