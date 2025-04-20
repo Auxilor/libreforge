@@ -53,6 +53,8 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
 
     private var hasLoaded = false
 
+    var isDisabling:Boolean = false;
+
     private val configCategories = listOf(
         LevelTypes,
         CustomEffectArguments
@@ -72,6 +74,8 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
     }
 
     override fun handleEnable() {
+        isDisabling = false;
+
         if (this.configYml.getBool("show-libreforge-info")) {
             this.logger.info("")
             this.logger.info("Hey, what's this plugin doing here? I didn't install it!")
@@ -100,6 +104,8 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
         BossBarProgressPlaceholder(this).register()
     }
 
+
+
     override fun handleReload() {
         for (config in chainsYml.getSubsections("chains")) {
             Effects.register(
@@ -127,6 +133,15 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
 
         hasLoaded = true
     }
+
+    override fun handleDisable(){
+        isDisabling = true;
+    }
+
+    fun isDisabling():Boolean{
+        return isDisabling
+    }
+
 
     override fun createTasks() {
         dispatchedTriggerFactory.startTicking()

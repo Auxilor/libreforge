@@ -10,8 +10,23 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
+import org.bukkit.metadata.FixedMetadataValue
 
 object EffectDataFixer : Listener {
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    fun onJoin(event: PlayerJoinEvent) {
+        if(isFirstJoin(event.player))return;
+        cleanup(event.player)
+    }
+    fun isFirstJoin(player: Player): Boolean {
+        return player.getMetadata("firstJoin").isEmpty()
+    }
+    fun cleanup(player: Player) {
+        player.setMetadata("firstjoin",FixedMetadataValue(plugin,"false"))
+        player.fixAttributes()
+    }
+
     @EventHandler(priority = EventPriority.LOWEST)
     fun clearOnQuit(event: PlayerQuitEvent) {
         val player = event.player
