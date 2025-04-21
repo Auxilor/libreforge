@@ -255,7 +255,8 @@ abstract class Effect<T>(
         "Use disable(Dispatcher<*>, ProvidedHolder, Boolean)",
         ReplaceWith("disable(player.toDispatcher(), holder, isReload)")
     )
-    protected open fun onDisable(
+    protected open fun onD
+    isable(
         player: Player,
         identifiers: Identifiers,
         holder: ProvidedHolder

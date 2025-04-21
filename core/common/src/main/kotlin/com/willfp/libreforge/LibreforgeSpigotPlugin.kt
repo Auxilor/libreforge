@@ -136,6 +136,13 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
 
     override fun handleDisable(){
         wasDisabled = true;
+        for (onlinePlayer in Bukkit.getOnlinePlayers()) {
+            val dispatcher = onlinePlayer.toDispatcher()
+            for ((effect, holder) in dispatcher.providedActiveEffects) {
+                effect.disable(dispatcher, holder,true)
+            }
+
+        }
     }
 
     fun wasDisabled() :Boolean{
