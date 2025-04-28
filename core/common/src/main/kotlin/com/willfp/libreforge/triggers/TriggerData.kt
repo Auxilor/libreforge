@@ -334,4 +334,34 @@ class TriggerData(
         this.holder = holder ?: EmptyProvidedHolder
         this.originalPlayer = originalPlayer
     }
+
+    @Suppress("UNUSED_PARAMETER")
+    constructor(
+        dispatcher: Dispatcher<*>?,
+        player: Player?,
+        victim: LivingEntity?,
+        block: Block?,
+        event: Event?,
+        location: Location?,
+        projectile: Projectile?,
+        velocity: Vector?,
+        item: ItemStack?,
+        text: String?,
+        value: Double,
+        @Suppress("UNUSED_PARAMETER") ignored: Int,
+        @Suppress("UNUSED_PARAMETER") marker: kotlin.jvm.internal.DefaultConstructorMarker?
+    ) : this(
+        dispatcher ?: GlobalDispatcher,
+        player,
+        victim,
+        block,
+        null, // blockData
+        event,
+        location,
+        projectile,
+        velocity,
+        item,
+        text,
+        value
+    )
 }
