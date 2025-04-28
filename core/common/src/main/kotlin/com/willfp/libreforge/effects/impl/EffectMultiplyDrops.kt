@@ -14,6 +14,7 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.event.DropResult
 import com.willfp.libreforge.triggers.event.EditableDropEvent
+import org.bukkit.Bukkit
 import org.bukkit.block.data.Ageable
 import kotlin.math.roundToInt
 
@@ -55,15 +56,14 @@ object EffectMultiplyDrops : Effect<NoCompileData>("multiply_drops") {
         //if(){
         //
         //}
-        if(data.block!=null){
-            val blockData = data.block.blockData
 
-            if (blockData is Ageable&& blockData.age != blockData.maximumAge) {
+        if(data.blockData!=null){
+            val blockData = data.blockData
+            if (blockData is Ageable && blockData.age != blockData.maximumAge) {
                 multiplier = 1
             }
         }
         //----only fully grown crops-------//
-
 
         event.addModifier {
             var matches = true

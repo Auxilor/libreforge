@@ -11,6 +11,7 @@ import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.impl.TriggerBlank
 import org.bukkit.Location
 import org.bukkit.block.Block
+import org.bukkit.block.data.BlockData
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
@@ -39,6 +40,7 @@ class TriggerData(
     val player: Player? = null,
     val victim: LivingEntity? = null,
     val block: Block? = null,
+    val blockData: BlockData? = null, //fixes checks within multiply drops effect (ageable)
     val event: Event? = null,
     val location: Location? = victim?.location ?: player?.location,
     val projectile: Projectile? = null,
@@ -123,6 +125,7 @@ class TriggerData(
         player: Player? = this.player,
         victim: LivingEntity? = this.victim,
         block: Block? = this.block,
+        blockData:BlockData? = this.blockData,
         event: Event? = this.event,
         location: Location? = this.location,
         projectile: Projectile? = this.projectile,
@@ -136,6 +139,7 @@ class TriggerData(
             player,
             victim,
             block,
+            blockData,
             event,
             location,
             projectile,
@@ -160,6 +164,8 @@ class TriggerData(
         return other is TriggerData && other.hashCode() == this.hashCode()
     }
 
+
+
     /*
     Everything below this line is *horrible*, but it's the only way to make trigger data
     work nicely with previous versions, when TriggerData was a data class.
@@ -170,6 +176,86 @@ class TriggerData(
     DO NOT UNDER ANY CIRCUMSTANCES change or remove this code in any way!
      */
 
+    @Suppress("UNUSED_PARAMETER")
+    @Deprecated(
+        "This is internal! Do not use!",
+        ReplaceWith("TriggerData()"),
+        DeprecationLevel.ERROR
+    )
+    constructor(
+        holder: ProvidedHolder?,
+        player: Player?,
+        victim: LivingEntity?,
+        block: Block?,
+        blockData: BlockData?,
+        event: Event?,
+        location: Location?,
+        projectile: Projectile?,
+        velocity: Vector?,
+        item: ItemStack?,
+        text: String?,
+        value: Double,
+        originalPlayer: Player?,
+        internal1: Int,
+        internal2: kotlin.jvm.internal.DefaultConstructorMarker?
+    ) : this(
+        GlobalDispatcher,
+        player,
+        victim,
+        block,
+        blockData,
+        event,
+        location,
+        projectile,
+        velocity,
+        item,
+        text,
+        value
+    ) {
+        this.holder = holder ?: EmptyProvidedHolder
+        this.originalPlayer = originalPlayer
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    @Deprecated(
+        "This is internal! Do not use!",
+        ReplaceWith("TriggerData()"),
+        DeprecationLevel.ERROR
+    )
+    constructor(
+        holder: ProvidedHolder?,
+        dispatcher: Dispatcher<*>?,
+        player: Player?,
+        victim: LivingEntity?,
+        block: Block?,
+        blockData: BlockData?,
+        event: Event?,
+        location: Location?,
+        projectile: Projectile?,
+        velocity: Vector?,
+        item: ItemStack?,
+        text: String?,
+        value: Double,
+        originalPlayer: Player?,
+        internal1: Int,
+        internal2: kotlin.jvm.internal.DefaultConstructorMarker?
+    ) : this(
+        dispatcher ?: GlobalDispatcher,
+        player,
+        victim,
+        block,
+        blockData,
+        event,
+        location,
+        projectile,
+        velocity,
+        item,
+        text,
+        value
+    ) {
+        this.holder = holder ?: EmptyProvidedHolder
+        this.originalPlayer = originalPlayer
+    }
     @Suppress("UNUSED_PARAMETER")
     @Deprecated(
         "This is internal! Do not use!",
@@ -196,6 +282,7 @@ class TriggerData(
         player,
         victim,
         block,
+        null,
         event,
         location,
         projectile,
@@ -235,6 +322,7 @@ class TriggerData(
         player,
         victim,
         block,
+        null,
         event,
         location,
         projectile,
