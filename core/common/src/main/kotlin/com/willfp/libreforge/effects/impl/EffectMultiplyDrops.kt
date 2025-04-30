@@ -25,6 +25,7 @@ object EffectMultiplyDrops : Effect<NoCompileData>("multiply_drops") {
 
     override val arguments = arguments {
         require(listOf("multiplier", "fortune"), "You must specify a multiplier or level of fortune to mimic!")
+        //require("only_fully_grown", "You must specify if only fully grown crops should be replanted!")
     }
 
     private val whitelist = mutableListOf<TestableItem>()
@@ -38,6 +39,7 @@ object EffectMultiplyDrops : Effect<NoCompileData>("multiply_drops") {
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val event = data.event as? EditableDropEvent ?: return false
+
 
         val isBlacklisting = plugin.configYml.getBool("effects.multiply_drops.prevent-duplication")
         val whitelist = plugin.configYml.getStrings("effects.multiply_drops.whitelist").map { Items.lookup(it) }

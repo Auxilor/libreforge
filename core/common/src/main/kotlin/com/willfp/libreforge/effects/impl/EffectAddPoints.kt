@@ -35,11 +35,7 @@ object EffectAddPoints : Effect<NoCompileData>("add_points") {
             point,
             amount
         )
-        val key = NamespacedKey(plugin, "clean_"+point)
-        if(player.persistentDataContainer.has(key)){
-            player.persistentDataContainer.remove(key)
-            return
-        }
+
         player.points[point] += amount
     }
 
@@ -49,9 +45,6 @@ object EffectAddPoints : Effect<NoCompileData>("add_points") {
         val addedPoint = tracker[player.uniqueId][identifiers.uuid] ?: return
         tracker[player.uniqueId].remove(identifiers.uuid)
 
-        if((plugin.wasDisabled())){
-            player.persistentDataContainer.set(NamespacedKey(plugin,"clean_"+addedPoint.point), PersistentDataType.BYTE,0)
-        }
         player.points[addedPoint.point] -= addedPoint.amount
     }
 

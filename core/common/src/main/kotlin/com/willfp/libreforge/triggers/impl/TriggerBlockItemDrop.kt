@@ -46,6 +46,7 @@ object TriggerBlockItemDrop : Trigger("block_item_drop") {
             return
         }
 
+
         val originalDrops = event.items.map { it.itemStack }.filterNotEmpty()
 
         val editableEvent = EditableBlockDropEvent(event)

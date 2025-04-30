@@ -53,7 +53,6 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
 
     private var hasLoaded = false
 
-    var wasDisabled:Boolean = false;
 
     private val configCategories = listOf(
         LevelTypes,
@@ -74,7 +73,6 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
     }
 
     override fun handleEnable() {
-        wasDisabled = false;
 
         if (this.configYml.getBool("show-libreforge-info")) {
             this.logger.info("")
@@ -135,19 +133,15 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
     }
 
     override fun handleDisable(){
-        wasDisabled = true;
-        for (onlinePlayer in Bukkit.getOnlinePlayers()) {
-            val dispatcher = onlinePlayer.toDispatcher()
-            for ((effect, holder) in dispatcher.providedActiveEffects) {
-                effect.disable(dispatcher, holder,true)
-            }
-
-        }
+         for (onlinePlayer in Bukkit.getOnlinePlayers()) {
+             val dispatcher = onlinePlayer.toDispatcher()
+             for ((effect, holder) in dispatcher.providedActiveEffects) {
+                 effect.disable(dispatcher, holder,true)
+             }
+         }
     }
 
-    fun wasDisabled() :Boolean{
-        return wasDisabled
-    }
+
 
 
     override fun createTasks() {
