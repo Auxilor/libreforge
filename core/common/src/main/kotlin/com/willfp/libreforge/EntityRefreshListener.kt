@@ -23,12 +23,15 @@ class EntityRefreshListener(
     }
 
     private fun removeEcoAttributeModifiers(entity: LivingEntity) {
-        for (attribute in Attribute.entries) {
+        for (attribute in Attribute.values()) { // Keep as .values() for cross-version compatibility
             val attributeInstance: AttributeInstance = entity.getAttribute(attribute) ?: continue
+            @Suppress("USELESS_ELVIS")
+            val modifiers = attributeInstance.modifiers ?: continue
 
-            attributeInstance.modifiers
-                .filter { modifier -> modifier.name.matches(Regex("\\d+_\\d+")) }
-                .forEach { modifier -> attributeInstance.removeModifier(modifier) }
+            modifiers.filter { it.name.matches(Regex("\\d+_\\d+")) }
+                .forEach { modifier ->
+                    attributeInstance.removeModifier(modifier)
+                }
         }
     }
 }
