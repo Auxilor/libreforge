@@ -30,6 +30,7 @@ softdepend:
   - Votifier
   - FancyNpcs
   - CustomCrops
+  - CustomFishing
 
 commands:
   lrcdb:
