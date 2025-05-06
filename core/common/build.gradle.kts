@@ -21,7 +21,7 @@ dependencies {
     compileOnly("com.github.N0RSKA:ScytherAPI:55a")
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.7")
     compileOnly("net.momirealms:custom-crops:3.6.29")
-    compileOnly("net.momirealms:custom-fishing:2.3.7")
+    compileOnly("net.momirealms:custom-fishing:2.3.8")
     compileOnly("net.citizensnpcs:citizens-main:2.0.31-SNAPSHOT") {
         exclude(group = "net.byteflux", module = "libby-bukkit")
     }

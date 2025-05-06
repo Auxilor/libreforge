@@ -1,4 +1,4 @@
-package com.willfp.libreforge.integrations.customcrops.impl
+package com.willfp.libreforge.integrations.customfishing.impl
 
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
