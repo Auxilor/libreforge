@@ -18,6 +18,8 @@ object FilterCustomFishType : Filter<NoCompileData, Collection<String>>("custom_
         val itemStack = (event.entity as? Item)?.itemStack?.type?.name
 
         return if (lootId == "vanilla") {
+            // I am unsure how to tie this into the Item-Lookup-System.
+            // Needs some amendments from Aux to improve this here.
             return value.any { it.equals(itemStack, ignoreCase = true) }
         } else {
             return value.any { it.equals(lootId, ignoreCase = true) }
