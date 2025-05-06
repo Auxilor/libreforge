@@ -7,7 +7,7 @@ import com.willfp.libreforge.triggers.TriggerData
 import net.momirealms.customcrops.api.event.CropBreakEvent
 import net.momirealms.customcrops.api.event.CropPlantEvent
 
-object FilterCropType : Filter<NoCompileData, Collection<String>>("crop_type") {
+object FilterCustomCropType : Filter<NoCompileData, Collection<String>>("custom_crop_type") {
     override fun getValue(config: Config, data: TriggerData?, key: String): Collection<String> {
         return config.getStrings(key)
     }

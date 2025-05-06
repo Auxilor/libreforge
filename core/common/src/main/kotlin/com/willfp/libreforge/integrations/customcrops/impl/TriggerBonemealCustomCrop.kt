@@ -4,11 +4,10 @@ import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import net.momirealms.customcrops.api.event.CropBreakEvent
-import org.bukkit.entity.Player
+import net.momirealms.customcrops.api.event.BoneMealUseEvent
 import org.bukkit.event.EventHandler
 
-object TriggerHarvestCrop : Trigger("harvest_crop") {
+object TriggerBonemealCustomCrop : Trigger("bonemeal_custom_crop") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT,
@@ -17,8 +16,8 @@ object TriggerHarvestCrop : Trigger("harvest_crop") {
     )
 
     @EventHandler(ignoreCancelled = true)
-    fun handle(event: CropBreakEvent) {
-        val player = event.entityBreaker() as? Player ?: return
+    fun handle(event: BoneMealUseEvent) {
+        val player = event.player ?: return
         val location = event.location() ?: return
         val crop = event.cropConfig().id() ?: return
 
