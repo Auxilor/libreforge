@@ -7,7 +7,7 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import net.momirealms.customcrops.api.event.BoneMealUseEvent
 import org.bukkit.event.EventHandler
 
-object TriggerBonemealCustomCrop : Trigger("bonemeal_custom_crop") {
+object TriggerBonemealCrop : Trigger("bonemeal_crop") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT,
