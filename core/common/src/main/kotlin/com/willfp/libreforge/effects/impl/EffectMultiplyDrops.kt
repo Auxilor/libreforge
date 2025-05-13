@@ -4,12 +4,8 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.items.Items
 import com.willfp.eco.core.items.TestableItem
 import com.willfp.eco.core.items.matches
-import com.willfp.libreforge.NoCompileData
-import com.willfp.libreforge.arguments
+import com.willfp.libreforge.*
 import com.willfp.libreforge.effects.Effect
-import com.willfp.libreforge.getDoubleFromExpression
-import com.willfp.libreforge.getIntFromExpression
-import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.event.DropResult
@@ -17,6 +13,7 @@ import com.willfp.libreforge.triggers.event.EditableDropEvent
 import org.bukkit.Bukkit
 import org.bukkit.block.data.Ageable
 import kotlin.math.roundToInt
+import kotlin.random.Random
 
 object EffectMultiplyDrops : Effect<NoCompileData>("multiply_drops") {
     override val parameters = setOf(
@@ -40,7 +37,6 @@ object EffectMultiplyDrops : Effect<NoCompileData>("multiply_drops") {
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val event = data.event as? EditableDropEvent ?: return false
 
-
         val isBlacklisting = plugin.configYml.getBool("effects.multiply_drops.prevent-duplication")
         val whitelist = plugin.configYml.getStrings("effects.multiply_drops.whitelist").map { Items.lookup(it) }
 
@@ -48,10 +44,17 @@ object EffectMultiplyDrops : Effect<NoCompileData>("multiply_drops") {
             val fortune = config.getIntFromExpression("fortune", data)
             (Math.random() * (fortune.toDouble() - 1) + 1.1).roundToInt()
         } else if (config.has("multiplier")) {
-            config.getDoubleFromExpression("multiplier", data).roundToInt()
+            config.getDoubleFromExpression("multiplier", data).toInt()
         } else 1
 
 
+        val weight: Double = config.getDouble("calculated_weight")
+
+        if (weight != 100.0) {
+            if ((100-weight) >= Random.nextInt(100)) {
+                multiplier += 1
+            }
+        }
 
         //----only fully grown crops-------//
         //TODO add config check
@@ -59,7 +62,7 @@ object EffectMultiplyDrops : Effect<NoCompileData>("multiply_drops") {
         //
         //}
 
-        if(data.blockData!=null){
+        if (data.blockData != null) {
             val blockData = data.blockData
             if (blockData is Ageable && blockData.age != blockData.maximumAge) {
                 multiplier = 1
@@ -87,4 +90,6 @@ object EffectMultiplyDrops : Effect<NoCompileData>("multiply_drops") {
 
         return true
     }
+
+
 }

@@ -13,6 +13,7 @@ import com.willfp.libreforge.getStrings
 import com.willfp.libreforge.toWeightedList
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import org.bukkit.Bukkit
 
 object EffectDropWeightedRandomItem : Effect<WeightedList<WeightedItems>>("drop_weighted_random_item") {
     override val parameters = setOf(
@@ -28,7 +29,6 @@ object EffectDropWeightedRandomItem : Effect<WeightedList<WeightedItems>>("drop_
         val player = data.player
         val items = compileData.randomOrNull() ?: return false
         val item = items.items.randomOrNull() ?: return false
-
         if (player != null) {
             DropQueue(player)
                 .addItem(item)

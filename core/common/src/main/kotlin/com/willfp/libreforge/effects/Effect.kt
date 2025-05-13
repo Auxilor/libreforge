@@ -158,11 +158,13 @@ abstract class Effect<T>(
     fun trigger(
         trigger: DispatchedTrigger,
         config: ChainElement<T>
-    ): Boolean = onTrigger(
-        config.config,
-        trigger.data.apply { this.inheritedTriggerPlaceholders = trigger.rawPlaceholders },
-        config.compileData
-    )
+    ): Boolean {
+        return onTrigger(
+            config.config,
+            trigger.data.apply { this.inheritedTriggerPlaceholders = trigger.rawPlaceholders },
+            config.compileData
+        )
+    }
 
     /**
      * Handle triggering.

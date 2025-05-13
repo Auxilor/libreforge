@@ -1,6 +1,8 @@
 package com.willfp.libreforge.effects
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.placeholder.context.placeholderContext
+import com.willfp.eco.util.NumberUtils
 import com.willfp.libreforge.Compiled
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.ProvidedHolder
@@ -13,9 +15,11 @@ import com.willfp.libreforge.filters.FilterList
 import com.willfp.libreforge.mutators.MutatorList
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.DispatchedTrigger
+import me.clip.placeholderapi.PlaceholderAPI
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.util.UUID
+import kotlin.random.Random
 
 /**
  * A single effect config block.
@@ -29,13 +33,27 @@ class ChainElement<T> internal constructor(
     override val mutators: MutatorList,
     override val filters: FilterList,
     override val weight: Double,
+    val weightExpression:String,
     forceRunOrder: RunOrder?
 ) : ElementLike(), Compiled<T>, Weighted {
     override val uuid: UUID = UUID.randomUUID()
     override val supportsDelay = effect.supportsDelay
-
+    var tempPlayer :Player? = null
     val runOrder = forceRunOrder ?: effect.runOrder
 
+     override fun calcWeight() : Double{
+        if(weightExpression.isEmpty())return 0.0
+        var expressionCalculated:String
+        val weight:Double
+        if(tempPlayer!=null){
+            expressionCalculated = PlaceholderAPI.setPlaceholders(tempPlayer,weightExpression)
+            weight = NumberUtils.evaluateExpression(expressionCalculated,placeholderContext(player = tempPlayer))
+        }else{
+            expressionCalculated = weightExpression
+            weight = NumberUtils.evaluateExpression(expressionCalculated);
+        }
+        return weight
+    }
     fun enable(
         dispatcher: Dispatcher<*>,
         holder: ProvidedHolder,
@@ -60,8 +78,15 @@ class ChainElement<T> internal constructor(
         effect.disable(dispatcher, holder, isReload = isReload)
     }
 
-    override fun doTrigger(trigger: DispatchedTrigger) =
-        effect.trigger(trigger, this)
+    override fun doTrigger(trigger: DispatchedTrigger):Boolean {
+        val player:Player? = trigger.dispatcher.dispatcher as? Player
+        if(player!=null){
+            tempPlayer = player
+        }
+        this.config.set("calculated_weight",calcWeight())
+        return effect.trigger(trigger, this)
+    }
+
 
     override fun shouldTrigger(trigger: DispatchedTrigger): Boolean =
         effect.shouldTrigger(trigger, this)
@@ -76,7 +101,10 @@ class ChainElement<T> internal constructor(
         player: Player,
         holder: ProvidedHolder,
         isReload: Boolean = false
-    ): Unit = enable(player.toDispatcher(), holder, isReload)
+    ): Unit {
+        tempPlayer = player
+        return enable(player.toDispatcher(), holder, isReload)
+    }
 
     @Deprecated(
         "Use disable(Dispatcher<*>, ProvidedHolder, Boolean)",
