@@ -10,6 +10,6 @@ object EffectMobCoinsChanceMultiplier : MultiplierEffect("mob_coins_chance_multi
     fun handle(event: PrepareMobCoinDropEvent) {
         val player = event.player
 
-        event.mobCoin.chance *= getMultiplier(player.toDispatcher())
+        event.mobCoin.dropChance *= getMultiplier(player.toDispatcher())
     }
 }
