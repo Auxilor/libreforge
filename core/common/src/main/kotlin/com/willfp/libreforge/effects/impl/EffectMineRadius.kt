@@ -85,7 +85,7 @@ object EffectMineRadius : MineBlockEffect<NoCompileData>("mine_radius") {
 
         val useSetBlockBreak = config.getBool("use_setblock_break")
         if (useSetBlockBreak) {
-            blocks.forEach { it.type = Material.AIR }
+            blocks.forEach { it.breakNaturally() }
         } else {
             player.breakBlocksSafely(blocks)
         }
