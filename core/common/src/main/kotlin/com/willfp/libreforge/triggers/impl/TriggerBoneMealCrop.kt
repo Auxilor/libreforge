@@ -6,7 +6,6 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.event.EventHandler
 import org.bukkit.event.block.BlockFertilizeEvent
-import org.bukkit.event.player.PlayerJoinEvent
 
 object TriggerBoneMealCrop : Trigger("bonemeal_crop") {
     override val parameters = setOf(
