@@ -1,4 +1,4 @@
-package com.willfp.libreforge.integrations.husktowns.impl
+package com.willfp.libreforge.integrations.huskintegration.huskclaims.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Dispatcher
@@ -6,7 +6,7 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.get
-import net.william278.husktowns.api.BukkitHuskTownsAPI
+import net.william278.huskclaims.api.BukkitHuskClaimsAPI
 import org.bukkit.entity.Player
 
 object ConditionInOwnClaim : Condition<NoCompileData>("in_own_claim") {
@@ -18,18 +18,13 @@ object ConditionInOwnClaim : Condition<NoCompileData>("in_own_claim") {
     ): Boolean {
         val player = dispatcher.get<Player>() ?: return false
         val location = dispatcher.location ?: return false
-        val position = BukkitHuskTownsAPI.getInstance().getPosition(location)
+        val position = BukkitHuskClaimsAPI.getInstance().getPosition(location)
 
-        val claimAtLocation = BukkitHuskTownsAPI.getInstance().getClaimAt(position)
-        if (!claimAtLocation.isPresent) {
+        val claimOwner = BukkitHuskClaimsAPI.getInstance().getClaimOwnerAt(position)
+        if (!claimOwner.isPresent) {
             return false
         }
 
-        val playerTown = BukkitHuskTownsAPI.getInstance().getUserTown(player)
-        if (!playerTown.isPresent) {
-            return false
-        }
-
-        return claimAtLocation.get().town == playerTown.get().town
+        return claimOwner.get().uuid == player.uniqueId
     }
 }

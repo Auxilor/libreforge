@@ -1,30 +1,27 @@
-package com.willfp.libreforge.integrations.husktowns.impl
+package com.willfp.libreforge.integrations.huskintegration.huskclaims.impl
 
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import net.william278.husktowns.events.MemberJoinEvent
+import net.william278.huskclaims.event.BukkitDeleteClaimEvent
 import org.bukkit.event.EventHandler
 
-object TriggerJoinTown : Trigger("join_town") {
+object TriggerUnclaimLand : Trigger("unclaim_land") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.EVENT,
-        TriggerParameter.TEXT
+        TriggerParameter.EVENT
     )
 
     @EventHandler(ignoreCancelled = true)
-    fun handle(event: MemberJoinEvent) {
+    fun handle(event: BukkitDeleteClaimEvent) {
         val player = event.player ?: return
-        val role = event.memberRole.name ?: return
 
         this.dispatch(
             player.toDispatcher(),
             TriggerData(
                 player = player,
-                event = event,
-                text = role
+                event = event
             )
         )
     }

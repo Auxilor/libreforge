@@ -1,20 +1,20 @@
-package com.willfp.libreforge.integrations.huskclaims.impl
+package com.willfp.libreforge.integrations.huskintegration.huskclaims.impl
 
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import net.william278.huskclaims.event.BukkitCreateClaimEvent
+import net.william278.huskclaims.event.BukkitExitClaimEvent
 import org.bukkit.event.EventHandler
 
-object TriggerClaimLand : Trigger("claim_land") {
+object TriggerLeaveClaimedLand : Trigger("leave_claimed_land") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT
     )
 
     @EventHandler(ignoreCancelled = true)
-    fun handle(event: BukkitCreateClaimEvent) {
+    fun handle(event: BukkitExitClaimEvent) {
         val player = event.player ?: return
 
         this.dispatch(

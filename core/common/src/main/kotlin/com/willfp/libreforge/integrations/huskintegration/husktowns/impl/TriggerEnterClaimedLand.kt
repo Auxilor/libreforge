@@ -1,4 +1,4 @@
-package com.willfp.libreforge.integrations.husktowns.impl
+package com.willfp.libreforge.integrations.huskintegration.husktowns.impl
 
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
