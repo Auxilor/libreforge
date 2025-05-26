@@ -19,20 +19,24 @@ object TriggerPlayerTrade : Trigger("player_trade") {
     fun handle(event: AxTradeCompleteEvent) {
         val player = event.trade.player2.player
         val victim = event.trade.player1.player
-        val playeritems = event.trade.player1.tradeGui.getItems(false).filterNotNull()
-        val victimitems = event.trade.player2.tradeGui.getItems(false).filterNotNull()
 
-        val allItems = playeritems + victimitems
-        val item = allItems.firstOrNull()
+        val tradedItems = (event.trade.player1.tradeGui.getItems(false) + event.trade.player2.tradeGui.getItems(false)).filterNotNull()
+            .groupBy { it.type }
+            .mapValues { (_, stacks) ->
+                stacks.reduce { acc, item ->
+                    acc.clone().apply { amount += item.amount }
+                }
+            }
 
-        val totalAmount = allItems.sumOf { it.amount }
+        val mergedItem = tradedItems.values.firstOrNull()
+        val totalAmount = tradedItems.values.sumOf { it.amount }
 
         this.dispatch(
             player.toDispatcher(),
             TriggerData(
                 player = player,
                 victim = victim,
-                item = item,
+                item = mergedItem,
                 value = totalAmount.toDouble()
             )
         )
