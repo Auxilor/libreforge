@@ -15,9 +15,9 @@ import com.willfp.libreforge.display.ItemFlagDisplay
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.arguments.custom.CustomEffectArguments
 import com.willfp.libreforge.effects.impl.bossbar.BossBarProgressPlaceholder
+import com.willfp.libreforge.integrations.AxPlugins.axenvoy.AxEnvoyIntegration
 import com.willfp.libreforge.integrations.auraskills.AuraSkillsIntegration
 import com.willfp.libreforge.integrations.aureliumskills.AureliumSkillsIntegration
-import com.willfp.libreforge.integrations.axenvoy.AxEnvoyIntegration
 import com.willfp.libreforge.integrations.citizens.CitizensIntegration
 import com.willfp.libreforge.integrations.custombiomes.impl.CustomBiomesTerra
 import com.willfp.libreforge.integrations.custombiomes.impl.CustomBiomesTerraformGenerator
@@ -34,7 +34,12 @@ import com.willfp.libreforge.integrations.vault.VaultIntegration
 import com.willfp.libreforge.integrations.votifier.VotifierIntegration
 import com.willfp.libreforge.integrations.worldguard.WorldGuardIntegration
 import com.willfp.libreforge.levels.LevelTypes
-import com.willfp.libreforge.levels.placeholder.*
+import com.willfp.libreforge.levels.placeholder.ItemDataPlaceholder
+import com.willfp.libreforge.levels.placeholder.ItemLevelPlaceholder
+import com.willfp.libreforge.levels.placeholder.ItemPointsPlaceholder
+import com.willfp.libreforge.levels.placeholder.ItemProgressPlaceholder
+import com.willfp.libreforge.levels.placeholder.ItemXPPlaceholder
+import com.willfp.libreforge.levels.placeholder.ItemXPRequiredPlaceholder
 import com.willfp.libreforge.placeholders.CustomPlaceholders
 import com.willfp.libreforge.tags.CustomTag
 import com.willfp.libreforge.triggers.DispatchedTriggerFactory
@@ -199,7 +204,8 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             IntegrationLoader("AxEnvoy") { AxEnvoyIntegration.load(this) },
             IntegrationLoader("Votifier") { VotifierIntegration.load(this) },
             IntegrationLoader("ModelEngine") { ModelEngineIntegration.load(this) },
-            IntegrationLoader("FancyNpcs") { FancyNPCsIntegration.load(this) }
+            IntegrationLoader("FancyNpcs") { FancyNPCsIntegration.load(this) },
+            IntegrationLoader("AxTrade") { com.willfp.libreforge.integrations.AxPlugins.axtrade.AxTradeIntegration.load(this) }
         )
     }
 
