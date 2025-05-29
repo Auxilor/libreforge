@@ -29,6 +29,7 @@ dependencies {
     })
 
     compileOnly("me.clip:placeholderapi:2.11.6")
+    compileOnly("io.lumine:Mythic-Dist:5.6.1")
 }
 
 repositories {
@@ -36,7 +37,8 @@ repositories {
     maven {
         url = uri("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     }
-
+    mavenCentral()
+    maven(url = "https://mvn.lumine.io/repository/maven-public/")
 }
 
 configurations.all {
