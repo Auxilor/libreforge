@@ -1,14 +1,13 @@
-package com.willfp.libreforge.integrations.customcrops.impl
+package com.willfp.libreforge.integrations.xiaomomiplugins.customcrops.impl
 
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import net.momirealms.customcrops.api.event.WateringCanWaterPotEvent
-import net.momirealms.customcrops.api.event.WateringCanWaterSprinklerEvent
+import net.momirealms.customcrops.api.event.CropPlantEvent
 import org.bukkit.event.EventHandler
 
-object TriggerUseWateringCan : Trigger("use_watering_can") {
+object TriggerPlantCustomCrop : Trigger("plant_custom_crop") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT,
@@ -17,29 +16,18 @@ object TriggerUseWateringCan : Trigger("use_watering_can") {
     )
 
     @EventHandler(ignoreCancelled = true)
-    fun handle(event: WateringCanWaterSprinklerEvent) {
+    fun handle(event: CropPlantEvent) {
         val player = event.player ?: return
         val location = event.location() ?: return
+        val crop = event.cropConfig().id() ?: return
 
         this.dispatch(
             player.toDispatcher(),
             TriggerData(
                 player = player,
                 event = event,
+                text = crop,
                 location = location
-            )
-        )
-    }
-
-    @EventHandler(ignoreCancelled = true)
-    fun handle(event: WateringCanWaterPotEvent) {
-        val player = event.player ?: return
-
-        this.dispatch(
-            player.toDispatcher(),
-            TriggerData(
-                player = player,
-                event = event,
             )
         )
     }

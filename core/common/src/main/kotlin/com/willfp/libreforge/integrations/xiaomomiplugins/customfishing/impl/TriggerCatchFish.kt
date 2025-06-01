@@ -1,4 +1,4 @@
-package com.willfp.libreforge.integrations.customfishing.impl
+package com.willfp.libreforge.integrations.xiaomomiplugins.customfishing.impl
 
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger

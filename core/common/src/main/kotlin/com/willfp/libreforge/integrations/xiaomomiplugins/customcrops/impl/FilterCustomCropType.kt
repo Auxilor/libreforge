@@ -1,4 +1,4 @@
-package com.willfp.libreforge.integrations.customcrops.impl
+package com.willfp.libreforge.integrations.xiaomomiplugins.customcrops.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.NoCompileData

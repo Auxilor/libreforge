@@ -21,8 +21,8 @@ import com.willfp.libreforge.integrations.axenvoy.AxEnvoyIntegration
 import com.willfp.libreforge.integrations.citizens.CitizensIntegration
 import com.willfp.libreforge.integrations.custombiomes.impl.CustomBiomesTerra
 import com.willfp.libreforge.integrations.custombiomes.impl.CustomBiomesTerraformGenerator
-import com.willfp.libreforge.integrations.customcrops.CustomCropsIntegration
-import com.willfp.libreforge.integrations.customcrops.CustomFishingIntegration
+import com.willfp.libreforge.integrations.xiaomomiplugins.customcrops.CustomCropsIntegration
+import com.willfp.libreforge.integrations.xiaomomiplugins.customfishing.CustomFishingIntegration
 import com.willfp.libreforge.integrations.fancynpcs.FancyNPCsIntegration
 import com.willfp.libreforge.integrations.jobs.JobsIntegration
 import com.willfp.libreforge.integrations.levelledmobs.LevelledMobsIntegration
