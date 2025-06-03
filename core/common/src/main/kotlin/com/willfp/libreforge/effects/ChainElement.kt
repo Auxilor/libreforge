@@ -116,4 +116,8 @@ class ChainElement<T> internal constructor(
         holder: ProvidedHolder,
         isReload: Boolean = false
     ): Unit = disable(player.toDispatcher(), holder, isReload)
+
+    override fun toString(): String {
+        return effect.id+ config.toString();
+    }
 }

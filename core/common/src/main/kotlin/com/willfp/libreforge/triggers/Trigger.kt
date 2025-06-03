@@ -111,20 +111,16 @@ abstract class Trigger(
         if (dispatchEvent.isCancelled) {
             return
         }
-
         // Filter out effects that can't be triggered by this trigger as an optimization
         val triggerableEffects = mutableListOf<ProvidedEffectBlock>()
-
         for (block in effects) {
             if (block.effect.canBeTriggeredBy(this)) {
                 // Effects are already sorted by priority
                 triggerableEffects += block
             }
         }
-
         // Only calculate placeholders once per holder
         val holderDispatches = mutableMapOf<ProvidedHolder, DispatchedTrigger>()
-
         for ((_, holder) in triggerableEffects) {
             val withHolder = dispatch.data.copy().apply {
                 this.holder = holder
@@ -151,7 +147,6 @@ abstract class Trigger(
             }
 
             val dispatchWithHolder = holderDispatches[holder] ?: continue
-
             block.tryTrigger(dispatchWithHolder)
         }
 

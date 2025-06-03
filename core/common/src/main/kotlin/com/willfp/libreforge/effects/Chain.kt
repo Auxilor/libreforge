@@ -54,4 +54,8 @@ class Chain internal constructor(
     ): Boolean {
         return trigger(player.toDispatcher(), data, trigger, executor)
     }
+
+    override fun toString(): String {
+        return list.toString();
+    }
 }

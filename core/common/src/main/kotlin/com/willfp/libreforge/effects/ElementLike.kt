@@ -13,6 +13,8 @@ import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.mutators.MutatorList
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.DispatchedTrigger
+import org.bukkit.Bukkit
+import org.bukkit.event.Cancellable
 
 /**
  * Things that are like a chain element (e.g. Blocks, Elements).
@@ -103,6 +105,7 @@ abstract class ElementLike : ConfigurableElement {
             }
         }
 
+
         // Inject placeholders everywhere after mutation
         trigger.generatePlaceholders(data)
         injectPlaceholders(trigger.placeholders)
@@ -172,7 +175,6 @@ abstract class ElementLike : ConfigurableElement {
                 }
             }.runTaskTimer(delay, delay)
         }
-
         // Code here is fucking disgusting duplicating the delay check.
         // Whatever.
 

@@ -52,6 +52,9 @@ object TriggerTakeDamage : Trigger("take_damage") {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: MythicDamageEvent){
         val victim = event.target.bukkitEntity?:return
+        if (event.damageMetadata.damageCause in ignoredCauses) {
+            return
+        }
         this.dispatch(
             victim.toDispatcher(),
             TriggerData(

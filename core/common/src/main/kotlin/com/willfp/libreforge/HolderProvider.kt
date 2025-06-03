@@ -189,21 +189,21 @@ inline fun <reified T> registerSpecificRefreshFunction(crossinline function: (T)
 }
 
 
-private val holderCooldown: Cache<UUID, Unit>? =
-    plugin.configYml.getInt("refresh.cooldown").takeIf { it > 0 }?.let {
-        Caffeine.newBuilder()
-            .expireAfterWrite(it.toLong(), TimeUnit.MILLISECONDS)
-            .build()
-    }
+private val holderCooldown: Cache<UUID, Unit>? = null
+//    plugin.configYml.getInt("refresh.cooldown").takeIf { it > 0 }?.let {
+//        Caffeine.newBuilder()
+//            .expireAfterWrite(it.toLong(), TimeUnit.MILLISECONDS)
+//            .build()
+//    }
 
 /**
  * Update holders, effects, and call refresh functions.
  */
 fun Dispatcher<*>.refreshHolders() {
-    if (holderCooldown != null) {
-        holderCooldown.getIfPresent(this.uuid) ?: return
-        holderCooldown.put(this.uuid, Unit)
-    }
+//    if (holderCooldown != null) {
+//        holderCooldown.getIfPresent(this.uuid) ?: return
+//        holderCooldown.put(this.uuid, Unit)
+//    }
     this.forceRefreshHolders()
 }
 

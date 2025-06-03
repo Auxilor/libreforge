@@ -45,9 +45,13 @@ object TriggerTakeEntityDamage : Trigger("take_entity_damage") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: MythicDamageEvent){
+        Bukkit.broadcastMessage("TakeEntity1")
         val attacker = event.caster.entity.bukkitEntity?:return
+        Bukkit.broadcastMessage("TakeEntity2")
         val livingAttacker = attacker as? LivingEntity ?: return
+        Bukkit.broadcastMessage("TakeEntity3")
         val victim = event.target.bukkitEntity?:return
+        Bukkit.broadcastMessage("TakeEntity4")
 
         this.dispatch(
             victim.toDispatcher(),
