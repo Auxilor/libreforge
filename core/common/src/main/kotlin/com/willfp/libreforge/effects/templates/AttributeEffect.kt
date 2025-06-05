@@ -10,6 +10,7 @@ import com.willfp.libreforge.get
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.proxy.Proxy
 import com.willfp.libreforge.proxy.loadProxy
+import org.bukkit.Bukkit
 import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeInstance
 import org.bukkit.attribute.AttributeModifier
@@ -53,7 +54,6 @@ abstract class AttributeEffect(
         val modifierName = "libreforge:${this.id} - ${identifiers.key.key} (${holder.holder.id})"
 
         instance.clean(modifierName, identifiers)
-
         val modifier = attributeModifier(
             identifiers,
             modifierName,

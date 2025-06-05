@@ -52,7 +52,6 @@ internal class CommandPointsSet(plugin: EcoPlugin): Subcommand(
             sender.sendMessage(plugin.langYml.getMessage("invalid-amount"))
             return
         }
-
         if (player != null) {
             player.points[pointString] = amountNum
         } else {
