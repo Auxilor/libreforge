@@ -32,6 +32,7 @@ dependencies {
     compileOnly("io.lumine:Mythic-Dist:5.6.1")
     compileOnly("net.william278.husktowns:husktowns-bukkit:3.0.8")
     compileOnly("net.william278.huskclaims:huskclaims-bukkit:1.5.8")
+    compileOnly("com.artillexstudios:AxTrade:1.14.0")
 }
 
 repositories {
@@ -42,6 +43,7 @@ repositories {
     mavenCentral()
     maven(url = "https://mvn.lumine.io/repository/maven-public/")
     maven(url = "https://repo.william278.net/releases")
+    maven("https://repo.artillex-studios.com/releases/")
 }
 
 configurations.all {

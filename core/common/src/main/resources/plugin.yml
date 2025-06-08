@@ -27,6 +27,7 @@ softdepend:
   - TerraformGenerator
   - ModelEngine
   - AxEnvoy
+  - AxTrade
   - Votifier
   - FancyNpcs
 
