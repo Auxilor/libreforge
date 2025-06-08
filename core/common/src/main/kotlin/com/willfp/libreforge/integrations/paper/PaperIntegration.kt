@@ -14,6 +14,7 @@ import com.willfp.libreforge.integrations.paper.impl.EffectElytraBoostSaveChance
 import com.willfp.libreforge.integrations.paper.impl.EffectSendMinimessage
 import com.willfp.libreforge.integrations.paper.impl.TriggerBeaconEffect
 import com.willfp.libreforge.integrations.paper.impl.TriggerElytraBoost
+import com.willfp.libreforge.integrations.paper.impl.TriggerRenameEntity
 import com.willfp.libreforge.integrations.paper.impl.TriggerSwing
 import com.willfp.libreforge.integrations.paper.impl.TriggerTridentAttack
 import com.willfp.libreforge.integrations.paper.impl.TriggerVillagerTrade
@@ -32,6 +33,7 @@ object PaperIntegration : LoadableIntegration {
         Triggers.register(TriggerBeaconEffect)
         Triggers.register(TriggerElytraBoost)
         Triggers.register(TriggerVillagerTrade)
+        Triggers.register(TriggerRenameEntity)
         Triggers.register(TriggerTridentAttack)
         Effects.register(EffectElytraBoostSaveChance)
         Effects.register(EffectDropPickupItem)
