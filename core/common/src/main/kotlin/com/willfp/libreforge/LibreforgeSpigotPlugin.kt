@@ -22,6 +22,8 @@ import com.willfp.libreforge.integrations.citizens.CitizensIntegration
 import com.willfp.libreforge.integrations.custombiomes.impl.CustomBiomesTerra
 import com.willfp.libreforge.integrations.custombiomes.impl.CustomBiomesTerraformGenerator
 import com.willfp.libreforge.integrations.fancynpcs.FancyNPCsIntegration
+import com.willfp.libreforge.integrations.huskintegration.huskclaims.HuskClaimsIntegration
+import com.willfp.libreforge.integrations.huskintegration.husktowns.HuskTownsIntegration
 import com.willfp.libreforge.integrations.jobs.JobsIntegration
 import com.willfp.libreforge.integrations.levelledmobs.LevelledMobsIntegration
 import com.willfp.libreforge.integrations.mcmmo.McMMOIntegration
@@ -215,7 +217,9 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             IntegrationLoader("AxEnvoy") { AxEnvoyIntegration.load(this) },
             IntegrationLoader("Votifier") { VotifierIntegration.load(this) },
             IntegrationLoader("ModelEngine") { ModelEngineIntegration.load(this) },
-            IntegrationLoader("FancyNpcs") { FancyNPCsIntegration.load(this) }
+            IntegrationLoader("FancyNpcs") { FancyNPCsIntegration.load(this) },
+            IntegrationLoader("HuskTowns") { HuskTownsIntegration.load(this) },
+            IntegrationLoader("HuskClaims") { HuskClaimsIntegration.load(this) }
         )
     }
 
