@@ -30,6 +30,8 @@ dependencies {
 
     compileOnly("me.clip:placeholderapi:2.11.6")
     compileOnly("io.lumine:Mythic-Dist:5.6.1")
+    compileOnly("net.william278.husktowns:husktowns-bukkit:3.0.8")
+    compileOnly("net.william278.huskclaims:huskclaims-bukkit:1.5.8")
 }
 
 repositories {
@@ -39,6 +41,7 @@ repositories {
     }
     mavenCentral()
     maven(url = "https://mvn.lumine.io/repository/maven-public/")
+    maven(url = "https://repo.william278.net/releases")
 }
 
 configurations.all {
