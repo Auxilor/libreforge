@@ -4,12 +4,12 @@ import com.willfp.libreforge.NamedValue
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.placeholders.TriggerPlaceholder
 
-object TriggerPlaceholderValue : TriggerPlaceholder("trigger_value") {
+object TriggerPlaceholderAltValue : TriggerPlaceholder("alt_trigger_value") {
     override fun createPlaceholders(data: TriggerData): Collection<NamedValue> {
         return listOf(
             NamedValue(
-                listOf("trigger_value", "triggervalue", "trigger", "value", "tv", "v", "t"),
-                data.altValue
+                listOf("alt_trigger_value", "alttriggervalue", "alttrigger", "altvalue", "atv", "av", "at"),
+                data.value
             )
         )
     }
