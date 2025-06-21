@@ -29,6 +29,7 @@ softdepend:
   - AxEnvoy
   - Votifier
   - FancyNpcs
+  - Lands
 
 commands:
   lrcdb:

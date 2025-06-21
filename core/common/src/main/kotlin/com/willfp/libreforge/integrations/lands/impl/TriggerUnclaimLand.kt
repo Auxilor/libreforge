@@ -4,21 +4,32 @@ import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import me.angeschossen.lands.api.events.ChunkDeleteEvent
 import me.angeschossen.lands.api.events.land.claiming.LandUnclaimAllEvent
 import me.angeschossen.lands.api.events.land.claiming.selection.LandUnclaimSelectionEvent
-import org.bukkit.entity.Player
+import org.bukkit.Bukkit
+import org.bukkit.event.Event
 import org.bukkit.event.EventHandler
 
 object TriggerUnclaimLand : Trigger("unclaim_land") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT,
-        TriggerParameter.LOCATION
+        TriggerParameter.LOCATION,
+        TriggerParameter.VALUE
     )
 
     @EventHandler(ignoreCancelled = true)
-    fun handle(event: LandUnclaimSelectionEvent) {
-        val player = event.landPlayer as Player
+    fun handle(event: Event) {
+        val result = when (event) {
+            is LandUnclaimSelectionEvent -> event.landPlayer?.let { it to event.affectedChunks.size }
+            is LandUnclaimAllEvent -> event.landPlayer?.let { it to event.land.maxChunks }
+            is ChunkDeleteEvent -> event.landPlayer?.let { it to 1 }
+            else -> null
+        } ?: return
+
+        val (landPlayer, chunkCount) = result
+        val player = Bukkit.getPlayer(landPlayer.uid) ?: return
         val location = player.location
 
         this.dispatch(
@@ -27,21 +38,7 @@ object TriggerUnclaimLand : Trigger("unclaim_land") {
                 player = player,
                 event = event,
                 location = location,
-            )
-        )
-    }
-
-    @EventHandler(ignoreCancelled = true)
-    fun handle(event: LandUnclaimAllEvent) {
-        val player = event.landPlayer as Player
-        val location = player.location
-
-        this.dispatch(
-            player.toDispatcher(),
-            TriggerData(
-                player = player,
-                event = event,
-                location = location,
+                value = chunkCount.toDouble()
             )
         )
     }

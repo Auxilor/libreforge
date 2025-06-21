@@ -5,6 +5,7 @@ import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import me.angeschossen.lands.api.events.LandTrustPlayerEvent
+import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 
@@ -12,12 +13,17 @@ object TriggerJoinLand : Trigger("join_land") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT,
-        TriggerParameter.LOCATION
+        TriggerParameter.LOCATION,
+        TriggerParameter.TEXT,
+        TriggerParameter.VICTIM
     )
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: LandTrustPlayerEvent) {
-        val player = event.landPlayer as Player
+        val trustedPlayer = event.targetUUID ?: return
+        val player = Bukkit.getPlayer(trustedPlayer) ?: return
+        val trustingPlayer = event.landPlayer ?: return
+        val trustee = Bukkit.getPlayer(trustingPlayer.uid) ?: return
         val location = player.location
 
         this.dispatch(
@@ -26,6 +32,8 @@ object TriggerJoinLand : Trigger("join_land") {
                 player = player,
                 event = event,
                 location = location,
+                text = event.land.name,
+                victim = trustee
             )
         )
     }
