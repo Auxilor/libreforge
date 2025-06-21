@@ -23,7 +23,7 @@ dependencies {
     compileOnly("net.citizensnpcs:citizens-main:2.0.31-SNAPSHOT") {
         exclude(group = "net.byteflux", module = "libby-bukkit")
     }
-
+    compileOnly("com.github.angeschossen:LandsAPI:7.15.19")
     compileOnly(fileTree("../../lib") {
         include("*.jar")
     })
