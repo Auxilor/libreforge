@@ -4,18 +4,14 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
-import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.get
 import com.willfp.libreforge.plugin
+import com.willfp.libreforge.triggers.TriggerData
 import me.angeschossen.lands.api.LandsIntegration
 import org.bukkit.entity.Player
 
-object ConditionHasLandsRole : Condition<NoCompileData>("has_lands_role") {
-    override val arguments = arguments {
-        require("roles", "You must specify the roles!")
-    }
-
+object ConditionInTrustedLand : Condition<NoCompileData>("in_trusted_land") {
     override fun isMet(
         dispatcher: Dispatcher<*>,
         config: Config,
@@ -24,11 +20,10 @@ object ConditionHasLandsRole : Condition<NoCompileData>("has_lands_role") {
     ): Boolean {
         val player = dispatcher.get<Player>() ?: return false
         val location = dispatcher.location ?: return false
-        val area = LandsIntegration.of(plugin).getArea(location) ?: return false
-        val roleName = area.getRole(player.uniqueId)?.name ?: return false
 
-        return config.getStrings("roles").any {
-            it.equals(roleName, ignoreCase = true)
-        }
+        val landsAPI = LandsIntegration.of(plugin)
+        val area = landsAPI.getArea(location) ?: return false
+
+        return area.isTrusted(player.uniqueId)
     }
 }
