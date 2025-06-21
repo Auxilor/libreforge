@@ -11,7 +11,7 @@ import com.willfp.libreforge.plugin
 import me.angeschossen.lands.api.LandsIntegration
 import org.bukkit.entity.Player
 
-object ConditionHasLandsRole : Condition<NoCompileData>("has_lands_role") {
+object ConditionHasClaimRole : Condition<NoCompileData>("has_claim_role") {
     override val arguments = arguments {
         require("roles", "You must specify the roles!")
     }

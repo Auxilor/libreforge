@@ -7,11 +7,10 @@ import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.get
 import com.willfp.libreforge.plugin
-import com.willfp.libreforge.triggers.TriggerData
 import me.angeschossen.lands.api.LandsIntegration
 import org.bukkit.entity.Player
 
-object ConditionInTrustedLand : Condition<NoCompileData>("in_trusted_land") {
+object ConditionInTrustedClaim : Condition<NoCompileData>("in_trusted_claim") {
     override fun isMet(
         dispatcher: Dispatcher<*>,
         config: Config,
