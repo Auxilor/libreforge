@@ -5,6 +5,7 @@ import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import me.angeschossen.lands.api.events.land.spawn.LandSpawnTeleportEvent
+import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 
@@ -17,7 +18,8 @@ object TriggerLandsSpawnTeleport : Trigger("lands_spawn_teleport") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: LandSpawnTeleportEvent) {
-        val player = event.landPlayer as Player
+        val landPlayer = event.landPlayer
+        val player = Bukkit.getPlayer(landPlayer.uid) ?: return
         val location = player.location
 
         this.dispatch(

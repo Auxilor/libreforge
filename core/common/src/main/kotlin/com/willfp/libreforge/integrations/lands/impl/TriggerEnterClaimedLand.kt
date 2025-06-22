@@ -5,11 +5,12 @@ import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import me.angeschossen.lands.api.events.PlayerLeaveLandEvent
+import me.angeschossen.lands.api.events.player.area.PlayerAreaEnterEvent
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 
-object TriggerLeaveLand : Trigger("leave_land") {
+object TriggerEnterClaimedLand : Trigger("enter_claimed_land") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT,
@@ -17,9 +18,9 @@ object TriggerLeaveLand : Trigger("leave_land") {
     )
 
     @EventHandler(ignoreCancelled = true)
-    fun handle(event: PlayerLeaveLandEvent) {
-        val leavingPlayer = event.landPlayer ?: return
-        val player = Bukkit.getPlayer(leavingPlayer.uid) ?: return
+    fun handle(event: PlayerAreaEnterEvent) {
+        val landPlayer = event.landPlayer ?: return
+        val player = Bukkit.getPlayer(landPlayer.uid) ?: return
         val location = player.location
 
         this.dispatch(

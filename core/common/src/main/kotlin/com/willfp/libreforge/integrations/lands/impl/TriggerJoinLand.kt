@@ -14,7 +14,6 @@ object TriggerJoinLand : Trigger("join_land") {
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT,
         TriggerParameter.LOCATION,
-        TriggerParameter.TEXT,
         TriggerParameter.VICTIM
     )
 
@@ -32,7 +31,6 @@ object TriggerJoinLand : Trigger("join_land") {
                 player = player,
                 event = event,
                 location = location,
-                text = event.land.name,
                 victim = trustee
             )
         )
