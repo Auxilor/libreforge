@@ -8,6 +8,7 @@ import me.angeschossen.lands.api.events.ChunkPostClaimEvent
 import me.angeschossen.lands.api.events.land.claiming.selection.LandClaimSelectionEvent
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
+import java.util.*
 
 object TriggerClaimLand : Trigger("claim_land") {
     override val parameters = setOf(
@@ -17,29 +18,38 @@ object TriggerClaimLand : Trigger("claim_land") {
         TriggerParameter.VALUE
     )
 
-    @EventHandler(ignoreCancelled = true)
-    fun handleClaimSelection(event: LandClaimSelectionEvent) {
-        if (event.affectedChunks.size > 1.0) {
-            val landPlayer = event.landPlayer ?: return
-            val player = Bukkit.getPlayer(landPlayer.uid) ?: return
+    private val multiChunkClaimingPlayers = mutableSetOf<UUID>()
 
-            this.dispatch(
-                player.toDispatcher(),
-                TriggerData(
-                    player = player,
-                    event = event,
-                    location = player.location,
-                    value = event.affectedChunks.size.toDouble()
-                )
-            )
-            return
+    @EventHandler(ignoreCancelled = true)
+    fun handle(event: LandClaimSelectionEvent) {
+        val landPlayer = event.landPlayer ?: return
+        val player = Bukkit.getPlayer(landPlayer.uid) ?: return
+
+        // Mark this player as doing a multi-chunk claim if more than 1 chunk
+        if (event.affectedChunks.size > 1) {
+            multiChunkClaimingPlayers.add(player.uniqueId)
         }
+
+        // Dispatch the total claim event
+        this.dispatch(
+            player.toDispatcher(),
+            TriggerData(
+                player = player,
+                event = event,
+                location = player.location,
+                value = event.affectedChunks.size.toDouble()
+            )
+        )
     }
 
     @EventHandler(ignoreCancelled = true)
-    fun handlePostClaim(event: ChunkPostClaimEvent) {
+    fun handle(event: ChunkPostClaimEvent) {
         val landPlayer = event.landPlayer ?: return
         val player = Bukkit.getPlayer(landPlayer.uid) ?: return
+
+        if (multiChunkClaimingPlayers.remove(player.uniqueId)) {
+            return
+        }
 
         this.dispatch(
             player.toDispatcher(),
