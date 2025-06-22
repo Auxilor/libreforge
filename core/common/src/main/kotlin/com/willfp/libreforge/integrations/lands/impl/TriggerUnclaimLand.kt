@@ -8,7 +8,6 @@ import me.angeschossen.lands.api.events.ChunkDeleteEvent
 import me.angeschossen.lands.api.events.land.claiming.LandUnclaimAllEvent
 import me.angeschossen.lands.api.events.land.claiming.selection.LandUnclaimSelectionEvent
 import org.bukkit.Bukkit
-import org.bukkit.event.Event
 import org.bukkit.event.EventHandler
 
 object TriggerUnclaimLand : Trigger("unclaim_land") {
@@ -20,15 +19,8 @@ object TriggerUnclaimLand : Trigger("unclaim_land") {
     )
 
     @EventHandler(ignoreCancelled = true)
-    fun handle(event: Event) {
-        val result = when (event) {
-            is LandUnclaimSelectionEvent -> event.landPlayer?.let { it to event.affectedChunks.size }
-            is LandUnclaimAllEvent -> event.landPlayer?.let { it to event.land.maxChunks }
-            is ChunkDeleteEvent -> event.landPlayer?.let { it to 1 }
-            else -> null
-        } ?: return
-
-        val (landPlayer, chunkCount) = result
+    fun handleUnclaimSelection(event: LandUnclaimSelectionEvent) {
+        val landPlayer = event.landPlayer ?: return
         val player = Bukkit.getPlayer(landPlayer.uid) ?: return
         val location = player.location
 
@@ -38,7 +30,41 @@ object TriggerUnclaimLand : Trigger("unclaim_land") {
                 player = player,
                 event = event,
                 location = location,
-                value = chunkCount.toDouble()
+                value = event.affectedChunks.size.toDouble()
+            )
+        )
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    fun handleUnclaimAll(event: LandUnclaimAllEvent) {
+        val landPlayer = event.landPlayer ?: return
+        val player = Bukkit.getPlayer(landPlayer.uid) ?: return
+        val location = player.location
+
+        this.dispatch(
+            player.toDispatcher(),
+            TriggerData(
+                player = player,
+                event = event,
+                location = location,
+                value = event.land.maxChunks.toDouble()
+            )
+        )
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    fun handleChunkDelete(event: ChunkDeleteEvent) {
+        val landPlayer = event.landPlayer ?: return
+        val player = Bukkit.getPlayer(landPlayer.uid) ?: return
+        val location = player.location
+
+        this.dispatch(
+            player.toDispatcher(),
+            TriggerData(
+                player = player,
+                event = event,
+                location = location,
+                value = 1.0
             )
         )
     }
