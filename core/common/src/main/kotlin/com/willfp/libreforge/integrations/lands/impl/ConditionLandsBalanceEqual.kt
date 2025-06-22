@@ -11,7 +11,7 @@ import com.willfp.libreforge.plugin
 import me.angeschossen.lands.api.LandsIntegration
 import org.bukkit.entity.Player
 
-object ConditionLandsBankBalanceAbove : Condition<NoCompileData>("lands_bank_balance_above") {
+object ConditionLandsBalanceEqual : Condition<NoCompileData>("lands_balance_equal") {
     override val arguments = arguments {
         require("amount", "You must specify the amount!")
     }
@@ -29,6 +29,6 @@ object ConditionLandsBankBalanceAbove : Condition<NoCompileData>("lands_bank_bal
         val balance = area.land.balance
         val required = config.getDoubleFromExpression("amount", player)
 
-        return balance > required
+        return balance == required
     }
 }

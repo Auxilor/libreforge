@@ -31,7 +31,8 @@ object TriggerUnclaimLand : Trigger("unclaim_land") {
             multiChunkUnclaimingPlayers[player.uniqueId] = event.affectedChunks.size
         }
 
-        Bukkit.getScheduler().runTask(plugin, Runnable {
+        Bukkit.getScheduler().runTask(plugin, Runnable { 
+        // TriggerDispatchEvent may only be triggered synchronously.
             this.dispatch(
                 player.toDispatcher(),
                 TriggerData(
@@ -80,7 +81,8 @@ object TriggerUnclaimLand : Trigger("unclaim_land") {
             return
         }
 
-        Bukkit.getScheduler().runTask(plugin, Runnable {
+        Bukkit.getScheduler().runTask(plugin, Runnable { 
+        // TriggerDispatchEvent may only be triggered synchronously.
             this.dispatch(
                 player.toDispatcher(),
                 TriggerData(

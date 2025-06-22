@@ -6,9 +6,11 @@ import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.filters.Filters
 import com.willfp.libreforge.integrations.LoadableIntegration
 import com.willfp.libreforge.integrations.lands.impl.ConditionHasClaimRole
+import com.willfp.libreforge.integrations.lands.impl.ConditionInOwnClaim
 import com.willfp.libreforge.integrations.lands.impl.ConditionInTrustedClaim
-import com.willfp.libreforge.integrations.lands.impl.ConditionLandsBankBalanceAbove
-import com.willfp.libreforge.integrations.lands.impl.ConditionLandsBankBalanceBelow
+import com.willfp.libreforge.integrations.lands.impl.ConditionLandsBalanceAbove
+import com.willfp.libreforge.integrations.lands.impl.ConditionLandsBalanceBelow
+import com.willfp.libreforge.integrations.lands.impl.ConditionLandsBalanceEqual
 import com.willfp.libreforge.integrations.lands.impl.EffectGiveLandsBankBalance
 import com.willfp.libreforge.integrations.lands.impl.FilterAtWarWithVictim
 import com.willfp.libreforge.integrations.lands.impl.TriggerClaimLand
@@ -24,19 +26,21 @@ import com.willfp.libreforge.triggers.Triggers
 
 object LandsIntegration : LoadableIntegration {
     override fun load(plugin: EcoPlugin) {
-        Conditions.register(ConditionHasClaimRole)
-        Conditions.register(ConditionInTrustedClaim)
-        Conditions.register(ConditionLandsBankBalanceAbove)
-        Conditions.register(ConditionLandsBankBalanceBelow)
-        Effects.register(EffectGiveLandsBankBalance)
-        Filters.register(FilterAtWarWithVictim)
+        Conditions.register(ConditionHasClaimRole) // Working
+        Conditions.register(ConditionInTrustedClaim) // Working
+        Conditions.register(ConditionInOwnClaim) // Working
+        Conditions.register(ConditionLandsBalanceAbove) // Working
+        Conditions.register(ConditionLandsBalanceBelow) // Working
+        Conditions.register(ConditionLandsBalanceEqual) // Working
+        Effects.register(EffectGiveLandsBankBalance) // Working
+        Filters.register(FilterAtWarWithVictim) // Working
         Triggers.register(TriggerClaimLand) // Working with single and selection
-        Triggers.register(TriggerEnterClaimedLand)
+        Triggers.register(TriggerEnterClaimedLand) // Working
         Triggers.register(TriggerJoinLand) // Working
-        Triggers.register(TriggerLandsBankDeposit)
-        Triggers.register(TriggerLandsBankWithdraw)
-        Triggers.register(TriggerLandsSpawnTeleport)
-        Triggers.register(TriggerLeaveClaimedLand)
+        Triggers.register(TriggerLandsBankDeposit) // Working
+        Triggers.register(TriggerLandsBankWithdraw) // Working
+        Triggers.register(TriggerLandsSpawnTeleport) // Working
+        Triggers.register(TriggerLeaveClaimedLand) // Working
         Triggers.register(TriggerLeaveLand) // Working
         Triggers.register(TriggerUnclaimLand) // Working with single, all and selection
     }
