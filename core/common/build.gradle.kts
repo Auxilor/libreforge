@@ -22,6 +22,7 @@ dependencies {
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.7")
     compileOnly("net.citizensnpcs:citizens-main:2.0.31-SNAPSHOT") {
         exclude(group = "net.byteflux", module = "libby-bukkit")
+    compileOnly("com.artillexstudios:AxTrade:1.14.0")
     }
 
     compileOnly(fileTree("../../lib") {
