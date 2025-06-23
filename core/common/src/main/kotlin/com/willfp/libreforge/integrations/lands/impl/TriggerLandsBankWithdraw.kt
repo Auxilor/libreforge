@@ -32,7 +32,7 @@ object TriggerLandsBankWithdraw : Trigger("lands_bank_withdraw") {
                 event = event,
                 location = location,
                 value = value,
-                altValue = balance
+                altValue = balance - value
             )
         )
     }

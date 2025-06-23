@@ -32,7 +32,7 @@ object TriggerLandsBankDeposit : Trigger("lands_bank_deposit") {
                 event = event,
                 location = location,
                 value = value,
-                altValue = balance
+                altValue = balance + value
             )
         )
     }
