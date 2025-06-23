@@ -1,34 +1,33 @@
-package com.willfp.libreforge.integrations.axenvoy.impl
+package com.willfp.libreforge.integrations.xiaomomiplugins.customcrops.impl
 
-import com.artillexstudios.axenvoy.event.EnvoyCrateCollectEvent
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import net.momirealms.customcrops.api.event.BoneMealUseEvent
 import org.bukkit.event.EventHandler
 
-object TriggerCollectEnvoy : Trigger("collect_envoy") {
+object TriggerBonemealCrop : Trigger("bonemeal_crop") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.LOCATION,
         TriggerParameter.EVENT,
-        TriggerParameter.TEXT
+        TriggerParameter.TEXT,
+        TriggerParameter.LOCATION
     )
 
     @EventHandler(ignoreCancelled = true)
-    fun handle(event: EnvoyCrateCollectEvent) {
+    fun handle(event: BoneMealUseEvent) {
         val player = event.player ?: return
-        val crate = event.crate ?: return
-        val location = crate.finishLocation ?: return
-        val crateType = crate.handle?.name ?: return
+        val location = event.location() ?: return
+        val crop = event.cropConfig().id() ?: return
 
         this.dispatch(
             player.toDispatcher(),
             TriggerData(
                 player = player,
-                location = location,
                 event = event,
-                text = crateType
+                text = crop,
+                location = location
             )
         )
     }

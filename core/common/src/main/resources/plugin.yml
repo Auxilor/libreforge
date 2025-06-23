@@ -27,10 +27,13 @@ softdepend:
   - TerraformGenerator
   - ModelEngine
   - AxEnvoy
+  - AxTrade
   - Votifier
   - FancyNpcs
   - HuskTowns
   - HuskClaims
+  - CustomCrops
+  - CustomFishing
 
 commands:
   lrcdb:
