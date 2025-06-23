@@ -34,6 +34,7 @@ import com.willfp.libreforge.integrations.paper.PaperIntegration
 import com.willfp.libreforge.integrations.scyther.ScytherIntegration
 import com.willfp.libreforge.integrations.tab.TabIntegration
 import com.willfp.libreforge.integrations.tmmobcoins.TMMobcoinsIntegration
+import com.willfp.libreforge.integrations.ultimatemobcoins.UltimateMobCoinsIntegration
 import com.willfp.libreforge.integrations.vault.VaultIntegration
 import com.willfp.libreforge.integrations.votifier.VotifierIntegration
 import com.willfp.libreforge.integrations.worldguard.WorldGuardIntegration
@@ -209,6 +210,7 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             IntegrationLoader("Votifier") { VotifierIntegration.load(this) },
             IntegrationLoader("ModelEngine") { ModelEngineIntegration.load(this) },
             IntegrationLoader("FancyNpcs") { FancyNPCsIntegration.load(this) },
+            IntegrationLoader("UltimateMobCoins") { UltimateMobCoinsIntegration.load(this) },
             IntegrationLoader("HuskTowns") { HuskTownsIntegration.load(this) },
             IntegrationLoader("HuskClaims") { HuskClaimsIntegration.load(this) },
             IntegrationLoader("CustomCrops") { CustomCropsIntegration.load(this) },
