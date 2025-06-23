@@ -6,7 +6,6 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import me.angeschossen.lands.api.events.LandTrustPlayerEvent
 import org.bukkit.Bukkit
-import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 
 object TriggerJoinLand : Trigger("join_land") {
@@ -14,7 +13,8 @@ object TriggerJoinLand : Trigger("join_land") {
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT,
         TriggerParameter.LOCATION,
-        TriggerParameter.VICTIM
+        TriggerParameter.VICTIM,
+        TriggerParameter.TEXT
     )
 
     @EventHandler(ignoreCancelled = true)
@@ -31,7 +31,8 @@ object TriggerJoinLand : Trigger("join_land") {
                 player = player,
                 event = event,
                 location = location,
-                victim = trustee
+                victim = trustee,
+                text = event.land.name
             )
         )
     }

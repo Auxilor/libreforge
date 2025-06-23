@@ -6,7 +6,6 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import me.angeschossen.lands.api.events.land.bank.LandBankWithdrawEvent
 import org.bukkit.Bukkit
-import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 
 object TriggerLandsBankWithdraw : Trigger("lands_bank_withdraw") {
@@ -14,7 +13,8 @@ object TriggerLandsBankWithdraw : Trigger("lands_bank_withdraw") {
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT,
         TriggerParameter.LOCATION,
-        TriggerParameter.VALUE
+        TriggerParameter.VALUE,
+        TriggerParameter.ALT_VALUE
     )
 
     @EventHandler(ignoreCancelled = true)
@@ -23,6 +23,7 @@ object TriggerLandsBankWithdraw : Trigger("lands_bank_withdraw") {
         val player = Bukkit.getPlayer(landPlayer.uid) ?: return
         val location = player.location
         val value = event.value
+        val balance = event.land.balance
 
         this.dispatch(
             player.toDispatcher(),
@@ -30,7 +31,8 @@ object TriggerLandsBankWithdraw : Trigger("lands_bank_withdraw") {
                 player = player,
                 event = event,
                 location = location,
-                value = value
+                value = value,
+                altValue = balance
             )
         )
     }

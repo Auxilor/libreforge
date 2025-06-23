@@ -6,6 +6,7 @@ import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.filters.Filters
 import com.willfp.libreforge.integrations.LoadableIntegration
 import com.willfp.libreforge.integrations.lands.impl.ConditionHasClaimRole
+import com.willfp.libreforge.integrations.lands.impl.ConditionInEnemyClaim
 import com.willfp.libreforge.integrations.lands.impl.ConditionInOwnClaim
 import com.willfp.libreforge.integrations.lands.impl.ConditionInTrustedClaim
 import com.willfp.libreforge.integrations.lands.impl.ConditionLandsBalanceAbove
@@ -27,6 +28,7 @@ import com.willfp.libreforge.triggers.Triggers
 object LandsIntegration : LoadableIntegration {
     override fun load(plugin: EcoPlugin) {
         Conditions.register(ConditionHasClaimRole) // Working
+        Conditions.register(ConditionInEnemyClaim) // TBC
         Conditions.register(ConditionInTrustedClaim) // Working
         Conditions.register(ConditionInOwnClaim) // Working
         Conditions.register(ConditionLandsBalanceAbove) // Working
