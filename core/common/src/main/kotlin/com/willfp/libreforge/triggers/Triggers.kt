@@ -138,5 +138,8 @@ object Triggers : Registry<Trigger>() {
         register(TriggerEntityTeleport)
         register(TriggerCompleteAdvancement)
         register(TriggerSmithItem)
+        register(TriggerUnleashEntity)
+        register(TriggerRingBell)
+        register(TriggerBoneMealCrop)
     }
 }
