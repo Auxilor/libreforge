@@ -24,8 +24,8 @@ import com.willfp.libreforge.integrations.custombiomes.impl.CustomBiomesTerrafor
 import com.willfp.libreforge.integrations.xiaomomiplugins.customcrops.CustomCropsIntegration
 import com.willfp.libreforge.integrations.xiaomomiplugins.customfishing.CustomFishingIntegration
 import com.willfp.libreforge.integrations.fancynpcs.FancyNPCsIntegration
-import com.willfp.libreforge.integrations.huskclaims.HuskClaimsIntegration
-import com.willfp.libreforge.integrations.husktowns.HuskTownsIntegration
+import com.willfp.libreforge.integrations.huskintegration.husktowns.HuskTownsIntegration
+import com.willfp.libreforge.integrations.huskintegration.huskclaims.HuskClaimsIntegration
 import com.willfp.libreforge.integrations.jobs.JobsIntegration
 import com.willfp.libreforge.integrations.levelledmobs.LevelledMobsIntegration
 import com.willfp.libreforge.integrations.mcmmo.McMMOIntegration
