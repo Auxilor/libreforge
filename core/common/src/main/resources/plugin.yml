@@ -30,6 +30,8 @@ softdepend:
   - AxTrade
   - Votifier
   - FancyNpcs
+  - CustomCrops
+  - CustomFishing
 
 commands:
   lrcdb:
