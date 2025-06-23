@@ -35,6 +35,7 @@ allprojects {
         maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
         maven("https://maven.citizensnpcs.co/repo")
         maven("https://repo.momirealms.net/releases/")
+        maven("https://repo.artillex-studios.com/releases/")
     }
 
     dependencies {

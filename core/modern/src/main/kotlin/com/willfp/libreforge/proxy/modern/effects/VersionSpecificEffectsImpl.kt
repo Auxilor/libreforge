@@ -4,7 +4,9 @@ import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.VersionSpecificEffects
 import com.willfp.libreforge.proxy.modern.effects.impl.EffectAddDurability
 import com.willfp.libreforge.proxy.modern.effects.impl.EffectBlockReach
+import com.willfp.libreforge.proxy.modern.effects.impl.EffectBurningTimeMultiplier
 import com.willfp.libreforge.proxy.modern.effects.impl.EffectEntityReach
+import com.willfp.libreforge.proxy.modern.effects.impl.EffectExplosionKnockbackResistanceMultiplier
 import com.willfp.libreforge.proxy.modern.effects.impl.EffectGravityMultiplier
 import com.willfp.libreforge.proxy.modern.effects.impl.EffectIncreaseStepHeight
 import com.willfp.libreforge.proxy.modern.effects.impl.EffectJumpStrengthMultiplier
@@ -13,6 +15,7 @@ import com.willfp.libreforge.proxy.modern.effects.impl.EffectMiningSpeedMultipli
 import com.willfp.libreforge.proxy.modern.effects.impl.EffectMovementEfficiencyMultiplier
 import com.willfp.libreforge.proxy.modern.effects.impl.EffectSafeFallDistance
 import com.willfp.libreforge.proxy.modern.effects.impl.EffectScale
+import com.willfp.libreforge.proxy.modern.effects.impl.EffectWaterMovementEfficiencyMultiplier
 import com.willfp.libreforge.proxy.modern.effects.impl.EffectSneakingSpeedMultiplier
 import com.willfp.libreforge.proxy.modern.effects.impl.EffectUnderwaterMiningSpeedMultiplier
 
@@ -32,6 +35,9 @@ class VersionSpecificEffectsImpl: VersionSpecificEffects {
             register(EffectSafeFallDistance)
             register(EffectAddDurability)
             register(EffectScale)
+            register(EffectWaterMovementEfficiencyMultiplier)
+            register(EffectBurningTimeMultiplier)
+            register(EffectExplosionKnockbackResistanceMultiplier)
         }
     }
 }

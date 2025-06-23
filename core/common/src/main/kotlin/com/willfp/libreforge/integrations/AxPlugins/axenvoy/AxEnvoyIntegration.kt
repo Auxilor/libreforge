@@ -1,10 +1,10 @@
-package com.willfp.libreforge.integrations.axenvoy
+package com.willfp.libreforge.integrations.AxPlugins.axenvoy
 
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.libreforge.filters.Filters
+import com.willfp.libreforge.integrations.AxPlugins.axenvoy.impl.FilterEnvoyType
+import com.willfp.libreforge.integrations.AxPlugins.axenvoy.impl.TriggerCollectEnvoy
 import com.willfp.libreforge.integrations.LoadableIntegration
-import com.willfp.libreforge.integrations.axenvoy.impl.FilterEnvoyType
-import com.willfp.libreforge.integrations.axenvoy.impl.TriggerCollectEnvoy
 import com.willfp.libreforge.triggers.Triggers
 
 object AxEnvoyIntegration : LoadableIntegration {

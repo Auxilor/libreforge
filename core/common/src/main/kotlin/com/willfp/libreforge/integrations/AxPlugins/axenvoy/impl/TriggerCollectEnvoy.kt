@@ -1,4 +1,4 @@
-package com.willfp.libreforge.integrations.axenvoy.impl
+package com.willfp.libreforge.integrations.AxPlugins.axenvoy.impl
 
 import com.artillexstudios.axenvoy.event.EnvoyCrateCollectEvent
 import com.willfp.libreforge.toDispatcher
