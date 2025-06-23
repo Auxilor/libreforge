@@ -9,7 +9,7 @@ object TriggerPlaceholderAltValue : TriggerPlaceholder("alt_trigger_value") {
         return listOf(
             NamedValue(
                 listOf("alt_trigger_value", "alttriggervalue", "alttrigger", "altvalue", "atv", "av", "at"),
-                data.value
+                data.altValue
             )
         )
     }
