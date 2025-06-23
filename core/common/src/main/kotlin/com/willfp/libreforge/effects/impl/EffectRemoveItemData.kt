@@ -19,7 +19,7 @@ object EffectRemoveItemData : Effect<NoCompileData>("remove_item_data") {
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val item = data.foundItem ?: return false
-        item.itemData.remove(config.getString("type"))
+        item.itemData.remove(config.getString("key"))
 
         return true
     }
