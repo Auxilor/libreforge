@@ -1,27 +1,30 @@
-package com.willfp.libreforge.integrations.huskintegration.huskclaims.impl
+package com.willfp.libreforge.integrations.huskintegration.husktowns.impl
 
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import net.william278.huskclaims.event.BukkitCreateClaimEvent
+import net.william278.husktowns.events.PlayerEnterTownEvent
 import org.bukkit.event.EventHandler
 
-object TriggerClaimLand : Trigger("claim_land") {
+object TriggerEnterClaim : Trigger("enter_claim") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.EVENT
+        TriggerParameter.EVENT,
+        TriggerParameter.TEXT
     )
 
     @EventHandler(ignoreCancelled = true)
-    fun handle(event: BukkitCreateClaimEvent) {
+    fun handle(event: PlayerEnterTownEvent) {
         val player = event.player ?: return
+        val town = event.enteredTownClaim.town.name ?: return
 
         this.dispatch(
             player.toDispatcher(),
             TriggerData(
                 player = player,
-                event = event
+                event = event,
+                text = town
             )
         )
     }
