@@ -12,7 +12,7 @@ import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import java.util.*
 
-object TriggerUnclaimLand : Trigger("unclaim_land") {
+object TriggerUnclaim : Trigger("unclaim") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT,

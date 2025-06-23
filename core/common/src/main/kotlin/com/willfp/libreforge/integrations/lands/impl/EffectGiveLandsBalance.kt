@@ -11,7 +11,7 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import me.angeschossen.lands.api.LandsIntegration
 
-object EffectGiveLandsBankBalance : Effect<NoCompileData>("give_lands_bank_balance") {
+object EffectGiveLandsBalance : Effect<NoCompileData>("give_lands_balance") {
     override val parameters = setOf(
         TriggerParameter.PLAYER
     )

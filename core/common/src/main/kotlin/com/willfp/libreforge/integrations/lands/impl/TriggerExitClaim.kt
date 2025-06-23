@@ -9,7 +9,7 @@ import me.angeschossen.lands.api.events.player.area.PlayerAreaLeaveEvent
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 
-object TriggerLeaveClaimedLand : Trigger("leave_claimed_land") {
+object TriggerExitClaim : Trigger("exit_claim") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT,

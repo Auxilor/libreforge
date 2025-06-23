@@ -9,7 +9,7 @@ import me.angeschossen.lands.api.events.player.area.PlayerAreaEnterEvent
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 
-object TriggerEnterClaimedLand : Trigger("enter_claimed_land") {
+object TriggerEnterClaim : Trigger("enter_claim") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT,

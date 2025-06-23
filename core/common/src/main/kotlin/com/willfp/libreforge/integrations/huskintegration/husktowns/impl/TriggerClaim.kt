@@ -7,7 +7,7 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import net.william278.husktowns.events.ClaimEvent
 import org.bukkit.event.EventHandler
 
-object TriggerClaimLand : Trigger("claim_land") {
+object TriggerClaim : Trigger("claim") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT

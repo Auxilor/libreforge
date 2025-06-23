@@ -9,7 +9,7 @@ import me.angeschossen.lands.api.events.land.claiming.selection.LandClaimSelecti
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 
-object TriggerClaimLand : Trigger("claim_land") {
+object TriggerClaim : Trigger("claim") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT,

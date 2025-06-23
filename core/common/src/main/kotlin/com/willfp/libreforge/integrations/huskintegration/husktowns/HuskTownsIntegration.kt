@@ -8,30 +8,30 @@ import com.willfp.libreforge.integrations.huskintegration.husktowns.impl.Conditi
 import com.willfp.libreforge.integrations.huskintegration.husktowns.impl.ConditionInOwnClaim
 import com.willfp.libreforge.integrations.huskintegration.husktowns.impl.FilterTownRole
 import com.willfp.libreforge.integrations.huskintegration.husktowns.impl.TriggerChangeTownRole
-import com.willfp.libreforge.integrations.huskintegration.husktowns.impl.TriggerClaimLand
+import com.willfp.libreforge.integrations.huskintegration.husktowns.impl.TriggerClaim
 import com.willfp.libreforge.integrations.huskintegration.husktowns.impl.TriggerCreateTown
 import com.willfp.libreforge.integrations.huskintegration.husktowns.impl.TriggerDisbandTown
-import com.willfp.libreforge.integrations.huskintegration.husktowns.impl.TriggerEnterClaimedLand
+import com.willfp.libreforge.integrations.huskintegration.husktowns.impl.TriggerEnterClaim
+import com.willfp.libreforge.integrations.huskintegration.husktowns.impl.TriggerExitClaim
 import com.willfp.libreforge.integrations.huskintegration.husktowns.impl.TriggerJoinTown
-import com.willfp.libreforge.integrations.huskintegration.husktowns.impl.TriggerLeaveClaimedLand
 import com.willfp.libreforge.integrations.huskintegration.husktowns.impl.TriggerLeaveTown
-import com.willfp.libreforge.integrations.huskintegration.husktowns.impl.TriggerUnclaimLand
+import com.willfp.libreforge.integrations.huskintegration.husktowns.impl.TriggerUnclaim
 import com.willfp.libreforge.triggers.Triggers
 
 object HuskTownsIntegration : LoadableIntegration {
     override fun load(plugin: EcoPlugin) {
-        Triggers.register(TriggerChangeTownRole)
-        Triggers.register(TriggerClaimLand)
-        Triggers.register(TriggerCreateTown)
-        Triggers.register(TriggerDisbandTown)
-        Triggers.register(TriggerEnterClaimedLand)
-        Triggers.register(TriggerJoinTown)
-        Triggers.register(TriggerLeaveTown)
-        Triggers.register(TriggerLeaveClaimedLand)
-        Triggers.register(TriggerUnclaimLand)
-        Filters.register(FilterTownRole)
-        Conditions.register(ConditionHasTownRole)
-        Conditions.register(ConditionInOwnClaim)
+        Triggers.register(TriggerChangeTownRole) // Seperate
+        Triggers.register(TriggerClaim) // Combined
+        Triggers.register(TriggerCreateTown) // Seperate
+        Triggers.register(TriggerDisbandTown) // Seperate
+        Triggers.register(TriggerEnterClaim) // Combined
+        Triggers.register(TriggerJoinTown) // Seperate
+        Triggers.register(TriggerLeaveTown) // Seperate
+        Triggers.register(TriggerExitClaim) // Combined
+        Triggers.register(TriggerUnclaim) // Combined
+        Filters.register(FilterTownRole) // Seperate
+        Conditions.register(ConditionHasTownRole) // Seperate
+        Conditions.register(ConditionInOwnClaim) // Combined
     }
 
     override fun getPluginName(): String {

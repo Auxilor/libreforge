@@ -4,10 +4,10 @@ import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import net.william278.husktowns.events.PlayerEnterTownEvent
+import net.william278.husktowns.events.PlayerLeaveTownEvent
 import org.bukkit.event.EventHandler
 
-object TriggerEnterClaimedLand : Trigger("enter_claimed_land") {
+object TriggerExitClaim : Trigger("exit_claim") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT,
@@ -15,9 +15,9 @@ object TriggerEnterClaimedLand : Trigger("enter_claimed_land") {
     )
 
     @EventHandler(ignoreCancelled = true)
-    fun handle(event: PlayerEnterTownEvent) {
+    fun handle(event: PlayerLeaveTownEvent) {
         val player = event.player ?: return
-        val town = event.enteredTownClaim.town.name ?: return
+        val town = event.leftTownClaim.town.name ?: return
 
         this.dispatch(
             player.toDispatcher(),

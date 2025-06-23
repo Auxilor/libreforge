@@ -7,7 +7,7 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import net.william278.husktowns.events.UnClaimEvent
 import org.bukkit.event.EventHandler
 
-object TriggerUnclaimLand : Trigger("unclaim_land") {
+object TriggerUnclaim : Trigger("unclaim") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT
