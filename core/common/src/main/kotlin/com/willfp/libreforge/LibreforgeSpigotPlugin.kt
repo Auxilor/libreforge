@@ -24,6 +24,8 @@ import com.willfp.libreforge.integrations.custombiomes.impl.CustomBiomesTerrafor
 import com.willfp.libreforge.integrations.xiaomomiplugins.customcrops.CustomCropsIntegration
 import com.willfp.libreforge.integrations.xiaomomiplugins.customfishing.CustomFishingIntegration
 import com.willfp.libreforge.integrations.fancynpcs.FancyNPCsIntegration
+import com.willfp.libreforge.integrations.huskclaims.HuskClaimsIntegration
+import com.willfp.libreforge.integrations.husktowns.HuskTownsIntegration
 import com.willfp.libreforge.integrations.jobs.JobsIntegration
 import com.willfp.libreforge.integrations.levelledmobs.LevelledMobsIntegration
 import com.willfp.libreforge.integrations.mcmmo.McMMOIntegration
@@ -207,6 +209,8 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             IntegrationLoader("Votifier") { VotifierIntegration.load(this) },
             IntegrationLoader("ModelEngine") { ModelEngineIntegration.load(this) },
             IntegrationLoader("FancyNpcs") { FancyNPCsIntegration.load(this) },
+            IntegrationLoader("HuskTowns") { HuskTownsIntegration.load(this) },
+            IntegrationLoader("HuskClaims") { HuskClaimsIntegration.load(this) },
             IntegrationLoader("CustomCrops") { CustomCropsIntegration.load(this) },
             IntegrationLoader("CustomFishing") { CustomFishingIntegration.load(this) },
             IntegrationLoader("AxTrade") { com.willfp.libreforge.integrations.AxPlugins.axtrade.AxTradeIntegration.load(this) }

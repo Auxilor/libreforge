@@ -30,6 +30,8 @@ softdepend:
   - AxTrade
   - Votifier
   - FancyNpcs
+  - HuskTowns
+  - HuskClaims
   - CustomCrops
   - CustomFishing
 
