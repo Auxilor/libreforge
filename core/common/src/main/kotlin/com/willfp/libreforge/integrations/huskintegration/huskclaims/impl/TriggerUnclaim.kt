@@ -4,17 +4,17 @@ import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import net.william278.huskclaims.event.BukkitExitClaimEvent
+import net.william278.huskclaims.event.BukkitDeleteClaimEvent
 import org.bukkit.event.EventHandler
 
-object TriggerLeaveClaimedLand : Trigger("leave_claimed_land") {
+object TriggerUnclaim : Trigger("unclaim") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT
     )
 
     @EventHandler(ignoreCancelled = true)
-    fun handle(event: BukkitExitClaimEvent) {
+    fun handle(event: BukkitDeleteClaimEvent) {
         val player = event.player ?: return
 
         this.dispatch(
