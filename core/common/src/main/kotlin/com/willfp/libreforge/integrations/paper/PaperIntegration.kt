@@ -31,17 +31,17 @@ object PaperIntegration : LoadableIntegration {
             Effects.register(EffectSendMinimessage)
         }
 
+        Conditions.register(ConditionInBubble)
+        Conditions.register(ConditionInLava)
+        Conditions.register(ConditionInRain)
+        Effects.register(EffectDropPickupItem)
+        Effects.register(EffectElytraBoostSaveChance)
         Triggers.register(TriggerBeaconEffect)
         Triggers.register(TriggerElytraBoost)
         Triggers.register(TriggerRenameEntity)
         Triggers.register(TriggerTridentAttack)
         Triggers.register(TriggerUseFlowerPot)
         Triggers.register(TriggerVillagerTrade)
-        Effects.register(EffectElytraBoostSaveChance)
-        Effects.register(EffectDropPickupItem)
-        Conditions.register(ConditionInBubble)
-        Conditions.register(ConditionInLava)
-        Conditions.register(ConditionInRain)
     }
 
     // I know it's not a plugin but shhhh

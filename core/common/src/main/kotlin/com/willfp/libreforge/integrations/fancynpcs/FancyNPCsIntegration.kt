@@ -10,9 +10,9 @@ import com.willfp.libreforge.triggers.Triggers
 
 object FancyNPCsIntegration : LoadableIntegration {
     override fun load(plugin: EcoPlugin) {
+        Filters.register(FilterNPC)
         Triggers.register(TriggerLeftClickNPC)
         Triggers.register(TriggerRightClickNPC)
-        Filters.register(FilterNPC)
     }
 
     override fun getPluginName(): String {

@@ -8,8 +8,8 @@ import com.willfp.libreforge.integrations.ultimatemobcoins.impl.EffectMobCoinsDr
 
 object UltimateMobCoinsIntegration: LoadableIntegration {
     override fun load(plugin: EcoPlugin) {
-        Effects.register(EffectMobCoinsDropMultiplier)
         Effects.register(EffectMobCoinsChanceMultiplier)
+        Effects.register(EffectMobCoinsDropMultiplier)
     }
 
     override fun getPluginName(): String = "UltimateMobCoins"

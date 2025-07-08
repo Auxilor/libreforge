@@ -20,17 +20,17 @@ import com.willfp.libreforge.triggers.Triggers
 
 object McMMOIntegration : LoadableIntegration {
     override fun load(plugin: EcoPlugin) {
-        Effects.register(EffectMcMMOXpMultiplier)
-        Effects.register(EffectGiveMcMMOXp)
-        Triggers.register(TriggerGainMcMMOXp)
-        Triggers.register(TriggerLevelUpMcMMO)
-        Triggers.register(TriggerLevelDownMcMMO)
-        Triggers.register(TriggerMcMMOAbilityActivate)
-        Triggers.register(TriggerMcMMOAbilityDeactivate)
-        Filters.register(FilterMcMMOSkill)
-        Filters.register(FilterMcMMOAbility)
         Conditions.register(ConditionHasMcMMOLevel)
         Conditions.register(ConditionMcMMOAbilityOnCooldown)
+        Effects.register(EffectGiveMcMMOXp)
+        Effects.register(EffectMcMMOXpMultiplier)
+        Filters.register(FilterMcMMOAbility)
+        Filters.register(FilterMcMMOSkill)
+        Triggers.register(TriggerGainMcMMOXp)
+        Triggers.register(TriggerLevelDownMcMMO)
+        Triggers.register(TriggerLevelUpMcMMO)
+        Triggers.register(TriggerMcMMOAbilityActivate)
+        Triggers.register(TriggerMcMMOAbilityDeactivate)
     }
 
     override fun getPluginName(): String {

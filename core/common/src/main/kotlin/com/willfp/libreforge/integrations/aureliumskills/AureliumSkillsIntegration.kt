@@ -17,10 +17,10 @@ object AureliumSkillsIntegration : LoadableIntegration {
             return
         }
 
-        Effects.register(EffectAddStat)
         Conditions.register(ConditionHasMana)
-        Effects.register(EffectSkillXpMultiplier)
         EffectArguments.register(ArgumentManaCost)
+        Effects.register(EffectAddStat)
+        Effects.register(EffectSkillXpMultiplier)
     }
 
     override fun getPluginName(): String {

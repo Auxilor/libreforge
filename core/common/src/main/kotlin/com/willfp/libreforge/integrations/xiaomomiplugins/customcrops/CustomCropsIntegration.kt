@@ -24,9 +24,9 @@ object CustomCropsIntegration : LoadableIntegration {
         Filters.register(FilterCustomCropType)
         Filters.register(FilterFertilizerType)
         Filters.register(FilterWateringCanType)
+        Triggers.register(TriggerBonemealCrop)
         Triggers.register(TriggerHarvestCustomCrop)
         Triggers.register(TriggerPlantCustomCrop)
-        Triggers.register(TriggerBonemealCrop)
         Triggers.register(TriggerUseFertilizer)
         Triggers.register(TriggerUseWateringCan)
     }

@@ -13,9 +13,9 @@ import com.willfp.libreforge.triggers.Triggers
 object WorldGuardIntegration : LoadableIntegration {
     override fun load(plugin: EcoPlugin) {
         Conditions.register(ConditionInRegion)
+        Filters.register(FilterRegion)
         Triggers.register(TriggerEnterRegion)
         Triggers.register(TriggerLeaveRegion)
-        Filters.register(FilterRegion)
     }
 
     override fun getPluginName(): String {

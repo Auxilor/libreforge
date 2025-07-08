@@ -15,9 +15,9 @@ import com.willfp.libreforge.display.ItemFlagDisplay
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.arguments.custom.CustomEffectArguments
 import com.willfp.libreforge.effects.impl.bossbar.BossBarProgressPlaceholder
-import com.willfp.libreforge.integrations.axplugins.axenvoy.AxEnvoyIntegration
 import com.willfp.libreforge.integrations.auraskills.AuraSkillsIntegration
 import com.willfp.libreforge.integrations.aureliumskills.AureliumSkillsIntegration
+import com.willfp.libreforge.integrations.axplugins.axenvoy.AxEnvoyIntegration
 import com.willfp.libreforge.integrations.axplugins.axtrade.AxTradeIntegration
 import com.willfp.libreforge.integrations.citizens.CitizensIntegration
 import com.willfp.libreforge.integrations.custombiomes.impl.CustomBiomesTerra
@@ -196,28 +196,28 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
         return listOf(
             IntegrationLoader("AuraSkills") { AuraSkillsIntegration.load(this) },
             IntegrationLoader("AureliumSkills") { AureliumSkillsIntegration.load(this) },
+            IntegrationLoader("AxEnvoy") { AxEnvoyIntegration.load(this) },
+            IntegrationLoader("AxTrade") { AxTradeIntegration.load(this) },
+            IntegrationLoader("Citizens") { CitizensIntegration.load(this) },
+            IntegrationLoader("CustomCrops") { CustomCropsIntegration.load(this) },
+            IntegrationLoader("CustomFishing") { CustomFishingIntegration.load(this) },
+            IntegrationLoader("FancyNpcs") { FancyNPCsIntegration.load(this) },
+            IntegrationLoader("HuskClaims") { HuskClaimsIntegration.load(this) },
+            IntegrationLoader("HuskTowns") { HuskTownsIntegration.load(this) },
             IntegrationLoader("Jobs") { JobsIntegration.load(this) },
+            IntegrationLoader("Lands") { com.willfp.libreforge.integrations.lands.LandsIntegration.load(this) },
             IntegrationLoader("LevelledMobs") { LevelledMobsIntegration.load(this) },
             IntegrationLoader("mcMMO") { McMMOIntegration.load(this) },
-            IntegrationLoader("Citizens") { CitizensIntegration.load(this) },
+            IntegrationLoader("ModelEngine") { ModelEngineIntegration.load(this) },
             IntegrationLoader("Scyther") { ScytherIntegration.load(this) },
-            IntegrationLoader("TMMobcoins") { TMMobcoinsIntegration.load(this) },
-            IntegrationLoader("Vault") { VaultIntegration.load(this) },
-            IntegrationLoader("WorldGuard") { WorldGuardIntegration.load(this) },
             IntegrationLoader("TAB") { TabIntegration.load(this) },
             IntegrationLoader("Terra") { CustomBiomesTerra.load(this) },
             IntegrationLoader("TerraformGenerator") { CustomBiomesTerraformGenerator.load(this) },
-            IntegrationLoader("AxEnvoy") { AxEnvoyIntegration.load(this) },
-            IntegrationLoader("Votifier") { VotifierIntegration.load(this) },
-            IntegrationLoader("ModelEngine") { ModelEngineIntegration.load(this) },
-            IntegrationLoader("FancyNpcs") { FancyNPCsIntegration.load(this) },
+            IntegrationLoader("TMMobcoins") { TMMobcoinsIntegration.load(this) },
             IntegrationLoader("UltimateMobCoins") { UltimateMobCoinsIntegration.load(this) },
-            IntegrationLoader("HuskTowns") { HuskTownsIntegration.load(this) },
-            IntegrationLoader("HuskClaims") { HuskClaimsIntegration.load(this) },
-            IntegrationLoader("CustomCrops") { CustomCropsIntegration.load(this) },
-            IntegrationLoader("CustomFishing") { CustomFishingIntegration.load(this) },
-            IntegrationLoader("Lands") { com.willfp.libreforge.integrations.lands.LandsIntegration.load(this) },
-            IntegrationLoader("AxTrade") { AxTradeIntegration.load(this) }
+            IntegrationLoader("Vault") { VaultIntegration.load(this) },
+            IntegrationLoader("Votifier") { VotifierIntegration.load(this) },
+            IntegrationLoader("WorldGuard") { WorldGuardIntegration.load(this) },
         )
     }
 

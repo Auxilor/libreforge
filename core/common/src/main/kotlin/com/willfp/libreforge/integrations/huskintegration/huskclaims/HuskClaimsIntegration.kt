@@ -12,11 +12,11 @@ import com.willfp.libreforge.triggers.Triggers
 
 object HuskClaimsIntegration : LoadableIntegration {
     override fun load(plugin: EcoPlugin) {
+        Conditions.register(ConditionInOwnClaim)
         Triggers.register(TriggerClaim)
         Triggers.register(TriggerEnterClaim)
         Triggers.register(TriggerLeaveClaim)
         Triggers.register(TriggerUnclaim)
-        Conditions.register(ConditionInOwnClaim)
     }
 
     override fun getPluginName(): String {

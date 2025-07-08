@@ -10,8 +10,8 @@ import com.willfp.libreforge.triggers.Triggers
 
 object JobsIntegration : LoadableIntegration {
     override fun load(plugin: EcoPlugin) {
-        Effects.register(EffectJobsXpMultiplier)
         Effects.register(EffectJobsMoneyMultiplier)
+        Effects.register(EffectJobsXpMultiplier)
         Triggers.register(TriggerJobsLevelUp)
     }
 

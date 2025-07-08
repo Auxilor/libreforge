@@ -9,8 +9,8 @@ import com.willfp.libreforge.triggers.Triggers
 
 object VotifierIntegration : LoadableIntegration {
     override fun load(plugin: EcoPlugin) {
-        Triggers.register(TriggerRegisterVote)
         Filters.register(FilterVoteService)
+        Triggers.register(TriggerRegisterVote)
     }
 
     override fun getPluginName(): String {
