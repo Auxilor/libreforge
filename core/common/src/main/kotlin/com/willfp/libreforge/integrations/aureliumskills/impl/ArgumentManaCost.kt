@@ -13,9 +13,9 @@ import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.toFriendlyPointName
 import com.willfp.libreforge.triggers.DispatchedTrigger
-import org.bukkit.Sound
 import org.bukkit.entity.Player
 
+@Deprecated("AureliumSkills integration is deprecated and will be removed in the future. Update to AuraSkills instead!")
 object ArgumentManaCost : EffectArgument<NoCompileData>("mana_cost") {
     override fun isMet(element: ConfigurableElement, trigger: DispatchedTrigger, compileData: NoCompileData): Boolean {
         val player = trigger.dispatcher.get<Player>() ?: return false

@@ -7,6 +7,7 @@ import com.willfp.libreforge.effects.templates.MultiMultiplierEffect
 import com.willfp.libreforge.toDispatcher
 import org.bukkit.event.EventHandler
 
+@Deprecated("AureliumSkills integration is deprecated and will be removed in the future. Update to AuraSkills instead!")
 object EffectSkillXpMultiplier : MultiMultiplierEffect<Skill>("skill_xp_multiplier") {
     override val key = "skills"
 

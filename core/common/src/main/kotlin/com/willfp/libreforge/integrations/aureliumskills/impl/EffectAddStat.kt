@@ -13,6 +13,7 @@ import com.willfp.libreforge.get
 import com.willfp.libreforge.plugin
 import org.bukkit.entity.Player
 
+@Deprecated("AureliumSkills integration is deprecated and will be removed in the future. Update to AuraSkills instead!")
 object EffectAddStat : Effect<NoCompileData>("add_stat") {
     override val arguments = arguments {
         require("stat", "You must specify the stat!")

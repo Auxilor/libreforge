@@ -15,6 +15,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 
+@Deprecated("AureliumSkills integration is deprecated and will be removed in the future. Update to AuraSkills instead!")
 object ConditionHasMana : Condition<NoCompileData>("has_mana") {
     override val arguments = arguments {
         require("amount", "You must specify the amount of mana!")
