@@ -7,7 +7,7 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import dev.aurelium.auraskills.api.event.mana.ManaRegenerateEvent
 import org.bukkit.event.EventHandler
 
-object TriggerRegenMagic : Trigger("regen_magic") {
+object TriggerRegenMana : Trigger("regen_mana") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,

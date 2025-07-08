@@ -23,7 +23,8 @@ object TriggerLevelUpSkill : Trigger("level_up_skill") {
                 player = player,
                 location = player.location,
                 event = event,
-                value = event.level.toDouble()
+                value = event.level.toDouble(),
+                text = event.skill.name().lowercase()
             )
         )
     }

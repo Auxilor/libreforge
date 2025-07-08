@@ -23,7 +23,7 @@ import com.willfp.libreforge.integrations.auraskills.impl.FilterSkill
 import com.willfp.libreforge.integrations.auraskills.impl.TriggerGainSkillXp
 import com.willfp.libreforge.integrations.auraskills.impl.TriggerLevelUpSkill
 import com.willfp.libreforge.integrations.auraskills.impl.TriggerManaAbilityActivate
-import com.willfp.libreforge.integrations.auraskills.impl.TriggerRegenMagic
+import com.willfp.libreforge.integrations.auraskills.impl.TriggerRegenMana
 import com.willfp.libreforge.triggers.Triggers
 
 object AuraSkillsIntegration : LoadableIntegration {
@@ -49,7 +49,7 @@ object AuraSkillsIntegration : LoadableIntegration {
         Triggers.register(TriggerGainSkillXp)
         Triggers.register(TriggerLevelUpSkill)
         Triggers.register(TriggerManaAbilityActivate)
-        Triggers.register(TriggerRegenMagic)
+        Triggers.register(TriggerRegenMana)
     }
 
     override fun getPluginName(): String {

@@ -7,7 +7,7 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import dev.aurelium.auraskills.api.event.mana.ManaAbilityActivateEvent
 import org.bukkit.event.EventHandler
 
-object TriggerManaAbilityActivate : Trigger("skill_ability_activate") {
+object TriggerManaAbilityActivate : Trigger("mana_ability_activate") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,
@@ -23,7 +23,8 @@ object TriggerManaAbilityActivate : Trigger("skill_ability_activate") {
                 player = player,
                 location = player.location,
                 event = event,
-                value = event.manaUsed
+                value = event.manaUsed,
+                text = event.manaAbility.name().lowercase()
             )
         )
     }

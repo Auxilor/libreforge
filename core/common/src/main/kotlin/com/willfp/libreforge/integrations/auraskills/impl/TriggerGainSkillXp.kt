@@ -24,7 +24,8 @@ object TriggerGainSkillXp : Trigger("gain_skill_xp") {
                 player = player,
                 location = player.location,
                 event = event,
-                value = event.amount
+                value = event.amount,
+                text = event.skill.name().lowercase()
             )
         )
     }
