@@ -34,6 +34,7 @@ softdepend:
   - HuskClaims
   - CustomCrops
   - CustomFishing
+  - Lands
 
 commands:
   lrcdb:

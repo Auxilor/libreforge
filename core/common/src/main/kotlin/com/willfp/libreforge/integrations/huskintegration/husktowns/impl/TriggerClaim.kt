@@ -4,17 +4,17 @@ import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import net.william278.husktowns.events.UnClaimEvent
+import net.william278.husktowns.events.ClaimEvent
 import org.bukkit.event.EventHandler
 
-object TriggerUnclaimLand : Trigger("unclaim_land") {
+object TriggerClaim : Trigger("claim") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT
     )
 
     @EventHandler(ignoreCancelled = true)
-    fun handle(event: UnClaimEvent) {
+    fun handle(event: ClaimEvent) {
         val player = event.player ?: return
 
         this.dispatch(

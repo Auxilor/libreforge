@@ -1,4 +1,4 @@
-package com.willfp.libreforge.integrations.AxPlugins.axtrade.impl
+package com.willfp.libreforge.integrations.axplugins.axtrade.impl
 
 import com.artillexstudios.axtrade.api.events.AxTradeCompleteEvent
 import com.willfp.libreforge.toDispatcher
