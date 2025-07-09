@@ -1,10 +1,16 @@
 package com.willfp.libreforge.integrations.auraskills.impl
 
-import dev.aurelium.auraskills.api.event.mana.ManaRegenerateEvent
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.*
+import com.willfp.libreforge.Dispatcher
+import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.ProvidedHolder
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
+import com.willfp.libreforge.get
+import com.willfp.libreforge.toDispatcher
+import com.willfp.libreforge.updateEffects
 import dev.aurelium.auraskills.api.AuraSkillsApi
+import dev.aurelium.auraskills.api.event.mana.ManaRegenerateEvent
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
@@ -27,6 +33,6 @@ object ConditionHasMana : Condition<NoCompileData>("has_mana") {
     ): Boolean {
         val player = dispatcher.get<Player>() ?: return false
 
-        return AuraSkillsApi.get().getUser(player.uniqueId).mana > config.getDoubleFromExpression("amount", player)
+        return AuraSkillsApi.get().getUser(player.uniqueId).mana >= config.getDoubleFromExpression("amount", player)
     }
 }

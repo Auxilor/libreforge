@@ -8,6 +8,7 @@ import com.willfp.libreforge.filters.Filters
 import com.willfp.libreforge.integrations.LoadableIntegration
 import com.willfp.libreforge.integrations.auraskills.impl.ArgumentManaCost
 import com.willfp.libreforge.integrations.auraskills.impl.ConditionHasMana
+import com.willfp.libreforge.integrations.auraskills.impl.ConditionHasMaxMana
 import com.willfp.libreforge.integrations.auraskills.impl.ConditionHasSkillLevel
 import com.willfp.libreforge.integrations.auraskills.impl.ConditionHasStatLevel
 import com.willfp.libreforge.integrations.auraskills.impl.EffectAddStat
@@ -33,6 +34,7 @@ object AuraSkillsIntegration : LoadableIntegration {
         }
 
         Conditions.register(ConditionHasMana)
+        Conditions.register(ConditionHasMaxMana)
         Conditions.register(ConditionHasSkillLevel)
         Conditions.register(ConditionHasStatLevel)
         EffectArguments.register(ArgumentManaCost)

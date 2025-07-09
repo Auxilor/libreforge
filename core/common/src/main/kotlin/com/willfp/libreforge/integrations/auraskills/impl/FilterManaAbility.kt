@@ -4,18 +4,24 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.filters.Filter
 import com.willfp.libreforge.triggers.TriggerData
+import dev.aurelium.auraskills.api.AuraSkillsApi
 import dev.aurelium.auraskills.api.event.mana.ManaAbilityActivateEvent
+import dev.aurelium.auraskills.api.mana.ManaAbility
+import dev.aurelium.auraskills.api.registry.NamespacedId
 
-object FilterManaAbility : Filter<NoCompileData, Collection<String>>("mana_ability") {
-    override fun getValue(config: Config, data: TriggerData?, key: String): Collection<String> {
-        return config.getStrings(key)
+object FilterManaAbility : Filter<NoCompileData, Collection<ManaAbility>>("mana_ability") {
+    override fun getValue(config: Config, data: TriggerData?, key: String): Collection<ManaAbility> {
+        return config.getStrings(key).mapNotNull { abilityId ->
+            try {
+                AuraSkillsApi.get().globalRegistry.getManaAbility(NamespacedId.fromDefault(abilityId))
+            } catch (e: IllegalArgumentException) {
+                null
+            }
+        }
     }
 
-    override fun isMet(data: TriggerData, value: Collection<String>, compileData: NoCompileData): Boolean {
+    override fun isMet(data: TriggerData, value: Collection<ManaAbility>, compileData: NoCompileData): Boolean {
         val event = data.event as? ManaAbilityActivateEvent ?: return true
-
-        return value.any { abilityName ->
-            abilityName.equals(event.manaAbility.id.toString(), ignoreCase = true)
-        }
+        return value.any { it == event.manaAbility }
     }
 }

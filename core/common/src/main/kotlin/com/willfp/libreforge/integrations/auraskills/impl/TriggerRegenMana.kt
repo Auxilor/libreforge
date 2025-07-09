@@ -23,7 +23,8 @@ object TriggerRegenMana : Trigger("regen_mana") {
                 player = player,
                 location = player.location,
                 event = event,
-                value = event.amount
+                value = event.amount,
+                altValue = event.user.mana
             )
         )
     }
