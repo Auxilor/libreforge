@@ -138,7 +138,7 @@ refresh:
   # Reduces lag by only allowing holders to refresh every X milliseconds.
   # Higher values will save performance, but can make effects feel less responsive.
   # Set to 0 to disable.
-  cooldown: 250
+  cooldown: 0
 
   pickup:
     # If picked up items should trigger a refresh

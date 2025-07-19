@@ -1,6 +1,7 @@
 package com.willfp.libreforge.triggers.placeholders
 
 import com.willfp.eco.core.registry.Registry
+import com.willfp.libreforge.triggers.placeholders.impl.TriggerPlaceholderAltValue
 import com.willfp.libreforge.triggers.placeholders.impl.TriggerPlaceholderDistance
 import com.willfp.libreforge.triggers.placeholders.impl.TriggerPlaceholderHits
 import com.willfp.libreforge.triggers.placeholders.impl.TriggerPlaceholderLocation
@@ -11,6 +12,7 @@ import com.willfp.libreforge.triggers.placeholders.impl.TriggerPlaceholderVictim
 
 object TriggerPlaceholders : Registry<TriggerPlaceholder>() {
     init {
+        register(TriggerPlaceholderAltValue)
         register(TriggerPlaceholderDistance)
         register(TriggerPlaceholderHits)
         register(TriggerPlaceholderLocation)

@@ -31,7 +31,8 @@ enum class TriggerParameter(
     VELOCITY(PLAYER, VICTIM),
     ITEM(PLAYER, VICTIM),
     TEXT,
-    VALUE
+    VALUE,
+    ALT_VALUE
 }
 
 class TriggerData(
@@ -46,6 +47,7 @@ class TriggerData(
     val item: ItemStack? = player?.inventory?.itemInMainHand ?: victim?.equipment?.itemInMainHand,
     val text: String? = null,
     val value: Double = 1.0,
+    val altValue: Double = 1.0
 ) {
     // The holders and dispatchers are automatically added when triggers are dispatched,
     // so they are not included in the constructor.
@@ -87,7 +89,8 @@ class TriggerData(
             velocity,
             item?.let { HashedItem.of(it) },
             text,
-            value
+            value,
+            altValue
         )
     }
 
@@ -130,6 +133,7 @@ class TriggerData(
         item: ItemStack? = this.item,
         text: String? = this.text,
         value: Double = this.value,
+        altValue: Double = this.altValue
     ): TriggerData {
         val copy = TriggerData(
             dispatcher,
@@ -142,7 +146,8 @@ class TriggerData(
             velocity,
             item,
             text,
-            value
+            value,
+            altValue
         )
 
         copy.holder = this.holder
@@ -188,6 +193,7 @@ class TriggerData(
         item: ItemStack?,
         text: String?,
         value: Double,
+        altValue: Double,
         originalPlayer: Player?,
         internal1: Int,
         internal2: kotlin.jvm.internal.DefaultConstructorMarker?
@@ -202,7 +208,8 @@ class TriggerData(
         velocity,
         item,
         text,
-        value
+        value,
+        altValue
     ) {
         this.holder = holder ?: EmptyProvidedHolder
         this.originalPlayer = originalPlayer
@@ -227,6 +234,7 @@ class TriggerData(
         item: ItemStack?,
         text: String?,
         value: Double,
+        altValue: Double,
         originalPlayer: Player?,
         internal1: Int,
         internal2: kotlin.jvm.internal.DefaultConstructorMarker?
@@ -241,7 +249,8 @@ class TriggerData(
         velocity,
         item,
         text,
-        value
+        value,
+        altValue
     ) {
         this.holder = holder ?: EmptyProvidedHolder
         this.originalPlayer = originalPlayer
