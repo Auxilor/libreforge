@@ -83,7 +83,7 @@ object EffectMineRadius : MineBlockEffect<NoCompileData>("mine_radius") {
             }
         }
 
-        val useSetBlockBreak = config.getBool("use_setblock_break")
+        val useSetBlockBreak = config.getBool("prevent_trigger")
         if (useSetBlockBreak) {
             blocks.forEach { it.breakNaturally() }
         } else {
