@@ -44,8 +44,8 @@ object EffectPotionEffect : Effect<NoCompileData>("potion_effect") {
                 config.getIntFromExpression("duration", data),
                 config.getIntFromExpression("level", data) - 1,
                 true,
-                true,
-                true
+                config.getBoolOrNull("particles") ?: true,
+                config.getBoolOrNull("icon") ?: true
             )
         )
 
