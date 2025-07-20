@@ -27,7 +27,7 @@ dependencies {
     compileOnly("net.citizensnpcs:citizens-main:2.0.31-SNAPSHOT") {
         exclude(group = "net.byteflux", module = "libby-bukkit")
     }
-    compileOnly("nl.chimpgamer.ultimatemobcoins:paper:1.6.0")
+    compileOnly("nl.chimpgamer.ultimatemobcoins:paper:1.8.1")
     compileOnly("com.artillexstudios:AxTrade:1.14.0")
     compileOnly("com.github.angeschossen:LandsAPI:7.15.19")
 
