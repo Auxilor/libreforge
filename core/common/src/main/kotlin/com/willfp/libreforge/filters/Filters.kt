@@ -100,5 +100,7 @@ object Filters : Registry<Filter<*, *>>() {
         register(FilterValueEquals)
         register(FilterVictimConditions)
         register(FilterVictimName)
+        register(FilterTamedEntity)
+        register(FilterIsTamedEntityOwner)
     }
 }
