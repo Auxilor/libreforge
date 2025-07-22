@@ -13,6 +13,7 @@ import com.willfp.libreforge.integrations.paper.impl.EffectDropPickupItem
 import com.willfp.libreforge.integrations.paper.impl.EffectElytraBoostSaveChance
 import com.willfp.libreforge.integrations.paper.impl.EffectSendMinimessage
 import com.willfp.libreforge.integrations.paper.impl.TriggerBeaconEffect
+import com.willfp.libreforge.integrations.paper.impl.TriggerCompostItem
 import com.willfp.libreforge.integrations.paper.impl.TriggerElytraBoost
 import com.willfp.libreforge.integrations.paper.impl.TriggerRenameEntity
 import com.willfp.libreforge.integrations.paper.impl.TriggerSwing
@@ -32,6 +33,7 @@ object PaperIntegration : LoadableIntegration {
         }
 
         Triggers.register(TriggerBeaconEffect)
+        Triggers.register(TriggerCompostItem)
         Triggers.register(TriggerElytraBoost)
         Triggers.register(TriggerRenameEntity)
         Triggers.register(TriggerTridentAttack)
