@@ -12,7 +12,8 @@ object TriggerPlayerTrade : Trigger("player_trade") {
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
         TriggerParameter.ITEM,
-        TriggerParameter.VALUE
+        TriggerParameter.VALUE,
+        TriggerParameter.ALT_VALUE
     )
 
     @EventHandler(ignoreCancelled = true)
@@ -31,14 +32,23 @@ object TriggerPlayerTrade : Trigger("player_trade") {
         val mergedItem = tradedItems.values.firstOrNull()
         val totalAmount = tradedItems.values.sumOf { it.amount }
 
+        val totalCurrency = sumCurrencies(event)
+
         this.dispatch(
             player.toDispatcher(),
             TriggerData(
                 player = player,
                 victim = victim,
                 item = mergedItem,
-                value = totalAmount.toDouble()
+                value = totalAmount.toDouble(),
+                altValue = totalCurrency
             )
         )
+    }
+
+    private fun sumCurrencies(event: AxTradeCompleteEvent): Double {
+        val player1Total = event.trade.player1.currencies.values.sum()
+        val player2Total = event.trade.player2.currencies.values.sum()
+        return player1Total + player2Total
     }
 }
