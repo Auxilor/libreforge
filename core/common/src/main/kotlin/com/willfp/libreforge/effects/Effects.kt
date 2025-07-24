@@ -22,7 +22,7 @@ import com.willfp.libreforge.proxy.loadProxy
 import com.willfp.libreforge.separatorAmbivalent
 import com.willfp.libreforge.toWeightedList
 import com.willfp.libreforge.triggers.Triggers
-import java.util.UUID
+import java.util.*
 
 object Effects : Registry<Effect<*>>() {
     private val identifiedChains = mutableMapOf<String, Chain>()
@@ -460,6 +460,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectKeepLevel)
         register(EffectAnimation)
         register(EffectRotateVictim)
+        register(EffectVillagerTradeMultiplier)
 
         loadProxy(VersionSpecificEffects::class.java).loadEffects()
     }
