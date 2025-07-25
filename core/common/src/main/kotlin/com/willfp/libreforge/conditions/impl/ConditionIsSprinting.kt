@@ -25,7 +25,7 @@ object ConditionIsSprinting : Condition<NoCompileData>("is_sprinting") {
         return player.isSprinting
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     fun handle(event: PlayerToggleSprintEvent) {
         event.player.toDispatcher().updateEffects()
     }

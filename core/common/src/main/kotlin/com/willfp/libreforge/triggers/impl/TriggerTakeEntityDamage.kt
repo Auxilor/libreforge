@@ -12,7 +12,6 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
-import kotlin.math.atan
 
 object TriggerTakeEntityDamage : Trigger("take_entity_damage") {
     override val parameters = setOf(
@@ -48,7 +47,6 @@ object TriggerTakeEntityDamage : Trigger("take_entity_damage") {
         val attacker = event.caster.entity.bukkitEntity?:return
         val livingAttacker = attacker as? LivingEntity ?: return
         val victim = event.target.bukkitEntity?:return
-
         this.dispatch(
             victim.toDispatcher(),
             TriggerData(

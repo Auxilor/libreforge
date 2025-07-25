@@ -25,7 +25,7 @@ object ConditionOnFire : Condition<NoCompileData>("on_fire") {
         return entity.fireTicks > 0
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     fun handle(event: EntityDamageEvent) {
         if (event.cause != EntityDamageEvent.DamageCause.FIRE
             && event.cause != EntityDamageEvent.DamageCause.FIRE_TICK

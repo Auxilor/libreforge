@@ -39,12 +39,12 @@ object ConditionRidingEntity : Condition<Collection<TestableEntity>>("riding_ent
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     fun handle(event: EntityDismountEvent) {
         event.entity.toDispatcher().updateEffects()
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     fun handle(event: EntityMountEvent) {
         event.entity.toDispatcher().updateEffects()
     }

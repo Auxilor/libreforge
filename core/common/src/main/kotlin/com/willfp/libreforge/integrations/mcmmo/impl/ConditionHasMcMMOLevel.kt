@@ -41,7 +41,7 @@ object ConditionHasMcMMOLevel : Condition<NoCompileData>("has_mcmmo_skill_level"
         return mcmmoPlayer.getSkillLevel(skill) >= config.getInt("level")
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     fun handle(event: McMMOPlayerLevelChangeEvent) {
         event.player.toDispatcher().updateEffects()
     }

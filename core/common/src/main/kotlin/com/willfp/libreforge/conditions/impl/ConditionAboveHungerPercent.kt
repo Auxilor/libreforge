@@ -31,7 +31,7 @@ object ConditionAboveHungerPercent : Condition<NoCompileData>("above_hunger_perc
         return player.foodLevel / 20 >= config.getDoubleFromExpression("percent", player) / 100
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     fun handle(event: FoodLevelChangeEvent) {
         event.entity.toDispatcher().updateEffects()
     }

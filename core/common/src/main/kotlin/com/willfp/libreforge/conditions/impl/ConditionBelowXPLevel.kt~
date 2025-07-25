@@ -15,7 +15,7 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.player.PlayerExpChangeEvent
 
 
-object ConditionAboveXPLevel : Condition<NoCompileData>("above_xp_level") {
+object ConditionBelowXPLevel : Condition<NoCompileData>("below_xp_level") {
     override val arguments = arguments {
         require("level", "You must specify the xp level!")
     }
@@ -28,10 +28,10 @@ object ConditionAboveXPLevel : Condition<NoCompileData>("above_xp_level") {
     ): Boolean {
         val player = dispatcher.get<Player>() ?: return false
 
-        return player.level >= config.getIntFromExpression("level", player)
+        return player.level < config.getIntFromExpression("level", player)
     }
 
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun handle(event: PlayerExpChangeEvent) {
         event.player.toDispatcher().updateEffects()
     }

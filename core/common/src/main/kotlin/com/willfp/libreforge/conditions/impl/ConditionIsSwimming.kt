@@ -25,7 +25,7 @@ object ConditionIsSwimming : Condition<NoCompileData>("is_swimming") {
         return entity.isSwimming
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     fun handle(event: EntityToggleSwimEvent) {
         event.entity.toDispatcher().updateEffects()
     }

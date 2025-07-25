@@ -25,7 +25,7 @@ object ConditionIsGliding : Condition<NoCompileData>("is_gliding") {
         return entity.isGliding
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     fun handle(event: EntityToggleGlideEvent) {
         event.entity.toDispatcher().updateEffects()
     }

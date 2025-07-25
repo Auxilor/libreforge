@@ -40,7 +40,7 @@ class TriggerData(
     val player: Player? = null,
     val victim: LivingEntity? = null,
     val block: Block? = null,
-    val blockData: BlockData? = null, //fixes checks within multiply drops effect (ageable)
+    val blockData: BlockData? = null, //fixes checks with multiply drops effect (ageable)
     val event: Event? = null,
     val location: Location? = victim?.location ?: player?.location,
     val projectile: Projectile? = null,

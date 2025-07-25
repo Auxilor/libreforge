@@ -31,7 +31,7 @@ object ConditionBelowXPLevel : Condition<NoCompileData>("below_xp_level") {
         return player.level < config.getIntFromExpression("level", player)
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     fun handle(event: PlayerExpChangeEvent) {
         event.player.toDispatcher().updateEffects()
     }

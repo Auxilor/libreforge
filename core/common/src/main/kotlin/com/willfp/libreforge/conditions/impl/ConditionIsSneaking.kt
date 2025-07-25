@@ -25,7 +25,7 @@ object ConditionIsSneaking : Condition<NoCompileData>("is_sneaking") {
         return player.isSneaking
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     fun handle(event: PlayerToggleSneakEvent) {
         event.player.toDispatcher().updateEffects()
     }

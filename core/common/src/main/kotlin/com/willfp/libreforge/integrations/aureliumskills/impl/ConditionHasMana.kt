@@ -20,7 +20,7 @@ object ConditionHasMana : Condition<NoCompileData>("has_mana") {
         require("amount", "You must specify the amount of mana!")
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     fun handle(event: ManaRegenerateEvent) {
         event.player.toDispatcher().updateEffects()
     }

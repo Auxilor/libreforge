@@ -39,7 +39,7 @@ object ConditionHasSkillLevel : Condition<NoCompileData>("has_skill_level") {
         )
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     fun handle(event: SkillLevelUpEvent) {
         event.player.toDispatcher().updateEffects()
     }

@@ -4,6 +4,7 @@ import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import io.lumine.mythic.bukkit.events.MythicDamageEvent
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -33,6 +34,26 @@ object TriggerFallDamage : Trigger("fall_damage") {
                 location = victim.location,
                 event = event,
                 value = event.finalDamage
+            )
+        )
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    fun handle(event: MythicDamageEvent) {
+        if (event.damageMetadata.damageCause != EntityDamageEvent.DamageCause.FALL) {
+            return
+        }
+
+        val victim = event.target.bukkitEntity  as? LivingEntity ?: return
+
+        this.dispatch(
+            victim.toDispatcher(),
+            TriggerData(
+                player = victim as? Player,
+                victim = victim,
+                location = victim.location,
+                event = event,
+                value = event.damage
             )
         )
     }

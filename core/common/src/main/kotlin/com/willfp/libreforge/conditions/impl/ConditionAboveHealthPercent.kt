@@ -36,12 +36,12 @@ object ConditionAboveHealthPercent : Condition<NoCompileData>("above_health_perc
         return health / maxHealth >= config.getDoubleFromExpression("percent", livingEntity as? Player) / 100
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     fun handle(event: EntityRegainHealthEvent) {
         event.entity.toDispatcher().updateEffects()
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     fun handle(event: EntityDamageEvent) {
         event.entity.toDispatcher().updateEffects()
     }

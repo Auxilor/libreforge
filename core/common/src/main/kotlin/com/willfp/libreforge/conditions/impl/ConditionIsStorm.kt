@@ -22,7 +22,7 @@ object ConditionIsStorm: Condition<NoCompileData>("is_storm") {
         return location.world.hasStorm()
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     fun handle(event: WeatherChangeEvent) {
         for (entity in event.world.entities) {
             entity.toDispatcher().updateEffects()
