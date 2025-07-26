@@ -4,7 +4,6 @@ import com.edwardbelt.edprison.utils.EconomyUtils
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.Dispatcher
-import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
@@ -40,7 +39,11 @@ object ConditionHasEdPrisonCurrency : Condition<String?>("has_edprison_economy")
                 this,
                 ConfigViolation(
                     "type",
-                    "You must specify the type of economy to give! Valid currencies are: ${validCurrencies.joinToString(", ")}"
+                    "You must specify the type of economy to give! Valid currencies are: ${
+                        validCurrencies.joinToString(
+                            ", "
+                        )
+                    }"
                 )
             )
             return null
