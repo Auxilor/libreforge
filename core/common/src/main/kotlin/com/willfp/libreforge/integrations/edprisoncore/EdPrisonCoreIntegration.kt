@@ -5,7 +5,6 @@ import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.integrations.LoadableIntegration
 import com.willfp.libreforge.integrations.edprisoncore.impl.ConditionHasEdPrisonCurrency
-import com.willfp.libreforge.integrations.edprisoncore.impl.ConditionHasEdPrisonLevel
 import com.willfp.libreforge.integrations.edprisoncore.impl.ConditionHasEdPrisonRobot
 import com.willfp.libreforge.integrations.edprisoncore.impl.ConditionInEdPrisonGang
 import com.willfp.libreforge.integrations.edprisoncore.impl.EffectCreateEdPrisonExplosion
@@ -18,15 +17,14 @@ import com.willfp.libreforge.integrations.edprisoncore.impl.EffectUpdateEdPrison
 object EdPrisonCoreIntegration : LoadableIntegration {
     override fun load(plugin: EcoPlugin) {
         Conditions.register(ConditionHasEdPrisonCurrency) // Working
-        Conditions.register(ConditionHasEdPrisonLevel)
-        Conditions.register(ConditionHasEdPrisonRobot)
+        Conditions.register(ConditionHasEdPrisonRobot) // Working
         Conditions.register(ConditionInEdPrisonGang) // Working
-        Effects.register(EffectCreateEdPrisonExplosion) // No good
+        Effects.register(EffectCreateEdPrisonExplosion) // Partially working, needs further testing
         Effects.register(EffectGiveEdPrisonEconomy) // Working
         Effects.register(EffectGiveEdPrisonPouch) // Working
-        Effects.register(EffectMultiplyEdPrisonEconomy)
+        Effects.register(EffectMultiplyEdPrisonEconomy) // No good
         Effects.register(EffectSetEdPrisonEconomy) // Working
-        Effects.register(EffectUpdateEdPrisonPickaxe)
+        Effects.register(EffectUpdateEdPrisonPickaxe) // Unsure, needs further testing
     }
 
     override fun getPluginName(): String {

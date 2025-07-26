@@ -40,11 +40,13 @@ object EffectGiveEdPrisonEconomy : Effect<String?>("give_edprison_economy") {
         if (currency !in validCurrencies) {
             context.log(
                 this,
-                ConfigViolation("type", "You must specify the type of economy to give!")
+                ConfigViolation(
+                    "type",
+                    "You must specify the type of economy to give! Valid currencies are: ${validCurrencies.joinToString(", ")}"
+                )
             )
             return null
         }
-
         return currency
     }
 }
