@@ -25,17 +25,11 @@ object EffectDamageMultiplier : Effect<NoCompileData>("damage_multiplier") {
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         if(data.event is EntityDamageEvent){
-            Bukkit.broadcastMessage(""+ ChatColor.GRAY +"Damage before "+data.event.damage)
             data.event.damage *= config.getDoubleFromExpression("multiplier", data)
-            Bukkit.broadcastMessage(""+ ChatColor.GRAY +"Damage after "+data.event.damage)
             return true
         }
         if(data.event is MythicDamageEvent){
-            Bukkit.broadcastMessage("Cause: "+data.event.damageMetadata.damageCause)
-            Bukkit.broadcastMessage(""+ ChatColor.GREEN +"MYTHIC before "+data.event.damage)
             data.event.damage *= config.getDoubleFromExpression("multiplier", data)
-            Bukkit.broadcastMessage("Multiplier: "+config.getString("multiplier"))
-            Bukkit.broadcastMessage(""+ ChatColor.GREEN +"MYTHIC after "+data.event.damage)
             return true
         }
         return false
