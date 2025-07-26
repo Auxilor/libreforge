@@ -9,14 +9,13 @@ import com.willfp.libreforge.triggers.TriggerParameter
 
 object EffectUpdateEdPrisonPickaxe : Effect<NoCompileData>("update_edprison_pickaxe") {
     override val parameters = setOf(
-        TriggerParameter.PLAYER,
-        TriggerParameter.LOCATION
+        TriggerParameter.PLAYER
     )
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val player = data.player ?: return false
-
         PickaxeUtils.updatePickaxe(player)
+
         return true
     }
 }

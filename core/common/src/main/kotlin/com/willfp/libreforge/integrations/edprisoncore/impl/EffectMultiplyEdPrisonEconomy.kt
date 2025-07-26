@@ -24,7 +24,6 @@ object EffectMultiplyEdPrisonEconomy : MultiMultiplierEffect<String>("multiply_e
         val player = Bukkit.getPlayer(event.uuid) ?: return
         val economy = event.currency ?: return
 
-        // Apply the additional multiplier to the event
-        event.multiplier = event.multiplier * getMultiplier(player.toDispatcher(), economy)
+        event.amount *= getMultiplier(player.toDispatcher(), economy)
     }
 }

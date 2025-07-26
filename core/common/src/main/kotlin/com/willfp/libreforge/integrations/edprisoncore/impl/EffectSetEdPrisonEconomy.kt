@@ -23,7 +23,7 @@ object EffectSetEdPrisonEconomy  : Effect<NoCompileData>("set_edprison_economy")
         val player = data.player ?: return false
         val uuid = player.uniqueId
 
-        val currency = config.getString("type") ?: return false
+        val currency = config.getString("type")
         val amount = config.getDoubleFromExpression("amount", data)
 
         EconomyUtils.setEco(uuid, currency, amount)
