@@ -18,10 +18,11 @@ object TriggerPlayerTrade : Trigger("player_trade") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: AxTradeCompleteEvent) {
-        val player = event.trade.player2.player
-        val victim = event.trade.player1.player
+        val player1 = event.trade.player1.player
+        val player2 = event.trade.player2.player
 
-        val tradedItems = (event.trade.player1.tradeGui.getItems(false) + event.trade.player2.tradeGui.getItems(false)).filterNotNull()
+        val tradedItems = (event.trade.player1.tradeGui.getItems(false) + event.trade.player2.tradeGui.getItems(false))
+            .filterNotNull()
             .groupBy { it.type }
             .mapValues { (_, stacks) ->
                 stacks.reduce { acc, item ->
@@ -34,11 +35,24 @@ object TriggerPlayerTrade : Trigger("player_trade") {
 
         val totalCurrency = sumCurrencies(event)
 
+        // Kept victim logic so that effects can be run based on victim_conditions.
+        // Could allow for more complex effect systems where affects are run if player has perm, and victim has perm.
         this.dispatch(
-            player.toDispatcher(),
+            player1.toDispatcher(),
             TriggerData(
-                player = player,
-                victim = victim,
+                player = player1,
+                victim = player2,
+                item = mergedItem,
+                value = totalAmount.toDouble(),
+                altValue = totalCurrency
+            )
+        )
+
+        this.dispatch(
+            player2.toDispatcher(),
+            TriggerData(
+                player = player2,
+                victim = player1,
                 item = mergedItem,
                 value = totalAmount.toDouble(),
                 altValue = totalCurrency
