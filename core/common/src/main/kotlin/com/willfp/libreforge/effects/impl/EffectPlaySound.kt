@@ -9,6 +9,7 @@ import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.getFormattedString
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import org.bukkit.SoundCategory
 
 object EffectPlaySound : Effect<NoCompileData>("play_sound") {
     override val parameters = setOf(
@@ -28,7 +29,11 @@ object EffectPlaySound : Effect<NoCompileData>("play_sound") {
         val pitch = config.getDoubleFromExpression("pitch", data)
         val volume = config.getDoubleFromExpression("volume", data)
 
-        player.playSound(player.location, sound, volume.toFloat(), pitch.toFloat())
+        var categoryString = config.getStringOrNull("category")
+        if (categoryString == null) categoryString = "MASTER"
+        val category = SoundCategory.valueOf(categoryString.uppercase())
+
+        player.playSound(player.location, sound, category, volume.toFloat(), pitch.toFloat())
 
         return true
     }
