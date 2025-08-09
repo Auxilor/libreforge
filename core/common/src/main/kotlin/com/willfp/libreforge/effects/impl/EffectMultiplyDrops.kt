@@ -47,9 +47,10 @@ object EffectMultiplyDrops : Effect<NoCompileData>("multiply_drops") {
         } else 1
 
         val weight: Double = config.getDouble("calculated_weight")
-
+        Bukkit.broadcastMessage(""+ ChatColor.GOLD+"Weight: "+weight)
         if (weight != 100.0) {
-            if ((100-weight) >= Random.nextInt(100)) {
+            if (weight >= Random.nextInt(100)) {
+                Bukkit.broadcastMessage(""+ ChatColor.GREEN+"Bonus")
                 multiplier += 1
             }
         }
