@@ -14,9 +14,12 @@ import com.willfp.libreforge.effects.events.EffectEnableEvent
 import com.willfp.libreforge.filters.FilterList
 import com.willfp.libreforge.mutators.MutatorList
 import com.willfp.libreforge.toDispatcher
+import com.willfp.libreforge.toPlaceholderContext
 import com.willfp.libreforge.triggers.DispatchedTrigger
+import com.willfp.libreforge.triggers.TriggerData
 import me.clip.placeholderapi.PlaceholderAPI
 import org.bukkit.Bukkit
+import org.bukkit.ChatColor
 import org.bukkit.entity.Player
 import java.util.UUID
 import kotlin.random.Random
@@ -34,6 +37,7 @@ class ChainElement<T> internal constructor(
     override val filters: FilterList,
     override val weight: Double,
     val weightExpression:String,
+    var calculatedWeight:Double,
     forceRunOrder: RunOrder?
 ) : ElementLike(), Compiled<T>, Weighted {
     override val uuid: UUID = UUID.randomUUID()
@@ -42,17 +46,19 @@ class ChainElement<T> internal constructor(
     val runOrder = forceRunOrder ?: effect.runOrder
 
      override fun calcWeight() : Double{
-        if(weightExpression.isEmpty())return 0.0
-        var expressionCalculated:String
-        val weight:Double
-        if(tempPlayer!=null){
-            expressionCalculated = PlaceholderAPI.setPlaceholders(tempPlayer,weightExpression)
-            weight = NumberUtils.evaluateExpression(expressionCalculated,placeholderContext(player = tempPlayer))
-        }else{
-            expressionCalculated = weightExpression
-            weight = NumberUtils.evaluateExpression(expressionCalculated);
-        }
-        return weight
+         return calculatedWeight;
+        //if(weightExpression.isEmpty())return 0.0
+        //var expressionCalculated:String
+        //val weight:Double
+        //if(tempPlayer!=null){
+        //    expressionCalculated = PlaceholderAPI.setPlaceholders(tempPlayer,weightExpression)
+        //    weight = NumberUtils.evaluateExpression(expressionCalculated,placeholderContext(player = tempPlayer))
+        //}else{
+        //    expressionCalculated = weightExpression
+        //    weight = NumberUtils.evaluateExpression(expressionCalculated);
+        //}
+        //return weight
+
     }
     fun enable(
         dispatcher: Dispatcher<*>,
@@ -83,8 +89,14 @@ class ChainElement<T> internal constructor(
         if(player!=null){
             tempPlayer = player
         }
-        this.config.set("calculated_weight",calcWeight())
+        calculatedWeight = calc(trigger.data,weightExpression)
+        this.config.set("calculated_weight",calculatedWeight)
+
         return effect.trigger(trigger, this)
+    }
+
+    fun calc(data: TriggerData, expression:String):Double{
+        return NumberUtils.evaluateExpression(expression,config.toPlaceholderContext(data))
     }
 
 

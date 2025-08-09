@@ -11,6 +11,7 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.event.DropResult
 import com.willfp.libreforge.triggers.event.EditableDropEvent
 import org.bukkit.Bukkit
+import org.bukkit.ChatColor
 import org.bukkit.block.data.Ageable
 import kotlin.math.roundToInt
 import kotlin.random.Random
@@ -36,17 +37,14 @@ object EffectMultiplyDrops : Effect<NoCompileData>("multiply_drops") {
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val event = data.event as? EditableDropEvent ?: return false
-
         val isBlacklisting = plugin.configYml.getBool("effects.multiply_drops.prevent-duplication")
         val whitelist = plugin.configYml.getStrings("effects.multiply_drops.whitelist").map { Items.lookup(it) }
-
         var multiplier = if (config.has("fortune")) {
             val fortune = config.getIntFromExpression("fortune", data)
             (Math.random() * (fortune.toDouble() - 1) + 1.1).roundToInt()
         } else if (config.has("multiplier")) {
             config.getDoubleFromExpression("multiplier", data).toInt()
         } else 1
-
 
         val weight: Double = config.getDouble("calculated_weight")
 
@@ -69,19 +67,16 @@ object EffectMultiplyDrops : Effect<NoCompileData>("multiply_drops") {
             }
         }
         //----only fully grown crops-------//
-
         event.addModifier {
             var matches = true
             if (config.has("on_items")) {
                 val items = config.getStrings("on_items").map { string -> Items.lookup(string) }
                 matches = items.any { test -> test.matches(it) }
             }
-
             if (it.maxStackSize > 1 && matches) {
                 if (it.type.isOccluding && isBlacklisting && !whitelist.matches(it)) {
                     return@addModifier DropResult(it, 0)
                 }
-
                 it.amount *= multiplier
             }
 

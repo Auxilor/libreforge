@@ -38,7 +38,9 @@ allprojects {
 
     dependencies {
         compileOnly("org.jetbrains:annotations:23.0.0")
-        compileOnly(kotlin("stdlib", version = "2.1.0"))
+        //compileOnly(kotlin("stdlib", version = "1.9.0"))
+        compileOnly(kotlin("stdlib", version = "2.1.0")) //ORYGINAL
+        //compileOnly(kotlin("stdlib"))
 
         compileOnly(fileTree("lib") { include("*.jar") })
     }

@@ -458,6 +458,7 @@ object Effects : Registry<Effect<*>>() {
             filters,
             weight,
             weightExpression,
+            0.0,
             forceRunOrder
         )
     }

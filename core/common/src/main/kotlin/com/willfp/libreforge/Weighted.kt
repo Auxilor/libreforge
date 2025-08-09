@@ -18,7 +18,7 @@ data class WeightedItems(
 }
 
 open class WeightedList<T : Weighted>(
-    list: List<T>,
+    list: List<T>
 ) : DelegatedList<T>(list) {
     fun random() = this.randomOrNull() ?: throw NoSuchElementException("List is empty")
 
