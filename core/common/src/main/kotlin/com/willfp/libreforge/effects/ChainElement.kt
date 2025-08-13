@@ -1,7 +1,6 @@
 package com.willfp.libreforge.effects
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.placeholder.context.placeholderContext
 import com.willfp.eco.util.NumberUtils
 import com.willfp.libreforge.Compiled
 import com.willfp.libreforge.Dispatcher
@@ -17,12 +16,9 @@ import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.toPlaceholderContext
 import com.willfp.libreforge.triggers.DispatchedTrigger
 import com.willfp.libreforge.triggers.TriggerData
-import me.clip.placeholderapi.PlaceholderAPI
 import org.bukkit.Bukkit
-import org.bukkit.ChatColor
 import org.bukkit.entity.Player
 import java.util.UUID
-import kotlin.random.Random
 
 /**
  * A single effect config block.

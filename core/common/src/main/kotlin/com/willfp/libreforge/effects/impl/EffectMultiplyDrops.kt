@@ -34,7 +34,39 @@ object EffectMultiplyDrops : Effect<NoCompileData>("multiply_drops") {
             whitelist.addAll(plugin.configYml.getStrings("effects.multiply_drops.whitelist").map { Items.lookup(it) })
         }
     }
+/*    override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
+        val event = data.event as? EditableDropEvent ?: return false
 
+        val isBlacklisting = plugin.configYml.getBool("effects.multiply_drops.prevent-duplication")
+        val whitelist = plugin.configYml.getStrings("effects.multiply_drops.whitelist").map { Items.lookup(it) }
+
+        val multiplier = if (config.has("fortune")) {
+            val fortune = config.getIntFromExpression("fortune", data)
+            (Math.random() * (fortune.toDouble() - 1) + 1.1).roundToInt()
+        } else if (config.has("multiplier")) {
+            config.getDoubleFromExpression("multiplier", data).roundToInt()
+        } else 1
+        Bukkit.broadcastMessage(""+ChatColor.GOLD+"Inital multiplier: "+multiplier)
+        event.addModifier {
+            var matches = true
+            if (config.has("on_items")) {
+                val items = config.getStrings("on_items").map { string -> Items.lookup(string) }
+                matches = items.any { test -> test.matches(it) }
+            }
+
+            if (it.maxStackSize > 1 && matches) {
+                if (it.type.isOccluding && isBlacklisting && !whitelist.matches(it)) {
+                    return@addModifier DropResult(it, 0)
+                }
+                Bukkit.broadcastMessage(""+ChatColor.GOLD+"Final mult (is applied): "+multiplier)
+                it.amount *= multiplier
+            }
+
+            DropResult(it, 0)
+        }
+
+        return true
+    }*/
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val event = data.event as? EditableDropEvent ?: return false
         val isBlacklisting = plugin.configYml.getBool("effects.multiply_drops.prevent-duplication")
@@ -43,15 +75,14 @@ object EffectMultiplyDrops : Effect<NoCompileData>("multiply_drops") {
             val fortune = config.getIntFromExpression("fortune", data)
             (Math.random() * (fortune.toDouble() - 1) + 1.1).roundToInt()
         } else if (config.has("multiplier")) {
-            config.getDoubleFromExpression("multiplier", data).toInt()
+            config.getDoubleFromExpression("multiplier", data).roundToInt()
         } else 1
 
+        var addWeightMult = 0;
         val weight: Double = config.getDouble("calculated_weight")
-        Bukkit.broadcastMessage(""+ ChatColor.GOLD+"Weight: "+weight)
-        if (weight != 100.0) {
-            if (weight >= Random.nextInt(100)) {
-                Bukkit.broadcastMessage(""+ ChatColor.GREEN+"Bonus")
-                multiplier += 1
+        if (weight != 100.0 && weight!=0.0) {
+            if ((100-weight) >= Random.nextInt(100)) {
+                addWeightMult = 1;
             }
         }
 
@@ -61,10 +92,11 @@ object EffectMultiplyDrops : Effect<NoCompileData>("multiply_drops") {
         //
         //}
 
+        var reduceMultiplier = false
         if (data.blockData != null) {
             val blockData = data.blockData
             if (blockData is Ageable && blockData.age != blockData.maximumAge) {
-                multiplier = 1
+                reduceMultiplier = true
             }
         }
         //----only fully grown crops-------//
@@ -77,6 +109,10 @@ object EffectMultiplyDrops : Effect<NoCompileData>("multiply_drops") {
             if (it.maxStackSize > 1 && matches) {
                 if (it.type.isOccluding && isBlacklisting && !whitelist.matches(it)) {
                     return@addModifier DropResult(it, 0)
+                }
+                multiplier+=addWeightMult
+                if(reduceMultiplier){
+                    multiplier = 1
                 }
                 it.amount *= multiplier
             }

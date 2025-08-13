@@ -26,14 +26,13 @@ object EffectDamageMultiplier : Effect<NoCompileData>("damage_multiplier") {
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         if(data.event is EntityDamageEvent){
-            Bukkit.broadcastMessage(""+ChatColor.GREEN+"EDE dmg: "+ ChatColor.GRAY +data.event.damage+ChatColor.GREEN+" multiplier "+ChatColor.GRAY +config.getDoubleFromExpression("multiplier", data))
-            data.event.damage *= config.getDoubleFromExpression("multiplier", data)
-
-            return true
+           data.event.damage *= config.getDoubleFromExpression("multiplier", data)
+         //  Bukkit.broadcastMessage(""+ChatColor.GREEN+"DEF_EVENT dmg: "+ ChatColor.GRAY +data.event.damage+ChatColor.GREEN+" multiplier "+ChatColor.GRAY +config.getDoubleFromExpression("multiplier", data))
+           return true
         }
         if(data.event is MythicDamageEvent){
-            Bukkit.broadcastMessage(""+ChatColor.RED+"EDE dmg: "+ ChatColor.GRAY +data.event.damage+ChatColor.RED+" multiplier "+ChatColor.GRAY +config.getDoubleFromExpression("multiplier", data))
             data.event.damage *= config.getDoubleFromExpressionDebug("multiplier", data)
+          //  Bukkit.broadcastMessage(""+ChatColor.RED+"MMOBS_EVENT dmg: "+ ChatColor.GRAY +data.event.damage+ChatColor.RED+" multiplier "+ChatColor.GRAY +config.getDoubleFromExpression("multiplier", data))
             return true
         }
         return false
