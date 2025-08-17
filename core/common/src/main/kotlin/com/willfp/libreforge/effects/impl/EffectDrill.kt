@@ -69,7 +69,12 @@ object EffectDrill : MineBlockEffect<NoCompileData>("drill") {
             blocks.add(toBreak)
         }
 
-        player.breakBlocksSafely(blocks)
+        val useSetBlockBreak = config.getBool("prevent_trigger")
+        if (useSetBlockBreak) {
+            blocks.forEach { it.breakNaturally() }
+        } else {
+            player.breakBlocksSafely(blocks)
+        }
 
         return true
     }
