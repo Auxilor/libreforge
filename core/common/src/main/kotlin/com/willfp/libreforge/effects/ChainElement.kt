@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.placeholder.context.placeholderContext
 import com.willfp.eco.util.NumberUtils
 import com.willfp.libreforge.Compiled
 import com.willfp.libreforge.Dispatcher
@@ -16,9 +17,12 @@ import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.toPlaceholderContext
 import com.willfp.libreforge.triggers.DispatchedTrigger
 import com.willfp.libreforge.triggers.TriggerData
+import me.clip.placeholderapi.PlaceholderAPI
 import org.bukkit.Bukkit
+import org.bukkit.ChatColor
 import org.bukkit.entity.Player
 import java.util.UUID
+import kotlin.random.Random
 
 /**
  * A single effect config block.
@@ -31,18 +35,63 @@ class ChainElement<T> internal constructor(
     override val conditions: ConditionList,
     override val mutators: MutatorList,
     override val filters: FilterList,
-    override val weight: Double,
+    override var weight: Double,
     val weightExpression:String,
-    var calculatedWeight:Double,
+    var calculatedWeight:Double = Double.MIN_VALUE,
     forceRunOrder: RunOrder?
 ) : ElementLike(), Compiled<T>, Weighted {
     override val uuid: UUID = UUID.randomUUID()
     override val supportsDelay = effect.supportsDelay
     var tempPlayer :Player? = null
     val runOrder = forceRunOrder ?: effect.runOrder
-
+    var triggerData: TriggerData? = null
      override fun calcWeight() : Double{
-         return calculatedWeight;
+         if(triggerData!=null){
+             triggerData?.let { weight = calc(it,weightExpression) }
+         }else{
+             var exp = weightExpression;
+             if(tempPlayer!=null){
+                 exp = PlaceholderAPI.setPlaceholders(tempPlayer,weightExpression)
+                 weight = NumberUtils.evaluateExpression(exp,placeholderContext(player = tempPlayer))
+             }else{
+                 exp = weightExpression
+                 weight = NumberUtils.evaluateExpression(exp);
+             }
+         }
+
+         return weight;
+
+
+        //if(weightExpression.isEmpty())return 0.0
+        //var expressionCalculated:String
+        //val weight:Double
+        //if(tempPlayer!=null){
+        //    expressionCalculated = PlaceholderAPI.setPlaceholders(tempPlayer,weightExpression)
+        //    weight = NumberUtils.evaluateExpression(expressionCalculated,placeholderContext(player = tempPlayer))
+        //}else{
+        //    expressionCalculated = weightExpression
+        //    weight = NumberUtils.evaluateExpression(expressionCalculated);
+        //}
+        //return weight
+
+    }
+     override fun calcWeight(data: TriggerData) : Double{
+        if(data!=null){
+            data?.let { weight = calc(it,weightExpression) }
+        }else{
+            var exp = weightExpression;
+            if(tempPlayer!=null){
+                exp = PlaceholderAPI.setPlaceholders(tempPlayer,weightExpression)
+                weight = NumberUtils.evaluateExpression(exp,placeholderContext(player = tempPlayer))
+            }else{
+                exp = weightExpression
+                weight = NumberUtils.evaluateExpression(exp);
+            }
+        }
+
+        return weight;
+
+
         //if(weightExpression.isEmpty())return 0.0
         //var expressionCalculated:String
         //val weight:Double
@@ -85,6 +134,8 @@ class ChainElement<T> internal constructor(
         if(player!=null){
             tempPlayer = player
         }
+        triggerData = trigger.data
+
         calculatedWeight = calc(trigger.data,weightExpression)
         this.config.set("calculated_weight",calculatedWeight)
 

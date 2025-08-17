@@ -46,7 +46,6 @@ object EffectMultiplyDrops : Effect<NoCompileData>("multiply_drops") {
         } else if (config.has("multiplier")) {
             config.getDoubleFromExpression("multiplier", data).roundToInt()
         } else 1
-        Bukkit.broadcastMessage(""+ChatColor.GOLD+"Inital multiplier: "+multiplier)
         event.addModifier {
             var matches = true
             if (config.has("on_items")) {
@@ -58,7 +57,6 @@ object EffectMultiplyDrops : Effect<NoCompileData>("multiply_drops") {
                 if (it.type.isOccluding && isBlacklisting && !whitelist.matches(it)) {
                     return@addModifier DropResult(it, 0)
                 }
-                Bukkit.broadcastMessage(""+ChatColor.GOLD+"Final mult (is applied): "+multiplier)
                 it.amount *= multiplier
             }
 
@@ -78,20 +76,6 @@ object EffectMultiplyDrops : Effect<NoCompileData>("multiply_drops") {
             config.getDoubleFromExpression("multiplier", data).roundToInt()
         } else 1
 
-        var addWeightMult = 0;
-        val weight: Double = config.getDouble("calculated_weight")
-        if (weight != 100.0 && weight!=0.0) {
-            if ((100-weight) >= Random.nextInt(100)) {
-                addWeightMult = 1;
-            }
-        }
-
-        //----only fully grown crops-------//
-        //TODO add config check
-        //if(){
-        //
-        //}
-
         var reduceMultiplier = false
         if (data.blockData != null) {
             val blockData = data.blockData
@@ -110,7 +94,7 @@ object EffectMultiplyDrops : Effect<NoCompileData>("multiply_drops") {
                 if (it.type.isOccluding && isBlacklisting && !whitelist.matches(it)) {
                     return@addModifier DropResult(it, 0)
                 }
-                multiplier+=addWeightMult
+
                 if(reduceMultiplier){
                     multiplier = 1
                 }
@@ -122,6 +106,7 @@ object EffectMultiplyDrops : Effect<NoCompileData>("multiply_drops") {
 
         return true
     }
+
 
 
 }
