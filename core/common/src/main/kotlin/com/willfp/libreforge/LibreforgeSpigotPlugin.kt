@@ -15,17 +15,19 @@ import com.willfp.libreforge.display.ItemFlagDisplay
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.arguments.custom.CustomEffectArguments
 import com.willfp.libreforge.effects.impl.bossbar.BossBarProgressPlaceholder
-import com.willfp.libreforge.integrations.axplugins.axenvoy.AxEnvoyIntegration
 import com.willfp.libreforge.integrations.auraskills.AuraSkillsIntegration
 import com.willfp.libreforge.integrations.aureliumskills.AureliumSkillsIntegration
+import com.willfp.libreforge.integrations.axplugins.axenvoy.AxEnvoyIntegration
 import com.willfp.libreforge.integrations.axplugins.axtrade.AxTradeIntegration
 import com.willfp.libreforge.integrations.citizens.CitizensIntegration
 import com.willfp.libreforge.integrations.custombiomes.impl.CustomBiomesTerra
 import com.willfp.libreforge.integrations.custombiomes.impl.CustomBiomesTerraformGenerator
+import com.willfp.libreforge.integrations.edprisoncore.EdPrisonCoreIntegration
 import com.willfp.libreforge.integrations.fancynpcs.FancyNPCsIntegration
 import com.willfp.libreforge.integrations.huskintegration.huskclaims.HuskClaimsIntegration
 import com.willfp.libreforge.integrations.huskintegration.husktowns.HuskTownsIntegration
 import com.willfp.libreforge.integrations.jobs.JobsIntegration
+import com.willfp.libreforge.integrations.lands.LandsIntegration
 import com.willfp.libreforge.integrations.levelledmobs.LevelledMobsIntegration
 import com.willfp.libreforge.integrations.mcmmo.McMMOIntegration
 import com.willfp.libreforge.integrations.modelengine.ModelEngineIntegration
@@ -208,6 +210,7 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             IntegrationLoader("Terra") { CustomBiomesTerra.load(this) },
             IntegrationLoader("TerraformGenerator") { CustomBiomesTerraformGenerator.load(this) },
             IntegrationLoader("AxEnvoy") { AxEnvoyIntegration.load(this) },
+            IntegrationLoader("AxTrade") { AxTradeIntegration.load(this) },
             IntegrationLoader("Votifier") { VotifierIntegration.load(this) },
             IntegrationLoader("ModelEngine") { ModelEngineIntegration.load(this) },
             IntegrationLoader("FancyNpcs") { FancyNPCsIntegration.load(this) },
@@ -216,8 +219,8 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             IntegrationLoader("HuskClaims") { HuskClaimsIntegration.load(this) },
             IntegrationLoader("CustomCrops") { CustomCropsIntegration.load(this) },
             IntegrationLoader("CustomFishing") { CustomFishingIntegration.load(this) },
-            IntegrationLoader("Lands") { com.willfp.libreforge.integrations.lands.LandsIntegration.load(this) },
-            IntegrationLoader("AxTrade") { AxTradeIntegration.load(this) }
+            IntegrationLoader("Lands") { LandsIntegration.load(this) },
+            IntegrationLoader("EdPrison") { EdPrisonCoreIntegration.load(this) }
         )
     }
 

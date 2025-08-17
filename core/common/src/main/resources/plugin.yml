@@ -35,6 +35,7 @@ softdepend:
   - CustomCrops
   - CustomFishing
   - Lands
+  - EdPrison
 
 commands:
   lrcdb:
