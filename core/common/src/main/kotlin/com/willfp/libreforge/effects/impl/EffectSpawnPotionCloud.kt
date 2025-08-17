@@ -5,6 +5,7 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getIntFromExpression
+import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.AreaEffectCloud
@@ -42,6 +43,12 @@ object EffectSpawnPotionCloud : Effect<NoCompileData>("spawn_potion_cloud") {
         )
 
         cloud.source = data.player
+
+        plugin.scheduler.runLater(duration.toLong()) {
+            if (!cloud.isDead) {
+                cloud.remove()
+            }
+        }
 
         return true
     }
