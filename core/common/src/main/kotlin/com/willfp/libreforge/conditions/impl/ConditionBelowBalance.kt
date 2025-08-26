@@ -23,6 +23,6 @@ object ConditionBelowBalance : Condition<NoCompileData>("below_balance") {
     ): Boolean {
         val player = dispatcher.get<Player>() ?: return false
 
-        return EconomyManager.hasAmount(player, config.getDoubleFromExpression("balance", player))
+        return EconomyManager.getBalance(player) < config.getDoubleFromExpression("balance", player)
     }
 }
