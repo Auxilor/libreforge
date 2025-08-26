@@ -59,8 +59,8 @@ object Filters : Registry<Filter<*, *>>() {
     }
 
     init {
-        register(FilterAdvancements)
         register(FilterAboveHealthPercent)
+        register(FilterAdvancements)
         register(FilterAltValueAbove)
         register(FilterAltValueBelow)
         register(FilterAltValueEquals)
@@ -77,6 +77,7 @@ object Filters : Registry<Filter<*, *>>() {
         register(FilterIsExpressionTrue)
         register(FilterIsNPC)
         register(FilterIsPassive)
+        register(FilterIsTamedEntityOwner)
         register(FilterItemDurabilityAbove)
         register(FilterItemDurabilityAbovePercent)
         register(FilterItemDurabilityBelow)
@@ -95,6 +96,7 @@ object Filters : Registry<Filter<*, *>>() {
         register(FilterText)
         register(FilterTextContains)
         register(FilterThisItem)
+        register(FilterTamedEntity)
         register(FilterValueAbove)
         register(FilterValueBelow)
         register(FilterValueEquals)
