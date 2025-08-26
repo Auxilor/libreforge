@@ -31,9 +31,13 @@ object TriggerTakeDamage : Trigger("take_damage") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityDamageEvent) {
-        val victim = event.entity
+        val victim = event.entity as? LivingEntity ?: return
 
         if (event.cause in ignoredCauses) {
+            return
+        }
+
+        if (victim.noDamageTicks > 0) {
             return
         }
 
@@ -41,7 +45,7 @@ object TriggerTakeDamage : Trigger("take_damage") {
             victim.toDispatcher(),
             TriggerData(
                 player = victim as? Player,
-                victim = victim as? LivingEntity,
+                victim = victim,
                 event = event,
                 value = event.finalDamage
             )
