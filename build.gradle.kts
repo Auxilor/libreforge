@@ -29,6 +29,7 @@ allprojects {
         mavenCentral()
         maven("https://repo.auxilor.io/repository/maven-public/")
         maven("https://repo.papermc.io/repository/maven-public/")
+        maven("https://repo.purpurmc.org/snapshots")
         maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
         maven("https://repo.codemc.io/repository/maven-public/")
         maven("https://maven.enginehub.org/repo/")
@@ -43,6 +44,7 @@ allprojects {
     dependencies {
         compileOnly("org.jetbrains:annotations:23.0.0")
         compileOnly(kotlin("stdlib", version = "2.1.0"))
+        compileOnly("org.purpurmc.purpur:purpur-api:1.20.4-R0.1-SNAPSHOT")
 
         compileOnly(fileTree("lib") { include("*.jar") })
     }
