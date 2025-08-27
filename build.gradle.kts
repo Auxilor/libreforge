@@ -39,6 +39,7 @@ allprojects {
         maven("https://repo.william278.net/releases")
         maven("https://repo.momirealms.net/releases/")
         maven("https://repo.artillex-studios.com/releases/")
+        maven("https://mvn.lumine.io/repository/maven-public/")
     }
 
     dependencies {

@@ -4,7 +4,6 @@ import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.command.impl.PluginCommand
 import com.willfp.eco.core.display.DisplayModule
-import com.willfp.eco.core.integrations.Integration
 import com.willfp.eco.core.integrations.IntegrationLoader
 import com.willfp.eco.core.integrations.afk.AFKManager
 import com.willfp.eco.core.items.Items
@@ -33,6 +32,7 @@ import com.willfp.libreforge.integrations.lands.LandsIntegration
 import com.willfp.libreforge.integrations.levelledmobs.LevelledMobsIntegration
 import com.willfp.libreforge.integrations.mcmmo.McMMOIntegration
 import com.willfp.libreforge.integrations.modelengine.ModelEngineIntegration
+import com.willfp.libreforge.integrations.mythicmobs.MythicMobsIntegration
 import com.willfp.libreforge.integrations.paper.PaperIntegration
 import com.willfp.libreforge.integrations.purpur.PurpurIntegration
 import com.willfp.libreforge.integrations.scyther.ScytherIntegration
@@ -229,7 +229,8 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             IntegrationLoader("CustomCrops") { CustomCropsIntegration.load(this) },
             IntegrationLoader("CustomFishing") { CustomFishingIntegration.load(this) },
             IntegrationLoader("Lands") { LandsIntegration.load(this) },
-            IntegrationLoader("EdPrison") { EdPrisonCoreIntegration.load(this) }
+            IntegrationLoader("EdPrison") { EdPrisonCoreIntegration.load(this) },
+            IntegrationLoader("MythicMobs") { MythicMobsIntegration.load(this) }
         )
     }
 
