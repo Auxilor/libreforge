@@ -7,9 +7,9 @@ import com.willfp.libreforge.integrations.LoadableIntegration
 import com.willfp.libreforge.integrations.edprisoncore.impl.ConditionHasEdPrisonCurrency
 import com.willfp.libreforge.integrations.edprisoncore.impl.ConditionHasEdPrisonRobot
 import com.willfp.libreforge.integrations.edprisoncore.impl.ConditionInEdPrisonGang
+import com.willfp.libreforge.integrations.edprisoncore.impl.EffectEdPrisonEconomyMultiplier
 import com.willfp.libreforge.integrations.edprisoncore.impl.EffectGiveEdPrisonEconomy
 import com.willfp.libreforge.integrations.edprisoncore.impl.EffectGiveEdPrisonPouch
-import com.willfp.libreforge.integrations.edprisoncore.impl.EffectMultiplyEdPrisonEconomy
 import com.willfp.libreforge.integrations.edprisoncore.impl.EffectSetEdPrisonEconomy
 import com.willfp.libreforge.integrations.edprisoncore.impl.EffectUpdateEdPrisonPickaxe
 
@@ -20,7 +20,7 @@ object EdPrisonCoreIntegration : LoadableIntegration {
         Conditions.register(ConditionInEdPrisonGang)
         Effects.register(EffectGiveEdPrisonEconomy)
         Effects.register(EffectGiveEdPrisonPouch)
-        Effects.register(EffectMultiplyEdPrisonEconomy)
+        Effects.register(EffectEdPrisonEconomyMultiplier)
         Effects.register(EffectSetEdPrisonEconomy)
         Effects.register(EffectUpdateEdPrisonPickaxe)
     }

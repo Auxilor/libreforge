@@ -12,6 +12,7 @@ import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.plugin
+import io.lumine.mythic.bukkit.MythicBukkit
 import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -21,7 +22,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockDropItemEvent
-import java.util.UUID
+import java.util.*
 
 object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
     private val players = listMap<UUID, UUID>()
@@ -46,10 +47,7 @@ object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
         TelekinesisUtils.registerTest { players[it.uniqueId].isNotEmpty() }
     }
 
-    @EventHandler(
-        priority = EventPriority.HIGH,
-        ignoreCancelled = true
-    )
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     fun handle(event: BlockDropItemEvent) {
         val player = event.player
         val block = event.block
@@ -105,10 +103,13 @@ object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
         event.expToDrop = 0
     }
 
-
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     fun handle(event: EntityDeathByEntityEvent) {
         val victim = event.victim
+
+        if (MythicBukkit.inst().mobManager.isMythicMob(victim)) {
+            return
+        }
 
         if (victim is Player && plugin.configYml.getBool("effects.telekinesis.on-players")) {
             return
