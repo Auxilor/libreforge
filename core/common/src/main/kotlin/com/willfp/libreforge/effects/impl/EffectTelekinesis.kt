@@ -13,6 +13,7 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.plugin
 import io.lumine.mythic.bukkit.MythicBukkit
+import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -107,8 +108,11 @@ object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
     fun handle(event: EntityDeathByEntityEvent) {
         val victim = event.victim
 
-        if (MythicBukkit.inst().mobManager.isMythicMob(victim)) {
-            return
+
+        if (Bukkit.getPluginManager().isPluginEnabled("MythicMobs")) {
+            if (MythicBukkit.inst().mobManager.isMythicMob(victim)) {
+                return
+            }
         }
 
         if (victim is Player && plugin.configYml.getBool("effects.telekinesis.on-players")) {
