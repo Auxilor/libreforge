@@ -5,6 +5,9 @@ import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.tryAsLivingEntity
+import io.lumine.mythic.bukkit.MythicBukkit
+import io.lumine.mythic.bukkit.events.MythicDamageEvent
+import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageByEntityEvent
@@ -24,6 +27,12 @@ object TriggerTakeEntityDamage : Trigger("take_entity_damage") {
 
         val victim = event.entity
 
+        if (Bukkit.getPluginManager().isPluginEnabled("MythicMobs")) {
+            if (MythicBukkit.inst().mobManager.isMythicMob(attacker)) {
+                return
+            }
+        }
+
         if (event.cause == EntityDamageEvent.DamageCause.THORNS) {
             return
         }
@@ -36,6 +45,23 @@ object TriggerTakeEntityDamage : Trigger("take_entity_damage") {
                 location = attacker.location,
                 event = event,
                 value = event.finalDamage
+            )
+        )
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    fun handle(event: MythicDamageEvent) {
+        val caster = event.caster?.entity?.bukkitEntity?.tryAsLivingEntity() ?: return
+        val victim = event.target?.bukkitEntity ?: return
+
+        this.dispatch(
+            victim.toDispatcher(),
+            TriggerData(
+                player = victim as? Player,
+                victim = caster,
+                location = caster.location,
+                event = event,
+                value = event.damage
             )
         )
     }
