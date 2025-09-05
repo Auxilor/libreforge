@@ -7,7 +7,6 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.tryAsLivingEntity
 import io.lumine.mythic.bukkit.MythicBukkit
-import io.lumine.mythic.bukkit.events.MythicDamageEvent
 import org.bukkit.Bukkit
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
@@ -59,21 +58,6 @@ object TriggerTakeDamage : Trigger("take_damage") {
                 victim = victim as? LivingEntity,
                 event = event,
                 value = event.finalDamage
-            )
-        )
-    }
-
-    @EventHandler(ignoreCancelled = true)
-    fun handle(event: MythicDamageEvent) {
-        val victim = event.target.bukkitEntity
-
-        this.dispatch(
-            victim.toDispatcher(),
-            TriggerData(
-                player = victim as? Player,
-                victim = victim as? LivingEntity,
-                event = event,
-                value = event.damage
             )
         )
     }
