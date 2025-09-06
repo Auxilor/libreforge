@@ -25,13 +25,6 @@ internal class CommandPointsTake(plugin: EcoPlugin): Subcommand(
             return
         }
 
-        val player = Bukkit.getPlayer(playerString)
-
-        if (player == null && !playerString.equals("global", ignoreCase = true)) {
-            sender.sendMessage(plugin.langYml.getMessage("invalid-player"))
-            return
-        }
-
         val pointString = args.getOrNull(1)
 
         if (pointString == null) {
@@ -53,14 +46,41 @@ internal class CommandPointsTake(plugin: EcoPlugin): Subcommand(
             return
         }
 
-        if (player != null) {
-            player.points[pointString] = player.points[pointString] - amountNum
-        } else {
-            globalPoints[pointString] = globalPoints[pointString] - amountNum
+        // Global points
+        if (playerString.equals("global", ignoreCase = true)) {
+            globalPoints[pointString] = (globalPoints[pointString] ?: 0.0) - amountNum
+            sender.sendMessage(plugin.langYml.getMessage("points-taken")
+                .replace("%playername%", "server")
+                .replace("%point%", pointString.toFriendlyPointName())
+                .replace("%amount%", amountNum.toNiceString())
+            )
+            return
         }
 
+        // Wildcard for all online players
+        if (playerString == "*") {
+            Bukkit.getOnlinePlayers().forEach { player ->
+                player.points[pointString] = (player.points[pointString] ?: 0.0) - amountNum
+            }
+            sender.sendMessage(plugin.langYml.getMessage("points-taken-all")
+                .replace("%point%", pointString.toFriendlyPointName())
+                .replace("%amount%", amountNum.toNiceString())
+            )
+            return
+        }
+
+        // Specific player
+        val player = Bukkit.getPlayer(playerString)
+
+        if (player == null) {
+            sender.sendMessage(plugin.langYml.getMessage("invalid-player"))
+            return
+        }
+
+        player.points[pointString] = (player.points[pointString] ?: 0.0) - amountNum
+
         sender.sendMessage(plugin.langYml.getMessage("points-taken")
-            .replace("%playername%", player?.name ?: "server")
+            .replace("%playername%", player.name)
             .replace("%point%", pointString.toFriendlyPointName())
             .replace("%amount%", amountNum.toNiceString())
         )
@@ -68,11 +88,12 @@ internal class CommandPointsTake(plugin: EcoPlugin): Subcommand(
 
     override fun tabComplete(sender: CommandSender, args: List<String>): List<String> {
         return when(args.size) {
-            1 -> StringUtil.copyPartialMatches(
-                args[0],
-                Bukkit.getOnlinePlayers().map { it.name },
-                mutableListOf("global")
-            )
+            1 -> {
+                val candidates = Bukkit.getOnlinePlayers().map { it.name }.toMutableList()
+                candidates.add("global")
+                candidates.add("*")
+                StringUtil.copyPartialMatches(args[0], candidates, mutableListOf())
+            }
             2 -> listOf("point")
             3 -> mutableListOf(
                 "1",
