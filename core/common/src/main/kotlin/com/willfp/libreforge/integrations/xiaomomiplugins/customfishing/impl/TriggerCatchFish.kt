@@ -12,13 +12,14 @@ object TriggerCatchFish : Trigger("catch_fish") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT,
+        TriggerParameter.LOCATION,
         TriggerParameter.TEXT,
         TriggerParameter.ITEM
     )
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: FishingLootSpawnEvent) {
-        val player = event.player ?: return
+        val player = event.player
         val loot = event.loot.id() ?: return
         val location = event.location ?: return
         val entity = event.entity

@@ -56,13 +56,6 @@ internal class CommandPointsGet(plugin: EcoPlugin): Subcommand(
                 mutableListOf("global")
             )
             2 -> listOf("point")
-            3 -> mutableListOf(
-                "1",
-                "5",
-                "10",
-                "100",
-                "1000"
-            )
             else -> mutableListOf()
         }
     }

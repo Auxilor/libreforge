@@ -5,6 +5,8 @@ import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.tryAsLivingEntity
+import io.lumine.mythic.bukkit.MythicBukkit
+import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageByEntityEvent
@@ -23,6 +25,12 @@ object TriggerTakeEntityDamage : Trigger("take_entity_damage") {
         val attacker = event.damager.tryAsLivingEntity() ?: return
 
         val victim = event.entity
+
+        if (Bukkit.getPluginManager().isPluginEnabled("MythicMobs")) {
+            if (MythicBukkit.inst().mobManager.isMythicMob(attacker)) {
+                return
+            }
+        }
 
         if (event.cause == EntityDamageEvent.DamageCause.THORNS) {
             return

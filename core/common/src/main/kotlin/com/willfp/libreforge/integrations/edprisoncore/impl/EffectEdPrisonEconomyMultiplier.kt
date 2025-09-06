@@ -11,7 +11,7 @@ import com.willfp.libreforge.toDispatcher
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 
-object EffectMultiplyEdPrisonEconomy : MultiMultiplierEffect<String>("multiply_edprison_economy") {
+object EffectEdPrisonEconomyMultiplier : MultiMultiplierEffect<String>("edprison_economy_multiplier") {
     override val key = "economies"
 
     override fun getElement(key: String): String? {
