@@ -8,15 +8,18 @@ import org.bukkit.attribute.AttributeModifier
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 
-object EffectKnockbackResistanceMultiplier : AttributeEffect(
-    "knockback_resistance_multiplier",
+object EffectKnockbackResistanceMultiplier : AttributeEffect("knockback_resistance_multiplier",
     Attribute.GENERIC_KNOCKBACK_RESISTANCE,
-    AttributeModifier.Operation.MULTIPLY_SCALAR_1
+    AttributeModifier.Operation.ADD_NUMBER
 ) {
     override val arguments = arguments {
         require("multiplier", "You must specify the knockback resistance multiplier!")
     }
 
-    override fun getValue(config: Config, entity: LivingEntity) =
-        config.getDoubleFromExpression("multiplier", entity as? Player) - 1
+    override fun getValue(config: Config, entity: LivingEntity): Double {
+        val multiplier = config.getDoubleFromExpression("multiplier", entity as? Player)
+        val value = multiplier - 1.0
+
+        return value
+    }
 }
