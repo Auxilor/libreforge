@@ -8,6 +8,7 @@ import com.willfp.libreforge.effects.RunOrder
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import org.bukkit.Bukkit
 import org.bukkit.event.entity.EntityDamageEvent
 
 object EffectAddDamage : Effect<NoCompileData>("add_damage") {
@@ -24,8 +25,19 @@ object EffectAddDamage : Effect<NoCompileData>("add_damage") {
     override val runOrder = RunOrder.LATE
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
-        val event = data.event as? EntityDamageEvent ?: return false
-        event.damage += config.getDoubleFromExpression("damage", data)
+        val damage = config.getDoubleFromExpression("damage", data)
+
+        val event = data.event
+
+        if (Bukkit.getPluginManager().isPluginEnabled("MythicMobs") && event is io.lumine.mythic.bukkit.events.MythicDamageEvent) {
+            event.damage += damage
+            return true
+        }
+
+        if (event is EntityDamageEvent) {
+            event.damage += damage
+            return true
+        }
 
         return true
     }

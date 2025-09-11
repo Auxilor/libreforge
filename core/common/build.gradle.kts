@@ -5,6 +5,7 @@ dependencies {
     implementation("com.willfp:ModelEngineBridge:1.3.0")
 
     compileOnly("io.papermc.paper:paper-api:1.20-R0.1-SNAPSHOT")
+    compileOnly("org.purpurmc.purpur:purpur-api:1.20.4-R0.1-SNAPSHOT")
     compileOnly("net.kyori:adventure-text-minimessage:4.14.0")
     compileOnly("com.github.NuVotifier:NuVotifier:2.7.2")
     compileOnly("dev.aurelium:auraskills-api-bukkit:2.0.0")
@@ -24,10 +25,12 @@ dependencies {
     compileOnly("net.william278.huskclaims:huskclaims-bukkit:1.5.2")
     compileOnly("net.momirealms:custom-crops:3.6.29")
     compileOnly("net.momirealms:custom-fishing:2.3.8")
+    compileOnly("io.lumine:Mythic:5.7.0")
+    compileOnly("io.lumine:LumineUtils:1.19-SNAPSHOT")
     compileOnly("net.citizensnpcs:citizens-main:2.0.31-SNAPSHOT") {
         exclude(group = "net.byteflux", module = "libby-bukkit")
     }
-    compileOnly("nl.chimpgamer.ultimatemobcoins:paper:1.6.0")
+    compileOnly("nl.chimpgamer.ultimatemobcoins:paper:1.8.1")
     compileOnly("com.artillexstudios:AxTrade:1.14.0")
     compileOnly("com.artillexstudios.axenvoy:AxEnvoy:2.2.1")
     compileOnly("com.github.angeschossen:LandsAPI:7.15.19")

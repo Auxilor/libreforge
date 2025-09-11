@@ -7,6 +7,7 @@ import com.willfp.eco.core.display.DisplayModule
 import com.willfp.eco.core.integrations.IntegrationLoader
 import com.willfp.eco.core.integrations.afk.AFKManager
 import com.willfp.eco.core.items.Items
+import com.willfp.eco.util.ClassUtils
 import com.willfp.libreforge.commands.CommandLibreforge
 import com.willfp.libreforge.configs.ChainsYml
 import com.willfp.libreforge.configs.TagsYml
@@ -31,7 +32,9 @@ import com.willfp.libreforge.integrations.lands.LandsIntegration
 import com.willfp.libreforge.integrations.levelledmobs.LevelledMobsIntegration
 import com.willfp.libreforge.integrations.mcmmo.McMMOIntegration
 import com.willfp.libreforge.integrations.modelengine.ModelEngineIntegration
+import com.willfp.libreforge.integrations.mythicmobs.MythicMobsIntegration
 import com.willfp.libreforge.integrations.paper.PaperIntegration
+import com.willfp.libreforge.integrations.purpur.PurpurIntegration
 import com.willfp.libreforge.integrations.scyther.ScytherIntegration
 import com.willfp.libreforge.integrations.tab.TabIntegration
 import com.willfp.libreforge.integrations.tmmobcoins.TMMobcoinsIntegration
@@ -100,6 +103,12 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
         if (Prerequisite.HAS_PAPER.isMet) {
             PaperIntegration.load(this)
         }
+
+        if (ClassUtils.exists("org.purpurmc.purpur.event.inventory.AnvilTakeResultEvent")
+        ) {
+            PurpurIntegration.load(this)
+        }
+
 
         pointsPlaceholder(this).register()
         globalPointsPlaceholder(this).register()
@@ -220,7 +229,8 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             IntegrationLoader("CustomCrops") { CustomCropsIntegration.load(this) },
             IntegrationLoader("CustomFishing") { CustomFishingIntegration.load(this) },
             IntegrationLoader("Lands") { LandsIntegration.load(this) },
-            IntegrationLoader("EdPrison") { EdPrisonCoreIntegration.load(this) }
+            IntegrationLoader("EdPrison") { EdPrisonCoreIntegration.load(this) },
+            IntegrationLoader("MythicMobs") { MythicMobsIntegration.load(this) }
         )
     }
 

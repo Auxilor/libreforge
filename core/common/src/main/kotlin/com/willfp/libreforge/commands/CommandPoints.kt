@@ -12,10 +12,11 @@ internal class CommandPoints(plugin: EcoPlugin): Subcommand(
     false
 ) {
     init {
-        this.addSubcommand(CommandPointsGive(plugin))
-            .addSubcommand(CommandPointsTake(plugin))
+        this.addSubcommand(CommandPointsGet(plugin))
+            .addSubcommand(CommandPointsGive(plugin))
+            .addSubcommand(CommandPointsReset(plugin))
             .addSubcommand(CommandPointsSet(plugin))
-            .addSubcommand(CommandPointsGet(plugin))
+            .addSubcommand(CommandPointsTake(plugin))
     }
 
     override fun onExecute(sender: CommandSender, args: MutableList<String>) {
