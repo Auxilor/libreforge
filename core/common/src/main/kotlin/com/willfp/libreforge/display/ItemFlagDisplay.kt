@@ -51,9 +51,24 @@ class ItemFlagDisplay(
             }
         }
 
-        fis.persistentDataContainer.set(pdcKey, PersistentDataType.STRING, flags.joinToString(","))
+        fis.persistentDataContainer.set(pdcKey, PersistentDataType.STRING,   flags.joinToString(","))
 
         fis.addItemFlags(*flags.toTypedArray())
+    }
+
+    fun joinAsString(): String {
+
+        val builder = StringBuilder()
+        for (flag in flags) {
+            if (flag == null) continue
+            builder.append(flag.toString()).append(",")
+        }
+        // Remove trailing comma if any
+        if (builder.isNotEmpty()) {
+            builder.setLength(builder.length - 1)
+        }
+        return builder.toString()
+
     }
 
     override fun revert(itemStack: ItemStack) {

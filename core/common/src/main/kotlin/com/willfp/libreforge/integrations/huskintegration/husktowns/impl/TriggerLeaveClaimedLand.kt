@@ -1,30 +1,32 @@
-package com.willfp.libreforge.triggers.impl
+package com.willfp.libreforge.integrations.huskintegration.husktowns.impl
+
 
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import net.william278.husktowns.events.PlayerLeaveTownEvent
 import org.bukkit.event.EventHandler
-import org.bukkit.event.block.BlockFertilizeEvent
 
-object TriggerBoneMealCrop : Trigger("bonemeal_crop") {
+object TriggerLeaveClaimedLand : Trigger("leave_claimed_land") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.BLOCK,
-        TriggerParameter.LOCATION
+        TriggerParameter.EVENT,
+        TriggerParameter.TEXT
     )
 
+    // This is the same as TriggerEnterTownLand, but with the event changed to PlayerLeaveTownEvent
     @EventHandler(ignoreCancelled = true)
-    fun handle(event: BlockFertilizeEvent) {
+    fun handle(event: PlayerLeaveTownEvent) {
         val player = event.player ?: return
+        val town = event.leftTownClaim.town.name ?: return
 
         this.dispatch(
             player.toDispatcher(),
             TriggerData(
                 player = player,
-                location = player.location,
-                block = event.block,
-                event = event
+                event = event,
+                text = town
             )
         )
     }

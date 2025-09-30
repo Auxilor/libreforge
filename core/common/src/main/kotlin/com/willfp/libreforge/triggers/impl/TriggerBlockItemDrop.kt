@@ -8,10 +8,12 @@ import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.event.EditableBlockDropEvent
+import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.block.Container
+import org.bukkit.block.data.BlockData
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.block.BlockDropItemEvent
@@ -47,12 +49,13 @@ object TriggerBlockItemDrop : Trigger("block_item_drop") {
         val originalDrops = event.items.map { it.itemStack }.filterNotEmpty()
 
         val editableEvent = EditableBlockDropEvent(event)
-
+        val blockData:BlockData = event.blockState.blockData.clone();
         this.dispatch(
             player.toDispatcher(),
             TriggerData(
                 player = player,
-                block = BrokenBlock(block, event.blockState.type), // Fixes the type always being AIR
+                block = BrokenBlock(block,event.blockState.type), // Fixes the type always being AIR
+                blockData = blockData,
                 location = block.location,
                 event = editableEvent,
                 item = null,

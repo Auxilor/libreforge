@@ -40,6 +40,7 @@ class TriggerData(
     val player: Player? = null,
     val victim: LivingEntity? = null,
     val block: Block? = null,
+    val blockData: BlockData? = null, //fixes checks with multiply drops effect (ageable)
     val event: Event? = null,
     val location: Location? = victim?.location ?: player?.location,
     val projectile: Projectile? = null,
@@ -126,6 +127,7 @@ class TriggerData(
         player: Player? = this.player,
         victim: LivingEntity? = this.victim,
         block: Block? = this.block,
+        blockData:BlockData? = this.blockData,
         event: Event? = this.event,
         location: Location? = this.location,
         projectile: Projectile? = this.projectile,
@@ -140,6 +142,7 @@ class TriggerData(
             player,
             victim,
             block,
+            blockData,
             event,
             location,
             projectile,
@@ -186,6 +189,7 @@ class TriggerData(
         player: Player?,
         victim: LivingEntity?,
         block: Block?,
+        blockData: BlockData?,
         event: Event?,
         location: Location?,
         projectile: Projectile?,
@@ -202,6 +206,88 @@ class TriggerData(
         player,
         victim,
         block,
+        blockData,
+        event,
+        location,
+        projectile,
+        velocity,
+        item,
+        text,
+        value,
+        altValue
+    ) {
+        this.holder = holder ?: EmptyProvidedHolder
+        this.originalPlayer = originalPlayer
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    @Deprecated(
+        "This is internal! Do not use!",
+        ReplaceWith("TriggerData()"),
+        DeprecationLevel.ERROR
+    )
+    constructor(
+        holder: ProvidedHolder?,
+        dispatcher: Dispatcher<*>?,
+        player: Player?,
+        victim: LivingEntity?,
+        block: Block?,
+        blockData: BlockData?,
+        event: Event?,
+        location: Location?,
+        projectile: Projectile?,
+        velocity: Vector?,
+        item: ItemStack?,
+        text: String?,
+        value: Double,
+        altValue: Double,
+        originalPlayer: Player?,
+        internal1: Int,
+        internal2: kotlin.jvm.internal.DefaultConstructorMarker?
+    ) : this(
+        dispatcher ?: GlobalDispatcher,
+        player,
+        victim,
+        block,
+        blockData,
+        event,
+        location,
+        projectile,
+        velocity,
+        item,
+        text,
+        value
+    ) {
+        this.holder = holder ?: EmptyProvidedHolder
+        this.originalPlayer = originalPlayer
+    }
+    @Suppress("UNUSED_PARAMETER")
+    @Deprecated(
+        "This is internal! Do not use!",
+        ReplaceWith("TriggerData()"),
+        DeprecationLevel.ERROR
+    )
+    constructor(
+        holder: ProvidedHolder?,
+        player: Player?,
+        victim: LivingEntity?,
+        block: Block?,
+        event: Event?,
+        location: Location?,
+        projectile: Projectile?,
+        velocity: Vector?,
+        item: ItemStack?,
+        text: String?,
+        value: Double,
+        originalPlayer: Player?,
+        internal1: Int,
+        internal2: kotlin.jvm.internal.DefaultConstructorMarker?
+    ) : this(
+        GlobalDispatcher,
+        player,
+        victim,
+        block,
+        null,
         event,
         location,
         projectile,
@@ -234,7 +320,6 @@ class TriggerData(
         item: ItemStack?,
         text: String?,
         value: Double,
-        altValue: Double,
         originalPlayer: Player?,
         internal1: Int,
         internal2: kotlin.jvm.internal.DefaultConstructorMarker?
@@ -243,16 +328,46 @@ class TriggerData(
         player,
         victim,
         block,
+        null,
         event,
         location,
         projectile,
         velocity,
         item,
         text,
-        value,
-        altValue
+        value
     ) {
         this.holder = holder ?: EmptyProvidedHolder
         this.originalPlayer = originalPlayer
     }
+
+    @Suppress("UNUSED_PARAMETER")
+    constructor(
+        dispatcher: Dispatcher<*>?,
+        player: Player?,
+        victim: LivingEntity?,
+        block: Block?,
+        event: Event?,
+        location: Location?,
+        projectile: Projectile?,
+        velocity: Vector?,
+        item: ItemStack?,
+        text: String?,
+        value: Double,
+        @Suppress("UNUSED_PARAMETER") ignored: Int,
+        @Suppress("UNUSED_PARAMETER") marker: kotlin.jvm.internal.DefaultConstructorMarker?
+    ) : this(
+        dispatcher ?: GlobalDispatcher,
+        player,
+        victim,
+        block,
+        null, // blockData
+        event,
+        location,
+        projectile,
+        velocity,
+        item,
+        text,
+        value
+    )
 }

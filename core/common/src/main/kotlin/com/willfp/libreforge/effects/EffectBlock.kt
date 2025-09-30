@@ -96,6 +96,9 @@ class EffectBlock internal constructor(
         return this.uuid == other.uuid
     }
 
+    override fun toString(): String {
+        return effects.toString()
+    }
     override fun hashCode(): Int {
         return Objects.hashCode(this.uuid)
     }
