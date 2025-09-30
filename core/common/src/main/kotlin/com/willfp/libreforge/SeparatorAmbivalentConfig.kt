@@ -9,6 +9,7 @@ import com.willfp.eco.core.placeholder.context.PlaceholderContext
 import com.willfp.eco.util.NumberUtils
 import com.willfp.eco.util.StringUtils
 import com.willfp.libreforge.triggers.TriggerData
+import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
 private class SeparatorAmbivalentConfig(
@@ -136,6 +137,11 @@ fun Config.getIntFromExpression(path: String, data: TriggerData?) = NumberUtils.
 fun Config.getDoubleFromExpression(path: String, data: TriggerData?) = NumberUtils.evaluateExpression(
     this.getString(path), this.toPlaceholderContext(data)
 )
+fun Config.getDoubleFromExpressionDebug(path: String, data: TriggerData?): Double {
+   return NumberUtils.evaluateExpression(
+        this.getString(path), this.toPlaceholderContext(data)
+    )
+}
 
 fun Config.getFormattedString(path: String, data: TriggerData?) =
     this.getFormattedString(path, this.toPlaceholderContext(data))

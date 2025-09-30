@@ -180,6 +180,7 @@ import com.willfp.libreforge.proxy.loadProxy
 import com.willfp.libreforge.separatorAmbivalent
 import com.willfp.libreforge.toWeightedList
 import com.willfp.libreforge.triggers.Triggers
+import org.bukkit.Bukkit
 import java.util.UUID
 
 object Effects : Registry<Effect<*>>() {
@@ -442,6 +443,8 @@ object Effects : Registry<Effect<*>>() {
 
         val weight = config.getDoubleFromExpression("weight")
 
+        val weightExpression = config.getString("weight")
+
         val forceRunOrder = if (args.has("run_order")) {
             enumValueOfOrNull<RunOrder>(args.getString("run_order").uppercase())
         } else null
@@ -455,6 +458,8 @@ object Effects : Registry<Effect<*>>() {
             mutators,
             filters,
             weight,
+            weightExpression,
+            0.0,
             forceRunOrder
         )
     }
@@ -473,6 +478,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectAgeCrop)
         register(EffectAllPlayers)
         register(EffectAnimation)
+        register(EffectAOE)
         register(EffectArmor)
         register(EffectArmorToughness)
         register(EffectArrowRing)

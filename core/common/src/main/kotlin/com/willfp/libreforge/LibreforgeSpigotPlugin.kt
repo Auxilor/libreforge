@@ -150,6 +150,15 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
         hasLoaded = true
     }
 
+    override fun handleDisable(){
+         for (onlinePlayer in Bukkit.getOnlinePlayers()) {
+             val dispatcher = onlinePlayer.toDispatcher()
+             for ((effect, holder) in dispatcher.providedActiveEffects) {
+                 effect.disable(dispatcher, holder,true)
+             }
+         }
+    }
+
     override fun createTasks() {
         dispatchedTriggerFactory.startTicking()
 

@@ -11,7 +11,7 @@ object RandomExecutorFactory : ChainExecutorFactory("random") {
 
     object RandomChainExecutor : ChainExecutor {
         override fun execute(chain: Chain, trigger: DispatchedTrigger): Boolean {
-           return chain.random().trigger(trigger)
+           return chain.random(trigger.data).trigger(trigger)
         }
     }
 }

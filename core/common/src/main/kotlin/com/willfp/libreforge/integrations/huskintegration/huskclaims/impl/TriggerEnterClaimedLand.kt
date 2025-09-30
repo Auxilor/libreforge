@@ -1,28 +1,26 @@
-package com.willfp.libreforge.triggers.impl
+package com.willfp.libreforge.integrations.huskintegration.huskclaims.impl
 
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import org.bukkit.entity.Player
+import net.william278.huskclaims.event.BukkitEnterClaimEvent
 import org.bukkit.event.EventHandler
-import org.bukkit.event.block.BellRingEvent
 
-object TriggerRingBell : Trigger("ring_bell") {
+object TriggerEnterClaimedLand : Trigger("enter_claimed_land") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.LOCATION
+        TriggerParameter.EVENT
     )
 
     @EventHandler(ignoreCancelled = true)
-    fun handle(event: BellRingEvent) {
-        val player = event.entity as? Player ?: return
+    fun handle(event: BukkitEnterClaimEvent) {
+        val player = event.player ?: return
 
         this.dispatch(
             player.toDispatcher(),
             TriggerData(
                 player = player,
-                location = player.location,
                 event = event
             )
         )
