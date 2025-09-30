@@ -11,6 +11,7 @@ import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.impl.TriggerBlank
 import org.bukkit.Location
 import org.bukkit.block.Block
+import org.bukkit.block.data.BlockData
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
@@ -279,6 +280,7 @@ class TriggerData(
         item: ItemStack?,
         text: String?,
         value: Double,
+        altValue: Double,
         originalPlayer: Player?,
         internal1: Int,
         internal2: kotlin.jvm.internal.DefaultConstructorMarker?

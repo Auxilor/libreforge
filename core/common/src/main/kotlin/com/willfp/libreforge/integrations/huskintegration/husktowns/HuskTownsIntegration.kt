@@ -20,18 +20,18 @@ import com.willfp.libreforge.triggers.Triggers
 
 object HuskTownsIntegration : LoadableIntegration {
     override fun load(plugin: EcoPlugin) {
-        Triggers.register(TriggerChangeTownRole) // Seperate
-        Triggers.register(TriggerClaim) // Combined
-        Triggers.register(TriggerCreateTown) // Seperate
-        Triggers.register(TriggerDisbandTown) // Seperate
-        Triggers.register(TriggerEnterClaim) // Combined
-        Triggers.register(TriggerJoinTown) // Seperate
-        Triggers.register(TriggerLeaveTown) // Seperate
-        Triggers.register(TriggerExitClaim) // Combined
-        Triggers.register(TriggerUnclaim) // Combined
-        Filters.register(FilterTownRole) // Seperate
-        Conditions.register(ConditionHasTownRole) // Seperate
-        Conditions.register(ConditionInOwnClaim) // Combined
+        Triggers.register(TriggerChangeTownRole)
+        Triggers.register(TriggerClaim)
+        Triggers.register(TriggerCreateTown)
+        Triggers.register(TriggerDisbandTown)
+        Triggers.register(TriggerEnterClaim)
+        Triggers.register(TriggerJoinTown)
+        Triggers.register(TriggerLeaveTown)
+        Triggers.register(TriggerExitClaim)
+        Triggers.register(TriggerUnclaim)
+        Filters.register(FilterTownRole)
+        Conditions.register(ConditionHasTownRole)
+        Conditions.register(ConditionInOwnClaim)
     }
 
     override fun getPluginName(): String {
