@@ -1,7 +1,7 @@
 name: libreforge
 version: ${projectVersion}
 main: com.willfp.libreforge.LibreforgeSpigotPlugin
-api-version: 1.17
+api-version: 1.21.4
 authors: [ Auxilor ]
 website: willfp.com
 
