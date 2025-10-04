@@ -11,9 +11,7 @@ import org.bukkit.SoundCategory
 import org.bukkit.block.Block
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
-import org.bukkit.event.inventory.CraftItemEvent
 import org.bukkit.event.player.PlayerItemBreakEvent
-import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
 import kotlin.math.roundToInt
@@ -96,12 +94,3 @@ fun getEnchantment(id: String): Enchantment? {
         return Enchantment.getByKey(NamespacedKey.minecraft(id))
     }
 }
-
-val Player.topInventory: Inventory
-    get() = this.openInventory.topInventory
-
-val CraftItemEvent.topInventory: Inventory
-    get() = this.topInventory
-
-val CraftItemEvent.bottomInventory: Inventory
-    get() = this.bottomInventory

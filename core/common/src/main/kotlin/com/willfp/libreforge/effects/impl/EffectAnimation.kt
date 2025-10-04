@@ -10,7 +10,6 @@ import com.willfp.libreforge.plugin
 import com.willfp.libreforge.toFloat3
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import com.willfp.libreforge.xz
 
 object EffectAnimation : Effect<AnimationBlock<*, *>?>("animation") {
     override val parameters = setOf(

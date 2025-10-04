@@ -17,7 +17,7 @@ import org.bukkit.entity.Projectile
 import org.bukkit.entity.Tameable
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
-import java.util.*
+import java.util.UUID
 
 object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
     private val players = listMap<UUID, UUID>()

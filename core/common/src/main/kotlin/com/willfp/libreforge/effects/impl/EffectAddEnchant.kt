@@ -1,7 +1,6 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.ConfigArguments
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -9,8 +8,6 @@ import com.willfp.libreforge.getEnchantment
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import org.bukkit.NamespacedKey
-import org.bukkit.enchantments.Enchantment
 import org.bukkit.inventory.meta.EnchantmentStorageMeta
 
 object EffectAddEnchant : Effect<NoCompileData>("add_enchant") {

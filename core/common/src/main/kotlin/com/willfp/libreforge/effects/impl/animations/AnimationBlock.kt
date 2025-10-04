@@ -3,10 +3,8 @@ package com.willfp.libreforge.effects.impl.animations
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Compiled
 import com.willfp.libreforge.triggers.TriggerData
-import dev.romainguy.kotlin.math.Float2
 import dev.romainguy.kotlin.math.Float3
 import org.bukkit.Location
-import org.bukkit.entity.Player
 
 /**
  * A single animation config block.

@@ -3,7 +3,6 @@ package com.willfp.libreforge.counters.bind
 import com.willfp.eco.core.map.listMap
 import com.willfp.libreforge.counters.Accumulator
 import com.willfp.libreforge.counters.Counter
-import net.kyori.adventure.chat.ChatType.Bound
 
 internal object BoundCounters {
     private val bindings = listMap<Counter, BoundCounter>()

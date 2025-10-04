@@ -7,7 +7,6 @@ import com.willfp.eco.core.placeholder.context.PlaceholderContext
 import com.willfp.eco.core.placeholder.context.copy
 import com.willfp.eco.util.NumberUtils
 import com.willfp.eco.util.formatEco
-import com.willfp.libreforge.GlobalDispatcher.dispatcher
 
 /**
  * A [config] that uses a provided [holder] as a source of placeholders.

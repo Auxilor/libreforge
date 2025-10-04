@@ -12,7 +12,6 @@ import com.willfp.libreforge.get
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.toPlaceholderContext
 import com.willfp.libreforge.triggers.DispatchedTrigger
-import org.bukkit.Sound
 import org.bukkit.entity.Player
 
 object ArgumentPrice : EffectArgument<NoCompileData>("price") {

@@ -1,7 +1,6 @@
 package com.willfp.libreforge.integrations.paper
 
 import com.willfp.eco.core.EcoPlugin
-import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.util.ClassUtils
 import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.effects.Effects

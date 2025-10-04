@@ -23,7 +23,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockDropItemEvent
-import java.util.*
+import java.util.UUID
 
 object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
     private val players = listMap<UUID, UUID>()

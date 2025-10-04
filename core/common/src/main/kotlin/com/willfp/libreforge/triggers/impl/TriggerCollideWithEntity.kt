@@ -7,7 +7,7 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.LivingEntity
 import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerMoveEvent
-import java.util.*
+import java.util.UUID
 
 object TriggerCollideWithEntity : Trigger("collide_with_entity") {
     override val parameters = setOf(

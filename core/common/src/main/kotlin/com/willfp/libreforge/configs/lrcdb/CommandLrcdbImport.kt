@@ -12,7 +12,6 @@ import java.io.BufferedReader
 import java.io.File
 import java.net.HttpURLConnection
 import java.net.URI
-import java.net.URL
 
 class CommandLrcdbImport(plugin: EcoPlugin) : Subcommand(
     plugin,

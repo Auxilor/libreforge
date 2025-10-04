@@ -7,8 +7,6 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getEnchantment
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import org.bukkit.NamespacedKey
-import org.bukkit.enchantments.Enchantment
 import org.bukkit.inventory.meta.EnchantmentStorageMeta
 
 object EffectRemoveEnchant : Effect<NoCompileData>("remove_enchant") {

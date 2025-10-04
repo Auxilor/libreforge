@@ -6,10 +6,8 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.get
-import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.entity.LivingEntity
-import org.bukkit.entity.Player
 
 object ConditionIsSubmerged: Condition<NoCompileData>("is_submerged") {
 

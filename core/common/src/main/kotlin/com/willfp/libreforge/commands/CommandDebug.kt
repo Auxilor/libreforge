@@ -2,7 +2,6 @@ package com.willfp.libreforge.commands
 
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.command.impl.Subcommand
-import com.willfp.eco.util.toNiceString
 import com.willfp.libreforge.Plugins
 import com.willfp.libreforge.activeEffects
 import com.willfp.libreforge.conditions.Conditions

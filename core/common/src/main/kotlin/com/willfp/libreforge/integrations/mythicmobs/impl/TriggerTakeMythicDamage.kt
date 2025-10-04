@@ -6,8 +6,6 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.tryAsLivingEntity
 import io.lumine.mythic.bukkit.events.MythicDamageEvent
-import org.bukkit.entity.Entity
-import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 

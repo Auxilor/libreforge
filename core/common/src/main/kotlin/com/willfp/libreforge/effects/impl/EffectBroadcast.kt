@@ -8,8 +8,6 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getStrings
 import com.willfp.libreforge.toPlaceholderContext
 import com.willfp.libreforge.triggers.TriggerData
-import com.willfp.libreforge.triggers.TriggerParameter
-import net.tmmobcoins.lib.CBA.CBAMethods.name
 import org.bukkit.Bukkit
 
 object EffectBroadcast : Effect<NoCompileData>("broadcast") {

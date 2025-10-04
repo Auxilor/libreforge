@@ -2,7 +2,6 @@ package com.willfp.libreforge
 
 import com.willfp.eco.core.EcoPlugin
 import org.bukkit.Registry
-import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeInstance
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player

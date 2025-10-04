@@ -9,12 +9,7 @@ import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import org.bukkit.Bukkit
-import org.bukkit.Location
-import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
-import org.bukkit.event.entity.EntityDamageEvent
-import java.util.*
 
 object EffectCreateExplosion : Effect<NoCompileData>("create_explosion"), Listener {
     override val parameters = setOf(

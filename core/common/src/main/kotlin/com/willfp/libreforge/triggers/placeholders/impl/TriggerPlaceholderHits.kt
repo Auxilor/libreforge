@@ -1,12 +1,12 @@
 package com.willfp.libreforge.triggers.placeholders.impl
 
 import com.willfp.libreforge.NamedValue
+import com.willfp.libreforge.integrations.paper.impl.TriggerTridentAttack
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.event.TriggerDispatchEvent
 import com.willfp.libreforge.triggers.impl.TriggerBowAttack
 import com.willfp.libreforge.triggers.impl.TriggerMeleeAttack
-import com.willfp.libreforge.integrations.paper.impl.TriggerTridentAttack
 import com.willfp.libreforge.triggers.placeholders.TriggerPlaceholder
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.LivingEntity

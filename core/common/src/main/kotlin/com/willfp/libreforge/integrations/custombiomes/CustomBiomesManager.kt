@@ -1,9 +1,7 @@
 package com.willfp.libreforge.integrations.custombiomes
 
 import com.willfp.eco.core.integrations.IntegrationRegistry
-import com.willfp.libreforge.plugin
 import org.bukkit.Location
-import org.bukkit.event.Listener
 
 val customBiomesIntegrations = IntegrationRegistry<CustomBiomesIntegration>()
 

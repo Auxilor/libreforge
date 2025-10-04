@@ -1,7 +1,6 @@
 package com.willfp.libreforge
 
 import com.destroystokyo.paper.event.entity.EntityRemoveFromWorldEvent
-import com.google.common.collect.Lists
 import com.willfp.libreforge.effects.Effects
 import org.bukkit.Registry
 import org.bukkit.attribute.Attribute

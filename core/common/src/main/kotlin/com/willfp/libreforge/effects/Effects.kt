@@ -196,7 +196,6 @@ import com.willfp.libreforge.separatorAmbivalent
 import com.willfp.libreforge.toWeightedList
 import com.willfp.libreforge.triggers.Triggers
 import java.util.UUID
-import kotlin.jvm.java
 
 object Effects : Registry<Effect<*>>() {
     private val identifiedChains = mutableMapOf<String, Chain>()

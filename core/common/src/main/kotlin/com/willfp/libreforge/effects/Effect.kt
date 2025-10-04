@@ -6,9 +6,7 @@ import com.willfp.libreforge.Compilable
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.applyHolder
-import com.willfp.libreforge.generatePlaceholders
 import com.willfp.libreforge.ifType
-import com.willfp.libreforge.mapToPlaceholders
 import com.willfp.libreforge.mutators.MutatorList
 import com.willfp.libreforge.mutators.emptyMutatorList
 import com.willfp.libreforge.plugin
