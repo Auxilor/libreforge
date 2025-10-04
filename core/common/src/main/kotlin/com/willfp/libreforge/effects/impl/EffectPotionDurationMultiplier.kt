@@ -1,9 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
-import com.willfp.eco.util.duration
 import com.willfp.libreforge.effects.templates.MultiplierEffect
 import com.willfp.libreforge.plugin
-import com.willfp.libreforge.proxy.renamedValues
 import com.willfp.libreforge.toDispatcher
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -33,14 +31,18 @@ object EffectPotionDurationMultiplier : MultiplierEffect("potion_duration_multip
                 val item = event.contents.getItem(i) ?: continue
                 val meta = item.itemMeta as? PotionMeta ?: continue
 
-                @Suppress("USELESS_ELVIS") // Not useless on 1.21+
-                val potionData = meta.basePotionData ?: continue
-
-                if (potionData.type in cannotExtend) {
+                if (meta.basePotionType in cannotExtend) {
                     continue
                 }
 
-                val duration = potionData.duration
+                val potionType = meta.basePotionType ?: continue
+                if (potionType in cannotExtend) {
+                    continue
+                }
+
+                val duration = potionType.potionEffects.firstOrNull()
+                    ?.duration ?: continue
+
                 val delta = (duration * multiplier).toInt() - duration
 
                 if (delta != 0) {
@@ -64,22 +66,21 @@ object EffectPotionDurationMultiplier : MultiplierEffect("potion_duration_multip
 
         val delta = meta.delta
 
-        @Suppress("USELESS_ELVIS") // Not useless on 1.21+
-        val data = meta.basePotionData ?: return
-
-        val type = data.type
+        val type = meta.basePotionType ?: return
 
         val effects = mutableMapOf<PotionEffectType, Int>()
 
         if (type == PotionType.TURTLE_MASTER) {
-            effects[renamedValues().potions.slowness] = 4
-            effects[renamedValues().potions.resistance] = 2
+            effects[PotionEffectType.SLOWNESS] = 4
+            effects[PotionEffectType.RESISTANCE] = 2
         } else {
-            val effectType = type.effectType ?: return
-            effects[effectType] = if (data.isUpgraded) 2 else 1
+            for (effect in type.potionEffects) {
+                effects[effect.type] = effect.amplifier
+            }
         }
 
-        val newDuration = data.duration + delta
+        val duration = type.potionEffects.firstOrNull()?.duration ?: return
+        val newDuration = duration + delta
 
         for ((k, level) in effects) {
             player.addPotionEffect(
@@ -99,20 +100,23 @@ object EffectPotionDurationMultiplier : MultiplierEffect("potion_duration_multip
 
         val meta = item.itemMeta as? PotionMeta ?: return
 
-        @Suppress("USELESS_ELVIS") // Not useless on 1.21+
-        val data = meta.basePotionData ?: return
+        val type = meta.basePotionType ?: return
 
         val effects = mutableMapOf<PotionEffectType, Int>()
 
-        if (data.type == PotionType.TURTLE_MASTER) {
-            effects[renamedValues().potions.slowness] = 4
-            effects[renamedValues().potions.resistance] = 2
+        if (type == PotionType.TURTLE_MASTER) {
+            effects[PotionEffectType.SLOWNESS] = 4
+            effects[PotionEffectType.RESISTANCE] = 2
         } else {
-            effects[data.type.effectType ?: return] = if (data.isUpgraded) 2 else 1
+            for (effect in type.potionEffects) {
+                effects[effect.type] = effect.amplifier
+            }
         }
 
+        val duration = type.potionEffects.firstOrNull()?.duration ?: return
+
         for (entity in entities) {
-            val newDuration = (data.duration + meta.delta) * event.getIntensity(entity)
+            val newDuration = (duration + meta.delta) * event.getIntensity(entity)
 
             for ((key, value) in effects) {
                 entity.addPotionEffect(

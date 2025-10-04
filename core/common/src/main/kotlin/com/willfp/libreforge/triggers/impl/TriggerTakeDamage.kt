@@ -22,16 +22,11 @@ object TriggerTakeDamage : Trigger("take_damage") {
         TriggerParameter.VALUE
     )
 
-    private val ignoredCauses = mutableSetOf(
+    private val ignoredCauses = setOf(
         EntityDamageEvent.DamageCause.VOID,
-        EntityDamageEvent.DamageCause.SUICIDE
+        EntityDamageEvent.DamageCause.SUICIDE,
+        EntityDamageEvent.DamageCause.KILL
     )
-
-    init {
-        if (Prerequisite.HAS_1_20.isMet) {
-            ignoredCauses += EntityDamageEvent.DamageCause.KILL
-        }
-    }
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityDamageEvent) {

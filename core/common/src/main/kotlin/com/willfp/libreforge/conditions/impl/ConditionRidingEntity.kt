@@ -14,8 +14,8 @@ import com.willfp.libreforge.updateEffects
 import org.bukkit.entity.Entity
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
-import org.spigotmc.event.entity.EntityDismountEvent
-import org.spigotmc.event.entity.EntityMountEvent
+import org.bukkit.event.entity.EntityDismountEvent
+import org.bukkit.event.entity.EntityMountEvent
 
 object ConditionRidingEntity : Condition<Collection<TestableEntity>>("riding_entity") {
     override val arguments = arguments {

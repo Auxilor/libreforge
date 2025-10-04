@@ -27,6 +27,7 @@ object ConditionHasCompletedAdvancement : Condition<NoCompileData>("has_complete
     ): Boolean {
         val player = dispatcher.get<Player>() ?: return false
 
+        @Suppress("DEPRECATION", "REMOVAL")
         val advancement = Registry.ADVANCEMENT.get(
             safeNamespacedKeyOf(config.getString("advancement")) ?: return false
         ) ?: return false

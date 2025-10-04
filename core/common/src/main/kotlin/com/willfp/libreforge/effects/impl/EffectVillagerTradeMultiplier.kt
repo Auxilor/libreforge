@@ -45,16 +45,19 @@ object EffectVillagerTradeMultiplier : MultiplierEffect("villager_trade_multipli
             }
         }
 
+        @Suppress("DEPRECATION", "REMOVAL")
         val displayName = villager.customName ?: when (villager.javaClass.simpleName) {
             "Villager" -> "Villager"
             "WanderingTrader" -> "Wandering Trader"
             else -> "Trader"
         }
 
+        @Suppress("DEPRECATION", "REMOVAL")
         val merchant = Bukkit.createMerchant(displayName).apply {
             recipes = discountedRecipes
         }
 
+        @Suppress("DEPRECATION", "REMOVAL")
         player.openMerchant(merchant, true)
     }
 }

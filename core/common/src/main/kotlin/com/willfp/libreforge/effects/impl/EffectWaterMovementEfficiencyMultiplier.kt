@@ -1,4 +1,4 @@
-package com.willfp.libreforge.proxy.modern.effects.impl
+package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.arguments
@@ -8,9 +8,9 @@ import org.bukkit.attribute.AttributeModifier
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 
-object EffectMovementEfficiencyMultiplier : AttributeEffect(
-    "movement_efficiency_multiplier",
-    Attribute.GENERIC_MOVEMENT_EFFICIENCY,
+object EffectWaterMovementEfficiencyMultiplier : AttributeEffect(
+    "water_movement_efficiency_multiplier",
+    Attribute.WATER_MOVEMENT_EFFICIENCY,
     AttributeModifier.Operation.MULTIPLY_SCALAR_1
 ) {
     override val arguments = arguments {

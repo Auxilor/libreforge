@@ -1,4 +1,4 @@
-package com.willfp.libreforge.proxy.modern.effects.impl
+package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.arguments
@@ -10,7 +10,7 @@ import org.bukkit.entity.Player
 
 object EffectBlockReach : AttributeEffect(
     "block_reach",
-    Attribute.PLAYER_BLOCK_INTERACTION_RANGE,
+    Attribute.BLOCK_INTERACTION_RANGE,
     AttributeModifier.Operation.ADD_NUMBER
 ) {
     override val arguments = arguments {

@@ -25,7 +25,7 @@ object EffectVictimSpeedMultiplier : Effect<NoCompileData>("victim_speed_multipl
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val victim = data.victim ?: return false
-        val attribute = victim.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED) ?: return false
+        val attribute = victim.getAttribute(Attribute.MOVEMENT_SPEED) ?: return false
         val attributeValue = attribute.value
         val duration = config.getIntFromExpression("duration", data)
 

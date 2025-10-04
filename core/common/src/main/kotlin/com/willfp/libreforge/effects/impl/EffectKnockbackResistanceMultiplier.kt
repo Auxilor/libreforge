@@ -9,7 +9,7 @@ import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 
 object EffectKnockbackResistanceMultiplier : AttributeEffect("knockback_resistance_multiplier",
-    Attribute.GENERIC_KNOCKBACK_RESISTANCE,
+    Attribute.KNOCKBACK_RESISTANCE,
     AttributeModifier.Operation.ADD_NUMBER
 ) {
     override val arguments = arguments {

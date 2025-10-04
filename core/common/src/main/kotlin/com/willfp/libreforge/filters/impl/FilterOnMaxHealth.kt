@@ -14,7 +14,7 @@ object FilterOnMaxHealth : Filter<NoCompileData, Boolean>("on_max_health") {
     override fun isMet(data: TriggerData, value: Boolean, compileData: NoCompileData): Boolean {
         val entity = data.victim ?: return true
 
-        val maxHealth = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.value
+        val maxHealth = entity.getAttribute(Attribute.MAX_HEALTH)?.value
         val onMaxHealth = entity.health == maxHealth
 
         return onMaxHealth == value

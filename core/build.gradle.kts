@@ -3,14 +3,12 @@ version = rootProject.version
 
 subprojects {
     dependencies {
-        compileOnly("com.willfp:eco:6.75.0")
+        compileOnly("com.willfp:eco:6.77.0")
     }
 }
 
 dependencies {
     implementation(project(":core:common"))
-    implementation(project(":core:legacy"))
-    implementation(project(":core:modern"))
 }
 
 tasks {

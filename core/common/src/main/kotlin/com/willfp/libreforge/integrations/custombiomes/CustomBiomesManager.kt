@@ -12,7 +12,7 @@ val Location.namedBiome: NamedBiome?
         val world = this.world ?: return null
         val vanilla = world.getBiome(this)
 
-        return if (vanilla.name.lowercase() == "custom") {
+        return if (vanilla.key.key.lowercase() == "custom") {
             customBiomesIntegrations
                 .firstOrNull { it.getBiome(this) != null }
                 ?.getBiome(this)

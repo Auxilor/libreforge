@@ -1,4 +1,4 @@
-package com.willfp.libreforge.proxy.modern.effects.impl
+package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.arguments
@@ -8,17 +8,13 @@ import org.bukkit.attribute.AttributeModifier
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 
-object EffectMiningSpeedMultiplier : AttributeEffect(
-    "mining_speed_multiplier",
-    Attribute.PLAYER_BLOCK_BREAK_SPEED,
+object EffectBurningTimeMultiplier : AttributeEffect(
+    "burning_time_multiplier",
+    Attribute.BURNING_TIME,
     AttributeModifier.Operation.MULTIPLY_SCALAR_1
 ) {
     override val arguments = arguments {
-        require("multiplier", "You must specify the mining speed multiplier!")
-    }
-
-    override fun canApplyTo(entity: LivingEntity): Boolean {
-        return entity is Player
+        require("multiplier", "You must specify the burning time multiplier!")
     }
 
     override fun getValue(config: Config, entity: LivingEntity) =

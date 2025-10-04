@@ -8,12 +8,11 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.get
 import com.willfp.libreforge.plugin
-import com.willfp.libreforge.proxy.Proxy
-import com.willfp.libreforge.proxy.loadProxy
 import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeInstance
 import org.bukkit.attribute.AttributeModifier
 import org.bukkit.entity.LivingEntity
+import org.bukkit.inventory.EquipmentSlotGroup
 
 abstract class AttributeEffect(
     id: String,
@@ -98,20 +97,10 @@ abstract class AttributeEffect(
         name: String,
         value: Double,
         operation: AttributeModifier.Operation
-    ) = loadProxy(AttributeManager::class.java).createModifier(
-        identifiers,
-        name,
+    ) = AttributeModifier(
+        identifiers.key,
         value,
-        operation
+        operation,
+        EquipmentSlotGroup.ANY
     )
-
-    @Proxy("AttributeManagerImpl")
-    interface AttributeManager {
-        fun createModifier(
-            identifiers: Identifiers,
-            name: String,
-            value: Double,
-            operation: AttributeModifier.Operation
-        ): AttributeModifier
-    }
 }

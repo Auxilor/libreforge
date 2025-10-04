@@ -16,6 +16,7 @@ object EffectOpenCrafting : Effect<NoCompileData>("open_crafting") {
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val player = data.player ?: return false
 
+        @Suppress("DEPRECATION", "REMOVAL")
         player.openWorkbench(null, true)
 
         return true

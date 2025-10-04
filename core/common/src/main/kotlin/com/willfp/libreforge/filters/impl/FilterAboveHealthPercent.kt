@@ -14,7 +14,7 @@ object FilterAboveHealthPercent : Filter<NoCompileData, Double>("above_health_pe
 
     override fun isMet(data: TriggerData, value: Double, compileData: NoCompileData): Boolean {
         val entity = data.victim ?: return true
-        val maxHealth = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.value ?: 20.0
+        val maxHealth = entity.getAttribute(Attribute.MAX_HEALTH)?.value ?: 20.0
         val percent = (entity.health / maxHealth) * 100
 
         return percent >= value

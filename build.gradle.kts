@@ -45,7 +45,6 @@ allprojects {
     dependencies {
         compileOnly("org.jetbrains:annotations:23.0.0")
         compileOnly(kotlin("stdlib", version = "2.1.0"))
-        compileOnly("org.purpurmc.purpur:purpur-api:1.20.4-R0.1-SNAPSHOT")
 
         compileOnly(fileTree("lib") { include("*.jar") })
     }
@@ -72,12 +71,12 @@ allprojects {
 
         withType<JavaCompile> {
             options.encoding = "UTF-8"
-            options.release = 17
+            options.release = 21
         }
 
         withType<KotlinCompile> {
             compilerOptions {
-                jvmTarget.set(JvmTarget.JVM_17)
+                jvmTarget.set(JvmTarget.JVM_21)
             }
         }
 

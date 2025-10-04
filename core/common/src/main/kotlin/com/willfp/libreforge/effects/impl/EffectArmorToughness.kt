@@ -10,7 +10,7 @@ import org.bukkit.entity.Player
 
 object EffectArmorToughness : AttributeEffect(
     "armor_toughness",
-    Attribute.GENERIC_ARMOR_TOUGHNESS,
+    Attribute.ARMOR_TOUGHNESS,
     AttributeModifier.Operation.ADD_NUMBER
 ) {
     override val arguments = arguments {

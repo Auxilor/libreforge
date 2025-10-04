@@ -10,7 +10,7 @@ import org.bukkit.entity.Player
 
 object EffectLuckMultiplier : AttributeEffect(
     "luck_multiplier",
-    Attribute.GENERIC_LUCK,
+    Attribute.LUCK,
     AttributeModifier.Operation.MULTIPLY_SCALAR_1
 ) {
     override val arguments = arguments {

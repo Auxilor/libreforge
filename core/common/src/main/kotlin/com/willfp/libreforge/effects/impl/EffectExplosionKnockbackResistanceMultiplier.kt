@@ -1,4 +1,4 @@
-package com.willfp.libreforge.proxy.modern.effects.impl
+package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.arguments
@@ -9,7 +9,7 @@ import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 
 object EffectExplosionKnockbackResistanceMultiplier : AttributeEffect("explosion_knockback_resistance_multiplier",
-    Attribute.GENERIC_EXPLOSION_KNOCKBACK_RESISTANCE,
+    Attribute.EXPLOSION_KNOCKBACK_RESISTANCE,
     AttributeModifier.Operation.ADD_NUMBER
 ) {
     override val arguments = arguments {

@@ -1,11 +1,12 @@
+import org.gradle.internal.impldep.org.junit.experimental.categories.Categories.CategoryFilter.exclude
+
 dependencies {
     implementation("dev.romainguy:kotlin-math:1.5.3") {
         isTransitive = false
     }
     implementation("com.willfp:ModelEngineBridge:1.3.0")
 
-    compileOnly("io.papermc.paper:paper-api:1.20-R0.1-SNAPSHOT")
-    compileOnly("org.purpurmc.purpur:purpur-api:1.20.4-R0.1-SNAPSHOT")
+    compileOnly("org.purpurmc.purpur:purpur-api:1.21.4-R0.1-SNAPSHOT")
     compileOnly("net.kyori:adventure-text-minimessage:4.14.0")
     compileOnly("com.github.NuVotifier:NuVotifier:2.7.2")
     compileOnly("dev.aurelium:auraskills-api-bukkit:2.0.0")
@@ -15,9 +16,13 @@ dependencies {
         exclude(group = "com.sk89q.worldedit", module = "worldedit-legacy")
     }
     compileOnly("com.github.Zrips:Jobs:v4.17.2")
-    compileOnly("com.github.MilkBowl:VaultAPI:1.7")
+    compileOnly("com.github.MilkBowl:VaultAPI:1.7", {
+        exclude("*", "*")
+    })
     compileOnly("com.github.ben-manes.caffeine:caffeine:3.1.8")
-    compileOnly("com.github.brcdev-minecraft:shopgui-api:2.2.0")
+    compileOnly("com.github.brcdev-minecraft:shopgui-api:2.2.0", {
+        exclude("*", "*")
+    })
     compileOnly("com.github.Gypopo:EconomyShopGUI-API:1.1.0")
     compileOnly("com.github.N0RSKA:ScytherAPI:55a")
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.7")
@@ -31,6 +36,8 @@ dependencies {
         exclude(group = "net.byteflux", module = "libby-bukkit")
     }
     compileOnly("nl.chimpgamer.ultimatemobcoins:paper:1.8.1")
+    // For mobcoins
+    compileOnly("com.github.shynixn.mccoroutine:mccoroutine-folia-api:2.22.0")
     compileOnly("com.artillexstudios:AxTrade:1.14.0")
     compileOnly("com.artillexstudios.axenvoy:AxEnvoy:2.2.1")
     compileOnly("com.github.angeschossen:LandsAPI:7.15.19")

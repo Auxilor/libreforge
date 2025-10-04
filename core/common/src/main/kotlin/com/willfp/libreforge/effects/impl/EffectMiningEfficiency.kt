@@ -1,4 +1,4 @@
-package com.willfp.libreforge.proxy.modern.effects.impl
+package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.arguments
@@ -8,13 +8,13 @@ import org.bukkit.attribute.AttributeModifier
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 
-object EffectEntityReach : AttributeEffect(
-    "entity_reach",
-    Attribute.PLAYER_ENTITY_INTERACTION_RANGE,
+object EffectMiningEfficiency : AttributeEffect(
+    "mining_efficiency",
+    Attribute.MINING_EFFICIENCY,
     AttributeModifier.Operation.ADD_NUMBER
 ) {
     override val arguments = arguments {
-        require("reach", "You must specify the amount of reach to add!")
+        require("amount", "You must specify the amount of efficiency to add!")
     }
 
     override fun canApplyTo(entity: LivingEntity): Boolean {
@@ -22,5 +22,5 @@ object EffectEntityReach : AttributeEffect(
     }
 
     override fun getValue(config: Config, entity: LivingEntity) =
-        config.getDoubleFromExpression("reach", entity as? Player)
+        config.getDoubleFromExpression("amount", entity as? Player)
 }

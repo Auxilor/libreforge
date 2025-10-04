@@ -1,7 +1,7 @@
 dependencies {
     compileOnly(project(":core:common"))
 
-    compileOnly("com.willfp:eco:6.73.0")
+    compileOnly("com.willfp:eco:6.77.0")
     compileOnly("io.papermc.paper:paper-api:1.17.1-R0.1-SNAPSHOT")
 }
 

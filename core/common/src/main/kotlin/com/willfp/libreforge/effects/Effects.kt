@@ -16,6 +16,7 @@ import com.willfp.libreforge.effects.executors.impl.NormalExecutorFactory
 import com.willfp.libreforge.effects.impl.EffectAOE
 import com.willfp.libreforge.effects.impl.EffectAOEBlocks
 import com.willfp.libreforge.effects.impl.EffectAddDamage
+import com.willfp.libreforge.effects.impl.EffectAddDurability
 import com.willfp.libreforge.effects.impl.EffectAddEnchant
 import com.willfp.libreforge.effects.impl.EffectAddGlobalPoints
 import com.willfp.libreforge.effects.impl.EffectAddHolder
@@ -33,10 +34,12 @@ import com.willfp.libreforge.effects.impl.EffectAttackSpeedMultiplier
 import com.willfp.libreforge.effects.impl.EffectAutosmelt
 import com.willfp.libreforge.effects.impl.EffectBleed
 import com.willfp.libreforge.effects.impl.EffectBlockCommands
+import com.willfp.libreforge.effects.impl.EffectBlockReach
 import com.willfp.libreforge.effects.impl.EffectBonusHealth
 import com.willfp.libreforge.effects.impl.EffectBreakBlock
 import com.willfp.libreforge.effects.impl.EffectBrewTimeMultiplier
 import com.willfp.libreforge.effects.impl.EffectBroadcast
+import com.willfp.libreforge.effects.impl.EffectBurningTimeMultiplier
 import com.willfp.libreforge.effects.impl.EffectCancelEvent
 import com.willfp.libreforge.effects.impl.EffectClearInvulnerability
 import com.willfp.libreforge.effects.impl.EffectCloseInventory
@@ -62,6 +65,8 @@ import com.willfp.libreforge.effects.impl.EffectDropItemSlot
 import com.willfp.libreforge.effects.impl.EffectDropRandomItem
 import com.willfp.libreforge.effects.impl.EffectDropRandomItemForPlayer
 import com.willfp.libreforge.effects.impl.EffectDropWeightedRandomItem
+import com.willfp.libreforge.effects.impl.EffectEntityReach
+import com.willfp.libreforge.effects.impl.EffectExplosionKnockbackResistanceMultiplier
 import com.willfp.libreforge.effects.impl.EffectExtinguish
 import com.willfp.libreforge.effects.impl.EffectFeatherStep
 import com.willfp.libreforge.effects.impl.EffectFlight
@@ -78,10 +83,13 @@ import com.willfp.libreforge.effects.impl.EffectGivePrice
 import com.willfp.libreforge.effects.impl.EffectGiveSaturation
 import com.willfp.libreforge.effects.impl.EffectGiveXp
 import com.willfp.libreforge.effects.impl.EffectGlowNearbyBlocks
+import com.willfp.libreforge.effects.impl.EffectGravityMultiplier
 import com.willfp.libreforge.effects.impl.EffectHoming
 import com.willfp.libreforge.effects.impl.EffectHungerMultiplier
 import com.willfp.libreforge.effects.impl.EffectIgnite
+import com.willfp.libreforge.effects.impl.EffectIncreaseStepHeight
 import com.willfp.libreforge.effects.impl.EffectItemDurabilityMultiplier
+import com.willfp.libreforge.effects.impl.EffectJumpStrengthMultiplier
 import com.willfp.libreforge.effects.impl.EffectKeepInventory
 import com.willfp.libreforge.effects.impl.EffectKeepLevel
 import com.willfp.libreforge.effects.impl.EffectKick
@@ -93,6 +101,9 @@ import com.willfp.libreforge.effects.impl.EffectLuckMultiplier
 import com.willfp.libreforge.effects.impl.EffectMineRadius
 import com.willfp.libreforge.effects.impl.EffectMineRadiusOneDeep
 import com.willfp.libreforge.effects.impl.EffectMineVein
+import com.willfp.libreforge.effects.impl.EffectMiningEfficiency
+import com.willfp.libreforge.effects.impl.EffectMiningSpeedMultiplier
+import com.willfp.libreforge.effects.impl.EffectMovementEfficiencyMultiplier
 import com.willfp.libreforge.effects.impl.EffectMovementSpeedMultiplier
 import com.willfp.libreforge.effects.impl.EffectMultiplyDrops
 import com.willfp.libreforge.effects.impl.EffectMultiplyGlobalPoints
@@ -130,6 +141,8 @@ import com.willfp.libreforge.effects.impl.EffectRunChain
 import com.willfp.libreforge.effects.impl.EffectRunChainInline
 import com.willfp.libreforge.effects.impl.EffectRunCommand
 import com.willfp.libreforge.effects.impl.EffectRunPlayerCommand
+import com.willfp.libreforge.effects.impl.EffectSafeFallDistance
+import com.willfp.libreforge.effects.impl.EffectScale
 import com.willfp.libreforge.effects.impl.EffectSellItems
 import com.willfp.libreforge.effects.impl.EffectSellMultiplier
 import com.willfp.libreforge.effects.impl.EffectSendMessage
@@ -150,6 +163,7 @@ import com.willfp.libreforge.effects.impl.EffectShoot
 import com.willfp.libreforge.effects.impl.EffectShootArrow
 import com.willfp.libreforge.effects.impl.EffectShuffleHotbar
 import com.willfp.libreforge.effects.impl.EffectSmite
+import com.willfp.libreforge.effects.impl.EffectSneakingSpeedMultiplier
 import com.willfp.libreforge.effects.impl.EffectSpawnEntity
 import com.willfp.libreforge.effects.impl.EffectSpawnMobs
 import com.willfp.libreforge.effects.impl.EffectSpawnParticle
@@ -168,19 +182,21 @@ import com.willfp.libreforge.effects.impl.EffectTraceback
 import com.willfp.libreforge.effects.impl.EffectTransmission
 import com.willfp.libreforge.effects.impl.EffectTriggerCustom
 import com.willfp.libreforge.effects.impl.EffectTriggerNestedChain
+import com.willfp.libreforge.effects.impl.EffectUnderwaterMiningSpeedMultiplier
 import com.willfp.libreforge.effects.impl.EffectUpdateBossBar
 import com.willfp.libreforge.effects.impl.EffectVictimSpeedMultiplier
 import com.willfp.libreforge.effects.impl.EffectVillagerTradeMultiplier
+import com.willfp.libreforge.effects.impl.EffectWaterMovementEfficiencyMultiplier
 import com.willfp.libreforge.effects.impl.EffectXpMultiplier
 import com.willfp.libreforge.enumValueOfOrNull
 import com.willfp.libreforge.filters.Filters
 import com.willfp.libreforge.integrations.paper.impl.EffectDropPickupItem
 import com.willfp.libreforge.mutators.Mutators
-import com.willfp.libreforge.proxy.loadProxy
 import com.willfp.libreforge.separatorAmbivalent
 import com.willfp.libreforge.toWeightedList
 import com.willfp.libreforge.triggers.Triggers
 import java.util.UUID
+import kotlin.jvm.java
 
 object Effects : Registry<Effect<*>>() {
     private val identifiedChains = mutableMapOf<String, Chain>()
@@ -619,7 +635,21 @@ object Effects : Registry<Effect<*>>() {
         register(EffectVictimSpeedMultiplier)
         register(EffectVillagerTradeMultiplier)
         register(EffectXpMultiplier)
-
-        loadProxy(VersionSpecificEffects::class.java).loadEffects()
+        register(EffectBlockReach)
+        register(EffectMiningEfficiency)
+        register(EffectEntityReach)
+        register(EffectGravityMultiplier)
+        register(EffectIncreaseStepHeight)
+        register(EffectJumpStrengthMultiplier)
+        register(EffectMiningSpeedMultiplier)
+        register(EffectMovementEfficiencyMultiplier)
+        register(EffectSneakingSpeedMultiplier)
+        register(EffectUnderwaterMiningSpeedMultiplier)
+        register(EffectSafeFallDistance)
+        register(EffectAddDurability)
+        register(EffectScale)
+        register(EffectWaterMovementEfficiencyMultiplier)
+        register(EffectBurningTimeMultiplier)
+        register(EffectExplosionKnockbackResistanceMultiplier)
     }
 }

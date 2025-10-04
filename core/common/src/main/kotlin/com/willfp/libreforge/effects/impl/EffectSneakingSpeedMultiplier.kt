@@ -1,4 +1,4 @@
-package com.willfp.libreforge.proxy.modern.effects.impl
+package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.arguments
@@ -8,13 +8,17 @@ import org.bukkit.attribute.AttributeModifier
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 
-object EffectJumpStrengthMultiplier : AttributeEffect(
-    "jump_strength_multiplier",
-    Attribute.GENERIC_JUMP_STRENGTH,
+object EffectSneakingSpeedMultiplier : AttributeEffect(
+    "sneaking_speed_multiplier",
+    Attribute.SNEAKING_SPEED,
     AttributeModifier.Operation.MULTIPLY_SCALAR_1
 ) {
     override val arguments = arguments {
-        require("multiplier", "You must specify the jump strength multiplier!")
+        require("multiplier", "You must specify the speed multiplier!")
+    }
+
+    override fun canApplyTo(entity: LivingEntity): Boolean {
+        return entity is Player
     }
 
     override fun getValue(config: Config, entity: LivingEntity) =

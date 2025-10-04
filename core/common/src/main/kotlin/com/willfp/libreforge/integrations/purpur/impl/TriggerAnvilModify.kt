@@ -23,6 +23,7 @@ object TriggerAnvilModify : Trigger("anvil_modify") {
     fun onPrepare(event: PrepareAnvilEvent) {
         val player = event.viewers.firstOrNull() as? org.bukkit.entity.Player ?: return
 
+        @Suppress("DEPRECATION", "REMOVAL")
         playerCosts[player] = event.inventory.repairCost
     }
 
@@ -30,6 +31,7 @@ object TriggerAnvilModify : Trigger("anvil_modify") {
     @EventHandler(ignoreCancelled = true)
     fun onTake(event: AnvilTakeResultEvent) {
         val player = event.player
+        @Suppress("USELESS_ELVIS")
         val result = event.result ?: return
 
         val cost = playerCosts.remove(player) ?: return

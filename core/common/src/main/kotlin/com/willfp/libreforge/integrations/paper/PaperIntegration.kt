@@ -28,10 +28,7 @@ object PaperIntegration : LoadableIntegration {
             Triggers.register(TriggerSwing)
         }
 
-        if (Prerequisite.HAS_1_18.isMet) {
-            Effects.register(EffectSendMinimessage)
-        }
-
+        Effects.register(EffectSendMinimessage)
         Conditions.register(ConditionInBubble)
         Conditions.register(ConditionInLava)
         Conditions.register(ConditionInRain)

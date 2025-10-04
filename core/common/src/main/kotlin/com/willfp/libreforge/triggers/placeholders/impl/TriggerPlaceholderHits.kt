@@ -46,7 +46,7 @@ object TriggerPlaceholderHits : TriggerPlaceholder("hits") {
         @Suppress("UNCHECKED_CAST")
         val map = entity.getMetadata(HITS_META_KEY).firstOrNull()?.value() as? MutableMap<UUID, Int> ?: mutableMapOf()
         val hits = entity.getHits(player)
-        if (entity.health >= entity.getAttribute(Attribute.GENERIC_MAX_HEALTH)!!.value) {
+        if (entity.health >= entity.getAttribute(Attribute.MAX_HEALTH)!!.value) {
             map[player.uniqueId] = 1
         } else {
             map[player.uniqueId] = hits + 1

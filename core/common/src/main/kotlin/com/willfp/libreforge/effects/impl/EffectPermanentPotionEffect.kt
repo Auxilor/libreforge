@@ -1,7 +1,6 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.Prerequisite
-import com.willfp.eco.core.config.config
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
@@ -10,7 +9,6 @@ import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.get
-import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.plugin
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -38,11 +36,7 @@ object EffectPermanentPotionEffect : Effect<NoCompileData>("permanent_potion_eff
 
     private val metaKey = "libreforge_${this.id}"
 
-    private val duration = if (Prerequisite.HAS_1_19_4.isMet) {
-        -1
-    } else {
-        1_500_000_000
-    }
+    private const val DURATION = -1
 
     data class PotionEffectData(
         val effectType: PotionEffectType,
@@ -61,7 +55,7 @@ object EffectPermanentPotionEffect : Effect<NoCompileData>("permanent_potion_eff
         for ((_, data) in meta) {
             val effect = PotionEffect(
                 data.effectType,
-                duration,
+                DURATION,
                 data.level,
                 false,
                 data.particles,
@@ -91,7 +85,7 @@ object EffectPermanentPotionEffect : Effect<NoCompileData>("permanent_potion_eff
 
         val effect = PotionEffect(
             effectType,
-            duration,
+            DURATION,
             level,
             false,
             particles,
@@ -118,14 +112,8 @@ object EffectPermanentPotionEffect : Effect<NoCompileData>("permanent_potion_eff
 
         val active = player.getPotionEffect(data.effectType) ?: return
 
-        if (Prerequisite.HAS_1_19_4.isMet) {
-            if (active.duration != -1) {
-                return
-            }
-        } else {
-            if (active.duration < 1_000_000_000) {
-                return
-            }
+        if (active.duration < 0) {
+            return
         }
 
         meta.remove(identifiers.uuid)
