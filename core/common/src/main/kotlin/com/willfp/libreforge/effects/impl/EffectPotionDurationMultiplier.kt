@@ -12,14 +12,8 @@ import org.bukkit.event.player.PlayerItemConsumeEvent
 import org.bukkit.inventory.meta.PotionMeta
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.potion.PotionEffect
-import org.bukkit.potion.PotionEffectType
-import org.bukkit.potion.PotionType
 
 object EffectPotionDurationMultiplier : MultiplierEffect("potion_duration_multiplier") {
-    private val cannotExtend = setOf(
-        PotionType.AWKWARD, PotionType.MUNDANE, PotionType.THICK, PotionType.WATER
-    )
-
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     fun handle(event: BrewEvent) {
         val player = event.contents.viewers.filterIsInstance<Player>().firstOrNull() ?: return
@@ -31,22 +25,17 @@ object EffectPotionDurationMultiplier : MultiplierEffect("potion_duration_multip
                 val item = event.contents.getItem(i) ?: continue
                 val meta = item.itemMeta as? PotionMeta ?: continue
 
-                if (meta.basePotionType in cannotExtend) {
-                    continue
-                }
-
                 val potionType = meta.basePotionType ?: continue
-                if (potionType in cannotExtend) {
+                val effects = potionType.potionEffects
+
+                // Skip potions with no effects (e.g., water, awkward, mundane, thick)
+                if (effects.isEmpty()) {
                     continue
                 }
 
-                val duration = potionType.potionEffects.firstOrNull()
-                    ?.duration ?: continue
-
-                val delta = (duration * multiplier).toInt() - duration
-
-                if (delta != 0) {
-                    meta.delta = delta
+                // Store multiplier for later application
+                if (multiplier != 1.0) {
+                    meta.multiplier = multiplier
                 }
 
                 item.itemMeta = meta
@@ -64,30 +53,26 @@ object EffectPotionDurationMultiplier : MultiplierEffect("potion_duration_multip
             return
         }
 
-        val delta = meta.delta
-
-        val type = meta.basePotionType ?: return
-
-        val effects = mutableMapOf<PotionEffectType, Int>()
-
-        if (type == PotionType.TURTLE_MASTER) {
-            effects[PotionEffectType.SLOWNESS] = 4
-            effects[PotionEffectType.RESISTANCE] = 2
-        } else {
-            for (effect in type.potionEffects) {
-                effects[effect.type] = effect.amplifier
-            }
+        val multiplier = meta.multiplier
+        if (multiplier == 1.0) {
+            return
         }
 
-        val duration = type.potionEffects.firstOrNull()?.duration ?: return
-        val newDuration = duration + delta
+        val type = meta.basePotionType ?: return
+        val effects = type.potionEffects
 
-        for ((k, level) in effects) {
+        if (effects.isEmpty()) {
+            return
+        }
+
+        // Apply multiplier to each effect's duration
+        for (effect in effects) {
+            val newDuration = (effect.duration * multiplier).toInt()
             player.addPotionEffect(
                 PotionEffect(
-                    k,
+                    effect.type,
                     newDuration,
-                    level - 1
+                    effect.amplifier
                 )
             )
         }
@@ -100,46 +85,45 @@ object EffectPotionDurationMultiplier : MultiplierEffect("potion_duration_multip
 
         val meta = item.itemMeta as? PotionMeta ?: return
 
-        val type = meta.basePotionType ?: return
-
-        val effects = mutableMapOf<PotionEffectType, Int>()
-
-        if (type == PotionType.TURTLE_MASTER) {
-            effects[PotionEffectType.SLOWNESS] = 4
-            effects[PotionEffectType.RESISTANCE] = 2
-        } else {
-            for (effect in type.potionEffects) {
-                effects[effect.type] = effect.amplifier
-            }
+        val multiplier = meta.multiplier
+        if (multiplier == 1.0) {
+            return
         }
 
-        val duration = type.potionEffects.firstOrNull()?.duration ?: return
+        val type = meta.basePotionType ?: return
+        val effects = type.potionEffects
 
+        if (effects.isEmpty()) {
+            return
+        }
+
+        // Apply multiplier to each effect's duration for each affected entity
         for (entity in entities) {
-            val newDuration = (duration + meta.delta) * event.getIntensity(entity)
+            val intensity = event.getIntensity(entity)
 
-            for ((key, value) in effects) {
+            for (effect in effects) {
+                val newDuration = (effect.duration * multiplier * intensity).toInt()
                 entity.addPotionEffect(
                     PotionEffect(
-                        key,
-                        newDuration.toInt(),
-                        value - 1
+                        effect.type,
+                        newDuration,
+                        effect.amplifier
                     )
                 )
             }
         }
     }
 
-    private var PotionMeta.delta: Int
+    private var PotionMeta.multiplier: Double
         get() = this.persistentDataContainer.getOrDefault(
-            plugin.createNamespacedKey("duration_delta"),
-            PersistentDataType.INTEGER,
-            0
+            plugin.createNamespacedKey("duration_multiplier"),
+            PersistentDataType.DOUBLE,
+            1.0
         )
         set(value) {
             this.persistentDataContainer.set(
-                plugin.createNamespacedKey("duration_delta"),
-                PersistentDataType.INTEGER,
+                plugin.createNamespacedKey("duration_multiplier"),
+                PersistentDataType.DOUBLE,
                 value
             )
         }
