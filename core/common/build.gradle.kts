@@ -1,5 +1,3 @@
-import org.gradle.internal.impldep.org.junit.experimental.categories.Categories.CategoryFilter.exclude
-
 dependencies {
     implementation("dev.romainguy:kotlin-math:1.5.3") {
         isTransitive = false

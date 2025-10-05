@@ -1,6 +1,5 @@
 package com.willfp.libreforge.loader
 
-import com.willfp.eco.core.Eco
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.LifecyclePosition
 import com.willfp.eco.core.PluginProps
