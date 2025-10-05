@@ -198,7 +198,11 @@ private val holderCooldown: Cache<UUID, Unit>? =
  */
 fun Dispatcher<*>.refreshHolders() {
     if (holderCooldown != null) {
-        holderCooldown.getIfPresent(this.uuid) ?: return
+        val isOnCooldown = holderCooldown.getIfPresent(this.uuid) != null
+        if (isOnCooldown) {
+            return
+        }
+
         holderCooldown.put(this.uuid, Unit)
     }
 
