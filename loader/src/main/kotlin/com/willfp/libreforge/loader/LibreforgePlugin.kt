@@ -207,6 +207,7 @@ abstract class LibreforgePlugin : EcoPlugin() {
     override fun mutateProps(props: PluginProps): PluginProps {
         return props.apply {
             isSupportingExtensions = true
+            ecoApiVersion = props.ecoApiVersion.coerceAtLeast(Version("6.77.0"))
         }
     }
 
