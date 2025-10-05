@@ -1,5 +1,6 @@
 package com.willfp.libreforge.loader
 
+import com.willfp.eco.core.Eco
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.LifecyclePosition
 import com.willfp.eco.core.PluginProps
@@ -207,11 +208,16 @@ abstract class LibreforgePlugin : EcoPlugin() {
     override fun mutateProps(props: PluginProps): PluginProps {
         return props.apply {
             isSupportingExtensions = true
-            ecoApiVersion = props.ecoApiVersion.coerceAtLeast(Version("6.77.0"))
+            try {
+                ecoApiVersion = props.ecoApiVersion.coerceAtLeast(Version("6.77.0"))
+            } catch (_: NoSuchMethodError) {
+                // Ignore, this will happen when running pre-6.77.0.
+            }
         }
     }
 
     @Deprecated(message = "Use eco-api-version in eco.yml instead")
+    @Suppress("REMOVAL")
     override fun getMinimumEcoVersion(): String {
         return "6.77.0"
     }
