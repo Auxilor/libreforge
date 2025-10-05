@@ -200,7 +200,7 @@ abstract class LibreforgePlugin : EcoPlugin() {
             }.toSet()
     }
 
-    public override fun getFile(): File {
+    override fun getFile(): File {
         return super.getFile()
     }
 
@@ -210,8 +210,9 @@ abstract class LibreforgePlugin : EcoPlugin() {
         }
     }
 
+    @Deprecated(message = "Use eco-api-version in eco.yml instead")
     override fun getMinimumEcoVersion(): String {
-        return "6.73.0"
+        return "6.77.0"
     }
 
     /**
