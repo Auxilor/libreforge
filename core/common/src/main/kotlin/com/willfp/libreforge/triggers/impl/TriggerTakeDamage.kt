@@ -39,8 +39,10 @@ object TriggerTakeDamage : Trigger("take_damage") {
         if (Bukkit.getPluginManager().isPluginEnabled("MythicMobs")) {
             if (event is EntityDamageByEntityEvent) {
                 val attacker = event.damager.tryAsLivingEntity()
-                if (MythicBukkit.inst().mobManager.isMythicMob(attacker)) {
-                    return
+                if (attacker != null) {
+                    if (MythicBukkit.inst().mobManager.isMythicMob(attacker)) {
+                        return
+                    }
                 }
             }
         }
