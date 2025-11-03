@@ -44,25 +44,39 @@ object EffectPermanentPotionEffect : Effect<NoCompileData>("permanent_potion_eff
         val icon: Boolean
     )
 
+    private fun getHolderData(player: Player): MutableMap<UUID, PotionEffectData> {
+        return player.getMetadata(metaKey).firstOrNull()?.value()
+                as? MutableMap<UUID, PotionEffectData>
+            ?: mutableMapOf()
+    }
+
+    private fun refreshEffectsOfType(player: Player, type: PotionEffectType) {
+        player.removePotionEffect(type)
+        val active = getHolderData(player)
+            .values
+            .filter { it.effectType == type }
+        if (active.isEmpty()) return
+        val best = active.maxByOrNull { it.level }!!
+        val effect = PotionEffect(
+            type,
+            DURATION,
+            best.level,
+            false,
+            active.any { it.particles },
+            active.any { it.icon }
+        )
+        player.addPotionEffect(effect)
+    }
+
     @EventHandler
     fun onRespawn(event: PlayerRespawnEvent) {
         val player = event.player
+        val types = getHolderData(player)
+            .values
+            .map { it.effectType }
+            .toSet()
 
-        val meta = player.getMetadata(metaKey).firstOrNull()?.value()
-                as? MutableMap<UUID, PotionEffectData> ?: mutableMapOf()
-
-        for ((_, data) in meta) {
-            val effect = PotionEffect(
-                data.effectType,
-                DURATION,
-                data.level,
-                false,
-                data.particles,
-                data.icon
-            )
-
-            player.addPotionEffect(effect)
-        }
+        types.forEach { refreshEffectsOfType(player, it) }
     }
 
     override fun onEnable(
@@ -82,42 +96,20 @@ object EffectPermanentPotionEffect : Effect<NoCompileData>("permanent_potion_eff
         val icon = config.getBoolOrNull("icon") ?: true
         val particles = config.getBoolOrNull("particles") ?: true
 
-        val effect = PotionEffect(
-            effectType,
-            DURATION,
-            level,
-            false,
-            particles,
-            icon
-        )
+        val holderData = getHolderData(player)
+        holderData[identifiers.uuid] = PotionEffectData(effectType, level, particles, icon)
+        player.setMetadata(metaKey, plugin.metadataValueFactory.create(holderData))
 
-        player.addPotionEffect(effect)
-
-        val meta = player.getMetadata(metaKey).firstOrNull()?.value()
-                as? MutableMap<UUID, PotionEffectData> ?: mutableMapOf()
-
-        meta[identifiers.uuid] = PotionEffectData(effectType, level, particles, icon)
-
-        player.setMetadata(metaKey, plugin.metadataValueFactory.create(meta))
+        refreshEffectsOfType(player, effectType)
     }
 
     override fun onDisable(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder) {
         val player = dispatcher.get<Player>() ?: return
 
-        val meta = player.getMetadata(metaKey).firstOrNull()?.value()
-                as? MutableMap<UUID, PotionEffectData> ?: mutableMapOf()
+        val holderData = getHolderData(player)
+        val removed = holderData.remove(identifiers.uuid) ?: return
+        player.setMetadata(metaKey, plugin.metadataValueFactory.create(holderData))
 
-        val data = meta[identifiers.uuid] ?: return
-
-        val active = player.getPotionEffect(data.effectType) ?: return
-
-        if (active.duration < 0) {
-            return
-        }
-
-        meta.remove(identifiers.uuid)
-        player.setMetadata(metaKey, plugin.metadataValueFactory.create(meta))
-
-        player.removePotionEffect(data.effectType)
+        refreshEffectsOfType(player, removed.effectType)
     }
 }
