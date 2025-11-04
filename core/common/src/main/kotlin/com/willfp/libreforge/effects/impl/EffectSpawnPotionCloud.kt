@@ -42,6 +42,7 @@ object EffectSpawnPotionCloud : Effect<NoCompileData>("spawn_potion_cloud") {
         )
 
         cloud.source = data.player
+        cloud.duration = duration
 
         return true
     }
