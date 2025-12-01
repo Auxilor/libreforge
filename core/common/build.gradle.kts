@@ -39,6 +39,7 @@ dependencies {
     compileOnly("com.artillexstudios:AxTrade:1.14.0")
     compileOnly("com.artillexstudios.axenvoy:AxEnvoy:2.2.1")
     compileOnly("com.github.angeschossen:LandsAPI:7.15.19")
+    compileOnly("su.nightexpress.coinsengine:CoinsEngine:2.6.0")
 
     compileOnly(fileTree("../../lib") {
         include("*.jar")

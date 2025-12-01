@@ -21,6 +21,7 @@ import com.willfp.libreforge.integrations.aureliumskills.AureliumSkillsIntegrati
 import com.willfp.libreforge.integrations.axplugins.axenvoy.AxEnvoyIntegration
 import com.willfp.libreforge.integrations.axplugins.axtrade.AxTradeIntegration
 import com.willfp.libreforge.integrations.citizens.CitizensIntegration
+import com.willfp.libreforge.integrations.coinsengine.CoinsEngineIntegration
 import com.willfp.libreforge.integrations.custombiomes.impl.CustomBiomesTerra
 import com.willfp.libreforge.integrations.custombiomes.impl.CustomBiomesTerraformGenerator
 import com.willfp.libreforge.integrations.edprisoncore.EdPrisonCoreIntegration
@@ -230,7 +231,8 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             IntegrationLoader("CustomFishing") { CustomFishingIntegration.load(this) },
             IntegrationLoader("Lands") { LandsIntegration.load(this) },
             IntegrationLoader("EdPrison") { EdPrisonCoreIntegration.load(this) },
-            IntegrationLoader("MythicMobs") { MythicMobsIntegration.load(this) }
+            IntegrationLoader("MythicMobs") { MythicMobsIntegration.load(this) },
+            IntegrationLoader("CoinsEngine") { CoinsEngineIntegration.load(this) }
         )
     }
 

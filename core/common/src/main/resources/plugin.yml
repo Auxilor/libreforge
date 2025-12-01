@@ -37,6 +37,7 @@ softdepend:
   - CustomFishing
   - Lands
   - EdPrison
+  - CoinsEngine
 
 commands:
   lrcdb:
