@@ -19,6 +19,8 @@ object EffectXpMultiplier : MultiplierEffect("xp_multiplier") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: DropQueuePushEvent) {
+        if (!event.isTelekinetic) return
+
         val player = event.player
 
         val multiplier = getMultiplier(player.toDispatcher())
