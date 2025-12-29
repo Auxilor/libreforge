@@ -15,6 +15,6 @@ object ConditionOnGround : Condition<NoCompileData>("on_ground") {
         compileData: NoCompileData
     ): Boolean {
         val location = dispatcher.location ?: return false
-        return location.block.getRelative(BlockFace.SOUTH).isSolid
+        return location.block.getRelative(BlockFace.DOWN).isSolid
     }
 }
