@@ -5,6 +5,8 @@ import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.conditions.Condition
+import org.bukkit.Material
+import org.bukkit.block.BlockFace
 
 object ConditionInAir : Condition<NoCompileData>("in_air") {
     override fun isMet(
@@ -14,6 +16,6 @@ object ConditionInAir : Condition<NoCompileData>("in_air") {
         compileData: NoCompileData
     ): Boolean {
         val location = dispatcher.location ?: return false
-        return location.block.isEmpty
+        return location.block.getRelative(BlockFace.DOWN).type == Material.AIR;
     }
 }
