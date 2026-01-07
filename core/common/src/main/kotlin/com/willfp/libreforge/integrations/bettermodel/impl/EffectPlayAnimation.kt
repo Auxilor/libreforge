@@ -25,7 +25,7 @@ object EffectPlayAnimation : Effect<NoCompileData>("play_animation") {
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val entity = data.dispatcher.get<LivingEntity>() ?: data.victim ?: return false
 
-        val animationModel = config.getFormattedString("model", data)
+        val animationModel = config.getFormattedString("tracker", data)
         val animationName = config.getFormattedString("animation", data)
         val animationType = config.getFormattedString("type", data)
 
