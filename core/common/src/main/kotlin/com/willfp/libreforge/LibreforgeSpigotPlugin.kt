@@ -222,6 +222,7 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             IntegrationLoader("AxTrade") { AxTradeIntegration.load(this) },
             IntegrationLoader("Votifier") { VotifierIntegration.load(this) },
             IntegrationLoader("ModelEngine") { ModelEngineIntegration.load(this) },
+            IntegrationLoader("BetterModel") { ModelEngineIntegration.load(this) },
             IntegrationLoader("FancyNpcs") { FancyNPCsIntegration.load(this) },
             IntegrationLoader("UltimateMobCoins") { UltimateMobCoinsIntegration.load(this) },
             IntegrationLoader("HuskTowns") { HuskTownsIntegration.load(this) },

@@ -3,6 +3,7 @@ dependencies {
         isTransitive = false
     }
     implementation("com.willfp:ModelEngineBridge:1.3.0")
+    compileOnly("io.github.toxicity188:bettermodel:1.15.1")
 
     compileOnly("org.purpurmc.purpur:purpur-api:1.21.4-R0.1-SNAPSHOT")
     compileOnly("net.kyori:adventure-text-minimessage:4.14.0")
