@@ -13,6 +13,7 @@ import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
 import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.event.player.PlayerRespawnEvent
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 
@@ -71,6 +72,11 @@ class ItemRefreshListener(
         plugin.scheduler.run {
             dispatcher.refreshHolders()
         }
+    }
+
+    @EventHandler
+    fun onRespawn(event: PlayerRespawnEvent) {
+        event.player.toDispatcher().refreshHolders()
     }
 
     @EventHandler
