@@ -33,6 +33,8 @@ import com.willfp.libreforge.integrations.levelledmobs.LevelledMobsIntegration
 import com.willfp.libreforge.integrations.mcmmo.McMMOIntegration
 import com.willfp.libreforge.integrations.modelengine.ModelEngineIntegration
 import com.willfp.libreforge.integrations.mythicmobs.MythicMobsIntegration
+import com.willfp.libreforge.integrations.custom_blocks.nexo.NexoIntegration
+import com.willfp.libreforge.integrations.custom_blocks.oraxen.OraxenIntegration
 import com.willfp.libreforge.integrations.paper.PaperIntegration
 import com.willfp.libreforge.integrations.purpur.PurpurIntegration
 import com.willfp.libreforge.integrations.scyther.ScytherIntegration
@@ -230,7 +232,9 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             IntegrationLoader("CustomFishing") { CustomFishingIntegration.load(this) },
             IntegrationLoader("Lands") { LandsIntegration.load(this) },
             IntegrationLoader("EdPrison") { EdPrisonCoreIntegration.load(this) },
-            IntegrationLoader("MythicMobs") { MythicMobsIntegration.load(this) }
+            IntegrationLoader("MythicMobs") { MythicMobsIntegration.load(this) },
+            IntegrationLoader("Nexo") { NexoIntegration.load(this) },
+            IntegrationLoader("Oraxen") { OraxenIntegration.load(this)}
         )
     }
 

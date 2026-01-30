@@ -39,6 +39,9 @@ dependencies {
     compileOnly("com.artillexstudios:AxTrade:1.14.0")
     compileOnly("com.artillexstudios.axenvoy:AxEnvoy:2.2.1")
     compileOnly("com.github.angeschossen:LandsAPI:7.15.19")
+    compileOnly("com.nexomc:nexo:1.17.0") {
+        exclude(group = "*", module = "*")
+    }
 
     compileOnly(fileTree("../../lib") {
         include("*.jar")

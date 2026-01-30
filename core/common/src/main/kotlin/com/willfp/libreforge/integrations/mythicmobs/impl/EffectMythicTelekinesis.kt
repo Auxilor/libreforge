@@ -19,7 +19,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import java.util.UUID
 
-object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
+object EffectMythicTelekinesis : Effect<NoCompileData>("telekinesis") {
     private val players = listMap<UUID, UUID>()
     private var allowTamedMobKills: Boolean = false
 

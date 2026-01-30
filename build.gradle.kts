@@ -40,6 +40,7 @@ allprojects {
         maven("https://repo.momirealms.net/releases/")
         maven("https://repo.artillex-studios.com/releases/")
         maven("https://mvn.lumine.io/repository/maven-public/")
+        maven("https://repo.nexomc.com/releases")
     }
 
     dependencies {
