@@ -138,8 +138,8 @@ object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
         val drops = event.drops.filterNotNull()
 
         DropQueue(player)
-            .addItems(drops)
             .setLocation(victim.location)
+            .addItems(drops)
             .addXP(xp)
             .forceTelekinesis()
             .push()

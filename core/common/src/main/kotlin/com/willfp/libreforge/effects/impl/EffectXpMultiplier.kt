@@ -1,5 +1,6 @@
 package com.willfp.libreforge.effects.impl
 
+import com.willfp.eco.core.events.DropQueuePushEvent
 import com.willfp.eco.core.events.NaturalExpGainEvent
 import com.willfp.libreforge.effects.templates.MultiplierEffect
 import com.willfp.libreforge.toDispatcher
@@ -14,5 +15,16 @@ object EffectXpMultiplier : MultiplierEffect("xp_multiplier") {
         val multiplier = getMultiplier(player.toDispatcher())
 
         event.expChangeEvent.amount = ceil(event.expChangeEvent.amount * multiplier).toInt()
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    fun handle(event: DropQueuePushEvent) {
+        if (!event.isTelekinetic) return
+
+        val player = event.player
+
+        val multiplier = getMultiplier(player.toDispatcher())
+
+        event.xp = ceil(event.xp * multiplier).toInt()
     }
 }
