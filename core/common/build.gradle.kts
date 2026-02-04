@@ -27,7 +27,7 @@ dependencies {
     compileOnly("net.william278.husktowns:husktowns-bukkit:3.0.8")
     compileOnly("net.william278.huskclaims:huskclaims-bukkit:1.5.2")
     compileOnly("net.momirealms:custom-crops:3.6.29")
-    compileOnly("net.momirealms:custom-fishing:2.3.8")
+    compileOnly("net.momirealms:custom-fishing:2.3.20")
     compileOnly("io.lumine:Mythic:5.7.0")
     compileOnly("io.lumine:LumineUtils:1.19-SNAPSHOT")
     compileOnly("net.citizensnpcs:citizens-main:2.0.31-SNAPSHOT") {
