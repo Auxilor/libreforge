@@ -26,6 +26,8 @@ softdepend:
   - Terra
   - TerraformGenerator
   - ModelEngine
+  -
+  - BetterModel
   - MythicMobs
   - AxEnvoy
   - AxTrade
