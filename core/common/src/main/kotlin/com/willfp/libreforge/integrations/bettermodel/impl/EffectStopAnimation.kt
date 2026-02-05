@@ -7,7 +7,7 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.get
 import com.willfp.libreforge.getFormattedString
 import com.willfp.libreforge.triggers.TriggerData
-import kr.toxicity.model.api.BetterModel
+import kr.toxicity.model.api.bukkit.platform.BukkitAdapter
 import org.bukkit.entity.LivingEntity
 import kotlin.jvm.optionals.getOrNull
 
@@ -25,9 +25,9 @@ object EffectStopAnimation : Effect<NoCompileData>("stop_animation") {
         val animationModel = config.getFormattedString("model", data)
         val animationName = config.getFormattedString("animation", data)
 
-        val modeledEntity = BetterModel.registry(entity).getOrNull() ?: return false
+        val modeledEntity = BukkitAdapter.adapt(entity)
 
-        val tracker = modeledEntity.tracker(animationModel) ?: return false
+        val tracker = modeledEntity.tracker(animationModel).getOrNull() ?: return false
 
         tracker.stopAnimation(animationName)
 
