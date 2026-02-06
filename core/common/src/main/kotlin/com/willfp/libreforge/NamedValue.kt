@@ -5,7 +5,7 @@ import com.willfp.eco.core.placeholder.StaticPlaceholder
 import com.willfp.eco.core.placeholder.context.PlaceholderContext
 import com.willfp.eco.core.placeholder.templates.SimpleInjectablePlaceholder
 
-open class NamedValue constructor(
+open class NamedValue(
     val identifiers: Collection<String>,
     value: String
 ) {

@@ -66,7 +66,7 @@ object EffectParticleAnimation : Effect<ParticleAnimationBlock<*>?>("particle_an
 
                 val mockTicks = (tick * mult until (tick * mult) + mult)
 
-                mockTicks.map { t ->
+                mockTicks.flatMap { t ->
                     compileData.getParticleLocations(
                         t,
                         entityVector.copy(),
@@ -74,7 +74,7 @@ object EffectParticleAnimation : Effect<ParticleAnimationBlock<*>?>("particle_an
                         locationVector.copy(),
                         player
                     )
-                }.flatten()
+                }
             } else {
                 compileData.getParticleLocations(
                     tick,

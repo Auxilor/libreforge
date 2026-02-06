@@ -119,8 +119,7 @@ object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
             return
         }
 
-        val killer = event.killer
-        val player = when (killer) {
+        val player = when (val killer = event.killer) {
             is Player -> killer
             is Projectile -> killer.shooter as? Player
             is Tameable -> {

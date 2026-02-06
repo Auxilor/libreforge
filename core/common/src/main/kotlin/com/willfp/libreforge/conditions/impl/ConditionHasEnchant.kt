@@ -37,7 +37,7 @@ object ConditionHasEnchant : Condition<NoCompileData>("has_enchant") {
     }
 
     private fun getItemsForSlotTypes(slotTypes: List<SlotType>, entity: LivingEntity) : List<ItemStack> {
-        return slotTypes.map { it.getItems(entity) }.flatten()
+        return slotTypes.flatMap { it.getItems(entity) }
     }
 
     private fun parseSlotTypes(config: Config) : List<SlotType> {
