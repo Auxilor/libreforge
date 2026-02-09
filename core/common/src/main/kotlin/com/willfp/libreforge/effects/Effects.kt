@@ -22,6 +22,7 @@ import com.willfp.libreforge.effects.impl.EffectAddGlobalPoints
 import com.willfp.libreforge.effects.impl.EffectAddHolder
 import com.willfp.libreforge.effects.impl.EffectAddHolderInRadius
 import com.willfp.libreforge.effects.impl.EffectAddHolderToVictim
+import com.willfp.libreforge.effects.impl.EffectAddLuck
 import com.willfp.libreforge.effects.impl.EffectAddPermanentHolderInRadius
 import com.willfp.libreforge.effects.impl.EffectAddPoints
 import com.willfp.libreforge.effects.impl.EffectAgeCrop
@@ -483,6 +484,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectAddHolder)
         register(EffectAddHolderInRadius)
         register(EffectAddHolderToVictim)
+        register(EffectAddLuck)
         register(EffectAddPermanentHolderInRadius)
         register(EffectAddPoints)
         register(EffectAgeCrop)
