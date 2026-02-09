@@ -114,6 +114,7 @@ import com.willfp.libreforge.effects.impl.EffectMultiplyVelocity
 import com.willfp.libreforge.effects.impl.EffectNameEntity
 import com.willfp.libreforge.effects.impl.EffectOpenCrafting
 import com.willfp.libreforge.effects.impl.EffectOpenEnderChest
+import com.willfp.libreforge.effects.impl.EffectOxygenBonus
 import com.willfp.libreforge.effects.impl.EffectParticleAnimation
 import com.willfp.libreforge.effects.impl.EffectParticleLine
 import com.willfp.libreforge.effects.impl.EffectPayPrice
@@ -567,6 +568,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectNameEntity)
         register(EffectOpenCrafting)
         register(EffectOpenEnderChest)
+        register(EffectOxygenBonus)
         register(EffectParticleAnimation)
         register(EffectParticleLine)
         register(EffectPayPrice)
