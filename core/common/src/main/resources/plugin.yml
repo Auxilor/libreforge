@@ -37,6 +37,7 @@ softdepend:
   - CustomFishing
   - Lands
   - EdPrison
+  - LuckPerms
 
 commands:
   lrcdb:

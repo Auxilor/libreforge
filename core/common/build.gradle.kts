@@ -42,6 +42,7 @@ dependencies {
     compileOnly("com.nexomc:nexo:1.17.0") {
         exclude(group = "*", module = "*")
     }
+    compileOnly("net.luckperms:api:5.4")
 
     compileOnly(fileTree("../../lib") {
         include("*.jar")
