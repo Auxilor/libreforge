@@ -14,6 +14,7 @@ import com.willfp.libreforge.mutators.impl.MutatorLocationToPlayer
 import com.willfp.libreforge.mutators.impl.MutatorLocationToProjectile
 import com.willfp.libreforge.mutators.impl.MutatorLocationToVictim
 import com.willfp.libreforge.mutators.impl.MutatorPlayerAsVictim
+import com.willfp.libreforge.mutators.impl.MutatorPlayerToItem
 import com.willfp.libreforge.mutators.impl.MutatorSpinLocation
 import com.willfp.libreforge.mutators.impl.MutatorSpinVelocity
 import com.willfp.libreforge.mutators.impl.MutatorTranslateLocation
@@ -21,7 +22,7 @@ import com.willfp.libreforge.mutators.impl.MutatorVictimAsDispatcher
 import com.willfp.libreforge.mutators.impl.MutatorVictimAsPlayer
 import com.willfp.libreforge.mutators.impl.MutatorVictimToOwner
 
-object Mutators: Registry<Mutator<*>>() {
+object Mutators : Registry<Mutator<*>>() {
     /**
      * Compile a list of [configs] into a MutatorList in a given [context].
      */
@@ -78,5 +79,6 @@ object Mutators: Registry<Mutator<*>>() {
         register(MutatorDispatcherAsPlayer)
         register(MutatorDispatcherAsVictim)
         register(MutatorLocationToDrop)
+        register(MutatorPlayerToItem)
     }
 }
