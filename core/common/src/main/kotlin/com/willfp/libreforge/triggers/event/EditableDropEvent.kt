@@ -2,12 +2,14 @@ package com.willfp.libreforge.triggers.event
 
 import com.willfp.eco.util.toSingletonList
 import org.bukkit.Location
+import org.bukkit.entity.Item
 import org.bukkit.event.Cancellable
 import org.bukkit.event.Event
 import org.bukkit.event.HandlerList
 import org.bukkit.event.block.BlockDropItemEvent
 import org.bukkit.event.entity.EntityDeathEvent
 import org.bukkit.event.player.PlayerDropItemEvent
+import org.bukkit.event.player.PlayerFishEvent
 import org.bukkit.inventory.ItemStack
 
 
@@ -170,5 +172,41 @@ class EditablePlayerDropEvent(
 
     override fun setCancelled(p0: Boolean) {
         event.isCancelled = p0
+    }
+}
+
+class EditableFishDropEvent(
+    private val cancellable: Cancellable?,
+    private val dropLocationSupplier: () -> Location,
+    private val itemEntity: Item
+) : EditableDropEvent() {
+
+    private val modifiers = mutableListOf<DropModifier>()
+
+    override fun addModifier(modifier: DropModifier) {
+        modifiers += modifier
+    }
+
+    override val originalItems: List<ItemStack>
+        get() = listOf(itemEntity.itemStack)
+
+    override val items: List<DropResult>
+        get() = originalItems.map { modifiers.modify(it) }
+
+    override val dropLocation: Location
+        get() = dropLocationSupplier()
+
+    override fun removeItem(item: ItemStack) {
+        if (itemEntity.itemStack == item) {
+            itemEntity.remove()
+        }
+    }
+
+    override fun isCancelled(): Boolean {
+        return cancellable?.isCancelled ?: false
+    }
+
+    override fun setCancelled(cancel: Boolean) {
+        cancellable?.isCancelled = cancel
     }
 }

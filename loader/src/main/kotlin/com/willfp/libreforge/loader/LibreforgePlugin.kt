@@ -200,18 +200,25 @@ abstract class LibreforgePlugin : EcoPlugin() {
             }.toSet()
     }
 
-    public override fun getFile(): File {
+    override fun getFile(): File {
         return super.getFile()
     }
 
     override fun mutateProps(props: PluginProps): PluginProps {
         return props.apply {
             isSupportingExtensions = true
+            try {
+                ecoApiVersion = props.ecoApiVersion.coerceAtLeast(Version("6.77.0"))
+            } catch (_: NoSuchMethodError) {
+                // Ignore, this will happen when running pre-6.77.0.
+            }
         }
     }
 
+    @Deprecated(message = "Use eco-api-version in eco.yml instead")
+    @Suppress("REMOVAL")
     override fun getMinimumEcoVersion(): String {
-        return "6.73.0"
+        return "6.77.0"
     }
 
     /**

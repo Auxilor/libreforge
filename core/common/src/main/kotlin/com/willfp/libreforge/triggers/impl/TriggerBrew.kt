@@ -5,7 +5,6 @@ import com.willfp.eco.core.gui.player
 import com.willfp.eco.core.recipe.parts.EmptyTestableItem
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.toDispatcher
-import com.willfp.libreforge.topInventory
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -31,7 +30,7 @@ object TriggerBrew : Trigger("brew") {
 
     @EventHandler
     fun handle(event: InventoryClickEvent) {
-        val inventory = event.player.topInventory as? BrewerInventory ?: return
+        val inventory = event.player.openInventory.topInventory as? BrewerInventory ?: return
         val player = event.player
         val location = inventory.location ?: return
         val oldContents = inventory.contents

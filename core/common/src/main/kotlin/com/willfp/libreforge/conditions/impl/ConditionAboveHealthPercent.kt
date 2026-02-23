@@ -30,7 +30,7 @@ object ConditionAboveHealthPercent : Condition<NoCompileData>("above_health_perc
     ): Boolean {
         val livingEntity = dispatcher.get<LivingEntity>() ?: return false
 
-        val maxHealth = livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.value ?: return false
+        val maxHealth = livingEntity.getAttribute(Attribute.MAX_HEALTH)?.value ?: return false
         val health = livingEntity.health
 
         return health / maxHealth >= config.getDoubleFromExpression("percent", livingEntity as? Player) / 100

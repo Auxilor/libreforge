@@ -1,13 +1,16 @@
 package com.willfp.libreforge.triggers.impl
 
-import com.willfp.eco.core.Prerequisite
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import com.willfp.libreforge.triggers.tryAsLivingEntity
+import io.lumine.mythic.bukkit.MythicBukkit
+import org.bukkit.Bukkit
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
+import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
 
 object TriggerTakeDamage : Trigger("take_damage") {
@@ -18,23 +21,30 @@ object TriggerTakeDamage : Trigger("take_damage") {
         TriggerParameter.VALUE
     )
 
-    private val ignoredCauses = mutableSetOf(
+    private val ignoredCauses = setOf(
         EntityDamageEvent.DamageCause.VOID,
-        EntityDamageEvent.DamageCause.SUICIDE
+        EntityDamageEvent.DamageCause.SUICIDE,
+        EntityDamageEvent.DamageCause.KILL
     )
-
-    init {
-        if (Prerequisite.HAS_1_20.isMet) {
-            ignoredCauses += EntityDamageEvent.DamageCause.KILL
-        }
-    }
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityDamageEvent) {
+
         val victim = event.entity
 
         if (event.cause in ignoredCauses) {
             return
+        }
+
+        if (Bukkit.getPluginManager().isPluginEnabled("MythicMobs")) {
+            if (event is EntityDamageByEntityEvent) {
+                val attacker = event.damager.tryAsLivingEntity()
+                if (attacker != null) {
+                    if (MythicBukkit.inst().mobManager.isMythicMob(attacker)) {
+                        return
+                    }
+                }
+            }
         }
 
         this.dispatch(

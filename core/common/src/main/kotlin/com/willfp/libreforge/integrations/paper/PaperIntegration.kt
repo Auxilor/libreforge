@@ -1,7 +1,6 @@
 package com.willfp.libreforge.integrations.paper
 
 import com.willfp.eco.core.EcoPlugin
-import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.util.ClassUtils
 import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.effects.Effects
@@ -13,6 +12,7 @@ import com.willfp.libreforge.integrations.paper.impl.EffectDropPickupItem
 import com.willfp.libreforge.integrations.paper.impl.EffectElytraBoostSaveChance
 import com.willfp.libreforge.integrations.paper.impl.EffectSendMinimessage
 import com.willfp.libreforge.integrations.paper.impl.TriggerBeaconEffect
+import com.willfp.libreforge.integrations.paper.impl.TriggerCompostItem
 import com.willfp.libreforge.integrations.paper.impl.TriggerElytraBoost
 import com.willfp.libreforge.integrations.paper.impl.TriggerRenameEntity
 import com.willfp.libreforge.integrations.paper.impl.TriggerSwing
@@ -27,21 +27,19 @@ object PaperIntegration : LoadableIntegration {
             Triggers.register(TriggerSwing)
         }
 
-        if (Prerequisite.HAS_1_18.isMet) {
-            Effects.register(EffectSendMinimessage)
-        }
-
+        Effects.register(EffectSendMinimessage)
+        Conditions.register(ConditionInBubble)
+        Conditions.register(ConditionInLava)
+        Conditions.register(ConditionInRain)
+        Effects.register(EffectDropPickupItem)
+        Effects.register(EffectElytraBoostSaveChance)
         Triggers.register(TriggerBeaconEffect)
+        Triggers.register(TriggerCompostItem)
         Triggers.register(TriggerElytraBoost)
         Triggers.register(TriggerRenameEntity)
         Triggers.register(TriggerTridentAttack)
         Triggers.register(TriggerUseFlowerPot)
         Triggers.register(TriggerVillagerTrade)
-        Effects.register(EffectElytraBoostSaveChance)
-        Effects.register(EffectDropPickupItem)
-        Conditions.register(ConditionInBubble)
-        Conditions.register(ConditionInLava)
-        Conditions.register(ConditionInRain)
     }
 
     // I know it's not a plugin but shhhh

@@ -16,11 +16,13 @@ import com.willfp.libreforge.effects.executors.impl.NormalExecutorFactory
 import com.willfp.libreforge.effects.impl.EffectAOE
 import com.willfp.libreforge.effects.impl.EffectAOEBlocks
 import com.willfp.libreforge.effects.impl.EffectAddDamage
+import com.willfp.libreforge.effects.impl.EffectAddDurability
 import com.willfp.libreforge.effects.impl.EffectAddEnchant
 import com.willfp.libreforge.effects.impl.EffectAddGlobalPoints
 import com.willfp.libreforge.effects.impl.EffectAddHolder
 import com.willfp.libreforge.effects.impl.EffectAddHolderInRadius
 import com.willfp.libreforge.effects.impl.EffectAddHolderToVictim
+import com.willfp.libreforge.effects.impl.EffectAddLuck
 import com.willfp.libreforge.effects.impl.EffectAddPermanentHolderInRadius
 import com.willfp.libreforge.effects.impl.EffectAddPoints
 import com.willfp.libreforge.effects.impl.EffectAgeCrop
@@ -33,10 +35,12 @@ import com.willfp.libreforge.effects.impl.EffectAttackSpeedMultiplier
 import com.willfp.libreforge.effects.impl.EffectAutosmelt
 import com.willfp.libreforge.effects.impl.EffectBleed
 import com.willfp.libreforge.effects.impl.EffectBlockCommands
+import com.willfp.libreforge.effects.impl.EffectBlockReach
 import com.willfp.libreforge.effects.impl.EffectBonusHealth
 import com.willfp.libreforge.effects.impl.EffectBreakBlock
 import com.willfp.libreforge.effects.impl.EffectBrewTimeMultiplier
 import com.willfp.libreforge.effects.impl.EffectBroadcast
+import com.willfp.libreforge.effects.impl.EffectBurningTimeMultiplier
 import com.willfp.libreforge.effects.impl.EffectCancelEvent
 import com.willfp.libreforge.effects.impl.EffectClearInvulnerability
 import com.willfp.libreforge.effects.impl.EffectCloseInventory
@@ -62,6 +66,8 @@ import com.willfp.libreforge.effects.impl.EffectDropItemSlot
 import com.willfp.libreforge.effects.impl.EffectDropRandomItem
 import com.willfp.libreforge.effects.impl.EffectDropRandomItemForPlayer
 import com.willfp.libreforge.effects.impl.EffectDropWeightedRandomItem
+import com.willfp.libreforge.effects.impl.EffectEntityReach
+import com.willfp.libreforge.effects.impl.EffectExplosionKnockbackResistanceMultiplier
 import com.willfp.libreforge.effects.impl.EffectExtinguish
 import com.willfp.libreforge.effects.impl.EffectFeatherStep
 import com.willfp.libreforge.effects.impl.EffectFlight
@@ -78,10 +84,13 @@ import com.willfp.libreforge.effects.impl.EffectGivePrice
 import com.willfp.libreforge.effects.impl.EffectGiveSaturation
 import com.willfp.libreforge.effects.impl.EffectGiveXp
 import com.willfp.libreforge.effects.impl.EffectGlowNearbyBlocks
+import com.willfp.libreforge.effects.impl.EffectGravityMultiplier
 import com.willfp.libreforge.effects.impl.EffectHoming
 import com.willfp.libreforge.effects.impl.EffectHungerMultiplier
 import com.willfp.libreforge.effects.impl.EffectIgnite
+import com.willfp.libreforge.effects.impl.EffectIncreaseStepHeight
 import com.willfp.libreforge.effects.impl.EffectItemDurabilityMultiplier
+import com.willfp.libreforge.effects.impl.EffectJumpStrengthMultiplier
 import com.willfp.libreforge.effects.impl.EffectKeepInventory
 import com.willfp.libreforge.effects.impl.EffectKeepLevel
 import com.willfp.libreforge.effects.impl.EffectKick
@@ -93,6 +102,9 @@ import com.willfp.libreforge.effects.impl.EffectLuckMultiplier
 import com.willfp.libreforge.effects.impl.EffectMineRadius
 import com.willfp.libreforge.effects.impl.EffectMineRadiusOneDeep
 import com.willfp.libreforge.effects.impl.EffectMineVein
+import com.willfp.libreforge.effects.impl.EffectMiningEfficiency
+import com.willfp.libreforge.effects.impl.EffectMiningSpeedMultiplier
+import com.willfp.libreforge.effects.impl.EffectMovementEfficiencyMultiplier
 import com.willfp.libreforge.effects.impl.EffectMovementSpeedMultiplier
 import com.willfp.libreforge.effects.impl.EffectMultiplyDrops
 import com.willfp.libreforge.effects.impl.EffectMultiplyGlobalPoints
@@ -102,6 +114,7 @@ import com.willfp.libreforge.effects.impl.EffectMultiplyVelocity
 import com.willfp.libreforge.effects.impl.EffectNameEntity
 import com.willfp.libreforge.effects.impl.EffectOpenCrafting
 import com.willfp.libreforge.effects.impl.EffectOpenEnderChest
+import com.willfp.libreforge.effects.impl.EffectOxygenBonus
 import com.willfp.libreforge.effects.impl.EffectParticleAnimation
 import com.willfp.libreforge.effects.impl.EffectParticleLine
 import com.willfp.libreforge.effects.impl.EffectPayPrice
@@ -130,6 +143,8 @@ import com.willfp.libreforge.effects.impl.EffectRunChain
 import com.willfp.libreforge.effects.impl.EffectRunChainInline
 import com.willfp.libreforge.effects.impl.EffectRunCommand
 import com.willfp.libreforge.effects.impl.EffectRunPlayerCommand
+import com.willfp.libreforge.effects.impl.EffectSafeFallDistance
+import com.willfp.libreforge.effects.impl.EffectScale
 import com.willfp.libreforge.effects.impl.EffectSellItems
 import com.willfp.libreforge.effects.impl.EffectSellMultiplier
 import com.willfp.libreforge.effects.impl.EffectSendMessage
@@ -150,6 +165,7 @@ import com.willfp.libreforge.effects.impl.EffectShoot
 import com.willfp.libreforge.effects.impl.EffectShootArrow
 import com.willfp.libreforge.effects.impl.EffectShuffleHotbar
 import com.willfp.libreforge.effects.impl.EffectSmite
+import com.willfp.libreforge.effects.impl.EffectSneakingSpeedMultiplier
 import com.willfp.libreforge.effects.impl.EffectSpawnEntity
 import com.willfp.libreforge.effects.impl.EffectSpawnMobs
 import com.willfp.libreforge.effects.impl.EffectSpawnParticle
@@ -168,14 +184,16 @@ import com.willfp.libreforge.effects.impl.EffectTraceback
 import com.willfp.libreforge.effects.impl.EffectTransmission
 import com.willfp.libreforge.effects.impl.EffectTriggerCustom
 import com.willfp.libreforge.effects.impl.EffectTriggerNestedChain
+import com.willfp.libreforge.effects.impl.EffectUnderwaterMiningSpeedMultiplier
 import com.willfp.libreforge.effects.impl.EffectUpdateBossBar
 import com.willfp.libreforge.effects.impl.EffectVictimSpeedMultiplier
+import com.willfp.libreforge.effects.impl.EffectVillagerTradeMultiplier
+import com.willfp.libreforge.effects.impl.EffectWaterMovementEfficiencyMultiplier
 import com.willfp.libreforge.effects.impl.EffectXpMultiplier
 import com.willfp.libreforge.enumValueOfOrNull
 import com.willfp.libreforge.filters.Filters
 import com.willfp.libreforge.integrations.paper.impl.EffectDropPickupItem
 import com.willfp.libreforge.mutators.Mutators
-import com.willfp.libreforge.proxy.loadProxy
 import com.willfp.libreforge.separatorAmbivalent
 import com.willfp.libreforge.toWeightedList
 import com.willfp.libreforge.triggers.Triggers
@@ -459,13 +477,20 @@ object Effects : Registry<Effect<*>>() {
     }
 
     init {
+        register(EffectAOE)
+        register(EffectAOEBlocks)
         register(EffectAddDamage)
+        register(EffectAddEnchant)
+        register(EffectAddGlobalPoints)
         register(EffectAddHolder)
         register(EffectAddHolderInRadius)
         register(EffectAddHolderToVictim)
+        register(EffectAddLuck)
         register(EffectAddPermanentHolderInRadius)
         register(EffectAddPoints)
-        register(EffectAOE)
+        register(EffectAgeCrop)
+        register(EffectAllPlayers)
+        register(EffectAnimation)
         register(EffectArmor)
         register(EffectArmorToughness)
         register(EffectArrowRing)
@@ -475,58 +500,99 @@ object Effects : Registry<Effect<*>>() {
         register(EffectBlockCommands)
         register(EffectBonusHealth)
         register(EffectBreakBlock)
+        register(EffectBrewTimeMultiplier)
         register(EffectBroadcast)
         register(EffectCancelEvent)
+        register(EffectClearInvulnerability)
+        register(EffectCloseInventory)
         register(EffectConsumeHeldItem)
+        register(EffectCreateBossBar)
         register(EffectCreateExplosion)
+        register(EffectCreateHologram)
         register(EffectCritMultiplier)
         register(EffectDamageArmor)
+        register(EffectDamageItem)
         register(EffectDamageMainhand)
         register(EffectDamageMultiplier)
         register(EffectDamageNearbyEntities)
+        register(EffectDamageOffhand)
+        register(EffectDamageTwice)
         register(EffectDamageVictim)
+        register(EffectDontConsumeLapisChance)
+        register(EffectDontConsumeXpChance)
         register(EffectDrill)
         register(EffectDropItem)
         register(EffectDropItemForPlayer)
+        register(EffectDropItemSlot)
+        register(EffectDropPickupItem)
+        register(EffectDropRandomItem)
+        register(EffectDropRandomItemForPlayer)
+        register(EffectDropWeightedRandomItem)
         register(EffectExtinguish)
         register(EffectFeatherStep)
         register(EffectFlight)
         register(EffectFoodMultiplier)
         register(EffectGiveFood)
+        register(EffectGiveGlobalPoints)
         register(EffectGiveHealth)
         register(EffectGiveItem)
+        register(EffectGiveItemPoints)
         register(EffectGiveMoney)
         register(EffectGiveOxygen)
         register(EffectGivePoints)
         register(EffectGivePrice)
+        register(EffectGiveSaturation)
         register(EffectGiveXp)
         register(EffectGlowNearbyBlocks)
+        register(EffectHoming)
         register(EffectHungerMultiplier)
         register(EffectIgnite)
+        register(EffectItemDurabilityMultiplier)
         register(EffectKeepInventory)
+        register(EffectKeepLevel)
+        register(EffectKick)
         register(EffectKnockAway)
         register(EffectKnockbackMultiplier)
         register(EffectKnockbackResistanceMultiplier)
+        register(EffectLevelItem)
         register(EffectLuckMultiplier)
         register(EffectMineRadius)
         register(EffectMineRadiusOneDeep)
         register(EffectMineVein)
         register(EffectMovementSpeedMultiplier)
         register(EffectMultiplyDrops)
+        register(EffectMultiplyGlobalPoints)
+        register(EffectMultiplyItemPoints)
         register(EffectMultiplyPoints)
         register(EffectMultiplyVelocity)
+        register(EffectNameEntity)
+        register(EffectOpenCrafting)
+        register(EffectOpenEnderChest)
+        register(EffectOxygenBonus)
         register(EffectParticleAnimation)
         register(EffectParticleLine)
         register(EffectPayPrice)
         register(EffectPermanentPotionEffect)
+        register(EffectPiercing)
         register(EffectPlaySound)
+        register(EffectPotionDurationMultiplier)
         register(EffectPotionEffect)
         register(EffectPullIn)
         register(EffectPullToLocation)
+        register(EffectRandomPlayer)
+        register(EffectRapidBows)
+        register(EffectReelSpeedMultiplier)
         register(EffectRegenMultiplier)
+        register(EffectRemoveBossBar)
+        register(EffectRemoveEnchant)
         register(EffectRemoveItem)
+        register(EffectRemoveItemData)
         register(EffectRemovePotionEffect)
+        register(EffectReplaceNear)
+        register(EffectReplantCrops)
+        register(EffectRepairItem)
         register(EffectRotate)
+        register(EffectRotateVictim)
         register(EffectRunChain)
         register(EffectRunChainInline)
         register(EffectRunCommand)
@@ -535,9 +601,16 @@ object Effects : Registry<Effect<*>>() {
         register(EffectSellMultiplier)
         register(EffectSendMessage)
         register(EffectSendTitle)
+        register(EffectSetArmorTrim)
         register(EffectSetBlock)
+        register(EffectSetCustomModelData)
+        register(EffectSetFood)
         register(EffectSetFreezeTicks)
+        register(EffectSetGlobalPoints)
+        register(EffectSetItemData)
+        register(EffectSetItemPoints)
         register(EffectSetPoints)
+        register(EffectSetSaturation)
         register(EffectSetVelocity)
         register(EffectSetVictimVelocity)
         register(EffectShoot)
@@ -550,74 +623,36 @@ object Effects : Registry<Effect<*>>() {
         register(EffectSpawnPotionCloud)
         register(EffectStrikeLightning)
         register(EffectStripAI)
+        register(EffectSwarm)
         register(EffectTakeMoney)
+        register(EffectTargetPlayer)
+        register(EffectTelekinesis)
         register(EffectTeleport)
         register(EffectTeleportTo)
         register(EffectTeleportToGround)
+        register(EffectTotalDamageMultiplier)
         register(EffectTraceback)
         register(EffectTransmission)
         register(EffectTriggerCustom)
-        register(EffectXpMultiplier)
-        register(EffectItemDurabilityMultiplier)
-        register(EffectKick)
-        register(EffectCreateHologram)
-        register(EffectClearInvulnerability)
-        register(EffectHoming)
-        register(EffectPiercing)
-        register(EffectDamageTwice)
-        register(EffectDamageItem)
-        register(EffectRepairItem)
-        register(EffectBrewTimeMultiplier)
-        register(EffectPotionDurationMultiplier)
-        register(EffectDontConsumeLapisChance)
-        register(EffectDontConsumeXpChance)
-        register(EffectGiveGlobalPoints)
-        register(EffectMultiplyGlobalPoints)
-        register(EffectReelSpeedMultiplier)
-        register(EffectDropRandomItem)
-        register(EffectDropRandomItemForPlayer)
-        register(EffectDropPickupItem)
-        register(EffectOpenEnderChest)
-        register(EffectAddEnchant)
-        register(EffectRemoveEnchant)
-        register(EffectAllPlayers)
-        register(EffectRandomPlayer)
-        register(EffectAgeCrop)
-        register(EffectGiveItemPoints)
-        register(EffectLevelItem)
-        register(EffectMultiplyItemPoints)
-        register(EffectSetGlobalPoints)
-        register(EffectSetItemPoints)
-        register(EffectSetCustomModelData)
-        register(EffectDropWeightedRandomItem)
-        register(EffectReplantCrops)
-        register(EffectSwarm)
-        register(EffectTargetPlayer)
-        register(EffectReplaceNear)
-        register(EffectCloseInventory)
-        register(EffectTelekinesis)
-        register(EffectRapidBows)
-        register(EffectNameEntity)
-        register(EffectTotalDamageMultiplier)
-        register(EffectVictimSpeedMultiplier)
-        register(EffectSetArmorTrim)
-        register(EffectSetItemData)
-        register(EffectRemoveItemData)
-        register(EffectAOEBlocks)
-        register(EffectGiveSaturation)
-        register(EffectSetSaturation)
-        register(EffectSetFood)
-        register(EffectDamageOffhand)
-        register(EffectCreateBossBar)
-        register(EffectRemoveBossBar)
         register(EffectUpdateBossBar)
-        register(EffectOpenCrafting)
-        register(EffectAddGlobalPoints)
-        register(EffectDropItemSlot)
-        register(EffectKeepLevel)
-        register(EffectAnimation)
-        register(EffectRotateVictim)
-
-        loadProxy(VersionSpecificEffects::class.java).loadEffects()
+        register(EffectVictimSpeedMultiplier)
+        register(EffectVillagerTradeMultiplier)
+        register(EffectXpMultiplier)
+        register(EffectBlockReach)
+        register(EffectMiningEfficiency)
+        register(EffectEntityReach)
+        register(EffectGravityMultiplier)
+        register(EffectIncreaseStepHeight)
+        register(EffectJumpStrengthMultiplier)
+        register(EffectMiningSpeedMultiplier)
+        register(EffectMovementEfficiencyMultiplier)
+        register(EffectSneakingSpeedMultiplier)
+        register(EffectUnderwaterMiningSpeedMultiplier)
+        register(EffectSafeFallDistance)
+        register(EffectAddDurability)
+        register(EffectScale)
+        register(EffectWaterMovementEfficiencyMultiplier)
+        register(EffectBurningTimeMultiplier)
+        register(EffectExplosionKnockbackResistanceMultiplier)
     }
 }

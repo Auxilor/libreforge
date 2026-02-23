@@ -2,9 +2,13 @@ package com.willfp.libreforge.integrations.edprisoncore.impl
 
 import com.edwardbelt.edprison.modules.robots.RobotUtils
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.*
+import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.Dispatcher
+import com.willfp.libreforge.ProvidedHolder
+import com.willfp.libreforge.ViolationContext
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
-import com.willfp.libreforge.conditions.Conditions
+import com.willfp.libreforge.get
 import org.bukkit.entity.Player
 
 object ConditionHasEdPrisonRobot : Condition<String?>("has_edprison_robot") {

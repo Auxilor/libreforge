@@ -10,7 +10,7 @@ import org.bukkit.entity.Player
 
 object EffectBonusHealth : AttributeEffect(
     "bonus_health",
-    Attribute.GENERIC_MAX_HEALTH,
+    Attribute.MAX_HEALTH,
     AttributeModifier.Operation.ADD_NUMBER
 ) {
     override val arguments = arguments {

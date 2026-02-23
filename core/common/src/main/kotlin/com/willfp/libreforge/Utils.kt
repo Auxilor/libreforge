@@ -2,8 +2,6 @@ package com.willfp.libreforge
 
 import com.willfp.eco.core.items.Items
 import com.willfp.eco.util.namespacedKeyOf
-import com.willfp.libreforge.proxy.Proxy
-import com.willfp.libreforge.proxy.loadProxy
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
@@ -12,16 +10,8 @@ import org.bukkit.Sound
 import org.bukkit.SoundCategory
 import org.bukkit.block.Block
 import org.bukkit.enchantments.Enchantment
-import org.bukkit.entity.AbstractArrow
-import org.bukkit.entity.Entity
-import org.bukkit.entity.HumanEntity
-import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
-import org.bukkit.entity.Projectile
-import org.bukkit.event.inventory.CraftItemEvent
-import org.bukkit.event.inventory.InventoryEvent
 import org.bukkit.event.player.PlayerItemBreakEvent
-import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
 import kotlin.math.roundToInt
@@ -97,24 +87,10 @@ fun ItemStack.applyDamage(damage: Int, player: Player?): Boolean {
 fun getEnchantment(id: String): Enchantment? {
     if (id.contains(':')) {
         val key = namespacedKeyOf(id)
+        @Suppress("DEPRECATION", "REMOVAL")
         return Enchantment.getByKey(key)
     } else {
+        @Suppress("DEPRECATION", "REMOVAL")
         return Enchantment.getByKey(NamespacedKey.minecraft(id))
     }
 }
-
-@Proxy("OpenInventoryAccessorImpl")
-interface OpenInventoryAccessor {
-    fun getTopInventory(player: Player): Inventory
-    fun getTopInventory(event: CraftItemEvent): Inventory
-    fun getBottomInventory(event: CraftItemEvent): Inventory
-}
-
-val Player.topInventory: Inventory
-    get() = loadProxy(OpenInventoryAccessor::class.java).getTopInventory(this)
-
-val CraftItemEvent.topInventory: Inventory
-    get() = loadProxy(OpenInventoryAccessor::class.java).getTopInventory(this)
-
-val CraftItemEvent.bottomInventory: Inventory
-    get() = loadProxy(OpenInventoryAccessor::class.java).getBottomInventory(this)

@@ -4,7 +4,6 @@ import com.github.benmanes.caffeine.cache.Caffeine
 import com.willfp.eco.core.gui.player
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.toDispatcher
-import com.willfp.libreforge.topInventory
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -31,7 +30,7 @@ object TriggerSmelt : Trigger("smelt") {
 
     @EventHandler
     fun handle(event: InventoryClickEvent) {
-        val inventory = event.player.topInventory as? FurnaceInventory ?: return
+        val inventory = event.player.openInventory.topInventory as? FurnaceInventory ?: return
         val player = event.player
         val location = inventory.location ?: return
         val oldContents = inventory.contents

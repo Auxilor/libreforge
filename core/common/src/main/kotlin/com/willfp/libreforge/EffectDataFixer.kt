@@ -1,8 +1,8 @@
 package com.willfp.libreforge
 
 import com.destroystokyo.paper.event.entity.EntityRemoveFromWorldEvent
-import com.willfp.libreforge.EmptyProvidedHolder.holder
 import com.willfp.libreforge.effects.Effects
+import org.bukkit.Registry
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -44,7 +44,7 @@ object EffectDataFixer : Listener {
     }
 
     private fun Player.fixAttributes() {
-        for (attribute in Attribute.values()) {
+        for (attribute in Registry.ATTRIBUTE) {
             val inst = this.getAttribute(attribute) ?: continue
             val mods = inst.modifiers.filter { it.name.startsWith("libreforge") }
             for (mod in mods) {
@@ -53,13 +53,13 @@ object EffectDataFixer : Listener {
         }
 
         // Extra fix
-        if (this.health > (this.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.value ?: 0.0)) {
-            this.health = this.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.value ?: 0.0
+        if (this.health > (this.getAttribute(Attribute.MAX_HEALTH)?.value ?: 0.0)) {
+            this.health = this.getAttribute(Attribute.MAX_HEALTH)?.value ?: 0.0
         }
 
         // Legacy fix
         for (effect in Effects.values()) {
-            for (attribute in Attribute.values()) {
+            for (attribute in Registry.ATTRIBUTE) {
                 val inst = this.getAttribute(attribute) ?: continue
                 val mods = inst.modifiers.filter { it.name.startsWith(effect.id) }
                 for (mod in mods) {

@@ -1,8 +1,6 @@
 package com.willfp.libreforge.triggers.impl
 
-import com.willfp.libreforge.bottomInventory
 import com.willfp.libreforge.toDispatcher
-import com.willfp.libreforge.topInventory
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -68,11 +66,11 @@ object TriggerCraft : Trigger("craft") {
     }
 
     private fun handleShiftClickCompletion(event: CraftItemEvent, result: ItemStack): Int {
-        val inventoryContent = event.topInventory.storageContents.toList().filterNot { item ->
+        val inventoryContent = event.view.topInventory.storageContents.toList().filterNot { item ->
             item == null || item.type.isAir
         }.drop(1)
 
-        val playerInventory = event.bottomInventory as PlayerInventory
+        val playerInventory = event.view.bottomInventory as PlayerInventory
 
         val contents = playerInventory.storageContents.toList()
 

@@ -10,7 +10,7 @@ import org.bukkit.entity.Player
 
 object EffectKnockbackMultiplier : AttributeEffect(
     "knockback_multiplier",
-    Attribute.GENERIC_ATTACK_KNOCKBACK,
+    Attribute.ATTACK_KNOCKBACK,
     AttributeModifier.Operation.MULTIPLY_SCALAR_1
 ) {
     override val arguments = arguments {

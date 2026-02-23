@@ -3,3 +3,4 @@ options:
   color: "&#b4ff33"
   uses-reflective-reload: false
   supports-extensions: true
+  eco-api-version: 6.77.0

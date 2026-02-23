@@ -15,7 +15,6 @@ import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.ifType
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.DispatchedTrigger
-import org.bukkit.Sound
 import org.bukkit.entity.Player
 import java.util.UUID
 import kotlin.math.ceil

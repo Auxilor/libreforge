@@ -1,6 +1,5 @@
 package com.willfp.libreforge.triggers.impl
 
-import com.willfp.libreforge.proxy.renamedValues
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
@@ -22,7 +21,7 @@ object TriggerShearEntity : Trigger("shear_entity") {
     fun handle(event: PlayerShearEntityEvent) {
         val entity = event.entity as? LivingEntity ?: return
 
-        if (entity.type !in listOf(EntityType.SHEEP, EntityType.SNOWMAN, renamedValues().entities.mooshroom)) {
+        if (entity.type !in listOf(EntityType.SHEEP, EntityType.SNOW_GOLEM, EntityType.MOOSHROOM)) {
             return
         }
 

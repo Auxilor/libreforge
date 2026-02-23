@@ -7,10 +7,6 @@ import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.get
-import com.willfp.libreforge.getProvider
-import com.willfp.libreforge.points
-import org.bukkit.entity.Player
-import org.bukkit.inventory.ItemStack
 
 object ConditionLightLevelBelow : Condition<NoCompileData>("light_level_below") {
     override val arguments = arguments {

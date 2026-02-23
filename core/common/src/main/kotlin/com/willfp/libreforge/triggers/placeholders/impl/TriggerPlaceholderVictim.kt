@@ -16,7 +16,7 @@ object TriggerPlaceholderVictim : TriggerPlaceholder("victim") {
             ),
             NamedValue(
                 "victim_max_health",
-                victim.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.value ?: 0.0
+                victim.getAttribute(Attribute.MAX_HEALTH)?.value ?: 0.0
             )
         )
     }

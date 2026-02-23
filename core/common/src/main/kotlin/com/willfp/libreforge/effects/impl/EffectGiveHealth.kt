@@ -22,7 +22,7 @@ object EffectGiveHealth : Effect<NoCompileData>("give_health") {
         val player = data.player ?: return false
 
         player.health = (player.health + config.getDoubleFromExpression("amount", data))
-            .coerceAtMost(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)!!.value)
+            .coerceAtMost(player.getAttribute(Attribute.MAX_HEALTH)!!.value)
 
         return true
     }

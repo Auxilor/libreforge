@@ -6,7 +6,6 @@ import com.willfp.eco.core.placeholder.RegistrablePlaceholder
 import com.willfp.eco.core.placeholder.context.PlaceholderContext
 import com.willfp.eco.core.placeholder.templates.SimplePlaceholder
 import com.willfp.libreforge.BlankHolder
-import com.willfp.libreforge.EntityDispatcher
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.conditions.ConditionList

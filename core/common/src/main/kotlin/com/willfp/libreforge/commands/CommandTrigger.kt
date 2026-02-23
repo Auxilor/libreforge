@@ -12,7 +12,6 @@ import com.willfp.libreforge.triggers.impl.TriggerGroupCustom
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.LivingEntity
-import org.bukkit.entity.Player
 import org.bukkit.util.StringUtil
 import java.util.UUID
 

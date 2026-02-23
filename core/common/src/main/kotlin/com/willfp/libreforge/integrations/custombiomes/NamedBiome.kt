@@ -9,5 +9,5 @@ interface NamedBiome {
 class VanillaNamedBiome(
     biome: Biome
 ) : NamedBiome {
-    override val name = biome.name
+    override val name = biome.key.key
 }

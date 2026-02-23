@@ -9,8 +9,9 @@ import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import org.bukkit.event.Listener
 
-object EffectCreateExplosion : Effect<NoCompileData>("create_explosion") {
+object EffectCreateExplosion : Effect<NoCompileData>("create_explosion"), Listener {
     override val parameters = setOf(
         TriggerParameter.LOCATION
     )
@@ -24,15 +25,19 @@ object EffectCreateExplosion : Effect<NoCompileData>("create_explosion") {
         val location = data.location ?: return false
         val world = location.world ?: return false
 
+        val damager = config.getBoolOrNull("player_as_damager") ?: false
+        val source = if (damager) data.player else null
+
         val amount = config.getIntFromExpression("amount", data)
         val power = config.getDoubleFromExpression("power", data)
+        val fire = config.getBoolOrNull("create_fire") ?: true
+        val breakBlocks = config.getBoolOrNull("break_blocks") ?: true
 
         for (i in 1..amount) {
             plugin.scheduler.runLater(i.toLong()) {
-                world.createExplosion(location, power.toFloat())
+                world.createExplosion(location, power.toFloat(), fire, breakBlocks, source)
+                }
             }
-        }
-
         return true
     }
 }

@@ -1,6 +1,5 @@
 package com.willfp.libreforge.effects.impl
 
-import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
@@ -36,33 +35,52 @@ object EffectPermanentPotionEffect : Effect<NoCompileData>("permanent_potion_eff
 
     private val metaKey = "libreforge_${this.id}"
 
-    private val duration = if (Prerequisite.HAS_1_19_4.isMet) {
-        -1
-    } else {
-        1_500_000_000
+    private const val DURATION = -1
+
+    data class PotionEffectData(
+        val effectType: PotionEffectType,
+        val level: Int,
+        val particles: Boolean,
+        val icon: Boolean
+    )
+
+    private fun getHolderData(player: Player): MutableMap<UUID, PotionEffectData> {
+        return player.getMetadata(metaKey).firstOrNull()?.value()
+                as? MutableMap<UUID, PotionEffectData>
+            ?: mutableMapOf()
+    }
+
+    private fun refreshEffectsOfType(player: Player, type: PotionEffectType) {
+        player.removePotionEffect(type)
+        val active = getHolderData(player)
+            .values
+            .filter { it.effectType == type }
+        if (active.isEmpty()) return
+        val best = active.maxByOrNull { it.level }!!
+        val effect = PotionEffect(
+            type,
+            DURATION,
+            best.level,
+            false,
+            active.any { it.particles },
+            active.any { it.icon }
+        )
+        player.addPotionEffect(effect)
     }
 
     @EventHandler
     fun onRespawn(event: PlayerRespawnEvent) {
         val player = event.player
 
-        val meta = player.getMetadata(metaKey).firstOrNull()?.value()
-                as? MutableMap<UUID, Pair<PotionEffectType, Int>> ?: mutableMapOf()
+        plugin.server.scheduler.runTask(plugin, Runnable {
+            val types = getHolderData(player)
+                .values
+                .map { it.effectType }
+                .toSet()
 
-        for ((_, pair) in meta) {
-            val (effectType, level) = pair
-
-            val effect = PotionEffect(
-                effectType,
-                duration,
-                level,
-                false,
-                false,
-                true
-            )
-
-            player.addPotionEffect(effect)
-        }
+            types.forEach { refreshEffectsOfType(player, it) }
+            }
+        )
     }
 
     override fun onEnable(
@@ -79,49 +97,23 @@ object EffectPermanentPotionEffect : Effect<NoCompileData>("permanent_potion_eff
             ?: PotionEffectType.LUCK
 
         val level = config.getIntFromExpression("level", player) - 1
+        val icon = config.getBoolOrNull("icon") ?: true
+        val particles = config.getBoolOrNull("particles") ?: true
 
-        val effect = PotionEffect(
-            effectType,
-            duration,
-            level,
-            false,
-            false,
-            true
-        )
+        val holderData = getHolderData(player)
+        holderData[identifiers.uuid] = PotionEffectData(effectType, level, particles, icon)
+        player.setMetadata(metaKey, plugin.metadataValueFactory.create(holderData))
 
-        player.addPotionEffect(effect)
-
-        val meta = player.getMetadata(metaKey).firstOrNull()?.value()
-                as? MutableMap<UUID, Pair<PotionEffectType, Int>> ?: mutableMapOf()
-
-        meta[identifiers.uuid] = Pair(effectType, level)
-
-        player.setMetadata(metaKey, plugin.metadataValueFactory.create(meta))
+        refreshEffectsOfType(player, effectType)
     }
 
     override fun onDisable(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder) {
         val player = dispatcher.get<Player>() ?: return
 
-        val meta = player.getMetadata(metaKey).firstOrNull()?.value()
-                as? MutableMap<UUID, Pair<PotionEffectType, Int>> ?: mutableMapOf()
+        val holderData = getHolderData(player)
+        val removed = holderData.remove(identifiers.uuid) ?: return
+        player.setMetadata(metaKey, plugin.metadataValueFactory.create(holderData))
 
-        val (toRemove, _) = meta[identifiers.uuid] ?: return
-
-        val active = player.getPotionEffect(toRemove) ?: return
-
-        if (Prerequisite.HAS_1_19_4.isMet) {
-            if (active.duration != -1) {
-                return
-            }
-        } else {
-            if (active.duration < 1_000_000_000) {
-                return
-            }
-        }
-
-        meta.remove(identifiers.uuid)
-        player.setMetadata(metaKey, plugin.metadataValueFactory.create(meta))
-
-        player.removePotionEffect(toRemove)
+        refreshEffectsOfType(player, removed.effectType)
     }
 }

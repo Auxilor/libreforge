@@ -4,11 +4,15 @@ import com.willfp.eco.util.NumberUtils
 import com.willfp.eco.util.PlayerUtils
 import com.willfp.eco.util.SoundUtils
 import com.willfp.eco.util.StringUtils
-import com.willfp.libreforge.*
+import com.willfp.libreforge.ConfigurableElement
+import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.effects.arguments.EffectArgument
+import com.willfp.libreforge.get
+import com.willfp.libreforge.getDoubleFromExpression
+import com.willfp.libreforge.plugin
+import com.willfp.libreforge.toFriendlyPointName
 import com.willfp.libreforge.triggers.DispatchedTrigger
 import dev.aurelium.auraskills.api.AuraSkillsApi
-import org.bukkit.Sound
 import org.bukkit.entity.Player
 
 object ArgumentManaCost : EffectArgument<NoCompileData>("mana_cost") {

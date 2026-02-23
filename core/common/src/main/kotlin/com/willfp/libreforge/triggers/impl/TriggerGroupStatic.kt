@@ -10,7 +10,6 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.Bukkit
 import org.bukkit.FluidCollisionMode
 import org.bukkit.entity.Player
-import java.lang.RuntimeException
 
 object TriggerGroupStatic : TriggerGroup("static") {
     private val registry = mutableMapOf<Int, TriggerStatic>()
@@ -51,8 +50,7 @@ object TriggerGroupStatic : TriggerGroup("static") {
         )
 
         fun dispatch(player: Player) {
-    
-            val block = if (Prerequisite.HAS_PAPER.isMet && Prerequisite.HAS_1_20.isMet) {
+            val block = if (Prerequisite.HAS_PAPER.isMet) {
                 player.getTargetBlockExact(plugin.configYml.getInt("raytrace-distance"), FluidCollisionMode.NEVER)
             } else null
 

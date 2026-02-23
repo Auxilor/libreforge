@@ -2,8 +2,8 @@ package com.willfp.libreforge.effects
 
 import com.willfp.eco.util.NamespacedKeyUtils
 import org.bukkit.NamespacedKey
-import kotlin.math.abs
 import java.util.UUID
+import kotlin.math.abs
 
 /**
  * Generates IDs around a base UUID.

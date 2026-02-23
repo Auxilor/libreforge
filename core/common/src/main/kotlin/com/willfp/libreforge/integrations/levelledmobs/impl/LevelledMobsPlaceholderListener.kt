@@ -3,8 +3,6 @@ package com.willfp.libreforge.integrations.levelledmobs.impl
 import com.willfp.eco.util.namespacedKeyOf
 import com.willfp.libreforge.NamedValue
 import com.willfp.libreforge.triggers.event.TriggerDispatchEvent
-import org.bukkit.Bukkit
-import org.bukkit.NamespacedKey
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.persistence.PersistentDataType

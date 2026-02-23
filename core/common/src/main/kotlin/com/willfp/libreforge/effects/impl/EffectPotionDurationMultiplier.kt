@@ -1,9 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
-import com.willfp.eco.util.duration
 import com.willfp.libreforge.effects.templates.MultiplierEffect
 import com.willfp.libreforge.plugin
-import com.willfp.libreforge.proxy.renamedValues
 import com.willfp.libreforge.toDispatcher
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -14,14 +12,8 @@ import org.bukkit.event.player.PlayerItemConsumeEvent
 import org.bukkit.inventory.meta.PotionMeta
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.potion.PotionEffect
-import org.bukkit.potion.PotionEffectType
-import org.bukkit.potion.PotionType
 
 object EffectPotionDurationMultiplier : MultiplierEffect("potion_duration_multiplier") {
-    private val cannotExtend = setOf(
-        PotionType.AWKWARD, PotionType.MUNDANE, PotionType.THICK, PotionType.WATER
-    )
-
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     fun handle(event: BrewEvent) {
         val player = event.contents.viewers.filterIsInstance<Player>().firstOrNull() ?: return
@@ -33,18 +25,17 @@ object EffectPotionDurationMultiplier : MultiplierEffect("potion_duration_multip
                 val item = event.contents.getItem(i) ?: continue
                 val meta = item.itemMeta as? PotionMeta ?: continue
 
-                @Suppress("USELESS_ELVIS") // Not useless on 1.21+
-                val potionData = meta.basePotionData ?: continue
+                val potionType = meta.basePotionType ?: continue
+                val effects = potionType.potionEffects
 
-                if (potionData.type in cannotExtend) {
+                // Skip potions with no effects (e.g., water, awkward, mundane, thick)
+                if (effects.isEmpty()) {
                     continue
                 }
 
-                val duration = potionData.duration
-                val delta = (duration * multiplier).toInt() - duration
-
-                if (delta != 0) {
-                    meta.delta = delta
+                // Store multiplier for later application
+                if (multiplier != 1.0) {
+                    meta.multiplier = multiplier
                 }
 
                 item.itemMeta = meta
@@ -62,31 +53,26 @@ object EffectPotionDurationMultiplier : MultiplierEffect("potion_duration_multip
             return
         }
 
-        val delta = meta.delta
-
-        @Suppress("USELESS_ELVIS") // Not useless on 1.21+
-        val data = meta.basePotionData ?: return
-
-        val type = data.type
-
-        val effects = mutableMapOf<PotionEffectType, Int>()
-
-        if (type == PotionType.TURTLE_MASTER) {
-            effects[renamedValues().potions.slowness] = 4
-            effects[renamedValues().potions.resistance] = 2
-        } else {
-            val effectType = type.effectType ?: return
-            effects[effectType] = if (data.isUpgraded) 2 else 1
+        val multiplier = meta.multiplier
+        if (multiplier == 1.0) {
+            return
         }
 
-        val newDuration = data.duration + delta
+        val type = meta.basePotionType ?: return
+        val effects = type.potionEffects
 
-        for ((k, level) in effects) {
+        if (effects.isEmpty()) {
+            return
+        }
+
+        // Apply multiplier to each effect's duration
+        for (effect in effects) {
+            val newDuration = (effect.duration * multiplier).toInt()
             player.addPotionEffect(
                 PotionEffect(
-                    k,
+                    effect.type,
                     newDuration,
-                    level - 1
+                    effect.amplifier
                 )
             )
         }
@@ -99,43 +85,45 @@ object EffectPotionDurationMultiplier : MultiplierEffect("potion_duration_multip
 
         val meta = item.itemMeta as? PotionMeta ?: return
 
-        @Suppress("USELESS_ELVIS") // Not useless on 1.21+
-        val data = meta.basePotionData ?: return
-
-        val effects = mutableMapOf<PotionEffectType, Int>()
-
-        if (data.type == PotionType.TURTLE_MASTER) {
-            effects[renamedValues().potions.slowness] = 4
-            effects[renamedValues().potions.resistance] = 2
-        } else {
-            effects[data.type.effectType ?: return] = if (data.isUpgraded) 2 else 1
+        val multiplier = meta.multiplier
+        if (multiplier == 1.0) {
+            return
         }
 
-        for (entity in entities) {
-            val newDuration = (data.duration + meta.delta) * event.getIntensity(entity)
+        val type = meta.basePotionType ?: return
+        val effects = type.potionEffects
 
-            for ((key, value) in effects) {
+        if (effects.isEmpty()) {
+            return
+        }
+
+        // Apply multiplier to each effect's duration for each affected entity
+        for (entity in entities) {
+            val intensity = event.getIntensity(entity)
+
+            for (effect in effects) {
+                val newDuration = (effect.duration * multiplier * intensity).toInt()
                 entity.addPotionEffect(
                     PotionEffect(
-                        key,
-                        newDuration.toInt(),
-                        value - 1
+                        effect.type,
+                        newDuration,
+                        effect.amplifier
                     )
                 )
             }
         }
     }
 
-    private var PotionMeta.delta: Int
+    private var PotionMeta.multiplier: Double
         get() = this.persistentDataContainer.getOrDefault(
-            plugin.createNamespacedKey("duration_delta"),
-            PersistentDataType.INTEGER,
-            0
+            plugin.createNamespacedKey("duration_multiplier"),
+            PersistentDataType.DOUBLE,
+            1.0
         )
         set(value) {
             this.persistentDataContainer.set(
-                plugin.createNamespacedKey("duration_delta"),
-                PersistentDataType.INTEGER,
+                plugin.createNamespacedKey("duration_multiplier"),
+                PersistentDataType.DOUBLE,
                 value
             )
         }

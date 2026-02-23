@@ -19,10 +19,9 @@ object EffectSmite : Effect<NoCompileData>("smite") {
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val victim = data.victim ?: return false
-        val silent = config.getBool("silent")
         val damage = config.getDoubleFromExpression("damage", data.player)
 
-        LightningUtils.strike(victim, damage, silent)
+        LightningUtils.strike(victim, damage)
 
         return true
     }

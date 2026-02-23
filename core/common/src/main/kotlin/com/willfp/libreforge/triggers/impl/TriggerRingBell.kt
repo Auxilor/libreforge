@@ -7,7 +7,6 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.block.BellRingEvent
-import org.bukkit.event.raid.RaidFinishEvent
 
 object TriggerRingBell : Trigger("ring_bell") {
     override val parameters = setOf(

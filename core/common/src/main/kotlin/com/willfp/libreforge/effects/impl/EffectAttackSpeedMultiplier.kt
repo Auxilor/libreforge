@@ -10,7 +10,7 @@ import org.bukkit.entity.Player
 
 object EffectAttackSpeedMultiplier : AttributeEffect(
     "attack_speed_multiplier",
-    Attribute.GENERIC_ATTACK_SPEED,
+    Attribute.ATTACK_SPEED,
     AttributeModifier.Operation.MULTIPLY_SCALAR_1
 ) {
     override val arguments = arguments {

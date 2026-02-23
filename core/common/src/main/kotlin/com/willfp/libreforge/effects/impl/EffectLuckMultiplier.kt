@@ -8,9 +8,10 @@ import org.bukkit.attribute.AttributeModifier
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 
+@Deprecated("Use add_luck instead")
 object EffectLuckMultiplier : AttributeEffect(
     "luck_multiplier",
-    Attribute.GENERIC_LUCK,
+    Attribute.LUCK,
     AttributeModifier.Operation.MULTIPLY_SCALAR_1
 ) {
     override val arguments = arguments {

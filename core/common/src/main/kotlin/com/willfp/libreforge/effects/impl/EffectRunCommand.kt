@@ -8,7 +8,6 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getStrings
 import com.willfp.libreforge.toPlaceholderContext
 import com.willfp.libreforge.triggers.TriggerData
-import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 

@@ -3,7 +3,6 @@ package com.willfp.libreforge.integrations.edprisoncore.impl
 import com.edwardbelt.edprison.utils.EconomyUtils
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ConfigViolation
-import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect

@@ -61,7 +61,7 @@ object EffectSpawnMobs : Effect<TestableEntity>("spawn_mobs") {
                 NumberUtils.randFloat(-range, range)
             )
             val mob = entityType.spawn(locationToSpawn) as Mob
-            val healthAttr = mob.getAttribute(Attribute.GENERIC_MAX_HEALTH) ?: continue
+            val healthAttr = mob.getAttribute(Attribute.MAX_HEALTH) ?: continue
             healthAttr.baseValue = health
 
             if (victim != null) {

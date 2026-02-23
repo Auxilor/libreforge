@@ -31,7 +31,7 @@ object TriggerKill : Trigger("kill") {
                 player = killer as? Player,
                 victim = victim,
                 location = victim.location,
-                value = victim.getAttribute(Attribute.GENERIC_MAX_HEALTH)!!.value
+                value = victim.getAttribute(Attribute.MAX_HEALTH)!!.value
             )
         )
     }
@@ -43,7 +43,7 @@ object TriggerKill : Trigger("kill") {
                 player = player,
                 victim = victim,
                 location = victim.location,
-                value = victim.getAttribute(Attribute.GENERIC_MAX_HEALTH)!!.value
+                value = victim.getAttribute(Attribute.MAX_HEALTH)!!.value
             )
         )
     }

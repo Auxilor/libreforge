@@ -13,7 +13,6 @@ import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.toFriendlyPointName
 import com.willfp.libreforge.triggers.DispatchedTrigger
-import org.bukkit.Sound
 import org.bukkit.entity.Player
 
 object ArgumentManaCost : EffectArgument<NoCompileData>("mana_cost") {

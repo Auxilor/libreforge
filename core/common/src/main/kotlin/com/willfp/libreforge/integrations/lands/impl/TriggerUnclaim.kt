@@ -10,7 +10,7 @@ import me.angeschossen.lands.api.events.land.claiming.LandUnclaimAllEvent
 import me.angeschossen.lands.api.events.land.claiming.selection.LandUnclaimSelectionEvent
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
-import java.util.*
+import java.util.UUID
 
 object TriggerUnclaim : Trigger("unclaim") {
     override val parameters = setOf(

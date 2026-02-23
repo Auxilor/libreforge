@@ -2,7 +2,6 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.drops.DropQueue
-import com.willfp.eco.core.entities.impl.EmptyTestableEntity
 import com.willfp.eco.core.items.Items
 import com.willfp.eco.core.recipe.parts.EmptyTestableItem
 import com.willfp.libreforge.ViolationContext

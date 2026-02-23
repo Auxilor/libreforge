@@ -8,10 +8,8 @@ import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.executors.ChainExecutors
-import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.toPlaceholderContext
 import com.willfp.libreforge.triggers.TriggerData
-import com.willfp.libreforge.triggers.TriggerParameter
 
 object EffectRunChain : Effect<NoCompileData>("run_chain") {
     override val isPermanent = false

@@ -21,7 +21,7 @@ object EffectSetItemData : Effect<NoCompileData>("set_item_data") {
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val item = data.foundItem ?: return false
-        item.itemData[config.getString("key")] = config.getFormattedString("amount", data)
+        item.itemData[config.getString("key")] = config.getFormattedString("value", data)
 
         return true
     }

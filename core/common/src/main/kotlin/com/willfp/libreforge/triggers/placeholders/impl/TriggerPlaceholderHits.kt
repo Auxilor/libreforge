@@ -1,12 +1,12 @@
 package com.willfp.libreforge.triggers.placeholders.impl
 
 import com.willfp.libreforge.NamedValue
+import com.willfp.libreforge.integrations.paper.impl.TriggerTridentAttack
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.event.TriggerDispatchEvent
 import com.willfp.libreforge.triggers.impl.TriggerBowAttack
 import com.willfp.libreforge.triggers.impl.TriggerMeleeAttack
-import com.willfp.libreforge.integrations.paper.impl.TriggerTridentAttack
 import com.willfp.libreforge.triggers.placeholders.TriggerPlaceholder
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.LivingEntity
@@ -46,7 +46,7 @@ object TriggerPlaceholderHits : TriggerPlaceholder("hits") {
         @Suppress("UNCHECKED_CAST")
         val map = entity.getMetadata(HITS_META_KEY).firstOrNull()?.value() as? MutableMap<UUID, Int> ?: mutableMapOf()
         val hits = entity.getHits(player)
-        if (entity.health >= entity.getAttribute(Attribute.GENERIC_MAX_HEALTH)!!.value) {
+        if (entity.health >= entity.getAttribute(Attribute.MAX_HEALTH)!!.value) {
             map[player.uniqueId] = 1
         } else {
             map[player.uniqueId] = hits + 1

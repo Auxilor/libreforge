@@ -10,7 +10,7 @@ import org.bukkit.entity.Player
 
 object EffectArmor : AttributeEffect(
     "armor",
-    Attribute.GENERIC_ARMOR,
+    Attribute.ARMOR,
     AttributeModifier.Operation.ADD_NUMBER
 ) {
     override val arguments = arguments {
