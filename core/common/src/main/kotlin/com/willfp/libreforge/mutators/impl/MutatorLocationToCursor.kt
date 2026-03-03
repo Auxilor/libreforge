@@ -3,6 +3,7 @@ package com.willfp.libreforge.mutators.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
+import com.willfp.libreforge.getFormattedString
 import com.willfp.libreforge.mutators.Mutator
 import com.willfp.libreforge.mutators.parameterTransformers
 import com.willfp.libreforge.plugin
@@ -12,10 +13,10 @@ import org.bukkit.FluidCollisionMode
 
 object MutatorLocationToCursor : Mutator<NoCompileData>("location_to_cursor") {
     override val arguments = arguments {
-        require("target", "You must specify a target (block or entity)!", Config::getString) {
+        require("target", "You must specify a target (block or entity)!", Config::getFormattedString) {
             it in listOf("block", "entity")
         }
-        require("start", "You must specify a start point! (player or victim)", Config::getString) {
+        require("start", "You must specify a start point! (player or victim)", Config::getFormattedString) {
             it in listOf("player", "victim")
         }
     }
@@ -26,8 +27,8 @@ object MutatorLocationToCursor : Mutator<NoCompileData>("location_to_cursor") {
     }
 
     override fun mutate(data: TriggerData, config: Config, compileData: NoCompileData): TriggerData {
-        val target = config.getString("target")
-        val startingEntity = config.getString("start")
+        val target = config.getFormattedString("target", data)
+        val startingEntity = config.getFormattedString("start", data)
 
         val start = if (startingEntity.equals("player", true)) {
             data.player
