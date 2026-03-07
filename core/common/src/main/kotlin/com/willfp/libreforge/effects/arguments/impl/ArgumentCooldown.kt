@@ -1,8 +1,8 @@
 package com.willfp.libreforge.effects.arguments.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.sound.PlayableSound
 import com.willfp.eco.util.PlayerUtils
-import com.willfp.eco.util.SoundUtils
 import com.willfp.eco.util.StringUtils
 import com.willfp.eco.util.formatEco
 import com.willfp.libreforge.ConfigurableElement
@@ -76,14 +76,7 @@ object ArgumentCooldown : EffectArgument<Chain?>("cooldown") {
                 player.sendMessage(message)
             }
 
-            if (plugin.configYml.getBool("cooldown.sound.enabled")) {
-                player.playSound(
-                    player.location,
-                    SoundUtils.getSound(plugin.configYml.getString("cooldown.sound.sound"))!!,
-                    1.0f,
-                    plugin.configYml.getDouble("cooldown.sound.pitch").toFloat()
-                )
-            }
+            PlayableSound.create(plugin.configYml.getSubsection("cooldown.sound"))?.playTo(player)
         }
     }
 

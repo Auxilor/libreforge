@@ -21,6 +21,8 @@ import com.willfp.libreforge.integrations.aureliumskills.AureliumSkillsIntegrati
 import com.willfp.libreforge.integrations.axplugins.axenvoy.AxEnvoyIntegration
 import com.willfp.libreforge.integrations.axplugins.axtrade.AxTradeIntegration
 import com.willfp.libreforge.integrations.citizens.CitizensIntegration
+import com.willfp.libreforge.integrations.custom_blocks.nexo.NexoIntegration
+import com.willfp.libreforge.integrations.custom_blocks.oraxen.OraxenIntegration
 import com.willfp.libreforge.integrations.custombiomes.impl.CustomBiomesTerra
 import com.willfp.libreforge.integrations.custombiomes.impl.CustomBiomesTerraformGenerator
 import com.willfp.libreforge.integrations.edprisoncore.EdPrisonCoreIntegration
@@ -33,8 +35,6 @@ import com.willfp.libreforge.integrations.levelledmobs.LevelledMobsIntegration
 import com.willfp.libreforge.integrations.mcmmo.McMMOIntegration
 import com.willfp.libreforge.integrations.modelengine.ModelEngineIntegration
 import com.willfp.libreforge.integrations.mythicmobs.MythicMobsIntegration
-import com.willfp.libreforge.integrations.custom_blocks.nexo.NexoIntegration
-import com.willfp.libreforge.integrations.custom_blocks.oraxen.OraxenIntegration
 import com.willfp.libreforge.integrations.paper.PaperIntegration
 import com.willfp.libreforge.integrations.purpur.PurpurIntegration
 import com.willfp.libreforge.integrations.scyther.ScytherIntegration
