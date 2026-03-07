@@ -3,7 +3,6 @@ package com.willfp.libreforge.effects.arguments.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.sound.PlayableSound
 import com.willfp.eco.util.PlayerUtils
-import com.willfp.eco.util.SoundUtils
 import com.willfp.eco.util.StringUtils
 import com.willfp.eco.util.formatEco
 import com.willfp.libreforge.ConfigurableElement

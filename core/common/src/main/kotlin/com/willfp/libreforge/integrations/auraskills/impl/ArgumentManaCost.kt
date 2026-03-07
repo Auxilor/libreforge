@@ -3,7 +3,6 @@ package com.willfp.libreforge.integrations.auraskills.impl
 import com.willfp.eco.core.sound.PlayableSound
 import com.willfp.eco.util.NumberUtils
 import com.willfp.eco.util.PlayerUtils
-import com.willfp.eco.util.SoundUtils
 import com.willfp.eco.util.StringUtils
 import com.willfp.libreforge.ConfigurableElement
 import com.willfp.libreforge.NoCompileData
