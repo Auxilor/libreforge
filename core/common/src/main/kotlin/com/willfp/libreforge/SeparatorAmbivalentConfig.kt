@@ -101,7 +101,7 @@ private class SeparatorAmbivalentConfig(
 }
 
 fun Config.separatorAmbivalent(): Config =
-    if (this is SeparatorAmbivalentConfig) this else SeparatorAmbivalentConfig(this)
+    this as? SeparatorAmbivalentConfig ?: SeparatorAmbivalentConfig(this)
 
 fun Config.toPlaceholderContext(data: TriggerData? = null): PlaceholderContext {
     val additionalPlayers = mutableListOf<AdditionalPlayer>()

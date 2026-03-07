@@ -15,7 +15,7 @@ object EffectSkillXpMultiplier : MultiMultiplierEffect<Skill>("skill_xp_multipli
     }
 
     override fun getAllElements(): Collection<Skill> {
-        return Skills.values().toList()
+        return Skills.entries
     }
 
     @EventHandler(ignoreCancelled = true)

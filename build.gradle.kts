@@ -7,14 +7,14 @@ buildscript {
     }
 
     dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:2.1.0")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.21")
     }
 }
 
 plugins {
     java
     id("java-library")
-    id("com.gradleup.shadow") version "8.3.5"
+    id("com.gradleup.shadow") version "9.3.1"
     id("maven-publish")
 }
 
@@ -44,8 +44,8 @@ allprojects {
     }
 
     dependencies {
-        compileOnly("org.jetbrains:annotations:23.0.0")
-        compileOnly(kotlin("stdlib", version = "2.1.0"))
+        compileOnly("org.jetbrains:annotations:26.0.2")
+        compileOnly(kotlin("stdlib", version = "2.3.0"))
 
         compileOnly(fileTree("lib") { include("*.jar") })
     }
