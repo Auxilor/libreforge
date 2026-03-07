@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.arguments.impl
 
 import com.willfp.eco.core.integrations.economy.balance
+import com.willfp.eco.core.sound.PlayableSound
 import com.willfp.eco.util.NumberUtils
 import com.willfp.eco.util.PlayerUtils
 import com.willfp.eco.util.SoundUtils
@@ -39,14 +40,7 @@ object ArgumentCost : EffectArgument<NoCompileData>("cost") {
             player.sendMessage(message)
         }
 
-        if (plugin.configYml.getBool("cannot-afford.sound.enabled")) {
-            player.playSound(
-                player.location,
-                SoundUtils.getSound(plugin.configYml.getString("cannot-afford.sound.sound"))!!,
-                1.0f,
-                plugin.configYml.getDouble("cannot-afford.sound.pitch").toFloat()
-            )
-        }
+        PlayableSound.create(plugin.configYml.getSubsection("cannot-afford.sound"))?.playTo(player)
     }
 
     override fun ifMet(element: ConfigurableElement, trigger: DispatchedTrigger, compileData: NoCompileData) {

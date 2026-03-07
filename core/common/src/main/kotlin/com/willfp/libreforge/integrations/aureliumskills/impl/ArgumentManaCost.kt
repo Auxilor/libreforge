@@ -1,6 +1,7 @@
 package com.willfp.libreforge.integrations.aureliumskills.impl
 
 import com.archyx.aureliumskills.api.AureliumAPI
+import com.willfp.eco.core.sound.PlayableSound
 import com.willfp.eco.util.NumberUtils
 import com.willfp.eco.util.PlayerUtils
 import com.willfp.eco.util.SoundUtils
@@ -51,13 +52,6 @@ object ArgumentManaCost : EffectArgument<NoCompileData>("mana_cost") {
             player.sendMessage(message)
         }
 
-        if (plugin.configYml.getBool("cannot-afford-type.sound.enabled")) {
-            player.playSound(
-                player.location,
-                SoundUtils.getSound(plugin.configYml.getString("cannot-afford-type.sound.sound"))!!,
-                1.0f,
-                plugin.configYml.getDouble("cannot-afford-type.sound.pitch").toFloat()
-            )
-        }
+        PlayableSound.create(plugin.configYml.getSubsection("cannot-afford-type.sound"))?.playTo(player)
     }
 }
