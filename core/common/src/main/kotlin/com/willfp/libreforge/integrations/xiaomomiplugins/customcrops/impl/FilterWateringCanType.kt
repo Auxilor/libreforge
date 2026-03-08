@@ -14,8 +14,7 @@ object FilterWateringCanType : Filter<NoCompileData, Collection<String>>("wateri
     }
 
     override fun isMet(data: TriggerData, value: Collection<String>, compileData: NoCompileData): Boolean {
-        val event = data.event
-        val wateringCanId = when (event) {
+        val wateringCanId = when (val event = data.event) {
             is WateringCanFillEvent -> event.wateringCanConfig().id()
             is WateringCanWaterSprinklerEvent -> event.wateringCanConfig().id()
             is WateringCanWaterPotEvent -> event.wateringCanConfig().id()

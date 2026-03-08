@@ -15,7 +15,7 @@ object EffectMcMMOXpMultiplier : MultiMultiplierEffect<PrimarySkillType>("mcmmo_
     }
 
     override fun getAllElements(): Collection<PrimarySkillType> {
-        return PrimarySkillType.values().toList()
+        return PrimarySkillType.entries
     }
 
     @EventHandler(ignoreCancelled = true)
