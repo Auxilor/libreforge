@@ -8,7 +8,6 @@ dependencies {
     compileOnly("net.kyori:adventure-text-minimessage:4.26.1")
     compileOnly("com.github.NuVotifier:NuVotifier:2.7.2")
     compileOnly("dev.aurelium:auraskills-api-bukkit:2.3.3")
-    compileOnly("com.github.Archy-X:AureliumSkills:Beta1.2.4")
     compileOnly("com.gmail.nossr50.mcMMO:mcMMO:2.2.049") {
         exclude(group = "com.sk89q.worldedit", module = "worldedit-core")
         exclude(group = "com.sk89q.worldedit", module = "worldedit-legacy")
