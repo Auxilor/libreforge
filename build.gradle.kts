@@ -27,6 +27,7 @@ allprojects {
     repositories {
         mavenLocal() // TODO: REMOVE
         mavenCentral()
+        maven("https://jitpack.io/")
         maven("https://repo.auxilor.io/repository/maven-public/")
         maven("https://repo.papermc.io/repository/maven-public/")
         maven("https://repo.purpurmc.org/snapshots")
