@@ -16,7 +16,6 @@ import org.bukkit.entity.Item
 import org.bukkit.entity.Player
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockDropItemEvent
-import org.bukkit.inventory.ItemStack
 
 abstract class MineBlockEffect<T : Any>(id: String) : Effect<T>(id) {
     private val ignoreKey = "blockbreakevent-ignore"
@@ -30,7 +29,8 @@ abstract class MineBlockEffect<T : Any>(id: String) : Effect<T>(id) {
         return !block.hasMetadata(ignoreKey)
     }
 
-    protected fun Player.breakBlocksSafely(item: ItemStack, blocks: Collection<Block>) {
+    protected fun Player.breakBlocksSafely(blocks: Collection<Block>) {
+        val item = this.inventory.itemInMainHand
         val useMultiBlocksEvents = plugin.configYml.getBool("effects.use-multiblock-events")
 
         if (plugin.configYml.getBool("effects.use-setblock-break")) {
@@ -101,7 +101,9 @@ abstract class MineBlockEffect<T : Any>(id: String) : Effect<T>(id) {
                     iter.remove()
                 }
 
-                item.applyDamage(damageToApply, player)
+                item.applyDamage(damageToApply, this) {
+                    this.inventory.setItemInMainHand(item.withType(Material.AIR))
+                }
             }
         }
     }

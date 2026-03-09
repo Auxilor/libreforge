@@ -64,7 +64,13 @@ fun Collection<ItemStack?>.filterNotEmpty() =
 internal val ItemStack?.isEcoEmpty: Boolean
     get() = Items.isEmpty(this)
 
+@Suppress("DEPRECATION")
+@Deprecated("Use applyDamage with the removeItem function")
 fun ItemStack.applyDamage(damage: Int, player: Player?): Boolean {
+    return this.applyDamage(damage, player) { this.type = Material.AIR }
+}
+
+fun ItemStack.applyDamage(damage: Int, player: Player?, removeItem: Runnable): Boolean {
     val meta = this.itemMeta as? Damageable ?: return false
     val unbreaking = meta.getEnchantLevel(Enchantment.UNBREAKING)
 
@@ -89,8 +95,7 @@ fun ItemStack.applyDamage(damage: Int, player: Player?): Boolean {
             Bukkit.getPluginManager().callEvent(PlayerItemBreakEvent(player, this))
             player.playSound(player.location, Sound.ENTITY_ITEM_BREAK, SoundCategory.BLOCKS, 1f, 1f)
         }
-        @Suppress("DEPRECATION")
-        this.type = Material.AIR
+        removeItem.run()
     } else {
         this.itemMeta = meta
     }
