@@ -1,14 +1,14 @@
 package com.willfp.libreforge.configs.lrcdb
 
-import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.command.impl.Subcommand
 import com.willfp.eco.core.commands.notifyNull
 import com.willfp.libreforge.Plugins
 import com.willfp.libreforge.configs.onLrcdbThread
+import com.willfp.libreforge.plugin
 import org.bukkit.command.CommandSender
 import org.bukkit.util.StringUtil
 
-class CommandLrcdbExport(plugin: EcoPlugin) : Subcommand(
+internal object CommandLrcdbExport : Subcommand(
     plugin,
     "export",
     "libreforge.command.lrcdb",
@@ -19,7 +19,9 @@ class CommandLrcdbExport(plugin: EcoPlugin) : Subcommand(
         val foundPlugin = Plugins[pluginName.lowercase()].notifyNull("invalid-plugin") ?: return
 
         val categoryName = args.getOrNull(1).notifyNull("must-specify-category") ?: return
-        val category = foundPlugin.categories.values().firstOrNull { it.id == categoryName }.notifyNull("invalid-category") ?: return
+        val category =
+            foundPlugin.categories.values().firstOrNull { it.id == categoryName }.notifyNull("invalid-category")
+                ?: return
 
         val configName = args.getOrNull(2).notifyNull("must-specify-config-name") ?: return
         val config = category[configName].notifyNull("invalid-config-name") ?: return

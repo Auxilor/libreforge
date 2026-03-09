@@ -1,17 +1,16 @@
 package com.willfp.libreforge.commands
 
-import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.command.impl.Subcommand
 import com.willfp.eco.util.toNiceString
 import com.willfp.libreforge.globalPoints
+import com.willfp.libreforge.plugin
 import com.willfp.libreforge.points
 import com.willfp.libreforge.toFriendlyPointName
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.util.StringUtil
 
-@Suppress("UsagesOfObsoleteApi")
-internal class CommandPointsReset(plugin: EcoPlugin) : Subcommand(
+internal object CommandPointsReset : Subcommand(
     plugin,
     "reset",
     "libreforge.command.points.reset",
@@ -37,10 +36,11 @@ internal class CommandPointsReset(plugin: EcoPlugin) : Subcommand(
             // 🔒 Leave global logic exactly as-is
             globalPoints[pointString] = resetAmount
 
-            sender.sendMessage(plugin.langYml.getMessage("points-reset")
-                .replace("%playername%", "server")
-                .replace("%point%", pointString.toFriendlyPointName())
-                .replace("%amount%", resetAmount.toNiceString())
+            sender.sendMessage(
+                plugin.langYml.getMessage("points-reset")
+                    .replace("%playername%", "server")
+                    .replace("%point%", pointString.toFriendlyPointName())
+                    .replace("%amount%", resetAmount.toNiceString())
             )
             return
         }
@@ -49,9 +49,10 @@ internal class CommandPointsReset(plugin: EcoPlugin) : Subcommand(
             // Reset for ALL online players
             Bukkit.getOnlinePlayers().forEach { it.points[pointString] = resetAmount }
 
-            sender.sendMessage(plugin.langYml.getMessage("points-reset-all")
-                .replace("%point%", pointString.toFriendlyPointName())
-                .replace("%amount%", resetAmount.toNiceString())
+            sender.sendMessage(
+                plugin.langYml.getMessage("points-reset-all")
+                    .replace("%point%", pointString.toFriendlyPointName())
+                    .replace("%amount%", resetAmount.toNiceString())
             )
             return
         }
@@ -64,10 +65,11 @@ internal class CommandPointsReset(plugin: EcoPlugin) : Subcommand(
 
         player.points[pointString] = resetAmount
 
-        sender.sendMessage(plugin.langYml.getMessage("points-reset")
-            .replace("%playername%", player.name)
-            .replace("%point%", pointString.toFriendlyPointName())
-            .replace("%amount%", resetAmount.toNiceString())
+        sender.sendMessage(
+            plugin.langYml.getMessage("points-reset")
+                .replace("%playername%", player.name)
+                .replace("%point%", pointString.toFriendlyPointName())
+                .replace("%amount%", resetAmount.toNiceString())
         )
     }
 
@@ -79,6 +81,7 @@ internal class CommandPointsReset(plugin: EcoPlugin) : Subcommand(
                 candidates.add("*")
                 StringUtil.copyPartialMatches(args[0], candidates, mutableListOf())
             }
+
             2 -> listOf("point")
             else -> mutableListOf()
         }
