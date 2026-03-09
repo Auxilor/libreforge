@@ -44,7 +44,7 @@ object EffectMineVein : MineBlockEffect<FilterList>("mine_vein") {
             .filter { AntigriefManager.canBreakBlock(player, it) }
             .filter { compileData.isMet(data.copy(block = it)) }
 
-        player.breakBlocksSafely(player.inventory.itemInMainHand, blocks)
+        player.breakBlocksSafely(blocks)
 
         return true
     }

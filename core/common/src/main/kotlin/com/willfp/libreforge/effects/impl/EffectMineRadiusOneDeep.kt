@@ -111,7 +111,7 @@ object EffectMineRadiusOneDeep : MineBlockEffect<NoCompileData>("mine_radius_one
             }
         }
 
-        player.breakBlocksSafely(player.inventory.itemInMainHand, blocks)
+        player.breakBlocksSafely(blocks)
 
         return true
     }
