@@ -16,7 +16,7 @@ object EffectBreakBlock : MineBlockEffect<NoCompileData>("break_block") {
 
         val player = data.player ?: return false
 
-        player.breakBlocksSafely(listOf(block))
+        player.breakBlocksSafely(player.inventory.itemInMainHand, listOf(block))
 
         return true
     }

@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.drops.DropQueue
 import com.willfp.eco.core.events.EntityDeathByEntityEvent
+import com.willfp.eco.core.events.MultiBlockDropItemEvent
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.eco.core.map.listMap
 import com.willfp.eco.util.TelekinesisUtils
@@ -54,7 +55,8 @@ object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
         val block = event.block
 
         if (!plugin.configYml.getBool("effects.telekinesis.always-process-blocks")
-            && !TelekinesisUtils.testPlayer(player)) {
+            && !TelekinesisUtils.testPlayer(player)
+        ) {
             return
         }
 
@@ -105,6 +107,31 @@ object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    fun handle(event: MultiBlockDropItemEvent) {
+        val player = event.player
+
+        for (block in event.blocks) {
+            if (!plugin.configYml.getBool("effects.telekinesis.always-process-blocks")
+                && !TelekinesisUtils.testPlayer(player)
+            ) {
+                return
+            }
+
+            if (!AntigriefManager.canBreakBlock(player, block)) {
+                return
+            }
+
+            val drops = event.getItems(block).map { it.itemStack }
+            event.getItems(block).clear()
+
+            DropQueue(player)
+                .setLocation(block.location)
+                .addItems(drops)
+                .push()
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     fun handle(event: EntityDeathByEntityEvent) {
         val victim = event.victim
 
@@ -126,6 +153,7 @@ object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
                 if (!killer.isTamed || !allowTamedMobKills) return
                 killer.owner as? Player
             }
+
             else -> null
         } ?: return
 

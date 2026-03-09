@@ -1,5 +1,6 @@
 package com.willfp.libreforge.triggers.impl
 
+import com.willfp.eco.core.events.MultiBlockBreakEvent
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
@@ -37,5 +38,27 @@ object TriggerMineBlock : Trigger("mine_block") {
                 item = player.inventory.itemInMainHand
             )
         )
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    fun handle(event: MultiBlockBreakEvent) {
+        val player = event.player
+
+        for (block in event.blocks) {
+            if (!AntigriefManager.canBreakBlock(player, block)) {
+                return
+            }
+
+            this.dispatch(
+                player.toDispatcher(),
+                TriggerData(
+                    player = player,
+                    block = block,
+                    location = block.location,
+                    event = event,
+                    item = player.inventory.itemInMainHand
+                )
+            )
+        }
     }
 }

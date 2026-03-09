@@ -66,7 +66,22 @@ internal val ItemStack?.isEcoEmpty: Boolean
 
 fun ItemStack.applyDamage(damage: Int, player: Player?): Boolean {
     val meta = this.itemMeta as? Damageable ?: return false
-    meta.damage += damage
+    val unbreaking = meta.getEnchantLevel(Enchantment.UNBREAKING)
+
+    // Calculate actual damage considering unbreaking
+    // Each damage point has a chance to be negated
+    var actualDamage = damage
+    if (unbreaking > 0) {
+        var damageNegated = 0
+        repeat(damage) {
+            // Chance to negate this damage point: (unbreakingLevel) / (unbreakingLevel + 1)
+            if (Math.random() < (unbreaking.toDouble() / (unbreaking + 1)))
+                damageNegated++
+        }
+        actualDamage = damage - damageNegated
+    }
+
+    meta.damage += actualDamage
     if (meta.damage >= this.type.maxDurability) {
         meta.damage = this.type.maxDurability.toInt()
         this.itemMeta = meta

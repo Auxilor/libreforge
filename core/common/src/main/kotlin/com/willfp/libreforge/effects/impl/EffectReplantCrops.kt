@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.events.MultiBlockBreakEvent
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.eco.core.map.listMap
 import com.willfp.libreforge.Dispatcher
@@ -36,11 +37,13 @@ object EffectReplantCrops : Effect<NoCompileData>("replant_crops") {
         holder: ProvidedHolder,
         compileData: NoCompileData
     ) {
-        players[dispatcher.uuid].add(ReplantConfig(
-            identifiers.uuid,
-            config.getBool("consume_seeds"),
-            config.getBool("only_fully_grown")
-        ))
+        players[dispatcher.uuid].add(
+            ReplantConfig(
+                identifiers.uuid,
+                config.getBool("consume_seeds"),
+                config.getBool("only_fully_grown")
+            )
+        )
     }
 
     override fun onDisable(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder) {
@@ -136,6 +139,96 @@ object EffectReplantCrops : Effect<NoCompileData>("replant_crops") {
                     EquipmentSlot.HAND
                 )
             )
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    fun handle(event: MultiBlockBreakEvent) {
+        val player = event.player
+
+        if (players[player.uniqueId].isEmpty()) {
+            return
+        }
+
+        for (block in event.blocks) {
+            val type = block.type
+
+            if (!AntigriefManager.canPlaceBlock(player, block)) {
+                return
+            }
+
+            if (type in arrayOf(
+                    Material.GLOW_BERRIES,
+                    Material.SWEET_BERRY_BUSH,
+                    Material.CACTUS,
+                    Material.BAMBOO,
+                    Material.CHORUS_FLOWER,
+                    Material.SUGAR_CANE
+                )
+            ) {
+                return
+            }
+
+            val data = block.blockData
+
+            if (data !is Ageable) {
+                return
+            }
+
+            val playerConfigs = players[player.uniqueId]
+            val consumeSeeds = playerConfigs.any { it.consumeSeeds }
+            val onlyFullyGrown = playerConfigs.all { it.onlyFullyGrown }
+
+            if (onlyFullyGrown && data.age != data.maximumAge) {
+                return
+            }
+
+            if (consumeSeeds) {
+                val item = ItemStack(
+                    when (type) {
+                        Material.WHEAT -> Material.WHEAT_SEEDS
+                        Material.POTATOES -> Material.POTATO
+                        Material.CARROTS -> Material.CARROT
+                        Material.BEETROOTS -> Material.BEETROOT_SEEDS
+                        Material.COCOA -> Material.COCOA_BEANS
+                        else -> type
+                    }
+                )
+
+                val hasSeeds = player.inventory.removeItem(item).isEmpty()
+
+                if (!hasSeeds) {
+                    return
+                }
+            }
+
+            if (data.age != data.maximumAge) {
+                if (onlyFullyGrown) {
+                    return
+                }
+
+                event.setDropItems(block, false)
+            }
+
+            data.age = 0
+
+            plugin.scheduler.run {
+                block.type = type
+                block.blockData = data
+
+                // Improves compatibility with other plugins.
+                Bukkit.getPluginManager().callEvent(
+                    BlockPlaceEvent(
+                        block,
+                        block.state,
+                        block.getRelative(BlockFace.DOWN),
+                        player.inventory.itemInMainHand,
+                        player,
+                        true,
+                        EquipmentSlot.HAND
+                    )
+                )
+            }
         }
     }
 

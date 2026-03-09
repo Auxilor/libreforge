@@ -1,6 +1,7 @@
 package com.willfp.libreforge.triggers.impl
 
 import com.willfp.eco.core.drops.DropQueue
+import com.willfp.eco.core.events.MultiBlockDropItemEvent
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.libreforge.filterNotEmpty
 import com.willfp.libreforge.toDispatcher
@@ -8,6 +9,7 @@ import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.event.EditableBlockDropEvent
+import com.willfp.libreforge.triggers.event.EditableMultiBlockDropEvent
 import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.block.Block
@@ -53,7 +55,11 @@ object TriggerBlockItemDrop : Trigger("block_item_drop") {
             player.toDispatcher(),
             TriggerData(
                 player = player,
-                block = BrokenBlock(block, event.blockState.type, event.blockState.blockData), // Fixes the type always being AIR
+                block = BrokenBlock(
+                    block,
+                    event.blockState.type,
+                    event.blockState.blockData
+                ), // Fixes the type always being AIR
                 location = block.location,
                 event = editableEvent,
                 item = null,
@@ -75,11 +81,60 @@ object TriggerBlockItemDrop : Trigger("block_item_drop") {
         }
     }
 
+    @EventHandler(
+        ignoreCancelled = true,
+        priority = EventPriority.LOW
+    )
+    fun handle(event: MultiBlockDropItemEvent) {
+        val player = event.player
+
+        if (player.gameMode == GameMode.CREATIVE || player.gameMode == GameMode.SPECTATOR) {
+            return
+        }
+
+        val editableEvent = EditableMultiBlockDropEvent(event)
+
+        for (block in event.blocks) {
+
+            if (event.getBlockState(block) is Container) {
+                return
+            }
+
+            if (!AntigriefManager.canBreakBlock(player, block)) {
+                return
+            }
+
+            val originalDrops = event.getItems(block).map { it.itemStack }.filterNotEmpty()
+
+            this.dispatch(
+                player.toDispatcher(),
+                TriggerData(
+                    player = player,
+                    block = BrokenBlock(
+                        block,
+                        block.type,
+                        block.blockData
+                    ), // Fixes the type always being AIR
+                    location = player.location,
+                    event = editableEvent,
+                    item = null,
+                    value = originalDrops.sumOf { it.amount }.toDouble()
+                )
+            )
+        }
+
+        val newDrops = editableEvent.items
+
+        for ((i, entry) in event.blocks.flatMap { event.getItems(it) }.withIndex()) {
+            entry.itemStack = newDrops[i].item
+        }
+    }
+
     private class BrokenBlock(
         private val block: Block,
         private val type: Material,
         private val data: BlockData
-    ): Block by block {
+    ) : Block by block {
         override fun getType() = type
         override fun getBlockData(): BlockData = data
     }

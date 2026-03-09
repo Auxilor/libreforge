@@ -118,6 +118,14 @@ effects:
   # Only set this option to true if you know what you're doing!
   use-setblock-break: false
 
+  # If this is set to true, effects like mine_radius, drill, etc. will use instead a single multiblock event.
+  # This **will** break compatibility with other plugins, but will also majorly improve performance under load.
+  # Setting this to true means that it will trigger mine_block and block_item_drop, but other plugins will not
+  # be able to interact with the event.
+  # Not compatible with use-setblock-break set to true.
+  # Only set this option to true if you know what you're doing!
+  use-multiblock-events: false
+
   multiply_drops:
     # Some items can be duplicated if they are placed on other blocks, e.g. torches, lanterns, etc.
     # This option will prevent this from happening by blacklisting certain blocks from being multiplied.
