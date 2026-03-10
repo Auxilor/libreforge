@@ -76,6 +76,7 @@ import com.willfp.libreforge.triggers.impl.TriggerProjectileHit
 import com.willfp.libreforge.triggers.impl.TriggerProjectileLaunch
 import com.willfp.libreforge.triggers.impl.TriggerReelIn
 import com.willfp.libreforge.triggers.impl.TriggerRespawn
+import com.willfp.libreforge.triggers.impl.TriggerResurrect
 import com.willfp.libreforge.triggers.impl.TriggerRingBell
 import com.willfp.libreforge.triggers.impl.TriggerRunCommand
 import com.willfp.libreforge.triggers.impl.TriggerSellItem
@@ -215,6 +216,7 @@ object Triggers : Registry<Trigger>() {
         register(TriggerProjectileLaunch)
         register(TriggerReelIn)
         register(TriggerRespawn)
+        register(TriggerResurrect)
         register(TriggerRingBell)
         register(TriggerRunCommand)
         register(TriggerSellItem)

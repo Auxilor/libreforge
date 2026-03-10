@@ -8,16 +8,15 @@ import org.bukkit.attribute.AttributeModifier
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 
-@Deprecated("Use add_luck instead")
-object EffectLuckMultiplier : AttributeEffect(
-    "luck_multiplier",
+object EffectAddLuck : AttributeEffect(
+    "add_luck",
     Attribute.LUCK,
-    AttributeModifier.Operation.MULTIPLY_SCALAR_1
+    AttributeModifier.Operation.ADD_NUMBER
 ) {
     override val arguments = arguments {
-        require("multiplier", "You must specify the luck multiplier!")
+        require("amount", "You must specify the amount of luck to add!")
     }
 
-    override fun getValue(config: Config, entity: LivingEntity) =
-        config.getDoubleFromExpression("multiplier", entity as? Player) - 1
+    override fun getValue(config: Config, entity: LivingEntity): Double =
+        config.getDoubleFromExpression("amount", entity as? Player)
 }

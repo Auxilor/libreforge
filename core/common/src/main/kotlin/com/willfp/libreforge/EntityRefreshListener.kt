@@ -1,6 +1,5 @@
 package com.willfp.libreforge
 
-import com.willfp.eco.core.EcoPlugin
 import org.bukkit.Registry
 import org.bukkit.attribute.AttributeInstance
 import org.bukkit.entity.LivingEntity
@@ -9,9 +8,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.world.ChunkLoadEvent
 
-class EntityRefreshListener(
-    private val plugin: EcoPlugin
-) : Listener {
+object EntityRefreshListener : Listener {
 
     @EventHandler
     fun onChunkLoad(event: ChunkLoadEvent) {

@@ -1,17 +1,16 @@
 package com.willfp.libreforge.commands
 
-import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.command.impl.Subcommand
 import com.willfp.eco.util.toNiceString
 import com.willfp.libreforge.globalPoints
+import com.willfp.libreforge.plugin
 import com.willfp.libreforge.points
 import com.willfp.libreforge.toFriendlyPointName
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.util.StringUtil
 
-@Suppress("UsagesOfObsoleteApi")
-internal class CommandPointsTake(plugin: EcoPlugin): Subcommand(
+internal object CommandPointsTake: Subcommand(
     plugin,
     "take",
     "libreforge.command.points.take",
@@ -48,7 +47,7 @@ internal class CommandPointsTake(plugin: EcoPlugin): Subcommand(
 
         // Global points
         if (playerString.equals("global", ignoreCase = true)) {
-            globalPoints[pointString] = (globalPoints[pointString] ?: 0.0) - amountNum
+            globalPoints[pointString] = globalPoints[pointString] - amountNum
             sender.sendMessage(plugin.langYml.getMessage("points-taken")
                 .replace("%playername%", "server")
                 .replace("%point%", pointString.toFriendlyPointName())
@@ -60,7 +59,7 @@ internal class CommandPointsTake(plugin: EcoPlugin): Subcommand(
         // Wildcard for all online players
         if (playerString == "*") {
             Bukkit.getOnlinePlayers().forEach { player ->
-                player.points[pointString] = (player.points[pointString] ?: 0.0) - amountNum
+                player.points[pointString] = player.points[pointString] - amountNum
             }
             sender.sendMessage(plugin.langYml.getMessage("points-taken-all")
                 .replace("%point%", pointString.toFriendlyPointName())
@@ -77,7 +76,7 @@ internal class CommandPointsTake(plugin: EcoPlugin): Subcommand(
             return
         }
 
-        player.points[pointString] = (player.points[pointString] ?: 0.0) - amountNum
+        player.points[pointString] = player.points[pointString] - amountNum
 
         sender.sendMessage(plugin.langYml.getMessage("points-taken")
             .replace("%playername%", player.name)

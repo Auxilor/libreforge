@@ -71,12 +71,16 @@ object EffectPermanentPotionEffect : Effect<NoCompileData>("permanent_potion_eff
     @EventHandler
     fun onRespawn(event: PlayerRespawnEvent) {
         val player = event.player
-        val types = getHolderData(player)
-            .values
-            .map { it.effectType }
-            .toSet()
 
-        types.forEach { refreshEffectsOfType(player, it) }
+        plugin.server.scheduler.runTask(plugin, Runnable {
+            val types = getHolderData(player)
+                .values
+                .map { it.effectType }
+                .toSet()
+
+            types.forEach { refreshEffectsOfType(player, it) }
+            }
+        )
     }
 
     override fun onEnable(

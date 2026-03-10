@@ -42,11 +42,11 @@ abstract class ItemHolderFinder<T : Holder> {
     fun findHolders(entity: LivingEntity, slot: SlotType): List<TypedProvidedHolder<T>> {
         val items = slot.getItems(entity)
 
-        val holders = items.map { item ->
+        val holders = items.flatMap { item ->
             this.find(item)
                 .filter { holder -> isValidInSlot(holder, slot) }
                 .map { holder -> SlotItemProvidedHolder(holder, item, slot) }
-        }.flatten()
+        }
 
         return holders
     }
