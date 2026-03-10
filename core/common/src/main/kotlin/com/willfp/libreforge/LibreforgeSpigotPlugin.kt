@@ -17,7 +17,6 @@ import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.arguments.custom.CustomEffectArguments
 import com.willfp.libreforge.effects.impl.bossbar.BossBarProgressPlaceholder
 import com.willfp.libreforge.integrations.auraskills.AuraSkillsIntegration
-import com.willfp.libreforge.integrations.aureliumskills.AureliumSkillsIntegration
 import com.willfp.libreforge.integrations.axplugins.axenvoy.AxEnvoyIntegration
 import com.willfp.libreforge.integrations.axplugins.axtrade.AxTradeIntegration
 import com.willfp.libreforge.integrations.citizens.CitizensIntegration
@@ -195,8 +194,8 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
     override fun loadListeners(): List<Listener> {
         val listeners = mutableListOf(
             EffectDataFixer,
-            ItemRefreshListener(this),
-            EntityRefreshListener(this)
+            ItemRefreshListener,
+            EntityRefreshListener
         )
 
         if (Prerequisite.HAS_PAPER.isMet) {
@@ -209,7 +208,6 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
     override fun loadIntegrationLoaders(): List<IntegrationLoader> {
         return listOf(
             IntegrationLoader("AuraSkills") { AuraSkillsIntegration.load(this) },
-            IntegrationLoader("AureliumSkills") { AureliumSkillsIntegration.load(this) },
             IntegrationLoader("Jobs") { JobsIntegration.load(this) },
             IntegrationLoader("LevelledMobs") { LevelledMobsIntegration.load(this) },
             IntegrationLoader("mcMMO") { McMMOIntegration.load(this) },
@@ -242,8 +240,8 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
 
     override fun loadPluginCommands(): List<PluginCommand> {
         return listOf(
-            CommandLrcdb(this),
-            CommandLibreforge(this)
+            CommandLrcdb,
+            CommandLibreforge
         )
     }
 

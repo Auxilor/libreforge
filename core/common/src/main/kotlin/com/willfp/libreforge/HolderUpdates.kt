@@ -1,7 +1,6 @@
 package com.willfp.libreforge
 
 import com.github.benmanes.caffeine.cache.Caffeine
-import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.events.ArmorChangeEvent
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
@@ -18,9 +17,7 @@ import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 @Suppress("unused", "UNUSED_PARAMETER")
-class ItemRefreshListener(
-    private val plugin: EcoPlugin
-) : Listener {
+object ItemRefreshListener : Listener {
     private val inventoryClickTimeouts = Caffeine.newBuilder()
         .expireAfterWrite(
             plugin.configYml.getInt("refresh.inventory-click.timeout").toLong(),

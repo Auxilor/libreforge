@@ -9,7 +9,6 @@ import org.bukkit.event.HandlerList
 import org.bukkit.event.block.BlockDropItemEvent
 import org.bukkit.event.entity.EntityDeathEvent
 import org.bukkit.event.player.PlayerDropItemEvent
-import org.bukkit.event.player.PlayerFishEvent
 import org.bukkit.inventory.ItemStack
 
 

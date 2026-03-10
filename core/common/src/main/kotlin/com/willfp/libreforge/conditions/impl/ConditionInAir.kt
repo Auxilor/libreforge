@@ -16,6 +16,6 @@ object ConditionInAir : Condition<NoCompileData>("in_air") {
         compileData: NoCompileData
     ): Boolean {
         val location = dispatcher.location ?: return false
-        return location.block.getRelative(BlockFace.DOWN).type == Material.AIR;
+        return location.block.getRelative(BlockFace.DOWN).type == Material.AIR
     }
 }

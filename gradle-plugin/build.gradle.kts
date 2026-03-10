@@ -6,10 +6,11 @@ plugins {
 dependencies {
     implementation(gradleApi())
     implementation(localGroovy())
+    compileOnly("com.gradleup.shadow:shadow-gradle-plugin:9.3.1")
 }
 
 group = "com.willfp"
-version = "1.0.3"
+version = "2.0.0"
 
 tasks {
     build {

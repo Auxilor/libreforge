@@ -17,10 +17,9 @@ object FilterCustomFishType : Filter<NoCompileData, Collection<String>>("custom_
         val lootId = event.loot.id()
         val itemStack = (event.entity as? Item)?.itemStack?.type?.name
 
-        return if (lootId == "vanilla") {
-            return value.any { it.equals(itemStack, ignoreCase = true) }
-        } else {
-            return value.any { it.equals(lootId, ignoreCase = true) }
-        }
+        return if (lootId == "vanilla")
+            value.any { it.equals(itemStack, ignoreCase = true) }
+        else
+            value.any { it.equals(lootId, ignoreCase = true) }
     }
 }

@@ -27,27 +27,27 @@ import com.willfp.libreforge.triggers.Triggers
 
 object LandsIntegration : LoadableIntegration {
     override fun load(plugin: EcoPlugin) {
-        Conditions.register(ConditionHasLandsRole) // Seperate
-        Conditions.register(ConditionInTrustedClaim) // Combined (not applicable though
+        Conditions.register(ConditionHasLandsRole) // Separate
+        Conditions.register(ConditionInTrustedClaim) // Combined (not applicable though)
         Conditions.register(ConditionInOwnClaim) // Combined
-        Conditions.register(ConditionLandsBalanceAbove) // Seperate
-        Conditions.register(ConditionLandsBalanceBelow) // Seperate
-        Conditions.register(ConditionLandsBalanceEqual) // Seperate
-        Effects.register(EffectGiveLandsBalance) // Seperate
-        Effects.register(EffectSetLandsBalance) // Seperate
+        Conditions.register(ConditionLandsBalanceAbove) // Separate
+        Conditions.register(ConditionLandsBalanceBelow) // Separate
+        Conditions.register(ConditionLandsBalanceEqual) // Separate
+        Effects.register(EffectGiveLandsBalance) // Separate
+        Effects.register(EffectSetLandsBalance) // Separate
         Filters.register(FilterAtWarWithVictim) // Potentially combined
         Triggers.register(TriggerClaim) // Combined
         Triggers.register(TriggerEnterClaim) // Combined
-        Triggers.register(TriggerJoinLand) // Seperate
-        Triggers.register(TriggerLandsBankDeposit) // Seperate
-        Triggers.register(TriggerLandsBankWithdraw) // Seperate
-        Triggers.register(TriggerLandsSpawnTeleport) // Seperate
+        Triggers.register(TriggerJoinLand) // Separate
+        Triggers.register(TriggerLandsBankDeposit) // Separate
+        Triggers.register(TriggerLandsBankWithdraw) // Separate
+        Triggers.register(TriggerLandsSpawnTeleport) // Separate
         Triggers.register(TriggerExitClaim) // Combined
-        Triggers.register(TriggerLeaveLand) // Seperate
+        Triggers.register(TriggerLeaveLand) // Separate
         Triggers.register(TriggerUnclaim) // Combined
     }
 
-    override fun getPluginName(): String? {
+    override fun getPluginName(): String {
         return "Lands"
     }
 }
