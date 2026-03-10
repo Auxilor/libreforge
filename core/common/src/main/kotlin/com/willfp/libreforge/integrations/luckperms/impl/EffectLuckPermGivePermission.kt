@@ -10,6 +10,7 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.get
 import com.willfp.libreforge.integrations.luckperms.LuckPermsIntegration.getLuckPermsUser
+import com.willfp.libreforge.integrations.luckperms.LuckPermsIntegration.saveChanges
 import net.luckperms.api.node.types.PermissionNode
 import org.bukkit.entity.Player
 import java.util.UUID
@@ -36,6 +37,7 @@ object EffectLuckPermGivePermission : Effect<NoCompileData>("give_permission") {
 
         permissions[player.uniqueId].add(GivenPermission(node, player.uniqueId))
         user.data().add(node)
+        user.saveChanges()
     }
 
     override fun onDisable(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder) {
@@ -47,6 +49,7 @@ object EffectLuckPermGivePermission : Effect<NoCompileData>("give_permission") {
 
         permissions[player.uniqueId].remove(givenPermission)
         user.data().remove(givenPermission.node)
+        user.saveChanges()
     }
 
     private data class GivenPermission(

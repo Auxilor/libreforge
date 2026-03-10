@@ -23,4 +23,8 @@ object LuckPermsIntegration : LoadableIntegration {
     fun Player.getLuckPermsUser(): User? {
         return LuckPermsProvider.get().userManager.getUser(uniqueId)
     }
+
+    fun User.saveChanges() {
+        LuckPermsProvider.get().userManager.saveUser(this)
+    }
 }
