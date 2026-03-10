@@ -3,7 +3,7 @@ dependencies {
         isTransitive = false
     }
     implementation("com.willfp:ModelEngineBridge:1.3.0")
-    compileOnly("io.github.toxicity188:bettermodel-bukkit-api:2.0.0") {
+    compileOnly("io.github.toxicity188:bettermodel-bukkit-api:2.2.0") {
         exclude("*", "kotlin-stdlib")
     }
 
