@@ -1,8 +1,8 @@
 package com.willfp.libreforge.effects.arguments.impl
 
+import com.willfp.eco.core.sound.PlayableSound
 import com.willfp.eco.util.NumberUtils
 import com.willfp.eco.util.PlayerUtils
-import com.willfp.eco.util.SoundUtils
 import com.willfp.eco.util.StringUtils
 import com.willfp.libreforge.ConfigurableElement
 import com.willfp.libreforge.NoCompileData
@@ -45,14 +45,7 @@ object ArgumentPointCost : EffectArgument<NoCompileData>("point_cost") {
             player.sendMessage(message)
         }
 
-        if (plugin.configYml.getBool("cannot-afford-type.sound.enabled")) {
-            player.playSound(
-                player.location,
-                SoundUtils.getSound(plugin.configYml.getString("cannot-afford-type.sound.sound"))!!,
-                1.0f,
-                plugin.configYml.getDouble("cannot-afford-type.sound.pitch").toFloat()
-            )
-        }
+        PlayableSound.create(plugin.configYml.getSubsection("cannot-afford-type.sound"))?.playTo(player)
     }
 
     override fun ifMet(element: ConfigurableElement, trigger: DispatchedTrigger, compileData: NoCompileData) {

@@ -1,11 +1,11 @@
 package com.willfp.libreforge.commands
 
-import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.command.impl.Subcommand
 import com.willfp.eco.util.formatEco
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.GlobalDispatcher
 import com.willfp.libreforge.get
+import com.willfp.libreforge.plugin
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.impl.TriggerGroupCustom
@@ -15,9 +15,7 @@ import org.bukkit.entity.LivingEntity
 import org.bukkit.util.StringUtil
 import java.util.UUID
 
-internal class CommandTrigger(
-    plugin: EcoPlugin
-) : Subcommand(
+internal object CommandTrigger : Subcommand(
     plugin,
     "trigger",
     "libreforge.command.trigger",
@@ -81,17 +79,19 @@ internal class CommandTrigger(
     }
 
     override fun tabComplete(sender: CommandSender, args: List<String>): List<String> {
-        return when(args.size) {
+        return when (args.size) {
             1 -> StringUtil.copyPartialMatches(
                 args[0],
                 listOf("global", "server", "all", "everyone") + Bukkit.getOnlinePlayers().map { it.name },
                 mutableListOf()
             )
+
             2 -> StringUtil.copyPartialMatches(
                 args[1],
                 TriggerGroupCustom.knownTriggers + "mycustomtrigger",
                 mutableListOf()
             )
+
             else -> StringUtil.copyPartialMatches(
                 args[2],
                 listOf("0.5", "1", "2", "5"),

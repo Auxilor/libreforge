@@ -1,17 +1,16 @@
 package com.willfp.libreforge.commands
 
-import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.command.impl.Subcommand
 import com.willfp.eco.util.toNiceString
 import com.willfp.libreforge.globalPoints
+import com.willfp.libreforge.plugin
 import com.willfp.libreforge.points
 import com.willfp.libreforge.toFriendlyPointName
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.util.StringUtil
 
-@Suppress("UsagesOfObsoleteApi")
-internal class CommandPointsGet(plugin: EcoPlugin): Subcommand(
+internal object CommandPointsGet : Subcommand(
     plugin,
     "get",
     "libreforge.command.points.get",
@@ -41,20 +40,22 @@ internal class CommandPointsGet(plugin: EcoPlugin): Subcommand(
 
         val amountNum = player?.points?.get(pointString) ?: globalPoints[pointString]
 
-        sender.sendMessage(plugin.langYml.getMessage("points-amount")
-            .replace("%playername%", player?.name ?: "server")
-            .replace("%point%", pointString.toFriendlyPointName())
-            .replace("%amount%", amountNum.toNiceString())
+        sender.sendMessage(
+            plugin.langYml.getMessage("points-amount")
+                .replace("%playername%", player?.name ?: "server")
+                .replace("%point%", pointString.toFriendlyPointName())
+                .replace("%amount%", amountNum.toNiceString())
         )
     }
 
     override fun tabComplete(sender: CommandSender, args: List<String>): List<String> {
-        return when(args.size) {
+        return when (args.size) {
             1 -> StringUtil.copyPartialMatches(
                 args[0],
                 Bukkit.getOnlinePlayers().map { it.name },
                 mutableListOf("global")
             )
+
             2 -> listOf("point")
             else -> mutableListOf()
         }

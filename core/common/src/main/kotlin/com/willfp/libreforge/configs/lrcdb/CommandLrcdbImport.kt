@@ -1,19 +1,19 @@
 package com.willfp.libreforge.configs.lrcdb
 
-import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.command.impl.Subcommand
 import com.willfp.eco.core.commands.notifyNull
 import com.willfp.eco.core.config.ConfigType
 import com.willfp.eco.core.config.readConfig
 import com.willfp.libreforge.Plugins
 import com.willfp.libreforge.configs.onLrcdbThread
+import com.willfp.libreforge.plugin
 import org.bukkit.command.CommandSender
 import java.io.BufferedReader
 import java.io.File
 import java.net.HttpURLConnection
 import java.net.URI
 
-class CommandLrcdbImport(plugin: EcoPlugin) : Subcommand(
+internal object CommandLrcdbImport : Subcommand(
     plugin,
     "import",
     "libreforge.command.lrcdb",

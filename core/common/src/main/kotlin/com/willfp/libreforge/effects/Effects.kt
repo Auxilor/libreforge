@@ -22,6 +22,7 @@ import com.willfp.libreforge.effects.impl.EffectAddGlobalPoints
 import com.willfp.libreforge.effects.impl.EffectAddHolder
 import com.willfp.libreforge.effects.impl.EffectAddHolderInRadius
 import com.willfp.libreforge.effects.impl.EffectAddHolderToVictim
+import com.willfp.libreforge.effects.impl.EffectAddLuck
 import com.willfp.libreforge.effects.impl.EffectAddPermanentHolderInRadius
 import com.willfp.libreforge.effects.impl.EffectAddPoints
 import com.willfp.libreforge.effects.impl.EffectAgeCrop
@@ -113,6 +114,7 @@ import com.willfp.libreforge.effects.impl.EffectMultiplyVelocity
 import com.willfp.libreforge.effects.impl.EffectNameEntity
 import com.willfp.libreforge.effects.impl.EffectOpenCrafting
 import com.willfp.libreforge.effects.impl.EffectOpenEnderChest
+import com.willfp.libreforge.effects.impl.EffectOxygenBonus
 import com.willfp.libreforge.effects.impl.EffectParticleAnimation
 import com.willfp.libreforge.effects.impl.EffectParticleLine
 import com.willfp.libreforge.effects.impl.EffectPayPrice
@@ -483,6 +485,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectAddHolder)
         register(EffectAddHolderInRadius)
         register(EffectAddHolderToVictim)
+        register(EffectAddLuck)
         register(EffectAddPermanentHolderInRadius)
         register(EffectAddPoints)
         register(EffectAgeCrop)
@@ -565,6 +568,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectNameEntity)
         register(EffectOpenCrafting)
         register(EffectOpenEnderChest)
+        register(EffectOxygenBonus)
         register(EffectParticleAnimation)
         register(EffectParticleLine)
         register(EffectPayPrice)

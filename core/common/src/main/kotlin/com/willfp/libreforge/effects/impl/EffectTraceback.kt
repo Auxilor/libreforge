@@ -20,7 +20,7 @@ object EffectTraceback : Effect<NoCompileData>("traceback") {
         require("seconds", "You must specify the amount of seconds to go back in time (1-30)!")
     }
 
-    private val key = "libreforge_traceback"
+    private const val key = "libreforge_traceback"
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val player = data.player ?: return false

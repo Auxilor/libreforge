@@ -1,7 +1,11 @@
-package com.willfp.libreforge.integrations.mythicmobs.impl
+package com.willfp.libreforge.integrations.custom_blocks.nexo.impl
 
+import com.nexomc.nexo.api.events.custom_block.NexoBlockBreakEvent
+import com.nexomc.nexo.api.events.furniture.NexoFurnitureBreakEvent
+import com.nexomc.nexo.utils.drops.Drop
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.drops.DropQueue
+import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.eco.core.map.listMap
 import com.willfp.eco.util.TelekinesisUtils
 import com.willfp.libreforge.Dispatcher
@@ -9,19 +13,13 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
-import com.willfp.libreforge.plugin
-import io.lumine.mythic.bukkit.BukkitAdapter
-import io.lumine.mythic.bukkit.events.MythicMobDeathEvent
-import org.bukkit.entity.Player
-import org.bukkit.entity.Projectile
-import org.bukkit.entity.Tameable
+import org.bukkit.GameMode
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import java.util.UUID
 
-object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
+object EffectNexoTelekinesis : Effect<NoCompileData>("telekinesis") {
     private val players = listMap<UUID, UUID>()
-    private var allowTamedMobKills: Boolean = false
 
     override fun onEnable(
         dispatcher: Dispatcher<*>,
@@ -31,7 +29,6 @@ object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
         compileData: NoCompileData
     ) {
         players[dispatcher.uuid].add(identifiers.uuid)
-        allowTamedMobKills = config.getBoolOrNull("on_tamed_mob_kills") ?: false
     }
 
     override fun onDisable(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder) {
@@ -43,36 +40,50 @@ object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-    fun handle(event: MythicMobDeathEvent) {
-        val victim = event.mob
-
-        if (victim is Player && !plugin.configYml.getBool("effects.telekinesis.on-players")) {
-            return
-        }
-
-        val killer = event.killer
-        val player = when (killer) {
-            is Player -> killer
-            is Projectile -> killer.shooter as? Player
-            is Tameable -> {
-                if (!killer.isTamed || !allowTamedMobKills) return
-                killer.owner as? Player
-            }
-            else -> null
-        } ?: return
-
+    fun NexoFurnitureBreakEvent.handle() {
         if (!TelekinesisUtils.testPlayer(player)) {
             return
         }
 
-        val drops = event.drops.filterNotNull()
+        if (!AntigriefManager.canBreakBlock(player, baseEntity.location.block)) {
+            return
+        }
+
+        if (player.gameMode == GameMode.CREATIVE || player.gameMode == GameMode.SPECTATOR) {
+            return
+        }
+
+        val drops = drop.loots.map { it.itemStack() }
+        drop = Drop.emptyDrop()
 
         DropQueue(player)
             .addItems(drops)
-            .setLocation(BukkitAdapter.adapt(victim.location))
             .forceTelekinesis()
             .push()
 
-        event.drops.clear()
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    fun NexoBlockBreakEvent.handle() {
+        if (!TelekinesisUtils.testPlayer(player)) {
+            return
+        }
+
+        if (!AntigriefManager.canBreakBlock(player, block)) {
+            return
+        }
+
+        if (player.gameMode == GameMode.CREATIVE || player.gameMode == GameMode.SPECTATOR) {
+            return
+        }
+
+        val drops = drop.loots.map { it.itemStack() }
+        drop = Drop.emptyDrop()
+
+        DropQueue(player)
+            .setLocation(block.location)
+            .addItems(drops)
+            .forceTelekinesis()
+            .push()
     }
 }

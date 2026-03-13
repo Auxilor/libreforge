@@ -36,6 +36,9 @@ object EffectDamageVictim : Effect<NoCompileData>("damage_victim") {
             }
         } else {
             if (config.getBool("use_source")) {
+                if (player == victim) {
+                    return true
+                }
                 victim.damage(damage, player)
             } else {
                 victim.damage(damage)

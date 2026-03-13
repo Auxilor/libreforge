@@ -12,6 +12,7 @@ import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.block.Container
+import org.bukkit.block.data.BlockData
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.block.BlockDropItemEvent
@@ -52,7 +53,7 @@ object TriggerBlockItemDrop : Trigger("block_item_drop") {
             player.toDispatcher(),
             TriggerData(
                 player = player,
-                block = BrokenBlock(block, event.blockState.type), // Fixes the type always being AIR
+                block = BrokenBlock(block, event.blockState.type, event.blockState.blockData), // Fixes the type always being AIR
                 location = block.location,
                 event = editableEvent,
                 item = null,
@@ -76,8 +77,10 @@ object TriggerBlockItemDrop : Trigger("block_item_drop") {
 
     private class BrokenBlock(
         private val block: Block,
-        private val type: Material
+        private val type: Material,
+        private val data: BlockData
     ): Block by block {
         override fun getType() = type
+        override fun getBlockData(): BlockData = data
     }
 }
