@@ -10,6 +10,7 @@ import com.willfp.eco.core.items.Items
 import com.willfp.eco.util.ClassUtils
 import com.willfp.libreforge.commands.CommandLibreforge
 import com.willfp.libreforge.configs.ChainsYml
+import com.willfp.libreforge.configs.PlaceholdersYml
 import com.willfp.libreforge.configs.TagsYml
 import com.willfp.libreforge.configs.lrcdb.CommandLrcdb
 import com.willfp.libreforge.display.ItemFlagDisplay
@@ -65,6 +66,7 @@ internal lateinit var plugin: LibreforgeSpigotPlugin
 class LibreforgeSpigotPlugin : EcoPlugin() {
     val chainsYml = ChainsYml(this)
     val tagsYml = TagsYml(this)
+    val placeholdersYml = PlaceholdersYml(this)
 
     val dispatchedTriggerFactory = DispatchedTriggerFactory(this)
 
@@ -138,7 +140,7 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             Items.registerTag(CustomTag(config, this))
         }
 
-        for (customPlaceholder in this.configYml.getSubsections("placeholders")) {
+        for (customPlaceholder in this.placeholdersYml.getSubsections("placeholders")) {
             CustomPlaceholders.load(customPlaceholder, this)
         }
 
