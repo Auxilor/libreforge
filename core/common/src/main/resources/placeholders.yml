@@ -1,0 +1,25 @@
+# Custom placeholders, usable anywhere PlaceholderAPI is supported and anywhere in configs.
+# They'll be prefixed with libreforge_, so for example 'level' would be '%libreforge_level%' when used.
+
+placeholders:
+  - id: "example_placeholder" # The placeholder ID
+    value: "This is an example placeholder!" # The value of the placeholder
+
+  - id: "example_expression_placeholder"
+    value: "%level% * 2" # Mathematical expressions are fully supported!
+
+  - id: "conditional_placeholder"
+    default: 5 # (Optional) Specify a default value if no conditions are true
+    values:
+      - conditions: # Full condition system support!
+          - id: has_permission
+            args:
+              permission: "ecomc.rank.netherite"
+        value: 20
+
+      - conditions:
+          - id: has_permission
+            args:
+              permission: "ecomc.rank.diamond"
+        value: 10
+
