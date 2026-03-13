@@ -9,7 +9,7 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
-object EffectSetBlock : Effect<TestableBlock?>("set_block") {
+object EffectSetBlock : Effect<TestableBlock>("set_block") {
     override val parameters = setOf(
         TriggerParameter.BLOCK
     )
@@ -18,16 +18,15 @@ object EffectSetBlock : Effect<TestableBlock?>("set_block") {
         require("block", "You must specify the block!")
     }
 
-    override fun onTrigger(config: Config, data: TriggerData, compileData: TestableBlock?): Boolean {
+    override fun onTrigger(config: Config, data: TriggerData, compileData: TestableBlock): Boolean {
         val block = data.block ?: data.location?.block ?: return false
-        compileData ?: return false
 
         compileData.place(block.location)
 
         return true
     }
 
-    override fun makeCompileData(config: Config, context: ViolationContext): TestableBlock? {
+    override fun makeCompileData(config: Config, context: ViolationContext): TestableBlock {
         return Blocks.lookup(config.getString("block"))
     }
 }
