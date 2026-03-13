@@ -8,6 +8,7 @@ import com.willfp.eco.core.integrations.IntegrationLoader
 import com.willfp.eco.core.integrations.afk.AFKManager
 import com.willfp.eco.core.items.Items
 import com.willfp.eco.util.ClassUtils
+import com.willfp.libreforge.commands.CommandEmpty
 import com.willfp.libreforge.commands.CommandLibreforge
 import com.willfp.libreforge.configs.ChainsYml
 import com.willfp.libreforge.configs.TagsYml
@@ -110,7 +111,6 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             PurpurIntegration.load(this)
         }
 
-
         pointsPlaceholder(this).register()
         globalPointsPlaceholder(this).register()
         ItemPointsPlaceholder(this).register()
@@ -124,6 +124,10 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
     }
 
     override fun handleReload() {
+        configYml.getStrings("empty-commands")
+            .map { CommandEmpty(it) }
+            .forEach { it.register() }
+
         for (config in chainsYml.getSubsections("chains")) {
             Effects.register(
                 config.getString("id"),
@@ -232,7 +236,7 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             IntegrationLoader("EdPrison") { EdPrisonCoreIntegration.load(this) },
             IntegrationLoader("MythicMobs") { MythicMobsIntegration.load(this) },
             IntegrationLoader("Nexo") { NexoIntegration.load(this) },
-            IntegrationLoader("Oraxen") { OraxenIntegration.load(this)}
+            IntegrationLoader("Oraxen") { OraxenIntegration.load(this) }
         )
     }
 

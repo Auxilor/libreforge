@@ -168,3 +168,6 @@ refresh:
     # Inventory clicks refresh active holders, but a group of malicious users spamming can cause server lag.
     # Setting a timeout ensures only one click triggers a refresh within the specified time (in milliseconds).
     timeout: 500
+
+# Commands that do nothing, useful for *run_command* trigger
+empty-commands: []
