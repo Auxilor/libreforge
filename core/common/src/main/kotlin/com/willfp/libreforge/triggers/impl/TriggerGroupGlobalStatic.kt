@@ -1,5 +1,7 @@
 package com.willfp.libreforge.triggers.impl
 
+import com.willfp.eco.core.placeholder.context.placeholderContext
+import com.willfp.eco.util.evaluateExpressionOrNull
 import com.willfp.libreforge.GlobalDispatcher
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.Trigger
@@ -9,10 +11,16 @@ import com.willfp.libreforge.triggers.TriggerParameter
 
 object TriggerGroupGlobalStatic : TriggerGroup("global_static") {
     private val registry = mutableMapOf<Int, TriggerGlobalStatic>()
+    private val dynamicRegistry = mutableMapOf<String, TriggerDynamicGlobalStatic>()
     private var tick = 0
 
     override fun create(value: String): Trigger? {
-        val interval = value.toIntOrNull() ?: return null
+        val interval = value.toIntOrNull()
+
+        if (interval == null) {
+            return dynamicRegistry.getOrPut(value) { TriggerDynamicGlobalStatic(value) }
+        }
+
         if (interval < 1) {
             return null
         }
@@ -32,10 +40,36 @@ object TriggerGroupGlobalStatic : TriggerGroup("global_static") {
                     )
                 }
             }
+
+            for ((_, trigger) in dynamicRegistry) {
+                trigger.dispatchIfMet(tick)
+            }
         }
     }
 
     private class TriggerGlobalStatic(interval: Int) : Trigger("global_static_$interval") {
         override val parameters = emptySet<TriggerParameter>()
+    }
+
+    private class TriggerDynamicGlobalStatic(
+        private val expression: String
+    ) : Trigger("global_static_expr_${expression.hashCode()}") {
+        override val parameters = emptySet<TriggerParameter>()
+
+        fun dispatchIfMet(tick: Int) {
+            val interval = evaluateExpressionOrNull(
+                expression,
+                placeholderContext()
+            )?.toInt() ?: return
+
+            if (interval < 1 || tick % interval != 0) {
+                return
+            }
+
+            this.dispatch(
+                GlobalDispatcher,
+                TriggerData()
+            )
+        }
     }
 }
