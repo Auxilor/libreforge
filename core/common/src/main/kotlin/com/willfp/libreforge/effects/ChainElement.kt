@@ -5,6 +5,7 @@ import com.willfp.libreforge.Compiled
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.Weighted
+import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.conditions.ConditionList
 import com.willfp.libreforge.effects.arguments.EffectArgumentList
 import com.willfp.libreforge.effects.events.EffectDisableEvent
@@ -23,6 +24,7 @@ import java.util.UUID
 class ChainElement<T> internal constructor(
     val effect: Effect<T>,
     override val config: Config,
+    private val elementConfig: Config,
     override val compileData: T,
     override val arguments: EffectArgumentList,
     override val conditions: ConditionList,
@@ -35,6 +37,18 @@ class ChainElement<T> internal constructor(
     override val supportsDelay = effect.supportsDelay
 
     val runOrder = forceRunOrder ?: effect.runOrder
+
+    fun getWeight(trigger: DispatchedTrigger): Double {
+        if (!elementConfig.has("weight")) {
+            return weight
+        }
+
+        elementConfig.addInjectablePlaceholder(trigger.placeholders)
+
+        return runCatching {
+            elementConfig.getDoubleFromExpression("weight", trigger.data)
+        }.getOrDefault(weight)
+    }
 
     fun enable(
         dispatcher: Dispatcher<*>,
