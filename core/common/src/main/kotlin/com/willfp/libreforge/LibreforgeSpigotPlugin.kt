@@ -22,6 +22,7 @@ import com.willfp.libreforge.effects.impl.bossbar.BossBarProgressPlaceholder
 import com.willfp.libreforge.integrations.auraskills.AuraSkillsIntegration
 import com.willfp.libreforge.integrations.axplugins.axenvoy.AxEnvoyIntegration
 import com.willfp.libreforge.integrations.axplugins.axtrade.AxTradeIntegration
+import com.willfp.libreforge.integrations.bettermodel.BetterModelIntegration
 import com.willfp.libreforge.integrations.citizens.CitizensIntegration
 import com.willfp.libreforge.integrations.custom_blocks.nexo.NexoIntegration
 import com.willfp.libreforge.integrations.custom_blocks.oraxen.OraxenIntegration
@@ -232,6 +233,7 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             IntegrationLoader("AxTrade") { AxTradeIntegration.load(this) },
             IntegrationLoader("Votifier") { VotifierIntegration.load(this) },
             IntegrationLoader("ModelEngine") { ModelEngineIntegration.load(this) },
+            IntegrationLoader("BetterModel") { BetterModelIntegration.load(this) },
             IntegrationLoader("FancyNpcs") { FancyNPCsIntegration.load(this) },
             IntegrationLoader("UltimateMobCoins") { UltimateMobCoinsIntegration.load(this) },
             IntegrationLoader("HuskTowns") { HuskTownsIntegration.load(this) },
