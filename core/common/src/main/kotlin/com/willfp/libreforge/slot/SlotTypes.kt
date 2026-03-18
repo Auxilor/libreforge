@@ -14,9 +14,6 @@ import com.willfp.libreforge.slot.impl.SlotTypeMainhand
 import com.willfp.libreforge.slot.impl.SlotTypeOffhand
 
 object SlotTypes : Registry<SlotType>() {
-    @Deprecated("Use SlotTypeMainhand instead", ReplaceWith("SlotTypeMainhand"), level = DeprecationLevel.ERROR)
-    val mainHandSlot = SlotTypeMainhand
-
     lateinit var baseTypes: List<SlotType>
         private set
 
