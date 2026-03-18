@@ -5,10 +5,8 @@ import com.willfp.libreforge.DelegatedList
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.applyHolder
-import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.toPlaceholderContext
 import com.willfp.libreforge.triggers.DispatchedTrigger
-import org.bukkit.entity.Player
 
 /**
  * A list of conditions.
@@ -67,34 +65,6 @@ class ConditionList(
 
         return lines
     }
-
-    @Deprecated(
-        "Use areMet(dispatcher, holder) instead.",
-        ReplaceWith("areMet(player.toDispatcher(), holder)"),
-        DeprecationLevel.ERROR
-    )
-    fun areMet(player: Player, holder: ProvidedHolder): Boolean =
-        areMet(player.toDispatcher(), holder)
-
-    /**
-     * Get if any conditions are not met and should be shown.
-     */
-    @Deprecated(
-        "Use isShowingAnyNotMet(dispatcher, holder) instead.",
-        ReplaceWith("isShowingAnyNotMet(player.toDispatcher(), holder)"),
-        DeprecationLevel.ERROR
-    )
-    fun isShowingAnyNotMet(player: Player, holder: ProvidedHolder): Boolean =
-        isShowingAnyNotMet(player.toDispatcher(), holder)
-
-    @Deprecated(
-        "Use getNotMetLines(dispatcher, holder) instead.",
-        ReplaceWith("getNotMetLines(player.toDispatcher(), holder)"),
-        DeprecationLevel.ERROR
-    )
-    fun getNotMetLines(player: Player, holder: ProvidedHolder): List<String> =
-        getNotMetLines(player.toDispatcher(), holder)
-}
 
 /**
  * Create an empty [ConditionList].
