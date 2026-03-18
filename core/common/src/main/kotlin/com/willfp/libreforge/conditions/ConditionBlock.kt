@@ -7,11 +7,8 @@ import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.applyHolder
 import com.willfp.libreforge.effects.Chain
-import com.willfp.libreforge.get
 import com.willfp.libreforge.plugin
-import com.willfp.libreforge.toDispatcher
 import org.bukkit.Bukkit
-import org.bukkit.entity.Player
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 
@@ -70,24 +67,10 @@ class ConditionBlock<T> internal constructor(
 
         val dispatcherMet = condition.isMet(dispatcher, withHolder, holder, compileData)
 
-        // Support for legacy conditions
-        @Suppress("DEPRECATION")
-        val metWith = dispatcher.get<Player>()?.let { condition.isMet(it, withHolder, holder, compileData) } ?: true
-        @Suppress("DEPRECATION")
-        val metWithout = dispatcher.get<Player>()?.let { condition.isMet(it, withHolder, compileData) } ?: true
-
-        val isMet = (metWith && metWithout && dispatcherMet) xor isInverted
+        val isMet = dispatcherMet xor isInverted
 
         syncMetCache.put(dispatcher.uuid, isMet)
 
         return isMet
     }
-
-    @Deprecated(
-        "Use isMet(dispatcher, holder) instead",
-        ReplaceWith("isMet(player.toDispatcher(), holder)"),
-        DeprecationLevel.ERROR
-    )
-    fun isMet(player: Player, holder: ProvidedHolder): Boolean =
-        isMet(player.toDispatcher(), holder)
 }
