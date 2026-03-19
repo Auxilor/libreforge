@@ -12,10 +12,8 @@ import com.willfp.libreforge.effects.events.EffectDisableEvent
 import com.willfp.libreforge.effects.events.EffectEnableEvent
 import com.willfp.libreforge.filters.FilterList
 import com.willfp.libreforge.mutators.MutatorList
-import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.DispatchedTrigger
 import org.bukkit.Bukkit
-import org.bukkit.entity.Player
 import java.util.UUID
 
 /**

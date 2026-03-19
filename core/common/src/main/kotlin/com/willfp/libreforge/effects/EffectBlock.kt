@@ -7,11 +7,9 @@ import com.willfp.libreforge.conditions.ConditionList
 import com.willfp.libreforge.effects.arguments.EffectArgumentList
 import com.willfp.libreforge.filters.FilterList
 import com.willfp.libreforge.mutators.MutatorList
-import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.DispatchedTrigger
 import com.willfp.libreforge.triggers.PotentiallyTriggerable
 import com.willfp.libreforge.triggers.Trigger
-import org.bukkit.entity.Player
 import java.util.Objects
 import java.util.UUID
 
@@ -50,31 +48,6 @@ class EffectBlock internal constructor(
         holder: ProvidedHolder,
         isReload: Boolean = false
     ) = effects.forEach { it.disable(dispatcher, holder, isReload = isReload) }
-
-    @Deprecated(
-        "Use enable(Dispatcher<*>, ProvidedHolder, Boolean)",
-        ReplaceWith("enable(player.toDispatcher(), holder, isReload)"),
-        DeprecationLevel.ERROR
-    )
-    @JvmOverloads
-    fun enable(
-        player: Player,
-        holder: ProvidedHolder,
-        isReload: Boolean = false
-    ): Unit = enable(player.toDispatcher(), holder, isReload = isReload)
-
-    @Deprecated(
-        "Use disable(Dispatcher<*>, ProvidedHolder, Boolean)",
-        ReplaceWith("disable(player.toDispatcher(), holder, isReload)"),
-        DeprecationLevel.ERROR
-    )
-    @JvmOverloads
-    fun disable(
-        player: Player,
-        holder: ProvidedHolder,
-        isReload: Boolean = false
-    ): Unit = disable(player.toDispatcher(), holder, isReload = isReload)
-
 
     fun tryTrigger(trigger: DispatchedTrigger) {
         if (canBeTriggeredBy(trigger.trigger)) {
