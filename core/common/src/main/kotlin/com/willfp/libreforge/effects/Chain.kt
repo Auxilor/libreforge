@@ -4,12 +4,10 @@ import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.WeightedList
 import com.willfp.libreforge.effects.executors.ChainExecutor
 import com.willfp.libreforge.get
-import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.DispatchedTrigger
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.impl.TriggerBlank
-import org.bukkit.entity.Player
 
 /**
  * A list of effect blocks.
@@ -38,19 +36,5 @@ class Chain internal constructor(
         executor: ChainExecutor = this.executor
     ): Boolean {
         return executor.execute(this, DispatchedTrigger(dispatcher, trigger, data))
-    }
-
-    @Deprecated(
-        "Use trigger(Dispatcher<*>, TriggerData, Trigger, ChainExecutor)",
-        ReplaceWith("trigger(player.toDispatcher(), data, trigger, executor)"),
-        DeprecationLevel.ERROR
-    )
-    fun trigger(
-        player: Player,
-        data: TriggerData = TriggerData(player = player),
-        trigger: Trigger = TriggerBlank,
-        executor: ChainExecutor = this.executor
-    ): Boolean {
-        return trigger(player.toDispatcher(), data, trigger, executor)
     }
 }

@@ -10,7 +10,6 @@ import com.willfp.libreforge.ifType
 import com.willfp.libreforge.mutators.MutatorList
 import com.willfp.libreforge.mutators.emptyMutatorList
 import com.willfp.libreforge.plugin
-import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.DispatchedTrigger
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
@@ -210,21 +209,6 @@ abstract class Effect<T>(
     open fun postRegister() {
         // Override when needed.
     }
-
-
-
-    @Deprecated(
-        "Use enable(Dispatcher<*>, ProvidedHolder, ChainElement<T>, Boolean)",
-        ReplaceWith("enable(player.toDispatcher(), holder, config, isReload)"),
-        DeprecationLevel.ERROR
-    )
-    fun enable(
-        player: Player,
-        holder: ProvidedHolder,
-        config: ChainElement<T>,
-        isReload: Boolean = false
-    ): Unit = enable(player.toDispatcher(), holder, config, isReload)
-
     @Deprecated(
         "Use enable(Dispatcher<*>, ProvidedHolder, ChainElement<T>, Boolean)",
         ReplaceWith("enable(player.toDispatcher(), holder, config, isReload)")
@@ -239,16 +223,6 @@ abstract class Effect<T>(
         // Override when needed.
     }
 
-    @Deprecated(
-        "Use disable(Dispatcher<*>, ProvidedHolder, Boolean)",
-        ReplaceWith("disable(player.toDispatcher(), holder, isReload)"),
-        DeprecationLevel.ERROR
-    )
-    fun disable(
-        player: Player,
-        holder: ProvidedHolder,
-        isReload: Boolean = false
-    ): Unit = disable(player.toDispatcher(), holder, isReload)
 
     @Deprecated(
         "Use disable(Dispatcher<*>, ProvidedHolder, Boolean)",
