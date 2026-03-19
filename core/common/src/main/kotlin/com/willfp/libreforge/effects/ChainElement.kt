@@ -79,27 +79,4 @@ class ChainElement<T> internal constructor(
 
     override fun shouldTrigger(trigger: DispatchedTrigger): Boolean =
         effect.shouldTrigger(trigger, this)
-
-
-    @Deprecated(
-        "Use enable(Dispatcher<*>, ProvidedHolder, Boolean)",
-        ReplaceWith("enable(player.toDispatcher(), holder, isReload)"),
-        DeprecationLevel.ERROR
-    )
-    fun enable(
-        player: Player,
-        holder: ProvidedHolder,
-        isReload: Boolean = false
-    ): Unit = enable(player.toDispatcher(), holder, isReload)
-
-    @Deprecated(
-        "Use disable(Dispatcher<*>, ProvidedHolder, Boolean)",
-        ReplaceWith("disable(player.toDispatcher(), holder, isReload)"),
-        DeprecationLevel.ERROR
-    )
-    fun disable(
-        player: Player,
-        holder: ProvidedHolder,
-        isReload: Boolean = false
-    ): Unit = disable(player.toDispatcher(), holder, isReload)
 }
