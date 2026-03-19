@@ -6,8 +6,8 @@ chains:
       - id: shoot_arrow
         args:
           repeat:
-            times: "2 * %arrows%"
-            start: "-11 * %arrows%"
+            times: 3
+            start: -22
             increment: 22
           inherit_velocity: true
         mutators:
