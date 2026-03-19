@@ -6,7 +6,6 @@ import com.willfp.libreforge.Compilable
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.applyHolder
-import com.willfp.libreforge.ifType
 import com.willfp.libreforge.mutators.MutatorList
 import com.willfp.libreforge.mutators.emptyMutatorList
 import com.willfp.libreforge.plugin
@@ -15,7 +14,6 @@ import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.Triggers
-import org.bukkit.entity.Player
 import org.bukkit.event.Listener
 import java.util.UUID
 
@@ -86,12 +84,6 @@ abstract class Effect<T>(
         val withHolder = config.config.applyHolder(holder, dispatcher)
 
         onEnable(dispatcher, withHolder, identifierFactory.makeIdentifiers(count), holder, config.compileData)
-
-        // Legacy support
-        dispatcher.ifType<Player> {
-            @Suppress("DEPRECATION")
-            onEnable(it, withHolder, identifierFactory.makeIdentifiers(count), holder, config.compileData)
-        }
     }
 
     /**
@@ -126,12 +118,6 @@ abstract class Effect<T>(
         val count = effectCounter[dispatcher.uuid]--
 
         onDisable(dispatcher, identifierFactory.makeIdentifiers(count), holder)
-
-        // Legacy support
-        dispatcher.ifType<Player> {
-            @Suppress("DEPRECATION")
-            onDisable(it, identifierFactory.makeIdentifiers(count), holder)
-        }
     }
 
     /**
@@ -207,32 +193,6 @@ abstract class Effect<T>(
     }
 
     open fun postRegister() {
-        // Override when needed.
-    }
-    @Deprecated(
-        "Use enable(Dispatcher<*>, ProvidedHolder, ChainElement<T>, Boolean)",
-        ReplaceWith("enable(player.toDispatcher(), holder, config, isReload)")
-    )
-    protected open fun onEnable(
-        player: Player,
-        config: Config,
-        identifiers: Identifiers,
-        holder: ProvidedHolder,
-        compileData: T
-    ) {
-        // Override when needed.
-    }
-
-
-    @Deprecated(
-        "Use disable(Dispatcher<*>, ProvidedHolder, Boolean)",
-        ReplaceWith("disable(player.toDispatcher(), holder, isReload)")
-    )
-    protected open fun onDisable(
-        player: Player,
-        identifiers: Identifiers,
-        holder: ProvidedHolder
-    ) {
         // Override when needed.
     }
 }
