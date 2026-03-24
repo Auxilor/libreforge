@@ -41,6 +41,6 @@ object TriggerCatchFish : Trigger("catch_fish") {
             )
         )
 
-        event.expToDrop = editableEvent.items.sumOf { it.xp }
+        event.expToDrop += editableEvent.items.sumOf { it.xp }
     }
 }
