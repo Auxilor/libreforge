@@ -110,25 +110,6 @@ private val providers = mutableListOf<HolderProvider>()
 fun registerHolderProvider(provider: HolderProvider) = providers.add(provider)
 
 /**
- * Register a new holder provider.
- */
-@Deprecated(
-    "Use registerSpecificHolderProvider<Player> instead",
-    ReplaceWith("registerSpecificHolderProvider<Player>(provider)"),
-    DeprecationLevel.ERROR
-)
-fun registerHolderProvider(provider: (Player) -> Collection<ProvidedHolder>) =
-    registerHolderProvider(object : HolderProvider {
-        override fun provide(dispatcher: Dispatcher<*>): Collection<ProvidedHolder> {
-            dispatcher.ifType<Player> {
-                return provider(it)
-            }
-
-            return emptyList()
-        }
-    })
-
-/**
  * Register a new holder provider for all possible dispatchers.
  */
 fun registerGenericHolderProvider(provider: (Dispatcher<*>) -> Collection<ProvidedHolder>) =
@@ -160,19 +141,6 @@ private val refreshFunctions = mutableListOf<(Dispatcher<*>) -> Unit>()
  */
 fun registerRefreshFunction(function: (Dispatcher<*>) -> Unit) {
     refreshFunctions += function
-}
-
-@Deprecated(
-    "Use registerSpecificRefreshFunction<Player> instead",
-    ReplaceWith("registerSpecificRefreshFunction<Player>(function)"),
-    DeprecationLevel.ERROR
-)
-fun registerPlayerRefreshFunction(function: (Player) -> Unit) {
-    refreshFunctions += {
-        it.get<Player>()?.let { player ->
-            function(player)
-        }
-    }
 }
 
 /**
@@ -218,14 +186,6 @@ fun Dispatcher<*>.forceRefreshHolders() {
     this.updateHolders()
     this.updateEffects()
 }
-
-@Deprecated(
-    "Use refreshHolders on a dispatcher instead",
-    ReplaceWith("toDispatcher().refreshHolders()"),
-    DeprecationLevel.ERROR
-)
-fun Player.refreshHolders() =
-    this.toDispatcher().refreshHolders()
 
 private val holderPlaceholderProviders = mutableListOf<(ProvidedHolder, Dispatcher<*>) -> Collection<NamedValue>>()
 
@@ -327,28 +287,12 @@ inline fun <reified T : Holder> Dispatcher<*>.getHoldersOfType(): Collection<T> 
     return this.holders.mapNotNull { it.holder as? T }
 }
 
-@Deprecated(
-    "Use a dispatcher instead of a player",
-    ReplaceWith("toDispatcher().holders"),
-    DeprecationLevel.ERROR
-)
-val Player.holders: Collection<ProvidedHolder>
-    get() = this.toDispatcher().holders
-
 /**
  * Invalidate holder cache to force rescan.
  */
 fun Dispatcher<*>.updateHolders() {
     holderCache.invalidate(this.uuid)
 }
-
-@Deprecated(
-    "Use updateHolders on a dispatcher instead",
-    ReplaceWith("toDispatcher().updateHolders()"),
-    DeprecationLevel.ERROR
-)
-fun Player.updateHolders() =
-    this.toDispatcher().updateHolders()
 
 internal fun Dispatcher<*>.purgePreviousHolders() {
     previousHolders.remove(this.uuid)
@@ -382,41 +326,17 @@ fun Collection<ProvidedHolder>.getProvidedActiveEffects(dispatcher: Dispatcher<*
 fun ProvidedHolder.getActiveEffects(dispatcher: Dispatcher<*>) =
     this.holder.effects.filter { it.conditions.areMet(dispatcher, this) }.toSet()
 
-@Deprecated(
-    "Use getActiveEffects on a dispatcher instead",
-    ReplaceWith("getActiveEffects(player.toDispatcher())"),
-    DeprecationLevel.ERROR
-)
-fun ProvidedHolder.getActiveEffects(player: Player) =
-    getActiveEffects(player.toDispatcher())
-
 /**
  * Recalculate active effects.
  */
 fun Dispatcher<*>.calculateActiveEffects() =
     this.holders.getProvidedActiveEffects(this)
 
-@Deprecated(
-    "Use calculateActiveEffects on a dispatcher instead",
-    ReplaceWith("toDispatcher().calculateActiveEffects()"),
-    DeprecationLevel.ERROR
-)
-fun Player.calculateActiveEffects() =
-    this.toDispatcher().calculateActiveEffects()
-
 /**
  * The active effects.
  */
 val Dispatcher<*>.activeEffects: List<EffectBlock>
     get() = previousStates[this.uuid].map { it.effect }
-
-@Deprecated(
-    "Use activeEffects on a dispatcher instead",
-    ReplaceWith("toDispatcher().activeEffects"),
-    DeprecationLevel.ERROR
-)
-val Player.activeEffects: List<EffectBlock>
-    get() = this.toDispatcher().activeEffects
 
 /**
  * The active effects mapped to the holder that provided them.
@@ -459,13 +379,6 @@ fun Dispatcher<*>.updateEffects() {
     }
 }
 
-@Deprecated(
-    "Use updateEffects on a dispatcher instead",
-    ReplaceWith("toDispatcher().updateEffects()"),
-    DeprecationLevel.ERROR
-)
-fun Player.updateEffects() =
-    this.toDispatcher().updateEffects()
 
 /**
  * Removes all elements from the given [other] list that are contained in this list.

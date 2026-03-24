@@ -1,0 +1,17 @@
+# Custom commands - registered dynamically and unregistered on reload.
+# Supported alias arguments:
+# - <player>: required player argument
+# - <value>: required numeric argument
+# - [value]: optional numeric argument
+# Value args are exposed as %value% / %trigger_value% and %text% (when provided)
+
+commands:
+  - id: "example_command" # Unique ID for this command
+    alias: "examplecmd <player> <value>" # The command alias; argument tokens can be used in any order
+    permission: "libreforge.example_command" # Permission required to use this command (remove line for none)
+    effects: # Effects to run when the command is executed
+      - id: give_money
+        args:
+          amount: "%value%"
+        conditions:
+          - id: is_night

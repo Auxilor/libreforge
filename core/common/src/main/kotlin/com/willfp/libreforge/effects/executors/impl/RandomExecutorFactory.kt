@@ -10,7 +10,9 @@ object RandomExecutorFactory : ChainExecutorFactory("random") {
 
     object RandomChainExecutor : ChainExecutor {
         override fun execute(chain: Chain, trigger: DispatchedTrigger): Boolean {
-           return chain.random().trigger(trigger)
+           val element = chain.randomOrNull { it.getWeight(trigger) } ?: return false
+
+           return element.trigger(trigger)
         }
     }
 }

@@ -10,11 +10,9 @@ import com.willfp.libreforge.generatePlaceholders
 import com.willfp.libreforge.getProvidedActiveEffects
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.providedActiveEffects
-import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.event.TriggerDispatchEvent
 import com.willfp.libreforge.triggers.impl.TriggerAltClick
 import org.bukkit.Bukkit
-import org.bukkit.entity.Player
 import org.bukkit.event.Cancellable
 import org.bukkit.event.Listener
 
@@ -60,16 +58,6 @@ abstract class Trigger(
         }
     }
 
-    @Deprecated(
-        "Use dispatch(dispatcher, data, forceHolders) instead",
-        ReplaceWith("dispatch(player.toDispatcher(), data, forceHolders)"),
-        DeprecationLevel.ERROR
-    )
-    fun dispatch(
-        player: Player,
-        data: TriggerData,
-        forceHolders: Collection<ProvidedHolder>? = null
-    ) = dispatch(player.toDispatcher(), data, forceHolders)
 
     /**
      * Dispatch the trigger.

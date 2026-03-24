@@ -7,7 +7,6 @@ import com.willfp.libreforge.GlobalDispatcher
 import com.willfp.libreforge.NamedValue
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.getProvider
-import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.impl.TriggerBlank
 import org.bukkit.Location
 import org.bukkit.block.Block
@@ -94,16 +93,6 @@ class TriggerData(
         )
     }
 
-    /**
-     * Turn into a dispatched trigger for a [player].
-     */
-    @Deprecated(
-        "Use dispatch(dispatcher) instead",
-        ReplaceWith("dispatch(player.toDispatcher())"),
-        DeprecationLevel.ERROR
-    )
-    fun dispatch(player: Player) =
-        dispatch(player.toDispatcher())
 
     /**
      * Turn into a dispatched trigger for a new [dispatcher].

@@ -72,14 +72,6 @@ abstract class MultiMultiplierEffect<T : Any>(id: String) : Effect<NoCompileData
         return multiplier
     }
 
-    @Deprecated(
-        "Use getMultiplier(dispatcher: Dispatcher<*>, element: T) instead.",
-        ReplaceWith("getMultiplier(player.toDispatcher(), element)"),
-        DeprecationLevel.ERROR
-    )
-    protected fun getMultiplier(player: Player, element: T): Double =
-        getMultiplier(player.toDispatcher(), element)
-
     /**
      * Get an element by [key], for example a stat.
      */
