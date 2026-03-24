@@ -65,9 +65,9 @@ class ConditionList(
 
         return lines
     }
-
-    /**
-     * Create an empty [ConditionList].
-     */
-    fun emptyConditionList() = ConditionList(emptyList())
 }
+
+/**
+ * Create an empty [ConditionList].
+ */
+fun emptyConditionList() = ConditionList(emptyList())
