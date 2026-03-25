@@ -9,15 +9,19 @@ import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.event.EditableEntityDropEvent
+import com.willfp.libreforge.triggers.event.EditableShearDropEvent
 import com.willfp.libreforge.triggers.tryAsLivingEntity
+import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
+import org.bukkit.event.player.PlayerShearEntityEvent
 
 
 object TriggerEntityItemDrop : Trigger("entity_item_drop") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
+        TriggerParameter.ITEM,
         TriggerParameter.EVENT,
         TriggerParameter.LOCATION
     )
@@ -59,6 +63,39 @@ object TriggerEntityItemDrop : Trigger("entity_item_drop") {
                     .addXP(newDrops.sumOf { it.xp })
                     .push()
             }
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    fun handle(event: PlayerShearEntityEvent) {
+        val entity = event.entity as? LivingEntity ?: return
+        val originalDrops = event.drops.filterNotEmpty()
+
+        if (originalDrops.isEmpty()) {
+            return
+        }
+
+        val editableEvent = EditableShearDropEvent(event)
+
+        this.dispatch(
+            event.player.toDispatcher(),
+            TriggerData(
+                player = event.player,
+                victim = entity,
+                item = event.item,
+                location = entity.location,
+                event = editableEvent,
+                value = originalDrops.sumOf { it.amount }.toDouble()
+            )
+        )
+
+        val newDrops = editableEvent.items
+
+        if (newDrops.sumOf { it.xp } > 0) {
+            DropQueue(event.player)
+                .setLocation(entity.location)
+                .addXP(newDrops.sumOf { it.xp })
+                .push()
         }
     }
 }

@@ -9,6 +9,7 @@ import org.bukkit.event.HandlerList
 import org.bukkit.event.block.BlockDropItemEvent
 import org.bukkit.event.entity.EntityDeathEvent
 import org.bukkit.event.player.PlayerDropItemEvent
+import org.bukkit.event.player.PlayerShearEntityEvent
 import org.bukkit.inventory.ItemStack
 
 
@@ -209,3 +210,35 @@ class EditableFishDropEvent(
         cancellable?.isCancelled = cancel
     }
 }
+
+class EditableShearDropEvent(
+    private val event: PlayerShearEntityEvent
+) : EditableDropEvent() {
+    private val modifiers = mutableListOf<DropModifier>()
+
+    override fun addModifier(modifier: DropModifier) {
+        modifiers += modifier
+    }
+
+    override val originalItems: List<ItemStack>
+        get() = event.drops
+
+    override val items: List<DropResult>
+        get() = originalItems.map { modifiers.modify(it) }
+
+    override val dropLocation: Location
+        get() = event.entity.location
+
+    override fun removeItem(item: ItemStack) {
+        event.drops.remove(item)
+    }
+
+    override fun isCancelled(): Boolean {
+        return event.isCancelled
+    }
+
+    override fun setCancelled(p0: Boolean) {
+        event.isCancelled = p0
+    }
+}
+
