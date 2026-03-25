@@ -13,6 +13,7 @@ object TriggerShearEntity : Trigger("shear_entity") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
+        TriggerParameter.ITEM,
         TriggerParameter.EVENT,
         TriggerParameter.LOCATION
     )
@@ -30,6 +31,7 @@ object TriggerShearEntity : Trigger("shear_entity") {
             TriggerData(
                 player = event.player,
                 victim = entity,
+                item = event.item,
                 location = entity.location,
                 event = event,
             )
