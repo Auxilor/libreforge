@@ -23,6 +23,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockDropItemEvent
+import org.bukkit.event.player.PlayerShearEntityEvent
 import java.util.UUID
 
 object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
@@ -146,4 +147,41 @@ object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
         event.deathEvent.droppedExp = 0
         event.deathEvent.drops.clear()
     }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    fun handle(event: PlayerShearEntityEvent) {
+        val victim = event.entity
+
+
+        if (Bukkit.getPluginManager().isPluginEnabled("MythicMobs")) {
+            if (MythicBukkit.inst().mobManager.isMythicMob(victim)) {
+                return
+            }
+        }
+
+        if (victim is Player && plugin.configYml.getBool("effects.telekinesis.on-players")) {
+            return
+        }
+
+        val player = event.player
+
+        if (!TelekinesisUtils.testPlayer(player)) {
+            return
+        }
+
+        val drops = event.drops.toList()
+
+        if (drops.isEmpty()) {
+            return
+        }
+
+        DropQueue(player)
+            .setLocation(victim.location)
+            .addItems(drops)
+            .forceTelekinesis()
+            .push()
+
+        event.drops.clear()
+    }
+    
 }
