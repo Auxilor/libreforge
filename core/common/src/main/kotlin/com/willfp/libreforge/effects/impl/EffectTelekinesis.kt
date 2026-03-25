@@ -159,9 +159,6 @@ object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
             }
         }
 
-        if (victim is Player && plugin.configYml.getBool("effects.telekinesis.on-players")) {
-            return
-        }
 
         val player = event.player
 
@@ -183,5 +180,4 @@ object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
 
         event.drops.clear()
     }
-    
 }
