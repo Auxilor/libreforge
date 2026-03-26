@@ -21,8 +21,10 @@ import org.bukkit.entity.Projectile
 import org.bukkit.entity.Tameable
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
+import io.papermc.paper.event.block.PlayerShearBlockEvent
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockDropItemEvent
+import org.bukkit.event.player.PlayerFishEvent
 import org.bukkit.event.player.PlayerShearEntityEvent
 import java.util.UUID
 
@@ -179,5 +181,60 @@ object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
             .push()
 
         event.drops.clear()
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    fun handle(event: PlayerShearBlockEvent) {
+        val player = event.player
+        val block = event.block
+
+        if (!plugin.configYml.getBool("effects.telekinesis.always-process-blocks")
+            && !TelekinesisUtils.testPlayer(player)) {
+            return
+        }
+
+        if (!AntigriefManager.canBreakBlock(player, block)) {
+            return
+        }
+
+        val drops = event.drops.toList()
+
+        if (drops.isEmpty()) {
+            return
+        }
+
+        DropQueue(player)
+            .setLocation(block.location)
+            .addItems(drops)
+            .push()
+
+        event.drops.clear()
+    }
+
+    // Fires at HIGH so TriggerCatchFish (NORMAL) has already applied modifiers
+    // and updated the caught entity's stack before we read it.
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    fun handle(event: PlayerFishEvent) {
+        if (event.state != PlayerFishEvent.State.CAUGHT_FISH) return
+
+        val player = event.player
+
+        if (!TelekinesisUtils.testPlayer(player)) {
+            return
+        }
+
+        val caught = event.caught as? org.bukkit.entity.Item ?: return
+
+        // getItemStack() returns a defensive copy - that's fine, we just need the data.
+        val stack = caught.itemStack
+
+        DropQueue(player)
+            .setLocation(event.hook.location)
+            .addItems(listOf(stack))
+            .forceTelekinesis()
+            .push()
+
+        // Remove the entity so it doesn't also fly to the player naturally.
+        caught.remove()
     }
 }

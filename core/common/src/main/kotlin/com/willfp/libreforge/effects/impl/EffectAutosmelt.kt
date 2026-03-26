@@ -7,8 +7,8 @@ import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getEnchantment
 import com.willfp.libreforge.triggers.TriggerData
+import com.willfp.libreforge.triggers.event.DropCause
 import com.willfp.libreforge.triggers.event.DropResult
-import com.willfp.libreforge.triggers.event.EditableBlockDropEvent
 import com.willfp.libreforge.triggers.event.EditableDropEvent
 import org.bukkit.Bukkit
 import org.bukkit.Material
@@ -77,7 +77,7 @@ object EffectAutosmelt : Effect<NoCompileData>("autosmelt") {
             @Suppress("DEPRECATION")
             it.type = type
 
-            if (fortune > 0 && it.maxStackSize > 1 && event is EditableBlockDropEvent && fortuneMaterials.contains(type)) {
+            if (fortune > 0 && it.maxStackSize > 1 && event.cause == DropCause.BLOCK && fortuneMaterials.contains(type)) {
                 it.amount = (Math.random() * (fortune.toDouble() - 1) + 1.1).roundToInt()
                 xp++
             }

@@ -9,15 +9,16 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.event.DropCause
 import com.willfp.libreforge.triggers.event.DropContext
 import com.willfp.libreforge.triggers.event.EditableDropEvent
+import io.papermc.paper.event.block.PlayerShearBlockEvent
 import org.bukkit.entity.LivingEntity
 import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerShearEntityEvent
 
-@Deprecated("Use 'shear' instead")
-object TriggerShearEntity : Trigger("shear_entity") {
+object TriggerShear : Trigger("shear") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
+        TriggerParameter.BLOCK,
         TriggerParameter.ITEM,
         TriggerParameter.EVENT,
         TriggerParameter.LOCATION
@@ -26,7 +27,6 @@ object TriggerShearEntity : Trigger("shear_entity") {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerShearEntityEvent) {
         val entity = event.entity as? LivingEntity ?: return
-
 
         val originalDrops = event.drops.filterNotEmpty()
 
@@ -66,4 +66,50 @@ object TriggerShearEntity : Trigger("shear_entity") {
                 .push()
         }
     }
+
+    @EventHandler(ignoreCancelled = true)
+    fun handle(event: PlayerShearBlockEvent) {
+        val block = event.block
+        val originalDrops = event.drops.filterNotEmpty()
+
+        if (originalDrops.isEmpty()) {
+            return
+        }
+
+        val editableEvent = EditableDropEvent(
+            initialDrops = originalDrops,
+            cause = DropCause.BLOCK,
+            context = DropContext(
+                player = event.player,
+                block = block,
+                tool = event.item
+            ),
+            dropLocation = block.location,
+            cancellable = event
+        )
+
+        this.dispatch(
+            event.player.toDispatcher(),
+            TriggerData(
+                player = event.player,
+                block = block,
+                item = event.item,
+                location = block.location,
+                event = editableEvent,
+                value = originalDrops.sumOf { it.amount }.toDouble()
+            )
+        )
+
+        event.drops.clear()
+        event.drops.addAll(editableEvent.drops)
+
+        val totalXP = editableEvent.items.sumOf { it.xp }
+        if (totalXP > 0) {
+            DropQueue(event.player)
+                .setLocation(block.location)
+                .addXP(totalXP)
+                .push()
+        }
+    }
 }
+

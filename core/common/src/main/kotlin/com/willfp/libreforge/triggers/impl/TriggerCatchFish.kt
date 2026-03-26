@@ -4,7 +4,9 @@ import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import com.willfp.libreforge.triggers.event.EditableFishDropEvent
+import com.willfp.libreforge.triggers.event.DropCause
+import com.willfp.libreforge.triggers.event.DropContext
+import com.willfp.libreforge.triggers.event.EditableDropEvent
 import org.bukkit.entity.Item
 import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerFishEvent
@@ -24,10 +26,17 @@ object TriggerCatchFish : Trigger("catch_fish") {
         val player = event.player
         val caught = event.caught as? Item ?: return
 
-        val editableEvent = EditableFishDropEvent(
-            cancellable = event,
-            dropLocationSupplier = { event.hook.location },
-            itemEntity = caught
+        val caughtStack = caught.itemStack
+
+        val editableEvent = EditableDropEvent(
+            initialDrops = listOf(caughtStack),
+            cause = DropCause.FISHING,
+            context = DropContext(
+                player = player,
+                tool = player.inventory.itemInMainHand
+            ),
+            dropLocation = event.hook.location,
+            cancellable = event
         )
 
         this.dispatch(
@@ -36,11 +45,23 @@ object TriggerCatchFish : Trigger("catch_fish") {
                 player = player,
                 location = editableEvent.dropLocation,
                 event = editableEvent,
-                item = caught.itemStack,
+                item = caughtStack,
                 value = event.expToDrop.toDouble()
             )
         )
 
-        event.expToDrop += editableEvent.items.sumOf { it.xp }
+        val dropResults = editableEvent.items
+
+        if (editableEvent.drops.isEmpty()) {
+            caught.remove()
+        } else {
+            caught.itemStack = editableEvent.drops.first()
+
+            for (extra in editableEvent.drops.drop(1)) {
+                caught.world.dropItemNaturally(caught.location, extra)
+            }
+        }
+
+        event.expToDrop += dropResults.sumOf { it.xp }
     }
 }
