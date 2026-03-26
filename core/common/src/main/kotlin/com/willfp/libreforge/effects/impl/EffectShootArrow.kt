@@ -1,7 +1,6 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.util.runExempted
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
@@ -20,25 +19,23 @@ object EffectShootArrow : Effect<NoCompileData>("shoot_arrow") {
         val velocity = data.velocity
         val fire = ((data.event as? EntityShootBowEvent)?.projectile?.fireTicks ?: 0) > 0
 
-        player.runExempted {
-            val arrow = if (velocity == null || !config.getBool("inherit_velocity")) {
-                player.launchProjectile(Arrow::class.java)
-            } else {
-                player.launchProjectile(Arrow::class.java, velocity)
-            }
+        val arrow = if (velocity == null || !config.getBool("inherit_velocity")) {
+            player.launchProjectile(Arrow::class.java)
+        } else {
+            player.launchProjectile(Arrow::class.java, velocity)
+        }
 
-            if (config.getBool("launch-at-location") && data.location != null) {
-                arrow.teleportAsync(data.location)
-            }
+        if (config.getBool("launch-at-location") && data.location != null) {
+            arrow.teleportAsync(data.location)
+        }
 
-            arrow.pickupStatus = AbstractArrow.PickupStatus.DISALLOWED
-            if (fire) {
-                arrow.fireTicks = Int.MAX_VALUE
-            }
+        arrow.pickupStatus = AbstractArrow.PickupStatus.DISALLOWED
+        if (fire) {
+            arrow.fireTicks = Int.MAX_VALUE
+        }
 
-            if (config.getBool("no_source")) {
-                arrow.shooter = null
-            }
+        if (config.getBool("no_source")) {
+            arrow.shooter = null
         }
 
         return true
