@@ -35,6 +35,7 @@ import com.willfp.libreforge.integrations.huskintegration.husktowns.HuskTownsInt
 import com.willfp.libreforge.integrations.jobs.JobsIntegration
 import com.willfp.libreforge.integrations.lands.LandsIntegration
 import com.willfp.libreforge.integrations.levelledmobs.LevelledMobsIntegration
+import com.willfp.libreforge.integrations.luckperms.LuckPermsIntegration
 import com.willfp.libreforge.integrations.mcmmo.McMMOIntegration
 import com.willfp.libreforge.integrations.modelengine.ModelEngineIntegration
 import com.willfp.libreforge.integrations.mythicmobs.MythicMobsIntegration
@@ -244,7 +245,8 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             IntegrationLoader("EdPrison") { EdPrisonCoreIntegration.load(this) },
             IntegrationLoader("MythicMobs") { MythicMobsIntegration.load(this) },
             IntegrationLoader("Nexo") { NexoIntegration.load(this) },
-            IntegrationLoader("Oraxen") { OraxenIntegration.load(this)}
+            IntegrationLoader("Oraxen") { OraxenIntegration.load(this) },
+            IntegrationLoader("LuckPerms") { LuckPermsIntegration.load(this) }
         )
     }
 
