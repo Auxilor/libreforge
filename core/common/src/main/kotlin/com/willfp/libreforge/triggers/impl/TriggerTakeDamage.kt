@@ -4,10 +4,8 @@ import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import com.willfp.libreforge.triggers.tryAsLivingEntity
 import io.lumine.mythic.bukkit.MythicBukkit
 import org.bukkit.Bukkit
-import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageByEntityEvent
@@ -38,11 +36,9 @@ object TriggerTakeDamage : Trigger("take_damage") {
 
         if (Bukkit.getPluginManager().isPluginEnabled("MythicMobs")) {
             if (event is EntityDamageByEntityEvent) {
-                val attacker = event.damager.tryAsLivingEntity()
-                if (attacker != null) {
-                    if (MythicBukkit.inst().mobManager.isMythicMob(attacker)) {
-                        return
-                    }
+                val attacker = event.damager
+                if (MythicBukkit.inst().mobManager.isMythicMob(attacker)) {
+                    return
                 }
             }
         }
@@ -51,7 +47,7 @@ object TriggerTakeDamage : Trigger("take_damage") {
             victim.toDispatcher(),
             TriggerData(
                 player = victim as? Player,
-                victim = victim as? LivingEntity,
+                victim = victim,
                 event = event,
                 value = event.finalDamage
             )

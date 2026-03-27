@@ -34,6 +34,7 @@ object EffectAddStat : Effect<NoCompileData>("add_stat") {
         val user = auraSkills.getUser(player.uniqueId)
         val stat = auraSkills.globalRegistry.getStat(NamespacedId.fromDefault(config.getString("stat")))
 
+        @Suppress("DEPRECATION")
         user.addStatModifier(StatModifier(
             identifiers.key.key,
             stat,

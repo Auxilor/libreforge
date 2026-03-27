@@ -6,6 +6,7 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import com.willfp.libreforge.triggers.tryAsLivingEntity
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 
 object EffectDamageTwice : Effect<NoCompileData>("damage_twice") {
@@ -20,7 +21,7 @@ object EffectDamageTwice : Effect<NoCompileData>("damage_twice") {
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val event = data.event as? EntityDamageByEntityEvent ?: return false
-        val victim = data.victim ?: return false
+        val victim = data.victim?.tryAsLivingEntity() ?: return false
 
         if (victim.hasMetadata(META_KEY)) {
             victim.removeMetadata(META_KEY, plugin)

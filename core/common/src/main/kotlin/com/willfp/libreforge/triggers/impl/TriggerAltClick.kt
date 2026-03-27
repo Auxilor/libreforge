@@ -122,7 +122,7 @@ object TriggerAltClick : Trigger("alt_click") {
                 player.location.add(dir)
             }
 
-        val victim = entityResult?.hitEntity as? LivingEntity
+        val victim = entityResult?.hitEntity
 
         preventDoubleTriggers += player.uniqueId
 

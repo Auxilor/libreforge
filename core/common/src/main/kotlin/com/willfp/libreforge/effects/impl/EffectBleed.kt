@@ -11,6 +11,7 @@ import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.impl.TriggerKill
+import com.willfp.libreforge.triggers.tryAsLivingEntity
 
 
 object EffectBleed : Effect<NoCompileData>("bleed") {
@@ -25,7 +26,7 @@ object EffectBleed : Effect<NoCompileData>("bleed") {
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
-        val victim = data.victim ?: return false
+        val victim = data.victim?.tryAsLivingEntity() ?: return false
 
         val damage = config.getDoubleFromExpression("damage", data)
         val interval = config.getIntFromExpression("interval", data)

@@ -13,6 +13,7 @@ import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.mutators.MutatorList
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.DispatchedTrigger
+import org.bukkit.entity.LivingEntity
 
 /**
  * Things that are like a chain element (e.g. Blocks, Elements).
@@ -96,9 +97,11 @@ abstract class ElementLike : ConfigurableElement {
 
         // Antigrief check here - not very clean, but it works.
         if (data.player != null && data.victim != null && data.victim != data.player) {
-            if (!config.getBool("disable_antigrief_check")) {
-                if (!AntigriefManager.canInjure(data.player, data.victim)) {
-                    return false
+            if (data.victim is LivingEntity) {
+                if (!config.getBool("disable_antigrief_check")) {
+                    if (!AntigriefManager.canInjure(data.player, data.victim)) {
+                        return false
+                    }
                 }
             }
         }

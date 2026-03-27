@@ -6,6 +6,7 @@ import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import com.willfp.libreforge.triggers.tryAsLivingEntity
 import io.lumine.mythic.bukkit.MythicBukkit
 import io.lumine.mythic.core.utils.MythicUtil
 import org.bukkit.Bukkit
@@ -29,7 +30,7 @@ object EffectCastMythicSkill : Effect<NoCompileData>("cast_mythic_skill") {
 
         val player: Player = data.player ?: return false
 
-        var victim: LivingEntity? = data.victim ?: MythicUtil.getTargetedEntity(player)
+        var victim: LivingEntity? = data.victim?.tryAsLivingEntity() ?: MythicUtil.getTargetedEntity(player)
 
         if (config.getBoolOrNull("victim_to_player") == true) {
             victim = player

@@ -3,11 +3,12 @@ package com.willfp.libreforge.triggers.placeholders.impl
 import com.willfp.libreforge.NamedValue
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.placeholders.TriggerPlaceholder
+import com.willfp.libreforge.triggers.tryAsLivingEntity
 import org.bukkit.attribute.Attribute
 
 object TriggerPlaceholderVictim : TriggerPlaceholder("victim") {
     override fun createPlaceholders(data: TriggerData): Collection<NamedValue> {
-        val victim = data.victim ?: return emptyList()
+        val victim = data.victim?.tryAsLivingEntity() ?: return emptyList()
 
         return listOf(
             NamedValue(

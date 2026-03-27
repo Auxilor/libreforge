@@ -4,6 +4,7 @@ import com.willfp.eco.util.toSingletonList
 import com.willfp.libreforge.effects.templates.DamageItemEffect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import com.willfp.libreforge.triggers.tryAsLivingEntity
 import org.bukkit.inventory.ItemStack
 
 
@@ -13,6 +14,6 @@ object EffectDamageOffhand : DamageItemEffect("damage_offhand") {
     )
 
     override fun getItems(data: TriggerData): List<ItemStack> {
-        return data.victim?.equipment?.itemInOffHand.toSingletonList()
+        return data.victim?.tryAsLivingEntity()?.equipment?.itemInOffHand.toSingletonList()
     }
 }

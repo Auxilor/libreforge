@@ -8,6 +8,7 @@ import com.willfp.libreforge.mutators.parameterTransformers
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import com.willfp.libreforge.triggers.tryAsLivingEntity
 import org.bukkit.FluidCollisionMode
 
 object MutatorLocationToCursor : Mutator<NoCompileData>("location_to_cursor") {
@@ -32,7 +33,7 @@ object MutatorLocationToCursor : Mutator<NoCompileData>("location_to_cursor") {
         val start = if (startingEntity.equals("player", true)) {
             data.player
         } else {
-            data.victim
+            data.victim?.tryAsLivingEntity()
         }
 
         val result = start?.world?.rayTrace(

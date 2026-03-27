@@ -4,7 +4,6 @@ import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityToggleGlideEvent
@@ -19,7 +18,7 @@ object TriggerDeployElytra : Trigger("deploy_elytra") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityToggleGlideEvent) {
-        val entity = event.entity as? LivingEntity ?: return
+        val entity = event.entity
 
         this.dispatch(
             entity.toDispatcher(),

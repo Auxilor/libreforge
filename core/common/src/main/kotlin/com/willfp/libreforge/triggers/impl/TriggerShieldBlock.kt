@@ -4,7 +4,6 @@ import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageByEntityEvent
@@ -20,7 +19,7 @@ object TriggerShieldBlock : Trigger("shield_block") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityDamageByEntityEvent) {
-        val attacker = event.damager as? LivingEntity ?: return
+        val attacker = event.damager
         val victim = event.entity as? Player ?: return
 
         if (event.isCancelled) {
@@ -38,7 +37,7 @@ object TriggerShieldBlock : Trigger("shield_block") {
         this.dispatch(
             victim.toDispatcher(),
             TriggerData(
-                player = victim as? Player,
+                player = victim,
                 victim = attacker,
                 location = attacker.location,
                 event = event,

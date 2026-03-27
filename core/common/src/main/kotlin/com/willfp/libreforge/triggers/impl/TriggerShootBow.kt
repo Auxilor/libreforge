@@ -4,7 +4,6 @@ import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
 import org.bukkit.event.EventHandler
@@ -21,7 +20,7 @@ object TriggerShootBow : Trigger("shoot_bow") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityShootBowEvent) {
-        val shooter = event.entity as? LivingEntity ?: return
+        val shooter = event.entity
 
         this.dispatch(
             shooter.toDispatcher(),

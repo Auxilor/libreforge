@@ -4,6 +4,7 @@ import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
@@ -23,7 +24,7 @@ object TriggerHeadshot : Trigger("headshot") {
     fun handle(event: EntityDamageByEntityEvent) {
         val projectile = event.damager as? Projectile ?: return
         val victim = event.entity as? LivingEntity ?: return
-        val shooter = projectile.shooter as? LivingEntity ?: return
+        val shooter = projectile.shooter as? Entity ?: return
 
         // Filter out non-headshots
         if (projectile.location.y < victim.location.y + victim.eyeHeight - 0.22) {

@@ -9,6 +9,7 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import com.willfp.libreforge.triggers.tryAsLivingEntity
 import org.bukkit.entity.Monster
 
 object EffectSwarm : Effect<List<TestableEntity>?>("swarm") {
@@ -28,7 +29,7 @@ object EffectSwarm : Effect<List<TestableEntity>?>("swarm") {
         victim.getNearbyEntities(radius, radius, radius)
             .filterIsInstance<Monster>()
             .filter { compileData?.any { t -> t.matches(it) } ?: true }
-            .forEach { it.target = victim }
+            .forEach { it.target = victim.tryAsLivingEntity() }
 
         return true
     }

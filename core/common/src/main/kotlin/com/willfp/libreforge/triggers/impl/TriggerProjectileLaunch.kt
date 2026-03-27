@@ -4,7 +4,7 @@ import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import org.bukkit.entity.LivingEntity
+import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.ProjectileLaunchEvent
@@ -21,7 +21,7 @@ object TriggerProjectileLaunch : Trigger("projectile_launch") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: ProjectileLaunchEvent) {
-        val shooter = event.entity.shooter as? LivingEntity ?: return
+        val shooter = event.entity.shooter as? Entity ?: return
 
         this.dispatch(
             shooter.toDispatcher(),
