@@ -9,7 +9,6 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.event.DropCause
 import com.willfp.libreforge.triggers.event.DropContext
 import com.willfp.libreforge.triggers.event.EditableDropEvent
-import org.bukkit.entity.LivingEntity
 import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerShearEntityEvent
 
@@ -25,8 +24,7 @@ object TriggerShearEntity : Trigger("shear_entity") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerShearEntityEvent) {
-        val entity = event.entity as? LivingEntity ?: return
-
+        val entity = event.entity
 
         val originalDrops = event.drops.filterNotEmpty()
 

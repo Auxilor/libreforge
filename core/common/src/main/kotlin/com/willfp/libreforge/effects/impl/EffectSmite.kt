@@ -7,6 +7,7 @@ import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import com.willfp.libreforge.triggers.tryAsLivingEntity
 
 object EffectSmite : Effect<NoCompileData>("smite") {
     override val parameters = setOf(
@@ -18,7 +19,7 @@ object EffectSmite : Effect<NoCompileData>("smite") {
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
-        val victim = data.victim ?: return false
+        val victim = data.victim?.tryAsLivingEntity() ?: return false
         val damage = config.getDoubleFromExpression("damage", data.player)
 
         LightningUtils.strike(victim, damage)

@@ -5,6 +5,7 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.filters.Filter
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
+import com.willfp.libreforge.triggers.tryAsLivingEntity
 import org.bukkit.attribute.Attribute
 
 object FilterAboveHealthPercent : Filter<NoCompileData, Double>("above_health_percent") {
@@ -13,7 +14,7 @@ object FilterAboveHealthPercent : Filter<NoCompileData, Double>("above_health_pe
     }
 
     override fun isMet(data: TriggerData, value: Double, compileData: NoCompileData): Boolean {
-        val entity = data.victim ?: return true
+        val entity = data.victim?.tryAsLivingEntity() ?: return true
         val maxHealth = entity.getAttribute(Attribute.MAX_HEALTH)?.value ?: 20.0
         val percent = (entity.health / maxHealth) * 100
 

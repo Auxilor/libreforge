@@ -7,6 +7,7 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import com.willfp.libreforge.triggers.tryAsLivingEntity
 import org.bukkit.potion.PotionEffectType
 
 object EffectRemovePotionEffect : Effect<NoCompileData>("remove_potion_effect") {
@@ -30,7 +31,7 @@ object EffectRemovePotionEffect : Effect<NoCompileData>("remove_potion_effect") 
         val toApply = if (config.getBoolOrNull("apply_to_player") == true) {
             data.player ?: return false
         } else {
-            data.victim ?: return false
+            data.victim?.tryAsLivingEntity() ?: return false
         }
 
         plugin.scheduler.run {

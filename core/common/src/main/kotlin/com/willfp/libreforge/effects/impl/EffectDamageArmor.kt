@@ -8,6 +8,7 @@ import com.willfp.libreforge.enumValueOfOrNull
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import com.willfp.libreforge.triggers.tryAsLivingEntity
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.Sound
@@ -30,7 +31,7 @@ object EffectDamageArmor : Effect<NoCompileData>("damage_armor") {
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
-        val victim = data.victim ?: return false
+        val victim = data.victim?.tryAsLivingEntity() ?: return false
 
         val damage = config.getIntFromExpression("damage", data)
 

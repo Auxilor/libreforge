@@ -7,7 +7,7 @@ import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import org.bukkit.entity.LivingEntity
+import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.entity.Trident
 import org.bukkit.event.EventHandler
@@ -29,7 +29,7 @@ object TriggerTridentAttack : Trigger("trident_attack") {
 
     @EventHandler(ignoreCancelled = true)
     fun onProjectileLaunch(event: ProjectileLaunchEvent) {
-        val shooter = event.entity.shooter as? LivingEntity ?: return
+        val shooter = event.entity.shooter as? Entity ?: return
         val trident = event.entity as? Trident ?: return
 
         trident.setMetadata(
@@ -41,9 +41,9 @@ object TriggerTridentAttack : Trigger("trident_attack") {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityDamageByEntityEvent) {
         val trident = event.damager as? Trident ?: return
-        val victim = event.entity as? LivingEntity ?: return
+        val victim = event.entity
 
-        val shooter = trident.shooter as? LivingEntity ?: return
+        val shooter = trident.shooter as? Entity ?: return
 
         @Suppress("UNCHECKED_CAST")
         this.dispatch(

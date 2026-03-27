@@ -12,8 +12,9 @@ import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import com.willfp.libreforge.triggers.tryAsLivingEntity
 import org.bukkit.attribute.Attribute
-import org.bukkit.entity.LivingEntity
+import org.bukkit.entity.Entity
 import org.bukkit.entity.Mob
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
@@ -65,7 +66,7 @@ object EffectSpawnMobs : Effect<TestableEntity>("spawn_mobs") {
             healthAttr.baseValue = health
 
             if (victim != null) {
-                mob.target = victim
+                mob.target = victim.tryAsLivingEntity() ?: continue
                 mob.setMetadata("spawn-mobs-target", plugin.createMetadataValue(victim))
             }
 
@@ -88,7 +89,7 @@ object EffectSpawnMobs : Effect<TestableEntity>("spawn_mobs") {
     @EventHandler
     fun onSwitchTarget(event: EntityTargetEvent) {
         if (event.entity.getMetadata("spawn-mobs-target").isNotEmpty()) {
-            val target = event.entity.getMetadata("spawn-mobs-target")[0].value() as? LivingEntity ?: return
+            val target = event.entity.getMetadata("spawn-mobs-target")[0].value() as? Entity ?: return
             event.target = target
         }
 

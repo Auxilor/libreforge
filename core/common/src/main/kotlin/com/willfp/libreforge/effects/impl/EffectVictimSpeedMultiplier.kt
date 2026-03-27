@@ -9,6 +9,7 @@ import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import com.willfp.libreforge.triggers.tryAsLivingEntity
 import org.bukkit.attribute.Attribute
 
 object EffectVictimSpeedMultiplier : Effect<NoCompileData>("victim_speed_multiplier") {
@@ -24,7 +25,7 @@ object EffectVictimSpeedMultiplier : Effect<NoCompileData>("victim_speed_multipl
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
-        val victim = data.victim ?: return false
+        val victim = data.victim?.tryAsLivingEntity() ?: return false
         val attribute = victim.getAttribute(Attribute.MOVEMENT_SPEED) ?: return false
         val attributeValue = attribute.value
         val duration = config.getIntFromExpression("duration", data)

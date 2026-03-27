@@ -5,7 +5,7 @@ import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.Arrow
-import org.bukkit.entity.LivingEntity
+import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageByEntityEvent
@@ -25,7 +25,7 @@ object TriggerProjectileHit : Trigger("projectile_hit") {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: ProjectileHitEvent) {
         val projectile = event.entity
-        val shooter = projectile.shooter as? LivingEntity ?: return
+        val shooter = projectile.shooter as? Entity ?: return
 
         this.dispatch(
             shooter.toDispatcher(),
@@ -43,8 +43,8 @@ object TriggerProjectileHit : Trigger("projectile_hit") {
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityDamageByEntityEvent) {
         val arrow = event.damager as? Arrow ?: return
-        val victim = event.entity as? LivingEntity ?: return
-        val shooter = arrow.shooter as? LivingEntity ?: return
+        val victim = event.entity
+        val shooter = arrow.shooter as? Entity ?: return
 
         this.dispatch(
             shooter.toDispatcher(),

@@ -4,7 +4,6 @@ import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import org.bukkit.entity.LivingEntity
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.entity.EntityDamageEvent
@@ -22,7 +21,7 @@ object TriggerEntityDamage : Trigger("entity_damage") {
         this.dispatch(
             entity.toDispatcher(),
             TriggerData(
-                victim = entity as? LivingEntity,
+                victim = entity,
                 location = entity.location,
                 value = event.finalDamage
             )

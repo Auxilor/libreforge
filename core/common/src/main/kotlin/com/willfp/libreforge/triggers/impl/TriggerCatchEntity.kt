@@ -5,7 +5,6 @@ import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.Item
-import org.bukkit.entity.LivingEntity
 import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerFishEvent
 
@@ -31,7 +30,7 @@ object TriggerCatchEntity : Trigger("catch_entity") {
             TriggerData(
                 player = player,
                 location = event.caught?.location ?: player.location,
-                victim = event.caught as? LivingEntity,
+                victim = event.caught,
                 event = event,
                 item = (event.caught as? Item)?.itemStack
             )

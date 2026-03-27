@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.filters.Filter
 import com.willfp.libreforge.triggers.TriggerData
+import com.willfp.libreforge.triggers.tryAsLivingEntity
 import org.bukkit.attribute.Attribute
 
 object FilterOnMaxHealth : Filter<NoCompileData, Boolean>("on_max_health") {
@@ -12,7 +13,7 @@ object FilterOnMaxHealth : Filter<NoCompileData, Boolean>("on_max_health") {
     }
 
     override fun isMet(data: TriggerData, value: Boolean, compileData: NoCompileData): Boolean {
-        val entity = data.victim ?: return true
+        val entity = data.victim?.tryAsLivingEntity() ?: return true
 
         val maxHealth = entity.getAttribute(Attribute.MAX_HEALTH)?.value
         val onMaxHealth = entity.health == maxHealth
