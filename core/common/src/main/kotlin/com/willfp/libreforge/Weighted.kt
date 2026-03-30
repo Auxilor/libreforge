@@ -16,8 +16,6 @@ open class WeightedList<T : Weighted>(
 ) : DelegatedList<T>(list) {
     fun random() = this.randomOrNull() ?: throw NoSuchElementException("List is empty")
 
-    fun random(weightSelector: (T) -> Double) =
-        this.randomOrNull(weightSelector) ?: throw NoSuchElementException("List is empty")
 
     fun randomOrNull(): T? = this.randomOrNull { it.weight }
 
