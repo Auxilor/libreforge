@@ -159,6 +159,7 @@ import com.willfp.libreforge.effects.impl.EffectSetVelocity
 import com.willfp.libreforge.effects.impl.EffectSetVictimVelocity
 import com.willfp.libreforge.effects.impl.EffectShoot
 import com.willfp.libreforge.effects.impl.EffectShootArrow
+import com.willfp.libreforge.effects.impl.EffectShootFirework
 import com.willfp.libreforge.effects.impl.EffectShuffleHotbar
 import com.willfp.libreforge.effects.impl.EffectSmite
 import com.willfp.libreforge.effects.impl.EffectSneakingSpeedMultiplier
@@ -614,6 +615,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectSetVictimVelocity)
         register(EffectShoot)
         register(EffectShootArrow)
+        register(EffectShootFirework)
         register(EffectShuffleHotbar)
         register(EffectSmite)
         register(EffectSpawnEntity)
