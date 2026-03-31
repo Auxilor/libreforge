@@ -68,6 +68,7 @@ import com.willfp.libreforge.effects.impl.EffectEntityReach
 import com.willfp.libreforge.effects.impl.EffectExplosionKnockbackResistanceMultiplier
 import com.willfp.libreforge.effects.impl.EffectExtinguish
 import com.willfp.libreforge.effects.impl.EffectFeatherStep
+import com.willfp.libreforge.effects.impl.EffectFirework
 import com.willfp.libreforge.effects.impl.EffectFlight
 import com.willfp.libreforge.effects.impl.EffectFoodMultiplier
 import com.willfp.libreforge.effects.impl.EffectGiveFood
@@ -531,6 +532,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectDropWeightedRandomItem)
         register(EffectExtinguish)
         register(EffectFeatherStep)
+        register(EffectFirework)
         register(EffectFlight)
         register(EffectFoodMultiplier)
         register(EffectGiveFood)
