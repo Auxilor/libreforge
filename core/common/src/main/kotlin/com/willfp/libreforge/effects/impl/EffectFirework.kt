@@ -1,5 +1,6 @@
 package com.willfp.libreforge.effects.impl
 
+import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.effects.Effect
@@ -20,7 +21,11 @@ object EffectFirework : Effect<NoCompileData>("firework") {
 
         val firework = location.world.createEntity(location, Firework::class.java)
 
-        firework.maxLife = if (config.getInt("lifespan") < 0) 0 else config.getInt("lifespan")
+        val lifespan = if (config.getInt("lifespan") < 1) 1 else config.getInt("lifespan")
+        if (Prerequisite.HAS_PAPER.isMet)
+            firework.ticksToDetonate = lifespan
+        else
+            firework.maxLife = lifespan
 
         val meta = firework.fireworkMeta
 
