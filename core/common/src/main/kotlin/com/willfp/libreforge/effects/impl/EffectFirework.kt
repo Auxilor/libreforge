@@ -43,15 +43,15 @@ object EffectFirework : Effect<List<FireworkEffect>>("firework") {
                 continue
             }
 
-            val colors = config.getStrings("colors").mapNotNull { Color.fromRGB(it.removePrefix("#").toInt(16)) }
-            val fadeColors = config.getStrings("colors").mapNotNull { Color.fromRGB(it.removePrefix("#").toInt(16)) }
+            val colors = section.getStrings("colors").mapNotNull { Color.fromRGB(it.removePrefix("#").toInt(16)) }
+            val fadeColors = section.getStrings("colors").mapNotNull { Color.fromRGB(it.removePrefix("#").toInt(16)) }
 
             val effect = FireworkEffect.builder()
                 .with(type)
                 .withColor(colors)
                 .withFade(fadeColors)
-                .trail(config.getBool("trail"))
-                .flicker(config.getBool("flicker"))
+                .trail(section.getBool("trail"))
+                .flicker(section.getBool("flicker"))
                 .build()
 
             effects += effect
