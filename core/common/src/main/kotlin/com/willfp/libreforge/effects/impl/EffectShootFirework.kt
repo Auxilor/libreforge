@@ -1,6 +1,5 @@
 package com.willfp.libreforge.effects.impl
 
-import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.util.runExempted
 import com.willfp.libreforge.ViolationContext
@@ -42,14 +41,11 @@ object EffectShootFirework : Effect<List<FireworkEffect>>("shoot_firework") {
                 firework.shooter = null
             }
 
-            val lifespan = if (config.getInt("lifespan") < 1) 1 else config.getInt("lifespan")
-            if (Prerequisite.HAS_PAPER.isMet)
-                firework.ticksToDetonate = lifespan
-            else
-                firework.maxLife = lifespan
+            val power = if (config.getInt("power") < 1) 1 else config.getInt("power")
 
             val meta = firework.fireworkMeta
             meta.addEffects(compileData)
+            meta.power = power
             firework.fireworkMeta = meta
         }
 
@@ -66,10 +62,8 @@ object EffectShootFirework : Effect<List<FireworkEffect>>("shoot_firework") {
                 continue
             }
 
-            val colors = parseColors(section.getFormattedString("colors")) ?: continue
-            val fadeColors =
-                if (config.getFormattedString("fade_colors").equals("false", ignoreCase = true)) emptyList()
-                else parseColors(config.getFormattedString("fade_colors")) ?: emptyList()
+            val colors = config.getStrings("colors").mapNotNull { Color.fromRGB(it.removePrefix("#").toInt(16)) }
+            val fadeColors = config.getStrings("colors").mapNotNull { Color.fromRGB(it.removePrefix("#").toInt(16)) }
 
             val effect = FireworkEffect.builder()
                 .with(type)
@@ -83,16 +77,5 @@ object EffectShootFirework : Effect<List<FireworkEffect>>("shoot_firework") {
         }
 
         return effects
-    }
-
-    private fun parseColor(input: String): Color? {
-        if (!input.startsWith("#")) return null
-        val hex = input.removePrefix("#").toIntOrNull(16) ?: return null
-        return Color.fromRGB(hex)
-    }
-
-    private fun parseColors(input: String): List<Color>? {
-        if (input.isBlank()) return emptyList()
-        return input.split(",").mapNotNull { parseColor(it) }.takeIf { it.isNotEmpty() }
     }
 }
