@@ -2,7 +2,7 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -10,13 +10,13 @@ import org.bukkit.Color
 import org.bukkit.FireworkEffect
 import org.bukkit.entity.Firework
 
-object EffectFirework : Effect<NoCompileData>("firework") {
+object EffectFirework : Effect<List<FireworkEffect>>("firework") {
     override val parameters = setOf(
         TriggerParameter.LOCATION
     )
 
     @Suppress("DEPRECATION")
-    override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
+    override fun onTrigger(config: Config, data: TriggerData, compileData: List<FireworkEffect>): Boolean {
         val location = data.location ?: return false
 
         val firework = location.world.createEntity(location, Firework::class.java)
@@ -28,10 +28,20 @@ object EffectFirework : Effect<NoCompileData>("firework") {
             firework.maxLife = lifespan
 
         val meta = firework.fireworkMeta
+        meta.addEffects(compileData)
+        firework.fireworkMeta = meta
+
+        firework.spawnAt(location)
+
+        return true
+    }
+
+    override fun makeCompileData(config: Config, context: ViolationContext): List<FireworkEffect> {
+        val effects = mutableListOf<FireworkEffect>()
 
         for (section in config.getSubsections("effects")) {
             val type = try {
-                FireworkEffect.Type.valueOf(section.getFormattedString("type"))
+                FireworkEffect.Type.valueOf(section.getFormattedString("type").uppercase())
             } catch (_: IllegalArgumentException) {
                 continue
             }
@@ -49,13 +59,10 @@ object EffectFirework : Effect<NoCompileData>("firework") {
                 .flicker(config.getBool("flicker"))
                 .build()
 
-            meta.addEffect(effect)
+            effects += effect
         }
 
-        firework.fireworkMeta = meta
-        firework.spawnAt(location)
-
-        return true
+        return effects
     }
 
     private fun parseColor(input: String): Color? {
