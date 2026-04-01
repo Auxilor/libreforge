@@ -41,7 +41,7 @@ object EffectShootFirework : Effect<List<FireworkEffect>>("shoot_firework") {
                 firework.shooter = null
             }
 
-            val power = if (config.getInt("power") < 1) 1 else config.getInt("power")
+            val power = if (config.getInt("power") !in 0..255) 0 else config.getInt("power")
 
             val meta = firework.fireworkMeta
             meta.addEffects(compileData)
