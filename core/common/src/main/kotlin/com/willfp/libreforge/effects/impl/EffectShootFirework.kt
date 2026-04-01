@@ -3,7 +3,7 @@ package com.willfp.libreforge.effects.impl
 import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.util.runExempted
-import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -12,13 +12,13 @@ import org.bukkit.FireworkEffect
 import org.bukkit.entity.Firework
 import org.bukkit.event.entity.EntityShootBowEvent
 
-object EffectShootFirework : Effect<NoCompileData>("shoot_firework") {
+object EffectShootFirework : Effect<List<FireworkEffect>>("shoot_firework") {
     override val parameters = setOf(
         TriggerParameter.PLAYER
     )
 
     @Suppress("DEPRECATION")
-    override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
+    override fun onTrigger(config: Config, data: TriggerData, compileData: List<FireworkEffect>): Boolean {
         val player = data.player ?: return false
         val velocity = data.velocity
         val fire = ((data.event as? EntityShootBowEvent)?.projectile?.fireTicks ?: 0) > 0
@@ -49,34 +49,40 @@ object EffectShootFirework : Effect<NoCompileData>("shoot_firework") {
                 firework.maxLife = lifespan
 
             val meta = firework.fireworkMeta
-
-            for (section in config.getSubsections("effects")) {
-                val type = try {
-                    FireworkEffect.Type.valueOf(section.getFormattedString("type"))
-                } catch (_: IllegalArgumentException) {
-                    continue
-                }
-
-                val colors = parseColors(section.getFormattedString("colors")) ?: continue
-                val fadeColors =
-                    if (config.getFormattedString("fade_colors").equals("false", ignoreCase = true)) emptyList()
-                    else parseColors(config.getFormattedString("fade_colors")) ?: emptyList()
-
-                val effect = FireworkEffect.builder()
-                    .with(type)
-                    .withColor(colors)
-                    .withFade(fadeColors)
-                    .trail(config.getBool("trail"))
-                    .flicker(config.getBool("flicker"))
-                    .build()
-
-                meta.addEffect(effect)
-            }
-
+            meta.addEffects(compileData)
             firework.fireworkMeta = meta
         }
 
         return true
+    }
+
+    override fun makeCompileData(config: Config, context: ViolationContext): List<FireworkEffect> {
+        val effects = mutableListOf<FireworkEffect>()
+
+        for (section in config.getSubsections("effects")) {
+            val type = try {
+                FireworkEffect.Type.valueOf(section.getFormattedString("type").uppercase())
+            } catch (_: IllegalArgumentException) {
+                continue
+            }
+
+            val colors = parseColors(section.getFormattedString("colors")) ?: continue
+            val fadeColors =
+                if (config.getFormattedString("fade_colors").equals("false", ignoreCase = true)) emptyList()
+                else parseColors(config.getFormattedString("fade_colors")) ?: emptyList()
+
+            val effect = FireworkEffect.builder()
+                .with(type)
+                .withColor(colors)
+                .withFade(fadeColors)
+                .trail(config.getBool("trail"))
+                .flicker(config.getBool("flicker"))
+                .build()
+
+            effects += effect
+        }
+
+        return effects
     }
 
     private fun parseColor(input: String): Color? {
