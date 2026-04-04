@@ -1,7 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(gh pr create --title \"Fix run_player_command discarding %player% replacement\" --body \"$\\(cat <<''EOF''\n## Summary\n- The Kotlin lambda in the `.map` call returned only the result of `it.replace\\(\"%victim%\", ...\\)`, discarding the `%player%` replacement since the two calls weren''t chained\n- Commands always contained a literal `%player%` instead of the player''s name\n- Chained the `.replace\\(\\)` calls so both substitutions take effect\n\n## Test plan\n- [ ] Configure a `run_player_command` effect with both `%player%` and `%victim%` placeholders\n- [ ] Verify both placeholders resolve correctly in the executed command\nEOF\n\\)\")"
-    ]
-  }
-}

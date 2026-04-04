@@ -34,7 +34,7 @@ object AnimationSpinItem : Animation<NoCompileData, List<ArmorStand>>("spin_item
         val armorStands = mutableListOf<ArmorStand>()
         val item = Items.lookup(config.getString("item")).item
 
-        for (i in 0..config.getIntFromExpression("amount", data)) {
+        for (i in 0 until config.getIntFromExpression("amount", data)) {
             val armorStand = sourceLocation.world!!.spawn(sourceLocation, ArmorStand::class.java) {
                 it.setGravity(false)
                 it.isVisible = false

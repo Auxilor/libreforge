@@ -28,7 +28,7 @@ object ConditionBelowHungerPercent : Condition<NoCompileData>("below_hunger_perc
     ): Boolean {
         val player = dispatcher.get<Player>() ?: return false
 
-        return player.foodLevel / 20 <= config.getDoubleFromExpression("percent", player) / 100
+        return player.foodLevel / 20.0 <= config.getDoubleFromExpression("percent", player) / 100
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
