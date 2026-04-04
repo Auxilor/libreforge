@@ -44,7 +44,7 @@ object EffectFirework : Effect<List<FireworkEffect>>("firework") {
             }
 
             val colors = section.getStrings("colors").mapNotNull { Color.fromRGB(it.removePrefix("#").toInt(16)) }
-            val fadeColors = section.getStrings("colors").mapNotNull { Color.fromRGB(it.removePrefix("#").toInt(16)) }
+            val fadeColors = section.getStrings("fade-colors").mapNotNull { Color.fromRGB(it.removePrefix("#").toInt(16)) }
 
             val effect = FireworkEffect.builder()
                 .with(type)
