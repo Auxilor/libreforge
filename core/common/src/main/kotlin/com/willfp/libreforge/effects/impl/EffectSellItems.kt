@@ -59,6 +59,7 @@ object EffectSellItems : Effect<Collection<TestableItem>?>("sell_items") {
 
             val price = item.getUnitValue(player)
             price.giveTo(player, item.amount * multiplier)
+            sold.add(item)
         }
 
         return sold
