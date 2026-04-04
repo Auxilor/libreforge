@@ -32,7 +32,6 @@ object EffectSendTitle : Effect<NoCompileData>("send_title") {
         val subtitle = config.getString("subtitle")
             .replace("%player%", player.name)
             .formatEco(config.toPlaceholderContext(data))
-            .formatEco(player)
 
         val audience = player.asAudience()
 
