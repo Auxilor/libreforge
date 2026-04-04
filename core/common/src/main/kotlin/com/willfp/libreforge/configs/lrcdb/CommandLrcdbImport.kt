@@ -34,13 +34,11 @@ internal object CommandLrcdbImport : Subcommand(
 
             val isError = code in 400..599
 
-            val reader = if (isError) {
-                connection.errorStream.reader()
-            } else {
-                connection.inputStream.reader()
-            }
+            val text = (if (isError) connection.errorStream else connection.inputStream)
+                .bufferedReader()
+                .use { it.readText() }
 
-            val res = readConfig(BufferedReader(reader).readText(), ConfigType.JSON)
+            val res = readConfig(text, ConfigType.JSON)
 
             if (isError) {
                 sender.sendMessage(
