@@ -33,6 +33,8 @@ object TriggerCollideWithEntity : Trigger("collide_with_entity") {
             if (cooldown.getOrDefault(key, 0L) > now) continue
             cooldown[key] = now + COLLISION_COOLDOWN_MS
 
+            cooldown.entries.removeIf { it.value <= now }
+
             this.dispatch(
                 player.toDispatcher(),
                 TriggerData(
