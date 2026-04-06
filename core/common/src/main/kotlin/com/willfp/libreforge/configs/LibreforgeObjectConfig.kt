@@ -48,7 +48,7 @@ data class LibreforgeObjectConfig(
         }.toPlaintext()
 
         val request = HttpRequest.newBuilder()
-            .uri(URI.create("https://lrcdb.auxilor.io/api/v1/addConfig"))
+            .uri(URI.create("https://lrcdb.auxilor.io/api/v2/configs"))
             .header("Content-Type", "application/json")
             .POST(HttpRequest.BodyPublishers.ofString(body))
             .build()
