@@ -32,7 +32,7 @@ internal object CommandLrcdbExport : Subcommand(
             if (response.success) {
                 sender.sendMessage(
                     plugin.langYml.getMessage("lrcdb-export-success")
-                        .replace("%name%", name)
+                        .replace("%name%", configName)
                         .replace("%id%", response.body.getString("id"))
                 )
             } else {
