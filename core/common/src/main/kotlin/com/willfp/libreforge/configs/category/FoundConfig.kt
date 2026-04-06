@@ -15,13 +15,13 @@ class FoundConfig(
         val inputStream = source.getResourceAsStream(resourcePath) ?: return
         val outFile = plugin.dataFolder.resolve(resourcePath)
 
-        if (!outFile.exists()) {
-            outFile.parentFile.mkdirs()
-            FileOutputStream(outFile).use { outStream ->
-                inputStream.copyTo(outStream)
+        inputStream.use {
+            if (!outFile.exists()) {
+                outFile.parentFile.mkdirs()
+                FileOutputStream(outFile).use { outStream ->
+                    it.copyTo(outStream)
+                }
             }
         }
-
-        inputStream.close()
     }
 }
