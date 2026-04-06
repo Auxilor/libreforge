@@ -60,7 +60,7 @@ object EffectHoming : Effect<List<TestableEntity>>("homing") {
         if (arrow.hasMetadata(META_KEY_DISTANCE)) {
             distance += arrow.getMetadata(META_KEY_DISTANCE).firstOrNull()?.value() as? Double ?: 0.0
             @Suppress("UNCHECKED_CAST")
-            targets += arrow.getMetadata(META_KEY_DISTANCE).firstOrNull()?.value() as? List<TestableEntity>
+            targets += arrow.getMetadata(META_KEY_TARGETS).firstOrNull()?.value() as? List<TestableEntity>
                 ?: emptyList()
         }
 
