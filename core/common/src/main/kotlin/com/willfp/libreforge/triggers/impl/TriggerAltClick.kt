@@ -50,7 +50,6 @@ object TriggerAltClick : Trigger("alt_click") {
         Material.BEACON,
         Material.LECTERN,
         Material.FLETCHING_TABLE,
-        Material.SMITHING_TABLE,
         Material.STONECUTTER,
         Material.SMOKER,
         Material.BLAST_FURNACE,
