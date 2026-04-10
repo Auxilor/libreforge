@@ -8,6 +8,7 @@ import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.attribute.Attribute
+import org.bukkit.event.entity.EntityRegainHealthEvent
 
 object EffectGiveHealth : Effect<NoCompileData>("give_health") {
     override val parameters = setOf(
@@ -21,8 +22,19 @@ object EffectGiveHealth : Effect<NoCompileData>("give_health") {
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val player = data.player ?: return false
 
-        player.health = (player.health + config.getDoubleFromExpression("amount", data))
-            .coerceAtMost(player.getAttribute(Attribute.MAX_HEALTH)!!.value)
+        if (config.getBoolOrNull("trigger_heal") == true) {
+            val amount = config.getDoubleFromExpression("amount", data)
+            val event = EntityRegainHealthEvent(player, amount, EntityRegainHealthEvent.RegainReason.CUSTOM)
+            player.server.pluginManager.callEvent(event)
+
+            if (event.isCancelled) return false
+
+            player.health = (player.health + event.amount)
+                .coerceAtMost(player.getAttribute(Attribute.MAX_HEALTH)!!.value)
+        } else {
+            player.health = (player.health + config.getDoubleFromExpression("amount", data))
+                .coerceAtMost(player.getAttribute(Attribute.MAX_HEALTH)!!.value)
+        }
 
         return true
     }
