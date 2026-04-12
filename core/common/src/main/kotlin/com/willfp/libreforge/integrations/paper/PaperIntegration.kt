@@ -20,6 +20,7 @@ import com.willfp.libreforge.integrations.paper.impl.TriggerTridentAttack
 import com.willfp.libreforge.integrations.paper.impl.TriggerUseFlowerPot
 import com.willfp.libreforge.integrations.paper.impl.TriggerVillagerTrade
 import com.willfp.libreforge.triggers.Triggers
+import com.willfp.libreforge.triggers.impl.TriggerTridentHit
 
 object PaperIntegration : LoadableIntegration {
     override fun load(plugin: EcoPlugin) {
@@ -38,6 +39,7 @@ object PaperIntegration : LoadableIntegration {
         Triggers.register(TriggerElytraBoost)
         Triggers.register(TriggerRenameEntity)
         Triggers.register(TriggerTridentAttack)
+        Triggers.register(TriggerTridentHit)
         Triggers.register(TriggerUseFlowerPot)
         Triggers.register(TriggerVillagerTrade)
     }
