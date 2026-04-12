@@ -27,6 +27,11 @@ messages:
   must-specify-player: "&cYou must specify the player!"
   invalid-player: "&cInvalid player name!"
 
+  must-specify-slot: "&cYou must specify the slot!"
+  invalid-slot: "&cInvalid slot &f%slot%&c! Use any slot accepted by in_slot, such as &fmainhand&c, &foffhand&c, &farmor&c, &fany&c, numeric slots, or comma-separated combinations."
+  empty-slot: "&c%player%'s slot &f%slot%&c is empty!"
+  item-data-header: "&aItem data for %player% slot %slot%"
+
   must-specify-point: "&cYou must specify the point!"
   invalid-point: "&cInvalid point name!"
 
