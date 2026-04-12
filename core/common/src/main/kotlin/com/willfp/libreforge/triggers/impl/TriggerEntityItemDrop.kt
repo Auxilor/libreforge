@@ -8,9 +8,12 @@ import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import com.willfp.libreforge.triggers.event.EditableEntityDropEvent
+import com.willfp.libreforge.triggers.event.DropCause
+import com.willfp.libreforge.triggers.event.DropContext
+import com.willfp.libreforge.triggers.event.EditableDropEvent
 import com.willfp.libreforge.triggers.tryAsLivingEntity
 import org.bukkit.entity.Player
+import org.bukkit.event.Cancellable
 import org.bukkit.event.EventHandler
 
 
@@ -18,6 +21,7 @@ object TriggerEntityItemDrop : Trigger("entity_item_drop") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
+        TriggerParameter.ITEM,
         TriggerParameter.EVENT,
         TriggerParameter.LOCATION
     )
@@ -34,7 +38,16 @@ object TriggerEntityItemDrop : Trigger("entity_item_drop") {
         val killer = event.killer.tryAsLivingEntity() ?: return
         val originalDrops = event.drops.filterNotEmpty()
 
-        val editableEvent = EditableEntityDropEvent(event.deathEvent)
+        val editableEvent = EditableDropEvent(
+            initialDrops = originalDrops,
+            cause = DropCause.ENTITY,
+            context = DropContext(
+                player = killer as? Player,
+                entity = entity
+            ),
+            dropLocation = entity.location,
+            cancellable = event.deathEvent as? Cancellable
+        )
 
         this.dispatch(
             killer.toDispatcher(),
@@ -47,16 +60,15 @@ object TriggerEntityItemDrop : Trigger("entity_item_drop") {
             )
         )
 
-        val newDrops = editableEvent.items
-
         event.drops.clear()
-        event.drops.addAll(newDrops.map { it.item })
+        event.drops.addAll(editableEvent.drops)
 
         if (killer is Player) {
-            if (newDrops.sumOf { it.xp } > 0) {
+            val totalXP = editableEvent.items.sumOf { it.xp }
+            if (totalXP > 0) {
                 DropQueue(killer)
                     .setLocation(entity.location)
-                    .addXP(newDrops.sumOf { it.xp })
+                    .addXP(totalXP)
                     .push()
             }
         }

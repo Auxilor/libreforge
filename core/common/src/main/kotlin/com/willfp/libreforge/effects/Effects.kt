@@ -61,15 +61,14 @@ import com.willfp.libreforge.effects.impl.EffectDontConsumeLapisChance
 import com.willfp.libreforge.effects.impl.EffectDontConsumeXpChance
 import com.willfp.libreforge.effects.impl.EffectDrill
 import com.willfp.libreforge.effects.impl.EffectDropItem
-import com.willfp.libreforge.effects.impl.EffectDropItemForPlayer
 import com.willfp.libreforge.effects.impl.EffectDropItemSlot
 import com.willfp.libreforge.effects.impl.EffectDropRandomItem
-import com.willfp.libreforge.effects.impl.EffectDropRandomItemForPlayer
 import com.willfp.libreforge.effects.impl.EffectDropWeightedRandomItem
 import com.willfp.libreforge.effects.impl.EffectEntityReach
 import com.willfp.libreforge.effects.impl.EffectExplosionKnockbackResistanceMultiplier
 import com.willfp.libreforge.effects.impl.EffectExtinguish
 import com.willfp.libreforge.effects.impl.EffectFeatherStep
+import com.willfp.libreforge.effects.impl.EffectFirework
 import com.willfp.libreforge.effects.impl.EffectFlight
 import com.willfp.libreforge.effects.impl.EffectFoodMultiplier
 import com.willfp.libreforge.effects.impl.EffectGiveFood
@@ -98,7 +97,6 @@ import com.willfp.libreforge.effects.impl.EffectKnockAway
 import com.willfp.libreforge.effects.impl.EffectKnockbackMultiplier
 import com.willfp.libreforge.effects.impl.EffectKnockbackResistanceMultiplier
 import com.willfp.libreforge.effects.impl.EffectLevelItem
-import com.willfp.libreforge.effects.impl.EffectLuckMultiplier
 import com.willfp.libreforge.effects.impl.EffectMineRadius
 import com.willfp.libreforge.effects.impl.EffectMineRadiusOneDeep
 import com.willfp.libreforge.effects.impl.EffectMineVein
@@ -140,7 +138,6 @@ import com.willfp.libreforge.effects.impl.EffectReplantCrops
 import com.willfp.libreforge.effects.impl.EffectRotate
 import com.willfp.libreforge.effects.impl.EffectRotateVictim
 import com.willfp.libreforge.effects.impl.EffectRunChain
-import com.willfp.libreforge.effects.impl.EffectRunChainInline
 import com.willfp.libreforge.effects.impl.EffectRunCommand
 import com.willfp.libreforge.effects.impl.EffectRunPlayerCommand
 import com.willfp.libreforge.effects.impl.EffectSafeFallDistance
@@ -163,6 +160,7 @@ import com.willfp.libreforge.effects.impl.EffectSetVelocity
 import com.willfp.libreforge.effects.impl.EffectSetVictimVelocity
 import com.willfp.libreforge.effects.impl.EffectShoot
 import com.willfp.libreforge.effects.impl.EffectShootArrow
+import com.willfp.libreforge.effects.impl.EffectShootFirework
 import com.willfp.libreforge.effects.impl.EffectShuffleHotbar
 import com.willfp.libreforge.effects.impl.EffectSmite
 import com.willfp.libreforge.effects.impl.EffectSneakingSpeedMultiplier
@@ -457,7 +455,13 @@ object Effects : Registry<Effect<*>>() {
 
         val (arguments, conditions, mutators, filters) = compileEffectContext(config, context)
 
-        val weight = config.getDoubleFromExpression("weight")
+        val weight = if (config.has("weight")) {
+            runCatching {
+                config.getDoubleFromExpression("weight", null)
+            }.getOrDefault(1.0)
+        } else {
+            1.0
+        }
 
         val forceRunOrder = if (args.has("run_order")) {
             enumValueOfOrNull<RunOrder>(args.getString("run_order").uppercase())
@@ -466,6 +470,7 @@ object Effects : Registry<Effect<*>>() {
         return ChainElement(
             effect,
             args,
+            config,
             compileData,
             arguments,
             conditions,
@@ -522,14 +527,13 @@ object Effects : Registry<Effect<*>>() {
         register(EffectDontConsumeXpChance)
         register(EffectDrill)
         register(EffectDropItem)
-        register(EffectDropItemForPlayer)
         register(EffectDropItemSlot)
         register(EffectDropPickupItem)
         register(EffectDropRandomItem)
-        register(EffectDropRandomItemForPlayer)
         register(EffectDropWeightedRandomItem)
         register(EffectExtinguish)
         register(EffectFeatherStep)
+        register(EffectFirework)
         register(EffectFlight)
         register(EffectFoodMultiplier)
         register(EffectGiveFood)
@@ -555,7 +559,6 @@ object Effects : Registry<Effect<*>>() {
         register(EffectKnockbackMultiplier)
         register(EffectKnockbackResistanceMultiplier)
         register(EffectLevelItem)
-        register(EffectLuckMultiplier)
         register(EffectMineRadius)
         register(EffectMineRadiusOneDeep)
         register(EffectMineVein)
@@ -594,7 +597,6 @@ object Effects : Registry<Effect<*>>() {
         register(EffectRotate)
         register(EffectRotateVictim)
         register(EffectRunChain)
-        register(EffectRunChainInline)
         register(EffectRunCommand)
         register(EffectRunPlayerCommand)
         register(EffectSellItems)
@@ -615,6 +617,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectSetVictimVelocity)
         register(EffectShoot)
         register(EffectShootArrow)
+        register(EffectShootFirework)
         register(EffectShuffleHotbar)
         register(EffectSmite)
         register(EffectSpawnEntity)

@@ -25,6 +25,7 @@ softdepend:
   - Terra
   - TerraformGenerator
   - ModelEngine
+  - BetterModel
   - MythicMobs
   - AxEnvoy
   - AxTrade
@@ -60,6 +61,7 @@ permissions:
       libreforge.command.reload: true
       libreforge.command.debug: true
       libreforge.command.trigger: true
+      libreforge.command.getitemdata: true
       libreforge.command.points.*: true
   libreforge.command.points.*:
     description: All points commands
@@ -83,6 +85,9 @@ permissions:
     default: op
   libreforge.command.trigger:
     description: Allows the use of /libreforge trigger
+    default: op
+  libreforge.command.getitemdata:
+    description: Allows the use of /libreforge getitemdata
     default: op
   libreforge.command.points:
     description: Allows the use of /libreforge points

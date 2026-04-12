@@ -10,7 +10,6 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.IdentifiedModifier
 import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.get
-import com.willfp.libreforge.toDispatcher
 import org.bukkit.entity.Player
 import java.util.UUID
 
@@ -47,11 +46,4 @@ abstract class MultiplierEffect(id: String) : Effect<NoCompileData>(id) {
         return multiplier
     }
 
-    @Deprecated(
-        "Use getMultiplier(dispatcher: Dispatcher<*>) instead.",
-        ReplaceWith("getMultiplier(player.toDispatcher())"),
-        DeprecationLevel.ERROR
-    )
-    protected fun getMultiplier(player: Player): Double =
-        getMultiplier(player.toDispatcher())
 }

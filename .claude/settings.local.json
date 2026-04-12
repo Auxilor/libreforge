@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C /Users/will/IdeaProjects/libreforge log --oneline -20)",
+      "Bash(git -C /Users/will/IdeaProjects/libreforge diff da822990~3..da822990 -- '*.kt')",
+      "Bash(git -C /Users/will/IdeaProjects/libreforge log --oneline -30 --all -- 'core/common/src/**/*.kt')",
+      "Bash(git -C /Users/will/IdeaProjects/libreforge diff 4bb1d0bb..da822990 -- '*.kt')",
+      "Bash(git stash:*)",
+      "Bash(git checkout:*)",
+      "Bash(git pull:*)",
+      "Bash(git reset:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
+    ]
+  }
+}

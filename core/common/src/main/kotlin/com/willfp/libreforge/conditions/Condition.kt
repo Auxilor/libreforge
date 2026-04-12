@@ -5,7 +5,6 @@ import com.willfp.libreforge.Compilable
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.plugin
-import org.bukkit.entity.Player
 import org.bukkit.event.Listener
 
 abstract class Condition<T>(
@@ -37,37 +36,6 @@ abstract class Condition<T>(
      */
     open fun isMet(
         dispatcher: Dispatcher<*>,
-        config: Config,
-        holder: ProvidedHolder,
-        compileData: T
-    ): Boolean {
-        return true
-    }
-
-    /**
-     * Get if the condition is met for a [player], with a [config], and [compileData].
-     */
-    @Deprecated(
-        "Use isMet(dispatcher, config, holder, compileData) instead.",
-        ReplaceWith("isMet(player.toDispatcher(), config, holder, compileData)"),
-    )
-    open fun isMet(
-        player: Player,
-        config: Config,
-        compileData: T
-    ): Boolean {
-        return true
-    }
-
-    /**
-     * Get if the condition is met for a [player], with a [config], [holder], and [compileData].
-     */
-    @Deprecated(
-        "Use isMet(dispatcher, config, holder, compileData) instead.",
-        ReplaceWith("isMet(player.toDispatcher(), config, holder, compileData)"),
-    )
-    open fun isMet(
-        player: Player,
         config: Config,
         holder: ProvidedHolder,
         compileData: T

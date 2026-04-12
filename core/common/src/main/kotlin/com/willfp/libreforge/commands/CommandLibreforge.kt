@@ -1,5 +1,6 @@
 package com.willfp.libreforge.commands
 
+import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.command.impl.PluginCommand
 import com.willfp.libreforge.plugin
 import org.bukkit.command.CommandSender
@@ -15,6 +16,7 @@ object CommandLibreforge : PluginCommand(
             .addSubcommand(CommandPoints)
             .addSubcommand(CommandTrigger)
             .addSubcommand(CommandDebug)
+            .addSubcommand(CommandGetItemData)
     }
 
     override fun onExecute(sender: CommandSender, args: MutableList<String>) {

@@ -81,6 +81,7 @@ import com.willfp.libreforge.triggers.impl.TriggerRingBell
 import com.willfp.libreforge.triggers.impl.TriggerRunCommand
 import com.willfp.libreforge.triggers.impl.TriggerSellItem
 import com.willfp.libreforge.triggers.impl.TriggerSendMessage
+import com.willfp.libreforge.triggers.impl.TriggerShear
 import com.willfp.libreforge.triggers.impl.TriggerShearEntity
 import com.willfp.libreforge.triggers.impl.TriggerShieldBlock
 import com.willfp.libreforge.triggers.impl.TriggerShootBow
@@ -221,6 +222,8 @@ object Triggers : Registry<Trigger>() {
         register(TriggerRunCommand)
         register(TriggerSellItem)
         register(TriggerSendMessage)
+        register(TriggerShear)
+        @Suppress("DEPRECATION")
         register(TriggerShearEntity)
         register(TriggerShieldBlock)
         register(TriggerShootBow)

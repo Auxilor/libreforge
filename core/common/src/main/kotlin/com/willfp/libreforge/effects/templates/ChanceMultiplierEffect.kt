@@ -47,12 +47,4 @@ abstract class ChanceMultiplierEffect(id: String) : Effect<NoCompileData>(id) {
 
         return randDouble(0.0, 1.0) > chance
     }
-
-    @Deprecated(
-        "Use passesChance(dispatcher: Dispatcher<*>) instead.",
-        ReplaceWith("passesChance(player.toDispatcher())"),
-        DeprecationLevel.ERROR
-    )
-    protected fun passesChance(player: Player): Boolean =
-        passesChance(player.toDispatcher())
 }

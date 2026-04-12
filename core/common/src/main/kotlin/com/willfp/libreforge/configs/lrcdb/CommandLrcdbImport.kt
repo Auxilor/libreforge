@@ -28,19 +28,17 @@ internal object CommandLrcdbImport : Subcommand(
         val id = args[0]
 
         onLrcdbThread {
-            val url = URI("https://lrcdb.auxilor.io/api/v1/getConfigByID?id=$id&isDownload=true").toURL()
+            val url = URI("https://lrcdb.auxilor.io/api/v2/configs/$id?isDownload=true").toURL()
             val connection = url.openConnection() as HttpURLConnection
             val code = connection.responseCode
 
             val isError = code in 400..599
 
-            val reader = if (isError) {
-                connection.errorStream.reader()
-            } else {
-                connection.inputStream.reader()
-            }
+            val text = (if (isError) connection.errorStream else connection.inputStream)
+                .bufferedReader()
+                .use { it.readText() }
 
-            val res = readConfig(BufferedReader(reader).readText(), ConfigType.JSON)
+            val res = readConfig(text, ConfigType.JSON)
 
             if (isError) {
                 sender.sendMessage(

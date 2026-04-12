@@ -1,19 +1,16 @@
 package com.willfp.libreforge.triggers.event
 
-import com.willfp.eco.util.toSingletonList
 import org.bukkit.Location
-import org.bukkit.entity.Item
+import org.bukkit.block.Block
+import org.bukkit.entity.Entity
+import org.bukkit.entity.Player
 import org.bukkit.event.Cancellable
 import org.bukkit.event.Event
 import org.bukkit.event.HandlerList
-import org.bukkit.event.block.BlockDropItemEvent
-import org.bukkit.event.entity.EntityDeathEvent
-import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.inventory.ItemStack
 
-
 /*
-An ItemStack becomes a DropResult.
+ * An ItemStack paired with accumulated XP from drop modifiers.
  */
 data class DropResult(
     val item: ItemStack,
@@ -21,191 +18,151 @@ data class DropResult(
 )
 
 /**
- * Turns an ItemStack into a DropResult.
+ * Transforms a drop: the returned XP is accumulated; item mutations should
+ * be done in-place since the item reference is shared with the event's drop list.
  */
 typealias DropModifier = (ItemStack) -> DropResult
 
 /**
- * Modify an ItemStack.
+ * Apply all modifiers to [item], accumulating XP.  Item mutations happen
+ * in-place; only the XP from each modifier's result is used.
  */
 fun Collection<DropModifier>.modify(item: ItemStack): DropResult {
     var xp = 0
-
     for (modifier in this) {
         xp += modifier(item).xp
     }
-
     return DropResult(item, xp)
 }
 
 /**
- * A 'mock' drop event providing a common API by which to modify drops.
+ * What caused this drop event to be fired.
  */
-abstract class EditableDropEvent : Event(), Cancellable {
-    abstract fun addModifier(modifier: DropModifier)
+enum class DropCause {
+    /** A block was broken and dropped items. */
+    BLOCK,
+
+    /** An entity died and dropped items. */
+    ENTITY,
+
+    /** An entity was sheared. */
+    SHEAR,
+
+    /** A player caught a fish. */
+    FISHING,
+
+    /** Any other / custom source. */
+    CUSTOM
+}
+
+/**
+ * Contextual information attached to an [EditableDropEvent].
+ * All fields are nullable; populate only what is relevant for the cause.
+ */
+data class DropContext(
+    /** The player responsible for this drop (miner, killer, fisherman…). */
+    val player: Player? = null,
+
+    /** The block that was broken (only relevant for [DropCause.BLOCK]). */
+    val block: Block? = null,
+
+    /** The entity that dropped/was sheared (only relevant for [DropCause.ENTITY] / [DropCause.SHEAR]). */
+    val entity: Entity? = null,
+
+    /** The tool used to produce this drop. */
+    val tool: ItemStack? = null
+)
+
+/**
+ * A unified, cause-agnostic drop event.
+ *
+ * All drops are stored as a [MutableList] so effects can add, remove, or
+ * reorder items directly.  [DropModifier]s are layered on top and are applied
+ * lazily when [items] is read (they accumulate XP and mutate item stacks
+ * in-place).
+ *
+ * @param initialDrops  The items that will be dropped before any modification.
+ * @param cause         Why this drop is happening.
+ * @param context       Extra contextual data (player, block, entity, tool).
+ * @param dropLocation  Where the items land.
+ * @param cancellable   Optional delegate used to implement [isCancelled] /
+ *                      [setCancelled].  Pass the originating Bukkit event when
+ *                      available.
+ */
+class EditableDropEvent(
+    initialDrops: List<ItemStack>,
+    val cause: DropCause,
+    val context: DropContext,
+    val dropLocation: Location,
+    private val cancellable: Cancellable? = null
+) : Event(), Cancellable {
+
+    /** Live, mutable drop list.  Modify directly or via [removeItem]. */
+    val drops: MutableList<ItemStack> = initialDrops.toMutableList()
 
     /**
-     * Items before any modifiers are applied.
+     * Snapshot of the drops as they were when this event was constructed,
+     * before any effect/modifier ran.
      */
-    abstract val originalItems: List<ItemStack>
+    @Suppress("unused")
+    val originalItems: List<ItemStack> = initialDrops.toList()
+
+    private val modifiers = mutableListOf<DropModifier>()
+
+    // ── Convenience accessors forwarded from context (backwards compat) ──────
+
+    /** Shorthand for [DropContext.player]. */
+    val player: Player? get() = context.player
+
+    /** Shorthand for [DropContext.block]. */
+    val block: Block? get() = context.block
+
+    /** Shorthand for [DropContext.entity]. */
+    val entity: Entity? get() = context.entity
+
+    /** Shorthand for [DropContext.tool]. */
+    @Suppress("unused")
+    val tool: ItemStack? get() = context.tool
 
     /**
-     * Items after modifiers are applied.
+     * Register a modifier that will be applied to every item in [drops] when
+     * [items] is read.  Modifiers accumulate XP; item mutations should be
+     * done in-place on the passed [ItemStack].
      */
-    abstract val items: List<DropResult>
-
-    /**
-     * The location of the drops.
-     */
-    abstract val dropLocation: Location
-
-    /**
-     * Remove an item.
-     */
-    abstract fun removeItem(item: ItemStack)
-
-    override fun getHandlers(): HandlerList {
-        return handlerList
+    fun addModifier(modifier: DropModifier) {
+        modifiers += modifier
     }
+
+    /**
+     * The current [drops] with all registered modifiers applied.
+     * XP values from every modifier are summed per item.
+     */
+    val items: List<DropResult>
+        get() = drops.map { modifiers.modify(it) }
+
+    /**
+     * Remove [item] from [drops] by equality.
+     * For identity-safe removal iterate [drops] directly.
+     */
+    fun removeItem(item: ItemStack) {
+        drops.remove(item)
+    }
+
+    override fun isCancelled(): Boolean = cancellable?.isCancelled ?: false
+
+    override fun setCancelled(cancel: Boolean) {
+        cancellable?.isCancelled = cancel
+    }
+
+    override fun getHandlers(): HandlerList = handlerList
 
     companion object {
         @JvmStatic
         private val handlerList = HandlerList()
 
         @JvmStatic
-        fun getHandlerList(): HandlerList {
-            return handlerList
-        }
+        @Suppress("unused")
+        fun getHandlerList(): HandlerList = handlerList
     }
 }
 
-class EditableEntityDropEvent(
-    private val event: EntityDeathEvent
-) : EditableDropEvent() {
-    private val modifiers = mutableListOf<DropModifier>()
-
-    override fun addModifier(modifier: DropModifier) {
-        modifiers += modifier
-    }
-
-    override val originalItems: List<ItemStack>
-        get() = event.drops
-
-    override val items: List<DropResult>
-        get() = originalItems.map { modifiers.modify(it) }
-
-    override val dropLocation: Location
-        get() = event.entity.location
-
-    override fun removeItem(item: ItemStack) {
-        event.drops.remove(item)
-    }
-
-    override fun isCancelled(): Boolean {
-        return event.isCancelled
-    }
-
-    override fun setCancelled(p0: Boolean) {
-        event.isCancelled = p0
-    }
-}
-
-class EditableBlockDropEvent(
-    private val event: BlockDropItemEvent
-) : EditableDropEvent() {
-    private val modifiers = mutableListOf<DropModifier>()
-
-    override fun addModifier(modifier: DropModifier) {
-        modifiers += modifier
-    }
-
-    override val originalItems: List<ItemStack>
-        get() = event.items.map { it.itemStack }
-
-    override val items: List<DropResult>
-        get() = originalItems.map { modifiers.modify(it) }
-
-    override val dropLocation: Location
-        get() = event.items.first().location
-
-    override fun removeItem(item: ItemStack) {
-        event.items.removeIf { it.itemStack == item }
-    }
-
-    override fun isCancelled(): Boolean {
-        return event.isCancelled
-    }
-
-    override fun setCancelled(p0: Boolean) {
-        event.isCancelled = p0
-    }
-}
-
-class EditablePlayerDropEvent(
-    private val event: PlayerDropItemEvent
-): EditableDropEvent() {
-    private val modifiers = mutableListOf<DropModifier>()
-
-    override fun addModifier(modifier: DropModifier) {
-        modifiers += modifier
-    }
-
-    override val originalItems: List<ItemStack>
-        get() = event.itemDrop.itemStack.toSingletonList()
-
-    override val items: List<DropResult>
-        get() = originalItems.map { modifiers.modify(it) }
-
-    override val dropLocation: Location
-        get() = event.itemDrop.location
-
-    override fun removeItem(item: ItemStack) {
-        if (event.itemDrop.itemStack == item) {
-            event.itemDrop.remove()
-        }
-    }
-
-    override fun isCancelled(): Boolean {
-        return event.isCancelled
-    }
-
-    override fun setCancelled(p0: Boolean) {
-        event.isCancelled = p0
-    }
-}
-
-class EditableFishDropEvent(
-    private val cancellable: Cancellable?,
-    private val dropLocationSupplier: () -> Location,
-    private val itemEntity: Item
-) : EditableDropEvent() {
-
-    private val modifiers = mutableListOf<DropModifier>()
-
-    override fun addModifier(modifier: DropModifier) {
-        modifiers += modifier
-    }
-
-    override val originalItems: List<ItemStack>
-        get() = listOf(itemEntity.itemStack)
-
-    override val items: List<DropResult>
-        get() = originalItems.map { modifiers.modify(it) }
-
-    override val dropLocation: Location
-        get() = dropLocationSupplier()
-
-    override fun removeItem(item: ItemStack) {
-        if (itemEntity.itemStack == item) {
-            itemEntity.remove()
-        }
-    }
-
-    override fun isCancelled(): Boolean {
-        return cancellable?.isCancelled ?: false
-    }
-
-    override fun setCancelled(cancel: Boolean) {
-        cancellable?.isCancelled = cancel
-    }
-}
