@@ -3,7 +3,7 @@ version = rootProject.version
 
 subprojects {
     dependencies {
-        compileOnly("com.willfp:eco:7.0.0")
+        compileOnly("com.willfp:eco:7.2.2")
     }
 }
 
