@@ -12,6 +12,7 @@ import org.bukkit.Tag
 import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import java.util.UUID
@@ -55,7 +56,8 @@ object TriggerAltClick : Trigger("alt_click") {
         Material.BLAST_FURNACE,
         Material.BREWING_STAND,
         Material.DISPENSER,
-        Material.DROPPER
+        Material.DROPPER,
+        Material.BEDROCK
     )
 
     private val preventDoubleTriggers = mutableSetOf<UUID>()
@@ -70,7 +72,7 @@ object TriggerAltClick : Trigger("alt_click") {
         BLOCK_BLACKLIST.addAll(Tag.SHULKER_BOXES.values)
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     fun handle(event: PlayerInteractEvent) {
         val player = event.player
 
