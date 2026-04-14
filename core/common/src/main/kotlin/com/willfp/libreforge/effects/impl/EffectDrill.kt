@@ -36,6 +36,8 @@ object EffectDrill : MineBlockEffect<NoCompileData>("drill") {
 
         val whitelist = config.getStringsOrNull("whitelist")
 
+        val preventTriggers = config.getBool("prevent_trigger")
+
         val blocks = mutableSetOf<Block>()
 
         for (i in 1..amount) {
@@ -69,7 +71,7 @@ object EffectDrill : MineBlockEffect<NoCompileData>("drill") {
             blocks.add(toBreak)
         }
 
-        player.breakBlocksSafely(blocks)
+        player.breakBlocksSafely(blocks, preventTriggers)
 
         return true
     }

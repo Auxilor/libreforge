@@ -27,6 +27,8 @@ object EffectMineRadius : MineBlockEffect<NoCompileData>("mine_radius") {
 
         val radius = config.getIntFromExpression("radius", data)
 
+        val preventTriggers = config.getBool("prevent_trigger")
+
         if (player.isSneaking && config.getBool("disable_on_sneak")) {
             return false
         }
@@ -83,7 +85,7 @@ object EffectMineRadius : MineBlockEffect<NoCompileData>("mine_radius") {
             }
         }
 
-        player.breakBlocksSafely(blocks)
+        player.breakBlocksSafely(blocks, preventTriggers)
 
         return true
     }

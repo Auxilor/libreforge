@@ -22,9 +22,11 @@ abstract class MineBlockEffect<T : Any>(id: String) : Effect<T>(id) {
         return !block.hasMetadata(ignoreKey)
     }
 
-    protected fun Player.breakBlocksSafely(blocks: Collection<Block>) {
+    protected fun Player.breakBlocksSafely(blocks: Collection<Block>, preventTriggers: Boolean = false) {
         if (plugin.configYml.getBool("effects.use-setblock-break")) {
             blocks.forEach { it.type = Material.AIR }
+        } else if (preventTriggers) {
+            blocks.forEach { it.breakNaturally() }
         } else {
             this.runExempted {
                 for (block in blocks) {

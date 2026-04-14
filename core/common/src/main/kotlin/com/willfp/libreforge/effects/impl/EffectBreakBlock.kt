@@ -16,7 +16,9 @@ object EffectBreakBlock : MineBlockEffect<NoCompileData>("break_block") {
 
         val player = data.player ?: return false
 
-        player.breakBlocksSafely(listOf(block))
+        val preventTriggers = config.getBool("prevent_trigger")
+
+        player.breakBlocksSafely(listOf(block), preventTriggers)
 
         return true
     }
