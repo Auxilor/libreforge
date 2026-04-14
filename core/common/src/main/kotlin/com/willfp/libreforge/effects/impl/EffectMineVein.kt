@@ -28,6 +28,8 @@ object EffectMineVein : MineBlockEffect<FilterList>("mine_vein") {
 
         val limit = config.getIntFromExpression("limit", data)
 
+        val preventTriggers = config.getBool("prevent_trigger")
+
         if (player.isSneaking && config.getBool("disable_on_sneak")) {
             return false
         }
@@ -44,7 +46,11 @@ object EffectMineVein : MineBlockEffect<FilterList>("mine_vein") {
             .filter { AntigriefManager.canBreakBlock(player, it) }
             .filter { compileData.isMet(data.copy(block = it)) }
 
-        player.breakBlocksSafely(blocks)
+        if (preventTriggers) {
+            blocks.forEach { it.breakNaturally() }
+        } else {
+            player.breakBlocksSafely(blocks)
+        }
 
         return true
     }
