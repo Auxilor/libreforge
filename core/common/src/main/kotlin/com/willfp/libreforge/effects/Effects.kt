@@ -28,6 +28,7 @@ import com.willfp.libreforge.effects.impl.EffectAddPoints
 import com.willfp.libreforge.effects.impl.EffectAgeCrop
 import com.willfp.libreforge.effects.impl.EffectAllPlayers
 import com.willfp.libreforge.effects.impl.EffectAnimation
+import com.willfp.libreforge.effects.impl.EffectAntigravityProjectile
 import com.willfp.libreforge.effects.impl.EffectArmor
 import com.willfp.libreforge.effects.impl.EffectArmorToughness
 import com.willfp.libreforge.effects.impl.EffectArrowRing
@@ -495,6 +496,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectAddPoints)
         register(EffectAgeCrop)
         register(EffectAllPlayers)
+        register(EffectAntigravityProjectile)
         register(EffectAnimation)
         register(EffectArmor)
         register(EffectArmorToughness)
