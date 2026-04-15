@@ -36,6 +36,10 @@ fun Location.getNearbyBlocks(
     z: Double
 ): Collection<Block> {
     val blocks = mutableListOf<Block>()
+    val world = this.world ?: return blocks
+    val baseX = this.blockX
+    val baseY = this.blockY
+    val baseZ = this.blockZ
 
     val xRadius = (x / 2).roundToInt()
     val yRadius = (y / 2).roundToInt()
@@ -44,7 +48,7 @@ fun Location.getNearbyBlocks(
     for (xPos in -xRadius..xRadius) {
         for (yPos in -yRadius..yRadius) {
             for (zPos in -zRadius..zRadius) {
-                blocks.add(this.clone().add(xPos.toDouble(), yPos.toDouble(), zPos.toDouble()).block)
+                blocks.add(world.getBlockAt(baseX + xPos, baseY + yPos, baseZ + zPos))
             }
         }
     }
@@ -69,7 +73,6 @@ fun ItemStack.applyDamage(damage: Int, player: Player?): Boolean {
     meta.damage += damage
     if (meta.damage >= this.type.maxDurability) {
         meta.damage = this.type.maxDurability.toInt()
-        this.itemMeta = meta
         if (player != null) {
             Bukkit.getPluginManager().callEvent(PlayerItemBreakEvent(player, this))
             player.playSound(player.location, Sound.ENTITY_ITEM_BREAK, SoundCategory.BLOCKS, 1f, 1f)
