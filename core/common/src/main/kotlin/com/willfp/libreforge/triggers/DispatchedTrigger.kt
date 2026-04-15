@@ -11,24 +11,30 @@ class DispatchedTrigger(
     val data: TriggerData
 ) {
     private val _placeholders = mutableListOf<NamedValue>()
+    private var _cachedPlaceholders: List<InjectablePlaceholder>? = null
 
     val rawPlaceholders: List<NamedValue>
         get() = _placeholders
 
     val placeholders: List<InjectablePlaceholder>
-        get() = _placeholders.flatMap { it.placeholders }
+        get() = _cachedPlaceholders ?: _placeholders.flatMap { it.placeholders }.also {
+            _cachedPlaceholders = it
+        }
 
 
     fun addPlaceholder(placeholder: NamedValue) {
         _placeholders += placeholder
+        _cachedPlaceholders = null
     }
 
     fun addPlaceholders(placeholder: Iterable<NamedValue>) {
         _placeholders += placeholder
+        _cachedPlaceholders = null
     }
 
     fun inheritPlaceholders(other: DispatchedTrigger): DispatchedTrigger {
         _placeholders += other._placeholders
+        _cachedPlaceholders = null
         return this
     }
 
@@ -39,6 +45,8 @@ class DispatchedTrigger(
      * and again after mutation with the updated [data].
      */
     internal fun generatePlaceholders(data: TriggerData = this.data) {
+        _placeholders.clear()
+        _cachedPlaceholders = null
         for (placeholder in TriggerPlaceholders) {
             _placeholders += placeholder.createPlaceholders(data)
         }
