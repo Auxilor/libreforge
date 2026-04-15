@@ -44,28 +44,21 @@ object EffectDataFixer : Listener {
     }
 
     private fun Player.fixAttributes() {
+        val effectIds = Effects.values().map { it.id }.toSet()
+
         for (attribute in Registry.ATTRIBUTE) {
             val inst = this.getAttribute(attribute) ?: continue
-            val mods = inst.modifiers.filter { it.name.startsWith("libreforge") }
-            for (mod in mods) {
-                inst.removeModifier(mod)
+            for (mod in inst.modifiers) {
+                if (mod.name.startsWith("libreforge") || effectIds.any { mod.name.startsWith(it) }) {
+                    inst.removeModifier(mod)
+                }
             }
         }
 
         // Extra fix
-        if (this.health > (this.getAttribute(Attribute.MAX_HEALTH)?.value ?: 0.0)) {
-            this.health = this.getAttribute(Attribute.MAX_HEALTH)?.value ?: 0.0
-        }
-
-        // Legacy fix
-        for (effect in Effects.values()) {
-            for (attribute in Registry.ATTRIBUTE) {
-                val inst = this.getAttribute(attribute) ?: continue
-                val mods = inst.modifiers.filter { it.name.startsWith(effect.id) }
-                for (mod in mods) {
-                    inst.removeModifier(mod)
-                }
-            }
+        val maxHealth = this.getAttribute(Attribute.MAX_HEALTH)?.value ?: 0.0
+        if (this.health > maxHealth) {
+            this.health = maxHealth
         }
     }
 }
