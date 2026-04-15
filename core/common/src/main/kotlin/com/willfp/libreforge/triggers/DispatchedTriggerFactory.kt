@@ -28,7 +28,8 @@ class DispatchedTriggerFactory(
         }
 
         dispatcherTriggers[dispatcher.uuid].add(hash)
-        return DispatchedTrigger(dispatcher, trigger, data.copy(dispatcher = dispatcher))
+        val dispatchData = if (data.dispatcher == dispatcher) data else data.copy(dispatcher = dispatcher)
+        return DispatchedTrigger(dispatcher, trigger, dispatchData)
     }
 
     internal fun startTicking() {
