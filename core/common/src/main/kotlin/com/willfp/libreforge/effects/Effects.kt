@@ -196,9 +196,10 @@ import com.willfp.libreforge.separatorAmbivalent
 import com.willfp.libreforge.toWeightedList
 import com.willfp.libreforge.triggers.Triggers
 import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 
 object Effects : Registry<Effect<*>>() {
-    private val identifiedChains = mutableMapOf<String, Chain>()
+    private val identifiedChains = ConcurrentHashMap<String, Chain>()
 
     /**
      * Get a chain by [id].
