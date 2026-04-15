@@ -19,11 +19,11 @@ open class NamedValue(
         value: Any
     ) : this(identifiers, value.toString())
 
-    open val placeholders: List<InjectablePlaceholder> = identifiers.map {
+    open val placeholders: List<InjectablePlaceholder> by lazy { identifiers.map {
         StaticPlaceholder(
             it
         ) { value }
-    }
+    } }
 }
 
 /*
@@ -64,7 +64,7 @@ internal class DynamicNumericValue(
 
         override fun hashCode(): Int {
             // Use the value of the function to force a re-calculation of the expression
-            return value.toInt() * 31 + identifier.hashCode()
+            return value.hashCode() * 31 + identifier.hashCode()
         }
 
         override fun equals(other: Any?): Boolean {
@@ -83,6 +83,6 @@ internal class DynamicNumericValue(
 }
 
 
-fun Collection<NamedValue>.mapToPlaceholders(): Array<out InjectablePlaceholder> {
-    return this.flatMap { it.placeholders }.toTypedArray()
+fun Collection<NamedValue>.mapToPlaceholders(): List<InjectablePlaceholder> {
+    return this.flatMap { it.placeholders }
 }
