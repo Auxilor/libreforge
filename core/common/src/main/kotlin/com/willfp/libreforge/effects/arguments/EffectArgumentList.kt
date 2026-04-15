@@ -15,6 +15,10 @@ class EffectArgumentList(
     }
 ) {
     fun checkMet(element: ConfigurableElement, trigger: DispatchedTrigger): EffectArgumentResponse {
+        if (isEmpty()) {
+            return EffectArgumentResponse(true, emptyList(), emptyList())
+        }
+
         val met = mutableListOf<EffectArgumentBlock<*>>()
         val notMet = mutableListOf<EffectArgumentBlock<*>>()
 
