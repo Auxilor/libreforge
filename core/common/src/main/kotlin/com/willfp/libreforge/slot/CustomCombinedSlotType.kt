@@ -3,13 +3,10 @@ package com.willfp.libreforge.slot
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import kotlin.math.abs
 
 internal class CustomCombinedSlotType(
     override val types: List<SlotType>
-
-    // Use abs to prevent negative hash codes, which violate the ID pattern
-) : CombinedSlotType("combined_" + abs(types.hashCode())) {
+) : CombinedSlotType("combined_" + types.hashCode().toUInt()) {
     override fun addToSlot(player: Player, item: ItemStack): Boolean {
         return types.any { it.addToSlot(player, item) }
     }
