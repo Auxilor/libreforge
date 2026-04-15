@@ -83,6 +83,9 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
 
     private val displayModule = ItemFlagDisplay(this)
 
+    private var entityRefreshInterval = 20L
+    private var skipAFKPlayers = false
+
     init {
         plugin = this
     }
@@ -130,6 +133,9 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
     }
 
     override fun handleReload() {
+        entityRefreshInterval = configYml.getInt("refresh.entities.interval").toLong()
+        skipAFKPlayers = configYml.getBool("refresh.players.skip-afk-players")
+
         for (config in chainsYml.getSubsections("chains")) {
             Effects.register(
                 config.getString("id"),
@@ -166,7 +172,6 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
         dispatchedTriggerFactory.startTicking()
 
         // Poll for changes
-        val skipAFKPlayers = configYml.getBool("refresh.players.skip-afk-players")
         plugin.scheduler.runTimer(20, 20) {
             for (player in Bukkit.getOnlinePlayers()) {
                 if (skipAFKPlayers && AFKManager.isAfk(player)) {
