@@ -16,7 +16,7 @@ data class TriggerParameterTransformer(
             } else {
                 acc.apply { add(parameter) }
             }
-        }.plus(parameterOut)
+        }.apply { add(parameterOut) }
     }
 }
 
