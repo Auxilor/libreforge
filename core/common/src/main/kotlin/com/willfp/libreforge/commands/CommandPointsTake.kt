@@ -47,7 +47,7 @@ internal object CommandPointsTake: Subcommand(
 
         // Global points
         if (playerString.equals("global", ignoreCase = true)) {
-            globalPoints[pointString] = globalPoints[pointString] - amountNum
+            globalPoints.add(pointString, -amountNum)
             sender.sendMessage(plugin.langYml.getMessage("points-taken")
                 .replace("%playername%", "server")
                 .replace("%point%", pointString.toFriendlyPointName())
@@ -59,7 +59,7 @@ internal object CommandPointsTake: Subcommand(
         // Wildcard for all online players
         if (playerString == "*") {
             Bukkit.getOnlinePlayers().forEach { player ->
-                player.points[pointString] = player.points[pointString] - amountNum
+                player.points.add(pointString, -amountNum)
             }
             sender.sendMessage(plugin.langYml.getMessage("points-taken-all")
                 .replace("%point%", pointString.toFriendlyPointName())
@@ -76,7 +76,7 @@ internal object CommandPointsTake: Subcommand(
             return
         }
 
-        player.points[pointString] = player.points[pointString] - amountNum
+        player.points.add(pointString, -amountNum)
 
         sender.sendMessage(plugin.langYml.getMessage("points-taken")
             .replace("%playername%", player.name)
