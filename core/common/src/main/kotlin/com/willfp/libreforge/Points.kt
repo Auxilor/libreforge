@@ -1,5 +1,6 @@
 package com.willfp.libreforge
 
+import com.github.benmanes.caffeine.cache.Caffeine
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.data.Profile
 import com.willfp.eco.core.data.ServerProfile
@@ -17,6 +18,8 @@ import com.willfp.eco.util.NamespacedKeyUtils
 import com.willfp.eco.util.toNiceString
 import org.bukkit.entity.Player
 import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
 
 class PointPriceFactory(private val type: String) : PriceFactory {
@@ -31,7 +34,9 @@ class PointPriceFactory(private val type: String) : PriceFactory {
         private val baseContext: PlaceholderContext,
         private val function: (PlaceholderContext) -> Double
     ) : Price {
-        private val multipliers = mutableMapOf<UUID, Double>()
+        private val multipliers = Caffeine.newBuilder()
+            .expireAfterAccess(5, TimeUnit.MINUTES)
+            .build<UUID, Double>()
 
         override fun canAfford(player: Player, multiplier: Double): Boolean {
             return player.points[type] >= getValue(player, multiplier)
@@ -50,11 +55,11 @@ class PointPriceFactory(private val type: String) : PriceFactory {
         }
 
         override fun getMultiplier(player: Player): Double {
-            return multipliers[player.uniqueId] ?: 1.0
+            return multipliers.getIfPresent(player.uniqueId) ?: 1.0
         }
 
         override fun setMultiplier(player: Player, multiplier: Double) {
-            multipliers[player.uniqueId] = multiplier
+            multipliers.put(player.uniqueId, multiplier)
         }
 
         override fun getIdentifier(): String {
@@ -68,6 +73,20 @@ private val initializedPoints = mutableSetOf<String>()
 class PointsMap(
     private val profile: Profile
 ) {
+    companion object {
+        private val keyCache = ConcurrentHashMap<String, PersistentDataKey<Double>>()
+
+        private fun getKey(type: String): PersistentDataKey<Double> {
+            return keyCache.computeIfAbsent(type) {
+                PersistentDataKey(
+                    NamespacedKeyUtils.createEcoKey("points_${it.lowercase()}"),
+                    PersistentDataKeyType.DOUBLE,
+                    0.0
+                )
+            }
+        }
+    }
+
     private fun initializeIfNeeded(type: String) {
         if (type in initializedPoints) {
             return
@@ -80,25 +99,17 @@ class PointsMap(
     operator fun get(key: String): Double {
         initializeIfNeeded(key)
 
-        val dataKey = PersistentDataKey(
-            NamespacedKeyUtils.createEcoKey("points_${key.lowercase()}"),
-            PersistentDataKeyType.DOUBLE,
-            0.0
-        )
+        return profile.read(getKey(key))
+    }
 
-        return profile.read(dataKey)
+    fun add(key: String, amount: Double) {
+        set(key, get(key) + amount)
     }
 
     operator fun set(key: String, value: Double) {
         initializeIfNeeded(key)
 
-        val dataKey = PersistentDataKey(
-            NamespacedKeyUtils.createEcoKey("points_${key.lowercase()}"),
-            PersistentDataKeyType.DOUBLE,
-            0.0
-        )
-
-        profile.write(dataKey, value)
+        profile.write(getKey(key), value)
     }
 
     override fun toString(): String {

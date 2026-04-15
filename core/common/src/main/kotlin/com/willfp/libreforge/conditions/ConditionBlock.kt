@@ -31,6 +31,7 @@ class ConditionBlock<T> internal constructor(
 
     private val syncMetCache = Caffeine.newBuilder()
         .expireAfterAccess(10, TimeUnit.SECONDS)
+        .maximumSize(1000)
         .build<UUID, Boolean>()
 
     /**
@@ -46,19 +47,6 @@ class ConditionBlock<T> internal constructor(
          */
 
         if (!Bukkit.isPrimaryThread()) {
-            /*
-            If the value isn't cached, then submit a task to cache it to avoid desync.
-             */
-
-            if (!syncMetCache.asMap().containsKey(dispatcher.uuid)) {
-                plugin.scheduler.run {
-                    // Double check that it isn't cached by the time we run
-                    if (!syncMetCache.asMap().containsKey(dispatcher.uuid)) {
-                        syncMetCache.put(dispatcher.uuid, isMet(dispatcher, holder))
-                    }
-                }
-            }
-
             return syncMetCache.getIfPresent(dispatcher.uuid)
                 ?: plugin.configYml.getBool("conditions.default-state-off-main-thread")
         }

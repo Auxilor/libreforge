@@ -151,7 +151,21 @@ class TriggerData(
     }
 
     override fun equals(other: Any?): Boolean {
-        return other is TriggerData && other.hashCode() == this.hashCode()
+        if (this === other) return true
+        if (other !is TriggerData) return false
+        if (other.hashCode() != this.hashCode()) return false
+
+        return holder == other.holder
+                && player == other.player
+                && victim == other.victim
+                && block == other.block
+                && event == other.event
+                && location == other.location
+                && projectile == other.projectile
+                && velocity == other.velocity
+                && text == other.text
+                && value == other.value
+                && altValue == other.altValue
     }
 
     /*

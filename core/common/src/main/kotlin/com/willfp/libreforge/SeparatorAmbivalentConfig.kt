@@ -14,6 +14,8 @@ import org.bukkit.entity.Player
 private class SeparatorAmbivalentConfig(
     private val config: Config
 ) : Config {
+    private val resolvedPaths = HashMap<String, String>()
+
     private inline fun <reified T> preprocess(path: String, getter: (String) -> T): T? {
         return preprocess(path, getter, { it == null }, null)
     }
@@ -24,6 +26,11 @@ private class SeparatorAmbivalentConfig(
         invalidator: (T) -> Boolean,
         invalid: T?
     ): T? {
+        resolvedPaths[path]?.let { resolved ->
+            val result = getter(resolved)
+            if (!invalidator(result)) return result
+        }
+
         val hyphen = path.lowercase().replace('_', '-')
         val underscore = path.lowercase().replace('-', '_')
         val unspaced = path.lowercase().replace("-", "").replace("_", "")
@@ -31,8 +38,14 @@ private class SeparatorAmbivalentConfig(
 
         val formattedPaths = arrayOf(hyphen, underscore, unspaced, camelcase)
 
-        return formattedPaths.map(getter)
-            .firstOrNull { !invalidator(it) } ?: invalid
+        for (formatted in formattedPaths) {
+            val result = getter(formatted)
+            if (!invalidator(result)) {
+                resolvedPaths[path] = formatted
+                return result
+            }
+        }
+        return invalid
     }
 
     override fun clone(): Config = config.clone().separatorAmbivalent()

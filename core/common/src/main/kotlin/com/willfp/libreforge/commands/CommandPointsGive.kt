@@ -46,7 +46,7 @@ internal object CommandPointsGive : Subcommand(
         }
 
         if (playerString.equals("global", ignoreCase = true)) {
-            globalPoints[pointString] = globalPoints[pointString] + amountNum
+            globalPoints.add(pointString, amountNum)
 
             sender.sendMessage(
                 plugin.langYml.getMessage("points-given")
@@ -59,7 +59,7 @@ internal object CommandPointsGive : Subcommand(
 
         if (playerString == "*") {
             Bukkit.getOnlinePlayers().forEach { player ->
-                player.points[pointString] = player.points[pointString] + amountNum
+                player.points.add(pointString, amountNum)
             }
 
             sender.sendMessage(
@@ -77,7 +77,7 @@ internal object CommandPointsGive : Subcommand(
             return
         }
 
-        player.points[pointString] = player.points[pointString] + amountNum
+        player.points.add(pointString, amountNum)
 
         sender.sendMessage(
             plugin.langYml.getMessage("points-given")

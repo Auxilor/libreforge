@@ -228,10 +228,17 @@ inline fun <reified T : Holder, reified R> registerSpecificHolderPlaceholderProv
  * Generate placeholders for a holder.
  */
 fun ProvidedHolder.generatePlaceholders(dispatcher: Dispatcher<*>): List<NamedValue> {
-    return holderPlaceholderProviders.flatMap { it(this, dispatcher) }
+    return buildList {
+        for (provider in holderPlaceholderProviders) {
+            addAll(provider(this@generatePlaceholders, dispatcher))
+        }
+    }
 }
 
-private val previousHolders = mutableMapOf<UUID, Collection<ProvidedHolder>>()
+private val previousHolders: com.github.benmanes.caffeine.cache.Cache<UUID, Collection<ProvidedHolder>> =
+    Caffeine.newBuilder()
+        .expireAfterAccess(30, TimeUnit.SECONDS)
+        .build()
 
 private val holderCache = Caffeine.newBuilder()
     .expireAfterWrite(4, TimeUnit.SECONDS)
@@ -252,30 +259,27 @@ val Dispatcher<*>.holders: Collection<ProvidedHolder>
             HolderProvideEvent(this, holders)
         )
 
-        val old = previousHolders[this.uuid] ?: emptyList()
+        val old = previousHolders.getIfPresent(this.uuid) ?: emptyList()
 
-        val newID = holders.map { it.holder.id }
-        val oldID = old.map { it.holder.id }
+        val newByID = holders.associateBy { it.holder.id }
+        val oldByID = old.associateBy { it.holder.id }
 
-        val added = newID without oldID
-        val removed = oldID without newID
-
-        val newByID = holders.associateBy { it.holder.id }.toNotNullMap()
-        val oldByID = old.associateBy { it.holder.id }.toNotNullMap()
+        val added = newByID.keys - oldByID.keys
+        val removed = oldByID.keys - newByID.keys
 
         for (id in added) {
             Bukkit.getPluginManager().callEvent(
-                HolderEnableEvent(this, newByID[id], holders)
+                HolderEnableEvent(this, newByID[id]!!, holders)
             )
         }
 
         for (id in removed) {
             Bukkit.getPluginManager().callEvent(
-                HolderDisableEvent(this, oldByID[id], old)
+                HolderDisableEvent(this, oldByID[id]!!, old)
             )
         }
 
-        previousHolders[this.uuid] = holders
+        previousHolders.put(this.uuid, holders)
 
         holders
     }
@@ -295,7 +299,7 @@ fun Dispatcher<*>.updateHolders() {
 }
 
 internal fun Dispatcher<*>.purgePreviousHolders() {
-    previousHolders.remove(this.uuid)
+    previousHolders.invalidate(this.uuid)
     previousStates.remove(this.uuid)
 }
 
@@ -386,9 +390,17 @@ fun Dispatcher<*>.updateEffects() {
  * Elements are only removed as many times as they are present.
  */
 inline infix fun <reified T> Collection<T>.without(other: Collection<T>): List<T> {
-    return other.toMutableList().let { mutableOther ->
-        filter { element ->
-            !mutableOther.remove(element)
+    val counts = HashMap<T, Int>(other.size)
+    for (element in other) {
+        counts[element] = (counts[element] ?: 0) + 1
+    }
+    return filter { element ->
+        val count = counts[element]
+        if (count != null && count > 0) {
+            counts[element] = count - 1
+            false
+        } else {
+            true
         }
     }
 }

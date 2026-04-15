@@ -10,6 +10,8 @@ import org.bukkit.event.world.ChunkLoadEvent
 
 object EntityRefreshListener : Listener {
 
+    private val MODIFIER_PATTERN = Regex("\\d+_\\d+")
+
     @EventHandler
     fun onChunkLoad(event: ChunkLoadEvent) {
         event.chunk.entities.filterIsInstance<LivingEntity>()
@@ -26,7 +28,7 @@ object EntityRefreshListener : Listener {
             @Suppress("USELESS_ELVIS")
             val modifiers = attributeInstance.modifiers ?: continue
 
-            modifiers.filter { it.name.matches(Regex("\\d+_\\d+")) }
+            modifiers.filter { it.name.matches(MODIFIER_PATTERN) }
                 .forEach { modifier ->
                     attributeInstance.removeModifier(modifier)
                 }

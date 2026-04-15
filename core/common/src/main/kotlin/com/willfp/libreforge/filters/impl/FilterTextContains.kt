@@ -13,6 +13,7 @@ object FilterTextContains : Filter<NoCompileData, Collection<String>>("text_cont
     override fun isMet(data: TriggerData, value: Collection<String>, compileData: NoCompileData): Boolean {
         val text = data.text ?: return true
 
-        return value.any { test -> text.lowercase().contains(test.lowercase()) }
+        val lowerText = text.lowercase()
+        return value.any { test -> lowerText.contains(test.lowercase()) }
     }
 }

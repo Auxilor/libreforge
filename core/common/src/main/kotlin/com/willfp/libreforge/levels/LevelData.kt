@@ -8,29 +8,17 @@ data class LevelData(
     val xp: Double
 ) {
     fun gainXP(type: LevelType, xp: Double, itemStack: ItemStack, context: PlaceholderContext): LevelData {
-        val required = type.getXPRequired(this.level, context)
-        val current = this.xp
+        var currentLevel = this.level
+        var remaining = this.xp + xp
 
-        return if (current + xp >= required) {
-            val overshoot = current + xp - required
-
-            val newData = LevelData(
-                this.level + 1,
-                0.0
-            )
-
-            type.handleLevelUp(
-                this.level + 1,
-                itemStack,
-                context
-            )
-
-            newData.gainXP(type, overshoot, itemStack, context) // For recursive level gains.
-        } else {
-            LevelData(
-                this.level,
-                this.xp + xp
-            )
+        while (true) {
+            val required = type.getXPRequired(currentLevel, context)
+            if (remaining < required) {
+                return LevelData(currentLevel, remaining)
+            }
+            remaining -= required
+            currentLevel++
+            type.handleLevelUp(currentLevel, itemStack, context)
         }
     }
 }

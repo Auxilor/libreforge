@@ -24,7 +24,10 @@ open class WeightedList<T : Weighted>(
             return null
         }
 
-        val totalWeight = this.sumOf { weightSelector(it).coerceAtLeast(0.0) }
+        var totalWeight = 0.0
+        for (item in this) {
+            totalWeight += weightSelector(item).coerceAtLeast(0.0)
+        }
         if (totalWeight == 0.0) {
             val randomIndex = (Math.random() * this.size).toInt()
             return this[randomIndex]
@@ -32,14 +35,17 @@ open class WeightedList<T : Weighted>(
 
         val random = Math.random() * totalWeight
         var current = 0.0
+        var lastPositive: T? = null
         for (item in this) {
-            current += weightSelector(item).coerceAtLeast(0.0)
+            val w = weightSelector(item).coerceAtLeast(0.0)
+            if (w > 0.0) lastPositive = item
+            current += w
             if (random < current) {
                 return item
             }
         }
 
-        return this.lastOrNull { weightSelector(it) > 0.0 }
+        return lastPositive
     }
 }
 

@@ -12,10 +12,11 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.Bukkit
 import org.bukkit.FluidCollisionMode
 import org.bukkit.entity.Player
+import java.util.concurrent.ConcurrentHashMap
 
 object TriggerGroupStatic : TriggerGroup("static") {
-    private val registry = mutableMapOf<Int, TriggerStatic>()
-    private val dynamicRegistry = mutableMapOf<String, TriggerDynamicStatic>()
+    private val registry = ConcurrentHashMap<Int, TriggerStatic>()
+    private val dynamicRegistry = ConcurrentHashMap<String, TriggerDynamicStatic>()
     private var tick = 0
 
     override fun create(value: String): Trigger? {

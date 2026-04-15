@@ -41,11 +41,13 @@ internal data class BoundCounter(
         val config = counter.config
 
         // Inject placeholders, totally not stolen from ElementLike
-        listOf(counter.filters, counter.conditions)
-            .flatten()
-            .map { it.config }
-            .plusElement(config)
-            .forEach { it.addInjectablePlaceholder(trigger.placeholders) }
+        for (filter in counter.filters) {
+            filter.config.addInjectablePlaceholder(trigger.placeholders)
+        }
+        for (condition in counter.conditions) {
+            condition.config.addInjectablePlaceholder(trigger.placeholders)
+        }
+        config.addInjectablePlaceholder(trigger.placeholders)
 
         val (argumentsMet, met, notMet) = counter.arguments.checkMet(counter, trigger)
 

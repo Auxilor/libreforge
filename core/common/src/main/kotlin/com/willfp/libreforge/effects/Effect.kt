@@ -144,7 +144,7 @@ abstract class Effect<T>(
         config: ChainElement<T>
     ): Boolean = onTrigger(
         config.config,
-        trigger.data.apply { this.inheritedTriggerPlaceholders = trigger.rawPlaceholders },
+        trigger.data.copy().apply { this.inheritedTriggerPlaceholders = trigger.rawPlaceholders },
         config.compileData
     )
 
@@ -184,7 +184,12 @@ abstract class Effect<T>(
         return true
     }
 
+    private var isListenerRegistered = false
+
     final override fun onRegister() {
+        if (isListenerRegistered) return
+        isListenerRegistered = true
+
         plugin.runWhenEnabled {
             plugin.eventManager.unregisterListener(this)
             plugin.eventManager.registerListener(this)
