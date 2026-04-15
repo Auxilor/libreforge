@@ -33,7 +33,7 @@ object TriggerChangeChunk : Trigger("change_chunk") {
             return
         }
 
-        if (event.to.chunk.chunkKey != event.from.chunk.chunkKey) {
+        if (event.to.chunk.chunkKey == event.from.chunk.chunkKey) {
             return
         }
 
@@ -58,7 +58,7 @@ object TriggerChangeChunk : Trigger("change_chunk") {
             }
         }
 
-        if (event.to.chunk.chunkKey != event.from.chunk.chunkKey) {
+        if (event.to.chunk.chunkKey == event.from.chunk.chunkKey) {
             return
         }
 
