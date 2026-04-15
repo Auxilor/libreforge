@@ -8,10 +8,11 @@ import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerGroup
 import com.willfp.libreforge.triggers.TriggerParameter
+import java.util.concurrent.ConcurrentHashMap
 
 object TriggerGroupGlobalStatic : TriggerGroup("global_static") {
-    private val registry = mutableMapOf<Int, TriggerGlobalStatic>()
-    private val dynamicRegistry = mutableMapOf<String, TriggerDynamicGlobalStatic>()
+    private val registry = ConcurrentHashMap<Int, TriggerGlobalStatic>()
+    private val dynamicRegistry = ConcurrentHashMap<String, TriggerDynamicGlobalStatic>()
     private var tick = 0
 
     override fun create(value: String): Trigger? {
