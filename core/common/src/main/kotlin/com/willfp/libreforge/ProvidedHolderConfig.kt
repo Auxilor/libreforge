@@ -54,5 +54,5 @@ private class ProvidedHolderConfig(
 
 fun Config.applyHolder(providedHolder: ProvidedHolder, dispatcher: Dispatcher<*>): Config =
     ProvidedHolderConfig(this, providedHolder).apply {
-        injectPlaceholders(*providedHolder.generatePlaceholders(dispatcher).mapToPlaceholders())
+        addInjectablePlaceholder(providedHolder.generatePlaceholders(dispatcher).mapToPlaceholders())
     }
