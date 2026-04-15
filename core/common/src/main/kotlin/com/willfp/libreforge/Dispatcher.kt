@@ -73,10 +73,10 @@ value class BlockDispatcher(
 ) : Dispatcher<Block> {
     override val uuid: UUID
         get() {
-            val blockType = dispatcher.type.hashCode()
-            val location = dispatcher.location.hashCode()
-
-            return UUID(blockType.toLong(), location.toLong())
+            return UUID.nameUUIDFromBytes(
+                "${dispatcher.world.name}:${dispatcher.x}:${dispatcher.y}:${dispatcher.z}:${dispatcher.type.name}"
+                    .toByteArray()
+            )
         }
 
     override val location
@@ -97,9 +97,10 @@ value class LocationDispatcher(
 ) : Dispatcher<Location> {
     override val uuid: UUID
         get() {
-            val location = dispatcher.hashCode()
-
-            return UUID(location.toLong(), location.toLong())
+            return UUID.nameUUIDFromBytes(
+                "${dispatcher.world?.name}:${dispatcher.blockX}:${dispatcher.blockY}:${dispatcher.blockZ}"
+                    .toByteArray()
+            )
         }
 
     override val location
