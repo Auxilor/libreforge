@@ -16,16 +16,10 @@ jobs:
           java-version: 21
       - name: Change wrapper permissions
         run: chmod +x ./gradlew
-      - name: Debug eco resolution
-        uses: gradle/gradle-build-action@v2
-        with:
-          arguments: :core:common:dependencyInsight --dependency com.willfp:eco --configuration compileClasspath --info
-      - name: List all repositories being used
-        run: ./gradlew :core:common:dependencies --configuration compileClasspath
       - name: Publish package
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: publish --refresh-dependencies --info
+          arguments: publish --refresh-dependencies
         env:
           MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
