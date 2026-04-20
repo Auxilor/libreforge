@@ -1,5 +1,6 @@
 package com.willfp.libreforge.effects.impl
 
+import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
@@ -33,7 +34,10 @@ object EffectTeleportTo : Effect<NoCompileData>("teleport_to") {
             config.getDoubleFromExpression("z", data)
         )
 
-        player.teleport(loc)
+        if (Prerequisite.HAS_PAPER.isMet)
+            player.teleportAsync(loc)
+        else
+            player.teleport(loc) // damn spigot!
 
         return true
     }

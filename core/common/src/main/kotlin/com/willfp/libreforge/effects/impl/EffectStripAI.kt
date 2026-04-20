@@ -32,7 +32,7 @@ object EffectStripAI : Effect<NoCompileData>("strip_ai") {
 
         victim.setAI(false)
 
-        plugin.scheduler.runLater(duration.toLong()) {
+        plugin.scheduler.runTaskLater(victim, duration.toLong()) {
             victim.setAI(true)
         }
 

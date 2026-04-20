@@ -2,25 +2,17 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.map.listMap
-import com.willfp.libreforge.Holder
-import com.willfp.libreforge.HolderTemplate
-import com.willfp.libreforge.SimpleProvidedHolder
-import com.willfp.libreforge.ViolationContext
-import com.willfp.libreforge.arguments
+import com.willfp.libreforge.*
 import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Effects
-import com.willfp.libreforge.getIntFromExpression
-import com.willfp.libreforge.nest
-import com.willfp.libreforge.plugin
-import com.willfp.libreforge.registerGenericHolderProvider
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDeathEvent
 import org.bukkit.event.player.PlayerQuitEvent
-import java.util.UUID
+import java.util.*
 
 object EffectAddHolderToVictim : Effect<HolderTemplate>("add_holder_to_victim") {
     override val parameters = setOf(
@@ -46,7 +38,7 @@ object EffectAddHolderToVictim : Effect<HolderTemplate>("add_holder_to_victim") 
 
         holders[player.uniqueId].add(holder)
 
-        plugin.scheduler.runLater(duration.toLong()) {
+        plugin.scheduler.runTaskLater(player, duration.toLong()) {
             holders[player.uniqueId].remove(holder)
             if (holders[player.uniqueId].isEmpty()) {
                 holders.remove(player.uniqueId)

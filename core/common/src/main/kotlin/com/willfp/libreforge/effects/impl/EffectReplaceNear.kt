@@ -1,15 +1,10 @@
 package com.willfp.libreforge.effects.impl
 
+import com.willfp.eco.core.blocks.Blocks
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
-import com.willfp.eco.core.items.Items
-import com.willfp.eco.util.containsIgnoreCase
-import com.willfp.libreforge.NoCompileData
-import com.willfp.libreforge.arguments
+import com.willfp.libreforge.*
 import com.willfp.libreforge.effects.Effect
-import com.willfp.libreforge.getIntFromExpression
-import com.willfp.libreforge.getOrNull
-import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.Material
@@ -32,46 +27,53 @@ object EffectReplaceNear : Effect<NoCompileData>("replace_near") {
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val block = data.block ?: data.location?.block ?: return false
         val player = data.player ?: return false
+        val world = block.world
 
         val radius = config.getIntFromExpression("radius", data)
+        // todo: radiusY is not used, someone left it here
+        // please use it or remove it, but don't leave it like this
         val radiusY = config.getIntFromExpression("radius_y", data)
 
-        if (player.isSneaking && config.getBool("disable_on_sneak")) {
+        if (player.isSneaking && config.getBool("disable_on_sneak"))
             return false
-        }
 
-        val replaceTo = Items.lookup(config.getString("replace_to")).item.type
+        val replaceTo = Blocks.lookup(config.getString("replace_to"))
 
         val whitelist = config.getStringsOrNull("whitelist")
+            ?.mapNotNull { Blocks.lookup(it) }?.toSet()
+
+        val blacklist = config.getStringsOrNull("blacklist")
+            ?.mapNotNull { Blocks.lookup(it) }?.toSet()
 
         val duration = config.getOrNull("duration") { getIntFromExpression(it, data) }
 
         val exposedBlocksOnly = config.getBool("exposed_only")
         val sourceBlocksOnly = config.getBool("source_only")
 
-        for (x in (-radius..radius)) {
-            for (y in (-radiusY..radiusY)) {
+        for (y in (-radius..radius)) {
+            val endY = block.y + y
+            if (endY !in world.minHeight..world.maxHeight) {
+                continue
+            }
+
+            for (x in (-radius..radius)) {
                 for (z in (-radius..radius)) {
                     if (x == 0 && y == 0 && z == 0) {
                         continue
                     }
 
-                    val toReplace = block.world.getBlockAt(
-                        block.location.clone().add(x.toDouble(), y.toDouble(), z.toDouble())
-                    )
+                    val toReplace = world.getBlockAt(block.x + x, block.y + y, block.z + z)
 
-                    if (config.getStrings("blacklist").containsIgnoreCase(toReplace.type.name)) {
-                        continue
-                    }
-
-                    if (whitelist != null) {
-                        if (!whitelist.containsIgnoreCase(toReplace.type.name)) {
+                    if (blacklist != null) {
+                        if (blacklist.any { it.matches(toReplace) }) {
                             continue
                         }
                     }
 
-                    if (toReplace.type == Material.AIR && whitelist?.containsIgnoreCase("air") != true) {
-                        continue
+                    if (whitelist != null) {
+                        if (!whitelist.any { it.matches(toReplace) }) {
+                            continue
+                        }
                     }
 
                     if (exposedBlocksOnly && !toReplace.getRelative(BlockFace.UP, 1).isEmpty) {
@@ -87,25 +89,27 @@ object EffectReplaceNear : Effect<NoCompileData>("replace_near") {
                         }
                     }
 
-                    if (!(AntigriefManager.canBreakBlock(player, toReplace) && AntigriefManager.canPlaceBlock(player, toReplace))) {
+                    if (!(AntigriefManager.canBreakBlock(player, toReplace) && AntigriefManager.canPlaceBlock(
+                            player,
+                            toReplace
+                        ))
+                    ) {
                         continue
                     }
 
                     if (duration != null && duration > 0) {
-                        val oldBlock = toReplace.type
-                        val oldBlockData = toReplace.blockData
+                        val oldBlock = Blocks.getBlock(toReplace)
                         toReplace.setMetadata("rn-block", plugin.createMetadataValue(true))
 
-                        plugin.scheduler.runLater(duration.toLong()) {
+                        plugin.scheduler.runTaskLater(duration.toLong()) {
                             if (toReplace.hasMetadata("rn-block")) {
-                                toReplace.type = oldBlock
-                                toReplace.blockData = oldBlockData
+                                oldBlock.place(toReplace.location)
                                 toReplace.removeMetadata("rn-block", plugin)
                             }
                         }
                     }
 
-                    toReplace.type = replaceTo
+                    replaceTo.place(toReplace.location)
                 }
             }
         }

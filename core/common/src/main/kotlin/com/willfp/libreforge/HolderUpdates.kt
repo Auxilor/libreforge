@@ -13,7 +13,7 @@ import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerRespawnEvent
-import java.util.UUID
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 @Suppress("unused", "UNUSED_PARAMETER")
@@ -43,7 +43,9 @@ object ItemRefreshListener : Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     fun onPlayerJoin(event: PlayerJoinEvent) {
         Bukkit.getServer().onlinePlayers.forEach {
-            it.toDispatcher().refreshHolders()
+            plugin.scheduler.runTask(it) {
+                it.toDispatcher().refreshHolders()
+            }
         }
     }
 
@@ -66,7 +68,7 @@ object ItemRefreshListener : Listener {
 
         val dispatcher = player.toDispatcher()
 
-        plugin.scheduler.run {
+        plugin.scheduler.runTask(player) {
             dispatcher.refreshHolders()
         }
     }
