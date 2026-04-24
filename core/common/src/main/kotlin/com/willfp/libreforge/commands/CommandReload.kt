@@ -5,6 +5,7 @@ import com.willfp.eco.core.command.impl.Subcommand
 import com.willfp.eco.util.StringUtils
 import com.willfp.eco.util.toNiceString
 import com.willfp.libreforge.plugin
+import com.willfp.libreforge.triggers.impl.TriggerTakeDamage
 import org.bukkit.command.CommandSender
 
 internal object CommandReload : Subcommand(
@@ -20,9 +21,12 @@ internal object CommandReload : Subcommand(
                     .replace("%time%", plugin.reloadWithTime(false).toNiceString())
             )
         }
-        if (Prerequisite.HAS_FOLIA.isMet)
+        if (Prerequisite.HAS_FOLIA.isMet) {
             plugin.scheduler.runTask(runnable) // run on global thread
-        else
+        } else {
             runnable.run()
+        }
+
+        TriggerTakeDamage.notifyOfEntityDamageChange(sender = sender)
     }
 }

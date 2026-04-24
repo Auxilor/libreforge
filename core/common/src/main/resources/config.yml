@@ -142,3 +142,8 @@ refresh:
     # Inventory clicks refresh active holders, but a group of malicious users spamming can cause server lag.
     # Setting a timeout ensures only one click triggers a refresh within the specified time (in milliseconds).
     timeout: 500
+
+# Optional features (opt-in early by choice).
+opt-in:
+  # Internal change to make the trigger 'take_damage' block 'take_entity_damage'.
+  take_damage_blocks_entity_damage: false
