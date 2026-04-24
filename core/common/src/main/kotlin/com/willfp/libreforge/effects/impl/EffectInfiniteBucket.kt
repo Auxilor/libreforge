@@ -33,12 +33,12 @@ object EffectInfiniteBucket : Effect<Set<String>>("infinite_bucket") {
 
         val slot = player.inventory.heldItemSlot
 
-        plugin.server.scheduler.runTask(plugin, Runnable {
+        plugin.scheduler.runTaskAsync {
             val item = player.inventory.getItem(slot)
             if (item != null && item.type == Material.BUCKET) {
                 player.inventory.setItem(slot, ItemStack(event.bucket))
             }
-        })
+        }
     }
 
     override fun makeCompileData(config: Config, context: ViolationContext): Set<String> {
