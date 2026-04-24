@@ -4,12 +4,8 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.entities.Entities
 import com.willfp.eco.core.entities.TestableEntity
 import com.willfp.eco.util.NumberUtils
-import com.willfp.libreforge.ViolationContext
-import com.willfp.libreforge.arguments
+import com.willfp.libreforge.*
 import com.willfp.libreforge.effects.Effect
-import com.willfp.libreforge.getDoubleFromExpression
-import com.willfp.libreforge.getIntFromExpression
-import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.attribute.Attribute
@@ -19,7 +15,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.entity.EntityDeathEvent
 import org.bukkit.event.entity.EntityTargetEvent
-import java.util.UUID
+import java.util.*
 
 
 object EffectSpawnMobs : Effect<TestableEntity>("spawn_mobs") {
@@ -75,7 +71,7 @@ object EffectSpawnMobs : Effect<TestableEntity>("spawn_mobs") {
 
             mob.health = health
 
-            plugin.scheduler.runLater(ticksToLive.toLong()) { mob.remove() }
+            plugin.scheduler.runTaskLater(mob, ticksToLive.toLong()) { mob.remove() }
         }
 
         return true

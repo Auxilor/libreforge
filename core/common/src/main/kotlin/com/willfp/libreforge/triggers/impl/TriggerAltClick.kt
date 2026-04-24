@@ -14,7 +14,7 @@ import org.bukkit.entity.LivingEntity
 import org.bukkit.event.EventHandler
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
-import java.util.UUID
+import java.util.*
 
 object TriggerAltClick : Trigger("alt_click") {
     override val parameters = setOf(
@@ -125,7 +125,7 @@ object TriggerAltClick : Trigger("alt_click") {
 
         preventDoubleTriggers += player.uniqueId
 
-        plugin.scheduler.run {
+        plugin.scheduler.runTask(player) {
             preventDoubleTriggers -= player.uniqueId
         }
 

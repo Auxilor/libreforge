@@ -7,6 +7,7 @@ import com.willfp.libreforge.filters.Filter
 import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.entity.Boss
 import org.bukkit.entity.ElderGuardian
+import org.bukkit.entity.Warden
 import org.bukkit.persistence.PersistentDataType
 
 @Deprecated("Use is_boss instead")
@@ -17,7 +18,7 @@ object FilterOnlyNonBosses : Filter<NoCompileData, Boolean>("only_non_bosses") {
 
     override fun isMet(data: TriggerData, value: Boolean, compileData: NoCompileData): Boolean {
         val entity = data.victim ?: return true
-        return (entity is Boss || entity is ElderGuardian || entity.persistentDataContainer
+        return (entity is Boss || entity is ElderGuardian || entity is Warden || entity.persistentDataContainer
             .has(NamespacedKeyUtils.create("ecobosses", "boss"), PersistentDataType.STRING)) != value
     }
 }

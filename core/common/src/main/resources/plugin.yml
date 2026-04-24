@@ -4,6 +4,7 @@ main: com.willfp.libreforge.LibreforgeSpigotPlugin
 api-version: 1.21.4
 authors: [ Auxilor ]
 website: willfp.com
+folia-supported: true
 
 # eco is written as a softdepend because otherwise the plugin
 # loader will complain about it not being installed.

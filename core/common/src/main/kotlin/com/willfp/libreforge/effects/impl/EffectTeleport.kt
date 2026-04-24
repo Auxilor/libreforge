@@ -1,5 +1,6 @@
 package com.willfp.libreforge.effects.impl
 
+import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.effects.Effect
@@ -17,7 +18,11 @@ object EffectTeleport : Effect<NoCompileData>("teleport") {
         val location = data.location ?: return false
         location.pitch = player.location.pitch
         location.yaw = player.location.yaw
-        player.teleport(location)
+
+        if (Prerequisite.HAS_PAPER.isMet)
+            player.teleportAsync(location)
+        else
+            player.teleport(location) // damn spigot!
 
         return true
     }

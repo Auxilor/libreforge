@@ -1,5 +1,6 @@
 package com.willfp.libreforge.effects.impl
 
+import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.effects.Effect
@@ -29,7 +30,10 @@ object EffectTeleportToGround : Effect<NoCompileData>("teleport_to_ground") {
             current = current.subtract(0.0, 1.0, 0.0)
         }
 
-        player.teleport(current)
+        if (Prerequisite.HAS_PAPER.isMet)
+            player.teleportAsync(current)
+        else
+            player.teleport(current) // damn spigot!
 
         return true
     }
