@@ -1,12 +1,11 @@
 package com.willfp.libreforge.triggers.impl
 
+import com.willfp.libreforge.integrations.mythicmobs.utils.isMythicMob
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.tryAsLivingEntity
-import io.lumine.mythic.bukkit.MythicBukkit
-import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageByEntityEvent
@@ -22,20 +21,11 @@ object TriggerTakeEntityDamage : Trigger("take_entity_damage") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityDamageByEntityEvent) {
+        if (event.cause == EntityDamageEvent.DamageCause.THORNS) return
         val attacker = event.damager.tryAsLivingEntity() ?: return
-
         val victim = event.entity
-
-        if (Bukkit.getPluginManager().isPluginEnabled("MythicMobs")) {
-            if (MythicBukkit.inst().mobManager.isMythicMob(attacker)) {
-                return
-            }
-        }
-
-        if (event.cause == EntityDamageEvent.DamageCause.THORNS) {
-            return
-        }
-
+        // If attacker is MythicMob, then skip, use 'take_mythic_damage' instead.
+        if (attacker.isMythicMob()) return
         this.dispatch(
             victim.toDispatcher(),
             TriggerData(
