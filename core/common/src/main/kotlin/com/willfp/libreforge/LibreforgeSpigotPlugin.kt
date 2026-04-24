@@ -1,5 +1,6 @@
 package com.willfp.libreforge
 
+import com.willfp.eco.core.Eco
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.command.impl.PluginCommand
@@ -154,9 +155,14 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             CustomPlaceholders.load(customPlaceholder, this)
         }
 
-        CustomCommands.clearAndUnregister()
-        for (config in commandsYml.getSubsections("commands")) {
-            CustomCommands.load(config, this)
+        Eco.get().beginCommandBatch()
+        try {
+            CustomCommands.clearAndUnregister()
+            for (config in commandsYml.getSubsections("commands")) {
+                CustomCommands.load(config, this)
+            }
+        } finally {
+            Eco.get().endCommandBatch()
         }
 
         for (category in configCategories) {
