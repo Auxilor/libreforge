@@ -60,15 +60,6 @@ object EffectSetUnbreakable : Effect<NoCompileData>("set_unbreakable") {
         applyUnbreakable(item, false)
     }
 
-    override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
-        val value = config.getBoolOrNull("value") ?: true
-        val slot = config.getStringOrNull("slot") ?: "holder"
-
-        val player = (data.victim as? Player) ?: data.player
-        val item = resolveItem(slot, player, data.holder) ?: return false
-        return applyUnbreakable(item, value)
-    }
-
     private fun resolveItem(slot: String, player: Player?, holder: ProvidedHolder): ItemStack? {
         val item = when (slot.lowercase()) {
             "holder" -> holder.getProvider<ItemStack>()
