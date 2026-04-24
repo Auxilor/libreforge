@@ -2,7 +2,6 @@ package com.willfp.libreforge.triggers
 
 import com.willfp.eco.core.registry.Registry
 import com.willfp.libreforge.mutators.MutatorList
-import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.impl.TriggerAltClick
 import com.willfp.libreforge.triggers.impl.TriggerBite
 import com.willfp.libreforge.triggers.impl.TriggerBlockItemDrop
@@ -98,9 +97,6 @@ import com.willfp.libreforge.triggers.impl.TriggerToggleSneak
 import com.willfp.libreforge.triggers.impl.TriggerToggleSprint
 import com.willfp.libreforge.triggers.impl.TriggerUnleashEntity
 import com.willfp.libreforge.triggers.impl.TriggerWinRaid
-import java.time.LocalDate
-import java.time.Month
-import java.time.format.DateTimeFormatter
 
 object Triggers : Registry<Trigger>() {
     private val groupRegistry = Registry<TriggerGroup>()
