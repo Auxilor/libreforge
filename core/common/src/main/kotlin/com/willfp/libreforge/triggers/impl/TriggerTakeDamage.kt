@@ -1,6 +1,7 @@
 package com.willfp.libreforge.triggers.impl
 
 import com.willfp.libreforge.plugin
+import com.willfp.libreforge.integrations.mythicmobs.utils.isMythicMob
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
@@ -36,25 +37,12 @@ object TriggerTakeDamage : Trigger("take_damage") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityDamageEvent) {
+        if (event.cause in ignoredCauses) return
+        // If Damager (or Projectile Shooter) is MythicMob, then skip. Use 'take_mythic_damage' instead.
+        if (event is EntityDamageByEntityEvent && event.damager.tryAsLivingEntity()?.isMythicMob() == true) return
         if (blockEntityDamageByEntity && event is EntityDamageByEntityEvent) return
 
         val victim = event.entity
-
-        if (event.cause in ignoredCauses) {
-            return
-        }
-
-        if (Bukkit.getPluginManager().isPluginEnabled("MythicMobs")) {
-            if (event is EntityDamageByEntityEvent) {
-                val attacker = event.damager.tryAsLivingEntity()
-                if (attacker != null) {
-                    if (MythicBukkit.inst().mobManager.isMythicMob(attacker)) {
-                        return
-                    }
-                }
-            }
-        }
-
         this.dispatch(
             victim.toDispatcher(),
             TriggerData(
