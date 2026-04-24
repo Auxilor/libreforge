@@ -294,10 +294,6 @@ object Effects : Registry<Effect<*>>() {
                     )
                 }
             }
-
-            if (!triggers.all { element.effect.supportsTrigger(it) }) {
-                isInvalid = true
-            }
         }
 
         if (isInvalid) {
