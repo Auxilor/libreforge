@@ -1,4 +1,4 @@
-package com.willfp.libreforge.integrations.mythicmobs.impl
+package com.willfp.libreforge.integrations.mythicmobs.impl.effect
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.drops.DropQueue
