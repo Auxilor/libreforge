@@ -1,12 +1,10 @@
 package com.willfp.libreforge.effects.impl.animations.impl
 
+import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.items.Items
-import com.willfp.libreforge.NoCompileData
-import com.willfp.libreforge.arguments
+import com.willfp.libreforge.*
 import com.willfp.libreforge.effects.impl.animations.Animation
-import com.willfp.libreforge.getDoubleFromExpression
-import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import dev.romainguy.kotlin.math.Float3
 import org.bukkit.Location
@@ -75,9 +73,13 @@ object AnimationSpinItem : Animation<NoCompileData, List<ArmorStand>>("spin_item
             val x = cos(armorStandAngle) * radius
             val z = sin(armorStandAngle) * radius
 
-            val armorStandLocation = sourceLocation.clone().add(x, 0.0, z)
-            armorStand.teleport(armorStandLocation.add(0.0,0.5, 0.0))
-            armorStand.rightArmPose = EulerAngle(0.0, armorStandAngle + Math.PI, 0.0) // Add PI to make the item point outwards
+            val armorStandLocation = sourceLocation.clone().add(x, 0.5, z)
+            if (Prerequisite.HAS_PAPER.isMet)
+                armorStand.teleportAsync(armorStandLocation)
+            else
+                armorStand.teleport(armorStandLocation) // damn spigot
+            armorStand.rightArmPose =
+                EulerAngle(0.0, armorStandAngle + Math.PI, 0.0) // Add PI to make the item point outwards
         }
 
         return tick >= config.getDoubleFromExpression("duration", triggerData)
@@ -91,6 +93,6 @@ object AnimationSpinItem : Animation<NoCompileData, List<ArmorStand>>("spin_item
         compileData: NoCompileData,
         data: List<ArmorStand>
     ) {
-        data.forEach { it.remove() }
+        data.forEach { plugin.scheduler.runTask(it) { it.remove() } }
     }
 }

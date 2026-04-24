@@ -2,16 +2,11 @@ package com.willfp.libreforge.effects
 
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.eco.core.placeholder.InjectablePlaceholder
-import com.willfp.libreforge.ConfigurableElement
-import com.willfp.libreforge.DynamicNumericValue
-import com.willfp.libreforge.NamedValue
+import com.willfp.libreforge.*
 import com.willfp.libreforge.conditions.ConditionList
 import com.willfp.libreforge.effects.arguments.EffectArgumentList
 import com.willfp.libreforge.filters.FilterList
-import com.willfp.libreforge.getDoubleFromExpression
-import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.mutators.MutatorList
-import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.DispatchedTrigger
 
 /**
@@ -165,14 +160,22 @@ abstract class ElementLike : ConfigurableElement {
         } else {
             // Delay between each repeat.
             var repeats = 0
-            plugin.runnableFactory.create { task ->
+            val task = plugin.runnableFactory.create { task ->
                 repeats++
                 trigger()
 
                 if (repeats >= repeatTimes) {
-                    task.cancel()
+                    task.cancelTask()
                 }
-            }.runTaskTimer(delay, delay)
+            }
+            // folia issue, run the task based on whom the trigger is for
+            if (data.player != null) {
+                task.runTaskTimer(data.player, delay, delay)
+            } else if (data.victim != null) {
+                task.runTaskTimer(data.victim, delay, delay)
+            } else {
+                task.runTaskTimer(delay, delay)
+            }
         }
 
         // Code here is fucking disgusting duplicating the delay check.

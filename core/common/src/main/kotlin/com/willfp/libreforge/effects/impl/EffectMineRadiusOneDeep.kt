@@ -1,8 +1,8 @@
 package com.willfp.libreforge.effects.impl
 
+import com.willfp.eco.core.blocks.Blocks
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
-import com.willfp.eco.util.containsIgnoreCase
 import com.willfp.eco.util.simplify
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
@@ -26,23 +26,34 @@ object EffectMineRadiusOneDeep : MineBlockEffect<NoCompileData>("mine_radius_one
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val block = data.block ?: data.location?.block ?: return false
         val player = data.player ?: return false
+        val world = block.world
 
         val radius = config.getIntFromExpression("radius", data)
 
         val preventTriggers = config.getBool("prevent_trigger")
 
-        if (player.isSneaking && config.getBool("disable_on_sneak")) {
+        if (player.isSneaking && config.getBool("disable_on_sneak"))
             return false
-        }
 
         val whitelist = config.getStringsOrNull("whitelist")
+            ?.mapNotNull { Blocks.lookup(it) }?.toSet()
 
-        val blocks = mutableSetOf<Block>()
+        val blacklist = config.getStringsOrNull("blacklisted_blocks")
+            ?.mapNotNull { Blocks.lookup(it) }?.toSet()
+
+        val checkHardness = config.getBool("check_hardness")
+
+        val blocks = mutableListOf<Block>()
 
         val ignoreVector = player.location.direction.simplify()
 
-        for (x in (-radius..radius)) {
-            for (y in (-radius..radius)) {
+        for (y in (-radius..radius)) {
+            val endY = block.y + y
+            if (endY !in world.minHeight..world.maxHeight) {
+                continue
+            }
+
+            for (x in (-radius..radius)) {
                 for (z in (-radius..radius)) {
                     // Jank
                     if (ignoreVector.x != 0.0 && x != 0) {
@@ -75,41 +86,27 @@ object EffectMineRadiusOneDeep : MineBlockEffect<NoCompileData>("mine_radius_one
                         }
                     }
 
-                    val toBreak = block.world.getBlockAt(
-                        block.location.clone().add(x.toDouble(), y.toDouble(), z.toDouble())
-                    )
+                    val toBreak = world.getBlockAt(block.x + x, block.y + y, block.z + z)
 
-                    if (toBreak.location.blockY !in block.world.minHeight..block.world.maxHeight) {
+                    if (toBreak.type == Material.AIR)
                         continue
-                    }
 
-                    if (config.getStrings("blacklisted_blocks").containsIgnoreCase(toBreak.type.name)) {
+                    if (toBreak.type.hardness < 0)
                         continue
-                    }
 
-                    if (whitelist != null) {
-                        if (!whitelist.containsIgnoreCase(toBreak.type.name)) {
+                    if (checkHardness && toBreak.type.hardness > block.type.hardness)
+                        continue
+
+                    if (!AntigriefManager.canBreakBlock(player, toBreak))
+                        continue
+
+                    if (blacklist != null)
+                        if (blacklist.any { it.matches(toBreak) })
                             continue
-                        }
-                    }
 
-                    if (config.getBoolOrNull("check_hardness") != false) {
-                        if (toBreak.type.hardness > block.type.hardness) {
+                    if (whitelist != null)
+                        if (!whitelist.any { it.matches(toBreak) })
                             continue
-                        }
-                    }
-
-                    if (toBreak.type.hardness < 0) {
-                        continue
-                    }
-
-                    if (toBreak.type == Material.AIR) {
-                        continue
-                    }
-
-                    if (!AntigriefManager.canBreakBlock(player, toBreak)) {
-                        continue
-                    }
 
                     blocks.add(toBreak)
                 }
