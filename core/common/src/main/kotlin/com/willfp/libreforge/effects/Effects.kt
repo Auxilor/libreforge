@@ -89,6 +89,7 @@ import com.willfp.libreforge.effects.impl.EffectHoming
 import com.willfp.libreforge.effects.impl.EffectHungerMultiplier
 import com.willfp.libreforge.effects.impl.EffectIgnite
 import com.willfp.libreforge.effects.impl.EffectIncreaseStepHeight
+import com.willfp.libreforge.effects.impl.EffectInfiniteBucket
 import com.willfp.libreforge.effects.impl.EffectItemDurabilityMultiplier
 import com.willfp.libreforge.effects.impl.EffectJumpStrengthMultiplier
 import com.willfp.libreforge.effects.impl.EffectKeepInventory
@@ -647,6 +648,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectEntityReach)
         register(EffectGravityMultiplier)
         register(EffectIncreaseStepHeight)
+        register(EffectInfiniteBucket)
         register(EffectJumpStrengthMultiplier)
         register(EffectMiningSpeedMultiplier)
         register(EffectMovementEfficiencyMultiplier)

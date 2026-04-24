@@ -21,19 +21,24 @@ object EffectGiveHealth : Effect<NoCompileData>("give_health") {
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val player = data.player ?: return false
+        val maxHealth = player.getAttribute(Attribute.MAX_HEALTH)!!.value
 
         if (config.getBoolOrNull("trigger_heal") == true) {
-            val amount = config.getDoubleFromExpression("amount", data)
-            val event = EntityRegainHealthEvent(player, amount, EntityRegainHealthEvent.RegainReason.CUSTOM)
+            val missingHealth = maxHealth - player.health
+
+            if (missingHealth <= 0) return false
+
+            val requestedAmount = config.getDoubleFromExpression("amount", data)
+            val actualAmount = requestedAmount.coerceAtMost(missingHealth)
+
+            val event = EntityRegainHealthEvent(player, actualAmount, EntityRegainHealthEvent.RegainReason.CUSTOM)
             player.server.pluginManager.callEvent(event)
 
             if (event.isCancelled) return false
 
-            player.health = (player.health + event.amount)
-                .coerceAtMost(player.getAttribute(Attribute.MAX_HEALTH)!!.value)
+            player.health = (player.health + event.amount).coerceAtMost(maxHealth)
         } else {
-            player.health = (player.health + config.getDoubleFromExpression("amount", data))
-                .coerceAtMost(player.getAttribute(Attribute.MAX_HEALTH)!!.value)
+            player.health = (player.health + config.getDoubleFromExpression("amount", data)).coerceAtMost(maxHealth)
         }
 
         return true
