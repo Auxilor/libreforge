@@ -1,12 +1,8 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.NoCompileData
-import com.willfp.libreforge.arguments
+import com.willfp.libreforge.*
 import com.willfp.libreforge.effects.Effect
-import com.willfp.libreforge.getDoubleFromExpression
-import com.willfp.libreforge.getIntFromExpression
-import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.event.Listener
@@ -34,10 +30,10 @@ object EffectCreateExplosion : Effect<NoCompileData>("create_explosion"), Listen
         val breakBlocks = config.getBoolOrNull("break_blocks") ?: true
 
         for (i in 1..amount) {
-            plugin.scheduler.runLater(i.toLong()) {
+            plugin.scheduler.runTaskLater(location, i.toLong()) {
                 world.createExplosion(location, power.toFloat(), fire, breakBlocks, source)
-                }
             }
+        }
         return true
     }
 }

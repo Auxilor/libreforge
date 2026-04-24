@@ -31,8 +31,10 @@ object EffectReelSpeedMultiplier : MultiplierEffect("reel_speed_multiplier") {
             .normalize()
             .multiply(multiplier)
 
-        plugin.scheduler.run {
-            event.caught?.velocity = vector
+        event.caught?.let {
+            plugin.scheduler.runTask(it) {
+                it.velocity = vector
+            }
         }
     }
 }

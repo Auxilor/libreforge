@@ -38,7 +38,7 @@ object EffectDataFixer : Listener {
 
         dispatcher.updateHolders()
 
-        plugin.scheduler.run {
+        plugin.scheduler.runTask(player) {
             dispatcher.updateEffects()
         }
     }
