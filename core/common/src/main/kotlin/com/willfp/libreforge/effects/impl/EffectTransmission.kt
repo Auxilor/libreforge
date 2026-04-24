@@ -1,5 +1,6 @@
 package com.willfp.libreforge.effects.impl
 
+import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
@@ -49,6 +50,9 @@ object EffectTransmission : Effect<NoCompileData>("transmission") {
         location.pitch = player.location.pitch
         location.yaw = player.location.yaw
 
-        return player.teleport(location)
+        return if (Prerequisite.HAS_PAPER.isMet)
+            player.teleportAsync(location).get()
+        else
+            player.teleport(location) // DAMN SPIGOT!
     }
 }

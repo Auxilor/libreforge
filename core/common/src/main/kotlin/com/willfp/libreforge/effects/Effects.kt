@@ -158,6 +158,7 @@ import com.willfp.libreforge.effects.impl.EffectSetItemData
 import com.willfp.libreforge.effects.impl.EffectSetItemPoints
 import com.willfp.libreforge.effects.impl.EffectSetPoints
 import com.willfp.libreforge.effects.impl.EffectSetSaturation
+import com.willfp.libreforge.effects.impl.EffectSetUnbreakable
 import com.willfp.libreforge.effects.impl.EffectSetVelocity
 import com.willfp.libreforge.effects.impl.EffectSetVictimVelocity
 import com.willfp.libreforge.effects.impl.EffectShoot
@@ -293,10 +294,6 @@ object Effects : Registry<Effect<*>>() {
                         )
                     )
                 }
-            }
-
-            if (!triggers.all { element.effect.supportsTrigger(it) }) {
-                isInvalid = true
             }
         }
 
@@ -617,6 +614,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectSetItemPoints)
         register(EffectSetPoints)
         register(EffectSetSaturation)
+        register(EffectSetUnbreakable)
         register(EffectSetVelocity)
         register(EffectSetVictimVelocity)
         register(EffectShoot)

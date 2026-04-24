@@ -3,7 +3,7 @@ package com.willfp.libreforge.triggers
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.map.listMap
 import com.willfp.libreforge.Dispatcher
-import java.util.UUID
+import java.util.*
 
 /*
 
@@ -33,7 +33,7 @@ class DispatchedTriggerFactory(
     }
 
     internal fun startTicking() {
-        plugin.scheduler.runTimer(1, 1) {
+        plugin.scheduler.runTaskTimer(1, 1) {
             dispatcherTriggers.clear()
         }
     }
