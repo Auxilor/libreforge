@@ -1,4 +1,4 @@
-package com.willfp.libreforge.integrations.mythicmobs.impl
+package com.willfp.libreforge.integrations.mythicmobs.impl.effect
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.NoCompileData
@@ -8,7 +8,6 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import io.lumine.mythic.bukkit.MythicBukkit
 import io.lumine.mythic.core.utils.MythicUtil
-import org.bukkit.Bukkit
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 
@@ -23,10 +22,6 @@ object EffectCastMythicSkill : Effect<NoCompileData>("cast_mythic_skill") {
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
-        if (!Bukkit.getPluginManager().isPluginEnabled("MythicMobs")) {
-            return false
-        }
-
         val player: Player = data.player ?: return false
 
         var victim: LivingEntity? = data.victim ?: MythicUtil.getTargetedEntity(player)
