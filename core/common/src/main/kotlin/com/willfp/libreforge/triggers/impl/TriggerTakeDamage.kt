@@ -14,6 +14,8 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
 
 object TriggerTakeDamage : Trigger("take_damage") {
+    var blockEntityDamageByEntity: Boolean = false
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
@@ -29,6 +31,7 @@ object TriggerTakeDamage : Trigger("take_damage") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityDamageEvent) {
+        if (blockEntityDamageByEntity && event is EntityDamageByEntityEvent) return
 
         val victim = event.entity
 

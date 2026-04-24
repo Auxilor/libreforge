@@ -2,6 +2,7 @@ package com.willfp.libreforge.triggers
 
 import com.willfp.eco.core.registry.Registry
 import com.willfp.libreforge.mutators.MutatorList
+import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.impl.TriggerAltClick
 import com.willfp.libreforge.triggers.impl.TriggerBite
 import com.willfp.libreforge.triggers.impl.TriggerBlockItemDrop
@@ -97,6 +98,9 @@ import com.willfp.libreforge.triggers.impl.TriggerToggleSneak
 import com.willfp.libreforge.triggers.impl.TriggerToggleSprint
 import com.willfp.libreforge.triggers.impl.TriggerUnleashEntity
 import com.willfp.libreforge.triggers.impl.TriggerWinRaid
+import java.time.LocalDate
+import java.time.Month
+import java.time.format.DateTimeFormatter
 
 object Triggers : Registry<Trigger>() {
     private val groupRegistry = Registry<TriggerGroup>()
@@ -230,8 +234,6 @@ object Triggers : Registry<Trigger>() {
         register(TriggerSmithItem)
         register(TriggerSmelt)
         register(TriggerSwapHands)
-        register(TriggerTakeDamage)
-        register(TriggerTakeEntityDamage)
         register(TriggerTameAnimal)
         register(TriggerTeleport)
         register(TriggerToggleFlight)
@@ -239,5 +241,23 @@ object Triggers : Registry<Trigger>() {
         register(TriggerToggleSprint)
         register(TriggerUnleashEntity)
         register(TriggerWinRaid)
+        register(TriggerTakeDamage)
+        register(TriggerTakeEntityDamage)
+
+        // TODO remove on 5th May 2026.
+        val optedIn = plugin.configYml.getBool("opt-in.take_damage_blocks_entity_damage")
+        val blockEntityDamageByEntityCutOff = LocalDate.of(2026, Month.MAY, 4)
+        val today = LocalDate.now()
+        val shouldDisableEntityDamageByEntity = today.isAfter(blockEntityDamageByEntityCutOff) || today.isEqual(blockEntityDamageByEntityCutOff) || optedIn
+        if (!optedIn) {
+            val formatter = DateTimeFormatter.ISO_LOCAL_DATE
+            val dateString = blockEntityDamageByEntityCutOff.format(formatter)
+            plugin.logger.warning("On $dateString 'take_damage' will no longer trigger for Entity damage.")
+            plugin.logger.warning("Please migrate all relevant usages of 'take_damage' to 'take_entity_damage' before this date.")
+            plugin.logger.warning("Alternatively, enable 'opt-in.take_damage_blocks_entity_damage' to apply the internal change before $dateString.")
+        }
+        if (shouldDisableEntityDamageByEntity) {
+            TriggerTakeDamage.blockEntityDamageByEntity = true
+        }
     }
 }
