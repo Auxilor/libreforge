@@ -230,8 +230,6 @@ object Triggers : Registry<Trigger>() {
         register(TriggerSmithItem)
         register(TriggerSmelt)
         register(TriggerSwapHands)
-        register(TriggerTakeDamage)
-        register(TriggerTakeEntityDamage)
         register(TriggerTameAnimal)
         register(TriggerTeleport)
         register(TriggerToggleFlight)
@@ -239,5 +237,8 @@ object Triggers : Registry<Trigger>() {
         register(TriggerToggleSprint)
         register(TriggerUnleashEntity)
         register(TriggerWinRaid)
+        register(TriggerTakeDamage)
+        register(TriggerTakeEntityDamage)
+        TriggerTakeDamage.notifyOfEntityDamageChange()
     }
 }

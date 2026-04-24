@@ -4,6 +4,7 @@ import com.willfp.eco.core.command.impl.Subcommand
 import com.willfp.eco.util.StringUtils
 import com.willfp.eco.util.toNiceString
 import com.willfp.libreforge.plugin
+import com.willfp.libreforge.triggers.impl.TriggerTakeDamage
 import org.bukkit.command.CommandSender
 
 internal object CommandReload : Subcommand(
@@ -17,5 +18,6 @@ internal object CommandReload : Subcommand(
             plugin.langYml.getMessage("reloaded", StringUtils.FormatOption.WITHOUT_PLACEHOLDERS)
                 .replace("%time%", plugin.reloadWithTime(false).toNiceString())
         )
+        TriggerTakeDamage.notifyOfEntityDamageChange(sender = sender)
     }
 }
