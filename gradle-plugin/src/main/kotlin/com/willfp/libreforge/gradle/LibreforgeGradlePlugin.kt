@@ -3,6 +3,7 @@ package com.willfp.libreforge.gradle
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.file.DuplicatesStrategy
+import org.gradle.api.plugins.BasePluginExtension
 import org.gradle.api.tasks.bundling.Jar
 
 class LibreforgeGradlePlugin : Plugin<Project> {
@@ -77,7 +78,8 @@ class LibreforgeGradlePlugin : Plugin<Project> {
                     task.description = "Build the final Libreforge jar"
 
                     task.destinationDirectory.set(project.file("${project.rootDir}/bin"))
-                    task.archiveFileName.set("${project.name} v${project.version}.jar")
+                    val archivesName = project.extensions.findByType(BasePluginExtension::class.java)?.archivesName?.get() ?: project.name
+                    task.archiveFileName.set("$archivesName v${project.version}.jar")
                     task.duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
                     task.dependsOn(shadowJarTask)
@@ -98,7 +100,8 @@ class LibreforgeGradlePlugin : Plugin<Project> {
                     task.description = "Build the final Libreforge jar"
 
                     task.destinationDirectory.set(project.file("${project.rootDir}/bin"))
-                    task.archiveFileName.set("${project.name} v${project.version}.jar")
+                    val archivesName = project.extensions.findByType(BasePluginExtension::class.java)?.archivesName?.get() ?: project.name
+                    task.archiveFileName.set("$archivesName v${project.version}.jar")
                     task.duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
                     task.dependsOn(shadowJarTask)
