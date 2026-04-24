@@ -243,21 +243,6 @@ object Triggers : Registry<Trigger>() {
         register(TriggerWinRaid)
         register(TriggerTakeDamage)
         register(TriggerTakeEntityDamage)
-
-        // TODO remove on 5th May 2026.
-        val optedIn = plugin.configYml.getBool("opt-in.take_damage_blocks_entity_damage")
-        val blockEntityDamageByEntityCutOff = LocalDate.of(2026, Month.MAY, 4)
-        val today = LocalDate.now()
-        val shouldDisableEntityDamageByEntity = today.isAfter(blockEntityDamageByEntityCutOff) || today.isEqual(blockEntityDamageByEntityCutOff) || optedIn
-        if (!optedIn) {
-            val formatter = DateTimeFormatter.ISO_LOCAL_DATE
-            val dateString = blockEntityDamageByEntityCutOff.format(formatter)
-            plugin.logger.warning("On $dateString 'take_damage' will no longer trigger for Entity damage.")
-            plugin.logger.warning("Please migrate all relevant usages of 'take_damage' to 'take_entity_damage' before this date.")
-            plugin.logger.warning("Alternatively, enable 'opt-in.take_damage_blocks_entity_damage' to apply the internal change before $dateString.")
-        }
-        if (shouldDisableEntityDamageByEntity) {
-            TriggerTakeDamage.blockEntityDamageByEntity = true
-        }
+        TriggerTakeDamage.notifyOfEntityDamageChange()
     }
 }
