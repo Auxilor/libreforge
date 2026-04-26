@@ -47,6 +47,7 @@ import com.willfp.libreforge.effects.impl.EffectBurningTimeMultiplier
 import com.willfp.libreforge.effects.impl.EffectCancelEvent
 import com.willfp.libreforge.effects.impl.EffectChainLightning
 import com.willfp.libreforge.effects.impl.EffectClearInvulnerability
+import com.willfp.libreforge.effects.impl.EffectClearInventory
 import com.willfp.libreforge.effects.impl.EffectCloseInventory
 import com.willfp.libreforge.effects.impl.EffectConsumeHeldItem
 import com.willfp.libreforge.effects.impl.EffectCreateBossBar
@@ -515,6 +516,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectCancelEvent)
         register(EffectChainLightning)
         register(EffectClearInvulnerability)
+        register(EffectClearInventory)
         register(EffectCloseInventory)
         register(EffectConsumeHeldItem)
         register(EffectCreateBossBar)
