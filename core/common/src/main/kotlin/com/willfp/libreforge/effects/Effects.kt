@@ -33,6 +33,7 @@ import com.willfp.libreforge.effects.impl.EffectAntigravityProjectile
 import com.willfp.libreforge.effects.impl.EffectArmor
 import com.willfp.libreforge.effects.impl.EffectArmorToughness
 import com.willfp.libreforge.effects.impl.EffectArrowRing
+import com.willfp.libreforge.effects.impl.EffectArrowStorm
 import com.willfp.libreforge.effects.impl.EffectAttackSpeedMultiplier
 import com.willfp.libreforge.effects.impl.EffectAutosmelt
 import com.willfp.libreforge.effects.impl.EffectBleed
@@ -76,9 +77,8 @@ import com.willfp.libreforge.effects.impl.EffectExtinguish
 import com.willfp.libreforge.effects.impl.EffectFeatherStep
 import com.willfp.libreforge.effects.impl.EffectFirework
 import com.willfp.libreforge.effects.impl.EffectFlight
-import com.willfp.libreforge.effects.impl.EffectFloodFill
 import com.willfp.libreforge.effects.impl.EffectFoodMultiplier
-import com.willfp.libreforge.effects.impl.EffectForceAttack
+import com.willfp.libreforge.effects.impl.EffectFrostNova
 import com.willfp.libreforge.effects.impl.EffectGiveFood
 import com.willfp.libreforge.effects.impl.EffectGiveGlobalPoints
 import com.willfp.libreforge.effects.impl.EffectGiveHealth
@@ -136,7 +136,6 @@ import com.willfp.libreforge.effects.impl.EffectPullIn
 import com.willfp.libreforge.effects.impl.EffectPullToLocation
 import com.willfp.libreforge.effects.impl.EffectRandomPlayer
 import com.willfp.libreforge.effects.impl.EffectRandomTeleport
-import com.willfp.libreforge.effects.impl.EffectRaiseUndead
 import com.willfp.libreforge.effects.impl.EffectRapidBows
 import com.willfp.libreforge.effects.impl.EffectReelSpeedMultiplier
 import com.willfp.libreforge.effects.impl.EffectReflect
@@ -183,10 +182,13 @@ import com.willfp.libreforge.effects.impl.EffectSmite
 import com.willfp.libreforge.effects.impl.EffectSneakingSpeedMultiplier
 import com.willfp.libreforge.effects.impl.EffectSpawnEntity
 import com.willfp.libreforge.effects.impl.EffectSpawnMobs
-import com.willfp.libreforge.effects.impl.EffectSpawnParticle
+import com.willfp.libreforge.effects.impl.EffectShockwave
 import com.willfp.libreforge.effects.impl.EffectSortInventory
+import com.willfp.libreforge.effects.impl.EffectSoulRip
+import com.willfp.libreforge.effects.impl.EffectSpawnParticle
 import com.willfp.libreforge.effects.impl.EffectSpawnPotionCloud
 import com.willfp.libreforge.effects.impl.EffectStrikeLightning
+import com.willfp.libreforge.effects.impl.EffectTimeBomb
 import com.willfp.libreforge.effects.impl.EffectStripAI
 import com.willfp.libreforge.effects.impl.EffectStun
 import com.willfp.libreforge.effects.impl.EffectSwapPositions
@@ -206,6 +208,7 @@ import com.willfp.libreforge.effects.impl.EffectUnderwaterMiningSpeedMultiplier
 import com.willfp.libreforge.effects.impl.EffectUpdateBossBar
 import com.willfp.libreforge.effects.impl.EffectVictimSpeedMultiplier
 import com.willfp.libreforge.effects.impl.EffectVillagerTradeMultiplier
+import com.willfp.libreforge.effects.impl.EffectVortex
 import com.willfp.libreforge.effects.impl.EffectWaterMovementEfficiencyMultiplier
 import com.willfp.libreforge.effects.impl.EffectXpMultiplier
 import com.willfp.libreforge.enumValueOfOrNull
@@ -518,6 +521,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectArmor)
         register(EffectArmorToughness)
         register(EffectArrowRing)
+        register(EffectArrowStorm)
         register(EffectAttackSpeedMultiplier)
         register(EffectAutosmelt)
         register(EffectBleed)
@@ -558,9 +562,8 @@ object Effects : Registry<Effect<*>>() {
         register(EffectFeatherStep)
         register(EffectFirework)
         register(EffectFlight)
-        register(EffectFloodFill)
         register(EffectFoodMultiplier)
-        register(EffectForceAttack)
+        register(EffectFrostNova)
         register(EffectGiveFood)
         register(EffectGiveGlobalPoints)
         register(EffectGiveHealth)
@@ -612,7 +615,6 @@ object Effects : Registry<Effect<*>>() {
         register(EffectPullToLocation)
         register(EffectRandomPlayer)
         register(EffectRandomTeleport)
-        register(EffectRaiseUndead)
         register(EffectRapidBows)
         register(EffectReelSpeedMultiplier)
         register(EffectReflect)
@@ -656,10 +658,13 @@ object Effects : Registry<Effect<*>>() {
         register(EffectSmite)
         register(EffectSpawnEntity)
         register(EffectSpawnMobs)
-        register(EffectSpawnParticle)
+        register(EffectShockwave)
         register(EffectSortInventory)
+        register(EffectSoulRip)
+        register(EffectSpawnParticle)
         register(EffectSpawnPotionCloud)
         register(EffectStrikeLightning)
+        register(EffectTimeBomb)
         register(EffectStripAI)
         register(EffectStun)
         register(EffectSwapPositions)
@@ -677,6 +682,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectUpdateBossBar)
         register(EffectVictimSpeedMultiplier)
         register(EffectVillagerTradeMultiplier)
+        register(EffectVortex)
         register(EffectXpMultiplier)
         register(EffectBlockReach)
         register(EffectMiningEfficiency)
