@@ -36,6 +36,7 @@ import com.willfp.libreforge.effects.impl.EffectArrowRing
 import com.willfp.libreforge.effects.impl.EffectAttackSpeedMultiplier
 import com.willfp.libreforge.effects.impl.EffectAutosmelt
 import com.willfp.libreforge.effects.impl.EffectBleed
+import com.willfp.libreforge.effects.impl.EffectBlink
 import com.willfp.libreforge.effects.impl.EffectBlockCommands
 import com.willfp.libreforge.effects.impl.EffectBlockReach
 import com.willfp.libreforge.effects.impl.EffectBonusHealth
@@ -504,6 +505,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectAttackSpeedMultiplier)
         register(EffectAutosmelt)
         register(EffectBleed)
+        register(EffectBlink)
         register(EffectBlockCommands)
         register(EffectBonusHealth)
         register(EffectBreakBlock)
