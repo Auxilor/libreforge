@@ -92,6 +92,7 @@ import com.willfp.libreforge.effects.impl.EffectGiveSaturation
 import com.willfp.libreforge.effects.impl.EffectGiveXp
 import com.willfp.libreforge.effects.impl.EffectGlowNearbyBlocks
 import com.willfp.libreforge.effects.impl.EffectGravityMultiplier
+import com.willfp.libreforge.effects.impl.EffectHarvestCrop
 import com.willfp.libreforge.effects.impl.EffectHoming
 import com.willfp.libreforge.effects.impl.EffectHungerMultiplier
 import com.willfp.libreforge.effects.impl.EffectIgnite
@@ -562,6 +563,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectGiveSaturation)
         register(EffectGiveXp)
         register(EffectGlowNearbyBlocks)
+        register(EffectHarvestCrop)
         register(EffectHoming)
         register(EffectHungerMultiplier)
         register(EffectIgnite)
