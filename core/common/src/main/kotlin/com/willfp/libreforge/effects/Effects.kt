@@ -76,6 +76,7 @@ import com.willfp.libreforge.effects.impl.EffectExtinguish
 import com.willfp.libreforge.effects.impl.EffectFeatherStep
 import com.willfp.libreforge.effects.impl.EffectFirework
 import com.willfp.libreforge.effects.impl.EffectFlight
+import com.willfp.libreforge.effects.impl.EffectFloodFill
 import com.willfp.libreforge.effects.impl.EffectFoodMultiplier
 import com.willfp.libreforge.effects.impl.EffectGiveFood
 import com.willfp.libreforge.effects.impl.EffectGiveGlobalPoints
@@ -545,6 +546,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectFeatherStep)
         register(EffectFirework)
         register(EffectFlight)
+        register(EffectFloodFill)
         register(EffectFoodMultiplier)
         register(EffectGiveFood)
         register(EffectGiveGlobalPoints)
