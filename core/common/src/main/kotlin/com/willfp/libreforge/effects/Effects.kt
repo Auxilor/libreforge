@@ -45,6 +45,7 @@ import com.willfp.libreforge.effects.impl.EffectBrewTimeMultiplier
 import com.willfp.libreforge.effects.impl.EffectBroadcast
 import com.willfp.libreforge.effects.impl.EffectBurningTimeMultiplier
 import com.willfp.libreforge.effects.impl.EffectCancelEvent
+import com.willfp.libreforge.effects.impl.EffectChainLightning
 import com.willfp.libreforge.effects.impl.EffectClearInvulnerability
 import com.willfp.libreforge.effects.impl.EffectCloseInventory
 import com.willfp.libreforge.effects.impl.EffectConsumeHeldItem
@@ -512,6 +513,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectBrewTimeMultiplier)
         register(EffectBroadcast)
         register(EffectCancelEvent)
+        register(EffectChainLightning)
         register(EffectClearInvulnerability)
         register(EffectCloseInventory)
         register(EffectConsumeHeldItem)
