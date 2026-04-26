@@ -165,6 +165,7 @@ import com.willfp.libreforge.effects.impl.EffectSetBlock
 import com.willfp.libreforge.effects.impl.EffectSetCustomModelData
 import com.willfp.libreforge.effects.impl.EffectSetFood
 import com.willfp.libreforge.effects.impl.EffectSetFreezeTicks
+import com.willfp.libreforge.effects.impl.EffectSetGlowing
 import com.willfp.libreforge.effects.impl.EffectSetGlobalPoints
 import com.willfp.libreforge.effects.impl.EffectSetItemData
 import com.willfp.libreforge.effects.impl.EffectSetItemPoints
@@ -634,6 +635,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectSetCustomModelData)
         register(EffectSetFood)
         register(EffectSetFreezeTicks)
+        register(EffectSetGlowing)
         register(EffectSetGlobalPoints)
         register(EffectSetItemData)
         register(EffectSetItemPoints)
