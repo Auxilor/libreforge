@@ -50,6 +50,7 @@ import com.willfp.libreforge.effects.impl.EffectClearInvulnerability
 import com.willfp.libreforge.effects.impl.EffectClearInventory
 import com.willfp.libreforge.effects.impl.EffectCloseInventory
 import com.willfp.libreforge.effects.impl.EffectConsumeHeldItem
+import com.willfp.libreforge.effects.impl.EffectCopyItem
 import com.willfp.libreforge.effects.impl.EffectCreateBossBar
 import com.willfp.libreforge.effects.impl.EffectCreateExplosion
 import com.willfp.libreforge.effects.impl.EffectCreateHologram
@@ -519,6 +520,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectClearInventory)
         register(EffectCloseInventory)
         register(EffectConsumeHeldItem)
+        register(EffectCopyItem)
         register(EffectCreateBossBar)
         register(EffectCreateExplosion)
         register(EffectCreateHologram)
