@@ -127,6 +127,7 @@ import com.willfp.libreforge.effects.impl.EffectParticleAnimation
 import com.willfp.libreforge.effects.impl.EffectParticleLine
 import com.willfp.libreforge.effects.impl.EffectPayPrice
 import com.willfp.libreforge.effects.impl.EffectPermanentPotionEffect
+import com.willfp.libreforge.effects.impl.EffectPlaceBlock
 import com.willfp.libreforge.effects.impl.EffectPiercing
 import com.willfp.libreforge.effects.impl.EffectPlaySound
 import com.willfp.libreforge.effects.impl.EffectPotionDurationMultiplier
@@ -594,6 +595,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectParticleLine)
         register(EffectPayPrice)
         register(EffectPermanentPotionEffect)
+        register(EffectPlaceBlock)
         register(EffectPiercing)
         register(EffectPlaySound)
         register(EffectPotionDurationMultiplier)
