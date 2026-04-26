@@ -139,6 +139,7 @@ import com.willfp.libreforge.effects.impl.EffectRandomTeleport
 import com.willfp.libreforge.effects.impl.EffectRaiseUndead
 import com.willfp.libreforge.effects.impl.EffectRapidBows
 import com.willfp.libreforge.effects.impl.EffectReelSpeedMultiplier
+import com.willfp.libreforge.effects.impl.EffectReflect
 import com.willfp.libreforge.effects.impl.EffectRegenMultiplier
 import com.willfp.libreforge.effects.impl.EffectRemoveBossBar
 import com.willfp.libreforge.effects.impl.EffectRemoveEnchant
@@ -609,6 +610,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectRaiseUndead)
         register(EffectRapidBows)
         register(EffectReelSpeedMultiplier)
+        register(EffectReflect)
         register(EffectRegenMultiplier)
         register(EffectRemoveBossBar)
         register(EffectRemoveEnchant)
