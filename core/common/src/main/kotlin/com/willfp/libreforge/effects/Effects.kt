@@ -184,6 +184,7 @@ import com.willfp.libreforge.effects.impl.EffectSneakingSpeedMultiplier
 import com.willfp.libreforge.effects.impl.EffectSpawnEntity
 import com.willfp.libreforge.effects.impl.EffectSpawnMobs
 import com.willfp.libreforge.effects.impl.EffectSpawnParticle
+import com.willfp.libreforge.effects.impl.EffectSortInventory
 import com.willfp.libreforge.effects.impl.EffectSpawnPotionCloud
 import com.willfp.libreforge.effects.impl.EffectStrikeLightning
 import com.willfp.libreforge.effects.impl.EffectStripAI
@@ -654,6 +655,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectSpawnEntity)
         register(EffectSpawnMobs)
         register(EffectSpawnParticle)
+        register(EffectSortInventory)
         register(EffectSpawnPotionCloud)
         register(EffectStrikeLightning)
         register(EffectStripAI)
