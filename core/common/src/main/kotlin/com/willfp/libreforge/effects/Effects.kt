@@ -135,6 +135,7 @@ import com.willfp.libreforge.effects.impl.EffectPotionEffect
 import com.willfp.libreforge.effects.impl.EffectPullIn
 import com.willfp.libreforge.effects.impl.EffectPullToLocation
 import com.willfp.libreforge.effects.impl.EffectRandomPlayer
+import com.willfp.libreforge.effects.impl.EffectRandomTeleport
 import com.willfp.libreforge.effects.impl.EffectRaiseUndead
 import com.willfp.libreforge.effects.impl.EffectRapidBows
 import com.willfp.libreforge.effects.impl.EffectReelSpeedMultiplier
@@ -604,6 +605,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectPullIn)
         register(EffectPullToLocation)
         register(EffectRandomPlayer)
+        register(EffectRandomTeleport)
         register(EffectRaiseUndead)
         register(EffectRapidBows)
         register(EffectReelSpeedMultiplier)
