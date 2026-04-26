@@ -15,6 +15,7 @@ import com.willfp.libreforge.effects.executors.ChainExecutors
 import com.willfp.libreforge.effects.executors.impl.NormalExecutorFactory
 import com.willfp.libreforge.effects.impl.EffectAOE
 import com.willfp.libreforge.effects.impl.EffectAOEBlocks
+import com.willfp.libreforge.effects.impl.EffectAbsorb
 import com.willfp.libreforge.effects.impl.EffectAddDamage
 import com.willfp.libreforge.effects.impl.EffectAddDurability
 import com.willfp.libreforge.effects.impl.EffectAddEnchant
@@ -483,6 +484,7 @@ object Effects : Registry<Effect<*>>() {
     init {
         register(EffectAOE)
         register(EffectAOEBlocks)
+        register(EffectAbsorb)
         register(EffectAddDamage)
         register(EffectAddEnchant)
         register(EffectAddGlobalPoints)
