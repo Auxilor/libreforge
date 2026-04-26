@@ -159,6 +159,7 @@ import com.willfp.libreforge.effects.impl.EffectScale
 import com.willfp.libreforge.effects.impl.EffectSellItems
 import com.willfp.libreforge.effects.impl.EffectSellMultiplier
 import com.willfp.libreforge.effects.impl.EffectSendMessage
+import com.willfp.libreforge.effects.impl.EffectSilence
 import com.willfp.libreforge.effects.impl.EffectSendTitle
 import com.willfp.libreforge.effects.impl.EffectSetArmorTrim
 import com.willfp.libreforge.effects.impl.EffectSetBlock
@@ -629,6 +630,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectSellItems)
         register(EffectSellMultiplier)
         register(EffectSendMessage)
+        register(EffectSilence)
         register(EffectSendTitle)
         register(EffectSetArmorTrim)
         register(EffectSetBlock)
