@@ -42,6 +42,7 @@ import com.willfp.libreforge.integrations.mythicmobs.MythicMobsIntegration
 import com.willfp.libreforge.integrations.paper.PaperIntegration
 import com.willfp.libreforge.integrations.purpur.PurpurIntegration
 import com.willfp.libreforge.integrations.scyther.ScytherIntegration
+import com.willfp.libreforge.integrations.shopkeepers.ShopkeepersIntegration
 import com.willfp.libreforge.integrations.tab.TabIntegration
 import com.willfp.libreforge.integrations.tmmobcoins.TMMobcoinsIntegration
 import com.willfp.libreforge.integrations.ultimatemobcoins.UltimateMobCoinsIntegration
@@ -241,6 +242,7 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             IntegrationLoader("mcMMO") { McMMOIntegration.load(this) },
             IntegrationLoader("Citizens") { CitizensIntegration.load(this) },
             IntegrationLoader("Scyther") { ScytherIntegration.load(this) },
+            IntegrationLoader("Shopkeepers") { ShopkeepersIntegration.load(this) },
             IntegrationLoader("TMMobcoins") { TMMobcoinsIntegration.load(this) },
             IntegrationLoader("Vault") { VaultIntegration.load(this) },
             IntegrationLoader("WorldGuard") { WorldGuardIntegration.load(this) },
