@@ -43,7 +43,14 @@ object EffectShoot : Effect<NoCompileData>("shoot") {
             }
 
             if (projectile is AbstractArrow) {
-                projectile.pickupStatus = AbstractArrow.PickupStatus.DISALLOWED
+                val pickupStatus = if (config.getBool("allow_pickup")) {
+                    AbstractArrow.PickupStatus.ALLOWED
+                } else {
+                    AbstractArrow.PickupStatus.DISALLOWED
+                }
+
+                projectile.pickupStatus = pickupStatus
+
             }
 
             if (fire) {
