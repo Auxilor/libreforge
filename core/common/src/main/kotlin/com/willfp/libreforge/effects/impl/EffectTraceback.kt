@@ -1,6 +1,5 @@
 package com.willfp.libreforge.effects.impl
 
-import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
@@ -36,21 +35,14 @@ object EffectTraceback : Effect<NoCompileData>("traceback") {
 
         val location = times.getOrElse(index) { times.lastOrNull() } ?: return false
 
-        if (Prerequisite.HAS_PAPER.isMet)
-            player.teleportAsync(location)
-        else
-            player.teleport(location) // damn spigot!
+        player.teleport(location)
 
         return true
     }
 
     override fun postRegister() {
-        Bukkit.getOnlinePlayers().forEach { player ->
-            // one timer for each player in folia cuz
-            // player metadata can be accessed only on player threads..
-            //
-            // sadly the same for spigot, and it's annoying :(
-            plugin.scheduler.runTaskTimer(player, 20, 20) {
+        plugin.scheduler.runTimer(20, 20) {
+            for (player in Bukkit.getOnlinePlayers()) {
                 @Suppress("UNCHECKED_CAST")
                 val times = player.getMetadata(key).getOrNull(0)?.value() as? List<Location> ?: emptyList()
                 val newTimes = (if (times.size < 30) times else times.drop(1)) + player.location

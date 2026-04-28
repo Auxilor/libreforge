@@ -75,9 +75,7 @@ object EffectDropPickupItem : Effect<Chain?>("drop_pickup_item") {
         val meta = item.getMetadata(META_KEY).firstOrNull()?.value() as? Meta ?: return
 
         event.isCancelled = true
-        plugin.scheduler.runTask(item) {
-            item.remove()
-        }
+        item.remove()
 
         meta.chain.trigger(meta.trigger)
         meta.team?.removeEntry(item.uniqueId.toString())

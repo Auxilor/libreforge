@@ -17,13 +17,11 @@ object TriggerTeleport : Trigger("teleport") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerTeleportEvent) {
-        val player = event.player
-
-        plugin.scheduler.runTask(player) {
+        plugin.scheduler.run {
             this.dispatch(
-                player.toDispatcher(),
+                event.player.toDispatcher(),
                 TriggerData(
-                    player = player,
+                    player = event.player,
                     location = event.to,
                     text = event.cause.name.lowercase()
                 )

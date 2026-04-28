@@ -13,7 +13,7 @@ import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerRespawnEvent
-import java.util.*
+import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 @Suppress("unused", "UNUSED_PARAMETER")
@@ -27,9 +27,6 @@ object ItemRefreshListener : Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     fun onItemPickup(event: EntityPickupItemEvent) {
-        val entity = event.entity
-        val dispatcher = entity.toDispatcher()
-
         if (!plugin.configYml.getBool("refresh.pickup.enabled")) {
             return
         }
@@ -39,26 +36,20 @@ object ItemRefreshListener : Listener {
                 return
             }
         }
-        dispatcher.refreshHolders()
+
+        event.entity.toDispatcher().refreshHolders()
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     fun onPlayerJoin(event: PlayerJoinEvent) {
         Bukkit.getServer().onlinePlayers.forEach {
-            plugin.scheduler.runTask(it) {
-                it.toDispatcher().refreshHolders()
-            }
+            it.toDispatcher().refreshHolders()
         }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onInventoryDrop(event: PlayerDropItemEvent) {
-        val dispatcher = event.player.toDispatcher()
-        val player = event.player
-
-        plugin.scheduler.runTask(player) {
-            dispatcher.refreshHolders()
-        }
+        event.player.toDispatcher().refreshHolders()
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -75,35 +66,24 @@ object ItemRefreshListener : Listener {
 
         val dispatcher = player.toDispatcher()
 
-        plugin.scheduler.runTask(player) {
+        plugin.scheduler.run {
             dispatcher.refreshHolders()
         }
     }
 
     @EventHandler
     fun onRespawn(event: PlayerRespawnEvent) {
-        val dispatcher = event.player.toDispatcher()
-        val player = event.player
-
-        plugin.scheduler.runTask(player) {
-            dispatcher.refreshHolders()
-        }
+        event.player.toDispatcher().refreshHolders()
     }
 
     @EventHandler
     fun onArmorChange(event: ArmorChangeEvent) {
-        val dispatcher = event.player.toDispatcher()
-        val player = event.player
-
-        plugin.scheduler.runTask(player) {
-            dispatcher.refreshHolders()
-        }
+        event.player.toDispatcher().refreshHolders()
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     fun onInventoryClick(event: InventoryClickEvent) {
         val player = event.whoClicked as? Player ?: return
-        val dispatcher = player.toDispatcher()
 
         if (inventoryClickTimeouts.getIfPresent(player.uniqueId) != null) {
             return
@@ -111,9 +91,6 @@ object ItemRefreshListener : Listener {
 
         inventoryClickTimeouts.put(player.uniqueId, Unit)
 
-
-        plugin.scheduler.runTask(player) {
-            dispatcher.refreshHolders()
-        }
+        player.toDispatcher().refreshHolders()
     }
 }
