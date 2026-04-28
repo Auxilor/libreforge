@@ -3,9 +3,13 @@ package com.willfp.libreforge.effects.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.eco.core.map.listMap
-import com.willfp.libreforge.*
+import com.willfp.libreforge.Dispatcher
+import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.ProvidedHolder
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
+import com.willfp.libreforge.plugin
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.block.BlockFace
@@ -15,7 +19,7 @@ import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
-import java.util.*
+import java.util.UUID
 
 object EffectReplantCrops : Effect<NoCompileData>("replant_crops") {
     override val arguments = arguments {
@@ -116,7 +120,7 @@ object EffectReplantCrops : Effect<NoCompileData>("replant_crops") {
 
         data.age = 0
 
-        plugin.scheduler.runTask(block.location) {
+        plugin.scheduler.run {
             block.type = type
             block.blockData = data
 

@@ -1,15 +1,20 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.libreforge.*
+import com.willfp.libreforge.Dispatcher
+import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.ProvidedHolder
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
+import com.willfp.libreforge.get
+import com.willfp.libreforge.plugin
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerRespawnEvent
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
-import java.util.*
+import java.util.UUID
 
 @Suppress("UNCHECKED_CAST")
 object EffectPermanentPotionEffect : Effect<NoCompileData>("permanent_potion_effect") {
@@ -46,37 +51,36 @@ object EffectPermanentPotionEffect : Effect<NoCompileData>("permanent_potion_eff
     }
 
     private fun refreshEffectsOfType(player: Player, type: PotionEffectType) {
-        plugin.scheduler.runTask(player) {
-            player.removePotionEffect(type)
-            val active = getHolderData(player)
-                .values
-                .filter { it.effectType == type }
-            if (active.isEmpty()) return@runTask
-            val best = active.maxByOrNull { it.level }!!
-            val effect = PotionEffect(
-                type,
-                DURATION,
-                best.level,
-                false,
-                active.any { it.particles },
-                active.any { it.icon }
-            )
-            player.addPotionEffect(effect)
-        }
+        player.removePotionEffect(type)
+        val active = getHolderData(player)
+            .values
+            .filter { it.effectType == type }
+        if (active.isEmpty()) return
+        val best = active.maxByOrNull { it.level }!!
+        val effect = PotionEffect(
+            type,
+            DURATION,
+            best.level,
+            false,
+            active.any { it.particles },
+            active.any { it.icon }
+        )
+        player.addPotionEffect(effect)
     }
 
     @EventHandler
     fun onRespawn(event: PlayerRespawnEvent) {
         val player = event.player
 
-        plugin.scheduler.runTask(player) {
+        plugin.server.scheduler.runTask(plugin, Runnable {
             val types = getHolderData(player)
                 .values
                 .map { it.effectType }
                 .toSet()
 
             types.forEach { refreshEffectsOfType(player, it) }
-        }
+            }
+        )
     }
 
     override fun onEnable(

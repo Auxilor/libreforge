@@ -2,7 +2,12 @@ package com.willfp.libreforge
 
 import com.willfp.eco.core.items.Items
 import com.willfp.eco.util.namespacedKeyOf
-import org.bukkit.*
+import org.bukkit.Bukkit
+import org.bukkit.Location
+import org.bukkit.Material
+import org.bukkit.NamespacedKey
+import org.bukkit.Sound
+import org.bukkit.SoundCategory
 import org.bukkit.block.Block
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
@@ -63,44 +68,21 @@ fun Collection<ItemStack?>.filterNotEmpty() =
 internal val ItemStack?.isEcoEmpty: Boolean
     get() = Items.isEmpty(this)
 
-@Suppress("DEPRECATION")
-@Deprecated("Use applyDamage with the removeItem function")
 fun ItemStack.applyDamage(damage: Int, player: Player?): Boolean {
-    return this.applyDamage(damage, player) { this.type = Material.AIR }
-}
-
-fun ItemStack.applyDamage(damage: Int, player: Player?, removeItem: Runnable): Boolean {
     val meta = this.itemMeta as? Damageable ?: return false
-    // don't apply damage to unbreakable
-    if (meta.isUnbreakable) return false
-
-    val unbreaking = meta.getEnchantLevel(Enchantment.UNBREAKING)
-
-    // Calculate actual damage considering unbreaking
-    // Each damage point has a chance to be negated
-    var actualDamage = damage
-    if (unbreaking > 0) {
-        var damageNegated = 0
-        repeat(damage) {
-            // Chance to negate this damage point: (unbreakingLevel) / (unbreakingLevel + 1)
-            if (Math.random() < (unbreaking.toDouble() / (unbreaking + 1)))
-                damageNegated++
-        }
-        actualDamage = damage - damageNegated
-    }
-
-    meta.damage += actualDamage
+    meta.damage += damage
     if (meta.damage >= this.type.maxDurability) {
         meta.damage = this.type.maxDurability.toInt()
-        this.itemMeta = meta
         if (player != null) {
             Bukkit.getPluginManager().callEvent(PlayerItemBreakEvent(player, this))
             player.playSound(player.location, Sound.ENTITY_ITEM_BREAK, SoundCategory.BLOCKS, 1f, 1f)
         }
-        removeItem.run()
+        @Suppress("DEPRECATION")
+        this.type = Material.AIR
     } else {
         this.itemMeta = meta
     }
+
     return true
 }
 

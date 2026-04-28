@@ -18,6 +18,6 @@ object EffectFoodMultiplier : MultiplierEffect("food_multiplier") {
             return
         }
 
-        event.foodLevel += ceil(getMultiplier(player.toDispatcher()) * diff).toInt()
+        event.foodLevel = player.foodLevel + ceil(getMultiplier(player.toDispatcher()) * diff).toInt()
     }
 }

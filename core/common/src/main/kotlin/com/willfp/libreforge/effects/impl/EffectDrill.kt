@@ -1,16 +1,15 @@
 package com.willfp.libreforge.effects.impl
 
-import com.willfp.eco.core.blocks.Blocks
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.eco.util.VectorUtils
+import com.willfp.eco.util.containsIgnoreCase
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.templates.MineBlockEffect
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import org.bukkit.Material
 import org.bukkit.block.Block
 
 
@@ -26,7 +25,6 @@ object EffectDrill : MineBlockEffect<NoCompileData>("drill") {
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val block = data.block ?: data.location?.block ?: return false
-        val world = block.world
 
         val player = data.player ?: return false
 
@@ -37,40 +35,38 @@ object EffectDrill : MineBlockEffect<NoCompileData>("drill") {
         }
 
         val whitelist = config.getStringsOrNull("whitelist")
-            ?.mapNotNull { Blocks.lookup(it) }?.toSet()
-
-        val blacklist = config.getStringsOrNull("blacklisted_blocks")
-            ?.mapNotNull { Blocks.lookup(it) }?.toSet()
 
         val preventTriggers = config.getBool("prevent_trigger")
-
-        val checkHardness = config.getBool("check_hardness")
 
         val blocks = mutableSetOf<Block>()
 
         for (i in 1..amount) {
             val simplified = VectorUtils.simplifyVector(player.location.direction.normalize()).multiply(i)
-            val toBreak = world.getBlockAt(block.location.clone().add(simplified))
+            val toBreak = block.world.getBlockAt(block.location.clone().add(simplified))
 
-            if (toBreak.type == Material.AIR)
+            if (config.getStrings("blacklisted_blocks").containsIgnoreCase(toBreak.type.name)) {
                 continue
+            }
 
-            if (toBreak.type.hardness < 0)
-                continue
-
-            if (checkHardness && toBreak.type.hardness > block.type.hardness)
-                continue
-
-            if (!AntigriefManager.canBreakBlock(player, toBreak))
-                continue
-
-            if (blacklist != null)
-                if (blacklist.any { it.matches(toBreak) })
+            if (whitelist != null) {
+                if (!whitelist.containsIgnoreCase(toBreak.type.name)) {
                     continue
+                }
+            }
 
-            if (whitelist != null)
-                if (!whitelist.any { it.matches(toBreak) })
+            if (config.getBool("check_hardness")) {
+                if (toBreak.type.hardness > block.type.hardness) {
                     continue
+                }
+            }
+
+            if (!AntigriefManager.canBreakBlock(player, toBreak)) {
+                continue
+            }
+
+            if (toBreak.type.hardness < 0) {
+                continue
+            }
 
             blocks.add(toBreak)
         }

@@ -8,7 +8,6 @@ import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getStrings
-import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.inventory.ItemStack
@@ -33,9 +32,7 @@ object EffectDropRandomItem : Effect<List<ItemStack>>("drop_random_item") {
                 .setLocation(location)
                 .push()
         } else {
-            plugin.scheduler.runTask(location) {
-                location.world?.dropItem(location, item)
-            }
+            location.world?.dropItem(location, item)
         }
 
         return true

@@ -20,7 +20,7 @@ object EffectPotionDurationMultiplier : MultiplierEffect("potion_duration_multip
 
         val multiplier = getMultiplier(player.toDispatcher())
 
-        plugin.scheduler.runTask(event.block.location) {
+        plugin.scheduler.run {
             for (i in 0..2) {
                 val item = event.contents.getItem(i) ?: continue
                 val meta = item.itemMeta as? PotionMeta ?: continue
@@ -103,15 +103,13 @@ object EffectPotionDurationMultiplier : MultiplierEffect("potion_duration_multip
 
             for (effect in effects) {
                 val newDuration = (effect.duration * multiplier * intensity).toInt()
-                plugin.scheduler.runTask(entity) {
-                    entity.addPotionEffect(
-                        PotionEffect(
-                            effect.type,
-                            newDuration,
-                            effect.amplifier
-                        )
+                entity.addPotionEffect(
+                    PotionEffect(
+                        effect.type,
+                        newDuration,
+                        effect.amplifier
                     )
-                }
+                )
             }
         }
     }
