@@ -14,6 +14,7 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerBucketEmptyEvent
+import org.bukkit.event.player.PlayerItemConsumeEvent
 import org.bukkit.inventory.ItemStack
 import java.util.UUID
 
@@ -37,6 +38,23 @@ object EffectInfiniteBucket : Effect<Set<String>>("infinite_bucket") {
             val item = player.inventory.getItem(slot)
             if (item != null && item.type == Material.BUCKET) {
                 player.inventory.setItem(slot, ItemStack(event.bucket))
+            }
+        }
+    }
+
+    @EventHandler
+    fun onMilkConsume(event: PlayerItemConsumeEvent) {
+        val player = event.player
+        val allowedTypes = activePlayers[player.uniqueId] ?: return
+        if (event.item.type != Material.MILK_BUCKET) return
+        if (allowedTypes.isNotEmpty() && "MILK_BUCKET" !in allowedTypes) return
+
+        val slot = player.inventory.heldItemSlot
+
+        plugin.scheduler.runTaskAsync {
+            val item = player.inventory.getItem(slot)
+            if (item != null && item.type == Material.BUCKET) {
+                player.inventory.setItem(slot, ItemStack(Material.MILK_BUCKET))
             }
         }
     }
