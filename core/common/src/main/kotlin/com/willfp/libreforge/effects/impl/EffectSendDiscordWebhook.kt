@@ -1,7 +1,6 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
-// No manual HTTP fallback: use DiscordManager only
 import com.willfp.libreforge.toPlaceholderContext
 import com.willfp.eco.core.integrations.discord.DiscordManager
 import com.willfp.eco.core.integrations.discord.DiscordWebhookMessage
@@ -19,7 +18,6 @@ import com.willfp.libreforge.triggers.TriggerData
 
 object EffectSendDiscordWebhook: Effect<NoCompileData>("send_discord_webhook") {
     override val arguments: ConfigArguments = arguments {
-        // webhook_url and text are required; everything else is optional
         require("webhook_url", "You must specify the webhook URL!")
         require("text", "You must specify the text to send!")
     }
@@ -31,15 +29,12 @@ object EffectSendDiscordWebhook: Effect<NoCompileData>("send_discord_webhook") {
 
         val webhookUrl = config.getFormattedString("webhook_url", ctx)
 
-        // The main content / message
         val content = config.getFormattedString("text", ctx)
 
-        // Optional overrides
         val username = config.getFormattedStringOrNull("username", ctx)
         val avatarUrl = config.getStringOrNull("avatar_url")
         val tts = config.getBoolOrNull("tts") ?: false
 
-        // Parse embeds from config into real DiscordEmbed objects
         val embedConfigs = config.getSubsectionsOrNull("embeds") ?: emptyList()
 
         val embeds = embedConfigs.map { embedCfg ->
