@@ -22,7 +22,6 @@ abstract class DamageItemEffect(id: String) : Effect<NoCompileData>(id) {
 
     abstract fun getItems(data: TriggerData): List<ItemStack>
 
-    @Suppress("DEPRECATION")
     final override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val victim = data.victim ?: return false
 
@@ -42,6 +41,7 @@ abstract class DamageItemEffect(id: String) : Effect<NoCompileData>(id) {
             }
 
             if (victim is Player) {
+                @Suppress("DEPRECATION")
                 val event = PlayerItemDamageEvent(victim, item, damage)
                 Bukkit.getPluginManager().callEvent(event)
                 if (!event.isCancelled) {

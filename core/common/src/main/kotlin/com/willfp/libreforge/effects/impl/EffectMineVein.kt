@@ -1,6 +1,5 @@
 package com.willfp.libreforge.effects.impl
 
-import com.willfp.eco.core.blocks.Blocks
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.eco.util.BlockUtils
@@ -12,6 +11,7 @@ import com.willfp.libreforge.filters.Filters
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import org.bukkit.Material
 
 object EffectMineVein : MineBlockEffect<FilterList>("mine_vein") {
     override val parameters = setOf(
@@ -30,11 +30,13 @@ object EffectMineVein : MineBlockEffect<FilterList>("mine_vein") {
 
         val preventTriggers = config.getBool("prevent_trigger")
 
-        if (player.isSneaking && config.getBool("disable_on_sneak"))
+        if (player.isSneaking && config.getBool("disable_on_sneak")) {
             return false
+        }
 
-        val whitelist = config.getStringsOrNull("whitelist")
-            ?.mapNotNull { Blocks.lookup(it) } ?: listOf(Blocks.getBlock(block))
+        val whitelist = config.getStringsOrNull("blocks")
+            ?.mapNotNull { Material.matchMaterial(it.uppercase()) }
+            ?: listOf(block.type)
 
         val blocks = BlockUtils.getVein(
             block,

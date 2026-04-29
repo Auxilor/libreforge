@@ -4,8 +4,12 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.util.TeamUtils
-import com.willfp.libreforge.*
+import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.enumValueOfOrNull
+import com.willfp.libreforge.getIntFromExpression
+import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.Bukkit
@@ -20,7 +24,7 @@ import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.world.ChunkLoadEvent
 import org.bukkit.event.world.ChunkUnloadEvent
 import org.bukkit.scoreboard.Team
-import java.util.*
+import java.util.UUID
 
 object EffectGlowNearbyBlocks : Effect<NoCompileData>("glow_nearby_blocks") {
     override val parameters = setOf(
@@ -82,7 +86,7 @@ object EffectGlowNearbyBlocks : Effect<NoCompileData>("glow_nearby_blocks") {
             team.addEntry(shulker.uniqueId.toString())
             block.setMetadata("gnb-uuid", plugin.metadataValueFactory.create(shulker.uniqueId))
 
-            plugin.scheduler.runTaskLater(duration.toLong()) {
+            plugin.scheduler.runLater(duration.toLong()) {
                 team.removeEntry(shulker.uniqueId.toString())
                 shulker.remove()
                 block.removeMetadata("gnb-uuid", plugin)
@@ -96,14 +100,14 @@ object EffectGlowNearbyBlocks : Effect<NoCompileData>("glow_nearby_blocks") {
     fun handleChunkUnload(event: ChunkUnloadEvent) {
         event.chunk.entities.filterIsInstance<LivingEntity>()
             .filter { it.hasMetadata("gnb-shulker") }
-            .forEach { plugin.scheduler.runTask(it) { it.remove() } }
+            .forEach { it.remove() }
     }
 
     @EventHandler
     fun handleChunkLoad(event: ChunkLoadEvent) {
         event.chunk.entities.filterIsInstance<LivingEntity>()
             .filter { it.hasMetadata("gnb-shulker") }
-            .forEach { plugin.scheduler.runTask(it) { it.remove() } }
+            .forEach { it.remove() }
     }
 
     @EventHandler
@@ -118,11 +122,7 @@ object EffectGlowNearbyBlocks : Effect<NoCompileData>("glow_nearby_blocks") {
             it.value() is UUID
         }?.value() as? UUID ?: return
 
-        Bukkit.getServer().getEntity(uuid)?.let {
-            plugin.scheduler.runTask(it) {
-                it.remove()
-            }
-        }
+        Bukkit.getServer().getEntity(uuid)?.remove()
 
         for (shulker in block.location.world.getNearbyEntities(
             block.location,
@@ -130,9 +130,7 @@ object EffectGlowNearbyBlocks : Effect<NoCompileData>("glow_nearby_blocks") {
             2.0,
             2.0
         ) { it.hasMetadata("gnb-shulker") }) {
-            plugin.scheduler.runTask(shulker) {
-                shulker.remove()
-            }
+            shulker.remove()
         }
     }
 }
