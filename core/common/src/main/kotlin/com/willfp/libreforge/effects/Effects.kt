@@ -130,10 +130,12 @@ import com.willfp.libreforge.effects.impl.EffectRapidBows
 import com.willfp.libreforge.effects.impl.EffectReelSpeedMultiplier
 import com.willfp.libreforge.effects.impl.EffectRegenMultiplier
 import com.willfp.libreforge.effects.impl.EffectRemoveBossBar
+import com.willfp.libreforge.effects.impl.EffectRemoveDispatcher
 import com.willfp.libreforge.effects.impl.EffectRemoveEnchant
 import com.willfp.libreforge.effects.impl.EffectRemoveItem
 import com.willfp.libreforge.effects.impl.EffectRemoveItemData
 import com.willfp.libreforge.effects.impl.EffectRemovePotionEffect
+import com.willfp.libreforge.effects.impl.EffectRemoveVictim
 import com.willfp.libreforge.effects.impl.EffectRepairItem
 import com.willfp.libreforge.effects.impl.EffectReplaceNear
 import com.willfp.libreforge.effects.impl.EffectReplantCrops
@@ -660,5 +662,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectWaterMovementEfficiencyMultiplier)
         register(EffectBurningTimeMultiplier)
         register(EffectExplosionKnockbackResistanceMultiplier)
+        register(EffectRemoveDispatcher)
+        register(EffectRemoveVictim)
     }
 }
