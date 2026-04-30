@@ -43,7 +43,7 @@ object EffectSendDiscordWebhook: Effect<NoCompileData>("send_discord_webhook") {
             val title = embedCfg.getFormattedStringOrNull("title", ectx)
             val description = embedCfg.getFormattedStringOrNull("description", ectx)
             val url = embedCfg.getStringOrNull("url")
-            val color = embedCfg.getIntOrNull("color")
+            val color = embedCfg.getStringOrNull("color")?.removePrefix("#")?.toIntOrNull(16)
             val timestamp = embedCfg.getStringOrNull("timestamp")
 
             val authorName = embedCfg.getFormattedStringOrNull("author.name", ectx)
