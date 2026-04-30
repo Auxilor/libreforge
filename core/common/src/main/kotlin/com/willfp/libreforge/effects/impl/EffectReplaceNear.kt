@@ -1,9 +1,10 @@
 package com.willfp.libreforge.effects.impl
 
+import com.willfp.eco.core.blocks.Blocks
+import com.willfp.eco.core.blocks.matches
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.eco.core.items.Items
-import com.willfp.eco.util.containsIgnoreCase
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -42,7 +43,8 @@ object EffectReplaceNear : Effect<NoCompileData>("replace_near") {
 
         val replaceTo = Items.lookup(config.getString("replace_to")).item.type
 
-        val whitelist = config.getStringsOrNull("whitelist")
+        val whitelist = config.getStringsOrNull("whitelist")?.map { Blocks.lookup(it) }
+        val blacklist = config.getStrings("blacklist").map { Blocks.lookup(it) }
 
         val duration = config.getOrNull("duration") { getIntFromExpression(it, data) }
 
@@ -60,17 +62,17 @@ object EffectReplaceNear : Effect<NoCompileData>("replace_near") {
                         block.location.clone().add(x.toDouble(), y.toDouble(), z.toDouble())
                     )
 
-                    if (config.getStrings("blacklist").containsIgnoreCase(toReplace.type.name)) {
+                    if (blacklist.matches(toReplace)) {
                         continue
                     }
 
                     if (whitelist != null) {
-                        if (!whitelist.containsIgnoreCase(toReplace.type.name)) {
+                        if (!whitelist.matches(toReplace)) {
                             continue
                         }
                     }
 
-                    if (toReplace.type == Material.AIR && whitelist?.containsIgnoreCase("air") != true) {
+                    if (toReplace.type == Material.AIR && whitelist?.matches(toReplace) != true) {
                         continue
                     }
 

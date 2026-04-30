@@ -1,9 +1,10 @@
 package com.willfp.libreforge.effects.impl
 
+import com.willfp.eco.core.blocks.Blocks
+import com.willfp.eco.core.blocks.matches
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.eco.util.VectorUtils
-import com.willfp.eco.util.containsIgnoreCase
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.templates.MineBlockEffect
@@ -34,7 +35,8 @@ object EffectDrill : MineBlockEffect<NoCompileData>("drill") {
             return false
         }
 
-        val whitelist = config.getStringsOrNull("whitelist")
+        val whitelist = config.getStringsOrNull("whitelist")?.map { Blocks.lookup(it) }
+        val blacklist = config.getStrings("blacklisted_blocks").map { Blocks.lookup(it) }
 
         val preventTriggers = config.getBool("prevent_trigger")
 
@@ -44,12 +46,12 @@ object EffectDrill : MineBlockEffect<NoCompileData>("drill") {
             val simplified = VectorUtils.simplifyVector(player.location.direction.normalize()).multiply(i)
             val toBreak = block.world.getBlockAt(block.location.clone().add(simplified))
 
-            if (config.getStrings("blacklisted_blocks").containsIgnoreCase(toBreak.type.name)) {
+            if (blacklist.matches(toBreak)) {
                 continue
             }
 
             if (whitelist != null) {
-                if (!whitelist.containsIgnoreCase(toBreak.type.name)) {
+                if (!whitelist.matches(toBreak)) {
                     continue
                 }
             }
