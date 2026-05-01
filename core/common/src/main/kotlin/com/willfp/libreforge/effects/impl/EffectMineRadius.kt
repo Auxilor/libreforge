@@ -1,8 +1,8 @@
 package com.willfp.libreforge.effects.impl
 
-import com.willfp.eco.core.blocks.Blocks
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
+import com.willfp.eco.util.containsIgnoreCase
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.templates.MineBlockEffect
@@ -24,58 +24,61 @@ object EffectMineRadius : MineBlockEffect<NoCompileData>("mine_radius") {
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val block = data.block ?: data.location?.block ?: return false
         val player = data.player ?: return false
-        val world = block.world
 
         val radius = config.getIntFromExpression("radius", data)
 
         val preventTriggers = config.getBool("prevent_trigger")
 
-        if (player.isSneaking && config.getBool("disable_on_sneak"))
+        if (player.isSneaking && config.getBool("disable_on_sneak")) {
             return false
+        }
 
         val whitelist = config.getStringsOrNull("whitelist")
-            ?.mapNotNull { Blocks.lookup(it) }?.toSet()
 
-        val blacklist = config.getStringsOrNull("blacklisted_blocks")
-            ?.mapNotNull { Blocks.lookup(it) }?.toSet()
+        val blocks = mutableSetOf<Block>()
 
-        val checkHardness = config.getBool("check_hardness")
-
-        val blocks = mutableListOf<Block>()
-
-        for (y in (-radius..radius)) {
-            val endY = block.y + y
-            if (endY !in world.minHeight..world.maxHeight) {
-                continue
-            }
-
-            for (x in (-radius..radius)) {
+        for (x in (-radius..radius)) {
+            for (y in (-radius..radius)) {
                 for (z in (-radius..radius)) {
                     if (x == 0 && y == 0 && z == 0) {
                         continue
                     }
 
-                    val toBreak = world.getBlockAt(block.x + x, block.y + y, block.z + z)
+                    val toBreak = block.world.getBlockAt(
+                        block.location.clone().add(x.toDouble(), y.toDouble(), z.toDouble())
+                    )
 
-                    if (toBreak.type == Material.AIR)
+                    if (toBreak.location.blockY !in block.world.minHeight..block.world.maxHeight) {
                         continue
+                    }
 
-                    if (toBreak.type.hardness < 0)
+                    if (config.getStrings("blacklisted_blocks").containsIgnoreCase(toBreak.type.name)) {
                         continue
+                    }
 
-                    if (checkHardness && toBreak.type.hardness > block.type.hardness)
-                        continue
-
-                    if (!AntigriefManager.canBreakBlock(player, toBreak))
-                        continue
-
-                    if (blacklist != null)
-                        if (blacklist.any { it.matches(toBreak) })
+                    if (whitelist != null) {
+                        if (!whitelist.containsIgnoreCase(toBreak.type.name)) {
                             continue
+                        }
+                    }
 
-                    if (whitelist != null)
-                        if (!whitelist.any { it.matches(toBreak) })
+                    if (config.getBoolOrNull("check_hardness") != false) {
+                        if (toBreak.type.hardness < 0 || toBreak.type.hardness > block.type.hardness) {
                             continue
+                        }
+                    }
+
+                    if (toBreak.type.hardness < 0) {
+                        continue
+                    }
+
+                    if (toBreak.type == Material.AIR) {
+                        continue
+                    }
+
+                    if (!AntigriefManager.canBreakBlock(player, toBreak)) {
+                        continue
+                    }
 
                     blocks.add(toBreak)
                 }

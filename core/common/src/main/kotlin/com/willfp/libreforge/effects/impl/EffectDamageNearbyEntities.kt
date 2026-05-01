@@ -12,7 +12,7 @@ import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.LivingEntity
-import java.util.*
+import java.util.UUID
 
 object EffectDamageNearbyEntities : Effect<Collection<TestableEntity>>("damage_nearby_entities") {
     private val damagedEntities = mutableSetOf<UUID>()
@@ -57,7 +57,7 @@ object EffectDamageNearbyEntities : Effect<Collection<TestableEntity>>("damage_n
             }
 
             entity.setMetadata("ignore-nearby-damage", plugin.metadataValueFactory.create(true))
-            plugin.scheduler.runTaskLater(entity, 5) { entity.removeMetadata("ignore-nearby-damage", plugin) }
+            plugin.scheduler.runLater(5) { entity.removeMetadata("ignore-nearby-damage", plugin) }
 
             if (!damageSelf && (entity == player)) {
                 continue
