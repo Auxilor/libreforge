@@ -5,7 +5,6 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.isEcoEmpty
-import com.willfp.libreforge.plugin
 import com.willfp.libreforge.slot.SlotTypes
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -48,12 +47,8 @@ object EffectDropItemSlot : Effect<NoCompileData>("drop_item_slot") {
 
             val itemToDrop = item.clone().apply { this.amount = (amount ?: this.amount) }
 
-            plugin.scheduler.runTask(player.eyeLocation) { // folia issue
-                player.location.world.dropItem(player.eyeLocation, itemToDrop)
-                    .apply {
-                        velocity = player.eyeLocation.direction.clone().multiply(0.3)
-                    }
-            }
+            val drop = player.location.world.dropItem(player.eyeLocation, itemToDrop)
+            drop.velocity = player.eyeLocation.direction.clone().multiply(0.3)
 
             player.inventory.setItem(slot, itemToSet)
         }

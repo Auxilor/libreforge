@@ -4,8 +4,16 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.entities.Entities
 import com.willfp.eco.core.entities.TestableEntity
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
-import com.willfp.libreforge.*
+import com.willfp.libreforge.ViolationContext
+import com.willfp.libreforge.arguments
+import com.willfp.libreforge.distance
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getDoubleFromExpression
+import com.willfp.libreforge.lerp
+import com.willfp.libreforge.normalize
+import com.willfp.libreforge.plugin
+import com.willfp.libreforge.toFloat3
+import com.willfp.libreforge.toVector
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.GameMode
@@ -86,11 +94,11 @@ object EffectHoming : Effect<List<TestableEntity>>("homing") {
             checks++
 
             if (checks > MAX_CHECKS) {
-                task.cancelTask()
+                task.cancel()
             }
 
             if (arrow.isDead || arrow.isInBlock || arrow.isOnGround) {
-                task.cancelTask()
+                task.cancel()
             }
 
             val entities = arrow.getNearbyEntities(distance, distance, distance)
@@ -108,7 +116,7 @@ object EffectHoming : Effect<List<TestableEntity>>("homing") {
                 val dist = arrow.location.toFloat3().distance(entity.eyeLocation.toFloat3())
 
                 if (dist < 1.0) {
-                    task.cancelTask()
+                    task.cancel()
                     break
                 }
 
@@ -136,7 +144,7 @@ object EffectHoming : Effect<List<TestableEntity>>("homing") {
                 arrow.velocity = lerp(arrow.velocity.toFloat3(), targetVelocity, 1 - SMOOTHNESS).toVector()
             }
 
-        }.runTaskTimer(arrow, 3L, CHECK_DELAY)
+        }.runTaskTimer(3L, CHECK_DELAY)
     }
 
     override fun makeCompileData(config: Config, context: ViolationContext): List<TestableEntity> {

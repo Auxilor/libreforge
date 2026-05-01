@@ -2,8 +2,12 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.hologram.HologramManager
-import com.willfp.libreforge.*
+import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getDoubleFromExpression
+import com.willfp.libreforge.getFormattedStrings
+import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
@@ -25,7 +29,7 @@ object EffectCreateHologram : Effect<NoCompileData>("create_hologram") {
 
         val hologram = HologramManager.createHologram(location, text)
 
-        plugin.scheduler.runTaskLater(location, duration.toLong()) {
+        plugin.scheduler.runLater(duration.toLong()) {
             hologram.remove()
         }
 

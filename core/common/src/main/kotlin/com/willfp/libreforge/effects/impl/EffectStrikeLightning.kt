@@ -21,9 +21,9 @@ object EffectStrikeLightning : Effect<NoCompileData>("strike_lightning") {
         val amount = config.getOrElse("amount", 1) { getIntFromExpression(it, data) }
 
         for (i in 1..amount) {
-            plugin.scheduler.runTaskLater(location, 1) {
+            plugin.scheduler.runLater({
                 world.strikeLightning(location)
-            }
+            }, 1)
         }
 
         return true

@@ -2,12 +2,18 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.particle.Particles
-import com.willfp.libreforge.*
+import com.willfp.libreforge.ViolationContext
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.impl.particles.ParticleAnimationBlock
 import com.willfp.libreforge.effects.impl.particles.ParticleAnimations
+import com.willfp.libreforge.getIntFromExpression
+import com.willfp.libreforge.plugin
+import com.willfp.libreforge.toFloat3
+import com.willfp.libreforge.toLocation
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import com.willfp.libreforge.xz
 import org.bukkit.entity.LivingEntity
 
 object EffectParticleAnimation : Effect<ParticleAnimationBlock<*>?>("particle_animation") {
@@ -96,7 +102,7 @@ object EffectParticleAnimation : Effect<ParticleAnimationBlock<*>?>("particle_an
                         player
                     )
                 }) {
-                it.cancelTask()
+                it.cancel()
             }
 
             tick++
