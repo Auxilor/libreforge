@@ -1,6 +1,7 @@
 package com.willfp.libreforge.integrations.auraskills
 
 import com.willfp.eco.core.drops.DropQueue
+import com.willfp.eco.util.TelekinesisUtils
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.event.DropCause
@@ -58,9 +59,21 @@ object AuraSkillsLootDropListener : Listener {
             return
         }
 
+        val totalXP = dropResults.sumOf { it.xp }
+
+        if (TelekinesisUtils.testPlayer(event.player)) {
+            event.isCancelled = true
+            DropQueue(event.player)
+                .setLocation(event.location)
+                .addItems(dropResults.map { it.item })
+                .addXP(totalXP)
+                .forceTelekinesis()
+                .push()
+            return
+        }
+
         event.item = editableEvent.drops.first()
 
-        val totalXP = dropResults.sumOf { it.xp }
         if (totalXP > 0) {
             DropQueue(event.player)
                 .setLocation(event.location)
