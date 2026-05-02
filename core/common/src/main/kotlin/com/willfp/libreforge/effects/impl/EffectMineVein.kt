@@ -1,5 +1,6 @@
 package com.willfp.libreforge.effects.impl
 
+import com.willfp.eco.core.blocks.Blocks
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.eco.util.BlockUtils
@@ -35,8 +36,7 @@ object EffectMineVein : MineBlockEffect<FilterList>("mine_vein") {
         }
 
         val whitelist = config.getStringsOrNull("blocks")
-            ?.mapNotNull { Material.matchMaterial(it.uppercase()) }
-            ?: listOf(block.type)
+            ?.mapNotNull { Blocks.lookup(it) } ?: listOf(Blocks.getBlock(block))
 
         val blocks = BlockUtils.getVein(
             block,

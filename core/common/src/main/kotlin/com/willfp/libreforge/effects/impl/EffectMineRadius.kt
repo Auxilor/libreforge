@@ -1,8 +1,9 @@
 package com.willfp.libreforge.effects.impl
 
+import com.willfp.eco.core.blocks.Blocks
+import com.willfp.eco.core.blocks.matches
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
-import com.willfp.eco.util.containsIgnoreCase
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.templates.MineBlockEffect
@@ -33,7 +34,8 @@ object EffectMineRadius : MineBlockEffect<NoCompileData>("mine_radius") {
             return false
         }
 
-        val whitelist = config.getStringsOrNull("whitelist")
+        val whitelist = config.getStringsOrNull("whitelist")?.map { Blocks.lookup(it) }
+        val blacklist = config.getStrings("blacklisted_blocks").map { Blocks.lookup(it) }
 
         val blocks = mutableSetOf<Block>()
 
@@ -52,12 +54,12 @@ object EffectMineRadius : MineBlockEffect<NoCompileData>("mine_radius") {
                         continue
                     }
 
-                    if (config.getStrings("blacklisted_blocks").containsIgnoreCase(toBreak.type.name)) {
+                    if (blacklist.matches(toBreak)) {
                         continue
                     }
 
                     if (whitelist != null) {
-                        if (!whitelist.containsIgnoreCase(toBreak.type.name)) {
+                        if (!whitelist.matches(toBreak)) {
                             continue
                         }
                     }
