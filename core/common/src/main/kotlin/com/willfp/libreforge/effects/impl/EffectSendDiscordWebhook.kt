@@ -35,45 +35,7 @@ object EffectSendDiscordWebhook: Effect<NoCompileData>("send_discord_webhook") {
         val avatarUrl = config.getStringOrNull("avatar_url")
         val tts = config.getBoolOrNull("tts") ?: false
 
-        val embedConfigs = config.getSubsectionsOrNull("embeds") ?: emptyList()
-
-        val embeds = embedConfigs.map { embedCfg ->
-            val ectx = embedCfg.toPlaceholderContext(data)
-
-            val title = embedCfg.getFormattedStringOrNull("title", ectx)
-            val description = embedCfg.getFormattedStringOrNull("description", ectx)
-            val url = embedCfg.getStringOrNull("url")
-            val color = embedCfg.getStringOrNull("color")?.removePrefix("#")?.toIntOrNull(16)
-            val timestamp = embedCfg.getStringOrNull("timestamp")
-
-            val authorName = embedCfg.getFormattedStringOrNull("author.name", ectx)
-            val authorUrl = embedCfg.getStringOrNull("author.url")
-            val authorIcon = embedCfg.getStringOrNull("author.icon_url")
-
-            val footerText = embedCfg.getFormattedStringOrNull("footer.text", ectx)
-            val footerIcon = embedCfg.getStringOrNull("footer.icon_url")
-
-            val imageUrl = embedCfg.getStringOrNull("image.url")
-            val thumbnailUrl = embedCfg.getStringOrNull("thumbnail.url")
-
-            val fieldCfgs = embedCfg.getSubsectionsOrNull("fields") ?: emptyList()
-            val fields = fieldCfgs.map { f ->
-                val name = f.getFormattedStringOrNull("name", ectx) ?: ""
-                val value = f.getFormattedStringOrNull("value", ectx) ?: ""
-                val inline = f.getBoolOrNull("inline") ?: false
-                DiscordEmbedField(name, value, inline)
-            }
-
-            val footer = if (footerText != null || footerIcon != null) DiscordEmbedFooter(footerText,
-                footerIcon) else null
-            val image = if (imageUrl != null) DiscordEmbedMedia(imageUrl) else null
-            val thumbnail = if (thumbnailUrl != null) DiscordEmbedMedia(thumbnailUrl) else null
-            val author = if (authorName != null || authorUrl != null || authorIcon != null)
-                DiscordEmbedAuthor(authorName, authorUrl, authorIcon) else null
-
-            DiscordEmbed(title, description, url, timestamp, color, footer, image, thumbnail, author,
-                if (fields.isEmpty()) null else fields)
-        }
+        val embeds = (config.getSubsectionsOrNull("embeds") ?: emptyList()).map { buildEmbed(it, data) }
 
         val msg = DiscordWebhookMessage(content, username ?: "", avatarUrl ?: "", tts, embeds)
 
@@ -85,4 +47,41 @@ object EffectSendDiscordWebhook: Effect<NoCompileData>("send_discord_webhook") {
             false
         }
     }
+}
+
+private fun buildEmbed(embedCfg: Config, data: TriggerData): DiscordEmbed {
+    val ectx = embedCfg.toPlaceholderContext(data)
+
+    val title = embedCfg.getFormattedStringOrNull("title", ectx)
+    val description = embedCfg.getFormattedStringOrNull("description", ectx)
+    val url = embedCfg.getStringOrNull("url")
+    val color = embedCfg.getStringOrNull("color")?.removePrefix("#")?.toIntOrNull(16)
+    val timestamp = embedCfg.getStringOrNull("timestamp")
+
+    val authorName = embedCfg.getFormattedStringOrNull("author.name", ectx)
+    val authorUrl = embedCfg.getStringOrNull("author.url")
+    val authorIcon = embedCfg.getStringOrNull("author.icon_url")
+
+    val footerText = embedCfg.getFormattedStringOrNull("footer.text", ectx)
+    val footerIcon = embedCfg.getStringOrNull("footer.icon_url")
+
+    val imageUrl = embedCfg.getStringOrNull("image.url")
+    val thumbnailUrl = embedCfg.getStringOrNull("thumbnail.url")
+
+    val fields = (embedCfg.getSubsectionsOrNull("fields") ?: emptyList()).map { f ->
+        DiscordEmbedField(
+            f.getFormattedStringOrNull("name", ectx) ?: "",
+            f.getFormattedStringOrNull("value", ectx) ?: "",
+            f.getBoolOrNull("inline") ?: false
+        )
+    }
+
+    val footer = if (footerText != null || footerIcon != null) DiscordEmbedFooter(footerText, footerIcon) else null
+    val image = if (imageUrl != null) DiscordEmbedMedia(imageUrl) else null
+    val thumbnail = if (thumbnailUrl != null) DiscordEmbedMedia(thumbnailUrl) else null
+    val author = if (authorName != null || authorUrl != null || authorIcon != null)
+        DiscordEmbedAuthor(authorName, authorUrl, authorIcon) else null
+
+    return DiscordEmbed(title, description, url, timestamp, color, footer, image, thumbnail, author,
+        fields.ifEmpty { null })
 }
