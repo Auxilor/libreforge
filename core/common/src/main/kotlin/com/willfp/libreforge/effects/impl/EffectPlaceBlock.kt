@@ -29,8 +29,11 @@ object EffectPlaceBlock : Effect<NoCompileData>("place_block") {
         if (duration != null && duration > 0) {
             val oldBlock = Blocks.getBlock(block)
             toPlace.place(location)
-            plugin.scheduler.runTaskLater(duration.toLong()) {
-                oldBlock.place(location)
+            val placedType = location.block.type
+            plugin.scheduler.runLater(duration.toLong()) {
+                if (location.block.type == placedType) {
+                    oldBlock.place(location)
+                }
             }
         } else {
             toPlace.place(location)

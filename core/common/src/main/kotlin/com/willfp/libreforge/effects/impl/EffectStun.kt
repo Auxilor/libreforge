@@ -27,8 +27,8 @@ object EffectStun : Effect<NoCompileData>("stun") {
         plugin.runnableFactory.create {
             current++
             victim.velocity = Vector(0, 0, 0)
-            if (current >= ticks) it.cancelTask()
-        }.runTaskTimer(victim, 0L, 1L)
+            if (current >= ticks) it.cancel()
+        }.runTaskTimer(0L, 1L)
 
         return true
     }

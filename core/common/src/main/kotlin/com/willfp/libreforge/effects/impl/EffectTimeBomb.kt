@@ -29,10 +29,12 @@ object EffectTimeBomb : Effect<NoCompileData>("time_bomb") {
 
         if (glow) victim.isGlowing = true
 
-        plugin.scheduler.runTaskLater(victim, fuse.toLong()) {
-            val loc = victim.location
+        plugin.scheduler.runLater(fuse.toLong()) {
             if (glow) victim.isGlowing = false
-            loc.world?.createExplosion(loc, power.toFloat(), false, breakBlocks, victim)
+            if (!victim.isDead) {
+                val loc = victim.location
+                loc.world?.createExplosion(loc, power.toFloat(), false, breakBlocks, victim)
+            }
         }
 
         return true

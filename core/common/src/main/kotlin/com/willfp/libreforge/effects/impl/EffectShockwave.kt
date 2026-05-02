@@ -50,8 +50,8 @@ object EffectShockwave : Effect<NoCompileData>("shockwave") {
                     entity.damage(damage)
                 }
 
-            if (pulse >= pulses) task.cancelTask()
-        }.runTaskTimer(player, 0L, 3L)
+            if (pulse >= pulses) task.cancel()
+        }.runTaskTimer(0L, 3L)
 
         return true
     }

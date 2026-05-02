@@ -22,7 +22,7 @@ object EffectSetGlowing : Effect<NoCompileData>("set_glowing") {
         victim.isGlowing = glowing
 
         if (duration != null && duration > 0) {
-            plugin.scheduler.runTaskLater(victim, duration.toLong()) {
+            plugin.scheduler.runLater(duration.toLong()) {
                 victim.isGlowing = !glowing
             }
         }

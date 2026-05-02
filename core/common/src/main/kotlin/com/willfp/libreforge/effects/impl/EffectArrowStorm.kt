@@ -32,6 +32,8 @@ object EffectArrowStorm : Effect<NoCompileData>("arrow_storm") {
         val height = config.getDoubleFromExpression("height", data)
         val spread = config.getDoubleFromExpression("spread", data)
         val damage = config.getOrNull("damage") { getDoubleFromExpression(it, data) }
+        val respectFlame = config.getBoolOrNull("respect_flame") ?: true
+        val flame = respectFlame && (data.item?.containsEnchantment(org.bukkit.enchantments.Enchantment.FLAME) ?: false)
 
         repeat(amount) {
             val spawnLoc = location.clone().add(
@@ -43,6 +45,7 @@ object EffectArrowStorm : Effect<NoCompileData>("arrow_storm") {
             arrow.velocity = Vector(0.0, -2.0, 0.0)
             arrow.pickupStatus = AbstractArrow.PickupStatus.DISALLOWED
             if (damage != null) arrow.damage = damage
+            if (flame) arrow.setFireTicks(Int.MAX_VALUE)
         }
 
         return true

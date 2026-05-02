@@ -51,9 +51,9 @@ object EffectVortex : Effect<NoCompileData>("vortex") {
 
             if (tick >= duration) {
                 affected.forEach { it.damage(damage) }
-                task.cancelTask()
+                task.cancel()
             }
-        }.runTaskTimer(player, 0L, 1L)
+        }.runTaskTimer(0L, 1L)
 
         return true
     }
