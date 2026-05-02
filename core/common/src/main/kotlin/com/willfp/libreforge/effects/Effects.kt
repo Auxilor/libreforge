@@ -161,6 +161,7 @@ import com.willfp.libreforge.effects.impl.EffectSafeFallDistance
 import com.willfp.libreforge.effects.impl.EffectScale
 import com.willfp.libreforge.effects.impl.EffectSellItems
 import com.willfp.libreforge.effects.impl.EffectSellMultiplier
+import com.willfp.libreforge.effects.impl.EffectSendDiscordWebhook
 import com.willfp.libreforge.effects.impl.EffectSendMessage
 import com.willfp.libreforge.effects.impl.EffectSilence
 import com.willfp.libreforge.effects.impl.EffectSendTitle
@@ -706,6 +707,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectWaterMovementEfficiencyMultiplier)
         register(EffectBurningTimeMultiplier)
         register(EffectExplosionKnockbackResistanceMultiplier)
+        register(EffectSendDiscordWebhook)
         register(EffectRemoveDispatcher)
         register(EffectRemoveVictim)
     }
