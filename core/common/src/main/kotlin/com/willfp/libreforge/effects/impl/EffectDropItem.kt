@@ -6,7 +6,6 @@ import com.willfp.eco.core.items.Items
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
-import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.inventory.ItemStack
@@ -23,12 +22,11 @@ object EffectDropItem : Effect<ItemStack>("drop_item") {
     override fun onTrigger(config: Config, data: TriggerData, compileData: ItemStack): Boolean {
         val location = data.location ?: return false
 
+
         val player = data.player
 
         if (player == null) {
-            plugin.scheduler.runTask(location) {
-                location.world?.dropItem(location, compileData)
-            }
+            location.world?.dropItem(location, compileData)
         } else {
             DropQueue(player)
                 .setLocation(location)

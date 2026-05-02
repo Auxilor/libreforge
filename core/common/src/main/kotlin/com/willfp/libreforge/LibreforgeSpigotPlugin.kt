@@ -52,7 +52,12 @@ import com.willfp.libreforge.integrations.worldguard.WorldGuardIntegration
 import com.willfp.libreforge.integrations.xiaomomiplugins.customcrops.CustomCropsIntegration
 import com.willfp.libreforge.integrations.xiaomomiplugins.customfishing.CustomFishingIntegration
 import com.willfp.libreforge.levels.LevelTypes
-import com.willfp.libreforge.levels.placeholder.*
+import com.willfp.libreforge.levels.placeholder.ItemDataPlaceholder
+import com.willfp.libreforge.levels.placeholder.ItemLevelPlaceholder
+import com.willfp.libreforge.levels.placeholder.ItemPointsPlaceholder
+import com.willfp.libreforge.levels.placeholder.ItemProgressPlaceholder
+import com.willfp.libreforge.levels.placeholder.ItemXPPlaceholder
+import com.willfp.libreforge.levels.placeholder.ItemXPRequiredPlaceholder
 import com.willfp.libreforge.placeholders.CustomPlaceholders
 import com.willfp.libreforge.tags.CustomTag
 import com.willfp.libreforge.triggers.DispatchedTriggerFactory
@@ -174,17 +179,13 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
         dispatchedTriggerFactory.startTicking()
 
         // Poll for changes
-        plugin.scheduler.runTaskTimer(20, 20) {
+        plugin.scheduler.runTimer(20, 20) {
             for (player in Bukkit.getOnlinePlayers()) {
                 if (skipAFKPlayers && AFKManager.isAfk(player)) {
                     continue
                 }
 
-                val runnable = Runnable { player.toDispatcher().refreshHolders() }
-                if (Prerequisite.HAS_FOLIA.isMet) // folia issue: refresh player holder in their own thread
-                    plugin.scheduler.runTask(player, runnable)
-                else
-                    runnable.run()
+                player.toDispatcher().refreshHolders()
             }
         }
 
@@ -195,18 +196,10 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
              */
             var currentOffset = 30L
             for (world in Bukkit.getWorlds()) {
-                plugin.scheduler.runTaskTimer(currentOffset, configYml.getInt("refresh.entities.interval").toLong()) {
+                plugin.scheduler.runTimer(currentOffset, configYml.getInt("refresh.entities.interval").toLong()) {
                     for (entity in world.entities) {
-                        val runnable = Runnable {
-                            if (entity is LivingEntity) {
-                                entity.toDispatcher().refreshHolders()
-                            }
-                        }
-                        if (Prerequisite.HAS_FOLIA.isMet) { // folia issue
-                            if (entity.isValid)
-                                plugin.scheduler.runTask(entity, runnable)
-                        } else {
-                            runnable.run()
+                        if (entity is LivingEntity) {
+                            entity.toDispatcher().refreshHolders()
                         }
                     }
                 }
@@ -215,7 +208,7 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
         }
 
         // Poll for changes in global holders
-        this.scheduler.runTaskTimer(25, 20) {
+        this.scheduler.runTimer(25, 20) {
             GlobalDispatcher.refreshHolders()
         }
     }
@@ -264,7 +257,7 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             IntegrationLoader("EdPrison") { EdPrisonCoreIntegration.load(this) },
             IntegrationLoader("MythicMobs") { MythicMobsIntegration.load(this) },
             IntegrationLoader("Nexo") { NexoIntegration.load(this) },
-            IntegrationLoader("Oraxen") { OraxenIntegration.load(this) }
+            IntegrationLoader("Oraxen") { OraxenIntegration.load(this)}
         )
     }
 

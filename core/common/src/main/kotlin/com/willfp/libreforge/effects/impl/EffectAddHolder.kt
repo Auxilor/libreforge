@@ -2,16 +2,24 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.map.listMap
-import com.willfp.libreforge.*
+import com.willfp.libreforge.Holder
+import com.willfp.libreforge.HolderTemplate
+import com.willfp.libreforge.SimpleProvidedHolder
+import com.willfp.libreforge.ViolationContext
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Effects
+import com.willfp.libreforge.getIntFromExpression
+import com.willfp.libreforge.nest
+import com.willfp.libreforge.plugin
+import com.willfp.libreforge.registerGenericHolderProvider
 import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDeathEvent
 import org.bukkit.event.player.PlayerQuitEvent
-import java.util.*
+import java.util.UUID
 
 object EffectAddHolder : Effect<HolderTemplate>("add_holder") {
     override val isPermanent = false
@@ -36,7 +44,7 @@ object EffectAddHolder : Effect<HolderTemplate>("add_holder") {
 
         holders[dispatcher.uuid].add(holder)
 
-        plugin.scheduler.runTaskLater(duration.toLong()) {
+        plugin.scheduler.runLater(duration.toLong()) {
             holders[dispatcher.uuid].remove(holder)
             if (holders[dispatcher.uuid].isEmpty()) {
                 holders.remove(dispatcher.uuid)

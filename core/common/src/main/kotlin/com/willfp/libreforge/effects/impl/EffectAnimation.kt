@@ -53,11 +53,11 @@ object EffectAnimation : Effect<AnimationBlock<*, *>?>("animation") {
                         data,
                         animationData
                     )
-                    it.cancelTask()
+                    it.cancel()
                 }
 
                 tick++
-            }.runTaskTimer(location, 0, 1)
+            }.runTaskTimer(0, 1)
         }
 
         playAnimation(compileData)

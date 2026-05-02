@@ -4,8 +4,13 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.drops.DropQueue
 import com.willfp.eco.core.items.Items
 import com.willfp.eco.core.recipe.parts.EmptyTestableItem
-import com.willfp.libreforge.*
+import com.willfp.libreforge.ViolationContext
+import com.willfp.libreforge.WeightedItems
+import com.willfp.libreforge.WeightedList
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getStrings
+import com.willfp.libreforge.toWeightedList
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
@@ -30,9 +35,7 @@ object EffectDropWeightedRandomItem : Effect<WeightedList<WeightedItems>>("drop_
                 .setLocation(location)
                 .push()
         } else {
-            plugin.scheduler.runTask(location) {
-                location.world?.dropItem(location, item)
-            }
+            location.world?.dropItem(location, item)
         }
 
         return true
