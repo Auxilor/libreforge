@@ -31,7 +31,15 @@ object EffectShootArrow : Effect<NoCompileData>("shoot_arrow") {
                 arrow.teleportAsync(data.location)
             }
 
-            arrow.pickupStatus = AbstractArrow.PickupStatus.DISALLOWED
+            val pickupStatus = if (config.getBool("allow_pickup")) {
+                AbstractArrow.PickupStatus.ALLOWED
+            } else {
+                AbstractArrow.PickupStatus.DISALLOWED
+            }
+
+            arrow.pickupStatus = pickupStatus
+
+
             if (fire) {
                 arrow.fireTicks = Int.MAX_VALUE
             }
