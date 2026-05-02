@@ -7,8 +7,9 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import org.bukkit.attribute.Attribute
 
-object EffectAbsorb : Effect<NoCompileData>("absorb") {
+object EffectGiveAbsorption : Effect<NoCompileData>("give_absorption") {
     override val parameters = setOf(
         TriggerParameter.PLAYER
     )
@@ -19,7 +20,13 @@ object EffectAbsorb : Effect<NoCompileData>("absorb") {
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val player = data.player ?: return false
-        player.absorptionAmount += config.getDoubleFromExpression("amount", data)
+        val newAmount = player.absorptionAmount + config.getDoubleFromExpression("amount", data)
+        player.getAttribute(Attribute.MAX_ABSORPTION)?.let { attr ->
+            if (newAmount > attr.value) {
+                attr.baseValue = newAmount
+            }
+        }
+        player.absorptionAmount = newAmount
         return true
     }
 }
