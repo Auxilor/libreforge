@@ -95,6 +95,7 @@ import com.willfp.libreforge.effects.impl.EffectJumpStrengthMultiplier
 import com.willfp.libreforge.effects.impl.EffectKeepInventory
 import com.willfp.libreforge.effects.impl.EffectKeepLevel
 import com.willfp.libreforge.effects.impl.EffectKick
+import com.willfp.libreforge.effects.impl.EffectKill
 import com.willfp.libreforge.effects.impl.EffectKnockAway
 import com.willfp.libreforge.effects.impl.EffectKnockbackMultiplier
 import com.willfp.libreforge.effects.impl.EffectKnockbackResistanceMultiplier
@@ -558,6 +559,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectKeepInventory)
         register(EffectKeepLevel)
         register(EffectKick)
+        register(EffectKill)
         register(EffectKnockAway)
         register(EffectKnockbackMultiplier)
         register(EffectKnockbackResistanceMultiplier)
