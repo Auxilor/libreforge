@@ -103,6 +103,7 @@ import com.willfp.libreforge.effects.impl.EffectJumpStrengthMultiplier
 import com.willfp.libreforge.effects.impl.EffectKeepInventory
 import com.willfp.libreforge.effects.impl.EffectKeepLevel
 import com.willfp.libreforge.effects.impl.EffectKick
+import com.willfp.libreforge.effects.impl.EffectKill
 import com.willfp.libreforge.effects.impl.EffectKnockAway
 import com.willfp.libreforge.effects.impl.EffectKnockbackMultiplier
 import com.willfp.libreforge.effects.impl.EffectKnockbackResistanceMultiplier
@@ -142,10 +143,12 @@ import com.willfp.libreforge.effects.impl.EffectReelSpeedMultiplier
 import com.willfp.libreforge.effects.impl.EffectReflect
 import com.willfp.libreforge.effects.impl.EffectRegenMultiplier
 import com.willfp.libreforge.effects.impl.EffectRemoveBossBar
+import com.willfp.libreforge.effects.impl.EffectRemoveDispatcher
 import com.willfp.libreforge.effects.impl.EffectRemoveEnchant
 import com.willfp.libreforge.effects.impl.EffectRemoveItem
 import com.willfp.libreforge.effects.impl.EffectRemoveItemData
 import com.willfp.libreforge.effects.impl.EffectRemovePotionEffect
+import com.willfp.libreforge.effects.impl.EffectRemoveVictim
 import com.willfp.libreforge.effects.impl.EffectRepairItem
 import com.willfp.libreforge.effects.impl.EffectReplaceNear
 import com.willfp.libreforge.effects.impl.EffectReplantCrops
@@ -585,6 +588,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectKeepInventory)
         register(EffectKeepLevel)
         register(EffectKick)
+        register(EffectKill)
         register(EffectKnockAway)
         register(EffectKnockbackMultiplier)
         register(EffectKnockbackResistanceMultiplier)
@@ -702,5 +706,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectWaterMovementEfficiencyMultiplier)
         register(EffectBurningTimeMultiplier)
         register(EffectExplosionKnockbackResistanceMultiplier)
+        register(EffectRemoveDispatcher)
+        register(EffectRemoveVictim)
     }
 }
