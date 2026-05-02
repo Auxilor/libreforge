@@ -37,7 +37,6 @@ dependencies {
     compileOnly("net.citizensnpcs:citizens-main:2.0.41-SNAPSHOT") {
         exclude(group = "net.byteflux", module = "libby-bukkit")
     }
-    compileOnly("nl.chimpgamer.ultimatemobcoins:paper:2.0.1")
     // For mobcoins
     compileOnly("com.github.shynixn.mccoroutine:mccoroutine-folia-api:2.22.0")
     compileOnly("com.artillexstudios:AxTrade:1.21.1")
