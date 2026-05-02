@@ -22,6 +22,7 @@ object AuraSkillsIntegration : LoadableIntegration {
         Conditions.register(ConditionHasSkillLevel)
         Effects.register(EffectSkillXpMultiplier)
         EffectArguments.register(ArgumentManaCost)
+        plugin.eventManager.registerListener(AuraSkillsLootDropListener)
     }
 
     override fun getPluginName(): String {
