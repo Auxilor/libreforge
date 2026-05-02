@@ -5,6 +5,7 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+
 object EffectKill : Effect<NoCompileData>("kill") {
     override val parameters = setOf(
         TriggerParameter.VICTIM
