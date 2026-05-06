@@ -178,28 +178,30 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
     override fun createTasks() {
         dispatchedTriggerFactory.startTicking()
 
-        // Poll for changes
-        plugin.scheduler.runTimer(20, 20) {
+        // Poll for condition changes — staggered across 20 ticks by UUID to avoid per-tick spike.
+        // Holders are presumed stable between events; pollEffects() skips the provider rescan.
+        var playerRefreshSlot = 0
+        plugin.scheduler.runTimer(20, 1) {
+            val slot = playerRefreshSlot
+            playerRefreshSlot = (playerRefreshSlot + 1) % 20
             for (player in Bukkit.getOnlinePlayers()) {
-                if (skipAFKPlayers && AFKManager.isAfk(player)) {
-                    continue
-                }
-
-                player.toDispatcher().refreshHolders()
+                if ((player.uniqueId.leastSignificantBits.toInt() and Int.MAX_VALUE) % 20 != slot) continue
+                if (skipAFKPlayers && AFKManager.isAfk(player)) continue
+                player.toDispatcher().pollEffects()
             }
         }
 
         if (configYml.getBool("refresh.entities.enabled")) {
             /*
-            Poll for changes in entities
-            Each world is offset by 3 ticks to prevent lag spikes
+            Poll for condition changes in entities.
+            Each world is offset by 3 ticks to prevent lag spikes.
              */
             var currentOffset = 30L
             for (world in Bukkit.getWorlds()) {
                 plugin.scheduler.runTimer(currentOffset, configYml.getInt("refresh.entities.interval").toLong()) {
                     for (entity in world.entities) {
                         if (entity is LivingEntity) {
-                            entity.toDispatcher().refreshHolders()
+                            entity.toDispatcher().pollEffects()
                         }
                     }
                 }
@@ -207,9 +209,9 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             }
         }
 
-        // Poll for changes in global holders
+        // Poll for condition changes in global holders
         this.scheduler.runTimer(25, 20) {
-            GlobalDispatcher.refreshHolders()
+            GlobalDispatcher.pollEffects()
         }
     }
 

@@ -181,9 +181,22 @@ fun Dispatcher<*>.refreshHolders() {
  * Forcibly refresh holders, ignoring cooldown.
  */
 fun Dispatcher<*>.forceRefreshHolders() {
-
     refreshFunctions.forEach { it(this) }
     this.updateHolders()
+    this.updateEffects()
+}
+
+/**
+ * Re-evaluate active effects against the current (possibly cached) holders.
+ *
+ * Used by the periodic polling task: holders are presumed stable between events,
+ * so we skip the provider rescan and only re-check conditions. The holder cache
+ * still expires naturally (4 s TTL), so providers are still rescanned periodically.
+ * Event-based callers (equipment change, inventory click, etc.) use [refreshHolders]
+ * or [forceRefreshHolders] which explicitly invalidate the cache.
+ */
+internal fun Dispatcher<*>.pollEffects() {
+    refreshFunctions.forEach { it(this) }
     this.updateEffects()
 }
 
@@ -355,12 +368,11 @@ fun Dispatcher<*>.updateEffects() {
     val before = this.providedActiveEffects
     val after = this.calculateActiveEffects()
 
-    previousStates[this.uuid] = after.sorted()
+    previousStates[this.uuid] = after
 
     // Permanent effects also have a run order, so we need to sort them.
     val added = (after without before).sorted()
     val removed = (before without after).sorted()
-    val toReload = (after without added).sorted()
 
     for ((effect, holder) in removed) {
         effect.disable(this, holder)
@@ -373,6 +385,7 @@ fun Dispatcher<*>.updateEffects() {
     // Reloading is now done by disabling all, then enabling all. Effect#reload is deprecated.
     // Since permanent effects are not allowed in chains, they are always done in the correct
     // order as mixing weights is not a concern.
+    val toReload = (after without added).sorted()
 
     for ((effect, holder) in toReload) {
         effect.disable(this, holder, isReload = true)
