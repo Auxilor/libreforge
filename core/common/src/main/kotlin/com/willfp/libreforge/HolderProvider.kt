@@ -30,6 +30,12 @@ interface TypedHolderProvider<T : Holder> : HolderProvider {
     override fun provide(dispatcher: Dispatcher<*>): Collection<TypedProvidedHolder<T>>
 }
 
+@Deprecated(
+    "HolderProvideEvent now only fires when the holder set changes, not on every refresh. " +
+    "Use HolderEnableEvent and HolderDisableEvent to react to holder additions and removals. " +
+    "This event will be removed in a future version.",
+    level = DeprecationLevel.WARNING
+)
 class HolderProvideEvent(
     val dispatcher: Dispatcher<*>,
     val holders: Collection<ProvidedHolder>
@@ -182,7 +188,8 @@ fun Dispatcher<*>.refreshHolders() {
  */
 fun Dispatcher<*>.forceRefreshHolders() {
     refreshFunctions.forEach { it(this) }
-    this.updateHolders()
+    // Pre-populate cache so updateEffects() gets a hit instead of a miss
+    holderCache.put(this.uuid, this.computeHolders())
     this.updateEffects()
 }
 
@@ -257,45 +264,50 @@ private val holderCache = Caffeine.newBuilder()
     .expireAfterWrite(4, TimeUnit.SECONDS)
     .build<UUID, Collection<ProvidedHolder>>()
 
+private fun Dispatcher<*>.computeHolders(): Collection<ProvidedHolder> {
+    if (this is EntityDispatcher && this.dispatcher !is Player && !plugin.configYml.getBool("refresh.entities.enabled")) {
+        return emptyList()
+    }
+
+    val holders = providers.flatMap { it.provide(this) }
+
+    val old = previousHolders.getIfPresent(this.uuid) ?: emptyList()
+
+    val newByID = holders.associateBy { it.holder.id }
+    val oldByID = old.associateBy { it.holder.id }
+
+    val added = newByID.keys - oldByID.keys
+    val removed = oldByID.keys - newByID.keys
+
+    for (id in added) {
+        Bukkit.getPluginManager().callEvent(
+            HolderEnableEvent(this, newByID[id]!!, holders)
+        )
+    }
+
+    for (id in removed) {
+        Bukkit.getPluginManager().callEvent(
+            HolderDisableEvent(this, oldByID[id]!!, old)
+        )
+    }
+
+    previousHolders.put(this.uuid, holders)
+
+    if (added.isNotEmpty() || removed.isNotEmpty()) {
+        @Suppress("DEPRECATION")
+        Bukkit.getPluginManager().callEvent(
+            HolderProvideEvent(this, holders)
+        )
+    }
+
+    return holders
+}
+
 /**
  * The holders.
  */
 val Dispatcher<*>.holders: Collection<ProvidedHolder>
-    get() = holderCache.get(this.uuid) {
-        if (this is EntityDispatcher && this.dispatcher !is Player && !plugin.configYml.getBool("refresh.entities.enabled")) {
-            return@get emptyList()
-        }
-
-        val holders = providers.flatMap { it.provide(this) }
-
-        Bukkit.getPluginManager().callEvent(
-            HolderProvideEvent(this, holders)
-        )
-
-        val old = previousHolders.getIfPresent(this.uuid) ?: emptyList()
-
-        val newByID = holders.associateBy { it.holder.id }
-        val oldByID = old.associateBy { it.holder.id }
-
-        val added = newByID.keys - oldByID.keys
-        val removed = oldByID.keys - newByID.keys
-
-        for (id in added) {
-            Bukkit.getPluginManager().callEvent(
-                HolderEnableEvent(this, newByID[id]!!, holders)
-            )
-        }
-
-        for (id in removed) {
-            Bukkit.getPluginManager().callEvent(
-                HolderDisableEvent(this, oldByID[id]!!, old)
-            )
-        }
-
-        previousHolders.put(this.uuid, holders)
-
-        holders
-    }
+    get() = holderCache.get(this.uuid) { computeHolders() }
 
 /**
  * Get holders of a specific type.
@@ -314,6 +326,11 @@ fun Dispatcher<*>.updateHolders() {
 internal fun Dispatcher<*>.purgePreviousHolders() {
     previousHolders.invalidate(this.uuid)
     previousStates.remove(this.uuid)
+}
+
+internal fun clearAllHolderCaches() {
+    holderCache.invalidateAll()
+    previousHolders.invalidateAll()
 }
 
 // Effects that were active on previous update

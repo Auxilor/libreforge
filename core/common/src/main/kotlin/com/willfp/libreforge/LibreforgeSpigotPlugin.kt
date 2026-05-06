@@ -172,6 +172,8 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
 
         displayModule.reload()
 
+        clearAllHolderCaches()
+
         hasLoaded = true
     }
 
@@ -180,16 +182,7 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
 
         // Poll for condition changes — staggered across 20 ticks by UUID to avoid per-tick spike.
         // Holders are presumed stable between events; pollEffects() skips the provider rescan.
-        var playerRefreshSlot = 0
-        plugin.scheduler.runTimer(20, 1) {
-            val slot = playerRefreshSlot
-            playerRefreshSlot = (playerRefreshSlot + 1) % 20
-            for (player in Bukkit.getOnlinePlayers()) {
-                if ((player.uniqueId.leastSignificantBits.toInt() and Int.MAX_VALUE) % 20 != slot) continue
-                if (skipAFKPlayers && AFKManager.isAfk(player)) continue
-                player.toDispatcher().pollEffects()
-            }
-        }
+        plugin.scheduler.runTimer(20, 1, PlayerPollTask())
 
         if (configYml.getBool("refresh.entities.enabled")) {
             /*
@@ -274,6 +267,20 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
         return listOf(
             displayModule
         )
+    }
+
+    private inner class PlayerPollTask : Runnable {
+        private var slot = 0
+
+        override fun run() {
+            val currentSlot = slot
+            slot = (slot + 1) % 20
+            for (player in Bukkit.getOnlinePlayers()) {
+                if ((player.uniqueId.leastSignificantBits.toInt() and Int.MAX_VALUE) % 20 != currentSlot) continue
+                if (skipAFKPlayers && AFKManager.isAfk(player)) continue
+                player.toDispatcher().pollEffects()
+            }
+        }
     }
 
     /**
