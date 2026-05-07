@@ -16,6 +16,7 @@ import com.willfp.libreforge.integrations.paper.impl.TriggerCompostItem
 import com.willfp.libreforge.integrations.paper.impl.TriggerElytraBoost
 import com.willfp.libreforge.integrations.paper.impl.TriggerRenameEntity
 import com.willfp.libreforge.integrations.paper.impl.TriggerSwing
+import com.willfp.libreforge.integrations.paper.impl.TriggerTargetBlockHit
 import com.willfp.libreforge.integrations.paper.impl.TriggerTridentAttack
 import com.willfp.libreforge.integrations.paper.impl.TriggerUseFlowerPot
 import com.willfp.libreforge.integrations.paper.impl.TriggerVillagerTrade
@@ -38,6 +39,7 @@ object PaperIntegration : LoadableIntegration {
         Triggers.register(TriggerCompostItem)
         Triggers.register(TriggerElytraBoost)
         Triggers.register(TriggerRenameEntity)
+        Triggers.register(TriggerTargetBlockHit)
         Triggers.register(TriggerTridentAttack)
         Triggers.register(TriggerTridentHit)
         Triggers.register(TriggerUseFlowerPot)

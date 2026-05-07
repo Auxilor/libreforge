@@ -12,6 +12,8 @@ import com.willfp.libreforge.triggers.impl.TriggerBrew
 import com.willfp.libreforge.triggers.impl.TriggerBrewIngredient
 import com.willfp.libreforge.triggers.impl.TriggerCastRod
 import com.willfp.libreforge.triggers.impl.TriggerCatchEntity
+import com.willfp.libreforge.triggers.impl.TriggerCauldronLevelChange
+import com.willfp.libreforge.triggers.impl.TriggerChangeBiome
 import com.willfp.libreforge.triggers.impl.TriggerCatchFish
 import com.willfp.libreforge.triggers.impl.TriggerCatchFishFail
 import com.willfp.libreforge.triggers.impl.TriggerChangeArmor
@@ -32,6 +34,8 @@ import com.willfp.libreforge.triggers.impl.TriggerDropItem
 import com.willfp.libreforge.triggers.impl.TriggerEmptyBucket
 import com.willfp.libreforge.triggers.impl.TriggerEnable
 import com.willfp.libreforge.triggers.impl.TriggerEnchantItem
+import com.willfp.libreforge.triggers.impl.TriggerEnterVehicle
+import com.willfp.libreforge.triggers.impl.TriggerExitVehicle
 import com.willfp.libreforge.triggers.impl.TriggerEnterBed
 import com.willfp.libreforge.triggers.impl.TriggerEntityBreakDoor
 import com.willfp.libreforge.triggers.impl.TriggerEntityCatchFireFromBlock
@@ -69,6 +73,7 @@ import com.willfp.libreforge.triggers.impl.TriggerMeleeAttack
 import com.willfp.libreforge.triggers.impl.TriggerMineBlock
 import com.willfp.libreforge.triggers.impl.TriggerMineBlockProgress
 import com.willfp.libreforge.triggers.impl.TriggerMove
+import com.willfp.libreforge.triggers.impl.TriggerNoteBlockPlay
 import com.willfp.libreforge.triggers.impl.TriggerPickUpItem
 import com.willfp.libreforge.triggers.impl.TriggerPlaceBlock
 import com.willfp.libreforge.triggers.impl.TriggerPotionEffect
@@ -85,6 +90,7 @@ import com.willfp.libreforge.triggers.impl.TriggerShear
 import com.willfp.libreforge.triggers.impl.TriggerShearEntity
 import com.willfp.libreforge.triggers.impl.TriggerShieldBlock
 import com.willfp.libreforge.triggers.impl.TriggerShootBow
+import com.willfp.libreforge.triggers.impl.TriggerSignEdit
 import com.willfp.libreforge.triggers.impl.TriggerSmelt
 import com.willfp.libreforge.triggers.impl.TriggerSmithItem
 import com.willfp.libreforge.triggers.impl.TriggerSwapHands
@@ -156,6 +162,8 @@ object Triggers : Registry<Trigger>() {
         register(TriggerBrewIngredient)
         register(TriggerCastRod)
         register(TriggerCatchEntity)
+        register(TriggerCauldronLevelChange)
+        register(TriggerChangeBiome)
         register(TriggerCatchFish)
         register(TriggerCatchFishFail)
         register(TriggerChangeArmor)
@@ -175,6 +183,8 @@ object Triggers : Registry<Trigger>() {
         register(TriggerDropItem)
         register(TriggerEnable)
         register(TriggerEmptyBucket)
+        register(TriggerEnterVehicle)
+        register(TriggerExitVehicle)
         register(TriggerEnchantItem)
         register(TriggerEnterBed)
         register(TriggerEntityBreakDoor)
@@ -210,6 +220,7 @@ object Triggers : Registry<Trigger>() {
         register(TriggerMineBlock)
         register(TriggerMineBlockProgress)
         register(TriggerMove)
+        register(TriggerNoteBlockPlay)
         register(TriggerPickUpItem)
         register(TriggerPlaceBlock)
         register(TriggerPotionEffect)
@@ -227,6 +238,7 @@ object Triggers : Registry<Trigger>() {
         register(TriggerShearEntity)
         register(TriggerShieldBlock)
         register(TriggerShootBow)
+        register(TriggerSignEdit)
         register(TriggerSmithItem)
         register(TriggerSmelt)
         register(TriggerSwapHands)
