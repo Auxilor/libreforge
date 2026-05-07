@@ -7,7 +7,6 @@ import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
-import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.normalize
 import com.willfp.libreforge.toFloat3
 import com.willfp.libreforge.toLocation
@@ -23,7 +22,6 @@ object EffectParticleLine : Effect<SpawnableParticle>("particle_line") {
 
     override val arguments = arguments {
         require("particle", "You must specify the particle!")
-        require("amount", "You must specify the amount of particles to spawn!")
         require("spacing", "You must specify the spacing between particles!")
     }
 
@@ -42,12 +40,11 @@ object EffectParticleLine : Effect<SpawnableParticle>("particle_line") {
         val addVector = (endPos.toFloat3() - startPos.toFloat3()).normalize() * spacing.toFloat()
 
         val particle = Particles.lookup(config.getString("particle"))
-        val amount = config.getIntFromExpression("amount", data)
 
         var currentVector = startPos.toFloat3()
 
         repeat(particles) {
-            particle.spawn(currentVector.toLocation(world), amount)
+            particle.spawn(currentVector.toLocation(world))
             currentVector += addVector
         }
 
