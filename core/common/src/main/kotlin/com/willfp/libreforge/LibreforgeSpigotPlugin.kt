@@ -30,6 +30,7 @@ import com.willfp.libreforge.integrations.custom_blocks.oraxen.OraxenIntegration
 import com.willfp.libreforge.integrations.custombiomes.impl.CustomBiomesTerra
 import com.willfp.libreforge.integrations.custombiomes.impl.CustomBiomesTerraformGenerator
 import com.willfp.libreforge.integrations.edprisoncore.EdPrisonCoreIntegration
+import com.willfp.libreforge.integrations.factionsbridge.FactionsBridgeIntegration
 import com.willfp.libreforge.integrations.fancynpcs.FancyNPCsIntegration
 import com.willfp.libreforge.integrations.huskintegration.huskclaims.HuskClaimsIntegration
 import com.willfp.libreforge.integrations.huskintegration.husktowns.HuskTownsIntegration
@@ -257,7 +258,8 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             IntegrationLoader("EdPrison") { EdPrisonCoreIntegration.load(this) },
             IntegrationLoader("MythicMobs") { MythicMobsIntegration.load(this) },
             IntegrationLoader("Nexo") { NexoIntegration.load(this) },
-            IntegrationLoader("Oraxen") { OraxenIntegration.load(this)}
+            IntegrationLoader("Oraxen") { OraxenIntegration.load(this) },
+            IntegrationLoader("FactionsBridge") { FactionsBridgeIntegration.load(this) }
         )
     }
 
