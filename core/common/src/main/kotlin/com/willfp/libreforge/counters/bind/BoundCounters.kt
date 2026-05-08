@@ -8,21 +8,24 @@ import com.willfp.libreforge.triggers.Trigger
 internal object BoundCounters {
     private val lock = Any()
     private var bindings = listMap<Counter, BoundCounter>()
+    private var cachedValues: Set<Counter>? = null
 
     fun bind(counter: Counter, accumulator: Accumulator) {
         synchronized(lock) {
             bindings[counter].add(BoundCounter(counter, accumulator))
+            cachedValues = null
         }
     }
 
     fun unbind(counter: Counter) {
         synchronized(lock) {
             bindings.remove(counter)
+            cachedValues = null
         }
     }
 
     fun values(): Set<Counter> = synchronized(lock) {
-        bindings.keys.toSet()
+        cachedValues ?: bindings.keys.toSet().also { cachedValues = it }
     }
 
     fun anyCanBeTriggeredBy(trigger: Trigger): Boolean = synchronized(lock) {
