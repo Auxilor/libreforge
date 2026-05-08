@@ -3,6 +3,7 @@ package com.willfp.libreforge.counters.bind
 import com.willfp.eco.core.map.listMap
 import com.willfp.libreforge.counters.Accumulator
 import com.willfp.libreforge.counters.Counter
+import com.willfp.libreforge.triggers.Trigger
 
 internal object BoundCounters {
     private val lock = Any()
@@ -22,6 +23,10 @@ internal object BoundCounters {
 
     fun values(): Set<Counter> = synchronized(lock) {
         bindings.keys.toSet()
+    }
+
+    fun anyCanBeTriggeredBy(trigger: Trigger): Boolean = synchronized(lock) {
+        bindings.keys.any { it.canBeTriggeredBy(trigger) }
     }
 
     val Counter.bindings: List<BoundCounter>

@@ -83,13 +83,20 @@ abstract class Trigger(
         // Do this first to filter disabled triggers
         val dispatch = plugin.dispatchedTriggerFactory.create(dispatcher, this, data) ?: return
 
-        val counters = BoundCounters.values()
+        // Filter out effects that can't be triggered by this trigger
+        val triggerableEffects = mutableListOf<ProvidedEffectBlock>()
+
+        for (block in effects) {
+            if (block.effect.canBeTriggeredBy(this)) {
+                triggerableEffects += block
+            }
+        }
 
         // Prevent dispatching useless triggers
-        val potentialDestinations = effects.map { it.effect } + counters
-        if (potentialDestinations.none { it.canBeTriggeredBy(this) }) {
+        if (triggerableEffects.isEmpty() && !BoundCounters.anyCanBeTriggeredBy(this)) {
             return
         }
+
         // Only dispatch placeholders after we know we're going to dispatch
         dispatch.generatePlaceholders()
 
@@ -98,16 +105,6 @@ abstract class Trigger(
 
         if (dispatchEvent.isCancelled) {
             return
-        }
-
-        // Filter out effects that can't be triggered by this trigger as an optimization
-        val triggerableEffects = mutableListOf<ProvidedEffectBlock>()
-
-        for (block in effects) {
-            if (block.effect.canBeTriggeredBy(this)) {
-                // Effects are already sorted by priority
-                triggerableEffects += block
-            }
         }
 
         // Only calculate placeholders once per holder
@@ -120,9 +117,7 @@ abstract class Trigger(
 
             val dispatchWithHolder = DispatchedTrigger(dispatcher, this, withHolder).inheritPlaceholders(dispatch)
 
-            holder.generatePlaceholders(dispatcher).forEach {
-                dispatchWithHolder.addPlaceholder(it)
-            }
+            dispatchWithHolder.addPlaceholders(holder.generatePlaceholders(dispatcher))
 
             holderDispatches[holder] = dispatchWithHolder
         }
@@ -144,7 +139,7 @@ abstract class Trigger(
         }
 
         // Probably a better way to work with counters, but this works for now.
-        for (counter in counters) {
+        for (counter in BoundCounters.values()) {
             counter.bindings.forEach { it.accept(dispatch) }
         }
     }
