@@ -31,20 +31,18 @@ private class SeparatorAmbivalentConfig(
             if (!invalidator(result)) return result
         }
 
-        val hyphen = path.lowercase().replace('_', '-')
-        val underscore = path.lowercase().replace('-', '_')
-        val unspaced = path.lowercase().replace("-", "").replace("_", "")
+        val lower = path.lowercase()
+        val hyphen = lower.replace('_', '-')
+        val underscore = lower.replace('-', '_')
+
+        getter(hyphen).let { if (!invalidator(it)) { resolvedPaths[path] = hyphen; return it } }
+        getter(underscore).let { if (!invalidator(it)) { resolvedPaths[path] = underscore; return it } }
+
+        val unspaced = lower.replace("-", "").replace("_", "")
+        getter(unspaced).let { if (!invalidator(it)) { resolvedPaths[path] = unspaced; return it } }
+
         val camelcase = underscore.toCamelCase()
-
-        val formattedPaths = arrayOf(hyphen, underscore, unspaced, camelcase)
-
-        for (formatted in formattedPaths) {
-            val result = getter(formatted)
-            if (!invalidator(result)) {
-                resolvedPaths[path] = formatted
-                return result
-            }
-        }
+        getter(camelcase).let { if (!invalidator(it)) { resolvedPaths[path] = camelcase; return it } }
         return invalid
     }
 
@@ -117,12 +115,10 @@ fun Config.separatorAmbivalent(): Config =
     this as? SeparatorAmbivalentConfig ?: SeparatorAmbivalentConfig(this)
 
 fun Config.toPlaceholderContext(data: TriggerData? = null): PlaceholderContext {
-    val additionalPlayers = mutableListOf<AdditionalPlayer>()
-
-    data?.let {
-        if (it.victim is Player) {
-            additionalPlayers += AdditionalPlayer(it.victim, "victim")
-        }
+    val additionalPlayers = if (data?.victim is Player) {
+        listOf(AdditionalPlayer(data.victim, "victim"))
+    } else {
+        emptyList()
     }
 
     return PlaceholderContext(
@@ -163,12 +159,17 @@ inline fun <reified T> Config.getOrElse(path: String, default: T, getter: Config
     if (this.has(path)) this.getter(path) else default
 
 private fun String.toCamelCase(): String {
-    val words = lowercase().split("_")
-
-    return buildString {
-        append(words.first())
-        words.drop(1).forEach { word ->
-            append(word.replaceFirstChar { char -> char.uppercase() })
+    return buildString(this@toCamelCase.length) {
+        var capitalizeNext = false
+        for (char in this@toCamelCase) {
+            if (char == '_') {
+                capitalizeNext = true
+            } else if (capitalizeNext) {
+                append(char.uppercaseChar())
+                capitalizeNext = false
+            } else {
+                append(char)
+            }
         }
     }
 }
