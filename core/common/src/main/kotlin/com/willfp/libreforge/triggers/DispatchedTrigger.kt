@@ -12,10 +12,13 @@ class DispatchedTrigger(
 ) {
     private val _generatedPlaceholders = mutableListOf<NamedValue>()
     private val _externalPlaceholders = mutableListOf<NamedValue>()
+    private var _cachedRawPlaceholders: List<NamedValue>? = null
     private var _cachedPlaceholders: List<InjectablePlaceholder>? = null
 
     val rawPlaceholders: List<NamedValue>
-        get() = _generatedPlaceholders + _externalPlaceholders
+        get() = _cachedRawPlaceholders ?: (_generatedPlaceholders + _externalPlaceholders).also {
+            _cachedRawPlaceholders = it
+        }
 
     val placeholders: List<InjectablePlaceholder>
         get() = _cachedPlaceholders ?: rawPlaceholders.flatMap { it.placeholders }.also {
@@ -25,17 +28,20 @@ class DispatchedTrigger(
 
     fun addPlaceholder(placeholder: NamedValue) {
         _externalPlaceholders += placeholder
+        _cachedRawPlaceholders = null
         _cachedPlaceholders = null
     }
 
     fun addPlaceholders(placeholder: Iterable<NamedValue>) {
         _externalPlaceholders += placeholder
+        _cachedRawPlaceholders = null
         _cachedPlaceholders = null
     }
 
     fun inheritPlaceholders(other: DispatchedTrigger): DispatchedTrigger {
         _generatedPlaceholders += other._generatedPlaceholders
         _externalPlaceholders += other._externalPlaceholders
+        _cachedRawPlaceholders = null
         _cachedPlaceholders = null
         return this
     }
@@ -48,6 +54,7 @@ class DispatchedTrigger(
      */
     internal fun generatePlaceholders(data: TriggerData = this.data) {
         _generatedPlaceholders.clear()
+        _cachedRawPlaceholders = null
         _cachedPlaceholders = null
         for (placeholder in TriggerPlaceholders) {
             _generatedPlaceholders += placeholder.createPlaceholders(data)
