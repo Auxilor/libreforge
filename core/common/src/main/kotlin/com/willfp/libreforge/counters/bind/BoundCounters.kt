@@ -9,11 +9,13 @@ internal object BoundCounters {
     private val lock = Any()
     private var bindings = listMap<Counter, BoundCounter>()
     private var cachedValues: Set<Counter>? = null
+    private var cachedBindings = HashMap<Counter, List<BoundCounter>>()
 
     fun bind(counter: Counter, accumulator: Accumulator) {
         synchronized(lock) {
             bindings[counter].add(BoundCounter(counter, accumulator))
             cachedValues = null
+            cachedBindings.remove(counter)
         }
     }
 
@@ -21,6 +23,7 @@ internal object BoundCounters {
         synchronized(lock) {
             bindings.remove(counter)
             cachedValues = null
+            cachedBindings.remove(counter)
         }
     }
 
@@ -34,6 +37,6 @@ internal object BoundCounters {
 
     val Counter.bindings: List<BoundCounter>
         get() = synchronized(lock) {
-            BoundCounters.bindings[this].toList()
+            cachedBindings.getOrPut(this) { BoundCounters.bindings[this].toList() }
         }
 }
