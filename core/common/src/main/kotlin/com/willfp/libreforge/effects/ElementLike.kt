@@ -90,7 +90,7 @@ abstract class ElementLike : ConfigurableElement {
         }
 
         // Initial injection into mutators
-        mutators.map { it.config }.forEach { it.addInjectablePlaceholder(trigger.placeholders) }
+        mutators.forEach { it.config.addInjectablePlaceholder(trigger.placeholders) }
 
         val data = mutators.mutate(trigger.data)
 
