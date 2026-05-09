@@ -90,7 +90,6 @@ import com.willfp.libreforge.triggers.impl.TriggerShear
 import com.willfp.libreforge.triggers.impl.TriggerShearEntity
 import com.willfp.libreforge.triggers.impl.TriggerShieldBlock
 import com.willfp.libreforge.triggers.impl.TriggerShootBow
-import com.willfp.libreforge.triggers.impl.TriggerSignEdit
 import com.willfp.libreforge.triggers.impl.TriggerSmelt
 import com.willfp.libreforge.triggers.impl.TriggerSmithItem
 import com.willfp.libreforge.triggers.impl.TriggerSwapHands
@@ -238,7 +237,6 @@ object Triggers : Registry<Trigger>() {
         register(TriggerShearEntity)
         register(TriggerShieldBlock)
         register(TriggerShootBow)
-        register(TriggerSignEdit)
         register(TriggerSmithItem)
         register(TriggerSmelt)
         register(TriggerSwapHands)
