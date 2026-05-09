@@ -7,6 +7,8 @@ import com.willfp.eco.core.command.impl.PluginCommand
 import com.willfp.eco.core.display.DisplayModule
 import com.willfp.eco.core.integrations.IntegrationLoader
 import com.willfp.eco.core.integrations.afk.AFKManager
+import com.willfp.eco.core.blocks.Blocks
+import com.willfp.eco.core.entities.Entities
 import com.willfp.eco.core.items.Items
 import com.willfp.eco.util.ClassUtils
 import com.willfp.libreforge.commands.CommandLibreforge
@@ -59,6 +61,8 @@ import com.willfp.libreforge.levels.placeholder.ItemProgressPlaceholder
 import com.willfp.libreforge.levels.placeholder.ItemXPPlaceholder
 import com.willfp.libreforge.levels.placeholder.ItemXPRequiredPlaceholder
 import com.willfp.libreforge.placeholders.CustomPlaceholders
+import com.willfp.libreforge.tags.CustomBlockTag
+import com.willfp.libreforge.tags.CustomEntityTag
 import com.willfp.libreforge.tags.CustomTag
 import com.willfp.libreforge.triggers.DispatchedTriggerFactory
 import org.bukkit.Bukkit
@@ -150,6 +154,8 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
 
         for (config in tagsYml.getSubsections("tags")) {
             Items.registerTag(CustomTag(config, this))
+            Blocks.registerTag(CustomBlockTag(config, this))
+            Entities.registerTag(CustomEntityTag(config, this))
         }
 
         for (customPlaceholder in this.placeholdersYml.getSubsections("placeholders")) {
