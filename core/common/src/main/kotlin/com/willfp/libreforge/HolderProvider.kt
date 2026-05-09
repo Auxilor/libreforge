@@ -30,6 +30,12 @@ interface TypedHolderProvider<T : Holder> : HolderProvider {
     override fun provide(dispatcher: Dispatcher<*>): Collection<TypedProvidedHolder<T>>
 }
 
+@Deprecated(
+    "HolderProvideEvent now only fires when the holder set changes, not on every refresh. " +
+    "Use HolderEnableEvent and HolderDisableEvent to react to holder additions and removals. " +
+    "This event will be removed in a future version.",
+    level = DeprecationLevel.WARNING
+)
 class HolderProvideEvent(
     val dispatcher: Dispatcher<*>,
     val holders: Collection<ProvidedHolder>
@@ -181,9 +187,23 @@ fun Dispatcher<*>.refreshHolders() {
  * Forcibly refresh holders, ignoring cooldown.
  */
 fun Dispatcher<*>.forceRefreshHolders() {
-
     refreshFunctions.forEach { it(this) }
-    this.updateHolders()
+    // Pre-populate cache so updateEffects() gets a hit instead of a miss
+    holderCache.put(this.uuid, this.computeHolders())
+    this.updateEffects()
+}
+
+/**
+ * Re-evaluate active effects against the current (possibly cached) holders.
+ *
+ * Used by the periodic polling task: holders are presumed stable between events,
+ * so we skip the provider rescan and only re-check conditions. The holder cache
+ * still expires naturally (4 s TTL), so providers are still rescanned periodically.
+ * Event-based callers (equipment change, inventory click, etc.) use [refreshHolders]
+ * or [forceRefreshHolders] which explicitly invalidate the cache.
+ */
+internal fun Dispatcher<*>.pollEffects() {
+    refreshFunctions.forEach { it(this) }
     this.updateEffects()
 }
 
@@ -244,45 +264,50 @@ private val holderCache = Caffeine.newBuilder()
     .expireAfterWrite(4, TimeUnit.SECONDS)
     .build<UUID, Collection<ProvidedHolder>>()
 
+private fun Dispatcher<*>.computeHolders(): Collection<ProvidedHolder> {
+    if (this is EntityDispatcher && this.dispatcher !is Player && !plugin.configYml.getBool("refresh.entities.enabled")) {
+        return emptyList()
+    }
+
+    val holders = providers.flatMap { it.provide(this) }
+
+    val old = previousHolders.getIfPresent(this.uuid) ?: emptyList()
+
+    val newByID = holders.associateBy { it.holder.id }
+    val oldByID = old.associateBy { it.holder.id }
+
+    val added = newByID.keys - oldByID.keys
+    val removed = oldByID.keys - newByID.keys
+
+    for (id in added) {
+        Bukkit.getPluginManager().callEvent(
+            HolderEnableEvent(this, newByID[id]!!, holders)
+        )
+    }
+
+    for (id in removed) {
+        Bukkit.getPluginManager().callEvent(
+            HolderDisableEvent(this, oldByID[id]!!, old)
+        )
+    }
+
+    previousHolders.put(this.uuid, holders)
+
+    if (added.isNotEmpty() || removed.isNotEmpty()) {
+        @Suppress("DEPRECATION")
+        Bukkit.getPluginManager().callEvent(
+            HolderProvideEvent(this, holders)
+        )
+    }
+
+    return holders
+}
+
 /**
  * The holders.
  */
 val Dispatcher<*>.holders: Collection<ProvidedHolder>
-    get() = holderCache.get(this.uuid) {
-        if (this is EntityDispatcher && this.dispatcher !is Player && !plugin.configYml.getBool("refresh.entities.enabled")) {
-            return@get emptyList()
-        }
-
-        val holders = providers.flatMap { it.provide(this) }
-
-        Bukkit.getPluginManager().callEvent(
-            HolderProvideEvent(this, holders)
-        )
-
-        val old = previousHolders.getIfPresent(this.uuid) ?: emptyList()
-
-        val newByID = holders.associateBy { it.holder.id }
-        val oldByID = old.associateBy { it.holder.id }
-
-        val added = newByID.keys - oldByID.keys
-        val removed = oldByID.keys - newByID.keys
-
-        for (id in added) {
-            Bukkit.getPluginManager().callEvent(
-                HolderEnableEvent(this, newByID[id]!!, holders)
-            )
-        }
-
-        for (id in removed) {
-            Bukkit.getPluginManager().callEvent(
-                HolderDisableEvent(this, oldByID[id]!!, old)
-            )
-        }
-
-        previousHolders.put(this.uuid, holders)
-
-        holders
-    }
+    get() = holderCache.get(this.uuid) { computeHolders() }
 
 /**
  * Get holders of a specific type.
@@ -301,6 +326,11 @@ fun Dispatcher<*>.updateHolders() {
 internal fun Dispatcher<*>.purgePreviousHolders() {
     previousHolders.invalidate(this.uuid)
     previousStates.remove(this.uuid)
+}
+
+internal fun clearAllHolderCaches() {
+    holderCache.invalidateAll()
+    previousHolders.invalidateAll()
 }
 
 // Effects that were active on previous update
@@ -355,12 +385,11 @@ fun Dispatcher<*>.updateEffects() {
     val before = this.providedActiveEffects
     val after = this.calculateActiveEffects()
 
-    previousStates[this.uuid] = after.sorted()
+    previousStates[this.uuid] = after
 
     // Permanent effects also have a run order, so we need to sort them.
     val added = (after without before).sorted()
     val removed = (before without after).sorted()
-    val toReload = (after without added).sorted()
 
     for ((effect, holder) in removed) {
         effect.disable(this, holder)
@@ -373,6 +402,7 @@ fun Dispatcher<*>.updateEffects() {
     // Reloading is now done by disabling all, then enabling all. Effect#reload is deprecated.
     // Since permanent effects are not allowed in chains, they are always done in the correct
     // order as mixing weights is not a concern.
+    val toReload = (after without added).sorted()
 
     for ((effect, holder) in toReload) {
         effect.disable(this, holder, isReload = true)
