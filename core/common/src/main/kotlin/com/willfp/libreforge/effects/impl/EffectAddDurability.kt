@@ -20,7 +20,17 @@ object EffectAddDurability : Effect<NoCompileData>("add_durability") {
         val durability = config.getIntFromExpression("durability", data)
         val meta = item.itemMeta as? Damageable ?: return false
 
-        meta.setMaxDamage(meta.maxDamage + durability)
+        val baseMaxDamage = if (meta.hasMaxDamage()) meta.maxDamage else item.type.maxDurability.toInt()
+        if (baseMaxDamage <= 0) return false
+
+        val newMaxDamage = baseMaxDamage + durability
+        if (newMaxDamage <= 0) {
+            item.amount = 0
+            return true
+        }
+
+        meta.setMaxDamage(newMaxDamage)
+        item.itemMeta = meta
 
         return true
     }
