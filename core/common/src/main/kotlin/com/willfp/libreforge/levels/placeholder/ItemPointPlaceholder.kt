@@ -24,7 +24,7 @@ abstract class ItemPointPlaceholder(
             }
 
             if (isNumeral) {
-                it.toString().toIntOrNull()?.toNumeral()
+                it.toNiceString().toIntOrNull()?.toNumeral()
             } else {
                 it.toNiceString()
             }
