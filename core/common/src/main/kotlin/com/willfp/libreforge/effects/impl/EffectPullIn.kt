@@ -7,6 +7,7 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import org.bukkit.util.Vector
 
 object EffectPullIn : Effect<NoCompileData>("pull_in") {
     override val parameters = setOf(
@@ -22,10 +23,13 @@ object EffectPullIn : Effect<NoCompileData>("pull_in") {
         val player = data.player ?: return false
         val victim = data.victim ?: return false
 
-        val vector = player.location.toVector().clone()
-            .subtract(victim.location.toVector())
-            .normalize()
-            .multiply(config.getDoubleFromExpression("velocity", data))
+        val diff = player.location.toVector().clone().subtract(victim.location.toVector())
+        val direction = if (diff.lengthSquared() < 1e-6) {
+            Vector(0.0, 0.0, 0.0)
+        } else {
+            diff.normalize()
+        }
+        val vector = direction.multiply(config.getDoubleFromExpression("velocity", data))
 
         victim.velocity = vector
 
