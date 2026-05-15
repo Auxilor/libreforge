@@ -5,6 +5,7 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
+import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.util.Vector
@@ -23,11 +24,13 @@ object EffectSetVelocity : Effect<NoCompileData>("set_velocity") {
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val player = data.player ?: return false
 
-        player.velocity = Vector(
-            config.getDoubleFromExpression("x", data),
-            config.getDoubleFromExpression("y", data),
-            config.getDoubleFromExpression("z", data)
-        )
+        plugin.scheduler.runLater(1) {
+            player.velocity = Vector(
+                config.getDoubleFromExpression("x", data),
+                config.getDoubleFromExpression("y", data),
+                config.getDoubleFromExpression("z", data)
+            )
+        }
 
         return true
     }
