@@ -2,7 +2,7 @@ dependencies {
     implementation("dev.romainguy:kotlin-math:1.6.0") {
         isTransitive = false
     }
-    implementation("com.willfp:ModelEngineBridge:1.3.0")
+    implementation("com.willfp:ModelEngineBridge:1.4.0")
     compileOnly("io.github.toxicity188:bettermodel-bukkit-api:2.2.0") {
         exclude("*", "kotlin-stdlib")
     }
