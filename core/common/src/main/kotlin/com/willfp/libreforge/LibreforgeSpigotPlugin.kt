@@ -3,6 +3,7 @@ package com.willfp.libreforge
 import com.willfp.eco.core.Eco
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.Prerequisite
+import com.willfp.eco.core.bstats.EcoMetricsChart
 import com.willfp.eco.core.command.impl.PluginCommand
 import com.willfp.eco.core.display.DisplayModule
 import com.willfp.eco.core.integrations.IntegrationLoader
@@ -12,6 +13,7 @@ import com.willfp.eco.core.entities.Entities
 import com.willfp.eco.core.items.Items
 import com.willfp.eco.util.ClassUtils
 import com.willfp.libreforge.commands.CommandLibreforge
+import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.commands.custom.CustomCommands
 import com.willfp.libreforge.configs.ChainsYml
 import com.willfp.libreforge.configs.CommandsYml
@@ -22,6 +24,7 @@ import com.willfp.libreforge.display.ItemFlagDisplay
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.arguments.custom.CustomEffectArguments
 import com.willfp.libreforge.effects.impl.bossbar.BossBarProgressPlaceholder
+import com.willfp.libreforge.filters.Filters
 import com.willfp.libreforge.integrations.auraskills.AuraSkillsIntegration
 import com.willfp.libreforge.integrations.axplugins.axenvoy.AxEnvoyIntegration
 import com.willfp.libreforge.integrations.axplugins.axtrade.AxTradeIntegration
@@ -54,6 +57,7 @@ import com.willfp.libreforge.integrations.worldguard.WorldGuardIntegration
 import com.willfp.libreforge.integrations.xiaomomiplugins.customcrops.CustomCropsIntegration
 import com.willfp.libreforge.integrations.xiaomomiplugins.customfishing.CustomFishingIntegration
 import com.willfp.libreforge.levels.LevelTypes
+import com.willfp.libreforge.mutators.Mutators
 import com.willfp.libreforge.levels.placeholder.ItemDataPlaceholder
 import com.willfp.libreforge.levels.placeholder.ItemLevelPlaceholder
 import com.willfp.libreforge.levels.placeholder.ItemPointsPlaceholder
@@ -65,6 +69,7 @@ import com.willfp.libreforge.tags.CustomBlockTag
 import com.willfp.libreforge.tags.CustomEntityTag
 import com.willfp.libreforge.tags.CustomTag
 import com.willfp.libreforge.triggers.DispatchedTriggerFactory
+import com.willfp.libreforge.triggers.Triggers
 import org.bukkit.Bukkit
 import org.bukkit.entity.LivingEntity
 import org.bukkit.event.Listener
@@ -261,6 +266,15 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             IntegrationLoader("Oraxen") { OraxenIntegration.load(this)}
         )
     }
+
+    override fun getCustomCharts() = listOf(
+        EcoMetricsChart.SingleLine("total_conditions") { Conditions.values().size },
+        EcoMetricsChart.SingleLine("total_effects") { Effects.values().size },
+        EcoMetricsChart.SingleLine("total_triggers") { Triggers.values().size },
+        EcoMetricsChart.SingleLine("total_filters") { Filters.values().size },
+        EcoMetricsChart.SingleLine("total_mutators") { Mutators.values().size },
+        EcoMetricsChart.SingleLine("loaded_libreforge_plugins") { Plugins.values().size }
+    )
 
     override fun loadPluginCommands(): List<PluginCommand> {
         return listOf(
