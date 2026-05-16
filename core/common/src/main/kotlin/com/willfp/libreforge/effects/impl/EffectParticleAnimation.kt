@@ -86,10 +86,7 @@ object EffectParticleAnimation : Effect<ParticleAnimationBlock<*>?>("particle_an
             }
 
             for (vector in vectors) {
-                particle.spawn(
-                    vector.toLocation(world),
-                    config.getIntFromExpression("particle-amount", data)
-                )
+                particle.spawn(vector.toLocation(world))
             }
 
             if (vectors.any { v ->
