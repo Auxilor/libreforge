@@ -71,6 +71,7 @@ import com.willfp.libreforge.triggers.impl.TriggerLoseHunger
 import com.willfp.libreforge.triggers.impl.TriggerLosePotionEffect
 import com.willfp.libreforge.triggers.impl.TriggerMeleeAttack
 import com.willfp.libreforge.triggers.impl.TriggerMineBlock
+import com.willfp.libreforge.triggers.impl.TriggerMineBlockCascade
 import com.willfp.libreforge.triggers.impl.TriggerMineBlockProgress
 import com.willfp.libreforge.triggers.impl.TriggerMove
 import com.willfp.libreforge.triggers.impl.TriggerNoteBlockPlay
@@ -217,6 +218,7 @@ object Triggers : Registry<Trigger>() {
         register(TriggerLosePotionEffect)
         register(TriggerMeleeAttack)
         register(TriggerMineBlock)
+        register(TriggerMineBlockCascade)
         register(TriggerMineBlockProgress)
         register(TriggerMove)
         register(TriggerNoteBlockPlay)
