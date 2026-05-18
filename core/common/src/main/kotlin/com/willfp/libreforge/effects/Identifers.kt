@@ -20,7 +20,7 @@ class IdentifierFactory(
         UUID.nameUUIDFromBytes("$uuid$offset".toByteArray())
 
     private fun makeKey(offset: Int) =
-        NamespacedKeyUtils.createEcoKey("${abs(uuid.hashCode())}_$offset")
+        NamespacedKeyUtils.createEcoKey("lf_${abs(uuid.hashCode())}_$offset")
 
     override fun toString(): String {
         return "IdentifierFactory(uuid=$uuid)"

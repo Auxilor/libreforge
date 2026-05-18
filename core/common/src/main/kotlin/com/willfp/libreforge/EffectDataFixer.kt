@@ -1,7 +1,6 @@
 package com.willfp.libreforge
 
 import com.destroystokyo.paper.event.entity.EntityRemoveFromWorldEvent
-import com.willfp.libreforge.effects.Effects
 import org.bukkit.Registry
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.Player
@@ -44,12 +43,15 @@ object EffectDataFixer : Listener {
     }
 
     private fun Player.fixAttributes() {
-        val effectIds = Effects.values().map { it.id }.toSet()
-
         for (attribute in Registry.ATTRIBUTE) {
             val inst = this.getAttribute(attribute) ?: continue
-            for (mod in inst.modifiers) {
-                if (mod.name.startsWith("libreforge") || effectIds.any { mod.name.startsWith(it) }) {
+            for (mod in inst.modifiers.toList()) {
+                val key = mod.key
+                // lf_ prefix = new format; bare digits_digits = old format pre-fix
+                if (key.namespace == "eco" && (
+                    key.key.startsWith("lf_") ||
+                    key.key.matches(Regex("\\d+_\\d+"))
+                )) {
                     inst.removeModifier(mod)
                 }
             }
