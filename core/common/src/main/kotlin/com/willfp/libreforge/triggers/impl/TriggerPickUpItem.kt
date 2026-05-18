@@ -20,14 +20,13 @@ object TriggerPickUpItem : Trigger("pick_up_item") {
     fun handle(event: EntityPickupItemEvent) {
         val entity = event.entity
 
-        this.dispatch(
-            entity.toDispatcher(),
-            TriggerData(
-                player = entity as? Player,
-                victim = entity,
-                item = event.item.itemStack,
-                value = event.item.itemStack.amount.toDouble()
-            )
-        )
+        val data = TriggerData(
+            player = entity as? Player,
+            victim = entity,
+            item = event.item.itemStack,
+            value = event.item.itemStack.amount.toDouble()
+        ).also { it.itemEntity = event.item }
+
+        this.dispatch(entity.toDispatcher(), data)
     }
 }
