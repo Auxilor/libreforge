@@ -89,6 +89,7 @@ import com.willfp.libreforge.effects.impl.EffectGiveOxygen
 import com.willfp.libreforge.effects.impl.EffectGivePoints
 import com.willfp.libreforge.effects.impl.EffectGivePrice
 import com.willfp.libreforge.effects.impl.EffectGiveSaturation
+import com.willfp.libreforge.effects.impl.EffectDropXp
 import com.willfp.libreforge.effects.impl.EffectGiveXp
 import com.willfp.libreforge.effects.impl.EffectGlowNearbyBlocks
 import com.willfp.libreforge.effects.impl.EffectGravityMultiplier
@@ -579,6 +580,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectGivePoints)
         register(EffectGivePrice)
         register(EffectGiveSaturation)
+        register(EffectDropXp)
         register(EffectGiveXp)
         register(EffectGlowNearbyBlocks)
         register(EffectHarvestCrop)
