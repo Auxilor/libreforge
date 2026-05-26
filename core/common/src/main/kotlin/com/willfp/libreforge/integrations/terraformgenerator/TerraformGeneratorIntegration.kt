@@ -1,17 +1,15 @@
-package com.willfp.libreforge.integrations.custombiomes.impl
+package com.willfp.libreforge.integrations.terraformgenerator
 
 import com.willfp.eco.core.EcoPlugin
-import com.willfp.libreforge.integrations.custombiomes.CustomBiomesIntegration
-import com.willfp.libreforge.integrations.custombiomes.NamedBiome
-import com.willfp.libreforge.integrations.custombiomes.customBiomesIntegrations
+import com.willfp.libreforge.biomes.BiomeProvider
+import com.willfp.libreforge.biomes.NamedBiome
+import com.willfp.libreforge.biomes.biomeProviders
 import org.bukkit.Location
 import org.terraform.biome.BiomeBank
 import org.terraform.data.TerraformWorld
 
-object CustomBiomesTerraformGenerator : CustomBiomesIntegration {
-    override fun getPluginName(): String {
-        return "TerraformGenerator"
-    }
+object TerraformGeneratorIntegration : BiomeProvider {
+    override fun getPluginName(): String = "TerraformGenerator"
 
     override fun getBiome(location: Location?): NamedBiome? {
         if (location == null || location.world == null) {
@@ -23,7 +21,7 @@ object CustomBiomesTerraformGenerator : CustomBiomesIntegration {
     }
 
     override fun load(plugin: EcoPlugin) {
-        customBiomesIntegrations.register(this)
+        biomeProviders.register(this)
     }
 
     private class TerraformNamedBiome(

@@ -1,4 +1,4 @@
-package com.willfp.libreforge.integrations.custombiomes
+package com.willfp.libreforge.biomes
 
 import org.bukkit.block.Biome
 

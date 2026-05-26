@@ -1,17 +1,15 @@
-package com.willfp.libreforge.integrations.custombiomes.impl
+package com.willfp.libreforge.integrations.terra
 
 import com.dfsek.terra.api.world.biome.Biome
 import com.dfsek.terra.bukkit.world.BukkitAdapter
 import com.willfp.eco.core.EcoPlugin
-import com.willfp.libreforge.integrations.custombiomes.CustomBiomesIntegration
-import com.willfp.libreforge.integrations.custombiomes.NamedBiome
-import com.willfp.libreforge.integrations.custombiomes.customBiomesIntegrations
+import com.willfp.libreforge.biomes.BiomeProvider
+import com.willfp.libreforge.biomes.NamedBiome
+import com.willfp.libreforge.biomes.biomeProviders
 import org.bukkit.Location
 
-object CustomBiomesTerra : CustomBiomesIntegration {
-    override fun getPluginName(): String {
-        return "Terra"
-    }
+object TerraIntegration : BiomeProvider {
+    override fun getPluginName(): String = "Terra"
 
     override fun getBiome(location: Location?): NamedBiome? {
         if (location == null || location.world == null) {
@@ -27,7 +25,7 @@ object CustomBiomesTerra : CustomBiomesIntegration {
     }
 
     override fun load(plugin: EcoPlugin) {
-        customBiomesIntegrations.register(this)
+        biomeProviders.register(this)
     }
 
     private class TerraNamedBiome(

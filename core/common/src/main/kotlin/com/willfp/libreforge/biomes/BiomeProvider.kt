@@ -1,9 +1,9 @@
-package com.willfp.libreforge.integrations.custombiomes
+package com.willfp.libreforge.biomes
 
 import com.willfp.libreforge.integrations.LoadableIntegration
 import org.bukkit.Location
 
-interface CustomBiomesIntegration: LoadableIntegration {
+interface BiomeProvider : LoadableIntegration {
     /**
      * Get a biome at given location. (Supports vanilla biomes as well)
      *
