@@ -32,8 +32,8 @@ import com.willfp.libreforge.integrations.bettermodel.BetterModelIntegration
 import com.willfp.libreforge.integrations.citizens.CitizensIntegration
 import com.willfp.libreforge.integrations.custom_blocks.nexo.NexoIntegration
 import com.willfp.libreforge.integrations.custom_blocks.oraxen.OraxenIntegration
-import com.willfp.libreforge.integrations.custombiomes.impl.CustomBiomesTerra
-import com.willfp.libreforge.integrations.custombiomes.impl.CustomBiomesTerraformGenerator
+import com.willfp.libreforge.integrations.terra.TerraIntegration
+import com.willfp.libreforge.integrations.terraformgenerator.TerraformGeneratorIntegration
 import com.willfp.libreforge.integrations.edprisoncore.EdPrisonCoreIntegration
 import com.willfp.libreforge.integrations.fancynpcs.FancyNPCsIntegration
 import com.willfp.libreforge.integrations.huskintegration.huskclaims.HuskClaimsIntegration
@@ -247,8 +247,8 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             IntegrationLoader("Vault") { VaultIntegration.load(this) },
             IntegrationLoader("WorldGuard") { WorldGuardIntegration.load(this) },
             IntegrationLoader("TAB") { TabIntegration.load(this) },
-            IntegrationLoader("Terra") { CustomBiomesTerra.load(this) },
-            IntegrationLoader("TerraformGenerator") { CustomBiomesTerraformGenerator.load(this) },
+            IntegrationLoader("Terra") { TerraIntegration.load(this) },
+            IntegrationLoader("TerraformGenerator") { TerraformGeneratorIntegration.load(this) },
             IntegrationLoader("AxEnvoy") { AxEnvoyIntegration.load(this) },
             IntegrationLoader("AxTrade") { AxTradeIntegration.load(this) },
             IntegrationLoader("Votifier") { VotifierIntegration.load(this) },
