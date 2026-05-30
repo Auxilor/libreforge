@@ -25,6 +25,11 @@ class CustomCommand(
     val commandName = parts.first().lowercase()
     private val arguments = parts.drop(1)
 
+    private val staticArguments = arguments
+        .mapIndexedNotNull { index, arg ->
+            if (!arg.startsWith("<") && !arg.startsWith("[")) index to arg else null
+        }
+
     val playerArgIndex = arguments.indexOfFirst { it.equals("<player>", ignoreCase = true) }
 
     val requiredValueArgIndex = arguments.indexOfFirst { it.equals("<value>", ignoreCase = true) }
@@ -52,6 +57,10 @@ class CustomCommand(
         !hasPlayerArg
     ) {
         override fun onExecute(sender: CommandSender, args: MutableList<String>) {
+            for ((index, expected) in staticArguments) {
+                if (args.getOrNull(index)?.equals(expected, ignoreCase = true) != true) return
+            }
+
             val player = commandPlayer(sender, args) ?: return
             val value = commandValue(sender, args.getOrNull(valueArgIndex)) ?: return
 
@@ -65,6 +74,12 @@ class CustomCommand(
         }
 
         override fun tabComplete(sender: CommandSender, args: MutableList<String>): List<String> {
+            val argIndex = args.size - 1
+            val staticArg = staticArguments.find { (index, _) -> index == argIndex }
+            if (staticArg != null) {
+                return listOf(staticArg.second).filter { it.startsWith(args[argIndex], true) }
+            }
+
             return when {
                 hasPlayerArg && args.size == playerArgIndex + 1 -> {
                     Bukkit.getOnlinePlayers()
