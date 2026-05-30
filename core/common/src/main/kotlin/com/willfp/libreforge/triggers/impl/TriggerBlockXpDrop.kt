@@ -37,6 +37,10 @@ object TriggerBlockXpDrop : Trigger("block_xp_drop") {
             return
         }
 
+        if (event.expToDrop <= 0) {
+            return
+        }
+
         val editableEvent = EditableXpDropEvent(
             initialXp = event.expToDrop,
             cause = XpDropCause.BLOCK,
