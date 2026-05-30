@@ -45,7 +45,7 @@ import com.willfp.libreforge.effects.impl.EffectBreakBlock
 import com.willfp.libreforge.effects.impl.EffectBrewTimeMultiplier
 import com.willfp.libreforge.effects.impl.EffectBroadcast
 import com.willfp.libreforge.effects.impl.EffectBurningTimeMultiplier
-import com.willfp.libreforge.effects.impl.EffectCancelDrop
+import com.willfp.libreforge.effects.impl.EffectCancelDrops
 import com.willfp.libreforge.effects.impl.EffectCancelEvent
 import com.willfp.libreforge.effects.impl.EffectChainLightning
 import com.willfp.libreforge.effects.impl.EffectClearInvulnerability
@@ -605,7 +605,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectMineRadiusOneDeep)
         register(EffectMineVein)
         register(EffectMovementSpeedMultiplier)
-        register(EffectCancelDrop)
+        register(EffectCancelDrops)
         register(EffectMultiplyDrops)
         register(EffectMultiplyGlobalPoints)
         register(EffectMultiplyItemPoints)

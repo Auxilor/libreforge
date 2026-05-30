@@ -9,7 +9,7 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.event.EditableDropEvent
 
-object EffectCancelDrop : Effect<NoCompileData>("cancel_drop") {
+object EffectCancelDrops : Effect<NoCompileData>("cancel_drops") {
     override val parameters = setOf(
         TriggerParameter.EVENT
     )
