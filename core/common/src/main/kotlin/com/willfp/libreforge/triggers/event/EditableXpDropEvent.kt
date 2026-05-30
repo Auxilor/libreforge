@@ -62,7 +62,6 @@ class EditableXpDropEvent(
 
     private var cancelled = false
 
-    // ── Convenience accessors forwarded from context ──────
     val player: Player? get() = context.player
     val block: Block? get() = context.block
     val entity: Entity? get() = context.entity
