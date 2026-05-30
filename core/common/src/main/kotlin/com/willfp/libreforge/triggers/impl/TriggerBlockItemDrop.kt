@@ -89,6 +89,21 @@ object TriggerBlockItemDrop : Trigger("block_item_drop") {
             item.setItemStack(stack)
         }
 
+        // Drops added by effects (e.g. drop_item with add_to_drops) have no backing
+        // item entity, so the loop above can't emit them. Push them through a
+        // DropQueue (telekinesis-aware). These stacks already have their modifiers
+        // applied in place by the `dropResults` read above, so we must NOT read
+        // editableEvent.items again here or modifiers would be applied twice.
+        val addedStacks = remainingDrops.filter { stack ->
+            itemEntityToStack.values.none { it === stack }
+        }
+        if (addedStacks.isNotEmpty()) {
+            DropQueue(player)
+                .setLocation(block.location)
+                .addItems(addedStacks)
+                .push()
+        }
+
         val totalXP = dropResults.sumOf { it.xp }
         if (totalXP > 0) {
             DropQueue(player)
