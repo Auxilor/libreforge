@@ -8,6 +8,7 @@ import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import com.willfp.libreforge.triggers.event.EditableDropEvent
 import org.bukkit.inventory.ItemStack
 
 object EffectDropItem : Effect<ItemStack>("drop_item") {
@@ -22,6 +23,18 @@ object EffectDropItem : Effect<ItemStack>("drop_item") {
     override fun onTrigger(config: Config, data: TriggerData, compileData: ItemStack): Boolean {
         val location = data.location ?: return false
 
+        // When add_to_drops is set and the trigger supplies a drop event, add the
+        // item into the event's drop list so it goes through the same pipeline as
+        // natural drops (multiply_drops, telekinesis). A clone is added because
+        // modifiers like multiply_drops mutate the stack in place, and compileData
+        // is shared across every invocation of this effect.
+        if (config.getBool("add_to_drops")) {
+            val dropEvent = data.event as? EditableDropEvent
+            if (dropEvent != null) {
+                dropEvent.drops.add(compileData.clone())
+                return true
+            }
+        }
 
         val player = data.player
 

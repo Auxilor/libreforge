@@ -5,6 +5,8 @@ import com.willfp.libreforge.mutators.MutatorList
 import com.willfp.libreforge.triggers.impl.TriggerAltClick
 import com.willfp.libreforge.triggers.impl.TriggerBite
 import com.willfp.libreforge.triggers.impl.TriggerBlockItemDrop
+import com.willfp.libreforge.triggers.impl.TriggerBlockXpDrop
+import com.willfp.libreforge.triggers.impl.TriggerEntityXpDrop
 import com.willfp.libreforge.triggers.impl.TriggerBoneMealCrop
 import com.willfp.libreforge.triggers.impl.TriggerBowAttack
 import com.willfp.libreforge.triggers.impl.TriggerBreed
@@ -155,6 +157,8 @@ object Triggers : Registry<Trigger>() {
         register(TriggerAltClick)
         register(TriggerBite)
         register(TriggerBlockItemDrop)
+        register(TriggerBlockXpDrop)
+        register(TriggerEntityXpDrop)
         register(TriggerBoneMealCrop)
         register(TriggerBowAttack)
         register(TriggerBreed)

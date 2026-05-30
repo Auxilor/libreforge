@@ -26,15 +26,25 @@ class Chain internal constructor(
         trigger: DispatchedTrigger,
         executor: ChainExecutor = this.executor
     ): Boolean {
-        return executor.execute(this, trigger)
+        val triggerWithDispatcher = if (trigger.data.dispatcher == trigger.dispatcher) {
+            trigger
+        } else {
+            DispatchedTrigger(
+                trigger.dispatcher,
+                trigger.trigger,
+                trigger.data.copy(dispatcher = trigger.dispatcher)
+            ).inheritPlaceholders(trigger)
+        }
+
+        return executor.execute(this, triggerWithDispatcher)
     }
 
     fun trigger(
         dispatcher: Dispatcher<*>,
-        data: TriggerData = TriggerData(player = dispatcher.get()),
+        data: TriggerData = TriggerData(dispatcher = dispatcher, player = dispatcher.get()),
         trigger: Trigger = TriggerBlank,
         executor: ChainExecutor = this.executor
     ): Boolean {
-        return executor.execute(this, DispatchedTrigger(dispatcher, trigger, data))
+        return trigger(DispatchedTrigger(dispatcher, trigger, data), executor)
     }
 }

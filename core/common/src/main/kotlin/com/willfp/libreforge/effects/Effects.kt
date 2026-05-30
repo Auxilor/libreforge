@@ -45,6 +45,7 @@ import com.willfp.libreforge.effects.impl.EffectBreakBlock
 import com.willfp.libreforge.effects.impl.EffectBrewTimeMultiplier
 import com.willfp.libreforge.effects.impl.EffectBroadcast
 import com.willfp.libreforge.effects.impl.EffectBurningTimeMultiplier
+import com.willfp.libreforge.effects.impl.EffectCancelDrops
 import com.willfp.libreforge.effects.impl.EffectCancelEvent
 import com.willfp.libreforge.effects.impl.EffectChainLightning
 import com.willfp.libreforge.effects.impl.EffectClearInvulnerability
@@ -110,6 +111,7 @@ import com.willfp.libreforge.effects.impl.EffectKnockbackMultiplier
 import com.willfp.libreforge.effects.impl.EffectKnockbackResistanceMultiplier
 import com.willfp.libreforge.effects.impl.EffectLevelItem
 import com.willfp.libreforge.effects.impl.EffectLifesteal
+import com.willfp.libreforge.effects.impl.EffectMineShape
 import com.willfp.libreforge.effects.impl.EffectMineRadius
 import com.willfp.libreforge.effects.impl.EffectMineRadiusOneDeep
 import com.willfp.libreforge.effects.impl.EffectMineVein
@@ -147,6 +149,7 @@ import com.willfp.libreforge.effects.impl.EffectRemoveBossBar
 import com.willfp.libreforge.effects.impl.EffectRemoveDispatcher
 import com.willfp.libreforge.effects.impl.EffectRemoveEnchant
 import com.willfp.libreforge.effects.impl.EffectRemoveItem
+import com.willfp.libreforge.effects.impl.EffectRemoveRandomEnchant
 import com.willfp.libreforge.effects.impl.EffectRemoveItemData
 import com.willfp.libreforge.effects.impl.EffectRemovePotionEffect
 import com.willfp.libreforge.effects.impl.EffectRemoveVictim
@@ -597,10 +600,12 @@ object Effects : Registry<Effect<*>>() {
         register(EffectKnockbackResistanceMultiplier)
         register(EffectLevelItem)
         register(EffectLifesteal)
+        register(EffectMineShape)
         register(EffectMineRadius)
         register(EffectMineRadiusOneDeep)
         register(EffectMineVein)
         register(EffectMovementSpeedMultiplier)
+        register(EffectCancelDrops)
         register(EffectMultiplyDrops)
         register(EffectMultiplyGlobalPoints)
         register(EffectMultiplyItemPoints)
@@ -629,6 +634,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectRegenMultiplier)
         register(EffectRemoveBossBar)
         register(EffectRemoveEnchant)
+        register(EffectRemoveRandomEnchant)
         register(EffectRemoveItem)
         register(EffectRemoveItemData)
         register(EffectRemovePotionEffect)
