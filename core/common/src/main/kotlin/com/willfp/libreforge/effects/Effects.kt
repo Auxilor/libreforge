@@ -117,6 +117,7 @@ import com.willfp.libreforge.effects.impl.EffectMiningEfficiency
 import com.willfp.libreforge.effects.impl.EffectMiningSpeedMultiplier
 import com.willfp.libreforge.effects.impl.EffectMovementEfficiencyMultiplier
 import com.willfp.libreforge.effects.impl.EffectMovementSpeedMultiplier
+import com.willfp.libreforge.effects.impl.EffectCancelDrop
 import com.willfp.libreforge.effects.impl.EffectMultiplyDrops
 import com.willfp.libreforge.effects.impl.EffectMultiplyGlobalPoints
 import com.willfp.libreforge.effects.impl.EffectMultiplyItemPoints
@@ -601,6 +602,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectMineRadiusOneDeep)
         register(EffectMineVein)
         register(EffectMovementSpeedMultiplier)
+        register(EffectCancelDrop)
         register(EffectMultiplyDrops)
         register(EffectMultiplyGlobalPoints)
         register(EffectMultiplyItemPoints)
