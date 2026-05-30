@@ -36,6 +36,10 @@ object TriggerEntityXpDrop : Trigger("entity_xp_drop") {
         val entity = event.victim
         val killer = event.killer.tryAsLivingEntity() ?: return
 
+        if (event.deathEvent.droppedExp <= 0) {
+            return
+        }
+
         val editableEvent = EditableXpDropEvent(
             initialXp = event.deathEvent.droppedExp,
             cause = XpDropCause.ENTITY,
