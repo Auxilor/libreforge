@@ -8,6 +8,7 @@ import com.willfp.eco.util.simplify
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.templates.MineBlockEffect
+import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.Material
@@ -72,58 +73,72 @@ object EffectMineArea : MineBlockEffect<NoCompileData>("mine_area") {
         val whitelist = config.getStringsOrNull("whitelist")?.map { Blocks.lookup(it) }
         val blacklist = config.getStrings("blacklisted_blocks").map { Blocks.lookup(it) }
 
+        // depth: how many layers to mine behind the trigger block, along the
+        // player's view axis. Defaults to 1 (just the face plane).
+        val depthLayers = (if (config.has("depth")) config.getIntFromExpression("depth", data) else 1)
+            .coerceAtLeast(1)
+
         val blocks = mutableSetOf<Block>()
 
-        for ((r, line) in area.withIndex()) {
-            for ((c, ch) in line.withIndex()) {
-                if (ch != 'X' && ch != 'x') {
-                    continue
-                }
+        for (layer in 0 until depthLayers) {
+            val dz = layer.toDouble()
 
-                val dx = (c - tCol).toDouble()
-                val dy = (tRow - r).toDouble()
+            for ((r, line) in area.withIndex()) {
+                for ((c, ch) in line.withIndex()) {
+                    // X cells always mine. The anchor (T) cell is already broken
+                    // by the trigger on the front layer, but its column is mined
+                    // on every layer behind it.
+                    val isAnchor = r == tRow && c == tCol
+                    val isMined = ch == 'X' || ch == 'x' || (isAnchor && layer > 0)
+                    if (!isMined) {
+                        continue
+                    }
 
-                val toBreak = block.world.getBlockAt(
-                    block.location.clone().add(
-                        right.x * dx + up.x * dy,
-                        right.y * dx + up.y * dy,
-                        right.z * dx + up.z * dy
+                    val dx = (c - tCol).toDouble()
+                    val dy = (tRow - r).toDouble()
+
+                    val toBreak = block.world.getBlockAt(
+                        block.location.clone().add(
+                            right.x * dx + up.x * dy + depth.x * dz,
+                            right.y * dx + up.y * dy + depth.y * dz,
+                            right.z * dx + up.z * dy + depth.z * dz
+                        )
                     )
-                )
 
-                if (toBreak.location.blockY !in block.world.minHeight..block.world.maxHeight) {
-                    continue
-                }
-
-                if (blacklist.matches(toBreak)) {
-                    continue
-                }
-
-                if (whitelist != null) {
-                    if (!whitelist.matches(toBreak)) {
+                    if (toBreak.location.blockY !in block.world.minHeight..block.world.maxHeight) {
                         continue
                     }
-                }
 
-                if (config.getBoolOrNull("check_hardness") != false) {
-                    if (toBreak.type.hardness > block.type.hardness) {
+                    if (blacklist.matches(toBreak)) {
                         continue
                     }
-                }
 
-                if (toBreak.type.hardness < 0) {
-                    continue
-                }
+                    if (whitelist != null) {
+                        if (!whitelist.matches(toBreak)) {
+                            continue
+                        }
+                    }
 
-                if (toBreak.type == Material.AIR) {
-                    continue
-                }
+                    if (config.getBoolOrNull("check_hardness") != false) {
+                        if (toBreak.type.hardness > block.type.hardness) {
+                            continue
+                        }
+                    }
 
-                if (!AntigriefManager.canBreakBlock(player, toBreak)) {
-                    continue
-                }
+                    if (toBreak.type.hardness < 0) {
+                        continue
+                    }
 
-                blocks.add(toBreak)
+                    if (toBreak.type == Material.AIR) {
+                        continue
+                    }
+
+                    if (!AntigriefManager.canBreakBlock(player, toBreak)) {
+                        continue
+                    }
+
+                    blocks.add(toBreak)
+                }
             }
         }
 
