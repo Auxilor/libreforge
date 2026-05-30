@@ -45,6 +45,7 @@ import com.willfp.libreforge.effects.impl.EffectBreakBlock
 import com.willfp.libreforge.effects.impl.EffectBrewTimeMultiplier
 import com.willfp.libreforge.effects.impl.EffectBroadcast
 import com.willfp.libreforge.effects.impl.EffectBurningTimeMultiplier
+import com.willfp.libreforge.effects.impl.EffectCancelDrop
 import com.willfp.libreforge.effects.impl.EffectCancelEvent
 import com.willfp.libreforge.effects.impl.EffectChainLightning
 import com.willfp.libreforge.effects.impl.EffectClearInvulnerability
@@ -117,7 +118,6 @@ import com.willfp.libreforge.effects.impl.EffectMiningEfficiency
 import com.willfp.libreforge.effects.impl.EffectMiningSpeedMultiplier
 import com.willfp.libreforge.effects.impl.EffectMovementEfficiencyMultiplier
 import com.willfp.libreforge.effects.impl.EffectMovementSpeedMultiplier
-import com.willfp.libreforge.effects.impl.EffectCancelDrop
 import com.willfp.libreforge.effects.impl.EffectMultiplyDrops
 import com.willfp.libreforge.effects.impl.EffectMultiplyGlobalPoints
 import com.willfp.libreforge.effects.impl.EffectMultiplyItemPoints

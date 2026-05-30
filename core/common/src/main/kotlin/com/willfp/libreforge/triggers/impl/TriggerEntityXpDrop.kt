@@ -12,6 +12,7 @@ import com.willfp.libreforge.triggers.event.XpDropContext
 import com.willfp.libreforge.triggers.tryAsLivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 
 object TriggerEntityXpDrop : Trigger("entity_xp_drop") {
     override val parameters = setOf(
@@ -21,7 +22,10 @@ object TriggerEntityXpDrop : Trigger("entity_xp_drop") {
         TriggerParameter.LOCATION
     )
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(
+        ignoreCancelled = true,
+        priority = EventPriority.LOW
+    )
     fun handle(event: EntityDeathByEntityEvent) {
         if (Prerequisite.HAS_PAPER.isMet) {
             if (event.deathEvent.isCancelled) {

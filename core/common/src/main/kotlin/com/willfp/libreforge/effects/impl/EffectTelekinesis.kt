@@ -136,7 +136,10 @@ object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
             return
         }
 
-        val xp = event.xp
+        // Read the live droppedExp rather than the EntityDeathByEntityEvent.xp
+        // snapshot so that modifications from earlier handlers (e.g. the
+        // entity_xp_drop trigger) are respected.
+        val xp = event.deathEvent.droppedExp
         val drops = event.drops.filterNotNull()
 
         DropQueue(player)
