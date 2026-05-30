@@ -149,6 +149,7 @@ import com.willfp.libreforge.effects.impl.EffectRemoveBossBar
 import com.willfp.libreforge.effects.impl.EffectRemoveDispatcher
 import com.willfp.libreforge.effects.impl.EffectRemoveEnchant
 import com.willfp.libreforge.effects.impl.EffectRemoveItem
+import com.willfp.libreforge.effects.impl.EffectRemoveRandomEnchant
 import com.willfp.libreforge.effects.impl.EffectRemoveItemData
 import com.willfp.libreforge.effects.impl.EffectRemovePotionEffect
 import com.willfp.libreforge.effects.impl.EffectRemoveVictim
@@ -633,6 +634,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectRegenMultiplier)
         register(EffectRemoveBossBar)
         register(EffectRemoveEnchant)
+        register(EffectRemoveRandomEnchant)
         register(EffectRemoveItem)
         register(EffectRemoveItemData)
         register(EffectRemovePotionEffect)
