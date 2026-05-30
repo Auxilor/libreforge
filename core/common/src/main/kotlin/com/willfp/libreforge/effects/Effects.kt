@@ -111,7 +111,7 @@ import com.willfp.libreforge.effects.impl.EffectKnockbackMultiplier
 import com.willfp.libreforge.effects.impl.EffectKnockbackResistanceMultiplier
 import com.willfp.libreforge.effects.impl.EffectLevelItem
 import com.willfp.libreforge.effects.impl.EffectLifesteal
-import com.willfp.libreforge.effects.impl.EffectMineArea
+import com.willfp.libreforge.effects.impl.EffectMineShape
 import com.willfp.libreforge.effects.impl.EffectMineRadius
 import com.willfp.libreforge.effects.impl.EffectMineRadiusOneDeep
 import com.willfp.libreforge.effects.impl.EffectMineVein
@@ -600,7 +600,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectKnockbackResistanceMultiplier)
         register(EffectLevelItem)
         register(EffectLifesteal)
-        register(EffectMineArea)
+        register(EffectMineShape)
         register(EffectMineRadius)
         register(EffectMineRadiusOneDeep)
         register(EffectMineVein)
