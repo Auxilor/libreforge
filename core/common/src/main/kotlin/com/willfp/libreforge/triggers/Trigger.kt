@@ -40,6 +40,13 @@ abstract class Trigger(
     open val additionalInfo: List<String> = emptyList()
 
     /**
+     * Per-parameter descriptions giving context specific to this trigger.
+     * Describes what each TriggerParameter value represents when this trigger fires,
+     * e.g. what VICTIM or VALUE actually contains for this specific event.
+     */
+    open val parameterDescriptions: Map<TriggerParameter, String> = emptyMap()
+
+    /**
      * Whether this trigger is enabled.
      */
     open var isEnabled: Boolean = false
