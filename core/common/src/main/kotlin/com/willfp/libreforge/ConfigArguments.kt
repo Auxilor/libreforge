@@ -101,12 +101,9 @@ class ConfigArgumentsBuilder {
         name: String,
         message: String,
         getter: Config.(String) -> T,
-        predicate: (T) -> Boolean,
-        description: String = "",
-        type: ArgType = ArgType.ANY,
-        choices: List<String> = emptyList()
+        predicate: (T) -> Boolean
     ) {
-        require(listOf(name), message, getter, predicate, description, type, choices)
+        require(listOf(name), message, getter, predicate)
     }
 
     fun require(
@@ -151,6 +148,28 @@ class ConfigArgumentsBuilder {
         arguments += OptionalArgument(names, description, type, default, choices)
     }
 
+    /**
+     * Attach wiki metadata to a previously registered [require] that used a getter/predicate.
+     * Call immediately after the require it describes.
+     */
+    fun describe(
+        name: String,
+        description: String = "",
+        type: ArgType = ArgType.ANY,
+        choices: List<String> = emptyList()
+    ) {
+        val arg = arguments
+            .filterIsInstance<RequiredArgument<*>>()
+            .lastOrNull { name in it.argNames }
+            ?: return
+
+        arg.meta = arg.meta.copy(
+            description = description,
+            type = type,
+            choices = choices
+        )
+    }
+
     fun inherit(
         getter: (Config) -> Compilable<*>?,
         description: String = ""
@@ -180,16 +199,16 @@ interface ConfigArgument {
 }
 
 private class RequiredArgument<T>(
-    private val names: Collection<String>,
+    val argNames: Collection<String>,
     private val message: String,
     private val getter: Config.(String) -> T,
     private val predicate: (T) -> Boolean,
-    private val description: String,
-    private val type: ArgType,
-    private val choices: List<String>
+    description: String,
+    type: ArgType,
+    choices: List<String>
 ) : ConfigArgument {
-    override val meta = ArgumentMeta.Regular(
-        names = names,
+    override var meta: ArgumentMeta.Regular = ArgumentMeta.Regular(
+        names = argNames,
         description = description,
         type = type,
         required = true,
@@ -198,14 +217,14 @@ private class RequiredArgument<T>(
     )
 
     override fun test(config: Config): List<ConfigViolation> {
-        for (name in names) {
+        for (name in argNames) {
             val value = config.getter(name)
             if (config.has(name) && predicate(value)) {
                 return emptyList()
             }
         }
 
-        return listOf(ConfigViolation(names.first(), message))
+        return listOf(ConfigViolation(argNames.first(), message))
     }
 }
 
