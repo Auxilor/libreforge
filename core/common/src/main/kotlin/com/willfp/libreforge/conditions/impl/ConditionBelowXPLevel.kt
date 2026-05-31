@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.get
@@ -16,8 +17,16 @@ import org.bukkit.event.player.PlayerExpChangeEvent
 
 
 object ConditionBelowXPLevel : Condition<NoCompileData>("below_xp_level") {
+    override val description = "Passes when the player's XP level is below the specified level."
+    override val categories = setOf("economy")
+
     override val arguments = arguments {
-        require("level", "You must specify the xp level!")
+        require(
+            "level",
+            "You must specify the xp level!",
+            description = "The XP level threshold; the player must be below this value.",
+            type = ArgType.EXPRESSION
+        )
     }
 
     override fun isMet(

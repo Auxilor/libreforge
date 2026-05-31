@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.get
@@ -16,9 +17,23 @@ import org.bukkit.entity.LivingEntity
 import org.bukkit.inventory.ItemStack
 
 object ConditionHasEnchant : Condition<NoCompileData>("has_enchant") {
+    override val description = "Passes when the entity has an item with the specified enchantment in the specified slot."
+    override val categories = setOf("inventory")
+    override val additionalInfo = listOf("Enchantment levels can be specified as a single integer or a range (e.g. sharpness:3-5).")
+
     override val arguments = arguments {
-        require(listOf("slot", "slots"), "You must specify the slot(s)!")
-        require(listOf("enchant", "enchants"), "You must specify the enchant(s)!")
+        require(
+            listOf("slot", "slots"),
+            "You must specify the slot(s)!",
+            description = "The equipment slot(s) to check for the enchantment.",
+            type = ArgType.STRING_LIST
+        )
+        require(
+            listOf("enchant", "enchants"),
+            "You must specify the enchant(s)!",
+            description = "The enchantment(s) to require, optionally with a level or range (e.g. sharpness:3-5).",
+            type = ArgType.ENCHANTMENT_LIST
+        )
     }
 
     override fun isMet(

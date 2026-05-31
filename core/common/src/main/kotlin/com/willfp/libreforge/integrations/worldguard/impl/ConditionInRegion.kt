@@ -7,12 +7,22 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
 
 object ConditionInRegion : Condition<NoCompileData>("in_region") {
+    override val description = "Passes when the player is standing inside one of the specified WorldGuard regions."
+    override val categories = setOf("world")
+    override val additionalInfo = listOf("Requires the WorldGuard plugin.")
+
     override val arguments = arguments {
-        require("region", "You must specify the allowed region names!")
+        require(
+            "region",
+            "You must specify the allowed region names!",
+            description = "The WorldGuard region name(s) to check against.",
+            type = ArgType.STRING_LIST
+        )
     }
 
     private val regionContainer = WorldGuard.getInstance().platform.regionContainer

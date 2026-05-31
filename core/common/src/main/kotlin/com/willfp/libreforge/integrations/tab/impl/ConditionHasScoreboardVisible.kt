@@ -10,6 +10,10 @@ import me.neznamy.tab.api.TabAPI
 import org.bukkit.entity.Player
 
 object ConditionHasScoreboardVisible: Condition<NoCompileData>("has_scoreboard_visible") {
+    override val description = "Passes when the player has the TAB scoreboard visible."
+    override val categories = setOf("player")
+    override val additionalInfo = listOf("Requires the TAB plugin.")
+
     override fun isMet(
         dispatcher: Dispatcher<*>,
         config: Config,

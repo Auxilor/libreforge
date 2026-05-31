@@ -6,15 +6,30 @@ import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.ViolationContext
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.get
 import org.bukkit.entity.Player
 
 object ConditionHasEdPrisonCurrency : Condition<String?>("has_edprison_economy") {
+    override val description = "Passes when the player has at least the specified amount of a given EDPrisonCore currency."
+    override val categories = setOf("economy", "player")
+    override val additionalInfo = listOf("Requires the EDPrisonCore plugin.")
+
     override val arguments = arguments {
-        require("type", "You must specify the economy type!")
-        require("amount", "You must specify the level!")
+        require(
+            "type",
+            "You must specify the economy type!",
+            description = "The EDPrisonCore economy/currency type to check.",
+            type = ArgType.STRING
+        )
+        require(
+            "amount",
+            "You must specify the level!",
+            description = "The minimum amount of the currency the player must have.",
+            type = ArgType.EXPRESSION
+        )
     }
 
     override fun isMet(

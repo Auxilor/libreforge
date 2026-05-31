@@ -4,13 +4,22 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.get
 
 object ConditionAboveY : Condition<NoCompileData>("above_y") {
+    override val description = "Passes when the entity's Y coordinate is at or above the specified value."
+    override val categories = setOf("world")
+
     override val arguments = arguments {
-        require("y", "You must specify the y level!")
+        require(
+            "y",
+            "You must specify the y level!",
+            description = "The minimum Y coordinate.",
+            type = ArgType.EXPRESSION
+        )
     }
 
     override fun isMet(
