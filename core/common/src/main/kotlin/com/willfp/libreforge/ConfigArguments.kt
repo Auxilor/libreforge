@@ -171,18 +171,24 @@ class ConfigArgumentsBuilder {
     }
 
     fun inherit(
-        getter: (Config) -> Compilable<*>?,
-        description: String = ""
+        getter: (Config) -> Compilable<*>?
     ) {
-        arguments += InheritedArguments(getter, null, description)
+        arguments += InheritedArguments(getter, null, "")
     }
 
     fun inherit(
         subsection: String,
-        getter: (Config) -> Compilable<*>?,
-        description: String = ""
+        getter: (Config) -> Compilable<*>?
     ) {
-        arguments += InheritedArguments(getter, subsection, description)
+        arguments += InheritedArguments(getter, subsection, "")
+    }
+
+    /**
+     * Attach a description to the [inherit] registered with the given [subsection].
+     */
+    fun describeInherit(subsection: String, description: String) {
+        val arg = arguments.filterIsInstance<InheritedArguments>().firstOrNull { it.subsection == subsection } ?: return
+        arg.meta = arg.meta.copy(description = description)
     }
 
     internal fun build() = ConfigArguments(arguments)
@@ -249,10 +255,10 @@ private class OptionalArgument(
 
 private class InheritedArguments(
     private val getter: (Config) -> Compilable<*>?,
-    private val subsection: String? = null,
-    private val description: String = ""
+    val subsection: String? = null,
+    description: String = ""
 ) : ConfigArgument {
-    override val meta = ArgumentMeta.Inherited(
+    override var meta: ArgumentMeta.Inherited = ArgumentMeta.Inherited(
         subsection = subsection,
         description = description
     )
