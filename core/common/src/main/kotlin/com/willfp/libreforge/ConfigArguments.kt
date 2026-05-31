@@ -184,11 +184,10 @@ class ConfigArgumentsBuilder {
     }
 
     /**
-     * Attach a description to the most recently registered [inherit].
-     * Call immediately after the inherit it describes.
+     * Attach a description to the [inherit] registered with the given [subsection].
      */
-    fun describeInherit(description: String) {
-        val arg = arguments.filterIsInstance<InheritedArguments>().lastOrNull() ?: return
+    fun describeInherit(subsection: String, description: String) {
+        val arg = arguments.filterIsInstance<InheritedArguments>().firstOrNull { it.subsection == subsection } ?: return
         arg.meta = arg.meta.copy(description = description)
     }
 
@@ -256,7 +255,7 @@ private class OptionalArgument(
 
 private class InheritedArguments(
     private val getter: (Config) -> Compilable<*>?,
-    private val subsection: String? = null,
+    val subsection: String? = null,
     description: String = ""
 ) : ConfigArgument {
     override var meta: ArgumentMeta.Inherited = ArgumentMeta.Inherited(
