@@ -30,7 +30,8 @@ object EffectAnimation : Effect<AnimationBlock<*, *>?>("animation") {
             type = ArgType.STRING
         )
 
-        inherit("animation_args", description = "Configuration for the selected animation type.") { Animations[it.getString("animation")] }
+        inherit("animation_args") { Animations[it.getString("animation")] }
+        describeInherit("animation_args", "Configuration for the selected animation type.")
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: AnimationBlock<*, *>?): Boolean {

@@ -34,7 +34,8 @@ object EffectAOEBlocks : Effect<AOECompileData>("aoe_blocks") {
             description = "The AOE shape to use.",
             type = ArgType.STRING
         )
-        inherit(description = "Configuration for the selected AOE shape.") { AOEShapes[it.getString("shape")] }
+        inherit { AOEShapes[it.getString("shape")] }
+        describeInherit("Configuration for the selected AOE shape.")
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: AOECompileData): Boolean {
