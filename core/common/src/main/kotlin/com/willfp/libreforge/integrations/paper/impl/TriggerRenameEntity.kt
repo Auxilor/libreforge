@@ -8,6 +8,18 @@ import io.papermc.paper.event.player.PlayerNameEntityEvent
 import org.bukkit.event.EventHandler
 
 object TriggerRenameEntity : Trigger("rename_entity") {
+    override val description = "Fires when the player renames an entity with a name tag."
+
+    override val categories = setOf("interaction")
+
+    override val additionalInfo = listOf("Requires Paper to be installed.")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.VICTIM to "The entity that was renamed.",
+        TriggerParameter.LOCATION to "The player's location.",
+        TriggerParameter.TEXT to "The new name applied to the entity."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,

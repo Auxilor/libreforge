@@ -8,6 +8,10 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerBucketEmptyEvent
 
 object TriggerEmptyBucket : Trigger("empty_bucket") {
+    override val description = "Fires when the player empties a bucket."
+
+    override val categories = setOf("interaction")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT

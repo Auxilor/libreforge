@@ -9,6 +9,15 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerFishEvent
 
 object TriggerHookInGround : Trigger("hook_in_ground") {
+    override val description = "Fires when the player's fishing hook embeds in the ground."
+
+    override val categories = setOf("fishing")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The location of the fishing hook.",
+        TriggerParameter.ITEM to "The item on the hook, if any."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,

@@ -9,6 +9,18 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 
 object TriggerCompostItem : Trigger("compost_item") {
+    override val description = "Fires when the player composts an item in a composter."
+
+    override val categories = setOf("interaction")
+
+    override val additionalInfo = listOf("Requires Paper to be installed.")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The player's location.",
+        TriggerParameter.ITEM to "The item that was composted.",
+        TriggerParameter.ALT_VALUE to "1 if the compost level will rise, 0 if not."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,

@@ -8,6 +8,16 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.event.EventHandler
 
 object TriggerLevelDownMcMMO : Trigger("level_down_mcmmo") {
+    override val description = "Fires when the player loses a level in a McMMO skill."
+
+    override val categories = setOf("player")
+
+    override val additionalInfo = listOf("Requires McMMO to be installed.")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The player's location."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,

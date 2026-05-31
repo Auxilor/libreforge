@@ -9,6 +9,17 @@ import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 
 object TriggerLeaveLand : Trigger("leave_land") {
+    override val description = "Fires when the player leaves a Lands land membership."
+
+    override val categories = setOf("player")
+
+    override val additionalInfo = listOf("Requires Lands to be installed.")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The player's location.",
+        TriggerParameter.TEXT to "The name of the land."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT,

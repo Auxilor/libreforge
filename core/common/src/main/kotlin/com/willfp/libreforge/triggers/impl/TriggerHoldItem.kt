@@ -8,6 +8,15 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerItemHeldEvent
 
 object TriggerHoldItem : Trigger("hold_item") {
+    override val description = "Fires when the player switches to a different hotbar slot."
+
+    override val categories = setOf("inventory")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The player's location.",
+        TriggerParameter.ITEM to "The item in the newly selected hotbar slot."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,

@@ -13,6 +13,17 @@ import org.bukkit.event.EventHandler
 import java.util.UUID
 
 object TriggerUnclaim : Trigger("unclaim") {
+    override val description = "Fires when the player unclaims Lands chunks."
+
+    override val categories = setOf("world")
+
+    override val additionalInfo = listOf("Requires Lands to be installed.")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The player's location.",
+        TriggerParameter.VALUE to "The number of chunks unclaimed."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT,

@@ -18,6 +18,18 @@ import org.bukkit.event.entity.ProjectileLaunchEvent
 private const val META_KEY = "libreforge_trident_hit_holders"
 
 object TriggerTridentHit : Trigger("trident_hit") {
+    override val description = "Fires when the player's thrown trident hits a block or entity."
+
+    override val categories = setOf("combat")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.VICTIM to "The entity hit by the trident, if any.",
+        TriggerParameter.PROJECTILE to "The trident projectile.",
+        TriggerParameter.LOCATION to "The trident's location at impact.",
+        TriggerParameter.BLOCK to "The block hit by the trident, if any.",
+        TriggerParameter.VELOCITY to "The velocity of the trident at impact."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,

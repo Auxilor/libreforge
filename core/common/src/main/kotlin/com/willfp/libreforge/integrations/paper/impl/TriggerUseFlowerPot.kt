@@ -8,6 +8,17 @@ import io.papermc.paper.event.player.PlayerFlowerPotManipulateEvent
 import org.bukkit.event.EventHandler
 
 object TriggerUseFlowerPot : Trigger("use_flower_pot") {
+    override val description = "Fires when the player places or removes a plant from a flower pot."
+
+    override val categories = setOf("interaction")
+
+    override val additionalInfo = listOf("Requires Paper to be installed.")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The player's location.",
+        TriggerParameter.ITEM to "The plant item placed into or removed from the pot."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,

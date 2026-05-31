@@ -12,6 +12,19 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
 
 object TriggerTakeEntityDamage : Trigger("take_entity_damage") {
+    override val description = "Fires when a player or entity takes damage from another entity."
+
+    override val categories = setOf("combat")
+
+    override val additionalInfo = listOf(
+        "Does not fire when the attacker is a MythicMobs mob — use 'take_mythic_damage' instead."
+    )
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.VICTIM to "The entity that dealt the damage (the attacker).",
+        TriggerParameter.LOCATION to "The attacker's location."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,

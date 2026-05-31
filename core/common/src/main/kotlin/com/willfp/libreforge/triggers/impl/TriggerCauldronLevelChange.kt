@@ -9,6 +9,16 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.block.CauldronLevelChangeEvent
 
 object TriggerCauldronLevelChange : Trigger("cauldron_level_change") {
+    override val description = "Fires when the player changes the water level of a cauldron."
+
+    override val categories = setOf("interaction")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.BLOCK to "The cauldron block.",
+        TriggerParameter.LOCATION to "The cauldron's location.",
+        TriggerParameter.VALUE to "The new water level of the cauldron after the change."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.BLOCK,

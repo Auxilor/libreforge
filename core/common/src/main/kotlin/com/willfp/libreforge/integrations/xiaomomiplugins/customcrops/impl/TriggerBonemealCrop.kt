@@ -8,6 +8,17 @@ import net.momirealms.customcrops.api.event.BoneMealUseEvent
 import org.bukkit.event.EventHandler
 
 object TriggerBonemealCrop : Trigger("bonemeal_crop") {
+    override val description = "Fires when the player uses bone meal on a CustomCrops crop."
+
+    override val categories = setOf("world", "interaction")
+
+    override val additionalInfo = listOf("Requires CustomCrops (xiaomomi) to be installed.")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The location of the crop.",
+        TriggerParameter.TEXT to "The ID of the crop that was fertilized."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT,

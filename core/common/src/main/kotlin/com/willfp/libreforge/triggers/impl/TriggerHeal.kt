@@ -9,6 +9,10 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityRegainHealthEvent
 
 object TriggerHeal : Trigger("heal") {
+    override val description = "Fires when the player regains health."
+
+    override val categories = setOf("player")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT

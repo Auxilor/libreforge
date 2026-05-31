@@ -9,6 +9,15 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerFishEvent
 
 object TriggerCastRod : Trigger("cast_rod") {
+    override val description = "Fires when the player casts a fishing rod."
+
+    override val categories = setOf("fishing")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The location of the fishing hook.",
+        TriggerParameter.ITEM to "The item in the player's hand."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,

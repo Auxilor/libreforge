@@ -11,6 +11,15 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
 
 object TriggerShieldBlock : Trigger("shield_block") {
+    override val description = "Fires when the player blocks an attack with a shield."
+
+    override val categories = setOf("combat")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.VICTIM to "The entity that attacked the player.",
+        TriggerParameter.LOCATION to "The attacker's location."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,

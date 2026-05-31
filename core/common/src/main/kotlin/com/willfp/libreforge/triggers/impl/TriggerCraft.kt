@@ -16,6 +16,14 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.PlayerInventory
 
 object TriggerCraft : Trigger("craft") {
+    override val description = "Fires when the player crafts an item."
+
+    override val categories = setOf("inventory")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The player's location.",
+        TriggerParameter.ITEM to "The crafted item."
+    )
 
     private const val CRAFTING_FAILED = 0
 

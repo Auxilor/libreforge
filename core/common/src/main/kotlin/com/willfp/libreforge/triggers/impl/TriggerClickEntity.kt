@@ -10,6 +10,15 @@ import org.bukkit.event.player.PlayerInteractEntityEvent
 import org.bukkit.inventory.EquipmentSlot
 
 object TriggerClickEntity : Trigger("click_entity") {
+    override val description = "Fires when the player right-clicks a living entity."
+
+    override val categories = setOf("interaction")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.VICTIM to "The entity that was clicked.",
+        TriggerParameter.LOCATION to "The location of the clicked entity."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,

@@ -7,6 +7,16 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.Player
 
 object TriggerLeaveRegion : Trigger("leave_region") {
+    override val description = "Fires when the player leaves a WorldGuard region."
+
+    override val categories = setOf("movement")
+
+    override val additionalInfo = listOf("Requires WorldGuard to be installed.")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The player's location when leaving the region."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,

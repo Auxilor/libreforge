@@ -8,6 +8,16 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.event.EventHandler
 
 object TriggerMcMMOAbilityDeactivate : Trigger("mcmmo_ability_deactivate") {
+    override val description = "Fires when the player deactivates a McMMO ability."
+
+    override val categories = setOf("player")
+
+    override val additionalInfo = listOf("Requires McMMO to be installed.")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The player's location."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,

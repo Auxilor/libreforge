@@ -11,6 +11,16 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 
 object TriggerHeadshot : Trigger("headshot") {
+    override val description = "Fires when the player hits an entity in the head with a projectile."
+
+    override val categories = setOf("combat")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.VICTIM to "The entity that was hit in the head.",
+        TriggerParameter.LOCATION to "The victim's location at impact.",
+        TriggerParameter.VELOCITY to "The velocity of the projectile at impact."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,

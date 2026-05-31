@@ -8,6 +8,10 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.event.EventHandler
 
 object TriggerDisable : Trigger("disable") {
+    override val description = "Fires when a holder is deactivated for the dispatcher, such as when an item is unequipped."
+
+    override val categories = setOf("meta")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT

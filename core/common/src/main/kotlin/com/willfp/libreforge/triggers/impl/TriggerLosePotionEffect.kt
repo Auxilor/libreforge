@@ -10,6 +10,15 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityPotionEffectEvent
 
 object TriggerLosePotionEffect : Trigger("lose_potion_effect") {
+    override val description = "Fires when an entity loses a potion effect."
+
+    override val categories = setOf("player")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.VICTIM to "The entity that lost the potion effect.",
+        TriggerParameter.LOCATION to "The entity's location."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,

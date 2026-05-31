@@ -10,6 +10,16 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerFishEvent
 
 object TriggerCatchEntity : Trigger("catch_entity") {
+    override val description = "Fires when the player catches a living entity with a fishing rod."
+
+    override val categories = setOf("fishing")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.VICTIM to "The entity that was caught by the rod.",
+        TriggerParameter.LOCATION to "The location of the caught entity.",
+        TriggerParameter.ITEM to "The item entity on the hook, if any."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,

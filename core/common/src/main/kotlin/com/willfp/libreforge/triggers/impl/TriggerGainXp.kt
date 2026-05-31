@@ -11,6 +11,10 @@ import org.bukkit.event.EventHandler
 import java.util.UUID
 
 object TriggerGainXp : Trigger("gain_xp") {
+    override val description = "Fires when the player gains experience points."
+
+    override val categories = setOf("player")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT

@@ -10,6 +10,17 @@ import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 
 object TriggerClaim : Trigger("claim") {
+    override val description = "Fires when the player claims land chunks in Lands."
+
+    override val categories = setOf("world")
+
+    override val additionalInfo = listOf("Requires Lands to be installed.")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The player's location.",
+        TriggerParameter.VALUE to "The number of chunks claimed."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT,

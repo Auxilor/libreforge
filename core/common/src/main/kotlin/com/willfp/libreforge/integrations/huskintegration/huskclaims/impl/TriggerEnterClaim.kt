@@ -8,6 +8,12 @@ import net.william278.huskclaims.event.BukkitEnterClaimEvent
 import org.bukkit.event.EventHandler
 
 object TriggerEnterClaim : Trigger("enter_claim") {
+    override val description = "Fires when the player enters a HuskClaims claim."
+
+    override val categories = setOf("movement")
+
+    override val additionalInfo = listOf("Requires HuskClaims to be installed.")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT

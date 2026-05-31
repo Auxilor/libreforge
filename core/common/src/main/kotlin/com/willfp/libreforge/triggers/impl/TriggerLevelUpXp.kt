@@ -8,6 +8,10 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerLevelChangeEvent
 
 object TriggerLevelUpXp : Trigger("level_up_xp") {
+    override val description = "Fires when the player gains an XP level."
+
+    override val categories = setOf("player")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT

@@ -8,6 +8,17 @@ import io.papermc.paper.event.player.PlayerTradeEvent
 import org.bukkit.event.EventHandler
 
 object TriggerVillagerTrade : Trigger("villager_trade") {
+    override val description = "Fires when the player completes a trade with a villager."
+
+    override val categories = setOf("economy")
+
+    override val additionalInfo = listOf("Requires Paper to be installed.")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.VICTIM to "The villager that was traded with.",
+        TriggerParameter.ITEM to "The item received from the trade."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,

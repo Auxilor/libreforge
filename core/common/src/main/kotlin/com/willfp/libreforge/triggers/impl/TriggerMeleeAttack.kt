@@ -12,6 +12,16 @@ import org.bukkit.event.entity.EntityDamageEvent
 import java.util.UUID
 
 object TriggerMeleeAttack : Trigger("melee_attack") {
+    override val description = "Fires when the player lands a melee hit on an entity."
+
+    override val categories = setOf("combat")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.VICTIM to "The entity that was hit.",
+        TriggerParameter.LOCATION to "The victim's location at the time of the hit.",
+        TriggerParameter.ITEM to "The item in the attacker's main hand."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,

@@ -10,6 +10,16 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.block.BlockBreakEvent
 
 object TriggerMineBlock : Trigger("mine_block") {
+    override val description = "Fires when the player successfully breaks a block."
+
+    override val categories = setOf("world")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.BLOCK to "The block that was broken.",
+        TriggerParameter.LOCATION to "The location of the broken block.",
+        TriggerParameter.ITEM to "The item in the player's main hand."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.BLOCK,

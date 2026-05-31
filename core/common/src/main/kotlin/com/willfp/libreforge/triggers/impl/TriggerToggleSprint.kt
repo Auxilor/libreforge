@@ -8,6 +8,15 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerToggleSprintEvent
 
 object TriggerToggleSprint : Trigger("toggle_sprint") {
+    override val description = "Fires when the player toggles sprinting."
+
+    override val categories = setOf("movement")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The player's location.",
+        TriggerParameter.VELOCITY to "The player's velocity at the time of the toggle."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,

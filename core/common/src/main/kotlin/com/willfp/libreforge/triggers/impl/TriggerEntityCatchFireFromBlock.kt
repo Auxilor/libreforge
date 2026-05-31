@@ -9,6 +9,15 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityCombustByBlockEvent
 
 object TriggerEntityCatchFireFromBlock : Trigger("entity_catch_fire_from_block") {
+    override val description = "Fires when an entity catches fire from a block such as lava."
+
+    override val categories = setOf("entity")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.VICTIM to "The entity that caught fire.",
+        TriggerParameter.LOCATION to "The entity's location."
+    )
+
     override val parameters = setOf(
         TriggerParameter.VICTIM,
         TriggerParameter.LOCATION

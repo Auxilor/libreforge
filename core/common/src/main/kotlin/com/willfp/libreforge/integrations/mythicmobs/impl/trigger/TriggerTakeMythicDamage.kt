@@ -12,6 +12,20 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 
 object TriggerTakeMythicDamage : Trigger("take_mythic_damage") {
+    override val description = "Fires when a player or entity takes damage from a MythicMobs mob."
+
+    override val categories = setOf("combat")
+
+    override val additionalInfo = listOf(
+        "Requires MythicMobs to be installed."
+    )
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.VICTIM to "The MythicMobs entity that dealt the damage.",
+        TriggerParameter.LOCATION to "The attacker's location.",
+        TriggerParameter.VALUE to "The damage dealt."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,

@@ -10,6 +10,16 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityBreedEvent
 
 object TriggerBreed : Trigger("breed") {
+    override val description = "Fires when two entities are bred."
+
+    override val categories = setOf("entity")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.VICTIM to "The offspring entity that was spawned.",
+        TriggerParameter.LOCATION to "The location of the offspring.",
+        TriggerParameter.ITEM to "The item used to breed."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,

@@ -8,6 +8,17 @@ import net.momirealms.customcrops.api.event.FertilizerUseEvent
 import org.bukkit.event.EventHandler
 
 object TriggerUseFertilizer : Trigger("use_fertilizer") {
+    override val description = "Fires when the player uses a CustomCrops fertilizer on a crop."
+
+    override val categories = setOf("world", "interaction")
+
+    override val additionalInfo = listOf("Requires CustomCrops (xiaomomi) to be installed.")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The location of the crop.",
+        TriggerParameter.TEXT to "The ID of the fertilizer used."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT,
