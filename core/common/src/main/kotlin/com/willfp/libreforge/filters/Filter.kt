@@ -1,6 +1,7 @@
 package com.willfp.libreforge.filters
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.Compilable
 import com.willfp.libreforge.InvalidCompileDataException
 import com.willfp.libreforge.NoCompileData
@@ -15,6 +16,13 @@ abstract class Filter<T, V>(
      * The run order.
      */
     open val runOrder = RunOrder.NORMAL
+
+    /**
+     * The type of value this filter reads from config, used for wiki documentation
+     * and interactive config builders. Filters do not use arguments blocks —
+     * the filter ID is the config key and this field declares what value type it expects.
+     */
+    open val valueType: ArgType = ArgType.ANY
 
     /**
      * Fetch value from config.

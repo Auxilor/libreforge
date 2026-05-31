@@ -26,6 +26,22 @@ abstract class Compilable<T> : KRegistrable {
     abstract override val id: String
 
     /**
+     * Human-readable description of what this does, shown on the wiki.
+     */
+    open val description: String = ""
+
+    /**
+     * Category tags for grouping and filtering on the wiki, e.g. "combat", "economy".
+     */
+    open val categories: Set<String> = emptySet()
+
+    /**
+     * Additional notes, warnings, or constraints shown on the wiki,
+     * e.g. required trigger types, integration dependencies, known limitations.
+     */
+    open val additionalInfo: List<String> = emptyList()
+
+    /**
      * The arguments that will be checked.
      */
     open val arguments: ConfigArguments = arguments { }
