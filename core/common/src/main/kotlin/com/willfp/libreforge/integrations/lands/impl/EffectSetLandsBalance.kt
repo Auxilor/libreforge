@@ -21,8 +21,18 @@ object EffectSetLandsBalance : Effect<NoCompileData>("set_lands_balance") {
     )
 
     override val arguments = arguments {
-        require("amount", "You must specify the amount of money to give!", description = "The value to set the land's balance to. Supports expressions.", type = ArgType.EXPRESSION)
-        optional("only_trusted", description = "Whether to restrict the effect to trusted land members. Defaults to true.", type = ArgType.BOOLEAN, default = "true")
+        require(
+            "amount",
+            "You must specify the amount of money to give!",
+            description = "The value to set the land's balance to. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
+        optional(
+            "only_trusted",
+            description = "Whether to restrict the effect to trusted land members. Defaults to true.",
+            type = ArgType.BOOLEAN,
+            default = "true"
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {

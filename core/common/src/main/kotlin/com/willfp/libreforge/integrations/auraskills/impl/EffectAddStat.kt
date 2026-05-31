@@ -19,8 +19,18 @@ object EffectAddStat : Effect<NoCompileData>("add_stat") {
     override val categories = setOf("player")
 
     override val arguments = arguments {
-        require("stat", "You must specify the stat!", description = "The AuraSkills stat ID to add to, e.g. auraskills:strength.", type = ArgType.STRING)
-        require("amount", "You must specify the amount!", description = "The amount to add to the stat. Supports expressions.", type = ArgType.EXPRESSION)
+        require(
+            "stat",
+            "You must specify the stat!",
+            description = "The AuraSkills stat ID to add to, e.g. strength.",
+            type = ArgType.STRING
+        )
+        require(
+            "amount",
+            "You must specify the amount!",
+            description = "The amount to add to the stat. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
     }
 
     override val shouldReload = false

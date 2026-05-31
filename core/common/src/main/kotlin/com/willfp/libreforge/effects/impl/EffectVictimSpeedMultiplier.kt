@@ -14,7 +14,7 @@ import org.bukkit.attribute.Attribute
 
 object EffectVictimSpeedMultiplier : Effect<NoCompileData>("victim_speed_multiplier") {
     override val description = "Temporarily multiplies the victim's movement speed for a given duration."
-    override val categories = setOf("movement", "combat")
+    override val categories = setOf("movement", "combat", "attribute")
 
     private const val META_KEY = "libreforge-vms"
 

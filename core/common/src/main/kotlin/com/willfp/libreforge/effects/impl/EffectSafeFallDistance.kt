@@ -15,7 +15,7 @@ object EffectSafeFallDistance : AttributeEffect(
     AttributeModifier.Operation.ADD_NUMBER
 ) {
     override val description = "Increases the player's safe fall distance, reducing fall damage taken."
-    override val categories = setOf("movement", "player")
+    override val categories = setOf("movement", "player", "attribute")
 
     override val arguments = arguments {
         require(

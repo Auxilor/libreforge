@@ -20,8 +20,18 @@ object EffectGiveEdPrisonEconomy : Effect<String?>("give_edprison_economy") {
     )
 
     override val arguments = arguments {
-        require("type", "You must specify the type of economy to give!", description = "The EdPrison economy currency ID to give.", type = ArgType.STRING)
-        require("amount", "You must specify the amount of economy to give!", description = "The amount of currency to give. Supports expressions.", type = ArgType.EXPRESSION)
+        require(
+            "type",
+            "You must specify the type of economy to give!",
+            description = "The EdPrison economy currency ID to give.",
+            type = ArgType.STRING
+        )
+        require(
+            "amount",
+            "You must specify the amount of economy to give!",
+            description = "The amount of currency to give. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: String?): Boolean {

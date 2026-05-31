@@ -12,7 +12,7 @@ import com.willfp.libreforge.triggers.TriggerParameter
 
 object EffectMultiplyPoints : Effect<NoCompileData>("multiply_points") {
     override val description = "Multiplies a player's point value for the specified point type by the given amount."
-    override val categories = setOf("economy")
+    override val categories = setOf("economy", "points")
 
     override val parameters = setOf(
         TriggerParameter.PLAYER

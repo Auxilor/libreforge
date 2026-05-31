@@ -11,7 +11,7 @@ import com.willfp.libreforge.triggers.TriggerData
 
 object EffectSetGlobalPoints : Effect<NoCompileData>("set_global_points") {
     override val description = "Sets a global point counter to a specific value."
-    override val categories = setOf("economy")
+    override val categories = setOf("economy", "points")
 
     override val isPermanent = false
 

@@ -28,9 +28,8 @@ import org.bukkit.scoreboard.Team
 import java.util.UUID
 
 object EffectGlowNearbyBlocks : Effect<NoCompileData>("glow_nearby_blocks") {
-    override val description = "Makes nearby blocks glow with configurable colors for a set duration by spawning invisible shulkers."
+    override val description = "Makes nearby blocks glow with configurable colors for a set duration."
     override val categories = setOf("visual", "world")
-    override val additionalInfo = listOf("Shulkers used to create the glow effect are removed when the chunk unloads or the block is broken.")
 
     override val parameters = setOf(
         TriggerParameter.LOCATION

@@ -14,7 +14,7 @@ object EffectKnockbackResistanceMultiplier : AttributeEffect("knockback_resistan
     AttributeModifier.Operation.ADD_NUMBER
 ) {
     override val description = "Multiplies the player's knockback resistance, reducing how far they are pushed when hit."
-    override val categories = setOf("combat", "player")
+    override val categories = setOf("combat", "player", "attribute")
 
     override val arguments = arguments {
         require(

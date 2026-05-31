@@ -20,7 +20,12 @@ class EffectTakeMobCoins(private val plugin: UltimateMobCoinsPlugin) : Effect<No
     )
 
     override val arguments = arguments {
-        require("amount", "You must specify the amount of mobcoins to take!", description = "The amount of mob coins to remove from the player. Supports expressions.", type = ArgType.EXPRESSION)
+        require(
+            "amount",
+            "You must specify the amount of mobcoins to take!",
+            description = "The amount of mob coins to remove from the player. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {

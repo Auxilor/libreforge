@@ -14,7 +14,7 @@ import org.bukkit.event.player.PlayerInteractEvent
 import java.util.UUID
 
 object EffectFeatherStep : Effect<NoCompileData>("feather_step") {
-    override val description = "Allows the player to walk over powder snow without sinking into it."
+    override val description = "Prevents the player trampling crops."
     override val categories = setOf("movement", "player")
 
     private val players = listMap<UUID, UUID>()

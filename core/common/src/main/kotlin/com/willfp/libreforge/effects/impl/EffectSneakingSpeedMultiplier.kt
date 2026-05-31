@@ -15,7 +15,7 @@ object EffectSneakingSpeedMultiplier : AttributeEffect(
     AttributeModifier.Operation.MULTIPLY_SCALAR_1
 ) {
     override val description = "Multiplies the player's movement speed while they are sneaking."
-    override val categories = setOf("movement", "player")
+    override val categories = setOf("movement", "player", "attribute")
 
     override val arguments = arguments {
         require(

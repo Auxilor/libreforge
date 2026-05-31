@@ -18,7 +18,12 @@ object EffectStopAnimation : Effect<NoCompileData>("stop_animation") {
     override val isPermanent = false
 
     override val arguments = arguments {
-        require("animation", "You must specify the animation name!", description = "The name of the animation to stop.", type = ArgType.STRING)
+        require(
+            "animation",
+            "You must specify the animation name!",
+            description = "The name of the animation to stop.",
+            type = ArgType.STRING
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {

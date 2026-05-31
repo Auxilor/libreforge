@@ -11,7 +11,7 @@ import com.willfp.libreforge.triggers.TriggerData
 
 object EffectGiveItemPoints : Effect<NoCompileData>("give_item_points") {
     override val description = "Adds points to a specific point type on the triggering item."
-    override val categories = setOf("economy")
+    override val categories = setOf("economy", "points")
 
     override val isPermanent = false
 

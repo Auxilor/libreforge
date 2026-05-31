@@ -15,7 +15,7 @@ object EffectOxygenBonus : AttributeEffect(
     AttributeModifier.Operation.ADD_NUMBER
 ) {
     override val description = "Permanently adds bonus oxygen (air bubbles) to the player while the holder is active."
-    override val categories = setOf("player")
+    override val categories = setOf("player", "attribute")
 
     override val arguments = arguments {
         require(

@@ -15,7 +15,7 @@ object EffectScale : AttributeEffect(
     AttributeModifier.Operation.MULTIPLY_SCALAR_1
 ) {
     override val description = "Scales the entity's size by a given multiplier."
-    override val categories = setOf("entity")
+    override val categories = setOf("entity", "attribute")
 
     override val arguments = arguments {
         require(

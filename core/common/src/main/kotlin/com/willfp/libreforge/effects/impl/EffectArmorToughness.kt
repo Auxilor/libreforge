@@ -15,7 +15,7 @@ object EffectArmorToughness : AttributeEffect(
     AttributeModifier.Operation.ADD_NUMBER
 ) {
     override val description = "Permanently increases or decreases the player's armor toughness attribute while the holder is active."
-    override val categories = setOf("combat", "player")
+    override val categories = setOf("combat", "player", "attribute")
 
     override val arguments = arguments {
         require(

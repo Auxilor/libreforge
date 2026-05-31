@@ -11,7 +11,7 @@ import com.willfp.libreforge.triggers.TriggerData
 
 object EffectGiveGlobalPoints : Effect<NoCompileData>("give_global_points") {
     override val description = "Adds points to a global (server-wide) point counter when triggered."
-    override val categories = setOf("economy")
+    override val categories = setOf("economy", "points")
 
     override val isPermanent = false
 

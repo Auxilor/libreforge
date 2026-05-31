@@ -11,7 +11,7 @@ import com.willfp.libreforge.triggers.TriggerData
 
 object EffectMultiplyGlobalPoints : Effect<NoCompileData>("multiply_global_points") {
     override val description = "Multiplies a global point counter by the specified amount."
-    override val categories = setOf("economy")
+    override val categories = setOf("economy", "points")
 
     override val isPermanent = false
 

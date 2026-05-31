@@ -8,6 +8,7 @@ import org.bukkit.event.EventHandler
 object EffectMobCoinsDropMultiplier : MultiplierEffect("mob_coins_drop_multiplier") {
     override val description = "Multiplies the amount of UltimateMobCoins received from mob kills while the holder is active."
     override val categories = setOf("economy")
+
     @EventHandler(ignoreCancelled = true)
     fun handle(event: MobCoinsReceiveEvent) {
         val player = event.player

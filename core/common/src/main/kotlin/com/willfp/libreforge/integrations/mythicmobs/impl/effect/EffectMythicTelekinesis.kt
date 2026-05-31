@@ -26,7 +26,12 @@ object EffectMythicTelekinesis : Effect<NoCompileData>("telekinesis") {
     override val categories = setOf("inventory")
 
     override val arguments = arguments {
-        optional("on_tamed_mob_kills", description = "Whether telekinesis also applies when the kill was made by the player's tamed mob. Defaults to false.", type = ArgType.BOOLEAN, default = "false")
+        optional(
+            "on_tamed_mob_kills",
+            description = "Whether telekinesis also applies when the kill was made by the player's tamed mob. Defaults to false.",
+            type = ArgType.BOOLEAN,
+            default = "false"
+        )
     }
 
     private val players = listMap<UUID, UUID>()

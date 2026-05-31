@@ -15,7 +15,7 @@ object EffectKnockbackMultiplier : AttributeEffect(
     AttributeModifier.Operation.MULTIPLY_SCALAR_1
 ) {
     override val description = "Multiplies the knockback dealt by the player when attacking."
-    override val categories = setOf("combat", "player")
+    override val categories = setOf("combat", "player", "attribute")
 
     override val arguments = arguments {
         require(

@@ -20,7 +20,7 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
 object EffectSellItems : Effect<Collection<TestableItem>?>("sell_items") {
-    override val description = "Sells sellable items from the player's inventory or drop event, crediting the player with money."
+    override val description = "Sells sellable items from the drop trigger."
     override val categories = setOf("economy", "inventory")
 
     override val parameters = setOf(

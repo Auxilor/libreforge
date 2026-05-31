@@ -16,7 +16,7 @@ import java.util.UUID
 
 object EffectAddPoints : Effect<NoCompileData>("add_points") {
     override val description = "Permanently increases a player's point counter while the holder is active."
-    override val categories = setOf("economy")
+    override val categories = setOf("economy", "points")
 
     override val arguments = arguments {
         require(

@@ -12,7 +12,7 @@ import com.willfp.libreforge.triggers.TriggerParameter
 
 object EffectSetItemPoints : Effect<NoCompileData>("set_item_points") {
     override val description = "Sets a point value on the trigger item to a specific amount."
-    override val categories = setOf("economy")
+    override val categories = setOf("economy", "points")
 
     override val parameters = setOf(
         TriggerParameter.ITEM

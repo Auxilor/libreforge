@@ -15,7 +15,7 @@ object EffectMiningSpeedMultiplier : AttributeEffect(
     AttributeModifier.Operation.MULTIPLY_SCALAR_1
 ) {
     override val description = "Multiplies the player's overall block-break speed while the holder is active."
-    override val categories = setOf("world", "player")
+    override val categories = setOf("world", "player", "attribute")
 
     override val arguments = arguments {
         require(

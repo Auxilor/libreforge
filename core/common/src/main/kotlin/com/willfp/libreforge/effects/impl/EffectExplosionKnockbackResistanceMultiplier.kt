@@ -14,7 +14,7 @@ object EffectExplosionKnockbackResistanceMultiplier : AttributeEffect("explosion
     AttributeModifier.Operation.ADD_NUMBER
 ) {
     override val description = "Adds a flat value to the player's explosion knockback resistance attribute."
-    override val categories = setOf("combat", "player")
+    override val categories = setOf("combat", "player", "attribute")
 
     override val arguments = arguments {
         require(

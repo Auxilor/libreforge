@@ -21,7 +21,12 @@ class EffectGivePermission(
     override val categories = setOf("player")
 
     override val arguments = arguments {
-        require("permission", "You must specify the permission!", description = "The permission node to grant the player.", type = ArgType.STRING)
+        require(
+            "permission",
+            "You must specify the permission!",
+            description = "The permission node to grant the player.",
+            type = ArgType.STRING
+        )
     }
 
     private val permissions = listMap<UUID, GivenPermission>()

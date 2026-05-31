@@ -12,7 +12,7 @@ import com.willfp.libreforge.triggers.TriggerParameter
 
 object EffectSetPoints : Effect<NoCompileData>("set_points") {
     override val description = "Sets a player's point counter to a specific value."
-    override val categories = setOf("economy")
+    override val categories = setOf("economy", "points")
 
     override val parameters = setOf(
         TriggerParameter.PLAYER

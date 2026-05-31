@@ -15,7 +15,7 @@ object EffectMovementEfficiencyMultiplier : AttributeEffect(
     AttributeModifier.Operation.MULTIPLY_SCALAR_1
 ) {
     override val description = "Multiplies the player's movement efficiency, reducing the speed penalty from blocks like soul sand."
-    override val categories = setOf("movement", "player")
+    override val categories = setOf("movement", "player", "attribute")
 
     override val arguments = arguments {
         require(

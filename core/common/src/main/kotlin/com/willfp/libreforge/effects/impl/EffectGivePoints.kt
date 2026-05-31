@@ -12,7 +12,7 @@ import com.willfp.libreforge.triggers.TriggerParameter
 
 object EffectGivePoints : Effect<NoCompileData>("give_points") {
     override val description = "Adds points to a specific player point type when triggered."
-    override val categories = setOf("economy")
+    override val categories = setOf("economy", "points")
 
     override val parameters = setOf(
         TriggerParameter.PLAYER

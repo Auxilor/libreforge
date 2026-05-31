@@ -14,7 +14,7 @@ import java.util.UUID
 
 object EffectAddGlobalPoints : Effect<NoCompileData>("add_global_points") {
     override val description = "Permanently increases a global point counter while the holder is active."
-    override val categories = setOf("economy")
+    override val categories = setOf("economy", "points")
 
     override val arguments = arguments {
         require(

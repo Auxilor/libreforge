@@ -10,7 +10,7 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.inventory.meta.EnchantmentStorageMeta
 
 object EffectRemoveRandomEnchant : Effect<NoCompileData>("remove_random_enchant") {
-    override val description = "Removes a randomly chosen enchantment from the triggering item, with an optional level-reduction mode."
+    override val description = "Removes a randomly chosen enchantment from the triggering item."
     override val categories = setOf("inventory")
 
     override val parameters = setOf(

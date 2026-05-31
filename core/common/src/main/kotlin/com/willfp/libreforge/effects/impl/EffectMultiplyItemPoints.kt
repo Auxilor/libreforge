@@ -11,7 +11,7 @@ import com.willfp.libreforge.triggers.TriggerData
 
 object EffectMultiplyItemPoints : Effect<NoCompileData>("multiply_item_points") {
     override val description = "Multiplies a point value stored on the found item by the specified amount."
-    override val categories = setOf("economy")
+    override val categories = setOf("economy", "points")
 
     override val isPermanent = false
 

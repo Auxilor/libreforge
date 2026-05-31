@@ -15,7 +15,7 @@ object EffectUnderwaterMiningSpeedMultiplier : AttributeEffect(
     AttributeModifier.Operation.MULTIPLY_SCALAR_1
 ) {
     override val description = "Multiplies the player's mining speed while submerged underwater."
-    override val categories = setOf("world", "player")
+    override val categories = setOf("world", "player", "attribute")
 
     override val arguments = arguments {
         require(

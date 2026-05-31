@@ -15,7 +15,7 @@ object EffectJumpStrengthMultiplier : AttributeEffect(
     AttributeModifier.Operation.MULTIPLY_SCALAR_1
 ) {
     override val description = "Multiplies the player's jump strength, making them jump higher or lower."
-    override val categories = setOf("movement", "player")
+    override val categories = setOf("movement", "player", "attribute")
 
     override val arguments = arguments {
         require(

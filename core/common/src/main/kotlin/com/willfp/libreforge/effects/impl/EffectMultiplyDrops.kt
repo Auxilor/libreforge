@@ -20,6 +20,7 @@ import kotlin.math.roundToInt
 object EffectMultiplyDrops : Effect<NoCompileData>("multiply_drops") {
     override val description = "Multiplies the item drops from an event, either by a flat multiplier or by simulating a fortune level."
     override val categories = setOf("inventory")
+    override val additionalInfo = listOf("Requires a drop trigger: block_item_drop, entity_item_drop, catch_fish, & shear")
 
     override val parameters = setOf(
         TriggerParameter.EVENT

@@ -15,7 +15,7 @@ object EffectBurningTimeMultiplier : AttributeEffect(
     AttributeModifier.Operation.MULTIPLY_SCALAR_1
 ) {
     override val description = "Multiplies the duration the player burns when on fire while the holder is active."
-    override val categories = setOf("combat", "player")
+    override val categories = setOf("combat", "player", "attribute")
 
     override val arguments = arguments {
         require(

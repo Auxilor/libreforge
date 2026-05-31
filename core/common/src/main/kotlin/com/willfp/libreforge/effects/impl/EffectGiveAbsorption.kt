@@ -12,7 +12,7 @@ import org.bukkit.attribute.Attribute
 
 object EffectGiveAbsorption : Effect<NoCompileData>("give_absorption") {
     override val description = "Grants the player additional absorption hearts, expanding the max absorption cap if needed."
-    override val categories = setOf("player")
+    override val categories = setOf("player", "attribute")
 
     override val parameters = setOf(
         TriggerParameter.PLAYER

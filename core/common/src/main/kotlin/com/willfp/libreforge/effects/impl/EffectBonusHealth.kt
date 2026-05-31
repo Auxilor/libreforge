@@ -15,7 +15,7 @@ object EffectBonusHealth : AttributeEffect(
     AttributeModifier.Operation.ADD_NUMBER
 ) {
     override val description = "Permanently increases the player's max health while the holder is active."
-    override val categories = setOf("player")
+    override val categories = setOf("player", "attribute")
 
     override val arguments = arguments {
         require(

@@ -15,7 +15,7 @@ object EffectEntityReach : AttributeEffect(
     AttributeModifier.Operation.ADD_NUMBER
 ) {
     override val description = "Increases the player's entity interaction range while the holder is active."
-    override val categories = setOf("player")
+    override val categories = setOf("player", "attribute")
 
     override val arguments = arguments {
         require(

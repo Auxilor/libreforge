@@ -19,8 +19,18 @@ object EffectGiveEdPrisonPouch : Effect<NoCompileData>("give_edprison_pouch") {
     )
 
     override val arguments = arguments {
-        require("type", "You must specify the type of pouch!", description = "The EdPrison pouch ID to give.", type = ArgType.STRING)
-        require("unlocked", "You must specify whether the pouch is unlocked!", description = "Whether the pouch starts fully unlocked.", type = ArgType.BOOLEAN)
+        require(
+            "type",
+            "You must specify the type of pouch!",
+            description = "The EdPrison pouch ID to give.",
+            type = ArgType.STRING
+        )
+        require(
+            "unlocked",
+            "You must specify whether the pouch is unlocked!",
+            description = "Whether the pouch starts fully unlocked.",
+            type = ArgType.BOOLEAN
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {

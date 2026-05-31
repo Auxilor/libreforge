@@ -8,7 +8,7 @@ import org.bukkit.event.entity.EntityRegainHealthEvent
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason
 
 object EffectRegenMultiplier : MultiMultiplierEffect<RegainReason>("regen_multiplier") {
-    override val description = "Multiplies the amount of health regenerated, optionally scoped to a specific regen reason."
+    override val description = "Multiplies the amount of health regenerated."
     override val categories = setOf("player", "combat")
     override val key: String = "reason"
 

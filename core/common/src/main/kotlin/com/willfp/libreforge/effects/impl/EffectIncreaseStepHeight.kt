@@ -15,7 +15,7 @@ object EffectIncreaseStepHeight : AttributeEffect(
     AttributeModifier.Operation.ADD_NUMBER
 ) {
     override val description = "Increases the player's step height, allowing them to walk up taller blocks without jumping."
-    override val categories = setOf("movement", "player")
+    override val categories = setOf("movement", "player", "attribute")
 
     override val arguments = arguments {
         require(

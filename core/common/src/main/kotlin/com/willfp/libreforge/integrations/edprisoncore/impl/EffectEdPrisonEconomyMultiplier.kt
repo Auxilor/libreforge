@@ -3,9 +3,11 @@ package com.willfp.libreforge.integrations.edprisoncore.impl
 import com.edwardbelt.edprison.events.EdPrisonAddMultiplierCurrency
 import com.edwardbelt.edprison.utils.EconomyUtils
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ViolationContext
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.templates.MultiMultiplierEffect
 import com.willfp.libreforge.toDispatcher
 import org.bukkit.Bukkit
@@ -14,6 +16,20 @@ import org.bukkit.event.EventHandler
 object EffectEdPrisonEconomyMultiplier : MultiMultiplierEffect<String>("edprison_economy_multiplier") {
     override val description = "Multiplies EdPrison economy earnings for one or all economy types while the holder is active."
     override val categories = setOf("economy")
+
+    override val arguments = arguments {
+        require(
+            "multiplier",
+            "You must specify the multiplier!",
+            description = "The economy earnings multiplier. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
+        optional(
+            "economies",
+            description = "List of EdPrison economy types to apply the multiplier to. If omitted, applies to all economies.",
+            type = ArgType.STRING_LIST
+        )
+    }
 
     override val key = "economies"
 

@@ -18,8 +18,18 @@ object EffectGiveMcMMOXp : Effect<NoCompileData>("give_mcmmo_xp") {
     )
 
     override val arguments = arguments {
-        require("amount", "You must specify the amount of xp to give!", description = "The amount of raw XP to give. Supports expressions.", type = ArgType.EXPRESSION)
-        require("skill", "You must specify the skill to give xp for!", description = "The McMMO skill name to give XP for, e.g. mining.", type = ArgType.STRING)
+        require(
+            "amount",
+            "You must specify the amount of xp to give!",
+            description = "The amount of raw XP to give. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
+        require(
+            "skill",
+            "You must specify the skill to give xp for!",
+            description = "The McMMO skill name to give XP for, e.g. mining.",
+            type = ArgType.STRING
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {

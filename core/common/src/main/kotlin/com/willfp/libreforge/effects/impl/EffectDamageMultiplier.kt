@@ -15,7 +15,7 @@ import org.bukkit.event.entity.EntityDamageEvent
 object EffectDamageMultiplier : Effect<NoCompileData>("damage_multiplier") {
     override val description = "Multiplies the damage of the triggering attack."
     override val categories = setOf("combat")
-    override val additionalInfo = listOf("Requires a trigger that provides EVENT (e.g. on_attack, take_damage).")
+    override val additionalInfo = listOf("Requires a damage trigger (e.g. melee_attack, take_damage).")
 
     override val supportsDelay = false
 

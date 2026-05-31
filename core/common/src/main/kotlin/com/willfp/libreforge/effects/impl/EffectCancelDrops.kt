@@ -14,7 +14,7 @@ import com.willfp.libreforge.triggers.event.EditableDropEvent
 object EffectCancelDrops : Effect<NoCompileData>("cancel_drops") {
     override val description = "Cancels item drops from the triggering event. If on_drops is specified, only those items are removed."
     override val categories = setOf("inventory", "world")
-    override val additionalInfo = listOf("Requires a trigger that provides EVENT with drop data (e.g. mine_block, entity_death).")
+    override val additionalInfo = listOf("Requires a drop trigger: block_item_drop, entity_item_drop, catch_fish, & shear")
 
     override val parameters = setOf(
         TriggerParameter.EVENT

@@ -13,7 +13,7 @@ import com.willfp.libreforge.toPlaceholderContext
 import com.willfp.libreforge.triggers.TriggerData
 
 object EffectRunChain : Effect<NoCompileData>("run_chain") {
-    override val description = "Runs a named chain of effects defined elsewhere in the configuration."
+    override val description = "Runs a named chain of effects defined in `plugins/libreforge/chains.yml`."
     override val categories = setOf("meta")
 
     override val isPermanent = false

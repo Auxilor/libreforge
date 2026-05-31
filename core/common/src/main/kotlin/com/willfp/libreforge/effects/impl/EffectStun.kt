@@ -12,7 +12,7 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.util.Vector
 
 object EffectStun : Effect<NoCompileData>("stun") {
-    override val description = "Prevents the victim entity from moving by zeroing its velocity each tick for a duration."
+    override val description = "Prevents the victim entity from moving for a duration."
     override val categories = setOf("combat")
 
     override val parameters = setOf(

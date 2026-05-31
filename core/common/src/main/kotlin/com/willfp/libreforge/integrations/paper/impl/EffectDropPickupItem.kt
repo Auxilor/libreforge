@@ -34,10 +34,28 @@ object EffectDropPickupItem : Effect<Chain?>("drop_pickup_item") {
     )
 
     override val arguments = arguments {
-        require("item", "You must specify the item to drop!", description = "The item to drop at the trigger location.", type = ArgType.ITEM)
-        require("effects", "You must specify the effects to run on pickup!", description = "The effects to run when a player picks up the dropped item.", type = ArgType.ANY)
-        optional("glow-color", description = "The ChatColor name to make the dropped item glow with (e.g. RED, GOLD).", type = ArgType.STRING)
-        optional("run-type", description = "The chain executor type to use for the pickup effects.", type = ArgType.STRING)
+        require(
+            "item",
+            "You must specify the item to drop!",
+            description = "The item to drop at the trigger location.",
+            type = ArgType.ITEM
+        )
+        require(
+            "effects",
+            "You must specify the effects to run on pickup!",
+            description = "The effects to run when a player picks up the dropped item.",
+            type = ArgType.ANY
+        )
+        optional(
+            "glow-color",
+            description = "The ChatColor name to make the dropped item glow with (e.g. RED, GOLD).",
+            type = ArgType.STRING
+        )
+        optional(
+            "run-type",
+            description = "The chain executor type to use for the pickup effects.",
+            type = ArgType.STRING
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: Chain?): Boolean {
