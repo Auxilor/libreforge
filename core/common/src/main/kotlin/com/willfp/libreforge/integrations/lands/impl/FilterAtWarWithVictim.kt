@@ -1,6 +1,7 @@
 package com.willfp.libreforge.integrations.lands.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.filters.Filter
 import com.willfp.libreforge.plugin
@@ -10,6 +11,11 @@ import me.angeschossen.lands.api.war.War
 import org.bukkit.entity.Player
 
 object FilterAtWarWithVictim : Filter<NoCompileData, Boolean>("at_war_with_victim") {
+    override val description = "Matches when the player and victim are (or are not) at war with each other in Lands."
+    override val categories = setOf("combat", "player")
+    override val valueType = ArgType.BOOLEAN
+    override val additionalInfo = listOf("Passes automatically when either the player or victim is not a Lands player.")
+
     override fun getValue(config: Config, data: TriggerData?, key: String): Boolean {
         return config.getBool(key)
     }
