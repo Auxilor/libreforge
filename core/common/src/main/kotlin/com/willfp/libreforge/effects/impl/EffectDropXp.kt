@@ -11,12 +11,20 @@ import org.bukkit.entity.ExperienceOrb
 import kotlin.random.Random
 
 object EffectDropXp : Effect<NoCompileData>("drop_xp") {
+    override val description = "Drops experience orbs at the trigger location."
+    override val categories = setOf("economy")
+
     override val parameters = setOf(
         TriggerParameter.LOCATION
     )
 
     override val arguments = arguments {
-        require("xp", "You must specify the amount of xp to drop!")
+        require(
+            "xp",
+            "You must specify the amount of xp to drop!",
+            description = "The amount of experience to drop. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
     }
 
     private val XP_TIERS = intArrayOf(2477, 1237, 617, 307, 149, 73, 37, 17, 7, 3, 1)

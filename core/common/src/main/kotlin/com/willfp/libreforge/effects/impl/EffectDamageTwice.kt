@@ -9,6 +9,10 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 
 object EffectDamageTwice : Effect<NoCompileData>("damage_twice") {
+    override val description = "Causes the victim to take the triggering hit's damage a second time."
+    override val categories = setOf("combat")
+    override val additionalInfo = listOf("Requires a trigger that provides both VICTIM and EVENT.")
+
     override val supportsDelay = false
 
     override val parameters = setOf(

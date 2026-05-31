@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
@@ -12,9 +13,22 @@ import com.willfp.libreforge.globalPoints
 import java.util.UUID
 
 object EffectAddGlobalPoints : Effect<NoCompileData>("add_global_points") {
+    override val description = "Permanently increases a global point counter while the holder is active."
+    override val categories = setOf("economy")
+
     override val arguments = arguments {
-        require("type", "You must specify the type of points!")
-        require("amount", "You must specify the amount of points!")
+        require(
+            "type",
+            "You must specify the type of points!",
+            description = "The global point type to add to.",
+            type = ArgType.STRING
+        )
+        require(
+            "amount",
+            "You must specify the amount of points!",
+            description = "The amount of global points to add. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
     }
 
     private val tracker = mutableMapOf<UUID, AddedPoint>()

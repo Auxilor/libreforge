@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -12,6 +13,9 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
 object EffectAnimation : Effect<AnimationBlock<*, *>?>("animation") {
+    override val description = "Plays a named animation at the trigger location."
+    override val categories = setOf("visual")
+
     override val parameters = setOf(
         TriggerParameter.LOCATION
     )
@@ -20,8 +24,13 @@ object EffectAnimation : Effect<AnimationBlock<*, *>?>("animation") {
         require("animation", "You must specify a valid animation!", Config::getString) {
             Animations[it] != null
         }
+        describe(
+            "animation",
+            description = "The animation to play.",
+            type = ArgType.STRING
+        )
 
-        inherit("animation_args") { Animations[it.getString("animation")] }
+        inherit("animation_args", description = "Configuration for the selected animation type.") { Animations[it.getString("animation")] }
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: AnimationBlock<*, *>?): Boolean {

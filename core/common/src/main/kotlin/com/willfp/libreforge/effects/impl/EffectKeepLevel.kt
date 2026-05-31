@@ -12,6 +12,9 @@ import org.bukkit.event.entity.PlayerDeathEvent
 import java.util.UUID
 
 object EffectKeepLevel : Effect<NoCompileData>("keep_level") {
+    override val description = "Prevents the player from losing their XP levels on death."
+    override val categories = setOf("economy", "player")
+
     private val players = listMap<UUID, UUID>()
 
     override fun onEnable(

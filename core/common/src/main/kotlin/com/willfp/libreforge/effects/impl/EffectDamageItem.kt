@@ -7,6 +7,9 @@ import org.bukkit.inventory.ItemStack
 
 
 object EffectDamageItem : DamageItemEffect("damage_item") {
+    override val description = "Applies durability damage to the triggering item."
+    override val categories = setOf("inventory")
+
     override val isPermanent = false
 
     override fun getItems(data: TriggerData): List<ItemStack> {

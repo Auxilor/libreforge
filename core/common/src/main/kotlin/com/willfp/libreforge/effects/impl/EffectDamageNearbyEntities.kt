@@ -15,6 +15,9 @@ import org.bukkit.entity.LivingEntity
 import java.util.UUID
 
 object EffectDamageNearbyEntities : Effect<Collection<TestableEntity>>("damage_nearby_entities") {
+    override val description = "Deals damage to all nearby entities within a radius."
+    override val categories = setOf("combat")
+
     private val damagedEntities = mutableSetOf<UUID>()
 
     override val parameters = setOf(
@@ -22,9 +25,35 @@ object EffectDamageNearbyEntities : Effect<Collection<TestableEntity>>("damage_n
     )
 
     override val arguments = arguments {
-        require("radius", "You must specify the radius!")
-        require("damage_as_player", "You must specify if the player should be marked as the damager!")
-        require("damage", "You must specify the damage to deal!")
+        require(
+            "radius",
+            "You must specify the radius!",
+            description = "The radius to damage entities within. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
+        require(
+            "damage_as_player",
+            "You must specify if the player should be marked as the damager!",
+            description = "Whether the player is attributed as the source of damage.",
+            type = ArgType.BOOLEAN
+        )
+        require(
+            "damage",
+            "You must specify the damage to deal!",
+            description = "The amount of damage to deal to each entity. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
+        optional(
+            "entities",
+            description = "If specified, only these entity types will be damaged.",
+            type = ArgType.ENTITY_LIST
+        )
+        optional(
+            "damage_self",
+            description = "Whether the player can damage themselves with this effect.",
+            type = ArgType.BOOLEAN,
+            default = "true"
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: Collection<TestableEntity>): Boolean {

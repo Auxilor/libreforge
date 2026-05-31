@@ -9,6 +9,9 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 
 object EffectJobsXpMultiplier : MultiMultiplierEffect<Job>("jobs_xp_multiplier") {
+    override val description = "Multiplies XP earned from Jobs for one or all jobs while the holder is active."
+    override val categories = setOf("economy")
+
     override val key = "jobs"
 
     override fun getElement(key: String): Job? {

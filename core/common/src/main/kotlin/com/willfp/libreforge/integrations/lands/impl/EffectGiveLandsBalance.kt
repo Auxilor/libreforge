@@ -1,6 +1,7 @@
 package com.willfp.libreforge.integrations.lands.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -12,12 +13,16 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import me.angeschossen.lands.api.LandsIntegration
 
 object EffectGiveLandsBalance : Effect<NoCompileData>("give_lands_balance") {
+    override val description = "Adds money to the Lands balance of the land at the trigger location."
+    override val categories = setOf("economy")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER
     )
 
     override val arguments = arguments {
-        require("amount", "You must specify the amount of money to give!")
+        require("amount", "You must specify the amount of money to give!", description = "The amount to add to the land's balance. Supports expressions.", type = ArgType.EXPRESSION)
+        optional("only_trusted", description = "Whether to restrict the effect to trusted land members. Defaults to true.", type = ArgType.BOOLEAN, default = "true")
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {

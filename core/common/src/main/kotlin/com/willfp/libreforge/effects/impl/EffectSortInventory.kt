@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -8,12 +9,21 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
 object EffectSortInventory : Effect<NoCompileData>("sort_inventory") {
+    override val description = "Sorts items in the player's inventory by material name and stack size."
+    override val categories = setOf("inventory", "player")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER
     )
 
     override val arguments = arguments {
-        require("type", "You must specify the inventory type (all/hotbar/main)!")
+        require(
+            "type",
+            "You must specify the inventory type (all/hotbar/main)!",
+            description = "Which section of the inventory to sort: all, hotbar, or main.",
+            type = ArgType.STRING,
+            choices = listOf("all", "hotbar", "main")
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {

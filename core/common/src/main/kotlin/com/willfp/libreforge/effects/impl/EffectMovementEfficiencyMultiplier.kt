@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.templates.AttributeEffect
 import org.bukkit.attribute.Attribute
@@ -13,8 +14,16 @@ object EffectMovementEfficiencyMultiplier : AttributeEffect(
     Attribute.MOVEMENT_EFFICIENCY,
     AttributeModifier.Operation.MULTIPLY_SCALAR_1
 ) {
+    override val description = "Multiplies the player's movement efficiency, reducing the speed penalty from blocks like soul sand."
+    override val categories = setOf("movement", "player")
+
     override val arguments = arguments {
-        require("multiplier", "You must specify the movement efficiency multiplier!")
+        require(
+            "multiplier",
+            "You must specify the movement efficiency multiplier!",
+            description = "The movement efficiency multiplier to apply (e.g. 2 = double efficiency). Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
     }
 
     override fun getValue(config: Config, entity: LivingEntity) =

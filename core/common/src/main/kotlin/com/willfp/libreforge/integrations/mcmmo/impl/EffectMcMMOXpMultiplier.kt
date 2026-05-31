@@ -8,6 +8,9 @@ import com.willfp.libreforge.toDispatcher
 import org.bukkit.event.EventHandler
 
 object EffectMcMMOXpMultiplier : MultiMultiplierEffect<PrimarySkillType>("mcmmo_xp_multiplier") {
+    override val description = "Multiplies McMMO XP gained for one or all skills while the holder is active."
+    override val categories = setOf("economy")
+
     override val key = "skills"
 
     override fun getElement(key: String): PrimarySkillType? {

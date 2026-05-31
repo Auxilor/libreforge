@@ -5,6 +5,7 @@ package com.willfp.libreforge.integrations.paper.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.items.Items
 import com.willfp.eco.util.TeamUtils
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Chain
@@ -22,6 +23,9 @@ import org.bukkit.event.player.PlayerAttemptPickupItemEvent
 import org.bukkit.scoreboard.Team
 
 object EffectDropPickupItem : Effect<Chain?>("drop_pickup_item") {
+    override val description = "Drops a custom item at the trigger location that executes a set of effects when a player picks it up."
+    override val categories = setOf("inventory")
+
     private const val META_KEY = "libreforge:pickup_item"
 
     override val parameters = setOf(
@@ -30,8 +34,10 @@ object EffectDropPickupItem : Effect<Chain?>("drop_pickup_item") {
     )
 
     override val arguments = arguments {
-        require("item", "You must specify the item to drop!")
-        require("effects", "You must specify the effects to run on pickup!")
+        require("item", "You must specify the item to drop!", description = "The item to drop at the trigger location.", type = ArgType.ITEM)
+        require("effects", "You must specify the effects to run on pickup!", description = "The effects to run when a player picks up the dropped item.", type = ArgType.ANY)
+        optional("glow-color", description = "The ChatColor name to make the dropped item glow with (e.g. RED, GOLD).", type = ArgType.STRING)
+        optional("run-type", description = "The chain executor type to use for the pickup effects.", type = ArgType.STRING)
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: Chain?): Boolean {

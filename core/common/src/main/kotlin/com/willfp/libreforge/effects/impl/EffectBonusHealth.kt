@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.templates.AttributeEffect
 import org.bukkit.attribute.Attribute
@@ -13,8 +14,16 @@ object EffectBonusHealth : AttributeEffect(
     Attribute.MAX_HEALTH,
     AttributeModifier.Operation.ADD_NUMBER
 ) {
+    override val description = "Permanently increases the player's max health while the holder is active."
+    override val categories = setOf("player")
+
     override val arguments = arguments {
-        require("health", "You must specify the bonus health to give!")
+        require(
+            "health",
+            "You must specify the bonus health to give!",
+            description = "The amount of bonus max health to add. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
     }
 
     override val shouldReload = false

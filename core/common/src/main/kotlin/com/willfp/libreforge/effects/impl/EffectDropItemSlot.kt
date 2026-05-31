@@ -10,12 +10,25 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
 object EffectDropItemSlot : Effect<NoCompileData>("drop_item_slot") {
+    override val description = "Drops items from a specific inventory slot."
+    override val categories = setOf("inventory")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER
     )
 
     override val arguments = arguments {
-        require("slot", "You must specify the slot to drop the item from!")
+        require(
+            "slot",
+            "You must specify the slot to drop the item from!",
+            description = "The inventory slot to drop items from, e.g. mainhand or slot_0.",
+            type = ArgType.STRING
+        )
+        optional(
+            "amount",
+            description = "How many items to drop. If omitted, drops the entire stack.",
+            type = ArgType.EXPRESSION
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {

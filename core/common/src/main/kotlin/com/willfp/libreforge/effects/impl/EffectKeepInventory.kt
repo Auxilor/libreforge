@@ -12,6 +12,9 @@ import org.bukkit.event.entity.PlayerDeathEvent
 import java.util.UUID
 
 object EffectKeepInventory : Effect<NoCompileData>("keep_inventory") {
+    override val description = "Prevents the player from dropping their inventory on death."
+    override val categories = setOf("player", "inventory")
+
     private val players = listMap<UUID, UUID>()
 
     override fun onEnable(

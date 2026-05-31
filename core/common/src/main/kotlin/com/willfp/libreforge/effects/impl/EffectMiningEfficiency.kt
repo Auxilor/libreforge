@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.templates.AttributeEffect
 import org.bukkit.attribute.Attribute
@@ -13,8 +14,16 @@ object EffectMiningEfficiency : AttributeEffect(
     Attribute.MINING_EFFICIENCY,
     AttributeModifier.Operation.ADD_NUMBER
 ) {
+    override val description = "Increases the player's mining efficiency attribute while the holder is active."
+    override val categories = setOf("world", "player")
+
     override val arguments = arguments {
-        require("amount", "You must specify the amount of efficiency to add!")
+        require(
+            "amount",
+            "You must specify the amount of efficiency to add!",
+            description = "The flat amount of mining efficiency to add. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
     }
 
     override fun canApplyTo(entity: LivingEntity): Boolean {

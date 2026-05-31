@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.templates.AttributeEffect
 import org.bukkit.attribute.Attribute
@@ -13,8 +14,16 @@ object EffectBurningTimeMultiplier : AttributeEffect(
     Attribute.BURNING_TIME,
     AttributeModifier.Operation.MULTIPLY_SCALAR_1
 ) {
+    override val description = "Multiplies the duration the player burns when on fire while the holder is active."
+    override val categories = setOf("combat", "player")
+
     override val arguments = arguments {
-        require("multiplier", "You must specify the burning time multiplier!")
+        require(
+            "multiplier",
+            "You must specify the burning time multiplier!",
+            description = "The burning time multiplier. Values below 1 reduce burn duration. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
     }
 
     override fun getValue(config: Config, entity: LivingEntity) =

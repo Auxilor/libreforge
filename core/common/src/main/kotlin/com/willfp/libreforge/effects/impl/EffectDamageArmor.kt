@@ -21,12 +21,26 @@ import org.bukkit.inventory.meta.Damageable
 
 
 object EffectDamageArmor : Effect<NoCompileData>("damage_armor") {
+    override val description = "Applies durability damage to the victim's equipped armor."
+    override val categories = setOf("combat", "inventory")
+
     override val parameters = setOf(
         TriggerParameter.VICTIM
     )
 
     override val arguments = arguments {
-        require("damage", "You must specify the amount of damage!")
+        require(
+            "damage",
+            "You must specify the amount of damage!",
+            description = "The durability damage to apply to each armor piece. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
+        optional(
+            "slots",
+            description = "Which armor slots to damage. If omitted, all armor slots are damaged.",
+            type = ArgType.STRING_LIST,
+            choices = listOf("HEAD", "CHEST", "LEGS", "FEET")
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {

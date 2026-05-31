@@ -9,6 +9,9 @@ import dev.aurelium.auraskills.api.skill.Skill
 import org.bukkit.event.EventHandler
 
 object EffectSkillXpMultiplier : MultiMultiplierEffect<Skill>("skill_xp_multiplier") {
+    override val description = "Multiplies AuraSkills XP gained for one or all skills while the holder is active."
+    override val categories = setOf("player")
+
     override val key = "skills"
 
     override fun getElement(key: String): Skill {

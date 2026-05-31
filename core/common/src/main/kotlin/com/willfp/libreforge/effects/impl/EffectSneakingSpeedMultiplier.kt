@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.templates.AttributeEffect
 import org.bukkit.attribute.Attribute
@@ -13,8 +14,16 @@ object EffectSneakingSpeedMultiplier : AttributeEffect(
     Attribute.SNEAKING_SPEED,
     AttributeModifier.Operation.MULTIPLY_SCALAR_1
 ) {
+    override val description = "Multiplies the player's movement speed while they are sneaking."
+    override val categories = setOf("movement", "player")
+
     override val arguments = arguments {
-        require("multiplier", "You must specify the speed multiplier!")
+        require(
+            "multiplier",
+            "You must specify the speed multiplier!",
+            description = "The multiplier applied to sneaking speed. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
     }
 
     override fun canApplyTo(entity: LivingEntity): Boolean {

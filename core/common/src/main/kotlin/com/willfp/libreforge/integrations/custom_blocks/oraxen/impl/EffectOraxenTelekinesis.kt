@@ -21,6 +21,9 @@ import org.bukkit.event.EventPriority
 import java.util.UUID
 
 object EffectOraxenTelekinesis : Effect<NoCompileData>("telekinesis") {
+    override val description = "Causes Oraxen block and furniture drops to go directly into the player's inventory instead of dropping on the ground."
+    override val categories = setOf("inventory")
+
     private val players = listMap<UUID, UUID>()
 
     override fun onEnable(

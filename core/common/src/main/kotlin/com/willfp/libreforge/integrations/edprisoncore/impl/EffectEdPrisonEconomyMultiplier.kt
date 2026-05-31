@@ -12,6 +12,9 @@ import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 
 object EffectEdPrisonEconomyMultiplier : MultiMultiplierEffect<String>("edprison_economy_multiplier") {
+    override val description = "Multiplies EdPrison economy earnings for one or all economy types while the holder is active."
+    override val categories = setOf("economy")
+
     override val key = "economies"
 
     override fun getElement(key: String): String? {

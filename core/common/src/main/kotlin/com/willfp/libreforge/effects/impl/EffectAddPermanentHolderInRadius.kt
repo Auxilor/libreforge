@@ -2,6 +2,7 @@ package com.willfp.libreforge.effects.impl
 
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.Holder
 import com.willfp.libreforge.HolderTemplate
@@ -22,9 +23,28 @@ import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 object EffectAddPermanentHolderInRadius : Effect<HolderTemplate>("add_permanent_holder_in_radius") {
+    override val description = "Permanently applies a set of effects and conditions to all nearby entities within a radius while the holder is active."
+    override val categories = setOf("meta")
+
     override val arguments = arguments {
-        require("effects", "You must specify the effects!")
-        require("radius", "You must specify the radius!")
+        require(
+            "effects",
+            "You must specify the effects!",
+            description = "The effects to apply to nearby entities.",
+            type = ArgType.ANY
+        )
+        require(
+            "radius",
+            "You must specify the radius!",
+            description = "The radius to apply effects within. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
+        optional(
+            "apply-to-self",
+            description = "Whether to also apply the effects to the holder owner.",
+            type = ArgType.BOOLEAN,
+            default = "false"
+        )
     }
 
     private val holders = mutableSetOf<PermanentNearbyHolder>()

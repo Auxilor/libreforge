@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -14,13 +15,38 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 
 object EffectFrostNova : Effect<NoCompileData>("frost_nova") {
+    override val description = "Freezes all nearby entities within a radius, optionally also applying a slowness effect."
+    override val categories = setOf("combat")
+
     override val parameters = setOf(
         TriggerParameter.LOCATION
     )
 
     override val arguments = arguments {
-        require("radius", "You must specify the radius!")
-        require("freeze_ticks", "You must specify the freeze duration in ticks!")
+        require(
+            "radius",
+            "You must specify the radius!",
+            description = "The radius around the trigger location in which entities are frozen. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
+        require(
+            "freeze_ticks",
+            "You must specify the freeze duration in ticks!",
+            description = "How many ticks the affected entities are frozen for. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
+        optional(
+            "slow_duration",
+            description = "Duration in ticks of the slowness effect applied alongside freezing. Defaults to 0 (no slowness).",
+            type = ArgType.EXPRESSION,
+            default = "0"
+        )
+        optional(
+            "slow_amplifier",
+            description = "Amplifier level of the slowness effect (0 = Slowness I). Defaults to 0.",
+            type = ArgType.EXPRESSION,
+            default = "0"
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {

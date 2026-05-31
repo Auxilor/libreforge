@@ -2,6 +2,7 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.util.NumberUtils
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -15,14 +16,43 @@ import org.bukkit.entity.Arrow
 import org.bukkit.util.Vector
 
 object EffectArrowStorm : Effect<NoCompileData>("arrow_storm") {
+    override val description = "Rains arrows down from above the trigger location."
+    override val categories = setOf("combat")
+
     override val parameters = setOf(
         TriggerParameter.LOCATION
     )
 
     override val arguments = arguments {
-        require("amount", "You must specify the number of arrows!")
-        require("height", "You must specify the spawn height above target!")
-        require("spread", "You must specify the spread radius!")
+        require(
+            "amount",
+            "You must specify the number of arrows!",
+            description = "The number of arrows to rain down. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
+        require(
+            "height",
+            "You must specify the spawn height above target!",
+            description = "The height above the target to spawn the arrows. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
+        require(
+            "spread",
+            "You must specify the spread radius!",
+            description = "The horizontal spread radius for arrow spawning. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
+        optional(
+            "damage",
+            description = "The damage each arrow deals. If omitted, uses the arrow's default damage.",
+            type = ArgType.EXPRESSION
+        )
+        optional(
+            "respect_flame",
+            description = "Whether arrows inherit the Flame enchantment from the held bow.",
+            type = ArgType.BOOLEAN,
+            default = "true"
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {

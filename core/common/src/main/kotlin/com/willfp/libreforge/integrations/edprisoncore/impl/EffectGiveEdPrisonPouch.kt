@@ -2,6 +2,7 @@ package com.willfp.libreforge.integrations.edprisoncore.impl
 
 import com.edwardbelt.edprison.modules.pouches.PouchUtils
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -9,14 +10,17 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
 object EffectGiveEdPrisonPouch : Effect<NoCompileData>("give_edprison_pouch") {
+    override val description = "Gives the player an EdPrison pouch item, optionally pre-unlocked."
+    override val categories = setOf("economy")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION
     )
 
     override val arguments = arguments {
-        require("type", "You must specify the type of pouch!")
-        require("unlocked", "You must specify whether the pouch is unlocked!")
+        require("type", "You must specify the type of pouch!", description = "The EdPrison pouch ID to give.", type = ArgType.STRING)
+        require("unlocked", "You must specify whether the pouch is unlocked!", description = "Whether the pouch starts fully unlocked.", type = ArgType.BOOLEAN)
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {

@@ -1,6 +1,7 @@
 package com.willfp.libreforge.integrations.ultimatemobcoins.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -11,13 +12,15 @@ import nl.chimpgamer.ultimatemobcoins.paper.UltimateMobCoinsPlugin
 import java.math.MathContext
 
 class EffectTakeMobCoins(private val plugin: UltimateMobCoinsPlugin) : Effect<NoCompileData>("take_mob_coins") {
+    override val description = "Removes a specified amount of UltimateMobCoins from the player."
+    override val categories = setOf("economy")
 
     override val parameters = setOf(
         TriggerParameter.PLAYER
     )
 
     override val arguments = arguments {
-        require("amount", "You must specify the amount of mobcoins to take!")
+        require("amount", "You must specify the amount of mobcoins to take!", description = "The amount of mob coins to remove from the player. Supports expressions.", type = ArgType.EXPRESSION)
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
