@@ -8,6 +8,9 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.Player
 
 object EffectShuffleHotbar : Effect<NoCompileData>("shuffle_hotbar") {
+    override val description = "Randomly shuffles the items in the victim's hotbar."
+    override val categories = setOf("inventory", "player")
+
     override val parameters = setOf(
         TriggerParameter.VICTIM
     )

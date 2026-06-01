@@ -2,6 +2,7 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.placeholder.translatePlaceholders
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -12,12 +13,26 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.Player
 
 object EffectRunPlayerCommand : Effect<NoCompileData>("run_player_command") {
+    override val description = "Runs one or more commands as the player when triggered."
+    override val categories = setOf("chat")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER
     )
 
     override val arguments = arguments {
-        require(listOf("commands", "command"), "You must specify the command to run!")
+        require(
+            listOf("commands", "command"),
+            "You must specify the command to run!",
+            description = "The command or list of commands to run as the player. Use %player% and %victim% as placeholders.",
+            type = ArgType.STRING_LIST
+        )
+        optional(
+            "as_op",
+            description = "Whether to temporarily grant the player operator permissions while running the commands.",
+            type = ArgType.BOOLEAN,
+            default = "false"
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {

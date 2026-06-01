@@ -2,6 +2,7 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.particle.Particles
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -17,18 +18,43 @@ import com.willfp.libreforge.xz
 import org.bukkit.entity.LivingEntity
 
 object EffectParticleAnimation : Effect<ParticleAnimationBlock<*>?>("particle_animation") {
+    override val description = "Plays a particle animation at the trigger location over time using a named animation pattern."
+    override val categories = setOf("visual")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION
     )
 
     override val arguments = arguments {
-        require("particle", "You must specify the particle!")
+        require(
+            "particle",
+            "You must specify the particle!",
+            description = "The particle type to spawn during the animation.",
+            type = ArgType.STRING
+        )
         require("animation", "You must specify a valid animation!", Config::getString) {
             ParticleAnimations[it] != null
         }
+        describe(
+            "animation",
+            description = "The animation pattern to use (e.g. circle, helix).",
+            type = ArgType.STRING
+        )
 
         inherit("particle_args") { ParticleAnimations[it.getString("animation")] }
+        optional(
+            "particle-amount",
+            description = "The number of particles to spawn per animation point per tick. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            default = "1"
+        )
+        optional(
+            "use-eye-location",
+            description = "Whether to use the entity's eye location instead of their feet.",
+            type = ArgType.BOOLEAN,
+            default = "false"
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: ParticleAnimationBlock<*>?): Boolean {

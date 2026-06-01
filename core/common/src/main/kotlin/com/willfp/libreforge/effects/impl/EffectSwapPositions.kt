@@ -8,6 +8,9 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
 object EffectSwapPositions : Effect<NoCompileData>("swap_positions") {
+    override val description = "Swaps the positions of the player and the victim instantly."
+    override val categories = setOf("movement")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM

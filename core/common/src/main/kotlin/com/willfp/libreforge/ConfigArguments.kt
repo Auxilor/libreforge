@@ -184,6 +184,14 @@ class ConfigArgumentsBuilder {
     }
 
     /**
+     * Attach a description to the root-level [inherit] (no subsection).
+     */
+    fun describeInherit(description: String) {
+        val arg = arguments.filterIsInstance<InheritedArguments>().firstOrNull { it.subsection == null } ?: return
+        arg.meta = arg.meta.copy(description = description)
+    }
+
+    /**
      * Attach a description to the [inherit] registered with the given [subsection].
      */
     fun describeInherit(subsection: String, description: String) {

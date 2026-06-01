@@ -2,6 +2,7 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -16,16 +17,44 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 object EffectArrowRing : Effect<NoCompileData>("arrow_ring") {
+    override val description = "Spawns a ring of arrows falling downward at the trigger location."
+    override val categories = setOf("combat")
+
     override val parameters = setOf(
         TriggerParameter.LOCATION
     )
 
     override val arguments = arguments {
-        require("amount", "You must specify the amount of arrows!")
-        require("height", "You must specify the height to spawn the arrows at!")
-        require("radius", "You must specify the radius of the circle!")
-        require("arrow_damage", "You must specify the arrow damage!")
-        require("fire_ticks", "You must specify the arrow fire ticks!")
+        require(
+            "amount",
+            "You must specify the amount of arrows!",
+            description = "The number of arrows in the ring. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
+        require(
+            "height",
+            "You must specify the height to spawn the arrows at!",
+            description = "The height above the location to spawn the arrows. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
+        require(
+            "radius",
+            "You must specify the radius of the circle!",
+            description = "The radius of the arrow ring. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
+        require(
+            "arrow_damage",
+            "You must specify the arrow damage!",
+            description = "The damage each arrow deals. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
+        require(
+            "fire_ticks",
+            "You must specify the arrow fire ticks!",
+            description = "How many ticks the arrows are on fire. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {

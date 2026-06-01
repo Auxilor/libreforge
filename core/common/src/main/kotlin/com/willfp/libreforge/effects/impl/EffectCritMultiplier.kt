@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -10,6 +11,10 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.event.entity.EntityDamageEvent
 
 object EffectCritMultiplier : Effect<NoCompileData>("crit_multiplier") {
+    override val description = "Multiplies damage when the player lands a critical hit (falling attack)."
+    override val categories = setOf("combat")
+    override val additionalInfo = listOf("Requires a trigger that provides both PLAYER and EVENT.")
+
     override val supportsDelay = false
 
     override val parameters = setOf(
@@ -18,7 +23,12 @@ object EffectCritMultiplier : Effect<NoCompileData>("crit_multiplier") {
     )
 
     override val arguments = arguments {
-        require("multiplier", "You must specify the crit damage multiplier!")
+        require(
+            "multiplier",
+            "You must specify the crit damage multiplier!",
+            description = "The damage multiplier applied on a critical hit. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {

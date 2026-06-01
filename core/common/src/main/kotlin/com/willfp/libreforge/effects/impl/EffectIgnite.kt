@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -13,14 +14,27 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageEvent
 
 object EffectIgnite : Effect<NoCompileData>("ignite") {
+    override val description = "Sets the victim on fire for a specified number of ticks with custom damage per tick."
+    override val categories = setOf("combat")
+
     override val parameters = setOf(
         TriggerParameter.VICTIM,
         TriggerParameter.PLAYER
     )
 
     override val arguments = arguments {
-        require("damage_per_tick", "You must specify the damage per fire tick!")
-        require("ticks", "You must specify the duration!")
+        require(
+            "damage_per_tick",
+            "You must specify the damage per fire tick!",
+            description = "The amount of damage dealt per fire tick. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
+        require(
+            "ticks",
+            "You must specify the duration!",
+            description = "The number of fire ticks to apply to the victim. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {

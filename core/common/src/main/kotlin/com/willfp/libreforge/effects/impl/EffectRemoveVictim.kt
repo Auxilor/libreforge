@@ -8,6 +8,9 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.Player
 
 object EffectRemoveVictim : Effect<NoCompileData>("remove_victim") {
+    override val description = "Removes (despawns) the victim entity. Has no effect if the victim is a player."
+    override val categories = setOf("combat", "entity")
+
     override val parameters = setOf(
         TriggerParameter.VICTIM
     )

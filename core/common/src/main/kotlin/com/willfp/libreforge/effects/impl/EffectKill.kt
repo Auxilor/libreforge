@@ -7,6 +7,9 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
 object EffectKill : Effect<NoCompileData>("kill") {
+    override val description = "Instantly kills the victim entity."
+    override val categories = setOf("combat")
+
     override val parameters = setOf(
         TriggerParameter.VICTIM
     )

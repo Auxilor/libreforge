@@ -2,7 +2,9 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.util.runExempted
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.ViolationContext
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -12,9 +14,44 @@ import org.bukkit.entity.Firework
 import org.bukkit.event.entity.EntityShootBowEvent
 
 object EffectShootFirework : Effect<List<FireworkEffect>>("shoot_firework") {
+    override val description = "Launches a firework projectile from the player with configurable visual effects."
+    override val categories = setOf("visual", "combat")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER
     )
+
+    override val arguments = arguments {
+        optional(
+            "effects",
+            description = "List of firework effect subsections defining the firework's appearance.",
+            type = ArgType.ANY
+        )
+        optional(
+            "power",
+            description = "The flight duration power of the firework (0-255).",
+            type = ArgType.INT,
+            default = "0"
+        )
+        optional(
+            "inherit_velocity",
+            description = "Whether the firework should inherit the player's current velocity.",
+            type = ArgType.BOOLEAN,
+            default = "false"
+        )
+        optional(
+            "launch-at-location",
+            description = "Whether the firework should be teleported to the trigger location after launch.",
+            type = ArgType.BOOLEAN,
+            default = "false"
+        )
+        optional(
+            "no_source",
+            description = "Whether the firework should have no shooter, preventing attribution to the player.",
+            type = ArgType.BOOLEAN,
+            default = "false"
+        )
+    }
 
     @Suppress("DEPRECATION")
     override fun onTrigger(config: Config, data: TriggerData, compileData: List<FireworkEffect>): Boolean {

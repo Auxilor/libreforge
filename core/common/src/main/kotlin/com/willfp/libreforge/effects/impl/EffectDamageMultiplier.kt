@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -12,6 +13,10 @@ import org.bukkit.Bukkit
 import org.bukkit.event.entity.EntityDamageEvent
 
 object EffectDamageMultiplier : Effect<NoCompileData>("damage_multiplier") {
+    override val description = "Multiplies the damage of the triggering attack."
+    override val categories = setOf("combat")
+    override val additionalInfo = listOf("Requires a damage trigger (e.g. melee_attack, take_damage).")
+
     override val supportsDelay = false
 
     override val parameters = setOf(
@@ -19,7 +24,12 @@ object EffectDamageMultiplier : Effect<NoCompileData>("damage_multiplier") {
     )
 
     override val arguments = arguments {
-        require("multiplier", "You must specify the damage multiplier!")
+        require(
+            "multiplier",
+            "You must specify the damage multiplier!",
+            description = "The damage multiplier to apply. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {

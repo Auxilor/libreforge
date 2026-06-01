@@ -14,6 +14,8 @@ import org.bukkit.persistence.PersistentDataType
 import org.bukkit.potion.PotionEffect
 
 object EffectPotionDurationMultiplier : MultiplierEffect("potion_duration_multiplier") {
+    override val description = "Multiplies the duration of potion effects brewed or consumed by the player."
+    override val categories = setOf("potion", "player")
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     fun handle(event: BrewEvent) {
         val player = event.contents.viewers.filterIsInstance<Player>().firstOrNull() ?: return

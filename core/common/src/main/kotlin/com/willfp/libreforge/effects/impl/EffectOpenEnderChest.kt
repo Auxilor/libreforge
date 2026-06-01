@@ -9,6 +9,9 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.inventory.ItemStack
 
 object EffectOpenEnderChest : Effect<ItemStack>("open_ender_chest") {
+    override val description = "Opens the player's ender chest inventory."
+    override val categories = setOf("player", "inventory")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER
     )

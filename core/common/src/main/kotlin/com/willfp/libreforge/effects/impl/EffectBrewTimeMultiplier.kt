@@ -11,6 +11,8 @@ import org.bukkit.event.inventory.InventoryClickEvent
 import kotlin.math.roundToInt
 
 object EffectBrewTimeMultiplier : MultiplierEffect("brew_time_multiplier") {
+    override val description = "Multiplies the time taken to brew potions while the holder is active."
+    override val categories = setOf("player")
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     fun handle(event: InventoryClickEvent) {
         val player = event.whoClicked as? Player ?: return

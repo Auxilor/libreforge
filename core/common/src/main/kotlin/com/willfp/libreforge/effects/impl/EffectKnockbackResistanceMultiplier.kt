@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.templates.AttributeEffect
 import org.bukkit.attribute.Attribute
@@ -12,8 +13,16 @@ object EffectKnockbackResistanceMultiplier : AttributeEffect("knockback_resistan
     Attribute.KNOCKBACK_RESISTANCE,
     AttributeModifier.Operation.ADD_NUMBER
 ) {
+    override val description = "Multiplies the player's knockback resistance, reducing how far they are pushed when hit."
+    override val categories = setOf("combat", "player", "attribute")
+
     override val arguments = arguments {
-        require("multiplier", "You must specify the knockback resistance multiplier!")
+        require(
+            "multiplier",
+            "You must specify the knockback resistance multiplier!",
+            description = "The knockback resistance multiplier to apply. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
     }
 
     override fun getValue(config: Config, entity: LivingEntity): Double {

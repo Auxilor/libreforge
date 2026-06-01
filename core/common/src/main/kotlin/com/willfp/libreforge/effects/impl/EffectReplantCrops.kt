@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.eco.core.map.listMap
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
@@ -22,9 +23,22 @@ import org.bukkit.inventory.ItemStack
 import java.util.UUID
 
 object EffectReplantCrops : Effect<NoCompileData>("replant_crops") {
+    override val description = "Automatically replants harvested crops at age 0 when the player breaks them."
+    override val categories = setOf("world")
+
     override val arguments = arguments {
-        require("consume_seeds", "You must specify if seeds should be consumed!")
-        require("only_fully_grown", "You must specify if only fully grown crops should be replanted!")
+        require(
+            "consume_seeds",
+            "You must specify if seeds should be consumed!",
+            description = "Whether seeds should be taken from the player's inventory when replanting.",
+            type = ArgType.BOOLEAN
+        )
+        require(
+            "only_fully_grown",
+            "You must specify if only fully grown crops should be replanted!",
+            description = "Whether to only replant crops that are fully grown.",
+            type = ArgType.BOOLEAN
+        )
     }
 
     private val players = listMap<UUID, ReplantConfig>()

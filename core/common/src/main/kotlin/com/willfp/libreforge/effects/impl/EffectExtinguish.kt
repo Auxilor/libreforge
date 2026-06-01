@@ -7,6 +7,9 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
 object EffectExtinguish : Effect<NoCompileData>("extinguish") {
+    override val description = "Immediately extinguishes any fire on the player."
+    override val categories = setOf("player")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER
     )

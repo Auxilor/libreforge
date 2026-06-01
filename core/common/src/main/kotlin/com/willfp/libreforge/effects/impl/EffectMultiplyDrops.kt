@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.items.Items
 import com.willfp.eco.core.items.TestableItem
 import com.willfp.eco.core.items.matches
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -17,12 +18,27 @@ import com.willfp.libreforge.triggers.event.EditableDropEvent
 import kotlin.math.roundToInt
 
 object EffectMultiplyDrops : Effect<NoCompileData>("multiply_drops") {
+    override val description = "Multiplies the item drops from an event, either by a flat multiplier or by simulating a fortune level."
+    override val categories = setOf("inventory")
+    override val additionalInfo = listOf("Requires a drop trigger: block_item_drop, entity_item_drop, catch_fish, & shear")
+
     override val parameters = setOf(
         TriggerParameter.EVENT
     )
 
     override val arguments = arguments {
-        require(listOf("multiplier", "fortune"), "You must specify a multiplier or level of fortune to mimic!")
+        require(
+            listOf("multiplier", "fortune"),
+            "You must specify a multiplier or level of fortune to mimic!",
+            description = "Either a flat drop multiplier or a fortune level to simulate. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
+        optional(
+            "on_items",
+            description = "A list of items to restrict drop multiplication to. Defaults to all drops.",
+            type = ArgType.ITEM_LIST,
+            default = "[]"
+        )
     }
 
     private val whitelist = mutableListOf<TestableItem>()

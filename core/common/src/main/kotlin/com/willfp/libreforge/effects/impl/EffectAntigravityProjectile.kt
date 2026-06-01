@@ -14,6 +14,8 @@ import org.bukkit.event.entity.ProjectileLaunchEvent
 import java.util.UUID
 
 object EffectAntigravityProjectile : Effect<NoCompileData>("antigravity_projectile") {
+    override val description = "Makes all projectiles the player fires travel in a straight line, unaffected by gravity."
+    override val categories = setOf("combat")
     private val players = listMap<UUID, UUID>()
 
     override fun onEnable(
