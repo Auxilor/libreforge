@@ -57,7 +57,8 @@ object EffectParticleAnimation : Effect<ParticleAnimationBlock<*>?>("particle_an
                 entity.location.toFloat3()
             }
 
-            val entityDirectionVector = entity.location.toFloat3().xz
+            val entityDirectionVector = entity.location.direction.toFloat3().xz
+            val entityDirectionFloat3Vector = entity.location.direction.toFloat3()
 
             val locationVector = location.toFloat3()
 
@@ -72,7 +73,8 @@ object EffectParticleAnimation : Effect<ParticleAnimationBlock<*>?>("particle_an
                         entityVector.copy(),
                         entityDirectionVector.copy(),
                         locationVector.copy(),
-                        player
+                        player,
+                        entityDirectionFloat3Vector.copy()
                     )
                 }
             } else {
@@ -81,7 +83,8 @@ object EffectParticleAnimation : Effect<ParticleAnimationBlock<*>?>("particle_an
                     entityVector.copy(),
                     entityDirectionVector.copy(),
                     locationVector.copy(),
-                    player
+                    player,
+                    entityDirectionFloat3Vector.copy()
                 )
             }
 
@@ -99,7 +102,8 @@ object EffectParticleAnimation : Effect<ParticleAnimationBlock<*>?>("particle_an
                         entityDirectionVector.copy(),
                         locationVector.copy(),
                         v,
-                        player
+                        player,
+                        entity
                     )
                 }) {
                 it.cancel()

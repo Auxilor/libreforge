@@ -2,8 +2,10 @@ package com.willfp.libreforge.effects.impl.particles
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Compiled
+import com.willfp.libreforge.toLocation
 import dev.romainguy.kotlin.math.Float2
 import dev.romainguy.kotlin.math.Float3
+import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 
 /**
@@ -19,7 +21,8 @@ class ParticleAnimationBlock<T>(
         entityLocation: Float3,
         entityDirection: Float2,
         location: Float3,
-        player: Player
+        player: Player,
+        entityDirectionFloat3: Float3
     ): Collection<Float3> =
         animation.getParticleLocations(
             tick,
@@ -28,7 +31,15 @@ class ParticleAnimationBlock<T>(
             location,
             config,
             player,
-            compileData
+            compileData,
+        ) + animation.getParticleLocations(
+            tick,
+            entityLocation,
+            entityDirectionFloat3,
+            location,
+            config,
+            player,
+            compileData,
         )
 
     fun shouldStopTicking(
@@ -37,7 +48,8 @@ class ParticleAnimationBlock<T>(
         entityDirection: Float2,
         location: Float3,
         lastLocation: Float3,
-        player: Player
+        player: Player,
+        entity: Entity
     ): Boolean = animation.shouldStopTicking(
         tick,
         entityLocation,
@@ -46,6 +58,16 @@ class ParticleAnimationBlock<T>(
         lastLocation,
         config,
         player,
+        compileData
+    ) || animation.shouldStopTicking(
+        tick,
+        entityLocation,
+        entityDirection,
+        location,
+        lastLocation,
+        config,
+        player,
+        entity,
         compileData
     )
 }
