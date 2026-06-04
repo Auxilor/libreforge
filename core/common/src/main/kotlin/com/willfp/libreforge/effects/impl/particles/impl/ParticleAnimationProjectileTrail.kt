@@ -24,6 +24,10 @@ object ParticleAnimationProjectileTrail : ParticleAnimation<NoCompileData>("proj
         player: Player,
         compileData: NoCompileData
     ): Collection<Float3> {
+        if (tick == 0) {
+            return emptySet()
+        }
+
         val gap = config.getIntFromExpression("gap", player)
 
         if ((tick % gap) != 0) {
