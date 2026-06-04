@@ -1,6 +1,6 @@
 package com.willfp.libreforge.triggers.impl
 
-import com.github.benmanes.caffeine.cache.Caffeine
+import com.willfp.eco.core.cache.EcoCache
 import com.willfp.eco.core.gui.player
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.toDispatcher
@@ -14,13 +14,13 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.inventory.FurnaceSmeltEvent
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.inventory.FurnaceInventory
-import java.util.concurrent.TimeUnit
+import java.time.Duration
 
 object TriggerSmelt : Trigger("smelt") {
-    private val playerCache = Caffeine.newBuilder()
+    private val playerCache = EcoCache.builder<Location, Player>()
         // Arbitrary long time
-        .expireAfterWrite(15, TimeUnit.MINUTES)
-        .build<Location, Player>()
+        .expireAfterWrite(Duration.ofMinutes(15))
+        .build()
 
     override val parameters = setOf(
         TriggerParameter.PLAYER,
@@ -50,7 +50,7 @@ object TriggerSmelt : Trigger("smelt") {
             return
         }
 
-        val player = playerCache.getIfPresent(event.block.location) ?: return
+        val player = playerCache.get(event.block.location) ?: return
         if (!player.isOnline) {
             return
         }

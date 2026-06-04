@@ -1,7 +1,6 @@
 package com.willfp.libreforge
 
-import com.github.benmanes.caffeine.cache.Cache
-import com.github.benmanes.caffeine.cache.Caffeine
+import com.willfp.eco.core.cache.EcoCache
 import com.willfp.eco.core.map.listMap
 import com.willfp.libreforge.effects.EffectBlock
 import com.willfp.libreforge.slot.ItemHolderFinder
@@ -10,7 +9,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.event.HandlerList
 import java.util.UUID
-import java.util.concurrent.TimeUnit
+import java.time.Duration
 
 
 /**
@@ -160,10 +159,10 @@ inline fun <reified T> registerSpecificRefreshFunction(crossinline function: (T)
     }
 }
 
-private val holderCooldown: Cache<UUID, Unit>? =
+private val holderCooldown: EcoCache<UUID, Unit>? =
     plugin.configYml.getInt("refresh.cooldown").takeIf { it > 0 }?.let {
-        Caffeine.newBuilder()
-            .expireAfterWrite(it.toLong(), TimeUnit.MILLISECONDS)
+        EcoCache.builder()
+            .expireAfterWrite(Duration.ofMillis(it.toLong()))
             .build()
     }
 
@@ -172,7 +171,7 @@ private val holderCooldown: Cache<UUID, Unit>? =
  */
 fun Dispatcher<*>.refreshHolders() {
     if (holderCooldown != null) {
-        val isOnCooldown = holderCooldown.getIfPresent(this.uuid) != null
+        val isOnCooldown = holderCooldown.get(this.uuid) != null
         if (isOnCooldown) {
             return
         }
@@ -255,14 +254,14 @@ fun ProvidedHolder.generatePlaceholders(dispatcher: Dispatcher<*>): List<NamedVa
     }
 }
 
-private val previousHolders: com.github.benmanes.caffeine.cache.Cache<UUID, Collection<ProvidedHolder>> =
-    Caffeine.newBuilder()
-        .expireAfterAccess(30, TimeUnit.SECONDS)
+private val previousHolders: EcoCache<UUID, Collection<ProvidedHolder>> =
+    EcoCache.builder()
+        .expireAfterAccess(Duration.ofSeconds(30))
         .build()
 
-private val holderCache = Caffeine.newBuilder()
-    .expireAfterWrite(4, TimeUnit.SECONDS)
-    .build<UUID, Collection<ProvidedHolder>>()
+private val holderCache = EcoCache.builder<UUID, Collection<ProvidedHolder>>()
+    .expireAfterWrite(Duration.ofSeconds(4))
+    .build()
 
 private fun Dispatcher<*>.computeHolders(): Collection<ProvidedHolder> {
     if (this is EntityDispatcher && this.dispatcher !is Player && !plugin.configYml.getBool("refresh.entities.enabled")) {
@@ -271,7 +270,7 @@ private fun Dispatcher<*>.computeHolders(): Collection<ProvidedHolder> {
 
     val holders = providers.flatMap { it.provide(this) }
 
-    val old = previousHolders.getIfPresent(this.uuid) ?: emptyList()
+    val old = previousHolders.get(this.uuid) ?: emptyList()
 
     val newByID = holders.associateBy { it.holder.id }
     val oldByID = old.associateBy { it.holder.id }
