@@ -178,6 +178,9 @@ import com.willfp.libreforge.effects.impl.EffectSetGlowing
 import com.willfp.libreforge.effects.impl.EffectSetGlobalPoints
 import com.willfp.libreforge.effects.impl.EffectSetItemData
 import com.willfp.libreforge.effects.impl.EffectSetItemPoints
+import com.willfp.libreforge.effects.impl.EffectSetNearbyBlocks
+import com.willfp.libreforge.effects.impl.EffectSetPlayerTime
+import com.willfp.libreforge.effects.impl.EffectSetPlayerWeather
 import com.willfp.libreforge.effects.impl.EffectSetPoints
 import com.willfp.libreforge.effects.impl.EffectSetSaturation
 import com.willfp.libreforge.effects.impl.EffectSetUnbreakable
@@ -190,6 +193,7 @@ import com.willfp.libreforge.effects.impl.EffectShuffleHotbar
 import com.willfp.libreforge.effects.impl.EffectSmite
 import com.willfp.libreforge.effects.impl.EffectSneakingSpeedMultiplier
 import com.willfp.libreforge.effects.impl.EffectSpawnEntity
+import com.willfp.libreforge.effects.impl.EffectSpawnFallingBlock
 import com.willfp.libreforge.effects.impl.EffectSpawnMobs
 import com.willfp.libreforge.effects.impl.EffectShockwave
 import com.willfp.libreforge.effects.impl.EffectSortInventory
@@ -660,6 +664,9 @@ object Effects : Registry<Effect<*>>() {
         register(EffectSetGlobalPoints)
         register(EffectSetItemData)
         register(EffectSetItemPoints)
+        register(EffectSetNearbyBlocks)
+        register(EffectSetPlayerTime)
+        register(EffectSetPlayerWeather)
         register(EffectSetPoints)
         register(EffectSetSaturation)
         register(EffectSetUnbreakable)
@@ -671,6 +678,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectShuffleHotbar)
         register(EffectSmite)
         register(EffectSpawnEntity)
+        register(EffectSpawnFallingBlock)
         register(EffectSpawnMobs)
         register(EffectShockwave)
         register(EffectSortInventory)
