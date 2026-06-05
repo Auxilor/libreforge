@@ -255,6 +255,5 @@ object Triggers : Registry<Trigger>() {
         register(TriggerWinRaid)
         register(TriggerTakeDamage)
         register(TriggerTakeEntityDamage)
-        TriggerTakeDamage.notifyOfEntityDamageChange()
     }
 }
