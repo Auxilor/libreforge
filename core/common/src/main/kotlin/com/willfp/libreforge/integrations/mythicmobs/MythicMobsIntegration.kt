@@ -2,9 +2,11 @@ package com.willfp.libreforge.integrations.mythicmobs
 
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.libreforge.effects.Effects
+import com.willfp.libreforge.filters.Filters
 import com.willfp.libreforge.integrations.LoadableIntegration
 import com.willfp.libreforge.integrations.mythicmobs.impl.effect.EffectCastMythicSkill
 import com.willfp.libreforge.integrations.mythicmobs.impl.effect.EffectMythicTelekinesis
+import com.willfp.libreforge.integrations.mythicmobs.impl.filter.FilterMythicMobType
 import com.willfp.libreforge.integrations.mythicmobs.impl.trigger.TriggerTakeMythicDamage
 import com.willfp.libreforge.triggers.Triggers
 
@@ -13,6 +15,7 @@ object MythicMobsIntegration : LoadableIntegration {
         Effects.register(EffectCastMythicSkill)
         Effects.register(EffectMythicTelekinesis)
         Triggers.register(TriggerTakeMythicDamage)
+        Filters.register(FilterMythicMobType)
     }
 
     override fun getPluginName(): String {
