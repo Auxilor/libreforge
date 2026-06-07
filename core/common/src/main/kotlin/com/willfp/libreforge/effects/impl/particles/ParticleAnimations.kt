@@ -8,8 +8,10 @@ import com.willfp.libreforge.effects.impl.particles.impl.ParticleAnimationCircle
 import com.willfp.libreforge.effects.impl.particles.impl.ParticleAnimationDoubleHelix
 import com.willfp.libreforge.effects.impl.particles.impl.ParticleAnimationGroundSpiral
 import com.willfp.libreforge.effects.impl.particles.impl.ParticleAnimationHelix
+import com.willfp.libreforge.effects.impl.particles.impl.ParticleAnimationProjectileTrail
 import com.willfp.libreforge.effects.impl.particles.impl.ParticleAnimationTrace
 import com.willfp.libreforge.effects.impl.particles.impl.ParticleAnimationTwirl
+import com.willfp.libreforge.effects.impl.particles.impl.ParticleAnimationWingTips
 
 @Suppress("UNUSED")
 object ParticleAnimations : Registry<ParticleAnimation<*>>() {
@@ -53,5 +55,7 @@ object ParticleAnimations : Registry<ParticleAnimation<*>>() {
         register(ParticleAnimationHelix)
         register(ParticleAnimationTrace)
         register(ParticleAnimationTwirl)
+        register(ParticleAnimationWingTips)
+        register(ParticleAnimationProjectileTrail)
     }
 }
