@@ -1,6 +1,6 @@
 package com.willfp.libreforge.effects.impl
 
-import com.github.benmanes.caffeine.cache.Caffeine
+import com.willfp.eco.core.cache.EcoCache
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.Holder
@@ -19,7 +19,7 @@ import com.willfp.libreforge.registerGenericHolderProvider
 import org.bukkit.Bukkit
 import java.util.Objects
 import java.util.UUID
-import java.util.concurrent.TimeUnit
+import java.time.Duration
 
 object EffectAddPermanentHolderInRadius : Effect<HolderTemplate>("add_permanent_holder_in_radius") {
     override val arguments = arguments {
@@ -29,9 +29,9 @@ object EffectAddPermanentHolderInRadius : Effect<HolderTemplate>("add_permanent_
 
     private val holders = mutableSetOf<PermanentNearbyHolder>()
 
-    private val nearbyCache = Caffeine.newBuilder()
-        .expireAfterWrite(250L, TimeUnit.MILLISECONDS)
-        .build<UUID, Collection<SimpleProvidedHolder>>()
+    private val nearbyCache = EcoCache.builder<UUID, Collection<SimpleProvidedHolder>>()
+        .expireAfterWrite(Duration.ofMillis(250L))
+        .build()
 
     init {
         registerGenericHolderProvider { dispatcher ->

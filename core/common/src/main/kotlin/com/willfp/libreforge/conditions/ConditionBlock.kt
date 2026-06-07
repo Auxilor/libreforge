@@ -1,6 +1,6 @@
 package com.willfp.libreforge.conditions
 
-import com.github.benmanes.caffeine.cache.Caffeine
+import com.willfp.eco.core.cache.EcoCache
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Compiled
 import com.willfp.libreforge.Dispatcher
@@ -10,7 +10,7 @@ import com.willfp.libreforge.effects.Chain
 import com.willfp.libreforge.plugin
 import org.bukkit.Bukkit
 import java.util.UUID
-import java.util.concurrent.TimeUnit
+import java.time.Duration
 
 /**
  * A single condition config block.
@@ -29,10 +29,10 @@ class ConditionBlock<T> internal constructor(
      */
     val showNotMet = forceShowNotMet || notMetLines.isNotEmpty()
 
-    private val syncMetCache = Caffeine.newBuilder()
-        .expireAfterAccess(10, TimeUnit.SECONDS)
-        .maximumSize(1000)
-        .build<UUID, Boolean>()
+    private val syncMetCache = EcoCache.builder<UUID, Boolean>()
+        .expireAfterAccess(Duration.ofSeconds(10))
+        .maxSize(1000)
+        .build()
 
     /**
      * Check if the condition is met for a [dispatcher].
@@ -47,7 +47,7 @@ class ConditionBlock<T> internal constructor(
          */
 
         if (!Bukkit.isPrimaryThread()) {
-            return syncMetCache.getIfPresent(dispatcher.uuid)
+            return syncMetCache.get(dispatcher.uuid)
                 ?: plugin.configYml.getBool("conditions.default-state-off-main-thread")
         }
 

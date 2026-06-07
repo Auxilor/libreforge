@@ -1,6 +1,6 @@
 package com.willfp.libreforge
 
-import com.github.benmanes.caffeine.cache.Caffeine
+import com.willfp.eco.core.cache.EcoCache
 import com.willfp.eco.core.events.ArmorChangeEvent
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
@@ -13,17 +13,14 @@ import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerRespawnEvent
+import java.time.Duration
 import java.util.UUID
-import java.util.concurrent.TimeUnit
 
 @Suppress("unused", "UNUSED_PARAMETER")
 object ItemRefreshListener : Listener {
-    private val inventoryClickTimeouts = Caffeine.newBuilder()
-        .expireAfterWrite(
-            plugin.configYml.getInt("refresh.inventory-click.timeout").toLong(),
-            TimeUnit.MILLISECONDS
-        )
-        .build<UUID, Unit>()
+    private val inventoryClickTimeouts = EcoCache.builder<UUID, Unit>()
+        .expireAfterWrite(Duration.ofMillis(plugin.configYml.getInt("refresh.inventory-click.timeout").toLong()))
+        .build()
 
     @EventHandler(priority = EventPriority.LOWEST)
     fun onItemPickup(event: EntityPickupItemEvent) {
@@ -85,7 +82,7 @@ object ItemRefreshListener : Listener {
     fun onInventoryClick(event: InventoryClickEvent) {
         val player = event.whoClicked as? Player ?: return
 
-        if (inventoryClickTimeouts.getIfPresent(player.uniqueId) != null) {
+        if (inventoryClickTimeouts.get(player.uniqueId) != null) {
             return
         }
 
