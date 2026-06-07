@@ -9,6 +9,7 @@ import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.entity.Trident
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 
 object TriggerBowAttack : Trigger("bow_attack") {
@@ -21,7 +22,7 @@ object TriggerBowAttack : Trigger("bow_attack") {
         TriggerParameter.PROJECTILE
     )
     
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     fun handle(event: EntityDamageByEntityEvent) {
         val arrow = event.damager
         val victim = event.entity as? LivingEntity ?: return
