@@ -8,7 +8,7 @@ import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Tameable
 
 object MutatorVictimToOwner : Mutator<NoCompileData>("victim_to_owner") {
-    override val description = "Re-maps the victim to the tamed entity's owner."
+    override val description = "Sets the victim to the tamed entity's owner."
 
     override val categories = setOf("victim")
 

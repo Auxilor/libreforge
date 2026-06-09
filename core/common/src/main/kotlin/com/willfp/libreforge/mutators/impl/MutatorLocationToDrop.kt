@@ -9,7 +9,7 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.event.EditableDropEvent
 
 object MutatorLocationToDrop : Mutator<NoCompileData>("location_to_drop") {
-    override val description = "Re-maps the location to the drop's position from the trigger event."
+    override val description = "Sets the location to the drop's position from the trigger event."
 
     override val categories = setOf("location", "entity")
 

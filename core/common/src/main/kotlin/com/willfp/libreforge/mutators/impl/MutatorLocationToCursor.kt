@@ -12,7 +12,7 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.FluidCollisionMode
 
 object MutatorLocationToCursor : Mutator<NoCompileData>("location_to_cursor") {
-    override val description = "Re-maps the location to the position of the entity or block at the player's or victim's cursor."
+    override val description = "Sets the location to the position of the entity or block at the player's or victim's cursor."
 
     override val categories = setOf("location")
 

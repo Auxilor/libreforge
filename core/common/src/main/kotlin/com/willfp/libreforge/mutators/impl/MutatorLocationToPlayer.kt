@@ -8,7 +8,7 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
 object MutatorLocationToPlayer : Mutator<NoCompileData>("location_to_player") {
-    override val description = "Re-maps the location to the player's current position."
+    override val description = "Sets the location to the player's current position."
 
     override val categories = setOf("location", "player")
 

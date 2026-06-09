@@ -8,7 +8,7 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
 object MutatorLocationToProjectile : Mutator<NoCompileData>("location_to_projectile") {
-    override val description = "Re-maps the location to the projectile's current position."
+    override val description = "Sets the location to the projectile's current position."
 
     override val categories = setOf("location", "entity")
 
