@@ -8,6 +8,10 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
 object MutatorBlockToLocation : Mutator<NoCompileData>("block_to_location") {
+    override val description = "Sets the location parameter to derive the block at that position."
+
+    override val categories = setOf("location", "block")
+
     override val parameterTransformers = parameterTransformers {
         TriggerParameter.LOCATION becomes TriggerParameter.BLOCK
     }
