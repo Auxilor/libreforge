@@ -87,6 +87,7 @@ class ConfigArguments internal constructor(
 class ConfigArgumentsBuilder {
     private val arguments = mutableListOf<ConfigArgument>()
 
+    @JvmOverloads
     fun require(
         name: String,
         message: String,
@@ -106,6 +107,7 @@ class ConfigArgumentsBuilder {
         require(listOf(name), message, getter, predicate)
     }
 
+    @JvmOverloads
     fun require(
         names: Collection<String>,
         message: String,
@@ -116,6 +118,7 @@ class ConfigArgumentsBuilder {
         require(names, message, { get(it) }, { true }, description, type, choices)
     }
 
+    @JvmOverloads
     fun <T> require(
         names: Collection<String>,
         message: String,
@@ -128,6 +131,7 @@ class ConfigArgumentsBuilder {
         arguments += RequiredArgument(names, message, getter, predicate, description, type, choices)
     }
 
+    @JvmOverloads
     fun optional(
         name: String,
         description: String = "",
@@ -138,6 +142,7 @@ class ConfigArgumentsBuilder {
         arguments += OptionalArgument(listOf(name), description, type, default, choices)
     }
 
+    @JvmOverloads
     fun optional(
         names: Collection<String>,
         description: String = "",
@@ -152,6 +157,7 @@ class ConfigArgumentsBuilder {
      * Attach wiki metadata to a previously registered [require] that used a getter/predicate.
      * Call immediately after the require it describes.
      */
+    @JvmOverloads
     fun describe(
         name: String,
         description: String = "",
