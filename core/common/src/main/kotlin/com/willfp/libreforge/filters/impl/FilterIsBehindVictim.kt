@@ -1,6 +1,7 @@
 package com.willfp.libreforge.filters.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.dot
 import com.willfp.libreforge.filters.Filter
@@ -9,6 +10,11 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.xz
 
 object FilterIsBehindVictim : Filter<NoCompileData, Boolean>("is_behind_victim") {
+    override val description = "Matches when the player is (or is not) behind the victim."
+    override val categories = setOf("combat", "entity")
+    override val valueType = ArgType.BOOLEAN
+    override val additionalInfo = listOf("Passes automatically when no player or victim is present in the trigger data.")
+
     override fun getValue(config: Config, data: TriggerData?, key: String): Boolean {
         return config.getBool(key)
     }

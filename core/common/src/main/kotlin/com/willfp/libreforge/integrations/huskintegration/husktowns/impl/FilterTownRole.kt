@@ -2,12 +2,18 @@ package com.willfp.libreforge.integrations.huskintegration.husktowns.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.util.containsIgnoreCase
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.filters.Filter
 import com.willfp.libreforge.triggers.TriggerData
 import net.william278.husktowns.events.MemberRoleChangeEvent
 
 object FilterTownRole : Filter<NoCompileData, Collection<String>>("town_role") {
+    override val description = "Matches when the player's new HuskTowns town role matches one of the given role names."
+    override val categories = setOf("player")
+    override val valueType = ArgType.STRING_LIST
+    override val additionalInfo = listOf("Passes automatically when the event is not a HuskTowns role change event.")
+
     override fun getValue(config: Config, data: TriggerData?, key: String): Collection<String> {
         return config.getStrings(key)
     }
