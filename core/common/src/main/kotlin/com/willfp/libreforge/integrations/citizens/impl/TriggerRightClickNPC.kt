@@ -8,6 +8,12 @@ import net.citizensnpcs.api.event.NPCRightClickEvent
 import org.bukkit.event.EventHandler
 
 object TriggerRightClickNPC : Trigger("right_click_npc") {
+    override val description = "Fires when the player right-clicks a Citizens NPC."
+
+    override val categories = setOf("interaction")
+
+    override val additionalInfo = listOf("Requires Citizens to be installed.")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT

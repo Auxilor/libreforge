@@ -8,11 +8,21 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerItemDamageEvent
 
 object TriggerDamageItem : Trigger("damage_item") {
+    override val description = "Fires when the player's held item takes durability damage."
+
+    override val categories = setOf("inventory")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The player's location.",
+        TriggerParameter.ITEM to "The item that was damaged.",
+        TriggerParameter.VALUE to "The amount of durability damage applied."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
+        TriggerParameter.EVENT,
         TriggerParameter.LOCATION,
         TriggerParameter.ITEM,
-        TriggerParameter.EVENT,
         TriggerParameter.VALUE
     )
 

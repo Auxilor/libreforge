@@ -8,6 +8,14 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerRespawnEvent
 
 object TriggerRespawn : Trigger("respawn") {
+    override val description = "Fires when the player respawns after death."
+
+    override val categories = setOf("player")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The player's respawn location."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION

@@ -8,11 +8,22 @@ import net.momirealms.customcrops.api.event.CropPlantEvent
 import org.bukkit.event.EventHandler
 
 object TriggerPlantCustomCrop : Trigger("plant_custom_crop") {
+    override val description = "Fires when the player plants a CustomCrops crop."
+
+    override val categories = setOf("world")
+
+    override val additionalInfo = listOf("Requires CustomCrops (xiaomomi) to be installed.")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The location where the crop was planted.",
+        TriggerParameter.TEXT to "The ID of the planted crop."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT,
-        TriggerParameter.TEXT,
-        TriggerParameter.LOCATION
+        TriggerParameter.LOCATION,
+        TriggerParameter.TEXT
     )
 
     @EventHandler(ignoreCancelled = true)

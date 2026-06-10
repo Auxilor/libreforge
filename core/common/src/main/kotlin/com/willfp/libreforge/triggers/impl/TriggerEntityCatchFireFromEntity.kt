@@ -9,6 +9,15 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityCombustByEntityEvent
 
 object TriggerEntityCatchFireFromEntity : Trigger("entity_catch_fire_from_entity") {
+    override val description = "Fires when an entity catches fire caused by another entity."
+
+    override val categories = setOf("entity")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.VICTIM to "The entity that caused the fire.",
+        TriggerParameter.LOCATION to "The entity's location."
+    )
+
     override val parameters = setOf(
         TriggerParameter.VICTIM,
         TriggerParameter.LOCATION

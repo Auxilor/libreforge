@@ -8,6 +8,16 @@ import net.william278.husktowns.events.MemberJoinEvent
 import org.bukkit.event.EventHandler
 
 object TriggerJoinTown : Trigger("join_town") {
+    override val description = "Fires when the player joins a HuskTowns town."
+
+    override val categories = setOf("player")
+
+    override val additionalInfo = listOf("Requires HuskTowns to be installed.")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.TEXT to "The role name the player was assigned on joining."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT,

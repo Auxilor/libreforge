@@ -11,9 +11,18 @@ import org.bukkit.event.EventHandler
 import java.util.UUID
 
 object TriggerGainXp : Trigger("gain_xp") {
+    override val description = "Fires when the player gains experience points."
+
+    override val categories = setOf("player")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.VALUE to "The amount of experience gained."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.EVENT
+        TriggerParameter.EVENT,
+        TriggerParameter.VALUE
     )
 
     private val telekinesisGranted = mutableSetOf<UUID>()

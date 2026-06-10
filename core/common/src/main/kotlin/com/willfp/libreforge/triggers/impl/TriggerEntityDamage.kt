@@ -10,9 +10,20 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.entity.EntityDamageEvent
 
 object TriggerEntityDamage : Trigger("entity_damage") {
+    override val description = "Fires when any entity takes damage from any source."
+
+    override val categories = setOf("entity")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.VICTIM to "The entity that was damaged.",
+        TriggerParameter.LOCATION to "The entity's location.",
+        TriggerParameter.VALUE to "The damage dealt."
+    )
+
     override val parameters = setOf(
         TriggerParameter.VICTIM,
-        TriggerParameter.LOCATION
+        TriggerParameter.LOCATION,
+        TriggerParameter.VALUE
     )
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)

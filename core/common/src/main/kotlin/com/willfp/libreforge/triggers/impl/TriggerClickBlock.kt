@@ -11,11 +11,20 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.EquipmentSlot
 
 object TriggerClickBlock : Trigger("click_block") {
+    override val description = "Fires when the player clicks on a block."
+
+    override val categories = setOf("interaction")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.BLOCK to "The block that was clicked.",
+        TriggerParameter.LOCATION to "The location of the clicked block."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.LOCATION,
         TriggerParameter.BLOCK,
-        TriggerParameter.EVENT
+        TriggerParameter.EVENT,
+        TriggerParameter.LOCATION
     )
 
     private val LEFT_CLICK_ITEMS = listOf(

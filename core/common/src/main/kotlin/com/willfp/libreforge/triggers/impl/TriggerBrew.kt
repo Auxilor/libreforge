@@ -17,6 +17,16 @@ import org.bukkit.inventory.BrewerInventory
 import java.util.concurrent.TimeUnit
 
 object TriggerBrew : Trigger("brew") {
+    override val description = "Fires when the player brews potions in a brewing stand."
+
+    override val categories = setOf("inventory")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The location of the brewing stand.",
+        TriggerParameter.ITEM to "One of the potion items that was brewed.",
+        TriggerParameter.VALUE to "The number of potions brewed."
+    )
+
     private val playerCache = Caffeine.newBuilder()
         // Arbitrary long time
         .expireAfterWrite(15, TimeUnit.MINUTES)
@@ -25,7 +35,8 @@ object TriggerBrew : Trigger("brew") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,
-        TriggerParameter.ITEM
+        TriggerParameter.ITEM,
+        TriggerParameter.VALUE
     )
 
     @EventHandler

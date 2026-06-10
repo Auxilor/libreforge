@@ -8,6 +8,12 @@ import net.citizensnpcs.api.event.NPCLeftClickEvent
 import org.bukkit.event.EventHandler
 
 object TriggerLeftClickNPC : Trigger("left_click_npc") {
+    override val description = "Fires when the player left-clicks a Citizens NPC."
+
+    override val categories = setOf("interaction")
+
+    override val additionalInfo = listOf("Requires Citizens to be installed.")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT

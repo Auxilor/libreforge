@@ -8,10 +8,19 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerToggleSneakEvent
 
 object TriggerToggleSneak : Trigger("toggle_sneak") {
+    override val description = "Fires when the player toggles sneaking."
+
+    override val categories = setOf("movement")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The player's location.",
+        TriggerParameter.VELOCITY to "The player's velocity at the time of the toggle."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.LOCATION,
         TriggerParameter.EVENT,
+        TriggerParameter.LOCATION,
         TriggerParameter.VELOCITY
     )
 

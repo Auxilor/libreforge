@@ -19,6 +19,14 @@ private fun Material.isDrink(): Boolean {
 }
 
 object TriggerDrink : Trigger("drink") {
+    override val description = "Fires when the player drinks a potion, honey bottle, milk bucket or stew."
+
+    override val categories = setOf("inventory")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.ITEM to "The item that was consumed."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT,

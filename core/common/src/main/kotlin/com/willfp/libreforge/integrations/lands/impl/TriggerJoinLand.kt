@@ -9,11 +9,23 @@ import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 
 object TriggerJoinLand : Trigger("join_land") {
+    override val description = "Fires when the player is trusted into a Lands land by another player."
+
+    override val categories = setOf("player")
+
+    override val additionalInfo = listOf("Requires Lands to be installed.")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.VICTIM to "The land owner who performed the trust action.",
+        TriggerParameter.LOCATION to "The trusted player's location.",
+        TriggerParameter.TEXT to "The name of the land."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
+        TriggerParameter.VICTIM,
         TriggerParameter.EVENT,
         TriggerParameter.LOCATION,
-        TriggerParameter.VICTIM,
         TriggerParameter.TEXT
     )
 

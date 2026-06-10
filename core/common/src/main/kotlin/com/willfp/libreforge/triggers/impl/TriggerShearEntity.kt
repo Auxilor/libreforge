@@ -15,12 +15,28 @@ import org.bukkit.event.player.PlayerShearEntityEvent
 
 @Deprecated("Use 'shear' instead")
 object TriggerShearEntity : Trigger("shear_entity") {
+    override val description = "Fires when the player shears a living entity."
+
+    override val categories = setOf("interaction")
+
+    override val additionalInfo = listOf(
+        "Deprecated — use 'shear' instead, which also handles shearing blocks."
+    )
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.VICTIM to "The entity that was sheared.",
+        TriggerParameter.ITEM to "The shears item used.",
+        TriggerParameter.LOCATION to "The location of the sheared entity.",
+        TriggerParameter.VALUE to "The number of items dropped."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
-        TriggerParameter.ITEM,
         TriggerParameter.EVENT,
-        TriggerParameter.LOCATION
+        TriggerParameter.LOCATION,
+        TriggerParameter.ITEM,
+        TriggerParameter.VALUE
     )
 
     @EventHandler(ignoreCancelled = true)

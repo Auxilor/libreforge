@@ -15,11 +15,22 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 
 object TriggerEntityXpDrop : Trigger("entity_xp_drop") {
+    override val description = "Fires when an entity killed by the player drops experience."
+
+    override val categories = setOf("combat")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.VICTIM to "The entity that died.",
+        TriggerParameter.LOCATION to "The location of the entity.",
+        TriggerParameter.VALUE to "The amount of XP dropped."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
         TriggerParameter.EVENT,
-        TriggerParameter.LOCATION
+        TriggerParameter.LOCATION,
+        TriggerParameter.VALUE
     )
 
     @EventHandler(

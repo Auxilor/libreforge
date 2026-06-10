@@ -8,6 +8,17 @@ import org.bukkit.event.EventHandler
 import org.purpurmc.purpur.event.inventory.GrindstoneTakeResultEvent
 
 object TriggerGrindItem : Trigger("grind_item") {
+    override val description = "Fires when the player takes a result from a grindstone."
+
+    override val categories = setOf("inventory")
+
+    override val additionalInfo = listOf("Requires Purpur to be installed.")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.ITEM to "The resulting item after grinding.",
+        TriggerParameter.VALUE to "The experience released by the grindstone."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.ITEM,
