@@ -12,6 +12,16 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.EquipmentSlot
 
 object TriggerNoteBlockPlay : Trigger("note_block_play") {
+    override val description = "Fires when the player plays a note block."
+
+    override val categories = setOf("interaction")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.BLOCK to "The note block.",
+        TriggerParameter.LOCATION to "The location of the note block.",
+        TriggerParameter.TEXT to "The instrument of the note block."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.BLOCK,

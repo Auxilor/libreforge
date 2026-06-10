@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.templates
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.applyDamage
 import com.willfp.libreforge.arguments
@@ -17,7 +18,12 @@ import org.bukkit.inventory.meta.Damageable
 
 abstract class DamageItemEffect(id: String) : Effect<NoCompileData>(id) {
     final override val arguments = arguments {
-        require("damage", "You must specify the amount of damage!")
+        require(
+            "damage",
+            "You must specify the amount of damage!",
+            description = "The amount of durability damage to apply to the item. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
     }
 
     abstract fun getItems(data: TriggerData): List<ItemStack>

@@ -9,6 +9,14 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityToggleSwimEvent
 
 object TriggerStartSwimming : Trigger("start_swimming") {
+    override val description = "Fires when a player starts swimming."
+
+    override val categories = setOf("movement")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The player's location when they started swimming."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION

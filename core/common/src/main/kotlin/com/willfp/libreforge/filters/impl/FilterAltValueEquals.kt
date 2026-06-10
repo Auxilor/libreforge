@@ -1,6 +1,7 @@
 package com.willfp.libreforge.filters.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.filters.Filter
 import com.willfp.libreforge.getDoubleFromExpression
@@ -10,6 +11,10 @@ import kotlin.math.absoluteValue
 private const val EPSILON = 0.0000001
 
 object FilterAltValueEquals : Filter<NoCompileData, Double>("alt_value_equals") {
+    override val description = "Matches when the trigger's alt value equals the given amount."
+    override val categories = setOf("value")
+    override val valueType = ArgType.DOUBLE
+
     override fun getValue(config: Config, data: TriggerData?, key: String): Double {
         return config.getDoubleFromExpression(key, data)
     }

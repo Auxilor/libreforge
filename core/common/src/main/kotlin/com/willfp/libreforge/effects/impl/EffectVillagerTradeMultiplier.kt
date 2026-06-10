@@ -12,6 +12,8 @@ import org.bukkit.inventory.MerchantRecipe
 import kotlin.math.ceil
 
 object EffectVillagerTradeMultiplier : MultiplierEffect("villager_trade_multiplier"), Listener {
+    override val description = "Multiplies the ingredient costs of villager trades when the player opens a merchant."
+    override val categories = setOf("economy")
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerInteractEntityEvent) {

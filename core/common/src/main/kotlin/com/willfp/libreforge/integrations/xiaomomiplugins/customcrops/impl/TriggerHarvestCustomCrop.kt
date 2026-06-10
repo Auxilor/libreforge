@@ -9,11 +9,22 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 
 object TriggerHarvestCustomCrop : Trigger("harvest_custom_crop") {
+    override val description = "Fires when the player harvests a CustomCrops crop."
+
+    override val categories = setOf("world")
+
+    override val additionalInfo = listOf("Requires CustomCrops (xiaomomi) to be installed.")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The location of the crop.",
+        TriggerParameter.TEXT to "The ID of the harvested crop."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT,
-        TriggerParameter.TEXT,
-        TriggerParameter.LOCATION
+        TriggerParameter.LOCATION,
+        TriggerParameter.TEXT
     )
 
     @EventHandler(ignoreCancelled = true)

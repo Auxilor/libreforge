@@ -8,6 +8,8 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.player.PlayerFishEvent
 
 object EffectReelSpeedMultiplier : MultiplierEffect("reel_speed_multiplier") {
+    override val description = "Multiplies the speed at which caught fish or entities are reeled in."
+    override val categories = setOf("player")
     @EventHandler(
         priority = EventPriority.HIGH,
         ignoreCancelled = true

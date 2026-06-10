@@ -13,6 +13,19 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
 
 object TriggerTakeDamage : Trigger("take_damage") {
+    override val description = "Fires when the player takes any damage."
+
+    override val categories = setOf("combat")
+
+    override val additionalInfo = listOf("Does not fire for void, /kill, or suicide damage.",)
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.VICTIM to "The entity that took the damage.",
+        TriggerParameter.VALUE to "The final damage taken."
+    )
+
+    var blockEntityDamageByEntity: Boolean = false
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,

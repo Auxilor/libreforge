@@ -1,12 +1,17 @@
 package com.willfp.libreforge.filters.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.filters.Filter
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 
 object FilterValueAbove : Filter<NoCompileData, Double>("value_above") {
+    override val description = "Matches when the trigger value is greater than or equal to the given amount."
+    override val categories = setOf("value")
+    override val valueType = ArgType.DOUBLE
+
     override fun getValue(config: Config, data: TriggerData?, key: String): Double {
         return config.getDoubleFromExpression(key, data)
     }

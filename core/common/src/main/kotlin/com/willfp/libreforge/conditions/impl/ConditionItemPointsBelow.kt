@@ -2,6 +2,7 @@ package com.willfp.libreforge.conditions.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Dispatcher
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
@@ -13,9 +14,22 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
 object ConditionItemPointsBelow : Condition<NoCompileData>("item_points_below") {
+    override val description = "Passes when the held item's points of a given type are at or below the specified amount."
+    override val categories = setOf("inventory")
+
     override val arguments = arguments {
-        require("type", "You must specify the type of points to check for!")
-        require("amount", "You must specify maximum amount of points!")
+        require(
+            "type",
+            "You must specify the type of points to check for!",
+            description = "The points type to read from the held item.",
+            type = ArgType.STRING
+        )
+        require(
+            "amount",
+            "You must specify maximum amount of points!",
+            description = "The maximum number of points the item may have.",
+            type = ArgType.EXPRESSION
+        )
     }
 
     override fun isMet(

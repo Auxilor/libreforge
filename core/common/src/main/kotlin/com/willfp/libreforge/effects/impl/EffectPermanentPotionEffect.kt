@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
@@ -18,6 +19,9 @@ import java.util.UUID
 
 @Suppress("UNCHECKED_CAST")
 object EffectPermanentPotionEffect : Effect<NoCompileData>("permanent_potion_effect") {
+    override val description = "Permanently applies a potion effect to the player for as long as the holder is active, surviving respawns."
+    override val categories = setOf("potion", "player")
+
     override val shouldReload = false
 
     override val arguments = arguments {
@@ -30,7 +34,29 @@ object EffectPermanentPotionEffect : Effect<NoCompileData>("permanent_potion_eff
             @Suppress("DEPRECATION")
             PotionEffectType.getByName(it.uppercase()) != null
         }
-        require("level", "You must specify the effect level!")
+        describe(
+            "effect",
+            description = "The potion effect type to apply (e.g. SPEED, STRENGTH).",
+            type = ArgType.POTION_EFFECT
+        )
+        require(
+            "level",
+            "You must specify the effect level!",
+            description = "The amplifier level of the potion effect (1 = level I). Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
+        optional(
+            "particles",
+            description = "Whether the potion effect shows particles. Defaults to true.",
+            type = ArgType.BOOLEAN,
+            default = "true"
+        )
+        optional(
+            "icon",
+            description = "Whether the potion effect shows an icon in the HUD. Defaults to true.",
+            type = ArgType.BOOLEAN,
+            default = "true"
+        )
     }
 
     private val metaKey = "libreforge_${this.id}"

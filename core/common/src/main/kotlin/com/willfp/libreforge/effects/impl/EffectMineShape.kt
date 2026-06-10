@@ -5,6 +5,7 @@ import com.willfp.eco.core.blocks.matches
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.eco.util.simplify
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.templates.MineBlockEffect
@@ -16,12 +17,56 @@ import org.bukkit.block.Block
 import org.bukkit.util.Vector
 
 object EffectMineShape : MineBlockEffect<NoCompileData>("mine_shape") {
+    override val description = "Breaks blocks in a custom 2D grid shape relative to the block the player mines."
+    override val categories = setOf("world")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER
     )
 
     override val arguments = arguments {
-        require("shape", "You must specify the shape to break!")
+        require(
+            "shape",
+            "You must specify the shape to break!",
+            description = "A list of strings forming a grid where 'T' is the trigger block and 'X' marks blocks to break.",
+            type = ArgType.STRING_LIST
+        )
+        optional(
+            "depth",
+            description = "How many layers deep to mine behind the trigger block. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            default = "1"
+        )
+        optional(
+            "whitelist",
+            description = "A list of blocks that are allowed to be broken. Defaults to all blocks.",
+            type = ArgType.BLOCK_LIST,
+            default = "[]"
+        )
+        optional(
+            "blacklisted_blocks",
+            description = "A list of blocks that will never be broken by this effect.",
+            type = ArgType.BLOCK_LIST,
+            default = "[]"
+        )
+        optional(
+            "prevent_trigger",
+            description = "Whether to prevent the broken blocks from re-triggering this effect.",
+            type = ArgType.BOOLEAN,
+            default = "false"
+        )
+        optional(
+            "disable_on_sneak",
+            description = "Whether to disable the shape mining when the player is sneaking.",
+            type = ArgType.BOOLEAN,
+            default = "false"
+        )
+        optional(
+            "check_hardness",
+            description = "Whether to skip blocks harder than the trigger block. Defaults to true.",
+            type = ArgType.BOOLEAN,
+            default = "true"
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {

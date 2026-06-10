@@ -1,7 +1,9 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.getOrElse
@@ -10,9 +12,21 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
 object EffectStrikeLightning : Effect<NoCompileData>("strike_lightning") {
+    override val description = "Strikes lightning at the trigger location."
+    override val categories = setOf("combat", "world")
+
     override val parameters = setOf(
         TriggerParameter.LOCATION
     )
+
+    override val arguments = arguments {
+        optional(
+            "amount",
+            description = "The number of lightning strikes. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            default = "1"
+        )
+    }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val location = data.location ?: return false

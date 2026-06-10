@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -12,15 +13,38 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.LivingEntity
 
 object EffectShockwave : Effect<NoCompileData>("shockwave") {
+    override val description = "Creates an expanding shockwave that knocks back and damages nearby entities."
+    override val categories = setOf("combat", "movement")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER
     )
 
     override val arguments = arguments {
-        require("radius", "You must specify the shockwave radius!")
-        require("pulses", "You must specify the number of pulses!")
-        require("damage", "You must specify the damage per entity!")
-        require("knockback", "You must specify the knockback force!")
+        require(
+            "radius",
+            "You must specify the shockwave radius!",
+            description = "The maximum radius the shockwave expands to. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
+        require(
+            "pulses",
+            "You must specify the number of pulses!",
+            description = "How many pulses the shockwave expands over before reaching its full radius. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
+        require(
+            "damage",
+            "You must specify the damage per entity!",
+            description = "The amount of damage dealt to each entity caught in the shockwave. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
+        require(
+            "knockback",
+            "You must specify the knockback force!",
+            description = "The knockback force applied to each entity hit. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {

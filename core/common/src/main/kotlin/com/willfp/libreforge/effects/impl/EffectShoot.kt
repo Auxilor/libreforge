@@ -2,6 +2,7 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.util.runExempted
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -15,12 +16,44 @@ import org.bukkit.event.entity.EntityShootBowEvent
 
 @Suppress("UNCHECKED_CAST")
 object EffectShoot : Effect<NoCompileData>("shoot") {
+    override val description = "Launches a projectile of the specified entity type from the player."
+    override val categories = setOf("combat")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER
     )
 
     override val arguments = arguments {
-        require("projectile", "You must specify the projectile!")
+        require(
+            "projectile",
+            "You must specify the projectile!",
+            description = "The entity type to launch as a projectile, e.g. ARROW or SNOWBALL.",
+            type = ArgType.ENTITY
+        )
+        optional(
+            "inherit_velocity",
+            description = "Whether the projectile should inherit the player's current velocity.",
+            type = ArgType.BOOLEAN,
+            default = "false"
+        )
+        optional(
+            "launch-at-location",
+            description = "Whether the projectile should be teleported to the trigger location after launch.",
+            type = ArgType.BOOLEAN,
+            default = "false"
+        )
+        optional(
+            "allow_pickup",
+            description = "Whether the projectile can be picked up by players (applies to arrows).",
+            type = ArgType.BOOLEAN,
+            default = "false"
+        )
+        optional(
+            "no_source",
+            description = "Whether the projectile should have no shooter, preventing attribution to the player.",
+            type = ArgType.BOOLEAN,
+            default = "false"
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {

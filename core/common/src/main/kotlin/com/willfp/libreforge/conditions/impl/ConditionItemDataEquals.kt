@@ -3,6 +3,7 @@ package com.willfp.libreforge.conditions.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.placeholder.context.placeholderContext
 import com.willfp.libreforge.Dispatcher
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
@@ -14,9 +15,22 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
 object ConditionItemDataEquals : Condition<NoCompileData>("item_data_equals") {
+    override val description = "Passes when the held item's custom data value for a given key equals the specified value."
+    override val categories = setOf("inventory")
+
     override val arguments = arguments {
-        require("key", "You must specify the data key!")
-        require("value", "You must specify the data value to equal!")
+        require(
+            "key",
+            "You must specify the data key!",
+            description = "The custom item data key to read from the item.",
+            type = ArgType.STRING
+        )
+        require(
+            "value",
+            "You must specify the data value to equal!",
+            description = "The value that the data key must equal.",
+            type = ArgType.STRING
+        )
     }
 
     override fun isMet(

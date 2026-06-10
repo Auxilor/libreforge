@@ -1,12 +1,18 @@
 package com.willfp.libreforge.integrations.xiaomomiplugins.customcrops.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.filters.Filter
 import com.willfp.libreforge.triggers.TriggerData
 import net.momirealms.customcrops.api.event.FertilizerUseEvent
 
 object FilterFertilizerType : Filter<NoCompileData, Collection<String>>("fertilizer_type") {
+    override val description = "Matches when the fertilizer used matches one of the given fertilizer IDs."
+    override val categories = setOf("world")
+    override val valueType = ArgType.STRING_LIST
+    override val additionalInfo = listOf("Passes automatically when the event is not a CustomCrops fertilizer event.")
+
     override fun getValue(config: Config, data: TriggerData?, key: String): Collection<String> {
         return config.getStrings(key)
     }

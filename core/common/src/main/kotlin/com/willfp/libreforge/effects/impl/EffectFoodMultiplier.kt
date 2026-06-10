@@ -8,6 +8,9 @@ import org.bukkit.event.entity.FoodLevelChangeEvent
 import kotlin.math.ceil
 
 object EffectFoodMultiplier : MultiplierEffect("food_multiplier") {
+    override val description = "Multiplies the amount of food level gained when the player eats."
+    override val categories = setOf("player")
+
     @EventHandler(ignoreCancelled = true)
     fun handle(event: FoodLevelChangeEvent) {
         val player = event.entity as? Player ?: return

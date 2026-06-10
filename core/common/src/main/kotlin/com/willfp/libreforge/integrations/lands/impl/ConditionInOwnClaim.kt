@@ -11,6 +11,10 @@ import me.angeschossen.lands.api.LandsIntegration
 import org.bukkit.entity.Player
 
 object ConditionInOwnClaim : Condition<NoCompileData>("in_own_claim") {
+    override val description = "Passes when the player is standing inside a Lands area where they hold the owner role."
+    override val categories = setOf("world", "player")
+    override val additionalInfo = listOf("Requires the Lands plugin.")
+
     override fun isMet(
         dispatcher: Dispatcher<*>,
         config: Config,

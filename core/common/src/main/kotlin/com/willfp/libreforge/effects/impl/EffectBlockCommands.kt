@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.map.nestedListMap
 import com.willfp.eco.util.formatEco
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
@@ -14,8 +15,21 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent
 import java.util.UUID
 
 object EffectBlockCommands : Effect<NoCompileData>("block_commands") {
+    override val description = "Prevents the player from using specific commands while the holder is active."
+    override val categories = setOf("player", "chat")
+
     override val arguments = arguments {
-        require("commands", "You must specify the commands to block!")
+        require(
+            "commands",
+            "You must specify the commands to block!",
+            description = "The list of command names to block (without the leading slash).",
+            type = ArgType.STRING_LIST
+        )
+        optional(
+            "messages",
+            description = "Messages to send to the player when a blocked command is attempted.",
+            type = ArgType.STRING_LIST
+        )
     }
 
     private val players = nestedListMap<UUID, UUID, String>()

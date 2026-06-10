@@ -9,6 +9,18 @@ import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 
 object TriggerLandsBankDeposit : Trigger("lands_bank_deposit") {
+    override val description = "Fires when the player deposits money into a Lands bank."
+
+    override val categories = setOf("economy")
+
+    override val additionalInfo = listOf("Requires Lands to be installed.")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The player's location.",
+        TriggerParameter.VALUE to "The amount deposited.",
+        TriggerParameter.ALT_VALUE to "The new bank balance after the deposit."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT,

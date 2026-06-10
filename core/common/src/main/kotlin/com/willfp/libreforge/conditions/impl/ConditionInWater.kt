@@ -9,6 +9,10 @@ import com.willfp.libreforge.get
 import org.bukkit.entity.Entity
 
 object ConditionInWater : Condition<NoCompileData>("in_water") {
+    override val description = "Passes when the entity is in contact with water."
+
+    override val categories = setOf("player", "world")
+
     override fun isMet(
         dispatcher: Dispatcher<*>,
         config: Config,

@@ -1,12 +1,17 @@
 package com.willfp.libreforge.filters.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.filters.Filter
 import com.willfp.libreforge.getProvider
 import com.willfp.libreforge.triggers.TriggerData
 
 object FilterThisItem : Filter<NoCompileData, Boolean>("this_item") {
+    override val description = "Matches when the item that triggered the effect is the same item that holds this effect."
+    override val categories = setOf("inventory", "meta")
+    override val valueType = ArgType.BOOLEAN
+
     override fun getValue(config: Config, data: TriggerData?, key: String): Boolean {
         return config.getBool(key)
     }

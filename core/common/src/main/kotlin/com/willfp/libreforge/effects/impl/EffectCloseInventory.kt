@@ -7,6 +7,9 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
 object EffectCloseInventory : Effect<NoCompileData>("close_inventory") {
+    override val description = "Closes any open inventory GUI for the player."
+    override val categories = setOf("inventory", "player")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER
     )

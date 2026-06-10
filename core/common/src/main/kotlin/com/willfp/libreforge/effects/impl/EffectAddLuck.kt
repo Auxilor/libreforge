@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.templates.AttributeEffect
 import org.bukkit.attribute.Attribute
@@ -13,8 +14,16 @@ object EffectAddLuck : AttributeEffect(
     Attribute.LUCK,
     AttributeModifier.Operation.ADD_NUMBER
 ) {
+    override val description = "Permanently increases the player's luck attribute while the holder is active."
+    override val categories = setOf("player", "attribute")
+
     override val arguments = arguments {
-        require("amount", "You must specify the amount of luck to add!")
+        require(
+            "amount",
+            "You must specify the amount of luck to add!",
+            description = "The amount of luck to add. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
     }
 
     override fun getValue(config: Config, entity: LivingEntity): Double =

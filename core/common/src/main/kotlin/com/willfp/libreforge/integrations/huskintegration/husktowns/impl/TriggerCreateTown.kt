@@ -8,6 +8,12 @@ import net.william278.husktowns.events.TownCreateEvent
 import org.bukkit.event.EventHandler
 
 object TriggerCreateTown : Trigger("create_town") {
+    override val description = "Fires when the player creates a HuskTowns town."
+
+    override val categories = setOf("player")
+
+    override val additionalInfo = listOf("Requires HuskTowns to be installed.")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT

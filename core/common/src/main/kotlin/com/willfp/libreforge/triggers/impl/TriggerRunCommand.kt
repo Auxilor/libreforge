@@ -9,6 +9,15 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerCommandPreprocessEvent
 
 object TriggerRunCommand : Trigger("run_command") {
+    override val description = "Fires when the player runs a command."
+
+    override val categories = setOf("player")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The player's location.",
+        TriggerParameter.TEXT to "The full command message."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,

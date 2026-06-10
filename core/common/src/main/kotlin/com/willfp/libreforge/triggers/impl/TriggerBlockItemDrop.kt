@@ -20,11 +20,24 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.block.BlockDropItemEvent
 
 object TriggerBlockItemDrop : Trigger("block_item_drop") {
+    override val description = "Fires when a block broken by the player drops its items."
+
+    override val categories = setOf("world")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.BLOCK to "The block that was broken.",
+        TriggerParameter.LOCATION to "The location of the broken block.",
+        TriggerParameter.ITEM to "Empty — the drops are exposed through the drop count, not a single item.",
+        TriggerParameter.VALUE to "The total number of items dropped."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.BLOCK,
         TriggerParameter.EVENT,
-        TriggerParameter.LOCATION
+        TriggerParameter.LOCATION,
+        TriggerParameter.ITEM,
+        TriggerParameter.VALUE
     )
 
     @EventHandler(

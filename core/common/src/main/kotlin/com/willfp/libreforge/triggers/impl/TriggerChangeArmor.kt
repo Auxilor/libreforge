@@ -8,6 +8,14 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.event.EventHandler
 
 object TriggerChangeArmor : Trigger("change_armor") {
+    override val description = "Fires when the player changes their equipped armor."
+
+    override val categories = setOf("inventory")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The player's location when the armor changed."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION

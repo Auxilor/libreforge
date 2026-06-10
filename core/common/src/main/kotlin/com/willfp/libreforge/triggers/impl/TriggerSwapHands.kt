@@ -8,10 +8,19 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerSwapHandItemsEvent
 
 object TriggerSwapHands : Trigger("swap_hands") {
+    override val description = "Fires when the player swaps items between main hand and off-hand."
+
+    override val categories = setOf("interaction")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The player's location.",
+        TriggerParameter.ITEM to "The item now in the main hand after the swap."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.LOCATION,
         TriggerParameter.EVENT,
+        TriggerParameter.LOCATION,
         TriggerParameter.ITEM
     )
 

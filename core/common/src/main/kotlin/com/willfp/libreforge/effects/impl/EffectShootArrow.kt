@@ -2,7 +2,9 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.util.runExempted
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -11,9 +13,39 @@ import org.bukkit.entity.Arrow
 import org.bukkit.event.entity.EntityShootBowEvent
 
 object EffectShootArrow : Effect<NoCompileData>("shoot_arrow") {
+    override val description = "Shoots an arrow from the player, optionally inheriting bow fire and velocity."
+    override val categories = setOf("combat")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER
     )
+
+    override val arguments = arguments {
+        optional(
+            "inherit_velocity",
+            description = "Whether the arrow should inherit the player's current velocity.",
+            type = ArgType.BOOLEAN,
+            default = "false"
+        )
+        optional(
+            "launch-at-location",
+            description = "Whether the arrow should be teleported to the trigger location after launch.",
+            type = ArgType.BOOLEAN,
+            default = "false"
+        )
+        optional(
+            "allow_pickup",
+            description = "Whether the arrow can be picked up by players.",
+            type = ArgType.BOOLEAN,
+            default = "false"
+        )
+        optional(
+            "no_source",
+            description = "Whether the arrow should have no shooter, preventing attribution to the player.",
+            type = ArgType.BOOLEAN,
+            default = "false"
+        )
+    }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val player = data.player ?: return false

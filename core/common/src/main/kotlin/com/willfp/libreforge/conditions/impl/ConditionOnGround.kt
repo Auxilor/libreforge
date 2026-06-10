@@ -8,6 +8,9 @@ import com.willfp.libreforge.conditions.Condition
 import org.bukkit.block.BlockFace
 
 object ConditionOnGround : Condition<NoCompileData>("on_ground") {
+    override val description = "Passes when the entity is standing on solid ground."
+    override val categories = setOf("player")
+
     override fun isMet(
         dispatcher: Dispatcher<*>,
         config: Config,

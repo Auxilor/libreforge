@@ -9,9 +9,19 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.inventory.InventoryClickEvent
 
 object TriggerMoveItem : Trigger("move_item") {
+    override val description = "Fires when a player clicks an item in an inventory."
+
+    override val categories = setOf("inventory")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.ITEM to "The item that was clicked.",
+        TriggerParameter.VALUE to "The stack size of the clicked item."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.ITEM,
+        TriggerParameter.VALUE,
         TriggerParameter.EVENT
     )
 

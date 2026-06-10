@@ -9,6 +9,17 @@ import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 
 object TriggerLandsSpawnTeleport : Trigger("lands_spawn_teleport") {
+    override val description = "Fires when the player teleports to a Lands land spawn point."
+
+    override val categories = setOf("movement")
+
+    override val additionalInfo = listOf("Requires Lands to be installed.")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The player's location.",
+        TriggerParameter.TEXT to "The name of the land."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT,

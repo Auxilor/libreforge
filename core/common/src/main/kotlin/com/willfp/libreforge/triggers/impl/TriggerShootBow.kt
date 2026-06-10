@@ -11,12 +11,24 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityShootBowEvent
 
 object TriggerShootBow : Trigger("shoot_bow") {
+    override val description = "Fires when the player shoots a bow or crossbow."
+
+    override val categories = setOf("combat")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.VICTIM to "The entity that shot the bow (same as the trigger source).",
+        TriggerParameter.PROJECTILE to "The projectile that was launched.",
+        TriggerParameter.VELOCITY to "The initial velocity of the launched projectile.",
+        TriggerParameter.VALUE to "The draw force of the bow."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
-        TriggerParameter.PROJECTILE,
         TriggerParameter.EVENT,
-        TriggerParameter.VELOCITY
+        TriggerParameter.PROJECTILE,
+        TriggerParameter.VELOCITY,
+        TriggerParameter.VALUE
     )
 
     @EventHandler(ignoreCancelled = true)

@@ -8,9 +8,19 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.raid.RaidFinishEvent
 
 object TriggerWinRaid : Trigger("win_raid") {
+    override val description = "Fires when the player wins a raid."
+
+    override val categories = setOf("combat", "world")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The location of the raid.",
+        TriggerParameter.VALUE to "The bad omen level of the raid, plus one."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.LOCATION
+        TriggerParameter.LOCATION,
+        TriggerParameter.VALUE
     )
 
     @EventHandler(ignoreCancelled = true)
