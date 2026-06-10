@@ -24,10 +24,7 @@ object TriggerTakeDamage : Trigger("take_damage") {
 
     override val categories = setOf("combat")
 
-    override val additionalInfo = listOf(
-        "Does not fire for void, /kill, or suicide damage.",
-        "After 2026-05-04 (or if opt-in.take_damage_blocks_entity_damage is enabled), does not fire for entity-to-entity damage — use 'take_entity_damage' instead."
-    )
+    override val additionalInfo = listOf("Does not fire for void, /kill, or suicide damage.",)
 
     override val parameterDescriptions = mapOf(
         TriggerParameter.VICTIM to "The entity that took the damage.",
