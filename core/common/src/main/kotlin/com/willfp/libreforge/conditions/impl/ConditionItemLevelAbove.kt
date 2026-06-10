@@ -2,6 +2,7 @@ package com.willfp.libreforge.conditions.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Dispatcher
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
@@ -14,9 +15,22 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
 object ConditionItemLevelAbove : Condition<NoCompileData>("item_level_above") {
+    override val description = "Passes when the held item's level for a given level type is above the specified value."
+    override val categories = setOf("inventory")
+
     override val arguments = arguments {
-        require("id", "You must specify the level ID to check for!")
-        require("level", "You must specify the minimum level!")
+        require(
+            "id",
+            "You must specify the level ID to check for!",
+            description = "The ID of the level type to check on the held item.",
+            type = ArgType.STRING
+        )
+        require(
+            "level",
+            "You must specify the minimum level!",
+            description = "The minimum level the item must exceed.",
+            type = ArgType.EXPRESSION
+        )
     }
 
     override fun isMet(

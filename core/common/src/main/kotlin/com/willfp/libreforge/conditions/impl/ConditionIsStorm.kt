@@ -12,6 +12,8 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.weather.WeatherChangeEvent
 
 object ConditionIsStorm: Condition<NoCompileData>("is_storm") {
+    override val description = "Passes when the world is experiencing a storm."
+    override val categories = setOf("world")
     override fun isMet(
         dispatcher: Dispatcher<*>,
         config: Config,

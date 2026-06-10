@@ -14,6 +14,9 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.player.PlayerToggleSneakEvent
 
 object ConditionIsSneaking : Condition<NoCompileData>("is_sneaking") {
+    override val description = "Passes when the player is sneaking."
+    override val categories = setOf("player")
+
     override fun isMet(
         dispatcher: Dispatcher<*>,
         config: Config,

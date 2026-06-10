@@ -9,6 +9,9 @@ import com.willfp.libreforge.get
 import org.bukkit.entity.Entity
 
 object ConditionInBubble : Condition<NoCompileData>("in_bubble") {
+    override val description = "Passes when the entity is inside a bubble column."
+    override val categories = setOf("world", "player")
+
     override fun isMet(
         dispatcher: Dispatcher<*>,
         config: Config,

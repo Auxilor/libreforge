@@ -14,6 +14,8 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.player.PlayerToggleSprintEvent
 
 object ConditionIsSprinting : Condition<NoCompileData>("is_sprinting") {
+    override val description = "Passes when the player is sprinting."
+    override val categories = setOf("player")
     override fun isMet(
         dispatcher: Dispatcher<*>,
         config: Config,

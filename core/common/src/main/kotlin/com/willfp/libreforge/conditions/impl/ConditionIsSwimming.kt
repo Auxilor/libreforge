@@ -14,6 +14,8 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.entity.EntityToggleSwimEvent
 
 object ConditionIsSwimming : Condition<NoCompileData>("is_swimming") {
+    override val description = "Passes when the entity is actively in the swimming animation."
+    override val categories = setOf("player")
     override fun isMet(
         dispatcher: Dispatcher<*>,
         config: Config,

@@ -2,6 +2,7 @@ package com.willfp.libreforge.conditions.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.placeholder.context.placeholderContext
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
@@ -12,9 +13,22 @@ import org.bukkit.entity.Player
 
 
 object ConditionPlaceholderGreaterThan : Condition<NoCompileData>("placeholder_greater_than") {
+    override val description = "Passes when the resolved placeholder value is numerically greater than or equal to the specified value."
+    override val categories = setOf("meta")
+
     override val arguments = arguments {
-        require("placeholder", "You must specify the placeholder!")
-        require("value", "You must specify the value!")
+        require(
+            "placeholder",
+            "You must specify the placeholder!",
+            description = "The placeholder string to resolve and evaluate as a number.",
+            type = ArgType.STRING
+        )
+        require(
+            "value",
+            "You must specify the value!",
+            description = "The minimum numeric threshold the placeholder must meet or exceed.",
+            type = ArgType.EXPRESSION
+        )
     }
 
     override fun isMet(
