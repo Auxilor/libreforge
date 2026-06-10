@@ -17,6 +17,8 @@ object TriggerMineBlockCascade : Trigger("mine_block_cascade") {
 
     override val categories = setOf("world")
 
+    override val additionalInfo = listOf("This fires once for every block in the stack, not just the block the player broke.")
+
     override val parameterDescriptions = mapOf(
         TriggerParameter.BLOCK to "The block in the cascade that was broken.",
         TriggerParameter.LOCATION to "The location of the block.",
