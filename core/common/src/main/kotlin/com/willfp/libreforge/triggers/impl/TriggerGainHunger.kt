@@ -13,6 +13,10 @@ object TriggerGainHunger : Trigger("gain_hunger") {
 
     override val categories = setOf("player")
 
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.VALUE to "The amount of food level gained."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT,

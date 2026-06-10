@@ -12,6 +12,10 @@ object TriggerEnable : Trigger("enable") {
 
     override val categories = setOf("meta")
 
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.VICTIM to "The dispatcher as a living entity, if applicable."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,

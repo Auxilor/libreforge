@@ -22,6 +22,16 @@ object TriggerBrewIngredient : Trigger("brew_ingredient") {
         .expireAfterWrite(15, TimeUnit.MINUTES)
         .build<Location, Player>()
 
+    override val description = "Fires when an ingredient finishes brewing in a brewing stand."
+
+    override val categories = setOf("inventory")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The location of the brewing stand.",
+        TriggerParameter.ITEM to "The ingredient that was used.",
+        TriggerParameter.VALUE to "The number of potions brewed."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,

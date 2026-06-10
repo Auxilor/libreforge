@@ -15,6 +15,10 @@ object TriggerGainXp : Trigger("gain_xp") {
 
     override val categories = setOf("player")
 
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.VALUE to "The amount of experience gained."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT,

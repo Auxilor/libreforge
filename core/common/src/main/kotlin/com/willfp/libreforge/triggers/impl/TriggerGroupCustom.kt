@@ -17,6 +17,18 @@ object TriggerGroupCustom : TriggerGroup("custom") {
     }
 
     class TriggerCustom(id: String) : Trigger("custom_$id") {
+        override val description = "A custom trigger dispatched manually by other effects or plugins."
+
+        override val categories = setOf("meta")
+
+        override val parameterDescriptions = mapOf(
+            TriggerParameter.VICTIM to "The victim entity, if provided by the dispatcher.",
+            TriggerParameter.BLOCK to "The block, if provided by the dispatcher.",
+            TriggerParameter.LOCATION to "The location, if provided by the dispatcher.",
+            TriggerParameter.VELOCITY to "The velocity, if provided by the dispatcher.",
+            TriggerParameter.ITEM to "The item, if provided by the dispatcher."
+        )
+
         override val parameters = setOf(
             TriggerParameter.PLAYER,
             TriggerParameter.VICTIM,

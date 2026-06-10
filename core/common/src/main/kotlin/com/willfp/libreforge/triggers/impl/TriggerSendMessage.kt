@@ -11,6 +11,15 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.player.AsyncPlayerChatEvent
 
 object TriggerSendMessage : Trigger("send_message") {
+    override val description = "Fires when the player sends a chat message."
+
+    override val categories = setOf("player")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The player's location.",
+        TriggerParameter.TEXT to "The message that was sent."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT,

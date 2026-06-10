@@ -12,6 +12,10 @@ object TriggerLevelUpXp : Trigger("level_up_xp") {
 
     override val categories = setOf("player")
 
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.VALUE to "The player's new XP level."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VALUE

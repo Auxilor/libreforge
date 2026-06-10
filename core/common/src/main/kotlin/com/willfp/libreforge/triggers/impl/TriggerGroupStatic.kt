@@ -54,6 +54,18 @@ object TriggerGroupStatic : TriggerGroup("static") {
     }
 
     private class TriggerStatic(interval: Int) : Trigger("static_$interval") {
+        override val description = "Fires on a fixed tick interval for every online player."
+
+        override val categories = setOf("meta")
+
+        override val parameterDescriptions = mapOf(
+            TriggerParameter.VICTIM to "The player themselves.",
+            TriggerParameter.BLOCK to "The block the player is looking at, if any.",
+            TriggerParameter.LOCATION to "The player's location.",
+            TriggerParameter.VELOCITY to "The player's velocity.",
+            TriggerParameter.ITEM to "The item in the player's main hand."
+        )
+
         override val parameters = setOf(
             TriggerParameter.PLAYER,
             TriggerParameter.VICTIM,
@@ -67,6 +79,18 @@ object TriggerGroupStatic : TriggerGroup("static") {
     private class TriggerDynamicStatic(
         private val expression: String
     ) : Trigger("static_expr_${expression.hashCode()}") {
+        override val description = "Fires on a tick interval defined by an expression, for every online player."
+
+        override val categories = setOf("meta")
+
+        override val parameterDescriptions = mapOf(
+            TriggerParameter.VICTIM to "The player themselves.",
+            TriggerParameter.BLOCK to "The block the player is looking at, if any.",
+            TriggerParameter.LOCATION to "The player's location.",
+            TriggerParameter.VELOCITY to "The player's velocity.",
+            TriggerParameter.ITEM to "The item in the player's main hand."
+        )
+
         override val parameters = setOf(
             TriggerParameter.PLAYER,
             TriggerParameter.LOCATION,

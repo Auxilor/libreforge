@@ -22,6 +22,16 @@ object TriggerSmelt : Trigger("smelt") {
         .expireAfterWrite(15, TimeUnit.MINUTES)
         .build<Location, Player>()
 
+    override val description = "Fires when the player smelts an item in a furnace."
+
+    override val categories = setOf("inventory")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The location of the furnace.",
+        TriggerParameter.ITEM to "The resulting item.",
+        TriggerParameter.VALUE to "The number of items produced."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,

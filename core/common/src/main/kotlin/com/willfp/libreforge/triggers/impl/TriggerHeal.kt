@@ -13,6 +13,10 @@ object TriggerHeal : Trigger("heal") {
 
     override val categories = setOf("player")
 
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.VALUE to "The amount of health regained."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT,
