@@ -1,6 +1,7 @@
 package com.willfp.libreforge.conditions.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
@@ -11,9 +12,22 @@ import org.bukkit.Material
 import org.bukkit.entity.LivingEntity
 
 object ConditionNearBlock : Condition<NoCompileData>("near_block") {
+    override val description = "Passes when a block of the specified type is found within a cubic radius of the entity."
+    override val categories = setOf("world")
+
     override val arguments = arguments {
-        require("block", "You must specify the block type!")
-        require("radius", "You must specify the radius!")
+        require(
+            "block",
+            "You must specify the block type!",
+            description = "The block type to search for.",
+            type = ArgType.BLOCK
+        )
+        require(
+            "radius",
+            "You must specify the radius!",
+            description = "The radius of the cube around the entity to search within.",
+            type = ArgType.INT
+        )
     }
 
     override fun isMet(
