@@ -20,8 +20,8 @@ object TriggerCastRod : Trigger("cast_rod") {
 
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.LOCATION,
         TriggerParameter.EVENT,
+        TriggerParameter.LOCATION,
         TriggerParameter.ITEM
     )
 

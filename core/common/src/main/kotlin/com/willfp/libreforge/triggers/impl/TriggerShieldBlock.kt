@@ -17,14 +17,16 @@ object TriggerShieldBlock : Trigger("shield_block") {
 
     override val parameterDescriptions = mapOf(
         TriggerParameter.VICTIM to "The entity that attacked the player.",
-        TriggerParameter.LOCATION to "The attacker's location."
+        TriggerParameter.LOCATION to "The attacker's location.",
+        TriggerParameter.VALUE to "The amount of damage blocked."
     )
 
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
+        TriggerParameter.EVENT,
         TriggerParameter.LOCATION,
-        TriggerParameter.EVENT
+        TriggerParameter.VALUE
     )
 
     @EventHandler(ignoreCancelled = true)

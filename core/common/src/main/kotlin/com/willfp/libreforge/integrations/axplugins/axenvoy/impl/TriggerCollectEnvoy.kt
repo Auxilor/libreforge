@@ -21,8 +21,8 @@ object TriggerCollectEnvoy : Trigger("collect_envoy") {
 
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.LOCATION,
         TriggerParameter.EVENT,
+        TriggerParameter.LOCATION,
         TriggerParameter.TEXT
     )
 

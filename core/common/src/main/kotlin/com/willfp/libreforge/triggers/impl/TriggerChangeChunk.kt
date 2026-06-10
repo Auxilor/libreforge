@@ -15,9 +15,9 @@ object TriggerChangeChunk : Trigger("change_chunk") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
+        TriggerParameter.EVENT,
         TriggerParameter.LOCATION,
         TriggerParameter.VELOCITY,
-        TriggerParameter.EVENT,
         TriggerParameter.ITEM
     )
 

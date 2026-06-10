@@ -17,14 +17,16 @@ object TriggerBreed : Trigger("breed") {
     override val parameterDescriptions = mapOf(
         TriggerParameter.VICTIM to "The offspring entity that was spawned.",
         TriggerParameter.LOCATION to "The location of the offspring.",
-        TriggerParameter.ITEM to "The item used to breed."
+        TriggerParameter.ITEM to "The item used to breed.",
+        TriggerParameter.VALUE to "The experience dropped from breeding."
     )
 
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
         TriggerParameter.LOCATION,
-        TriggerParameter.ITEM
+        TriggerParameter.ITEM,
+        TriggerParameter.VALUE
     )
 
     @EventHandler(ignoreCancelled = true)

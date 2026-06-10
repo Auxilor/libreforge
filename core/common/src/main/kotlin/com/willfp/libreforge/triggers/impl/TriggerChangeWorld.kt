@@ -21,9 +21,9 @@ object TriggerChangeWorld : Trigger("change_world") {
 
     override val parameters = setOf(
         TriggerParameter.PLAYER,
+        TriggerParameter.EVENT,
         TriggerParameter.LOCATION,
         TriggerParameter.VELOCITY,
-        TriggerParameter.EVENT,
         TriggerParameter.ITEM,
         TriggerParameter.TEXT
     )

@@ -26,15 +26,17 @@ object TriggerShearEntity : Trigger("shear_entity") {
     override val parameterDescriptions = mapOf(
         TriggerParameter.VICTIM to "The entity that was sheared.",
         TriggerParameter.ITEM to "The shears item used.",
-        TriggerParameter.LOCATION to "The location of the sheared entity."
+        TriggerParameter.LOCATION to "The location of the sheared entity.",
+        TriggerParameter.VALUE to "The number of items dropped."
     )
 
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
-        TriggerParameter.ITEM,
         TriggerParameter.EVENT,
-        TriggerParameter.LOCATION
+        TriggerParameter.LOCATION,
+        TriggerParameter.ITEM,
+        TriggerParameter.VALUE
     )
 
     @EventHandler(ignoreCancelled = true)

@@ -23,8 +23,8 @@ object TriggerPotionEffect : Trigger("potion_effect") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
-        TriggerParameter.LOCATION,
         TriggerParameter.EVENT,
+        TriggerParameter.LOCATION,
         TriggerParameter.TEXT
     )
 

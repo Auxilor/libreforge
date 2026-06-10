@@ -18,7 +18,8 @@ object TriggerBlockXpDrop : Trigger("block_xp_drop") {
         TriggerParameter.PLAYER,
         TriggerParameter.BLOCK,
         TriggerParameter.EVENT,
-        TriggerParameter.LOCATION
+        TriggerParameter.LOCATION,
+        TriggerParameter.VALUE
     )
 
     @EventHandler(

@@ -19,8 +19,8 @@ object TriggerToggleSprint : Trigger("toggle_sprint") {
 
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.LOCATION,
         TriggerParameter.EVENT,
+        TriggerParameter.LOCATION,
         TriggerParameter.VELOCITY
     )
 

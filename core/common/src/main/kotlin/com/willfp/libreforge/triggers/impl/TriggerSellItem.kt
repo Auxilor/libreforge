@@ -14,12 +14,14 @@ object TriggerSellItem : Trigger("sell_item") {
     override val categories = setOf("economy")
 
     override val parameterDescriptions = mapOf(
-        TriggerParameter.ITEM to "The item that was sold."
+        TriggerParameter.ITEM to "The item that was sold.",
+        TriggerParameter.VALUE to "The total sell value of the items."
     )
 
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.ITEM
+        TriggerParameter.ITEM,
+        TriggerParameter.VALUE
     )
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)

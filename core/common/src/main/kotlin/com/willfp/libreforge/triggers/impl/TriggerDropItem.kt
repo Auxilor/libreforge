@@ -17,14 +17,16 @@ object TriggerDropItem : Trigger("drop_item") {
 
     override val parameterDescriptions = mapOf(
         TriggerParameter.ITEM to "The item that was dropped.",
-        TriggerParameter.LOCATION to "The location where the item was dropped."
+        TriggerParameter.LOCATION to "The location where the item was dropped.",
+        TriggerParameter.VALUE to "The number of items dropped."
     )
 
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.ITEM,
         TriggerParameter.EVENT,
-        TriggerParameter.LOCATION
+        TriggerParameter.LOCATION,
+        TriggerParameter.ITEM,
+        TriggerParameter.VALUE
     )
 
     @EventHandler(ignoreCancelled = true)

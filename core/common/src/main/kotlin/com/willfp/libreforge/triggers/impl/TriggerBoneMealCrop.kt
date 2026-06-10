@@ -20,6 +20,7 @@ object TriggerBoneMealCrop : Trigger("bonemeal_crop") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.BLOCK,
+        TriggerParameter.EVENT,
         TriggerParameter.LOCATION
     )
 

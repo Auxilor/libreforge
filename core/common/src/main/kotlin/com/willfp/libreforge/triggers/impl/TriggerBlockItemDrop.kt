@@ -24,7 +24,9 @@ object TriggerBlockItemDrop : Trigger("block_item_drop") {
         TriggerParameter.PLAYER,
         TriggerParameter.BLOCK,
         TriggerParameter.EVENT,
-        TriggerParameter.LOCATION
+        TriggerParameter.LOCATION,
+        TriggerParameter.ITEM,
+        TriggerParameter.VALUE
     )
 
     @EventHandler(

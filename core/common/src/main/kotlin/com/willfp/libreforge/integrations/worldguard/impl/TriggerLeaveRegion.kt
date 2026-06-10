@@ -19,8 +19,8 @@ object TriggerLeaveRegion : Trigger("leave_region") {
 
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.LOCATION,
-        TriggerParameter.EVENT
+        TriggerParameter.EVENT,
+        TriggerParameter.LOCATION
     )
 
     fun dispatch(player: Player, event: RegionEvent) {

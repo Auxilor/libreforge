@@ -20,16 +20,18 @@ object TriggerBowAttack : Trigger("bow_attack") {
         TriggerParameter.VICTIM to "The entity that was hit by the arrow.",
         TriggerParameter.LOCATION to "The victim's location at impact.",
         TriggerParameter.VELOCITY to "The velocity of the arrow at impact.",
-        TriggerParameter.PROJECTILE to "The arrow that hit the entity."
+        TriggerParameter.PROJECTILE to "The arrow that hit the entity.",
+        TriggerParameter.VALUE to "The damage dealt."
     )
 
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
-        TriggerParameter.LOCATION,
         TriggerParameter.EVENT,
+        TriggerParameter.LOCATION,
+        TriggerParameter.PROJECTILE,
         TriggerParameter.VELOCITY,
-        TriggerParameter.PROJECTILE
+        TriggerParameter.VALUE
     )
     
     @EventHandler(ignoreCancelled = true)

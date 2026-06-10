@@ -13,12 +13,16 @@ object TriggerLevelUpItem : Trigger("level_up_item") {
     override val categories = setOf("player")
 
     override val parameterDescriptions = mapOf(
-        TriggerParameter.ITEM to "The item that levelled up."
+        TriggerParameter.ITEM to "The item that levelled up.",
+        TriggerParameter.TEXT to "The ID of the item that was levelled up.",
+        TriggerParameter.VALUE to "The new level of the item."
     )
 
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.ITEM
+        TriggerParameter.ITEM,
+        TriggerParameter.TEXT,
+        TriggerParameter.VALUE
     )
 
     @EventHandler

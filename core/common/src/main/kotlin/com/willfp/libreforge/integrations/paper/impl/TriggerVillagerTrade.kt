@@ -16,13 +16,15 @@ object TriggerVillagerTrade : Trigger("villager_trade") {
 
     override val parameterDescriptions = mapOf(
         TriggerParameter.VICTIM to "The villager that was traded with.",
-        TriggerParameter.ITEM to "The item received from the trade."
+        TriggerParameter.ITEM to "The item received from the trade.",
+        TriggerParameter.VALUE to "The villager experience gained from the trade."
     )
 
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
-        TriggerParameter.ITEM
+        TriggerParameter.ITEM,
+        TriggerParameter.VALUE
     )
 
     @EventHandler(ignoreCancelled = true)

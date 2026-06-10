@@ -24,10 +24,10 @@ object TriggerProjectileLaunch : Trigger("projectile_launch") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
-        TriggerParameter.PROJECTILE,
-        TriggerParameter.VELOCITY,
         TriggerParameter.EVENT,
-        TriggerParameter.LOCATION
+        TriggerParameter.LOCATION,
+        TriggerParameter.PROJECTILE,
+        TriggerParameter.VELOCITY
     )
 
     @EventHandler(ignoreCancelled = true)

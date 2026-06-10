@@ -23,9 +23,9 @@ object TriggerJoinLand : Trigger("join_land") {
 
     override val parameters = setOf(
         TriggerParameter.PLAYER,
+        TriggerParameter.VICTIM,
         TriggerParameter.EVENT,
         TriggerParameter.LOCATION,
-        TriggerParameter.VICTIM,
         TriggerParameter.TEXT
     )
 

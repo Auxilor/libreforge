@@ -13,9 +13,9 @@ import org.bukkit.event.player.AsyncPlayerChatEvent
 object TriggerSendMessage : Trigger("send_message") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
+        TriggerParameter.EVENT,
         TriggerParameter.LOCATION,
-        TriggerParameter.TEXT,
-        TriggerParameter.EVENT
+        TriggerParameter.TEXT
     )
 
     @EventHandler(ignoreCancelled = true)

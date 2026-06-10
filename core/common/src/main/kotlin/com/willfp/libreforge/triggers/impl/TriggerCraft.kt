@@ -22,7 +22,8 @@ object TriggerCraft : Trigger("craft") {
 
     override val parameterDescriptions = mapOf(
         TriggerParameter.LOCATION to "The player's location.",
-        TriggerParameter.ITEM to "The crafted item."
+        TriggerParameter.ITEM to "The crafted item.",
+        TriggerParameter.VALUE to "The number of items crafted."
     )
 
     private const val CRAFTING_FAILED = 0
@@ -30,7 +31,8 @@ object TriggerCraft : Trigger("craft") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,
-        TriggerParameter.ITEM
+        TriggerParameter.ITEM,
+        TriggerParameter.VALUE
     )
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)

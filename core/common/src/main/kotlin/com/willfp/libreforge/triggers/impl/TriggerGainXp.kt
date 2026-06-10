@@ -17,7 +17,8 @@ object TriggerGainXp : Trigger("gain_xp") {
 
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.EVENT
+        TriggerParameter.EVENT,
+        TriggerParameter.VALUE
     )
 
     private val telekinesisGranted = mutableSetOf<UUID>()

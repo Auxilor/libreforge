@@ -11,8 +11,8 @@ import org.bukkit.event.vehicle.VehicleExitEvent
 object TriggerExitVehicle : Trigger("exit_vehicle") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.LOCATION,
-        TriggerParameter.EVENT
+        TriggerParameter.EVENT,
+        TriggerParameter.LOCATION
     )
 
     @EventHandler(ignoreCancelled = true)

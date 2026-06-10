@@ -22,14 +22,16 @@ object TriggerTakeEntityDamage : Trigger("take_entity_damage") {
 
     override val parameterDescriptions = mapOf(
         TriggerParameter.VICTIM to "The entity that dealt the damage (the attacker).",
-        TriggerParameter.LOCATION to "The attacker's location."
+        TriggerParameter.LOCATION to "The attacker's location.",
+        TriggerParameter.VALUE to "The damage taken."
     )
 
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
+        TriggerParameter.EVENT,
         TriggerParameter.LOCATION,
-        TriggerParameter.EVENT
+        TriggerParameter.VALUE
     )
 
     @EventHandler(ignoreCancelled = true)

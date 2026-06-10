@@ -14,6 +14,7 @@ object TriggerDisable : Trigger("disable") {
 
     override val parameters = setOf(
         TriggerParameter.PLAYER,
+        TriggerParameter.VICTIM,
         TriggerParameter.EVENT
     )
 

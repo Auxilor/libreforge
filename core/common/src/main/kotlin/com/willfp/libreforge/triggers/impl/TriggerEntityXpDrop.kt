@@ -19,7 +19,8 @@ object TriggerEntityXpDrop : Trigger("entity_xp_drop") {
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
         TriggerParameter.EVENT,
-        TriggerParameter.LOCATION
+        TriggerParameter.LOCATION,
+        TriggerParameter.VALUE
     )
 
     @EventHandler(

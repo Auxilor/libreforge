@@ -28,17 +28,19 @@ object TriggerTridentAttack : Trigger("trident_attack") {
         TriggerParameter.LOCATION to "The trident's location at impact.",
         TriggerParameter.PROJECTILE to "The trident projectile.",
         TriggerParameter.ITEM to "The trident item stack.",
-        TriggerParameter.VELOCITY to "The trident's velocity at impact."
+        TriggerParameter.VELOCITY to "The trident's velocity at impact.",
+        TriggerParameter.VALUE to "The damage dealt."
     )
 
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
+        TriggerParameter.EVENT,
         TriggerParameter.LOCATION,
         TriggerParameter.PROJECTILE,
-        TriggerParameter.EVENT,
+        TriggerParameter.VELOCITY,
         TriggerParameter.ITEM,
-        TriggerParameter.VELOCITY
+        TriggerParameter.VALUE
     )
 
     @EventHandler(ignoreCancelled = true)

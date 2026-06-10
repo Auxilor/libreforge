@@ -35,10 +35,10 @@ object TriggerAltClick : Trigger("alt_click") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
-        TriggerParameter.LOCATION,
+        TriggerParameter.BLOCK,
         TriggerParameter.EVENT,
-        TriggerParameter.ITEM,
-        TriggerParameter.BLOCK
+        TriggerParameter.LOCATION,
+        TriggerParameter.ITEM
     )
 
     private val LEFT_CLICK_ITEMS = listOf(

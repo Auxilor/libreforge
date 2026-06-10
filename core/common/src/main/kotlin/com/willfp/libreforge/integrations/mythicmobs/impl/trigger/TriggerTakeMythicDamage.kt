@@ -29,8 +29,8 @@ object TriggerTakeMythicDamage : Trigger("take_mythic_damage") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
-        TriggerParameter.LOCATION,
         TriggerParameter.EVENT,
+        TriggerParameter.LOCATION,
         TriggerParameter.VALUE
     )
 

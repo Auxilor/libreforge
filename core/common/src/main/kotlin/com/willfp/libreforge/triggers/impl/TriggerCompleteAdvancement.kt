@@ -23,8 +23,8 @@ object TriggerCompleteAdvancement : Trigger("complete_advancement") {
 
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.LOCATION,
         TriggerParameter.EVENT,
+        TriggerParameter.LOCATION,
         TriggerParameter.TEXT
     )
 

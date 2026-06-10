@@ -15,13 +15,15 @@ object TriggerLevelUpMcMMO : Trigger("level_up_mcmmo") {
     override val additionalInfo = listOf("Requires McMMO to be installed.")
 
     override val parameterDescriptions = mapOf(
-        TriggerParameter.LOCATION to "The player's location."
+        TriggerParameter.LOCATION to "The player's location.",
+        TriggerParameter.VALUE to "The new skill level."
     )
 
     override val parameters = setOf(
         TriggerParameter.PLAYER,
+        TriggerParameter.EVENT,
         TriggerParameter.LOCATION,
-        TriggerParameter.EVENT
+        TriggerParameter.VALUE
     )
 
    @EventHandler(ignoreCancelled = true)

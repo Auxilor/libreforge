@@ -22,9 +22,9 @@ object TriggerClickBlock : Trigger("click_block") {
 
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.LOCATION,
         TriggerParameter.BLOCK,
-        TriggerParameter.EVENT
+        TriggerParameter.EVENT,
+        TriggerParameter.LOCATION
     )
 
     private val LEFT_CLICK_ITEMS = listOf(

@@ -22,9 +22,9 @@ object TriggerCauldronLevelChange : Trigger("cauldron_level_change") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.BLOCK,
+        TriggerParameter.EVENT,
         TriggerParameter.LOCATION,
-        TriggerParameter.VALUE,
-        TriggerParameter.EVENT
+        TriggerParameter.VALUE
     )
 
     @EventHandler(ignoreCancelled = true)

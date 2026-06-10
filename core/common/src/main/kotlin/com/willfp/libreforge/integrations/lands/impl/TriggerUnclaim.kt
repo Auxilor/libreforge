@@ -99,8 +99,7 @@ object TriggerUnclaim : Trigger("unclaim") {
                 TriggerData(
                     player = player,
                     event = event,
-                    location = player.location,
-                    value = 1.0
+                    location = player.location
                 )
             )
         })

@@ -19,6 +19,7 @@ object TriggerRingBell : Trigger("ring_bell") {
 
     override val parameters = setOf(
         TriggerParameter.PLAYER,
+        TriggerParameter.EVENT,
         TriggerParameter.LOCATION
     )
 

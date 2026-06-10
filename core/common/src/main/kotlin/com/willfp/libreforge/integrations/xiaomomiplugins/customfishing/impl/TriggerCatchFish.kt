@@ -25,8 +25,8 @@ object TriggerCatchFish : Trigger("catch_fish") {
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT,
         TriggerParameter.LOCATION,
-        TriggerParameter.TEXT,
-        TriggerParameter.ITEM
+        TriggerParameter.ITEM,
+        TriggerParameter.TEXT
     )
 
     @EventHandler(ignoreCancelled = true)

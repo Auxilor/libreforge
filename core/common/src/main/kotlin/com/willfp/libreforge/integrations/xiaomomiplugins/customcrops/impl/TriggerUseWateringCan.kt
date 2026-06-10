@@ -16,14 +16,12 @@ object TriggerUseWateringCan : Trigger("use_watering_can") {
     override val additionalInfo = listOf("Requires CustomCrops (xiaomomi) to be installed.")
 
     override val parameterDescriptions = mapOf(
-        TriggerParameter.LOCATION to "The location that was watered.",
-        TriggerParameter.TEXT to "The ID of the watering can, if available."
+        TriggerParameter.LOCATION to "The location that was watered."
     )
 
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT,
-        TriggerParameter.TEXT,
         TriggerParameter.LOCATION
     )
 

@@ -27,10 +27,10 @@ object TriggerProjectileHit : Trigger("projectile_hit") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
-        TriggerParameter.PROJECTILE,
-        TriggerParameter.LOCATION,
         TriggerParameter.BLOCK,
         TriggerParameter.EVENT,
+        TriggerParameter.LOCATION,
+        TriggerParameter.PROJECTILE,
         TriggerParameter.VELOCITY
     )
 

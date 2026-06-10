@@ -15,7 +15,8 @@ object TriggerHeal : Trigger("heal") {
 
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.EVENT
+        TriggerParameter.EVENT,
+        TriggerParameter.VALUE
     )
 
     @EventHandler(ignoreCancelled = true)

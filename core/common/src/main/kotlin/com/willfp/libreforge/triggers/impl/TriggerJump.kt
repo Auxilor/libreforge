@@ -10,8 +10,8 @@ import org.bukkit.event.EventHandler
 object TriggerJump : Trigger("jump") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.LOCATION,
         TriggerParameter.EVENT,
+        TriggerParameter.LOCATION,
         TriggerParameter.VELOCITY
     )
 

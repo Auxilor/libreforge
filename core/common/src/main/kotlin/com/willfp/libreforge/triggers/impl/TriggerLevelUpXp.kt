@@ -14,7 +14,7 @@ object TriggerLevelUpXp : Trigger("level_up_xp") {
 
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.EVENT
+        TriggerParameter.VALUE
     )
 
     @EventHandler(ignoreCancelled = true)

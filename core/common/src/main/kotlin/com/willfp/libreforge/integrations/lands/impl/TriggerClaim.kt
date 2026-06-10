@@ -57,8 +57,7 @@ object TriggerClaim : Trigger("claim") {
             TriggerData(
                 player = player,
                 event = event,
-                location = player.location,
-                value = 1.0
+                location = player.location
             )
         )
     }

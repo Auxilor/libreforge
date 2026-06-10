@@ -20,9 +20,9 @@ object TriggerDamageItem : Trigger("damage_item") {
 
     override val parameters = setOf(
         TriggerParameter.PLAYER,
+        TriggerParameter.EVENT,
         TriggerParameter.LOCATION,
         TriggerParameter.ITEM,
-        TriggerParameter.EVENT,
         TriggerParameter.VALUE
     )
 

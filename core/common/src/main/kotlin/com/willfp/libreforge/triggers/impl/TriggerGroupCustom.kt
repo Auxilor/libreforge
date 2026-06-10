@@ -19,9 +19,9 @@ object TriggerGroupCustom : TriggerGroup("custom") {
     class TriggerCustom(id: String) : Trigger("custom_$id") {
         override val parameters = setOf(
             TriggerParameter.PLAYER,
-            TriggerParameter.LOCATION,
             TriggerParameter.VICTIM,
             TriggerParameter.BLOCK,
+            TriggerParameter.LOCATION,
             TriggerParameter.VELOCITY,
             TriggerParameter.ITEM
         )

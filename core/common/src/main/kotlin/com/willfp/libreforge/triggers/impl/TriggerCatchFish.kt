@@ -18,14 +18,16 @@ object TriggerCatchFish : Trigger("catch_fish") {
 
     override val parameterDescriptions = mapOf(
         TriggerParameter.LOCATION to "The location of the catch.",
-        TriggerParameter.ITEM to "The item that was caught."
+        TriggerParameter.ITEM to "The item that was caught.",
+        TriggerParameter.VALUE to "The amount of XP dropped."
     )
 
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.LOCATION,
         TriggerParameter.EVENT,
-        TriggerParameter.ITEM
+        TriggerParameter.LOCATION,
+        TriggerParameter.ITEM,
+        TriggerParameter.VALUE
     )
 
     @EventHandler(ignoreCancelled = true)

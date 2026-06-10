@@ -15,7 +15,8 @@ object TriggerLoseHunger : Trigger("lose_hunger") {
 
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.EVENT
+        TriggerParameter.EVENT,
+        TriggerParameter.VALUE
     )
 
     @EventHandler(ignoreCancelled = true)

@@ -56,9 +56,9 @@ object TriggerGroupStatic : TriggerGroup("static") {
     private class TriggerStatic(interval: Int) : Trigger("static_$interval") {
         override val parameters = setOf(
             TriggerParameter.PLAYER,
-            TriggerParameter.LOCATION,
             TriggerParameter.VICTIM,
             TriggerParameter.BLOCK,
+            TriggerParameter.LOCATION,
             TriggerParameter.VELOCITY,
             TriggerParameter.ITEM
         )

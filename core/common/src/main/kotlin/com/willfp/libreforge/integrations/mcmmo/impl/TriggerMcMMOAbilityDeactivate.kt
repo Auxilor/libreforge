@@ -20,8 +20,8 @@ object TriggerMcMMOAbilityDeactivate : Trigger("mcmmo_ability_deactivate") {
 
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.LOCATION,
-        TriggerParameter.EVENT
+        TriggerParameter.EVENT,
+        TriggerParameter.LOCATION
     )
 
     @EventHandler(ignoreCancelled = true)

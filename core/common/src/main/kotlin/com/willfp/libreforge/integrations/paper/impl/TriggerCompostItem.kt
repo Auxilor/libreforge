@@ -23,9 +23,9 @@ object TriggerCompostItem : Trigger("compost_item") {
 
     override val parameters = setOf(
         TriggerParameter.PLAYER,
+        TriggerParameter.EVENT,
         TriggerParameter.LOCATION,
         TriggerParameter.ITEM,
-        TriggerParameter.EVENT,
         TriggerParameter.ALT_VALUE
     )
 

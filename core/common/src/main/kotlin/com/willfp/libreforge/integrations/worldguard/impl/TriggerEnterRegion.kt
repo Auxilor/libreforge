@@ -23,8 +23,8 @@ object TriggerEnterRegion : Trigger("enter_region") {
 
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.LOCATION,
-        TriggerParameter.EVENT
+        TriggerParameter.EVENT,
+        TriggerParameter.LOCATION
     )
 
     private val regionContainer = WorldGuard.getInstance().platform.regionContainer

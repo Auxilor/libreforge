@@ -33,10 +33,10 @@ object TriggerTridentHit : Trigger("trident_hit") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
-        TriggerParameter.PROJECTILE,
-        TriggerParameter.LOCATION,
         TriggerParameter.BLOCK,
         TriggerParameter.EVENT,
+        TriggerParameter.LOCATION,
+        TriggerParameter.PROJECTILE,
         TriggerParameter.VELOCITY
     )
 

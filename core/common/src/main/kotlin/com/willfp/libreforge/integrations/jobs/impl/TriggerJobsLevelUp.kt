@@ -15,12 +15,14 @@ object TriggerJobsLevelUp : Trigger("jobs_level_up") {
     override val additionalInfo = listOf("Requires Jobs Reborn to be installed.")
 
     override val parameterDescriptions = mapOf(
-        TriggerParameter.LOCATION to "The player's location."
+        TriggerParameter.LOCATION to "The player's location.",
+        TriggerParameter.VALUE to "The new job level."
     )
 
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.LOCATION
+        TriggerParameter.LOCATION,
+        TriggerParameter.VALUE
     )
 
     @EventHandler(ignoreCancelled = true)

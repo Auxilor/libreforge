@@ -10,7 +10,8 @@ import org.bukkit.event.raid.RaidFinishEvent
 object TriggerWinRaid : Trigger("win_raid") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.LOCATION
+        TriggerParameter.LOCATION,
+        TriggerParameter.VALUE
     )
 
     @EventHandler(ignoreCancelled = true)

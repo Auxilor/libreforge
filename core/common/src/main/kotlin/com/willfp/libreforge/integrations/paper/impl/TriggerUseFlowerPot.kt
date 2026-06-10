@@ -21,9 +21,9 @@ object TriggerUseFlowerPot : Trigger("use_flower_pot") {
 
     override val parameters = setOf(
         TriggerParameter.PLAYER,
+        TriggerParameter.EVENT,
         TriggerParameter.LOCATION,
-        TriggerParameter.ITEM,
-        TriggerParameter.EVENT
+        TriggerParameter.ITEM
     )
 
     @EventHandler(ignoreCancelled = true)
