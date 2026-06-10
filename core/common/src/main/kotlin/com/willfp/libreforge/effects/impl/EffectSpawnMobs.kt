@@ -16,6 +16,7 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Mob
+import org.bukkit.entity.Tameable
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.entity.EntityDeathEvent
@@ -104,6 +105,10 @@ object EffectSpawnMobs : Effect<TestableEntity>("spawn_mobs") {
             }
 
             mob.health = health
+
+            if (config.getBool("owner") && mob is Tameable) {
+                mob.owner = player
+            }
 
             plugin.scheduler.runLater(ticksToLive.toLong()) { mob.remove() }
         }

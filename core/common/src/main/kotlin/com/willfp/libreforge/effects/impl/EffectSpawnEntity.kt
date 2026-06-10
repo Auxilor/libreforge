@@ -9,6 +9,7 @@ import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import org.bukkit.entity.Tameable
 
 object EffectSpawnEntity : Effect<TestableEntity>("spawn_entity") {
     override val description = "Spawns an entity at the trigger location."
@@ -29,7 +30,11 @@ object EffectSpawnEntity : Effect<TestableEntity>("spawn_entity") {
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: TestableEntity): Boolean {
         val location = data.location ?: return false
-        compileData.spawn(location)
+        val spawned = compileData.spawn(location)
+
+        if (config.getBool("owner") && spawned is Tameable) {
+            spawned.owner = data.player
+        }
 
         return true
     }
