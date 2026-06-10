@@ -17,8 +17,7 @@ object TriggerShopkeepersTrade : Trigger("shopkeepers_trade") {
     override val parameterDescriptions = mapOf(
         TriggerParameter.LOCATION to "The shopkeeper's location.",
         TriggerParameter.ITEM to "The result item from the trade.",
-        TriggerParameter.VALUE to "The stack size of the result item.",
-        TriggerParameter.ALT_VALUE to "Always 1 — one trade was completed."
+        TriggerParameter.VALUE to "The stack size of the result item."
     )
 
     override val parameters = setOf(
@@ -26,8 +25,7 @@ object TriggerShopkeepersTrade : Trigger("shopkeepers_trade") {
         TriggerParameter.EVENT,
         TriggerParameter.LOCATION,
         TriggerParameter.ITEM,
-        TriggerParameter.VALUE,
-        TriggerParameter.ALT_VALUE
+        TriggerParameter.VALUE
     )
 
     @EventHandler
@@ -44,8 +42,7 @@ object TriggerShopkeepersTrade : Trigger("shopkeepers_trade") {
                 event = event,
                 location = location,
                 item = resultItem.copy(),
-                value = resultItem.amount.toDouble(),
-                altValue = 1.0
+                value = resultItem.amount.toDouble()
             )
         )
     }
