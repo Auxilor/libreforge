@@ -1,4 +1,4 @@
-package com.willfp.libreforge.integrations.arsmagica.pyrofishingpro.impl
+package com.willfp.libreforge.integrations.pyrofishingpro.impl
 
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger

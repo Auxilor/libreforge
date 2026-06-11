@@ -1,11 +1,11 @@
-package com.willfp.libreforge.integrations.arsmagica.pyrofishingpro
+package com.willfp.libreforge.integrations.pyrofishingpro
 
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.libreforge.filters.Filters
 import com.willfp.libreforge.integrations.LoadableIntegration
-import com.willfp.libreforge.integrations.arsmagica.pyrofishingpro.impl.FilterFishHotspot
-import com.willfp.libreforge.integrations.arsmagica.pyrofishingpro.impl.FilterFishTier
-import com.willfp.libreforge.integrations.arsmagica.pyrofishingpro.impl.TriggerCatchFish
+import com.willfp.libreforge.integrations.pyrofishingpro.impl.FilterFishHotspot
+import com.willfp.libreforge.integrations.pyrofishingpro.impl.FilterFishTier
+import com.willfp.libreforge.integrations.pyrofishingpro.impl.TriggerCatchFish
 import com.willfp.libreforge.triggers.Triggers
 
 object PyroFishingProIntegration : LoadableIntegration {
