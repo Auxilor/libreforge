@@ -1,7 +1,7 @@
 dependencies {
     compileOnly(project(":core:common"))
 
-    compileOnly("com.willfp:eco:${findProperty("eco-version")}")
+    compileOnly("com.willfp:eco:${rootProject.extra["ecoVersion"]}")
     compileOnly("io.papermc.paper:paper-api:1.17.1-R0.1-SNAPSHOT")
 }
 

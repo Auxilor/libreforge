@@ -14,8 +14,14 @@ class LibreforgeGradlePlugin : Plugin<Project> {
         configuration.isTransitive = false
 
         project.afterEvaluate {
-            val libreforgeVersion: String = project.findProperty("libreforge-version") as? String
-                ?: throw IllegalStateException("libreforge-version must be specified in gradle.properties!")
+            // useGradleVersions=true (set by release workflows) pins libreforge to the
+            // version in gradle.properties; otherwise builds track the latest master snapshot.
+            val libreforgeVersion: String = if (project.findProperty("useGradleVersions") == "true") {
+                project.findProperty("libreforge-version") as? String
+                    ?: throw IllegalStateException("libreforge-version must be specified in gradle.properties!")
+            } else {
+                "dev-SNAPSHOT"
+            }
 
             val libreforge = project.configurations.getByName("libreforge")
             val compile = project.configurations.getByName("compileOnly")
