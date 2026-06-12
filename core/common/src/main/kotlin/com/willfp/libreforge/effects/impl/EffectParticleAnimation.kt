@@ -39,7 +39,8 @@ object EffectParticleAnimation : Effect<ParticleAnimationBlock<*>?>("particle_an
         describe(
             "animation",
             description = "The animation pattern to use (e.g. circle, helix).",
-            type = ArgType.STRING
+            type = ArgType.STRING,
+            choices = listOf("circle", "double_helix", "ground_spiral", "helix", "trace", "twirl")
         )
 
         inherit("particle_args") { ParticleAnimations[it.getString("animation")] }

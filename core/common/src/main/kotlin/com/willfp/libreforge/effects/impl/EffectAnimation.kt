@@ -27,7 +27,8 @@ object EffectAnimation : Effect<AnimationBlock<*, *>?>("animation") {
         describe(
             "animation",
             description = "The animation to play.",
-            type = ArgType.STRING
+            type = ArgType.STRING,
+            choices = listOf("spin_item")
         )
 
         inherit("animation_args") { Animations[it.getString("animation")] }

@@ -70,8 +70,10 @@ sealed class ArgumentMeta {
         /**
          * For [ArgType.DYNAMIC] args: a documentation-only DTO describing the keys of each
          * subsection in the list. Non-null properties are required keys, nullable properties
-         * are optional keys; KDoc `@property` lines supply per-key descriptions. The wiki
-         * parser reads this class from source — it is never instantiated at runtime.
+         * are optional keys; KDoc `@property` lines supply per-key descriptions. A List<String>
+         * property with a listOf(...) default is a fixed set of choices (rendered as a dropdown);
+         * without a default it is a free list of user entries. The wiki parser reads this class
+         * from source — it is never instantiated at runtime.
          */
         val schema: KClass<*>? = null
     ) : ArgumentMeta()
