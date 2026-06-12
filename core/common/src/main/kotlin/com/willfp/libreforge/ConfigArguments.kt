@@ -1,6 +1,7 @@
 package com.willfp.libreforge
 
 import com.willfp.eco.core.config.interfaces.Config
+import kotlin.reflect.KClass
 
 /**
  * The data type of a config argument, used for wiki documentation and config builders.
@@ -38,6 +39,9 @@ enum class ArgType {
     EFFECT_LIST,      // value is a list of effect config sections
     CONDITION_LIST,   // value is a list of condition config sections
 
+    // List of structured subsections described by a schema DTO (see ArgumentMeta.Regular.schema)
+    DYNAMIC,
+
     // Fallback
     ANY
 }
@@ -62,7 +66,14 @@ sealed class ArgumentMeta {
         /** Default value as a string (for optional args), e.g. "false", "1.0", "[]". */
         val default: String?,
         /** Fixed set of accepted values for enum-like arguments. */
-        val choices: List<String>
+        val choices: List<String>,
+        /**
+         * For [ArgType.DYNAMIC] args: a documentation-only DTO describing the keys of each
+         * subsection in the list. Non-null properties are required keys, nullable properties
+         * are optional keys; KDoc `@property` lines supply per-key descriptions. The wiki
+         * parser reads this class from source — it is never instantiated at runtime.
+         */
+        val schema: KClass<*>? = null
     ) : ArgumentMeta()
 
     /**
@@ -97,9 +108,10 @@ class ConfigArgumentsBuilder {
         message: String,
         description: String = "",
         type: ArgType = ArgType.ANY,
-        choices: List<String> = emptyList()
+        choices: List<String> = emptyList(),
+        schema: KClass<*>? = null
     ) {
-        require(listOf(name), message, description, type, choices)
+        require(listOf(name), message, description, type, choices, schema)
     }
 
     fun <T> require(
@@ -117,9 +129,10 @@ class ConfigArgumentsBuilder {
         message: String,
         description: String = "",
         type: ArgType = ArgType.ANY,
-        choices: List<String> = emptyList()
+        choices: List<String> = emptyList(),
+        schema: KClass<*>? = null
     ) {
-        require(names, message, { get(it) }, { true }, description, type, choices)
+        require(names, message, { get(it) }, { true }, description, type, choices, schema)
     }
 
     @JvmOverloads
@@ -130,9 +143,10 @@ class ConfigArgumentsBuilder {
         predicate: (T) -> Boolean,
         description: String = "",
         type: ArgType = ArgType.ANY,
-        choices: List<String> = emptyList()
+        choices: List<String> = emptyList(),
+        schema: KClass<*>? = null
     ) {
-        arguments += RequiredArgument(names, message, getter, predicate, description, type, choices)
+        arguments += RequiredArgument(names, message, getter, predicate, description, type, choices, schema)
     }
 
     @JvmOverloads
@@ -141,9 +155,10 @@ class ConfigArgumentsBuilder {
         description: String = "",
         type: ArgType = ArgType.ANY,
         default: String? = null,
-        choices: List<String> = emptyList()
+        choices: List<String> = emptyList(),
+        schema: KClass<*>? = null
     ) {
-        arguments += OptionalArgument(listOf(name), description, type, default, choices)
+        arguments += OptionalArgument(listOf(name), description, type, default, choices, schema)
     }
 
     @JvmOverloads
@@ -152,9 +167,10 @@ class ConfigArgumentsBuilder {
         description: String = "",
         type: ArgType = ArgType.ANY,
         default: String? = null,
-        choices: List<String> = emptyList()
+        choices: List<String> = emptyList(),
+        schema: KClass<*>? = null
     ) {
-        arguments += OptionalArgument(names, description, type, default, choices)
+        arguments += OptionalArgument(names, description, type, default, choices, schema)
     }
 
     /**
@@ -229,7 +245,8 @@ private class RequiredArgument<T>(
     private val predicate: (T) -> Boolean,
     description: String,
     type: ArgType,
-    choices: List<String>
+    choices: List<String>,
+    schema: KClass<*>? = null
 ) : ConfigArgument {
     override var meta: ArgumentMeta.Regular = ArgumentMeta.Regular(
         names = argNames,
@@ -237,7 +254,8 @@ private class RequiredArgument<T>(
         type = type,
         required = true,
         default = null,
-        choices = choices
+        choices = choices,
+        schema = schema
     )
 
     override fun test(config: Config): List<ConfigViolation> {
@@ -257,7 +275,8 @@ private class OptionalArgument(
     private val description: String,
     private val type: ArgType,
     private val default: String?,
-    private val choices: List<String>
+    private val choices: List<String>,
+    schema: KClass<*>? = null
 ) : ConfigArgument {
     override val meta = ArgumentMeta.Regular(
         names = names,
@@ -265,7 +284,8 @@ private class OptionalArgument(
         type = type,
         required = false,
         default = default,
-        choices = choices
+        choices = choices,
+        schema = schema
     )
 
     override fun test(config: Config): List<ConfigViolation> = emptyList()

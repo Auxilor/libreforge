@@ -25,7 +25,8 @@ object EffectFirework : Effect<List<FireworkEffect>>("firework") {
         optional(
             "effects",
             description = "A list of firework effect subsections, each with type, colors, fade-colors, trail, and flicker.",
-            type = ArgType.ANY
+            type = ArgType.DYNAMIC,
+            schema = FireworkEffectSpec::class
         )
     }
 

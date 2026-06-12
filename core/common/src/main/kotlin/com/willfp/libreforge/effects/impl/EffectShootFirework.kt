@@ -25,7 +25,8 @@ object EffectShootFirework : Effect<List<FireworkEffect>>("shoot_firework") {
         optional(
             "effects",
             description = "List of firework effect subsections defining the firework's appearance.",
-            type = ArgType.ANY
+            type = ArgType.DYNAMIC,
+            schema = FireworkEffectSpec::class
         )
         optional(
             "power",
