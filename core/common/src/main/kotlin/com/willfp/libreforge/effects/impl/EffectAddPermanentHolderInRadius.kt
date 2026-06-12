@@ -31,7 +31,7 @@ object EffectAddPermanentHolderInRadius : Effect<HolderTemplate>("add_permanent_
             "effects",
             "You must specify the effects!",
             description = "The effects to apply to nearby entities.",
-            type = ArgType.ANY
+            type = ArgType.EFFECT_LIST
         )
         require(
             "radius",
@@ -44,6 +44,11 @@ object EffectAddPermanentHolderInRadius : Effect<HolderTemplate>("add_permanent_
             description = "Whether to also apply the effects to the holder owner.",
             type = ArgType.BOOLEAN,
             default = "false"
+        )
+        optional(
+            "conditions",
+            description = "The conditions the holder requires to be active.",
+            type = ArgType.CONDITION_LIST
         )
     }
 

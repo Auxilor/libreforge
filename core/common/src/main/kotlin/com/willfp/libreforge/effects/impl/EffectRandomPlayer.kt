@@ -23,7 +23,7 @@ object EffectRandomPlayer : Effect<Chain?>("random_player") {
             "effects",
             "You must specify the effects!",
             description = "The list of effects to run on the randomly selected player.",
-            type = ArgType.ANY
+            type = ArgType.EFFECT_LIST
         )
     }
 

@@ -34,7 +34,7 @@ object EffectAddHolderInRadius : Effect<HolderTemplate>("add_holder_in_radius") 
             "effects",
             "You must specify the effects!",
             description = "The effects to apply temporarily to nearby entities.",
-            type = ArgType.ANY
+            type = ArgType.EFFECT_LIST
         )
         require(
             "duration",
@@ -53,6 +53,11 @@ object EffectAddHolderInRadius : Effect<HolderTemplate>("add_holder_in_radius") 
             description = "Whether to also apply the effects to the dispatcher.",
             type = ArgType.BOOLEAN,
             default = "false"
+        )
+        optional(
+            "conditions",
+            description = "The conditions the holder requires to be active.",
+            type = ArgType.CONDITION_LIST
         )
     }
 

@@ -33,13 +33,18 @@ object EffectAddHolder : Effect<HolderTemplate>("add_holder") {
             "effects",
             "You must specify the effects!",
             description = "The effects to apply temporarily.",
-            type = ArgType.ANY
+            type = ArgType.EFFECT_LIST
         )
         require(
             "duration",
             "You must specify the duration (in ticks)!",
             description = "How long to apply the holder, in ticks. Supports expressions.",
             type = ArgType.EXPRESSION
+        )
+        optional(
+            "conditions",
+            description = "The conditions the holder requires to be active.",
+            type = ArgType.CONDITION_LIST
         )
     }
 
