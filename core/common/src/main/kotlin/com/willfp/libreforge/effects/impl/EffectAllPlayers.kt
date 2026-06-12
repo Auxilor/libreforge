@@ -23,7 +23,7 @@ object EffectAllPlayers : Effect<Chain?>("all_players") {
             "effects",
             "You must specify the effects!",
             description = "The effects to run on every online player.",
-            type = ArgType.ANY
+            type = ArgType.EFFECT_LIST
         )
         optional(
             "run-type",

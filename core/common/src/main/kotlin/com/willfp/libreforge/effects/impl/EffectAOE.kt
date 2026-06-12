@@ -24,7 +24,7 @@ object EffectAOE : Effect<AOECompileData>("aoe") {
             "effects",
             "You must specify the effects!",
             description = "The effects to run on each entity within the AOE.",
-            type = ArgType.ANY
+            type = ArgType.EFFECT_LIST
         )
         require("shape", "You must specify a valid shape!", Config::getString) {
             AOEShapes[it] != null

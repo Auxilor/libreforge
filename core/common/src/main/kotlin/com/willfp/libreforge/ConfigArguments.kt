@@ -34,6 +34,10 @@ enum class ArgType {
     POTION_EFFECT_LIST,
     ENCHANTMENT_LIST,
 
+    // Config-section lists (consumed by the config builder as nested element sockets)
+    EFFECT_LIST,      // value is a list of effect config sections
+    CONDITION_LIST,   // value is a list of condition config sections
+
     // Fallback
     ANY
 }
