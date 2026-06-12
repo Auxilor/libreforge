@@ -27,8 +27,9 @@ object EffectAllPlayers : Effect<Chain?>("all_players") {
         )
         optional(
             "run-type",
-            description = "The chain executor to use, e.g. random or all.",
-            type = ArgType.STRING
+            description = "The chain executor to use.",
+            type = ArgType.STRING,
+            choices = listOf("normal", "cycle", "random")
         )
     }
 

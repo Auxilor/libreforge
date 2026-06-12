@@ -33,7 +33,8 @@ object EffectRunChain : Effect<NoCompileData>("run_chain") {
         optional(
             "run-type",
             description = "The chain executor type to use when running the chain.",
-            type = ArgType.STRING
+            type = ArgType.STRING,
+            choices = listOf("normal", "cycle", "random")
         )
     }
 

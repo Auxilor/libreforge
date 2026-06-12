@@ -32,7 +32,8 @@ object EffectAOE : Effect<AOECompileData>("aoe") {
         describe(
             "shape",
             description = "The AOE shape to use.",
-            type = ArgType.STRING
+            type = ArgType.STRING,
+            choices = listOf("circle", "cone", "offset_circle", "scan_in_front", "beam")
         )
         inherit { AOEShapes[it.getString("shape")] }
         describeInherit("Configuration for the selected AOE shape.")
