@@ -25,7 +25,7 @@ object TriggerResurrect : Trigger("resurrect") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityResurrectEvent) {
-        val player = event.entity as Player? ?: return
+        val player = event.entity as? Player ?: return
 
         this.dispatch(
             player.toDispatcher(),
