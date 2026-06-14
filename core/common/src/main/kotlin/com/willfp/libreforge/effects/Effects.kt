@@ -103,6 +103,7 @@ import com.willfp.libreforge.effects.impl.EffectInfiniteBucket
 import com.willfp.libreforge.effects.impl.EffectItemDurabilityMultiplier
 import com.willfp.libreforge.effects.impl.EffectJumpStrengthMultiplier
 import com.willfp.libreforge.effects.impl.EffectKeepInventory
+import com.willfp.libreforge.effects.impl.EffectKeepItem
 import com.willfp.libreforge.effects.impl.EffectKeepLevel
 import com.willfp.libreforge.effects.impl.EffectKick
 import com.willfp.libreforge.effects.impl.EffectKill
@@ -597,6 +598,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectIgnite)
         register(EffectItemDurabilityMultiplier)
         register(EffectKeepInventory)
+        register(EffectKeepItem)
         register(EffectKeepLevel)
         register(EffectKick)
         register(EffectKill)
