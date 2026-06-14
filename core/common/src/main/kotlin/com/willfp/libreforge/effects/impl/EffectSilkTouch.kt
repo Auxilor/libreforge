@@ -10,6 +10,7 @@ import com.willfp.libreforge.triggers.event.DropCause
 import com.willfp.libreforge.triggers.event.EditableDropEvent
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.BlockStateMeta
 
 object EffectSilkTouch : Effect<NoCompileData>("silk_touch") {
     override val description = "Replaces a broken block's drops with the block itself, as if mined with Silk Touch."
@@ -28,19 +29,30 @@ object EffectSilkTouch : Effect<NoCompileData>("silk_touch") {
         }
 
         val blockState = event.context.blockState ?: return false
-        val silkTouch = getEnchantment("silk_touch") ?: return false
 
-        val tool = (event.tool ?: ItemStack(Material.AIR)).clone()
-        if (tool.type == Material.AIR) {
-            tool.type = Material.DIAMOND_PICKAXE
+        val drops = if (blockState.type.isItem) {
+            val item = ItemStack(blockState.type)
+            val meta = item.itemMeta
+            if (meta is BlockStateMeta) {
+                meta.blockState = blockState
+                item.itemMeta = meta
+            }
+            listOf(item)
+        } else {
+            val silkTouch = getEnchantment("silk_touch") ?: return false
+
+            val tool = (event.tool ?: ItemStack(Material.AIR)).clone()
+            if (tool.type == Material.AIR) {
+                tool.type = Material.DIAMOND_PICKAXE
+            }
+
+            val meta = tool.itemMeta
+            meta.addEnchant(silkTouch, 1, true)
+            tool.itemMeta = meta
+
+            val player = event.player
+            if (player != null) blockState.getDrops(tool, player) else blockState.getDrops(tool)
         }
-
-        val meta = tool.itemMeta
-        meta.addEnchant(silkTouch, 1, true)
-        tool.itemMeta = meta
-
-        val player = event.player
-        val drops = if (player != null) blockState.getDrops(tool, player) else blockState.getDrops(tool)
 
         event.drops.clear()
         event.drops.addAll(drops)
