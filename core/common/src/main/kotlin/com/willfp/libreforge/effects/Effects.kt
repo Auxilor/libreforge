@@ -101,6 +101,7 @@ import com.willfp.libreforge.effects.impl.EffectIgnite
 import com.willfp.libreforge.effects.impl.EffectIncreaseStepHeight
 import com.willfp.libreforge.effects.impl.EffectInfiniteBucket
 import com.willfp.libreforge.effects.impl.EffectItemDurabilityMultiplier
+import com.willfp.libreforge.effects.impl.EffectItemMagnet
 import com.willfp.libreforge.effects.impl.EffectJumpStrengthMultiplier
 import com.willfp.libreforge.effects.impl.EffectKeepInventory
 import com.willfp.libreforge.effects.impl.EffectKeepLevel
@@ -595,6 +596,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectHungerMultiplier)
         register(EffectIgnite)
         register(EffectItemDurabilityMultiplier)
+        register(EffectItemMagnet)
         register(EffectKeepInventory)
         register(EffectKeepLevel)
         register(EffectKick)
