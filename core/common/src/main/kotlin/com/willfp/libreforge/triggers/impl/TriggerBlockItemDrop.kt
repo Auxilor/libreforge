@@ -71,6 +71,7 @@ object TriggerBlockItemDrop : Trigger("block_item_drop") {
             context = DropContext(
                 player = player,
                 block = brokenBlock,
+                blockState = event.blockState,
                 tool = player.inventory.itemInMainHand
             ),
             dropLocation = block.location,

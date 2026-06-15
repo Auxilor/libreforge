@@ -104,6 +104,7 @@ import com.willfp.libreforge.effects.impl.EffectItemDurabilityMultiplier
 import com.willfp.libreforge.effects.impl.EffectItemMagnet
 import com.willfp.libreforge.effects.impl.EffectJumpStrengthMultiplier
 import com.willfp.libreforge.effects.impl.EffectKeepInventory
+import com.willfp.libreforge.effects.impl.EffectKeepItem
 import com.willfp.libreforge.effects.impl.EffectKeepLevel
 import com.willfp.libreforge.effects.impl.EffectKick
 import com.willfp.libreforge.effects.impl.EffectKill
@@ -191,6 +192,7 @@ import com.willfp.libreforge.effects.impl.EffectShoot
 import com.willfp.libreforge.effects.impl.EffectShootArrow
 import com.willfp.libreforge.effects.impl.EffectShootFirework
 import com.willfp.libreforge.effects.impl.EffectShuffleHotbar
+import com.willfp.libreforge.effects.impl.EffectSilkTouch
 import com.willfp.libreforge.effects.impl.EffectSmite
 import com.willfp.libreforge.effects.impl.EffectSneakingSpeedMultiplier
 import com.willfp.libreforge.effects.impl.EffectSpawnEntity
@@ -598,6 +600,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectItemDurabilityMultiplier)
         register(EffectItemMagnet)
         register(EffectKeepInventory)
+        register(EffectKeepItem)
         register(EffectKeepLevel)
         register(EffectKick)
         register(EffectKill)
@@ -678,6 +681,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectShootArrow)
         register(EffectShootFirework)
         register(EffectShuffleHotbar)
+        register(EffectSilkTouch)
         register(EffectSmite)
         register(EffectSpawnEntity)
         register(EffectSpawnFallingBlock)
