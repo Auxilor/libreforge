@@ -104,12 +104,12 @@ object EffectMineRadius : MineBlockEffect<NoCompileData>("mine_radius") {
                     }
 
                     if (config.getBoolOrNull("check_hardness") != false) {
-                        if (toBreak.type.hardness < 0 || toBreak.type.hardness > block.type.hardness) {
+                        if (Blocks.hardness(toBreak) < 0 || Blocks.hardness(toBreak) > Blocks.hardness(block)) {
                             continue
                         }
                     }
 
-                    if (toBreak.type.hardness < 0) {
+                    if (Blocks.hardness(toBreak) < 0) {
                         continue
                     }
 

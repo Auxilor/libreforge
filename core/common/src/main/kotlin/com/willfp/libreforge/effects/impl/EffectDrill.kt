@@ -93,7 +93,7 @@ object EffectDrill : MineBlockEffect<NoCompileData>("drill") {
             }
 
             if (config.getBool("check_hardness")) {
-                if (toBreak.type.hardness > block.type.hardness) {
+                if (Blocks.hardness(toBreak) > Blocks.hardness(block)) {
                     continue
                 }
             }
@@ -102,7 +102,7 @@ object EffectDrill : MineBlockEffect<NoCompileData>("drill") {
                 continue
             }
 
-            if (toBreak.type.hardness < 0) {
+            if (Blocks.hardness(toBreak) < 0) {
                 continue
             }
 

@@ -49,28 +49,27 @@ object EffectOraxenTelekinesis : Effect<NoCompileData>("telekinesis") {
         if (!TelekinesisUtils.testPlayer(player)) {
             return
         }
-//
+
         if (!AntigriefManager.canBreakBlock(player, block)) {
             return
         }
-//
+
         if (player.gameMode == GameMode.CREATIVE || player.gameMode == GameMode.SPECTATOR) {
             return
         }
-//
+
         val drops = drop.loots.mapNotNull { it.itemStack }
-        drop = null
-//
+        drop = Drop.emptyDrop()
+
         DropQueue(player)
+            .setLocation(block.location)
             .addItems(drops)
             .forceTelekinesis()
             .push()
-//
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     fun OraxenNoteBlockBreakEvent.handle() {
-        plugin.logger.info("OraxenNoteBlockBreakEvent triggered, drop: $drop.loots")
         if (!TelekinesisUtils.testPlayer(player)) {
             return
         }
