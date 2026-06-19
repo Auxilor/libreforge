@@ -14,6 +14,7 @@ object CommandLibreforge : PluginCommand(
     init {
         this.addSubcommand(CommandReload)
             .addSubcommand(CommandPoints)
+            .addSubcommand(CommandItemLevel)
             .addSubcommand(CommandTrigger)
             .addSubcommand(CommandDebug)
             .addSubcommand(CommandGetItemData)
