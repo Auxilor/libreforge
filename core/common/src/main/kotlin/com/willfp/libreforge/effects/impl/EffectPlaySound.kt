@@ -1,13 +1,12 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.sound.PlayableSound
 import com.willfp.eco.util.SoundUtils
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
-import com.willfp.libreforge.getDoubleFromExpression
-import com.willfp.libreforge.getFormattedString
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.SoundCategory
@@ -51,15 +50,8 @@ object EffectPlaySound : Effect<NoCompileData>("play_sound") {
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val player = data.player ?: return false
 
-        val sound = SoundUtils.getSound(config.getFormattedString("sound", data)) ?: return false
-        val pitch = config.getDoubleFromExpression("pitch", data)
-        val volume = config.getDoubleFromExpression("volume", data)
-
-        var categoryString = config.getStringOrNull("category")
-        if (categoryString == null) categoryString = "MASTER"
-        val category = SoundCategory.valueOf(categoryString.uppercase())
-
-        player.playSound(player.location, sound, category, volume.toFloat(), pitch.toFloat())
+        val sound = PlayableSound.create(config) ?: return false
+        sound.playTo(player)
 
         return true
     }

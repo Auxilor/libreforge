@@ -28,7 +28,8 @@ object TriggerShootBow : Trigger("shoot_bow") {
         TriggerParameter.EVENT,
         TriggerParameter.PROJECTILE,
         TriggerParameter.VELOCITY,
-        TriggerParameter.VALUE
+        TriggerParameter.VALUE,
+        TriggerParameter.LOCATION
     )
 
     @EventHandler(ignoreCancelled = true)
@@ -39,6 +40,7 @@ object TriggerShootBow : Trigger("shoot_bow") {
             shooter.toDispatcher(),
             TriggerData(
                 player = shooter as? Player,
+                location = event.projectile.location,
                 victim = shooter,
                 projectile = event.projectile as? Projectile,
                 event = event,
