@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.templates.AttributeEffect
 import org.bukkit.attribute.Attribute
@@ -13,8 +14,16 @@ object EffectGravityMultiplier : AttributeEffect(
     Attribute.GRAVITY,
     AttributeModifier.Operation.MULTIPLY_SCALAR_1
 ) {
+    override val description = "Multiplies the player's gravity, making them fall faster or slower."
+    override val categories = setOf("movement", "player", "attribute")
+
     override val arguments = arguments {
-        require("multiplier", "You must specify the gravity multiplier!")
+        require(
+            "multiplier",
+            "You must specify the gravity multiplier!",
+            description = "The gravity multiplier to apply. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
     }
 
     override fun getValue(config: Config, entity: LivingEntity) =

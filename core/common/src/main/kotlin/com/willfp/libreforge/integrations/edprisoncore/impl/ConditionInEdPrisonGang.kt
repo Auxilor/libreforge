@@ -10,6 +10,10 @@ import com.willfp.libreforge.get
 import org.bukkit.entity.Player
 
 object ConditionInEdPrisonGang : Condition<NoCompileData>("in_edprison_gang") {
+    override val description = "Passes when the player is a member of an EDPrisonCore gang."
+    override val categories = setOf("player", "economy")
+    override val additionalInfo = listOf("Requires the EDPrisonCore plugin.")
+
     override fun isMet(
         dispatcher: Dispatcher<*>,
         config: Config,

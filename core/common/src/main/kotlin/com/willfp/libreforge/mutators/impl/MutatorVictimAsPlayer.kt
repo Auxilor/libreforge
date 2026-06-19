@@ -9,6 +9,12 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.Player
 
 object MutatorVictimAsPlayer : Mutator<NoCompileData>("victim_as_player") {
+    override val description = "Sets the player to be the current victim."
+
+    override val categories = setOf("player", "victim")
+
+    override val additionalInfo = listOf("Sets player to null if the victim is not a Player.")
+
     override val parameterTransformers = parameterTransformers {
         TriggerParameter.VICTIM becomes TriggerParameter.PLAYER
     }

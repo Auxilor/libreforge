@@ -10,11 +10,20 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityToggleGlideEvent
 
 object TriggerDeployElytra : Trigger("deploy_elytra") {
+    override val description = "Fires when an entity toggles elytra gliding."
+
+    override val categories = setOf("movement")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.VICTIM to "The entity that toggled elytra gliding.",
+        TriggerParameter.LOCATION to "The entity's location."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
-        TriggerParameter.LOCATION,
-        TriggerParameter.EVENT
+        TriggerParameter.EVENT,
+        TriggerParameter.LOCATION
     )
 
     @EventHandler(ignoreCancelled = true)

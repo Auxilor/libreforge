@@ -49,12 +49,20 @@ object TriggerGroupGlobalStatic : TriggerGroup("global_static") {
     }
 
     private class TriggerGlobalStatic(interval: Int) : Trigger("global_static_$interval") {
+        override val description = "Fires once globally on a fixed tick interval, not tied to any player."
+
+        override val categories = setOf("meta")
+
         override val parameters = emptySet<TriggerParameter>()
     }
 
     private class TriggerDynamicGlobalStatic(
         private val expression: String
     ) : Trigger("global_static_expr_${expression.hashCode()}") {
+        override val description = "Fires once globally on a tick interval defined by an expression, not tied to any player."
+
+        override val categories = setOf("meta")
+
         override val parameters = emptySet<TriggerParameter>()
 
         fun dispatchIfMet(tick: Int) {

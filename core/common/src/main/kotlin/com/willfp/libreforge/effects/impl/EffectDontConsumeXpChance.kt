@@ -8,6 +8,8 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.enchantment.EnchantItemEvent
 
 object EffectDontConsumeXpChance : ChanceMultiplierEffect("dont_consume_xp_chance") {
+    override val description = "Gives a percentage chance for the enchanting table to not consume experience levels."
+    override val categories = setOf("economy")
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     fun handle(event: EnchantItemEvent) {
         val player = event.enchanter

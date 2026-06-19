@@ -8,6 +8,12 @@ import net.william278.husktowns.events.ClaimEvent
 import org.bukkit.event.EventHandler
 
 object TriggerClaim : Trigger("claim") {
+    override val description = "Fires when the player claims a chunk for their HuskTowns town."
+
+    override val categories = setOf("world")
+
+    override val additionalInfo = listOf("Requires HuskTowns to be installed.")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT

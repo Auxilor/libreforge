@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -8,12 +9,21 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
 object EffectClearInventory : Effect<NoCompileData>("clear_inventory") {
+    override val description = "Clears a section of the player's inventory."
+    override val categories = setOf("inventory", "player")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER
     )
 
     override val arguments = arguments {
-        require("type", "You must specify the inventory type (all/hotbar/main/armor)!")
+        require(
+            "type",
+            "You must specify the inventory type (all/hotbar/main/armor)!",
+            description = "Which section of the inventory to clear.",
+            type = ArgType.STRING,
+            choices = listOf("all", "hotbar", "main", "armor")
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {

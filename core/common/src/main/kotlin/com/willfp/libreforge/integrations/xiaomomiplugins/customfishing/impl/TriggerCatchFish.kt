@@ -9,12 +9,24 @@ import org.bukkit.entity.Item
 import org.bukkit.event.EventHandler
 
 object TriggerCatchFish : Trigger("catch_fish") {
+    override val description = "Fires when the player catches a fish through CustomFishing."
+
+    override val categories = setOf("fishing")
+
+    override val additionalInfo = listOf("Requires CustomFishing (xiaomomi) to be installed.")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The location of the catch.",
+        TriggerParameter.TEXT to "The loot ID of the caught item.",
+        TriggerParameter.ITEM to "The item that was caught, if any."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT,
         TriggerParameter.LOCATION,
-        TriggerParameter.TEXT,
-        TriggerParameter.ITEM
+        TriggerParameter.ITEM,
+        TriggerParameter.TEXT
     )
 
     @EventHandler(ignoreCancelled = true)

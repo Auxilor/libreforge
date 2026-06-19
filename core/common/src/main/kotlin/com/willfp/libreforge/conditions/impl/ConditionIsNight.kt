@@ -7,6 +7,14 @@ import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.conditions.Condition
 
 object ConditionIsNight : Condition<NoCompileData>("is_night") {
+    override val description = "Passes when it is nighttime in the dispatcher's world."
+
+    override val categories = setOf("world")
+
+    override val additionalInfo = listOf(
+        "Night is defined as world time between 12301 and 23849 ticks (inclusive)."
+    )
+
     override fun isMet(
         dispatcher: Dispatcher<*>,
         config: Config,

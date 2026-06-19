@@ -8,6 +8,16 @@ import net.momirealms.customfishing.api.event.FishingResultEvent
 import org.bukkit.event.EventHandler
 
 object TriggerCatchFishFail : Trigger("catch_fish_fail") {
+    override val description = "Fires when the player fails a fishing attempt in CustomFishing."
+
+    override val categories = setOf("fishing")
+
+    override val additionalInfo = listOf("Requires CustomFishing (xiaomomi) to be installed.")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.TEXT to "The result type of the failed fishing attempt."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT,

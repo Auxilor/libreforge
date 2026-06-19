@@ -12,6 +12,9 @@ import org.bukkit.entity.Player
 import java.util.UUID
 
 object EffectFlight : Effect<NoCompileData>("flight") {
+    override val description = "Grants the player the ability to fly while the holder is active."
+    override val categories = setOf("movement", "player")
+
     override val shouldReload = false
 
     private val players = listMap<UUID, UUID>()

@@ -8,6 +8,19 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.event.EventHandler
 
 object TriggerPlayerTrade : Trigger("player_trade") {
+    override val description = "Fires when an AxTrade trade between two players is completed."
+
+    override val categories = setOf("economy")
+
+    override val additionalInfo = listOf("Requires AxTrade to be installed.", "Fires once for each player involved in the trade.")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.VICTIM to "The other player involved in the trade.",
+        TriggerParameter.ITEM to "The first item type exchanged in the trade.",
+        TriggerParameter.VALUE to "The total count of all items exchanged.",
+        TriggerParameter.ALT_VALUE to "The total currency value exchanged in the trade."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,

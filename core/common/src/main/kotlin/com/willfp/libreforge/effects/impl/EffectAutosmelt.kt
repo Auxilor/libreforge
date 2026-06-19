@@ -2,6 +2,7 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.fast.FastItemStack
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -19,10 +20,18 @@ import kotlin.math.ceil
 import kotlin.math.roundToInt
 
 object EffectAutosmelt : Effect<NoCompileData>("autosmelt") {
+    override val description = "Automatically smelts blocks as they are mined, converting drops to their furnace output."
+    override val categories = setOf("world", "inventory")
+
     override val isPermanent = false
 
     override val arguments = arguments {
-        require("drop_xp", "You must specify if xp should be dropped!")
+        require(
+            "drop_xp",
+            "You must specify if xp should be dropped!",
+            description = "Whether to drop smelting XP alongside the smelted item.",
+            type = ArgType.BOOLEAN
+        )
     }
 
     private val recipes = mutableMapOf<Material, Pair<Material, Int>>()

@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -11,12 +12,20 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.Mob
 
 object EffectStripAI : Effect<NoCompileData>("strip_ai") {
+    override val description = "Temporarily removes the AI from the victim entity, stopping it from acting."
+    override val categories = setOf("entity")
+
     override val parameters = setOf(
         TriggerParameter.VICTIM
     )
 
     override val arguments = arguments {
-        require("duration", "You must specify the duration to disable AI for!")
+        require(
+            "duration",
+            "You must specify the duration to disable AI for!",
+            description = "How long to disable the entity's AI, in ticks. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {

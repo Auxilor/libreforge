@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -11,12 +12,26 @@ import org.bukkit.attribute.Attribute
 import org.bukkit.event.entity.EntityRegainHealthEvent
 
 object EffectGiveHealth : Effect<NoCompileData>("give_health") {
+    override val description = "Heals the player by the specified amount, capped at their maximum health."
+    override val categories = setOf("player")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER
     )
 
     override val arguments = arguments {
-        require("amount", "You must specify the amount of health to give!")
+        require(
+            "amount",
+            "You must specify the amount of health to give!",
+            description = "The amount of health points to restore. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
+        optional(
+            "trigger_heal",
+            description = "If true, fires an EntityRegainHealthEvent and respects cancellation (e.g. for Mending). Defaults to false.",
+            type = ArgType.BOOLEAN,
+            default = "false"
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {

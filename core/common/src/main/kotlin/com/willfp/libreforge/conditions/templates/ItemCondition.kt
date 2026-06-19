@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.items.Items
 import com.willfp.eco.core.items.TestableItem
 import com.willfp.eco.core.recipe.parts.EmptyTestableItem
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.ViolationContext
@@ -17,7 +18,12 @@ import org.bukkit.inventory.ItemStack
 
 abstract class ItemCondition(id: String) : Condition<Collection<TestableItem>>(id) {
     override val arguments = arguments {
-        require(listOf("items", "item"), "You must specify the items!")
+        require(
+            listOf("items", "item"),
+            "You must specify the items!",
+            description = "The item(s) to check for.",
+            type = ArgType.ITEM_LIST
+        )
     }
 
     override fun isMet(

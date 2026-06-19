@@ -8,6 +8,14 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerQuitEvent
 
 object TriggerLeave : Trigger("leave") {
+    override val description = "Fires when the player leaves the server."
+
+    override val categories = setOf("player")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The player's location on leaving."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION

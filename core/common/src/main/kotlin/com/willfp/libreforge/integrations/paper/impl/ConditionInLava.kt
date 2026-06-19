@@ -9,6 +9,9 @@ import com.willfp.libreforge.get
 import org.bukkit.entity.Entity
 
 object ConditionInLava : Condition<NoCompileData>("in_lava") {
+    override val description = "Passes when the entity is submerged in lava."
+    override val categories = setOf("world", "player")
+
     override fun isMet(
         dispatcher: Dispatcher<*>,
         config: Config,

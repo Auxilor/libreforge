@@ -2,6 +2,7 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.hologram.HologramManager
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -12,13 +13,26 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
 object EffectCreateHologram : Effect<NoCompileData>("create_hologram") {
+    override val description = "Creates a temporary hologram at the trigger location."
+    override val categories = setOf("visual")
+
     override val parameters = setOf(
         TriggerParameter.LOCATION
     )
 
     override val arguments = arguments {
-        require("text", "You must specify the text to display!")
-        require("duration", "You must specify the duration to display for!")
+        require(
+            "text",
+            "You must specify the text to display!",
+            description = "The lines of text to show on the hologram. Supports placeholders.",
+            type = ArgType.STRING_LIST
+        )
+        require(
+            "duration",
+            "You must specify the duration to display for!",
+            description = "How long to show the hologram, in ticks. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {

@@ -8,6 +8,15 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerItemBreakEvent
 
 object TriggerItemBreak : Trigger("item_break") {
+    override val description = "Fires when the player's item breaks from durability loss."
+
+    override val categories = setOf("inventory")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The player's location.",
+        TriggerParameter.ITEM to "The item that broke."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,

@@ -7,6 +7,9 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
 object EffectOpenCrafting : Effect<NoCompileData>("open_crafting") {
+    override val description = "Opens a virtual crafting table GUI for the player."
+    override val categories = setOf("player", "inventory")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER
     )

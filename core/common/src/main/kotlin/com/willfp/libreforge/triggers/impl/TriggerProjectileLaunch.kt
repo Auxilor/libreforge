@@ -10,13 +10,24 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.ProjectileLaunchEvent
 
 object TriggerProjectileLaunch : Trigger("projectile_launch") {
+    override val description = "Fires when the player launches a projectile."
+
+    override val categories = setOf("combat")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.VICTIM to "The entity that launched the projectile (same as the trigger source).",
+        TriggerParameter.PROJECTILE to "The projectile that was launched.",
+        TriggerParameter.LOCATION to "The launch location of the projectile.",
+        TriggerParameter.VELOCITY to "The initial velocity of the launched projectile."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
-        TriggerParameter.PROJECTILE,
-        TriggerParameter.VELOCITY,
         TriggerParameter.EVENT,
-        TriggerParameter.LOCATION
+        TriggerParameter.LOCATION,
+        TriggerParameter.PROJECTILE,
+        TriggerParameter.VELOCITY
     )
 
     @EventHandler(ignoreCancelled = true)

@@ -55,7 +55,7 @@ import com.willfp.libreforge.integrations.vault.VaultIntegration
 import com.willfp.libreforge.integrations.votifier.VotifierIntegration
 import com.willfp.libreforge.integrations.worldguard.WorldGuardIntegration
 import com.willfp.libreforge.integrations.xiaomomiplugins.customcrops.CustomCropsIntegration
-import com.willfp.libreforge.integrations.arsmagica.pyrofishingpro.PyroFishingProIntegration
+import com.willfp.libreforge.integrations.pyrofishingpro.PyroFishingProIntegration
 import com.willfp.libreforge.integrations.xiaomomiplugins.customfishing.CustomFishingIntegration
 import com.willfp.libreforge.levels.LevelTypes
 import com.willfp.libreforge.mutators.Mutators

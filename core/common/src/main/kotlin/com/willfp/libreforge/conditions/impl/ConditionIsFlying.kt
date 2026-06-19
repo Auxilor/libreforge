@@ -9,6 +9,14 @@ import com.willfp.libreforge.get
 import org.bukkit.entity.Player
 
 object ConditionIsFlying : Condition<NoCompileData>("is_flying") {
+    override val description = "Passes when the player is flying."
+
+    override val categories = setOf("player")
+
+    override val additionalInfo = listOf(
+        "Requires a player dispatcher — elytra gliding is not considered flying by this condition."
+    )
+
     override fun isMet(
         dispatcher: Dispatcher<*>,
         config: Config,

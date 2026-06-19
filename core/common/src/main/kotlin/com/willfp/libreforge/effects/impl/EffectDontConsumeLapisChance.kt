@@ -10,6 +10,8 @@ import org.bukkit.event.enchantment.EnchantItemEvent
 import org.bukkit.inventory.ItemStack
 
 object EffectDontConsumeLapisChance : ChanceMultiplierEffect("dont_consume_lapis_chance") {
+    override val description = "Gives a percentage chance for the enchanting table to not consume lapis lazuli."
+    override val categories = setOf("inventory")
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     fun handle(event: EnchantItemEvent) {
         val player = event.enchanter

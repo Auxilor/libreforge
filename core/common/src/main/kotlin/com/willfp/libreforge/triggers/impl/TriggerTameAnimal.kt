@@ -9,10 +9,21 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityTameEvent
 
 object TriggerTameAnimal : Trigger("tame_animal") {
+    override val description = "Fires when the player tames an animal."
+
+    override val categories = setOf("interaction")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The player's location.",
+        TriggerParameter.ITEM to "The item used to tame the animal.",
+        TriggerParameter.VICTIM to "The animal that was tamed."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.LOCATION,
+        TriggerParameter.VICTIM,
         TriggerParameter.EVENT,
+        TriggerParameter.LOCATION,
         TriggerParameter.ITEM
     )
 

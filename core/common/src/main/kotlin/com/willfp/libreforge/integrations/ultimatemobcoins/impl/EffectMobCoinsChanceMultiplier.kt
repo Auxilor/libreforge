@@ -6,6 +6,9 @@ import nl.chimpgamer.ultimatemobcoins.paper.events.PrepareMobCoinDropEvent
 import org.bukkit.event.EventHandler
 
 object EffectMobCoinsChanceMultiplier : MultiplierEffect("mob_coins_chance_multiplier") {
+    override val description = "Multiplies the drop chance for UltimateMobCoins while the holder is active."
+    override val categories = setOf("economy")
+
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PrepareMobCoinDropEvent) {
         val player = event.player

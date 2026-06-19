@@ -2,12 +2,17 @@ package com.willfp.libreforge.filters.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.util.evaluateExpression
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.filters.Filter
 import com.willfp.libreforge.toPlaceholderContext
 import com.willfp.libreforge.triggers.TriggerData
 
 object FilterIsExpressionTrue : Filter<Config, String>("is_expression_true") {
+    override val description = "Matches when the given mathematical expression evaluates to a value greater than zero."
+    override val categories = setOf("meta")
+    override val valueType = ArgType.EXPRESSION
+
     override fun getValue(config: Config, data: TriggerData?, key: String): String {
         return config.getString(key)
     }

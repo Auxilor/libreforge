@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.get
@@ -11,8 +12,17 @@ import net.momirealms.customcrops.api.BukkitCustomCropsPlugin
 import org.bukkit.entity.Player
 
 object ConditionIsSeason : Condition<NoCompileData>("is_season") {
+    override val description = "Passes when the current world season matches one of the specified seasons."
+    override val categories = setOf("world")
+    override val additionalInfo = listOf("Requires the CustomCrops plugin.")
+
     override val arguments = arguments {
-        require(listOf("season", "seasons"), "You must specify the season(s)!")
+        require(
+            listOf("season", "seasons"),
+            "You must specify the season(s)!",
+            description = "The season name(s) to check against (e.g. SPRING, SUMMER, AUTUMN, WINTER).",
+            type = ArgType.STRING_LIST
+        )
     }
 
     override fun isMet(

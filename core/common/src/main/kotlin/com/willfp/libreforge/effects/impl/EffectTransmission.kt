@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -10,12 +11,20 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
 object EffectTransmission : Effect<NoCompileData>("transmission") {
+    override val description = "Teleports the player forward by a given distance, stopping at the first solid block in the path."
+    override val categories = setOf("movement")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER
     )
 
     override val arguments = arguments {
-        require("distance", "You must specify the distance to transmit!")
+        require(
+            "distance",
+            "You must specify the distance to transmit!",
+            description = "The maximum distance to teleport the player forward. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
