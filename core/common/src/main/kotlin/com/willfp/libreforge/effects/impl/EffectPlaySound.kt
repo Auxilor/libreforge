@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.sound.PlayableSound
 import com.willfp.eco.util.SoundUtils
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
@@ -8,6 +9,7 @@ import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import org.bukkit.SoundCategory
 
 object EffectPlaySound : Effect<NoCompileData>("play_sound") {
     override val description = "Plays a sound to the triggering player at their location."
@@ -48,8 +50,8 @@ object EffectPlaySound : Effect<NoCompileData>("play_sound") {
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val player = data.player ?: return false
 
-        val sound = PlayableSound.create(config)
-        sound?.playTo(player)
+        val sound = PlayableSound.create(config) ?: return false
+        sound.playTo(player)
 
         return true
     }
