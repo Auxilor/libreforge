@@ -160,12 +160,12 @@ object EffectMineShape : MineBlockEffect<NoCompileData>("mine_shape") {
                     }
 
                     if (config.getBoolOrNull("check_hardness") != false) {
-                        if (targetBlock.type.hardness > triggerBlock.type.hardness) {
+                        if (Blocks.hardness(targetBlock) > Blocks.hardness(triggerBlock)) {
                             continue
                         }
                     }
 
-                    if (targetBlock.type.hardness < 0) {
+                    if (Blocks.hardness(targetBlock) < 0) {
                         continue
                     }
 

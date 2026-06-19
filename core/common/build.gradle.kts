@@ -45,6 +45,9 @@ dependencies {
     compileOnly("com.nexomc:nexo:1.17.0") {
         exclude(group = "*", module = "*")
     }
+    compileOnly("com.github.LoneDev6:API-ItemsAdder:2.4.7")
+    compileOnly("net.momirealms:craft-engine-core:26.6.2")
+    compileOnly("net.momirealms:craft-engine-bukkit:26.6.2")
 
     compileOnly(fileTree("../../lib") {
         include("*.jar")
@@ -53,6 +56,7 @@ dependencies {
 
 repositories {
     maven("https://jitpack.io/")
+    maven("https://repo.momirealms.net/releases/")
 }
 
 configurations.all {

@@ -91,7 +91,6 @@ object EffectItemMagnet : Effect<EffectItemMagnet.ItemMagnetFilter>("item_magnet
     }
 
     override fun onDisable(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder) {
-        plugin.logger.info("[item_magnet DEBUG] onDisable dispatcher=${dispatcher.uuid}")
         tasks.remove(identifiers)?.cancel()
     }
 

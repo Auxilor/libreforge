@@ -91,7 +91,6 @@ object EffectMineRadiusOneDeep : MineBlockEffect<NoCompileData>("mine_radius_one
         for (x in (-radius..radius)) {
             for (y in (-radius..radius)) {
                 for (z in (-radius..radius)) {
-                    // Jank
                     if (ignoreVector.x != 0.0 && x != 0) {
                         continue
                     }
@@ -103,7 +102,6 @@ object EffectMineRadiusOneDeep : MineBlockEffect<NoCompileData>("mine_radius_one
                     if (ignoreVector.z != 0.0 && z != 0) {
                         continue
                     }
-                    // End Jank
 
                     if (x == 0 && y == 0 && z == 0) {
                         continue
@@ -141,12 +139,12 @@ object EffectMineRadiusOneDeep : MineBlockEffect<NoCompileData>("mine_radius_one
                     }
 
                     if (config.getBoolOrNull("check_hardness") != false) {
-                        if (toBreak.type.hardness > block.type.hardness) {
+                        if (Blocks.hardness(toBreak) > Blocks.hardness(block)) {
                             continue
                         }
                     }
 
-                    if (toBreak.type.hardness < 0) {
+                    if (Blocks.hardness(toBreak) < 0) {
                         continue
                     }
 
