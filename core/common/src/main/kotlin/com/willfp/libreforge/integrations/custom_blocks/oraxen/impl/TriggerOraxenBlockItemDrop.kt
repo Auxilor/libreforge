@@ -67,6 +67,8 @@ object TriggerOraxenBlockItemDrop : Listener {
 
         clearDrop()
 
+        val dropResults = editableEvent.items
+
         val remaining = editableEvent.drops
         if (remaining.isEmpty()) return
 
@@ -78,6 +80,14 @@ object TriggerOraxenBlockItemDrop : Listener {
                 .push()
         } else {
             remaining.forEach { block.world.dropItemNaturally(block.location, it) }
+        }
+
+        val totalXP = dropResults.sumOf { it.xp }
+        if (totalXP > 0) {
+            DropQueue(player)
+                .setLocation(block.location)
+                .addXP(totalXP)
+                .push()
         }
     }
 }

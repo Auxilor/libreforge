@@ -1,24 +1,35 @@
 package com.willfp.libreforge.integrations.custom_blocks.nexo.impl
 
 import com.nexomc.nexo.api.events.custom_block.NexoBlockBreakEvent
-import com.nexomc.nexo.utils.drops.Drop
 import com.willfp.eco.core.drops.DropQueue
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.eco.util.TelekinesisUtils
 import com.willfp.libreforge.filterNotEmpty
+import com.willfp.libreforge.plugin
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.event.DropCause
 import com.willfp.libreforge.triggers.event.DropContext
 import com.willfp.libreforge.triggers.event.EditableDropEvent
 import com.willfp.libreforge.triggers.impl.TriggerBlockItemDrop
+import org.bukkit.Bukkit
 import org.bukkit.GameMode
+import org.bukkit.Location
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
+import org.bukkit.event.entity.ItemSpawnEvent
+import org.bukkit.inventory.ItemStack
+import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 
 object TriggerNexoBlockItemDrop : Listener {
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    private data class PendingBreak(val playerUuid: UUID, val items: MutableList<ItemStack>)
+
+    private val pending = ConcurrentHashMap<Location, PendingBreak>()
+    private val reDropping = ThreadLocal.withInitial { false }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     fun handle(event: NexoBlockBreakEvent) {
         if (!TriggerBlockItemDrop.isEnabled) return
 
@@ -26,10 +37,37 @@ object TriggerNexoBlockItemDrop : Listener {
         if (player.gameMode == GameMode.CREATIVE || player.gameMode == GameMode.SPECTATOR) return
         if (!AntigriefManager.canBreakBlock(player, event.block)) return
 
-        val items = event.drop.loots.mapNotNull { it.itemStack() }.filterNotEmpty()
+        val loc = event.block.location
+        pending[loc] = PendingBreak(player.uniqueId, mutableListOf())
+
+        plugin.scheduler.runLater(1) {
+            val pendingBreak = pending.remove(loc) ?: return@runLater
+            processDrops(loc, pendingBreak.playerUuid, pendingBreak.items)
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    fun handleItemSpawn(event: ItemSpawnEvent) {
+        if (reDropping.get()) return
+
+        val itemLoc = event.entity.location
+        val world = itemLoc.world ?: return
+
+        val entry = pending.entries.firstOrNull { (blockLoc, _) ->
+            blockLoc.world == world &&
+                itemLoc.distanceSquared(blockLoc.clone().add(0.5, 0.5, 0.5)) <= 4.0
+        } ?: return
+
+        event.isCancelled = true
+        entry.value.items.add(event.entity.itemStack.clone())
+    }
+
+    private fun processDrops(loc: Location, playerUuid: UUID, collected: List<ItemStack>) {
+        val items = collected.filterNotEmpty()
         if (items.isEmpty()) return
 
-        val block = event.block
+        val player = Bukkit.getPlayer(playerUuid) ?: return
+        val block = loc.block
 
         val editableEvent = EditableDropEvent(
             initialDrops = items,
@@ -39,7 +77,7 @@ object TriggerNexoBlockItemDrop : Listener {
                 block = block,
                 tool = player.inventory.itemInMainHand
             ),
-            dropLocation = block.location
+            dropLocation = loc
         )
 
         TriggerBlockItemDrop.dispatch(
@@ -47,26 +85,39 @@ object TriggerNexoBlockItemDrop : Listener {
             TriggerData(
                 player = player,
                 block = block,
-                location = block.location,
+                location = loc,
                 event = editableEvent,
                 item = null,
                 value = items.sumOf { it.amount.toDouble() }
             )
         )
 
-        event.drop = Drop.emptyDrop()
+        val dropResults = editableEvent.items
 
-        val remaining = editableEvent.drops
-        if (remaining.isEmpty()) return
+        val world = loc.world ?: return
+        reDropping.set(true)
+        try {
+            if (TelekinesisUtils.testPlayer(player)) {
+                DropQueue(player)
+                    .setLocation(loc)
+                    .addItems(editableEvent.drops)
+                    .forceTelekinesis()
+                    .push()
+            } else {
+                for (item in editableEvent.drops) {
+                    world.dropItemNaturally(loc, item)
+                }
+            }
+        } finally {
+            reDropping.set(false)
+        }
 
-        if (TelekinesisUtils.testPlayer(player)) {
+        val totalXP = dropResults.sumOf { it.xp }
+        if (totalXP > 0) {
             DropQueue(player)
-                .setLocation(block.location)
-                .addItems(remaining)
-                .forceTelekinesis()
+                .setLocation(loc)
+                .addXP(totalXP)
                 .push()
-        } else {
-            remaining.forEach { block.world.dropItemNaturally(block.location, it) }
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.willfp.libreforge.integrations.custom_blocks.itemsadder.impl
 
+import com.willfp.eco.core.drops.DropQueue
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.libreforge.filterNotEmpty
 import com.willfp.libreforge.plugin
@@ -91,6 +92,8 @@ object TriggerItemsAdderBlockItemDrop : Listener {
             )
         )
 
+        val dropResults = editableEvent.items
+
         val world = loc.world ?: return
         reDropping.set(true)
         try {
@@ -99,6 +102,14 @@ object TriggerItemsAdderBlockItemDrop : Listener {
             }
         } finally {
             reDropping.set(false)
+        }
+
+        val totalXP = dropResults.sumOf { it.xp }
+        if (totalXP > 0) {
+            DropQueue(player)
+                .setLocation(loc)
+                .addXP(totalXP)
+                .push()
         }
     }
 }
