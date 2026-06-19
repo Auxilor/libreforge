@@ -8,6 +8,12 @@ import net.william278.husktowns.events.UnClaimEvent
 import org.bukkit.event.EventHandler
 
 object TriggerUnclaim : Trigger("unclaim") {
+    override val description = "Fires when the player unclaims a chunk from their HuskTowns town."
+
+    override val categories = setOf("world")
+
+    override val additionalInfo = listOf("Requires HuskTowns to be installed.")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT

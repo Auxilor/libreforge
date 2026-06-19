@@ -18,12 +18,24 @@ import org.bukkit.event.EventHandler
 
 
 object TriggerEntityItemDrop : Trigger("entity_item_drop") {
+    override val description = "Fires when the player kills an entity and the entity drops items."
+
+    override val categories = setOf("entity", "combat")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.VICTIM to "The entity that was killed and dropped items.",
+        TriggerParameter.ITEM to "The first item from the drop pool.",
+        TriggerParameter.LOCATION to "The location of the killed entity.",
+        TriggerParameter.VALUE to "The number of items dropped."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
-        TriggerParameter.ITEM,
         TriggerParameter.EVENT,
-        TriggerParameter.LOCATION
+        TriggerParameter.LOCATION,
+        TriggerParameter.ITEM,
+        TriggerParameter.VALUE
     )
 
     @EventHandler(ignoreCancelled = true)

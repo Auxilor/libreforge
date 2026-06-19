@@ -9,6 +9,12 @@ import de.oliver.fancynpcs.api.events.NpcInteractEvent
 import org.bukkit.event.EventHandler
 
 object TriggerLeftClickNPC : Trigger("left_click_npc") {
+    override val description = "Fires when the player left-clicks a FancyNPCs NPC."
+
+    override val categories = setOf("interaction")
+
+    override val additionalInfo = listOf("Requires FancyNPCs to be installed.")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT

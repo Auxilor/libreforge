@@ -8,6 +8,10 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
 object MutatorPlayerAsVictim : Mutator<NoCompileData>("player_as_victim") {
+    override val description = "Sets the victim to be the triggering player."
+
+    override val categories = setOf("player", "victim")
+
     override val parameterTransformers = parameterTransformers {
         TriggerParameter.PLAYER becomes TriggerParameter.VICTIM
     }

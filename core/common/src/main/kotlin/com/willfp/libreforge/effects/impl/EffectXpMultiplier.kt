@@ -8,6 +8,9 @@ import org.bukkit.event.EventHandler
 import kotlin.math.ceil
 
 object EffectXpMultiplier : MultiplierEffect("xp_multiplier") {
+    override val description = "Multiplies the amount of XP the player gains from natural sources and telekinesis drops."
+    override val categories = setOf("economy")
+
     @EventHandler(ignoreCancelled = true)
     fun handle(event: NaturalExpGainEvent) {
         val player = event.expChangeEvent.player

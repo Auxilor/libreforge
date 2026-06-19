@@ -1,6 +1,7 @@
 package com.willfp.libreforge.filters.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.filters.Filter
 import com.willfp.libreforge.getIntFromExpression
@@ -8,6 +9,11 @@ import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.inventory.meta.Damageable
 
 object FilterItemDurabilityAbove : Filter<NoCompileData, Int>("item_durability_above") {
+    override val description = "Matches when the held item's remaining durability is at or above the given amount."
+    override val categories = setOf("inventory")
+    override val valueType = ArgType.INT
+    override val additionalInfo = listOf("Passes automatically when no item is present in the trigger data.")
+
     override fun getValue(config: Config, data: TriggerData?, key: String): Int {
         return config.getIntFromExpression(key, data)
     }

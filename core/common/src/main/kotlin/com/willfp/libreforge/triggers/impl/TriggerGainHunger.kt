@@ -9,9 +9,18 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.FoodLevelChangeEvent
 
 object TriggerGainHunger : Trigger("gain_hunger") {
+    override val description = "Fires when the player's food level increases."
+
+    override val categories = setOf("player")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.VALUE to "The amount of food level gained."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.EVENT
+        TriggerParameter.EVENT,
+        TriggerParameter.VALUE
     )
 
     @EventHandler(ignoreCancelled = true)

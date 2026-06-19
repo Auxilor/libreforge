@@ -9,6 +9,10 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
 object MutatorDispatcherAsVictim : Mutator<NoCompileData>("dispatcher_as_victim") {
+    override val description = "Sets the victim to the current dispatcher."
+
+    override val categories = setOf("victim", "meta")
+
     override val parameterTransformers = parameterTransformers {
         adds(TriggerParameter.VICTIM)
     }

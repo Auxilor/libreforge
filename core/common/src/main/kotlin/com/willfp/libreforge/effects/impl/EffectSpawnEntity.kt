@@ -3,24 +3,38 @@ package com.willfp.libreforge.effects.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.entities.Entities
 import com.willfp.eco.core.entities.TestableEntity
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import org.bukkit.entity.Tameable
 
 object EffectSpawnEntity : Effect<TestableEntity>("spawn_entity") {
+    override val description = "Spawns an entity at the trigger location."
+    override val categories = setOf("entity")
+
     override val parameters = setOf(
         TriggerParameter.LOCATION
     )
 
     override val arguments = arguments {
-        require("entity", "You must specify the mob to spawn!")
+        require(
+            "entity",
+            "You must specify the mob to spawn!",
+            description = "The entity type to spawn at the trigger location.",
+            type = ArgType.ENTITY
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: TestableEntity): Boolean {
         val location = data.location ?: return false
-        compileData.spawn(location)
+        val spawned = compileData.spawn(location)
+
+        if (config.getBool("owner") && spawned is Tameable) {
+            spawned.owner = data.player
+        }
 
         return true
     }

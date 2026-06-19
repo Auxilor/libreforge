@@ -9,8 +9,17 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.block.BellRingEvent
 
 object TriggerRingBell : Trigger("ring_bell") {
+    override val description = "Fires when the player rings a bell."
+
+    override val categories = setOf("interaction")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The player's location."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
+        TriggerParameter.EVENT,
         TriggerParameter.LOCATION
     )
 

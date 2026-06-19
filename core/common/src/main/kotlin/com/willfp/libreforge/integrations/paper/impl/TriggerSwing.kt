@@ -8,6 +8,16 @@ import io.papermc.paper.event.player.PlayerArmSwingEvent
 import org.bukkit.event.EventHandler
 
 object TriggerSwing : Trigger("swing") {
+    override val description = "Fires when the player swings their arm."
+
+    override val categories = setOf("interaction")
+
+    override val additionalInfo = listOf("Requires Paper to be installed.")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The player's location."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION

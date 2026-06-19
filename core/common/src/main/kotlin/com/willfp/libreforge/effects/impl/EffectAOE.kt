@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -13,14 +14,29 @@ import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.entity.LivingEntity
 
 object EffectAOE : Effect<AOECompileData>("aoe") {
+    override val description = "Runs a set of effects on all nearby entities within an AOE shape."
+    override val categories = setOf("meta")
+
     override val isPermanent = false
 
     override val arguments = arguments {
-        require("effects", "You must specify the effects!")
+        require(
+            "effects",
+            "You must specify the effects!",
+            description = "The effects to run on each entity within the AOE.",
+            type = ArgType.EFFECT_LIST
+        )
         require("shape", "You must specify a valid shape!", Config::getString) {
             AOEShapes[it] != null
         }
+        describe(
+            "shape",
+            description = "The AOE shape to use.",
+            type = ArgType.STRING,
+            choices = listOf("circle", "cone", "offset_circle", "scan_in_front", "beam")
+        )
         inherit { AOEShapes[it.getString("shape")] }
+        describeInherit("Configuration for the selected AOE shape.")
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: AOECompileData): Boolean {

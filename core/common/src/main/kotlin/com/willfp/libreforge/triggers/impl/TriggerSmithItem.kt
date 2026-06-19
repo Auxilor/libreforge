@@ -9,6 +9,15 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.inventory.SmithItemEvent
 
 object TriggerSmithItem : Trigger("smith_item") {
+    override val description = "Fires when the player smiths an item at a smithing table."
+
+    override val categories = setOf("inventory")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The player's location.",
+        TriggerParameter.ITEM to "The resulting item from the smithing table."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,

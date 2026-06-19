@@ -1,6 +1,7 @@
 package com.willfp.libreforge.integrations.bettermodel.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -11,10 +12,18 @@ import kr.toxicity.model.api.BetterModel
 import org.bukkit.entity.LivingEntity
 
 object EffectStopAnimation : Effect<NoCompileData>("stop_animation") {
+    override val description = "Stops a BetterModel animation on the triggering entity or victim."
+    override val categories = setOf("visual", "entity")
+
     override val isPermanent = false
 
     override val arguments = arguments {
-        require("animation", "You must specify the animation name!")
+        require(
+            "animation",
+            "You must specify the animation name!",
+            description = "The name of the animation to stop.",
+            type = ArgType.STRING
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {

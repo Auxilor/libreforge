@@ -8,6 +8,14 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerBedLeaveEvent
 
 object TriggerLeaveBed : Trigger("leave_bed") {
+    override val description = "Fires when the player leaves a bed."
+
+    override val categories = setOf("player")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The player's location."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION

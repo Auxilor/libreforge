@@ -8,6 +8,12 @@ import net.william278.huskclaims.event.BukkitExitClaimEvent
 import org.bukkit.event.EventHandler
 
 object TriggerLeaveClaim : Trigger("leave_claim") {
+    override val description = "Fires when the player exits a HuskClaims claim."
+
+    override val categories = setOf("movement")
+
+    override val additionalInfo = listOf("Requires HuskClaims to be installed.")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT

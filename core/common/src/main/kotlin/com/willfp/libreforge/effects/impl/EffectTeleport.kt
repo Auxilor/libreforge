@@ -7,6 +7,9 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
 object EffectTeleport : Effect<NoCompileData>("teleport") {
+    override val description = "Teleports the player to the trigger location, preserving their look direction."
+    override val categories = setOf("movement")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION

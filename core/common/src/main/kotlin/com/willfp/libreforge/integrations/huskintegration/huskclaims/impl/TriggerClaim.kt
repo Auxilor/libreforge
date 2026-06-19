@@ -8,6 +8,12 @@ import net.william278.huskclaims.event.BukkitCreateClaimEvent
 import org.bukkit.event.EventHandler
 
 object TriggerClaim : Trigger("claim") {
+    override val description = "Fires when the player creates a HuskClaims claim."
+
+    override val categories = setOf("world")
+
+    override val additionalInfo = listOf("Requires HuskClaims to be installed.")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT

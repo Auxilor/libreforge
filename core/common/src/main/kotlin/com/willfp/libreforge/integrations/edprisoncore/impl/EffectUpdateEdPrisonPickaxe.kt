@@ -8,6 +8,9 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
 object EffectUpdateEdPrisonPickaxe : Effect<NoCompileData>("update_edprison_pickaxe") {
+    override val description = "Forces an update of the player's EdPrison pickaxe, refreshing its stats and enchantments."
+    override val categories = setOf("economy")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER
     )

@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.drops.DropQueue
 import com.willfp.eco.core.items.Items
 import com.willfp.eco.core.recipe.parts.EmptyTestableItem
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.WeightedItems
 import com.willfp.libreforge.WeightedList
@@ -15,12 +16,21 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
 object EffectDropWeightedRandomItem : Effect<WeightedList<WeightedItems>>("drop_weighted_random_item") {
+    override val description = "Drops one item chosen from a weighted list at the trigger location."
+    override val categories = setOf("inventory")
+
     override val parameters = setOf(
         TriggerParameter.LOCATION
     )
 
     override val arguments = arguments {
-        require("items", "You must specify the list of items to choose from!")
+        require(
+            "items",
+            "You must specify the list of items to choose from!",
+            description = "A list of weighted item groups. Each entry has a weight and an items list.",
+            type = ArgType.DYNAMIC,
+            schema = WeightedItemSpec::class
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: WeightedList<WeightedItems>): Boolean {

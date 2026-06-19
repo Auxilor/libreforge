@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.ViolationContext
@@ -19,9 +20,16 @@ import org.bukkit.inventory.ItemStack
 import java.util.UUID
 
 object EffectInfiniteBucket : Effect<Set<String>>("infinite_bucket") {
+    override val description = "Prevents the specified bucket types from being emptied, refilling them automatically."
+    override val categories = setOf("player", "world")
 
     override val arguments = arguments {
-        require(listOf("type", "types"), "You must specify the bucket type(s) (e.g. type: any, or types: [lava, water, axolotl, etc.])!")
+        require(
+            listOf("type", "types"),
+            "You must specify the bucket type(s) (e.g. type: any, or types: [lava, water, axolotl, etc.])!",
+            description = "The bucket type(s) to make infinite. Use 'any' to apply to all bucket types.",
+            type = ArgType.STRING_LIST
+        )
     }
 
     private val activePlayers = mutableMapOf<UUID, Set<String>>()

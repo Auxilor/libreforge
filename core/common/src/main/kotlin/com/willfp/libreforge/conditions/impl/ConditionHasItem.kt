@@ -6,6 +6,9 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
 object ConditionHasItem : ItemCondition("has_item") {
+    override val description = "Passes when the player has the specified item in their inventory."
+    override val categories = setOf("inventory")
+
     override fun getItems(entity: LivingEntity): Collection<ItemStack?> {
         if (entity is Player) {
             return entity.inventory.contents.toList()

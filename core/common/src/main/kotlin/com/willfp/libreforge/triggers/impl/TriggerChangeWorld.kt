@@ -8,11 +8,22 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerChangedWorldEvent
 
 object TriggerChangeWorld : Trigger("change_world") {
+    override val description = "Fires when the player moves to a different world."
+
+    override val categories = setOf("movement", "world")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The player's location in the destination world.",
+        TriggerParameter.VELOCITY to "The player's velocity at the time of the world change.",
+        TriggerParameter.ITEM to "The item in the player's main hand.",
+        TriggerParameter.TEXT to "The name of the world the player moved to."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
+        TriggerParameter.EVENT,
         TriggerParameter.LOCATION,
         TriggerParameter.VELOCITY,
-        TriggerParameter.EVENT,
         TriggerParameter.ITEM,
         TriggerParameter.TEXT
     )

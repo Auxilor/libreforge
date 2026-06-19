@@ -9,10 +9,18 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.vehicle.VehicleExitEvent
 
 object TriggerExitVehicle : Trigger("exit_vehicle") {
+    override val description = "Fires when the player exits a vehicle."
+
+    override val categories = setOf("interaction", "movement")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The player's location."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.LOCATION,
-        TriggerParameter.EVENT
+        TriggerParameter.EVENT,
+        TriggerParameter.LOCATION
     )
 
     @EventHandler(ignoreCancelled = true)

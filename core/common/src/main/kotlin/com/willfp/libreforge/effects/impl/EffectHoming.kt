@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.entities.Entities
 import com.willfp.eco.core.entities.TestableEntity
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.distance
@@ -30,8 +31,22 @@ import kotlin.math.min
 import kotlin.math.sqrt
 
 object EffectHoming : Effect<List<TestableEntity>>("homing") {
+    override val description = "Makes fired arrows home in on the nearest valid target within range."
+    override val categories = setOf("combat")
+
     override val arguments = arguments {
-        require("distance", "You must specify the distance to hone from!")
+        require(
+            "distance",
+            "You must specify the distance to hone from!",
+            description = "The maximum range at which the arrow will lock on to a target. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
+        optional(
+            "targets",
+            description = "A list of entity types the arrow will home in on. Leave empty to target all entities.",
+            type = ArgType.ENTITY_LIST,
+            default = "[]"
+        )
     }
 
     override val parameters = setOf(

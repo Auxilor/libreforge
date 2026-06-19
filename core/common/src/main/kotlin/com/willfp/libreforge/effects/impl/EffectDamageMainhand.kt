@@ -8,6 +8,9 @@ import org.bukkit.inventory.ItemStack
 
 
 object EffectDamageMainhand : DamageItemEffect("damage_mainhand") {
+    override val description = "Applies durability damage to the item in the victim's main hand."
+    override val categories = setOf("combat", "inventory")
+
     override val parameters = setOf(
         TriggerParameter.VICTIM
     )

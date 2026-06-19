@@ -9,6 +9,15 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerTeleportEvent
 
 object TriggerTeleport : Trigger("teleport") {
+    override val description = "Fires when the player teleports."
+
+    override val categories = setOf("movement")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The destination location.",
+        TriggerParameter.TEXT to "The cause of the teleport."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,

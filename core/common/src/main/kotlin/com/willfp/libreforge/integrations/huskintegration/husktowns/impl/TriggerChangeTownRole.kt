@@ -8,6 +8,16 @@ import net.william278.husktowns.events.MemberRoleChangeEvent
 import org.bukkit.event.EventHandler
 
 object TriggerChangeTownRole : Trigger("change_town_role") {
+    override val description = "Fires when the player's role in their HuskTowns town changes."
+
+    override val categories = setOf("player")
+
+    override val additionalInfo = listOf("Requires HuskTowns to be installed.")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.TEXT to "The name of the new town role."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT,

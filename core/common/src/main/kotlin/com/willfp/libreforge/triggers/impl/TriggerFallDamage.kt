@@ -10,11 +10,22 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageEvent
 
 object TriggerFallDamage : Trigger("fall_damage") {
+    override val description = "Fires when an entity takes fall damage."
+
+    override val categories = setOf("combat", "movement")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.VICTIM to "The entity that took fall damage.",
+        TriggerParameter.LOCATION to "The entity's location.",
+        TriggerParameter.VALUE to "The fall damage taken."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
+        TriggerParameter.EVENT,
         TriggerParameter.LOCATION,
-        TriggerParameter.EVENT
+        TriggerParameter.VALUE
     )
 
     @EventHandler(ignoreCancelled = true)

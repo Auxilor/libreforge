@@ -1,41 +1,28 @@
 ---
-title: Configuring an Effect Chain
+title: "Configuring an Effect Chain"
 sidebar_position: 2
 ---
 
-## The Basics
+Effect chains are groups of effects executed together. This page explains why chains exist, the difference between **reusable** and **inline** chains, how to **call** them, and the **run types** that control how their effects fire.
 
-Effect chains are groups of effects that can be executed together. This is very useful if you want to create a chance-based effect with several components: chance is calculated independently on each effect, so without chains, particles and messages could send when the other effects don't activate, and vice-versa.
+Chains are most useful for chance-based effects with several parts. Chance is calculated independently per effect, so without a chain, particles and messages could fire when the other effects don't, and vice versa.
 
-Effects in chains run in isolation, so applying a mutator to one effect in the chain will apply it only to that effect — however, you can specify a mutator on the parent effect which will be applied to all effects in the chain. The same works for delays, e.g. if an effect in a chain has a delay of 2, it won't hold up other effects down the chain.
+Effects in a chain run in isolation: a mutator on one effect applies only to that effect. To apply a mutator to every effect, set it on the parent effect. Delays work the same way, e.g. a delay of 2 on one effect won't hold up the rest of the chain.
 
-Effect chains are also useful to re-use more complex logic, via custom arguments that you can specify. These work like regular placeholders, and you reference them in your chains with `%<id>%`, for example `%size%` if you had a size argument.
+Chains can also reuse complex logic via custom arguments. These work like regular placeholders and are referenced inside the chain with `%<id>%`, for example `%size%` for a `size` argument.
 
-There are two ways to create chains: **Reusable Chains** defined in a shared config file, and **Inline Chains** defined directly inside an effect holder.
+There are two ways to create chains: **reusable chains** in a shared config file, and **inline chains** defined directly inside an effect holder.
 
-## Reusable Chains
+## Reusable chains
 
-Reusable chains are defined in `chains.yml` in `/plugins/libreforge`. They are universally accessible — you can use them in Enchants, Skills, Jobs, or any other effect holder. This is great if you want to use the same chain in multiple places.
+Reusable chains live in `chains.yml` in `/plugins/libreforge`. They are universally accessible: you can use them in Enchants, Skills, Jobs, or any other effect holder. This is ideal when you want the same chain in multiple places.
 
-You don't need to specify triggers in your chain; these are handled by the `run_chain` effect when you call the chain.
-
-### The Chain Layout
+You don't specify triggers in the chain itself; those are handled by the `run_chain` effect when you call the chain.
 
 ```yaml
 chains:
-  - id: <chain id> # The unique ID used to reference this chain
-    effects: # The list of effects to run in the chain
-      - <effect 1>
-      - <effect 2>
-      - <effect 3>
-```
-
-### Example Chain Config
-
-```yaml
-chains:
-  - id: mining_effect # The unique ID of this chain
-    effects:
+  - id: mining_effect # The unique ID used to reference this chain
+    effects: # The effects to run in the chain
       - id: play_sound # First effect: play a sound
         args:
           sound: BLOCK_AMETHYST_CLUSTER_BREAK
@@ -55,9 +42,9 @@ chains:
 
 You can add or remove as many chains as you want.
 
-### Calling a Chain
+### Calling a chain
 
-To call a reusable chain, use the `run_chain` effect. Triggers, filters, and [optional args](https://plugins.auxilor.io/effects/configuring-an-effect#optional-arguments) are specified here, not in the chain itself.
+To call a reusable chain, use the `run_chain` effect. Triggers, filters, and [optional args](configuring-an-effect#optional-arguments) are specified here, not in the chain itself.
 
 ```yaml
 - id: run_chain
@@ -74,7 +61,7 @@ To call a reusable chain, use the `run_chain` effect. Triggers, filters, and [op
       - ancient_debris
 ```
 
-### Custom Chain Arguments
+### Custom chain arguments
 
 You can pass custom arguments into a chain using `chain_args`. These are available as placeholders inside the chain's effects.
 
@@ -84,27 +71,11 @@ You can pass custom arguments into a chain using `chain_args`. These are availab
     chain: <chain id>
     chain_args:
       strength: "%player_y% * 100" # Referenced as %strength% inside the chain
-      # Add whichever arguments you use in your chain
 ```
 
-## Inline Chains
+## Inline chains
 
-If you don't want to re-use a chain, or if you prefer having effects specified directly inside the effect holder, you can define chains inline instead. Inline chains also support custom arguments, just like reusable chains.
-
-### The Inline Layout
-
-```yaml
-effects:
-  - <effect 1>
-  - <effect 2>
-  - <effect 3>
-triggers:
-  - mine_block
-args:
-  every: 3 # Optional args are supported here: https://plugins.auxilor.io/effects/configuring-an-effect#optional-arguments
-```
-
-### Example Inline Chain
+If you don't want to reuse a chain, or you prefer effects defined directly inside the effect holder, define chains inline. Inline chains also support custom arguments, just like reusable chains.
 
 ```yaml
 effects:
@@ -115,6 +86,8 @@ effects:
         - diamond_ore
         - emerald_ore
         - ancient_debris
+    args:
+      every: 3 # Optional args are supported here too
     effects:
       - id: play_sound # First effect: play a sound
         args:
@@ -133,15 +106,15 @@ effects:
               add_z: 0.5
 ```
 
-## Run Types
+## Run types
 
-Effect chains support several run types that control how effects in the chain are executed:
+Effect chains support several run types that control how their effects execute:
 
-- **normal**: All effects in the chain will be run sequentially, one after another (default)
-- **cycle**: Only one effect will be run, cycling through each effect each time the chain is triggered
-- **random**: Only one effect will be run, chosen at random each time the chain is triggered
+- **normal:** all effects run sequentially, one after another (default).
+- **cycle:** only one effect runs, cycling through each effect each time the chain is triggered.
+- **random:** only one effect runs, chosen at random each time the chain is triggered.
 
-To specify the run type, add the `run-type` argument:
+Set the run type with the `run-type` argument:
 
 ```yaml
 effects:
@@ -156,11 +129,9 @@ effects:
       - <effect 3>
 ```
 
-### Weighted Random Chains
+### Weighted random chains
 
-When using the `random` run type, you may want certain effects to occur more frequently than others — for example, a higher chance of dropping an Iron Ingot and a lower chance of dropping a Diamond.
-
-To do this, specify a `weight` on each effect in the chain:
+With the `random` run type, you may want some effects to occur more often than others, e.g. a higher chance of dropping an Iron Ingot and a lower chance of dropping a Diamond. Set a `weight` on each effect:
 
 ```yaml
 effects:
@@ -180,3 +151,11 @@ effects:
 ```
 
 Weight is calculated as `<weight of element> / <sum of all weights>`.
+
+<hr/>
+
+## Where to go next
+
+- **Effects:** [Configuring an Effect](configuring-an-effect) for how each effect inside a chain is built.
+- **Conditions:** [Configuring a Condition](configuring-a-condition) to gate chained effects behind requirements.
+- **Triggers:** [All Triggers](https://plugins.auxilor.io/effects/all-triggers) for every event a chain can hook into.

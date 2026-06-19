@@ -9,6 +9,10 @@ import com.willfp.libreforge.get
 import org.bukkit.entity.LivingEntity
 
 object ConditionIsFrozen : Condition<NoCompileData>("is_frozen") {
+    override val description = "Passes when the entity is fully frozen from standing in powdered snow."
+
+    override val categories = setOf("player")
+
     override fun isMet(
         dispatcher: Dispatcher<*>,
         config: Config,

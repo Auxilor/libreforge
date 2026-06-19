@@ -8,6 +8,10 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerBucketFillEvent
 
 object TriggerFillBucket : Trigger("fill_bucket") {
+    override val description = "Fires when the player fills a bucket."
+
+    override val categories = setOf("interaction")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT

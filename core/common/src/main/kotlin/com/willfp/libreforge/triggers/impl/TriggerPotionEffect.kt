@@ -10,11 +10,21 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityPotionEffectEvent
 
 object TriggerPotionEffect : Trigger("potion_effect") {
+    override val description = "Fires when an entity receives a potion effect."
+
+    override val categories = setOf("player")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.VICTIM to "The entity that received the effect.",
+        TriggerParameter.LOCATION to "The entity's location.",
+        TriggerParameter.TEXT to "The namespaced key of the potion effect type (e.g. speed, strength)."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
-        TriggerParameter.LOCATION,
         TriggerParameter.EVENT,
+        TriggerParameter.LOCATION,
         TriggerParameter.TEXT
     )
 

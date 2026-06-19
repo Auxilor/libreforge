@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.drops.DropQueue
 import com.willfp.eco.core.items.Items
 import com.willfp.eco.core.recipe.parts.EmptyTestableItem
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -13,12 +14,20 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.inventory.ItemStack
 
 object EffectDropRandomItem : Effect<List<ItemStack>>("drop_random_item") {
+    override val description = "Drops one randomly chosen item from a list at the trigger location."
+    override val categories = setOf("inventory")
+
     override val parameters = setOf(
         TriggerParameter.LOCATION
     )
 
     override val arguments = arguments {
-        require(listOf("items", "item"), "You must specify the list of items to choose from!")
+        require(
+            listOf("items", "item"),
+            "You must specify the list of items to choose from!",
+            description = "The pool of items to choose from. One is picked at random per trigger.",
+            type = ArgType.ITEM_LIST
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: List<ItemStack>): Boolean {

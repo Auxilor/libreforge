@@ -76,6 +76,7 @@ import com.willfp.libreforge.triggers.impl.TriggerMineBlock
 import com.willfp.libreforge.triggers.impl.TriggerMineBlockCascade
 import com.willfp.libreforge.triggers.impl.TriggerMineBlockProgress
 import com.willfp.libreforge.triggers.impl.TriggerMove
+import com.willfp.libreforge.triggers.impl.TriggerMoveItem
 import com.willfp.libreforge.triggers.impl.TriggerNoteBlockPlay
 import com.willfp.libreforge.triggers.impl.TriggerPickUpItem
 import com.willfp.libreforge.triggers.impl.TriggerPlaceBlock
@@ -95,6 +96,7 @@ import com.willfp.libreforge.triggers.impl.TriggerShieldBlock
 import com.willfp.libreforge.triggers.impl.TriggerShootBow
 import com.willfp.libreforge.triggers.impl.TriggerSmelt
 import com.willfp.libreforge.triggers.impl.TriggerSmithItem
+import com.willfp.libreforge.triggers.impl.TriggerStartSwimming
 import com.willfp.libreforge.triggers.impl.TriggerSwapHands
 import com.willfp.libreforge.triggers.impl.TriggerTakeDamage
 import com.willfp.libreforge.triggers.impl.TriggerTakeEntityDamage
@@ -225,6 +227,7 @@ object Triggers : Registry<Trigger>() {
         register(TriggerMineBlockCascade)
         register(TriggerMineBlockProgress)
         register(TriggerMove)
+        register(TriggerMoveItem)
         register(TriggerNoteBlockPlay)
         register(TriggerPickUpItem)
         register(TriggerPlaceBlock)
@@ -245,6 +248,7 @@ object Triggers : Registry<Trigger>() {
         register(TriggerShootBow)
         register(TriggerSmithItem)
         register(TriggerSmelt)
+        register(TriggerStartSwimming)
         register(TriggerSwapHands)
         register(TriggerTameAnimal)
         register(TriggerTeleport)
@@ -255,6 +259,5 @@ object Triggers : Registry<Trigger>() {
         register(TriggerWinRaid)
         register(TriggerTakeDamage)
         register(TriggerTakeEntityDamage)
-        TriggerTakeDamage.notifyOfEntityDamageChange()
     }
 }

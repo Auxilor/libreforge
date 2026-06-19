@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.entities.Entities
 import com.willfp.eco.core.entities.TestableEntity
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -12,12 +13,20 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.Monster
 
 object EffectSwarm : Effect<List<TestableEntity>?>("swarm") {
+    override val description = "Causes all nearby monsters within a radius to target the victim."
+    override val categories = setOf("combat", "entity")
+
     override val parameters = setOf(
         TriggerParameter.VICTIM
     )
 
     override val arguments = arguments {
-        require("radius", "You must specify the maximum distance to swarm the victim from!")
+        require(
+            "radius",
+            "You must specify the maximum distance to swarm the victim from!",
+            description = "The radius to search for monsters that will target the victim. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: List<TestableEntity>?): Boolean {

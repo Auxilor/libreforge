@@ -9,6 +9,16 @@ import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 
 object TriggerRegisterVote : Trigger("register_vote") {
+    override val description = "Fires when the player registers a vote through Votifier."
+
+    override val categories = setOf("player")
+
+    override val additionalInfo = listOf("Requires Votifier to be installed.")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.TEXT to "The name of the voting service."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT,

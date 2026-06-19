@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -11,15 +12,33 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.LivingEntity
 
 object EffectChainLightning : Effect<NoCompileData>("chain_lightning") {
+    override val description = "Strikes lightning that chains to nearby entities, dealing damage at each jump."
+    override val categories = setOf("combat", "visual")
+
     override val parameters = setOf(
         TriggerParameter.VICTIM,
         TriggerParameter.LOCATION
     )
 
     override val arguments = arguments {
-        require("jumps", "You must specify the number of jumps!")
-        require("range", "You must specify the chain range!")
-        require("damage", "You must specify the damage per jump!")
+        require(
+            "jumps",
+            "You must specify the number of jumps!",
+            description = "The number of entities the lightning can chain to. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
+        require(
+            "range",
+            "You must specify the chain range!",
+            description = "The maximum distance between chain targets. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
+        require(
+            "damage",
+            "You must specify the damage per jump!",
+            description = "The damage dealt to each entity struck. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {

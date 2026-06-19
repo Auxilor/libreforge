@@ -8,6 +8,9 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.Monster
 
 object EffectTargetPlayer : Effect<NoCompileData>("target_player") {
+    override val description = "Forces the victim monster to target the player."
+    override val categories = setOf("meta", "entity")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM
