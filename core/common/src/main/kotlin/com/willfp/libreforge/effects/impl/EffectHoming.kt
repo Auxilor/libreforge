@@ -54,7 +54,6 @@ object EffectHoming : Effect<List<TestableEntity>>("homing") {
     )
 
     private const val META_KEY_DISTANCE = "libreforge-homing-arrows-distance"
-    private const val META_KEY_FORCE = "libreforge-homing-arrows-force"
     private const val META_KEY_TARGETS = "libreforge-homing-arrows-targets"
     private const val META_KEY_TRACKED = "libreforge-homing-arrows-tracked"
     private const val MAX_CHECKS = 40
@@ -91,7 +90,6 @@ object EffectHoming : Effect<List<TestableEntity>>("homing") {
         }
 
         arrow.setMetadata(META_KEY_DISTANCE, plugin.createMetadataValue(distance))
-        arrow.setMetadata(META_KEY_FORCE, plugin.createMetadataValue(force))
         arrow.setMetadata(META_KEY_TARGETS, plugin.createMetadataValue(targets))
 
         return true
@@ -223,7 +221,7 @@ object EffectHoming : Effect<List<TestableEntity>>("homing") {
             val disc = b * b - 4f * a * c
 
             if (disc >= 0f) {
-                val sqrtDisc = sqrt(disc)
+                val sqrtDisc = sqrt(disc.coerceAtLeast(0f))
                 val t1 = (-b - sqrtDisc) / (2f * a)
                 val t2 = (-b + sqrtDisc) / (2f * a)
 
