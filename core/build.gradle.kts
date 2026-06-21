@@ -67,5 +67,27 @@ publishing {
                 classifier = "shadow"
             }
         }
+
+        create<MavenPublication>("standalone") {
+            groupId = "com.willfp"
+            artifactId = "libreforge-standalone"
+
+            artifact(tasks.named("buildStandalone"))
+        }
     }
+
+    repositories {
+        maven {
+            name = "AuxilorPrivate"
+            url = uri("https://repo.auxilor.io/repository/maven-private/")
+            credentials {
+                username = System.getenv("MAVEN_USERNAME")
+                password = System.getenv("MAVEN_PASSWORD")
+            }
+        }
+    }
+}
+
+tasks.register("publishToAuxilor") {
+    dependsOn(tasks.named("publishStandalonePublicationToAuxilorPrivateRepository"))
 }
