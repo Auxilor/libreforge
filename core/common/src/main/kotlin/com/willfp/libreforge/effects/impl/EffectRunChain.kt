@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.util.evaluateExpressionOrNull
 import com.willfp.eco.util.formatEco
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NamedValue
@@ -43,12 +44,18 @@ object EffectRunChain : Effect<NoCompileData>("run_chain") {
 
         val args = config.getSubsection("chain_args")
 
+        val context = config.toPlaceholderContext(data)
+
         for (key in args.getKeys(false)) {
+            val raw = args.getString(key)
+            val value = evaluateExpressionOrNull(raw, context)
+                ?.takeIf { it.isFinite() }
+                ?.let { if (it % 1.0 == 0.0) it.toLong().toString() else it.toString() }
+                ?: raw.formatEco(context)
             dispatch.addPlaceholder(
                 NamedValue(
                     listOf(key, key.replace("_", "")),
-                    args.getString(key)
-                        .formatEco(args.toPlaceholderContext(data))
+                    value
                 )
             )
         }
