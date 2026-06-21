@@ -3,7 +3,7 @@ version = rootProject.version
 
 subprojects {
     dependencies {
-        compileOnly("com.willfp:eco:${rootProject.extra["ecoVersion"]}")
+        compileOnly("com.willfp:eco:${findProperty("eco-version")}")
     }
 }
 

@@ -18,12 +18,6 @@ plugins {
     id("maven-publish")
 }
 
-// useGradleVersions=true (set by release workflows) pins dependencies to the
-// versions in gradle.properties; otherwise dev builds track the latest master
-// snapshot of upstream projects.
-val useGradleVersions = findProperty("useGradleVersions") == "true"
-val ecoVersion by extra(if (useGradleVersions) findProperty("eco-version").toString() else "dev-SNAPSHOT")
-
 allprojects {
     apply(plugin = "kotlin")
     apply(plugin = "java")
@@ -31,13 +25,7 @@ allprojects {
     apply(plugin = "com.gradleup.shadow")
 
     repositories {
-        mavenLocal {
-            content {
-                excludeGroup("com.willfp")
-                excludeGroup("com.auxilor")
-                excludeGroup("com.exanthiax")
-            }
-        }
+        mavenLocal() // TODO: REMOVE
         mavenCentral()
         maven("https://jitpack.io/")
         maven("https://repo.auxilor.io/repository/maven-public/")
@@ -62,21 +50,11 @@ allprojects {
         compileOnly(fileTree("lib") { include("*.jar") })
     }
 
-    configurations.all {
-        resolutionStrategy.cacheChangingModulesFor(0, "seconds")
-    }
-
     publishing {
         repositories {
             maven {
                 name = "auxilor"
-                url = uri(
-                    if (version.toString().endsWith("SNAPSHOT")) {
-                        "https://repo.auxilor.io/repository/maven-snapshots/"
-                    } else {
-                        "https://repo.auxilor.io/repository/maven-releases/"
-                    }
-                )
+                url = uri("https://repo.auxilor.io/repository/maven-releases/")
                 credentials {
                     username = System.getenv("MAVEN_USERNAME")
                     password = System.getenv("MAVEN_PASSWORD")
