@@ -33,7 +33,7 @@ object TriggerTrustPlayer : Trigger("trust_player") {
             TriggerData(
                 player = player,
                 event = event,
-                text = event.trustLevel.name
+                text = event.trustLevel.id
             )
         )
     }
