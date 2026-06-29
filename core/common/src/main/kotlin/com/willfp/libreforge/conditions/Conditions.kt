@@ -25,6 +25,7 @@ import com.willfp.libreforge.conditions.impl.ConditionCanAffordPrice
 import com.willfp.libreforge.conditions.impl.ConditionGlobalPointsEqual
 import com.willfp.libreforge.conditions.impl.ConditionHasCompletedAdvancement
 import com.willfp.libreforge.conditions.impl.ConditionHasEnchant
+import com.willfp.libreforge.conditions.impl.ConditionHasInventorySpace
 import com.willfp.libreforge.conditions.impl.ConditionHasItem
 import com.willfp.libreforge.conditions.impl.ConditionHasItemData
 import com.willfp.libreforge.conditions.impl.ConditionHasPermission
@@ -167,6 +168,7 @@ object Conditions : Registry<Condition<*>>() {
         register(ConditionBelowXPLevel)
         register(ConditionBelowY)
         register(ConditionCanAffordPrice)
+        register(ConditionHasInventorySpace)
         register(ConditionHasItem)
         register(ConditionHasPermission)
         register(ConditionHasPotionEffect)
