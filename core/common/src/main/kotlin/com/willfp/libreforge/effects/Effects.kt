@@ -111,6 +111,8 @@ import com.willfp.libreforge.effects.impl.EffectKill
 import com.willfp.libreforge.effects.impl.EffectKnockAway
 import com.willfp.libreforge.effects.impl.EffectKnockbackMultiplier
 import com.willfp.libreforge.effects.impl.EffectKnockbackResistanceMultiplier
+import com.willfp.libreforge.effects.impl.EffectGiveItemLevel
+import com.willfp.libreforge.effects.impl.EffectGiveItemLevelXp
 import com.willfp.libreforge.effects.impl.EffectLevelItem
 import com.willfp.libreforge.effects.impl.EffectLifesteal
 import com.willfp.libreforge.effects.impl.EffectMineShape
@@ -607,6 +609,8 @@ object Effects : Registry<Effect<*>>() {
         register(EffectKnockAway)
         register(EffectKnockbackMultiplier)
         register(EffectKnockbackResistanceMultiplier)
+        register(EffectGiveItemLevelXp)
+        register(EffectGiveItemLevel)
         register(EffectLevelItem)
         register(EffectLifesteal)
         register(EffectMineShape)

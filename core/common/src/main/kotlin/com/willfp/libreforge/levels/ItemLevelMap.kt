@@ -67,11 +67,33 @@ class ItemLevelMap(
     }
 
     fun gainXP(level: LevelType, xp: Double, context: PlaceholderContext) {
-        require(xp >= 0) { "XP must be positive" }
+        val currentData = this[level]
 
-        val currentLevel = this[level]
-        val newLevel = currentLevel.gainXP(level, xp, itemStack, context)
-        this[level] = newLevel
+        if (xp >= 0) {
+            this[level] = currentData.gainXP(level, xp, itemStack, context)
+            return
+        }
+
+        var remaining = currentData.xp + xp
+        var currentLevel = currentData.level
+        while (remaining < 0 && currentLevel > 1) {
+            currentLevel--
+            remaining += level.getXPRequired(currentLevel, context)
+        }
+        this[level] = LevelData(maxOf(1, currentLevel), maxOf(0.0, remaining))
+    }
+
+    fun gainLevels(level: LevelType, levels: Int, context: PlaceholderContext) {
+        val currentData = this[level]
+        val targetLevel = maxOf(1, currentData.level + levels)
+
+        if (levels > 0) {
+            for (l in (currentData.level + 1)..targetLevel) {
+                level.handleLevelUp(l, itemStack, context)
+            }
+        }
+
+        this[level] = LevelData(targetLevel, 0.0)
     }
 }
 

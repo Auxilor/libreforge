@@ -11,8 +11,7 @@ import com.willfp.libreforge.levels.levels
 import com.willfp.libreforge.toPlaceholderContext
 import com.willfp.libreforge.triggers.TriggerData
 
-@Deprecated("Use give_item_level_xp instead")
-object EffectLevelItem : Effect<NoCompileData>("level_item") {
+object EffectGiveItemLevelXp : Effect<NoCompileData>("give_item_level_xp") {
     override val description = "Grants XP to the triggered item's level system."
     override val categories = setOf("inventory")
 
@@ -30,7 +29,7 @@ object EffectLevelItem : Effect<NoCompileData>("level_item") {
         require(
             "xp",
             "You must specify the amount of xp to give!",
-            description = "The amount of XP to grant to the item. Supports expressions.",
+            description = "The amount of XP to grant to the item. Supports expressions. Negative values remove XP.",
             type = ArgType.EXPRESSION
         )
     }
