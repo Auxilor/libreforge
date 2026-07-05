@@ -1,6 +1,6 @@
 ---
 title: "Configuring an Effect Chain"
-sidebar_position: 2
+sidebar_position: 6
 ---
 
 Effect chains are groups of effects executed together. This page explains why chains exist, the difference between **reusable** and **inline** chains, how to **call** them, and the **run types** that control how their effects fire.

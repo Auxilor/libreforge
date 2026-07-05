@@ -1,6 +1,6 @@
 ---
 title: "The Points System"
-sidebar_position: 8
+sidebar_position: 12
 ---
 
 Points are a way to track a number against a player, similar to a currency but used purely for keeping count. For example, if you want a player to have used one item a certain number of times before they can use another, a point keeps track of that. This page explains the **point types**, the **commands** to manage them, and the **effects and conditions** that read and write them.

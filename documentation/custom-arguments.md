@@ -1,6 +1,6 @@
 ---
 title: "Custom Arguments"
-sidebar_position: 12
+sidebar_position: 10
 ---
 
 Custom arguments let you bundle a **condition** and a set of **effects** into a reusable effect argument, so you can share common logic between effects. They are handy for richer messages or adding sounds to make actions more immersive. Each custom argument is a config file, and you call it with a `custom_` prefix. This page covers creating one, naming it, its structure, and how to use it.

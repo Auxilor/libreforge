@@ -1,6 +1,6 @@
 ---
 title: "Configuring an Effect"
-sidebar_position: 1
+sidebar_position: 4
 ---
 
 Effects are the actions libreforge runs for you: dealing damage, spawning particles, giving money, sending messages, and more. This page explains how an effect is put together, the difference between **triggered** and **permanent** effects, and the **optional arguments** and **placeholders** you can layer on top.

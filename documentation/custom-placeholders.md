@@ -1,6 +1,6 @@
 ---
 title: "Custom Placeholders"
-sidebar_position: 10
+sidebar_position: 8
 ---
 
 Custom placeholders let you reuse a **value**, a **math expression**, or a **conditional** lookup, and share data between plugins. You define them in one file and reference them as `%libreforge_<id>%`, with full PlaceholderAPI support. This page covers creating one, naming it, and the three kinds of placeholder you can build.

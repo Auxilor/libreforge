@@ -1,6 +1,6 @@
 ---
 title: "Custom Commands"
-sidebar_position: 11
+sidebar_position: 9
 ---
 
 Custom commands let you register an in-game command that runs a set of **effects** when a player types it. Each command has an **ID**, an **alias** players type, an optional **permission**, and the effects to run. This page covers creating one, naming it, its structure, and the argument tokens you can pass through to your effects.

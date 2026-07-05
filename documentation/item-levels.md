@@ -1,6 +1,6 @@
 ---
 title: "Item Levels"
-sidebar_position: 9
+sidebar_position: 11
 ---
 
 Item levels let an item gain **XP** and **level up** as it is used, instead of having a value set directly. Each item level is a config file that defines how much XP each level needs and what happens on level-up, and you grant XP with the `level_item` **effect**. This page covers creating one, naming it, its structure, and the placeholders it exposes.

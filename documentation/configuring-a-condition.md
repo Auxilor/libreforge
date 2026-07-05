@@ -1,6 +1,6 @@
 ---
 title: "Configuring a Condition"
-sidebar_position: 3
+sidebar_position: 5
 ---
 
 Conditions are requirements that must be met for an effect to activate. They let you control when effects run by checking things like the player's permission, Y level, world, or health. This page covers the shared **inverse** argument, **not-met lines** and **not-met effects** for feedback, and **victim conditions** for checking the target. Like effects and mutators, a condition is an ID plus arguments.
