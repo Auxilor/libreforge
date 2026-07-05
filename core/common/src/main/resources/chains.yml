@@ -1,4 +1,4 @@
-# Read more about chains: https://plugins.auxilor.io/effects/configuring-an-effect#effect-chains
+# Read more about chains: https://hub.auxilor.io/wiki/libreforge/configuring-an-effect#effect-chains
 
 chains:
   - id: shoot_extra_arrows
