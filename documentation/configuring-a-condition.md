@@ -62,7 +62,7 @@ Here, MVP players get $100 for breaking a block, while non-MVP players are told 
 
 ## Victim conditions
 
-You can check whether the victim (player or entity) meets conditions before running effects using the [`victim_conditions`](https://plugins.auxilor.io/effects/all-filters/victim_conditions) filter. Combine these with normal conditions to build intricate effects with comprehensive criteria.
+You can check whether the victim (player or entity) meets conditions before running effects using the [`victim_conditions`](https://hub.auxilor.io/wiki/libreforge/victim_conditions?category=filters) filter. Combine these with normal conditions to build intricate effects with comprehensive criteria.
 
 ```yaml
 effects:

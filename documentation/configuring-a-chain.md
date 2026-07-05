@@ -158,4 +158,3 @@ Weight is calculated as `<weight of element> / <sum of all weights>`.
 
 - **Effects:** [Configuring an Effect](configuring-an-effect) for how each effect inside a chain is built.
 - **Conditions:** [Configuring a Condition](configuring-a-condition) to gate chained effects behind requirements.
-- **Triggers:** [All Triggers](https://plugins.auxilor.io/effects/all-triggers) for every event a chain can hook into.

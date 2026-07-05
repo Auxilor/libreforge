@@ -11,7 +11,7 @@ You can have as many points as you want; the plugins track them automatically. P
 
 | Point type | Placeholder | Description |
 | --- | --- | --- |
-| **Points** | `%libreforge_points_<point>%` | A general per-player point (e.g. times jumped, zombies killed). You can also use these within [Prices](https://plugins.auxilor.io/all-plugins/prices) to build cost-based systems. |
+| **Points** | `%libreforge_points_<point>%` | A general per-player point (e.g. times jumped, zombies killed). You can also use these within [Prices](https://hub.auxilor.io/wiki/eco/the-price-lookup-system) to build cost-based systems. |
 | **Global points** | `%libreforge_global_points_<point>%` | A point tracked globally for all players (e.g. zombies killed by everyone). |
 | **Item points** | `%libreforge_item_points_<point>%` | A point tied to a specific item, tracking data on that item. Useful for custom durability or per-item stats (e.g. zombies killed with this sword). |
 
@@ -33,28 +33,28 @@ Points are integrated into the effects system. Below are all the effects and con
 
 | Name | Type | Link |
 | --- | --- | --- |
-| `add_global_points` | Effect | [Link](https://plugins.auxilor.io/effects/all-effects/add_global_points) |
-| `add_points` | Effect | [Link](https://plugins.auxilor.io/effects/all-effects/add_points) |
-| `give_global_points` | Effect | [Link](https://plugins.auxilor.io/effects/all-effects/give_global_points) |
-| `give_item_points` | Effect | [Link](https://plugins.auxilor.io/effects/all-effects/give_item_points) |
-| `give_points` | Effect | [Link](https://plugins.auxilor.io/effects/all-effects/give_points) |
-| `multiply_global_points` | Effect | [Link](https://plugins.auxilor.io/effects/all-effects/multiply_global_points) |
-| `multiply_item_points` | Effect | [Link](https://plugins.auxilor.io/effects/all-effects/multiply_item_points) |
-| `multiply_points` | Effect | [Link](https://plugins.auxilor.io/effects/all-effects/multiply_points) |
-| `above_global_points` | Condition | [Link](https://plugins.auxilor.io/effects/all-conditions/above_global_points) |
-| `below_global_points` | Condition | [Link](https://plugins.auxilor.io/effects/all-conditions/below_global_points) |
-| `global_points_equal` | Condition | [Link](https://plugins.auxilor.io/effects/all-conditions/global_points_equal) |
-| `above_points` | Condition | [Link](https://plugins.auxilor.io/effects/all-conditions/above_points) |
-| `below_points` | Condition | [Link](https://plugins.auxilor.io/effects/all-conditions/below_points) |
-| `points_equal` | Condition | [Link](https://plugins.auxilor.io/effects/all-conditions/points_equal) |
-| `item_points_above` | Condition | [Link](https://plugins.auxilor.io/effects/all-conditions/item_points_above) |
-| `item_points_below` | Condition | [Link](https://plugins.auxilor.io/effects/all-conditions/item_points_below) |
-| `item_points_equal` | Condition | [Link](https://plugins.auxilor.io/effects/all-conditions/item_points_equal) |
+| `add_global_points` | Effect | [Link](https://hub.auxilor.io/wiki/libreforge/add_global_points?category=effects) |
+| `add_points` | Effect | [Link](https://hub.auxilor.io/wiki/libreforge/add_points?category=effects) |
+| `give_global_points` | Effect | [Link](https://hub.auxilor.io/wiki/libreforge/give_global_points?category=effects) |
+| `give_item_points` | Effect | [Link](https://hub.auxilor.io/wiki/libreforge/give_item_points?category=effects) |
+| `give_points` | Effect | [Link](https://hub.auxilor.io/wiki/libreforge/give_points?category=effects) |
+| `multiply_global_points` | Effect | [Link](https://hub.auxilor.io/wiki/libreforge/multiply_global_points?category=effects) |
+| `multiply_item_points` | Effect | [Link](https://hub.auxilor.io/wiki/libreforge/multiply_item_points?category=effects) |
+| `multiply_points` | Effect | [Link](https://hub.auxilor.io/wiki/libreforge/multiply_points?category=effects) |
+| `above_global_points` | Condition | [Link](https://hub.auxilor.io/wiki/libreforge/above_global_points?category=conditions) |
+| `below_global_points` | Condition | [Link](https://hub.auxilor.io/wiki/libreforge/below_global_points?category=conditions) |
+| `global_points_equal` | Condition | [Link](https://hub.auxilor.io/wiki/libreforge/global_points_equal?category=conditions) |
+| `above_points` | Condition | [Link](https://hub.auxilor.io/wiki/libreforge/above_points?category=conditions) |
+| `below_points` | Condition | [Link](https://hub.auxilor.io/wiki/libreforge/below_points?category=conditions) |
+| `points_equal` | Condition | [Link](https://hub.auxilor.io/wiki/libreforge/points_equal?category=conditions) |
+| `item_points_above` | Condition | [Link](https://hub.auxilor.io/wiki/libreforge/item_points_above?category=conditions) |
+| `item_points_below` | Condition | [Link](https://hub.auxilor.io/wiki/libreforge/item_points_below?category=conditions) |
+| `item_points_equal` | Condition | [Link](https://hub.auxilor.io/wiki/libreforge/item_points_equal?category=conditions) |
 
 <hr/>
 
 ## Where to go next
 
 - **Effects:** [Configuring an Effect](configuring-an-effect) to wire points into triggered or permanent effects.
-- **Prices:** [Prices](https://plugins.auxilor.io/all-plugins/prices) to use points as a currency.
+- **Prices:** [Prices](https://hub.auxilor.io/wiki/eco/the-price-lookup-system) to use points as a currency.
 - **Item levels:** [Item Levels](item-levels) for the related per-item data system.

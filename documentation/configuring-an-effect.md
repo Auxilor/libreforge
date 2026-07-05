@@ -5,7 +5,7 @@ sidebar_position: 4
 
 Effects are the actions libreforge runs for you: dealing damage, spawning particles, giving money, sending messages, and more. This page explains how an effect is put together, the difference between **triggered** and **permanent** effects, and the **optional arguments** and **placeholders** you can layer on top.
 
-There are two types of effect: **triggered** and **permanent**. They are configured the same way with a few differences. Triggered effects need a [trigger](https://plugins.auxilor.io/effects/all-triggers) to activate; permanent effects are always active as long as their conditions, if any, are met.
+There are two types of effect: **triggered** and **permanent**. They are configured the same way with a few differences. Triggered effects need a trigger to activate; permanent effects are always active as long as their conditions, if any, are met.
 
 ## Example effect config
 
@@ -57,7 +57,7 @@ A trigger is the event or action that causes the effect to run, e.g. mining a bl
       - mine_block
 ```
 
-You can find all available triggers [here](https://plugins.auxilor.io/effects/all-triggers).
+You can find all available triggers here.
 
 ## Filters
 
@@ -151,7 +151,7 @@ args:
     display: "&b%value% Crystals ❖" # The display name of the price
 ```
 
-Read more about the price system here: [Prices](https://plugins.auxilor.io/all-plugins/prices).
+Read more about the price system here: [Prices](https://hub.auxilor.io/wiki/eco/the-price-lookup-system).
 
 ### Advanced options
 
@@ -178,8 +178,8 @@ There are extra placeholders passed in that you can use:
 
 | Placeholder | Value | Aliases |
 | --- | --- | --- |
-| `%trigger_value%` | The value passed by the trigger (e.g. the amount of damage dealt; see [here](https://plugins.auxilor.io/effects/all-triggers)). | `%triggervalue%`, `%trigger%`, `%value%`, `%tv%`, `%v%`, `%t%` |
-| `%alt_trigger_value%` | The alt-value passed by the trigger (see [here](https://plugins.auxilor.io/effects/all-triggers)). | `%alttriggervalue%`, `%alttrigger%`, `%altvalue%`, `%atv%`, `%av%`, `%at%` |
+| `%trigger_value%` | The value passed by the trigger (e.g. the amount of damage dealt; see here). | `%triggervalue%`, `%trigger%`, `%value%`, `%tv%`, `%v%`, `%t%` |
+| `%alt_trigger_value%` | The alt-value passed by the trigger (see here). | `%alttriggervalue%`, `%alttrigger%`, `%altvalue%`, `%atv%`, `%av%`, `%at%` |
 | `%player%` | The player's name | |
 | `%player_uuid%` | The player's UUID | |
 | `%victim_health%` | The victim's health | |
@@ -206,5 +206,4 @@ All configs load alphabetically by default. If a config depends on another, for 
 
 - **Conditions:** [Configuring a Condition](configuring-a-condition) to gate effects behind requirements.
 - **Chains:** [Configuring an Effect Chain](configuring-a-chain) to group effects together.
-- **Triggers:** [All Triggers](https://plugins.auxilor.io/effects/all-triggers) for every event you can hook into.
 - **Effects:** browse "All Effects" on the sidebar for the full list of actions.
