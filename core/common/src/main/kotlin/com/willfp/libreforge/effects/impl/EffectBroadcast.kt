@@ -22,7 +22,8 @@ object EffectBroadcast : Effect<NoCompileData>("broadcast") {
             listOf("message", "messages"),
             "You must specify the message(s) to send!",
             description = "The message(s) to broadcast to all players.",
-            type = ArgType.STRING_LIST
+            type = ArgType.STRING_LIST,
+            example = listOf("&aWelcome to the server, %player%!")
         )
     }
 

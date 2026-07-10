@@ -27,7 +27,8 @@ object ConditionBelowHealthPercent : Condition<NoCompileData>("below_health_perc
             "percent",
             "You must specify the health percentage!",
             description = "The maximum health percentage (0–100).",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "25 + %level% * 0.5"
         )
     }
 

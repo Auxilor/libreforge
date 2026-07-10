@@ -23,7 +23,8 @@ object EffectBlink : Effect<NoCompileData>("blink") {
             "distance",
             "You must specify the blink distance!",
             description = "The maximum number of blocks to teleport forward. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "5 + %level%"
         )
     }
 

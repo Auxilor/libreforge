@@ -26,7 +26,8 @@ object ConditionAboveGlobalPoints : Condition<NoCompileData>("above_global_point
             "amount",
             "You must specify the minimum amount of points!",
             description = "The minimum number of global points required.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%level% * 10"
         )
     }
 

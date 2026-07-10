@@ -26,7 +26,8 @@ object EffectRapidBows : Effect<NoCompileData>("rapid_bows") {
             "percent_faster",
             "You must specify how many percent faster to make bow pulls!",
             description = "How many percent faster the bow charges. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "10 + %level%"
         )
     }
 

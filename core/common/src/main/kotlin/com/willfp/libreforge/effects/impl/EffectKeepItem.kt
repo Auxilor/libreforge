@@ -33,7 +33,8 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
         optional(
             "slot",
             description = "The inventory slot of the item to keep, e.g. mainhand or slot_0. If omitted, the item providing this effect is kept.",
-            type = ArgType.STRING
+            type = ArgType.STRING,
+            example = "mainhand"
         )
     }
 

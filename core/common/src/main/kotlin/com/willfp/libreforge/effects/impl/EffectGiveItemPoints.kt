@@ -26,7 +26,8 @@ object EffectGiveItemPoints : Effect<NoCompileData>("give_item_points") {
             "amount",
             "You must specify the amount of points!",
             description = "The amount of points to add to the item. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%level% * 5"
         )
     }
 

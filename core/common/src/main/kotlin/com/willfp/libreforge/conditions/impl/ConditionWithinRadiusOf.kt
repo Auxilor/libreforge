@@ -38,7 +38,8 @@ object ConditionWithinRadiusOf : Condition<NoCompileData>("within_radius_of") {
             "radius",
             "You must specify the radius!",
             description = "The maximum distance from the target location.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "15 + %level% * 0.5"
         )
     }
 

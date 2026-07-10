@@ -30,7 +30,8 @@ object EffectPlaceBlock : Effect<NoCompileData>("place_block") {
         optional(
             "duration",
             description = "How many ticks before the block reverts to its original state. Omit to place permanently. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "20 * %level%"
         )
     }
 

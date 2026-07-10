@@ -38,13 +38,15 @@ object EffectPotionEffect : Effect<NoCompileData>("potion_effect") {
             "level",
             "You must specify the effect level!",
             description = "The level of the potion effect (1 = level I). Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "1 + %level% / 10"
         )
         require(
             "duration",
             "You must specify the duration!",
             description = "How long the effect lasts in ticks. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "20 * %level%"
         )
         optional(
             "apply_to_player",

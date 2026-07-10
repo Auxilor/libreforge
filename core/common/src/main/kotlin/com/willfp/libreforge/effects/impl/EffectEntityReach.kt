@@ -22,7 +22,8 @@ object EffectEntityReach : AttributeEffect(
             "reach",
             "You must specify the amount of reach to add!",
             description = "The number of blocks to add to the entity interaction range. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%level% * 0.5"
         )
     }
 

@@ -22,13 +22,15 @@ object EffectCopyItem : Effect<NoCompileData>("copy_item") {
             "from_slot",
             "You must specify the source slot!",
             description = "The slot to copy the item from, e.g. mainhand or offhand.",
-            type = ArgType.STRING
+            type = ArgType.STRING,
+            example = "mainhand"
         )
         require(
             "to_slot",
             "You must specify the destination slot!",
             description = "The slot to copy the item into.",
-            type = ArgType.STRING
+            type = ArgType.STRING,
+            example = "offhand"
         )
     }
 

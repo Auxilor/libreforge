@@ -22,13 +22,15 @@ object ConditionCanAffordPrice : Condition<Price>("can_afford_price") {
             "value",
             "You must specify the value of the price!",
             description = "The amount or expression for the price value.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%level% * 100"
         )
         require(
             "type",
             "You must specify the type of price (coins, xpl, etc.)!",
             description = "The price type identifier (e.g. coins, xpl).",
-            type = ArgType.STRING
+            type = ArgType.STRING,
+            example = "coins"
         )
     }
 

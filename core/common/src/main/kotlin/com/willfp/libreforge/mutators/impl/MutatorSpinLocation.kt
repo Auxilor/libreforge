@@ -18,13 +18,15 @@ object MutatorSpinLocation : Mutator<NoCompileData>("spin_location") {
             "angle",
             "You must specify the angle to rotate by!",
             description = "The angle in degrees to rotate around the Y axis.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%level% * 10"
         )
         require(
             "distance",
             "You must specify the distance from the current location!",
             description = "The distance from the current location to offset in the rotated direction.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "1 + %level% * 0.1"
         )
     }
 

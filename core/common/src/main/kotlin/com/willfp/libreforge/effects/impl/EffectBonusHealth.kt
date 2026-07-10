@@ -22,7 +22,8 @@ object EffectBonusHealth : AttributeEffect(
             "health",
             "You must specify the bonus health to give!",
             description = "The amount of bonus max health to add. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%level% * 2"
         )
     }
 

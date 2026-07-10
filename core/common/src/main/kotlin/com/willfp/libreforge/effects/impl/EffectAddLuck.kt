@@ -22,7 +22,8 @@ object EffectAddLuck : AttributeEffect(
             "amount",
             "You must specify the amount of luck to add!",
             description = "The amount of luck to add. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%level% * 0.5"
         )
     }
 

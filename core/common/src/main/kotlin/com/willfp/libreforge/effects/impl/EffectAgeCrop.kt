@@ -24,7 +24,8 @@ object EffectAgeCrop : Effect<NoCompileData>("age_crop") {
             "age",
             description = "The number of growth stages to advance. Supports expressions.",
             type = ArgType.EXPRESSION,
-            default = "1"
+            default = "1",
+            example = "1 + %level%"
         )
     }
 

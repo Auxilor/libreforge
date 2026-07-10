@@ -19,7 +19,8 @@ object EffectPiercing : Effect<NoCompileData>("piercing") {
             "level",
             "You must specify the pierce level!",
             description = "The number of extra piercing levels to add to the arrow. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "1 + %level% / 20"
         )
     }
 

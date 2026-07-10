@@ -32,7 +32,8 @@ object EffectGiveItem : Effect<List<ItemStack>>("give_item") {
         optional(
             "slot",
             description = "The inventory slot type to place the item into. If omitted the item is dropped into the player's inventory via telekinesis.",
-            type = ArgType.STRING
+            type = ArgType.STRING,
+            example = "mainhand"
         )
     }
 

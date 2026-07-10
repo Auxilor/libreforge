@@ -28,7 +28,8 @@ object ConditionItemPointsAbove : Condition<NoCompileData>("item_points_above") 
             "amount",
             "You must specify minimum amount of points!",
             description = "The minimum number of points the item must have.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%level% * 10"
         )
     }
 

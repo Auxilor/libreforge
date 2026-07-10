@@ -34,7 +34,8 @@ object EffectDamageArmor : Effect<NoCompileData>("damage_armor") {
             "damage",
             "You must specify the amount of damage!",
             description = "The durability damage to apply to each armor piece. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "10 + %level%"
         )
         optional(
             "slots",

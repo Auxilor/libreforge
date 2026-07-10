@@ -43,7 +43,8 @@ object EffectPermanentPotionEffect : Effect<NoCompileData>("permanent_potion_eff
             "level",
             "You must specify the effect level!",
             description = "The amplifier level of the potion effect (1 = level I). Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "1 + %level% / 10"
         )
         optional(
             "particles",

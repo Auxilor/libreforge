@@ -28,7 +28,8 @@ object EffectSetArmorTrim : Effect<NoCompileData>("set_armor_trim") {
         describe(
             "pattern",
             description = "The trim pattern to apply, e.g. 'sentry' or 'dune'.",
-            type = ArgType.STRING
+            type = ArgType.STRING,
+            example = "sentry"
         )
         require("material", "You must specify a valid trim material!", Config::getString) {
             @Suppress("DEPRECATION")
@@ -37,7 +38,8 @@ object EffectSetArmorTrim : Effect<NoCompileData>("set_armor_trim") {
         describe(
             "material",
             description = "The trim material to apply, e.g. 'gold' or 'diamond'.",
-            type = ArgType.STRING
+            type = ArgType.STRING,
+            example = "diamond"
         )
     }
 

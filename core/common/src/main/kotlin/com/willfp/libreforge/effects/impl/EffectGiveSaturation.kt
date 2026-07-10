@@ -22,7 +22,8 @@ object EffectGiveSaturation : Effect<NoCompileData>("give_saturation") {
             "amount",
             "You must specify the amount of saturation to give!",
             description = "The amount of saturation points to add. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%level%"
         )
     }
 

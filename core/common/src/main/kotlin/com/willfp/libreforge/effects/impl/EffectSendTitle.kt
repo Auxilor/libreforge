@@ -26,13 +26,15 @@ object EffectSendTitle : Effect<NoCompileData>("send_title") {
             "title",
             "You must specify the title!",
             description = "The main title text to display. Supports placeholders.",
-            type = ArgType.STRING
+            type = ArgType.STRING,
+            example = "Level Up!"
         )
         require(
             "subtitle",
             "You must specify the subtitle!",
             description = "The subtitle text to display below the title. Supports placeholders.",
-            type = ArgType.STRING
+            type = ArgType.STRING,
+            example = "You reached level %player_level%!"
         )
     }
 

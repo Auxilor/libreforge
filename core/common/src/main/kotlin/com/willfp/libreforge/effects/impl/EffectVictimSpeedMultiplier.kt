@@ -27,13 +27,15 @@ object EffectVictimSpeedMultiplier : Effect<NoCompileData>("victim_speed_multipl
             "multiplier",
             "You must specify the speed multiplier!",
             description = "The value to multiply the victim's movement speed by. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "1 - %level% * 0.02"
         )
         require(
             "duration",
             "You must specify the duration!",
             description = "How many ticks the speed change lasts. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "20 * %level%"
         )
     }
 

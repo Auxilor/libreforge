@@ -30,7 +30,8 @@ object EffectAddEnchant : Effect<NoCompileData>("add_enchant") {
             "level",
             "You must specify the level of the enchantment to add!",
             description = "The level of the enchantment to add. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%level% + 1"
         )
     }
 

@@ -28,7 +28,8 @@ object EffectBlockCommands : Effect<NoCompileData>("block_commands") {
         optional(
             "messages",
             description = "Messages to send to the player when a blocked command is attempted.",
-            type = ArgType.STRING_LIST
+            type = ArgType.STRING_LIST,
+            example = listOf("&cYou can't use that command right now!", "&7Complete your quest first.")
         )
     }
 

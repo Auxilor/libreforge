@@ -28,7 +28,8 @@ object EffectDamageMultiplier : Effect<NoCompileData>("damage_multiplier") {
             "multiplier",
             "You must specify the damage multiplier!",
             description = "The damage multiplier to apply. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "1.2 + %level% * 0.02"
         )
     }
 

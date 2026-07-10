@@ -23,13 +23,15 @@ object EffectPayPrice : Effect<NoCompileData>("pay_price") {
             "value",
             "You must specify the value of the price to pay!",
             description = "The amount to deduct from the player. Supports expressions and placeholders.",
-            type = ArgType.STRING
+            type = ArgType.STRING,
+            example = "%level% * 10"
         )
         require(
             "type",
             "You must specify the type of price (coins, xpl, etc.)!",
             description = "The price type identifier (e.g. coins, xp, xpl, item).",
-            type = ArgType.STRING
+            type = ArgType.STRING,
+            example = "coins"
         )
     }
 

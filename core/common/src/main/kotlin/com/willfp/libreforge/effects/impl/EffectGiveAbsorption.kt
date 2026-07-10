@@ -23,7 +23,8 @@ object EffectGiveAbsorption : Effect<NoCompileData>("give_absorption") {
             "amount",
             "You must specify the amount of absorption hearts!",
             description = "The number of absorption hearts to add. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%level%"
         )
     }
 

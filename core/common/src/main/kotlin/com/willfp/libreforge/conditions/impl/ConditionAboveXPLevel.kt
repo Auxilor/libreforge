@@ -25,7 +25,8 @@ object ConditionAboveXPLevel : Condition<NoCompileData>("above_xp_level") {
             "level",
             "You must specify the xp level!",
             description = "The minimum XP level required.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "10 + %level%"
         )
     }
 

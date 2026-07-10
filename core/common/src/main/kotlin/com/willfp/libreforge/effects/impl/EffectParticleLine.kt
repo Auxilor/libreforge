@@ -30,7 +30,8 @@ object EffectParticleLine : Effect<SpawnableParticle>("particle_line") {
             "particle",
             "You must specify the particle!",
             description = "The particle type to spawn along the line.",
-            type = ArgType.STRING
+            type = ArgType.STRING,
+            example = "flame"
         )
         require(
             "amount",

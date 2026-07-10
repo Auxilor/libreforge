@@ -22,7 +22,8 @@ object EffectNameEntity : Effect<NoCompileData>("name_entity") {
             "name",
             "You must specify the name to set!",
             description = "The custom name to display above the entity. Supports placeholders.",
-            type = ArgType.STRING
+            type = ArgType.STRING,
+            example = "%player_name%'s Wolf"
         )
     }
 

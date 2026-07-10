@@ -28,7 +28,8 @@ object ConditionItemPointsEqual : Condition<NoCompileData>("item_points_equal") 
             "amount",
             "You must specify the amount of points!",
             description = "The exact number of points the item must have.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%level% * 10"
         )
     }
 

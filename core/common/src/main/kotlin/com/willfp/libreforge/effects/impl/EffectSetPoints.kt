@@ -29,7 +29,8 @@ object EffectSetPoints : Effect<NoCompileData>("set_points") {
             "amount",
             "You must specify the amount of points!",
             description = "The value to set the player's point counter to. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%level% * 10"
         )
     }
 

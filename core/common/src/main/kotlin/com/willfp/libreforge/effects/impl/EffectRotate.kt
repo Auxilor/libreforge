@@ -22,7 +22,8 @@ object EffectRotate : Effect<NoCompileData>("rotate") {
             "angle",
             "You must specify the angle to rotate by!",
             description = "The number of degrees to add to the player's current yaw. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%level% * 10"
         )
     }
 

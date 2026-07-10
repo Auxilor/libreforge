@@ -22,7 +22,8 @@ object EffectMiningEfficiency : AttributeEffect(
             "amount",
             "You must specify the amount of efficiency to add!",
             description = "The flat amount of mining efficiency to add. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%level% * 0.1"
         )
     }
 

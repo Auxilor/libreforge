@@ -33,13 +33,15 @@ object EffectReplaceNear : Effect<NoCompileData>("replace_near") {
             "radius",
             "You must specify the radius!",
             description = "The horizontal radius to search for blocks. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "3 + %level% * 0.3"
         )
         require(
             "radius_y",
             "You must specify the y radius!",
             description = "The vertical radius to search for blocks. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "2 + %level% * 0.2"
         )
         require(
             "replace_to",
@@ -60,7 +62,8 @@ object EffectReplaceNear : Effect<NoCompileData>("replace_near") {
         optional(
             "duration",
             description = "How long (in ticks) before the replaced blocks revert to their original type. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "20 * %level%"
         )
         optional(
             "disable_on_sneak",

@@ -39,7 +39,8 @@ object EffectHoming : Effect<List<TestableEntity>>("homing") {
             "distance",
             "You must specify the distance to hone from!",
             description = "The maximum range at which the arrow will lock on to a target. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "10 + %level%"
         )
         optional(
             "targets",

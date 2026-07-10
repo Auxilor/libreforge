@@ -28,7 +28,8 @@ object EffectDrill : MineBlockEffect<NoCompileData>("drill") {
             "amount",
             "You must specify the amount of blocks to break!",
             description = "The number of blocks to break in a line. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "3 + %level%"
         )
         require(
             "check_hardness",

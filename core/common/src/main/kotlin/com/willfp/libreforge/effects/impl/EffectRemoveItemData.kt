@@ -22,7 +22,8 @@ object EffectRemoveItemData : Effect<NoCompileData>("remove_item_data") {
             "key",
             "You must specify the data key!",
             description = "The key of the custom item data entry to remove.",
-            type = ArgType.STRING
+            type = ArgType.STRING,
+            example = "custom_id"
         )
     }
 

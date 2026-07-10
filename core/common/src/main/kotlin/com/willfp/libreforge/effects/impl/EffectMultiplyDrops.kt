@@ -31,7 +31,8 @@ object EffectMultiplyDrops : Effect<NoCompileData>("multiply_drops") {
             listOf("multiplier", "fortune"),
             "You must specify a multiplier or level of fortune to mimic!",
             description = "Either a flat drop multiplier or a fortune level to simulate. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "1 + %level% * 0.1"
         )
         optional(
             "on_items",

@@ -24,19 +24,22 @@ object EffectSetVictimVelocity : Effect<NoCompileData>("set_victim_velocity") {
             "x",
             "You must specify the velocity x component!",
             description = "The X component of the velocity vector. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "0"
         )
         require(
             "y",
             "You must specify the velocity y component!",
             description = "The Y component of the velocity vector. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "1.5"
         )
         require(
             "z",
             "You must specify the velocity z component!",
             description = "The Z component of the velocity vector. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "0"
         )
     }
 

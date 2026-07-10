@@ -25,7 +25,8 @@ object EffectShockwave : Effect<NoCompileData>("shockwave") {
             "radius",
             "You must specify the shockwave radius!",
             description = "The maximum radius the shockwave expands to. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "5 + %level% * 0.5"
         )
         require(
             "pulses",
@@ -37,13 +38,15 @@ object EffectShockwave : Effect<NoCompileData>("shockwave") {
             "damage",
             "You must specify the damage per entity!",
             description = "The amount of damage dealt to each entity caught in the shockwave. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%level% * 2"
         )
         require(
             "knockback",
             "You must specify the knockback force!",
             description = "The knockback force applied to each entity hit. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "1 + %level% * 0.1"
         )
     }
 

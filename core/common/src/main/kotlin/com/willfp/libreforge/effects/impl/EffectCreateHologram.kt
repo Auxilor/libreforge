@@ -25,13 +25,15 @@ object EffectCreateHologram : Effect<NoCompileData>("create_hologram") {
             "text",
             "You must specify the text to display!",
             description = "The lines of text to show on the hologram. Supports placeholders.",
-            type = ArgType.STRING_LIST
+            type = ArgType.STRING_LIST,
+            example = listOf("&6%player%", "&7Level %level%")
         )
         require(
             "duration",
             "You must specify the duration to display for!",
             description = "How long to show the hologram, in ticks. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "20 * %level%"
         )
     }
 

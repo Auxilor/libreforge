@@ -26,7 +26,8 @@ object ConditionGlobalPointsEqual : Condition<NoCompileData>("global_points_equa
             "amount",
             "You must specify the amount of points!",
             description = "The exact global points value required.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%level% * 10"
         )
     }
 

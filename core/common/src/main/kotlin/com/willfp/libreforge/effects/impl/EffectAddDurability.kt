@@ -20,7 +20,8 @@ object EffectAddDurability : Effect<NoCompileData>("add_durability") {
             "durability",
             "You must specify the durability to add!",
             description = "The amount of maximum durability to add. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "50 + %level% * 10"
         )
     }
 

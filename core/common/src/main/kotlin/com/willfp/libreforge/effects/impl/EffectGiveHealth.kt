@@ -24,7 +24,8 @@ object EffectGiveHealth : Effect<NoCompileData>("give_health") {
             "amount",
             "You must specify the amount of health to give!",
             description = "The amount of health points to restore. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%level% * 2"
         )
         optional(
             "trigger_heal",

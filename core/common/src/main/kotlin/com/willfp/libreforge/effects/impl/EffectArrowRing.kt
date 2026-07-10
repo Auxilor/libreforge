@@ -29,7 +29,8 @@ object EffectArrowRing : Effect<NoCompileData>("arrow_ring") {
             "amount",
             "You must specify the amount of arrows!",
             description = "The number of arrows in the ring. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "8 + %level%"
         )
         require(
             "height",
@@ -41,13 +42,15 @@ object EffectArrowRing : Effect<NoCompileData>("arrow_ring") {
             "radius",
             "You must specify the radius of the circle!",
             description = "The radius of the arrow ring. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "3 + %level% * 0.3"
         )
         require(
             "arrow_damage",
             "You must specify the arrow damage!",
             description = "The damage each arrow deals. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%level% * 1.5"
         )
         require(
             "fire_ticks",

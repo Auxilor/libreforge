@@ -24,7 +24,8 @@ object EffectStripAI : Effect<NoCompileData>("strip_ai") {
             "duration",
             "You must specify the duration to disable AI for!",
             description = "How long to disable the entity's AI, in ticks. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "20 * %level%"
         )
     }
 

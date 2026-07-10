@@ -27,7 +27,8 @@ object EffectSpawnParticle : Effect<NoCompileData>(
             "particle",
             "You must specify the particle!",
             description = "The particle to spawn, as an eco particle string.",
-            type = ArgType.ANY
+            type = ArgType.ANY,
+            example = "flame"
         )
         optional(
             "amount",

@@ -25,7 +25,8 @@ object ConditionBelowXPLevel : Condition<NoCompileData>("below_xp_level") {
             "level",
             "You must specify the xp level!",
             description = "The XP level threshold; the player must be below this value.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "10 + %level%"
         )
     }
 

@@ -22,7 +22,8 @@ object EffectGravityMultiplier : AttributeEffect(
             "multiplier",
             "You must specify the gravity multiplier!",
             description = "The gravity multiplier to apply. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "1 - %level% * 0.05"
         )
     }
 

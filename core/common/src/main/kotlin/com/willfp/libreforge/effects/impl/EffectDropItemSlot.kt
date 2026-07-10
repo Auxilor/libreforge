@@ -23,7 +23,8 @@ object EffectDropItemSlot : Effect<NoCompileData>("drop_item_slot") {
             "slot",
             "You must specify the slot to drop the item from!",
             description = "The inventory slot to drop items from, e.g. mainhand or slot_0.",
-            type = ArgType.STRING
+            type = ArgType.STRING,
+            example = "mainhand"
         )
         optional(
             "amount",

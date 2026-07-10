@@ -26,7 +26,8 @@ object EffectUpdateBossBar : Effect<NoCompileData>("update_boss_bar") {
             "id",
             "You must specify the id of the boss bar!",
             description = "The ID of the boss bar to update.",
-            type = ArgType.STRING
+            type = ArgType.STRING,
+            example = "boss_%player_name%"
         )
         optional(
             "progress",
@@ -38,19 +39,22 @@ object EffectUpdateBossBar : Effect<NoCompileData>("update_boss_bar") {
             "name",
             description = "The new display name of the boss bar. Supports placeholders.",
             type = ArgType.STRING,
-            default = ""
+            default = "",
+            example = "%player_name%'s Boss"
         )
         optional(
             "color",
             description = "The new color of the boss bar (e.g. BLUE, RED).",
             type = ArgType.STRING,
-            default = ""
+            default = "",
+            example = "RED"
         )
         optional(
             "style",
             description = "The new overlay style of the boss bar (e.g. PROGRESS, NOTCHED_10).",
             type = ArgType.STRING,
-            default = ""
+            default = "",
+            example = "NOTCHED_10"
         )
     }
 

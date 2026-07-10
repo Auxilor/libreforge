@@ -29,7 +29,8 @@ object ConditionItemLevelAbove : Condition<NoCompileData>("item_level_above") {
             "level",
             "You must specify the minimum level!",
             description = "The minimum level the item must exceed.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "5 + %level%"
         )
     }
 

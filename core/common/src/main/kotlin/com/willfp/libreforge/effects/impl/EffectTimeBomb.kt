@@ -24,7 +24,8 @@ object EffectTimeBomb : Effect<NoCompileData>("time_bomb") {
             "fuse",
             "You must specify the fuse duration in ticks!",
             description = "How many ticks before the explosion occurs. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "20 * %level%"
         )
         require(
             "power",

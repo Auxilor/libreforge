@@ -21,7 +21,8 @@ object EffectExplosionKnockbackResistanceMultiplier : AttributeEffect("explosion
             "multiplier",
             "You must specify the explosion knockback resistance multiplier!",
             description = "The value to add to the explosion knockback resistance attribute. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%level% * 0.1"
         )
     }
 

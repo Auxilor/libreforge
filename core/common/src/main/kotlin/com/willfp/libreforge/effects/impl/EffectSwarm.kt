@@ -25,7 +25,8 @@ object EffectSwarm : Effect<List<TestableEntity>?>("swarm") {
             "radius",
             "You must specify the maximum distance to swarm the victim from!",
             description = "The radius to search for monsters that will target the victim. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "10 + %level%"
         )
     }
 

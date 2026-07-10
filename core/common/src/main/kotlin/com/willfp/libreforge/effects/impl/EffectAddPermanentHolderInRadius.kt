@@ -37,7 +37,8 @@ object EffectAddPermanentHolderInRadius : Effect<HolderTemplate>("add_permanent_
             "radius",
             "You must specify the radius!",
             description = "The radius to apply effects within. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "5 + %level% * 0.5"
         )
         optional(
             "apply-to-self",

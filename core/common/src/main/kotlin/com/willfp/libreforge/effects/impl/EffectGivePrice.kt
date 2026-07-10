@@ -23,13 +23,15 @@ object EffectGivePrice : Effect<NoCompileData>("give_price") {
             "value",
             "You must specify the value of the price to give!",
             description = "The amount to give, as an expression string (may reference placeholders).",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%level% * 100"
         )
         require(
             "type",
             "You must specify the value of the price (coins, xpl, etc.)!",
             description = "The eco price type identifier (e.g. coins, xp, points:mytype).",
-            type = ArgType.STRING
+            type = ArgType.STRING,
+            example = "points:mytype"
         )
     }
 

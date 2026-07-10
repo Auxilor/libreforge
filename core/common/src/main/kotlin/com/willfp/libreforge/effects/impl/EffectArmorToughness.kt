@@ -22,7 +22,8 @@ object EffectArmorToughness : AttributeEffect(
             "points",
             "You must specify the amount of points to add/remove!",
             description = "The number of armor toughness points to add (or subtract if negative). Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%level% * 0.25"
         )
     }
 

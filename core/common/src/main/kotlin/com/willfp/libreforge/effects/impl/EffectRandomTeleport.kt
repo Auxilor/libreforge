@@ -25,13 +25,15 @@ object EffectRandomTeleport : Effect<NoCompileData>("random_teleport") {
             "radius",
             "You must specify the radius!",
             description = "The maximum distance from the player's current position to teleport. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "10 + %level%"
         )
         optional(
             "min_radius",
             description = "The minimum distance from the player's current position to teleport. Supports expressions.",
             type = ArgType.EXPRESSION,
-            default = "0"
+            default = "0",
+            example = "%level% * 0.1"
         )
     }
 

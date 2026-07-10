@@ -21,13 +21,15 @@ object ConditionPlaceholderGreaterThan : Condition<NoCompileData>("placeholder_g
             "placeholder",
             "You must specify the placeholder!",
             description = "The placeholder string to resolve and evaluate as a number.",
-            type = ArgType.STRING
+            type = ArgType.STRING,
+            example = "%player_level%"
         )
         require(
             "value",
             "You must specify the value!",
             description = "The minimum numeric threshold the placeholder must meet or exceed.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "5 + %level%"
         )
     }
 

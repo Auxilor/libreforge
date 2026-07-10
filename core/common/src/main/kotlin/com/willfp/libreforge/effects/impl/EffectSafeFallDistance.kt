@@ -22,7 +22,8 @@ object EffectSafeFallDistance : AttributeEffect(
             "distance",
             "You must specify the increase in safe fall distance!",
             description = "The number of extra blocks the player can fall safely. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%level% * 0.5"
         )
     }
 

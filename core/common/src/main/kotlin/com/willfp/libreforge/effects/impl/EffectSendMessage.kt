@@ -26,7 +26,8 @@ object EffectSendMessage : Effect<NoCompileData>("send_message") {
             listOf("message", "messages"),
             "You must specify the message(s) to send!",
             description = "The message or list of messages to send to the player. Supports placeholders.",
-            type = ArgType.STRING_LIST
+            type = ArgType.STRING_LIST,
+            example = listOf("Hi %player_name%!", "You have %player_level% levels.")
         )
         optional(
             "action_bar",

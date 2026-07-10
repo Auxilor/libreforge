@@ -26,13 +26,15 @@ object ConditionHasEnchant : Condition<NoCompileData>("has_enchant") {
             listOf("slot", "slots"),
             "You must specify the slot(s)!",
             description = "The equipment slot(s) to check for the enchantment.",
-            type = ArgType.STRING_LIST
+            type = ArgType.STRING_LIST,
+            example = listOf("mainhand", "9")
         )
         require(
             listOf("enchant", "enchants"),
             "You must specify the enchant(s)!",
             description = "The enchantment(s) to require, optionally with a level or range (e.g. sharpness:3-5).",
-            type = ArgType.ENCHANTMENT_LIST
+            type = ArgType.ENCHANTMENT_LIST,
+            example = listOf("sharpness:3-5", "unbreaking:2")
         )
     }
 
