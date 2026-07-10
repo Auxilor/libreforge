@@ -30,7 +30,7 @@ object EffectSetItemPoints : Effect<NoCompileData>("set_item_points") {
             "You must specify the amount of points!",
             description = "The value to set the item point counter to. Supports expressions.",
             type = ArgType.EXPRESSION,
-            example = "100"
+            example = "%level% * 10"
         )
     }
 

@@ -27,7 +27,7 @@ object EffectSetGlobalPoints : Effect<NoCompileData>("set_global_points") {
             "You must specify the amount of points!",
             description = "The value to set the global point counter to. Supports expressions.",
             type = ArgType.EXPRESSION,
-            example = "100"
+            example = "%level% * 10"
         )
     }
 

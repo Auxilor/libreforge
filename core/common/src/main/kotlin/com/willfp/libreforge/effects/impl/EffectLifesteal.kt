@@ -24,7 +24,7 @@ object EffectLifesteal : Effect<NoCompileData>("lifesteal") {
             "You must specify the heal multiplier!",
             description = "The fraction of damage dealt that is converted into healing. Supports expressions.",
             type = ArgType.EXPRESSION,
-            example = "0.2"
+            example = "0.1 + %level% * 0.01"
         )
     }
 

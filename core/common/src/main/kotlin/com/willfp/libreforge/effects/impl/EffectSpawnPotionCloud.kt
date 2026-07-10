@@ -39,7 +39,7 @@ object EffectSpawnPotionCloud : Effect<NoCompileData>("spawn_potion_cloud") {
             "You must specify the duration of the effect applied!",
             description = "How long the cloud and its applied effect last, in ticks. Supports expressions.",
             type = ArgType.EXPRESSION,
-            example = "100"
+            example = "20 * %level%"
         )
     }
 

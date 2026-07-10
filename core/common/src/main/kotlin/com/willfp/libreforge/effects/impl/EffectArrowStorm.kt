@@ -35,15 +35,14 @@ object EffectArrowStorm : Effect<NoCompileData>("arrow_storm") {
             "height",
             "You must specify the spawn height above target!",
             description = "The height above the target to spawn the arrows. Supports expressions.",
-            type = ArgType.EXPRESSION,
-            example = "10"
+            type = ArgType.EXPRESSION
         )
         require(
             "spread",
             "You must specify the spread radius!",
             description = "The horizontal spread radius for arrow spawning. Supports expressions.",
             type = ArgType.EXPRESSION,
-            example = "3"
+            example = "3 + %level% * 0.3"
         )
         optional(
             "damage",

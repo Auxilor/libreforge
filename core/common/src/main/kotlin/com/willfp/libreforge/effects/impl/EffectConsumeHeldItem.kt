@@ -25,8 +25,7 @@ object EffectConsumeHeldItem : Effect<NoCompileData>("consume_held_item") {
             "amount",
             "You must specify the amount of items to consume!",
             description = "The number of items to remove from the main hand. Supports expressions.",
-            type = ArgType.EXPRESSION,
-            example = "1"
+            type = ArgType.EXPRESSION
         )
     }
 

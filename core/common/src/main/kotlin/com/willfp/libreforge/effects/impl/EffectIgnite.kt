@@ -35,7 +35,7 @@ object EffectIgnite : Effect<NoCompileData>("ignite") {
             "You must specify the duration!",
             description = "The number of fire ticks to apply to the victim. Supports expressions.",
             type = ArgType.EXPRESSION,
-            example = "100"
+            example = "20 * %level%"
         )
     }
 

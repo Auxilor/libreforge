@@ -25,7 +25,7 @@ object EffectStrikeLightning : Effect<NoCompileData>("strike_lightning") {
             description = "The number of lightning strikes. Supports expressions.",
             type = ArgType.EXPRESSION,
             default = "1",
-            example = "3"
+            example = "1 + %level% / 10"
         )
     }
 

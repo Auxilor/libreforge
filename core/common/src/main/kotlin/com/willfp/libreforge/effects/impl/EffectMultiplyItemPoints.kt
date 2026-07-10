@@ -27,7 +27,7 @@ object EffectMultiplyItemPoints : Effect<NoCompileData>("multiply_item_points") 
             "You must specify the multiplier!",
             description = "The multiplier to apply to the item's point value. Supports expressions.",
             type = ArgType.EXPRESSION,
-            example = "1.5"
+            example = "1 + %level% * 0.1"
         )
     }
 

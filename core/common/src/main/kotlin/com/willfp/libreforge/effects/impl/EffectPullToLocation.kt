@@ -28,14 +28,13 @@ object EffectPullToLocation : Effect<NoCompileData>("pull_to_location") {
             "You must specify the movement velocity!",
             description = "The strength of the pull force applied to the player. Supports expressions.",
             type = ArgType.EXPRESSION,
-            example = "1.5"
+            example = "1 + %level% * 0.1"
         )
         optional(
             "jump",
             description = "An upward boost added to the pull vector. Supports expressions.",
             type = ArgType.EXPRESSION,
-            default = "0",
-            example = "0.5"
+            default = "0"
         )
     }
 

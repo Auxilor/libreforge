@@ -29,8 +29,7 @@ object EffectSpawnFallingBlock : Effect<NoCompileData>("spawn_falling_block") {
             "height",
             description = "The number of blocks above the trigger location to spawn the falling block.",
             type = ArgType.EXPRESSION,
-            default = "0",
-            example = "5"
+            default = "0"
         )
     }
 

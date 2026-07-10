@@ -26,21 +26,21 @@ object EffectSoulRip : Effect<NoCompileData>("soul_rip") {
             "You must specify the radius!",
             description = "The radius around the player to search for targets. Supports expressions.",
             type = ArgType.EXPRESSION,
-            example = "5"
+            example = "5 + %level% * 0.5"
         )
         require(
             "damage",
             "You must specify the damage to deal!",
             description = "The amount of damage dealt to each nearby entity. Supports expressions.",
             type = ArgType.EXPRESSION,
-            example = "4"
+            example = "%level% * 2"
         )
         optional(
             "heal_multiplier",
             description = "A multiplier applied to the total damage dealt before it is converted to healing.",
             type = ArgType.EXPRESSION,
             default = "1.0",
-            example = "0.5"
+            example = "0.5 + %level% * 0.02"
         )
     }
 

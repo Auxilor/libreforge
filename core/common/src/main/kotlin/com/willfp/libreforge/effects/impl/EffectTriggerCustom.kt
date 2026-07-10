@@ -26,8 +26,7 @@ object EffectTriggerCustom : Effect<NoCompileData>("trigger_custom") {
             "value",
             description = "An optional value to pass to the dispatched trigger. Supports expressions.",
             type = ArgType.EXPRESSION,
-            default = "0",
-            example = "5"
+            default = "0"
         )
     }
 

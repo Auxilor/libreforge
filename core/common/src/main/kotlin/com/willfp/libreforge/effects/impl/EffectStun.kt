@@ -25,7 +25,7 @@ object EffectStun : Effect<NoCompileData>("stun") {
             "You must specify the stun duration in ticks!",
             description = "How many ticks to stun the victim for. Supports expressions.",
             type = ArgType.EXPRESSION,
-            example = "60"
+            example = "20 * %level%"
         )
     }
 

@@ -31,7 +31,7 @@ object EffectDamageNearbyEntities : Effect<Collection<TestableEntity>>("damage_n
             "You must specify the radius!",
             description = "The radius to damage entities within. Supports expressions.",
             type = ArgType.EXPRESSION,
-            example = "5"
+            example = "5 + %level% * 0.5"
         )
         require(
             "damage_as_player",

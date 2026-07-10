@@ -33,7 +33,7 @@ object EffectSellItems : Effect<Collection<TestableItem>?>("sell_items") {
             description = "A multiplier applied to the sell price of each item. Supports expressions.",
             type = ArgType.EXPRESSION,
             default = "1.0",
-            example = "1.5"
+            example = "1 + %level% * 0.05"
         )
         optional(
             "whitelist",

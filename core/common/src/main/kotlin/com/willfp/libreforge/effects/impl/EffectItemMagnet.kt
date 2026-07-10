@@ -27,7 +27,7 @@ object EffectItemMagnet : Effect<EffectItemMagnet.ItemMagnetFilter>("item_magnet
             "You must specify the radius!",
             description = "The radius within which dropped items will be pulled, in blocks. Supports expressions.",
             type = ArgType.EXPRESSION,
-            example = "5"
+            example = "5 + %level% * 0.5"
         )
         optional(
             "items",
@@ -46,7 +46,7 @@ object EffectItemMagnet : Effect<EffectItemMagnet.ItemMagnetFilter>("item_magnet
             description = "How strongly items are pulled per tick. Supports expressions.",
             type = ArgType.EXPRESSION,
             default = "0.3",
-            example = "0.3"
+            example = "0.1 + %level% * 0.02"
         )
     }
 

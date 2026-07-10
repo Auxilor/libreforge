@@ -28,28 +28,28 @@ object EffectFrostNova : Effect<NoCompileData>("frost_nova") {
             "You must specify the radius!",
             description = "The radius around the trigger location in which entities are frozen. Supports expressions.",
             type = ArgType.EXPRESSION,
-            example = "5"
+            example = "5 + %level% * 0.5"
         )
         require(
             "freeze_ticks",
             "You must specify the freeze duration in ticks!",
             description = "How many ticks the affected entities are frozen for. Supports expressions.",
             type = ArgType.EXPRESSION,
-            example = "100"
+            example = "20 * %level%"
         )
         optional(
             "slow_duration",
             description = "Duration in ticks of the slowness effect applied alongside freezing. Defaults to 0 (no slowness).",
             type = ArgType.EXPRESSION,
             default = "0",
-            example = "100"
+            example = "20 * %level%"
         )
         optional(
             "slow_amplifier",
             description = "Amplifier level of the slowness effect (0 = Slowness I). Defaults to 0.",
             type = ArgType.EXPRESSION,
             default = "0",
-            example = "1"
+            example = "%level% / 10"
         )
     }
 

@@ -29,8 +29,7 @@ object EffectDropItemSlot : Effect<NoCompileData>("drop_item_slot") {
         optional(
             "amount",
             description = "How many items to drop. If omitted, drops the entire stack.",
-            type = ArgType.EXPRESSION,
-            example = "1"
+            type = ArgType.EXPRESSION
         )
     }
 

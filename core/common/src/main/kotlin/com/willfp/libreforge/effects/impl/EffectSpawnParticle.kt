@@ -34,8 +34,7 @@ object EffectSpawnParticle : Effect<NoCompileData>(
             "amount",
             description = "The number of particles to spawn. Supports expressions.",
             type = ArgType.EXPRESSION,
-            default = "1",
-            example = "3"
+            default = "1"
         )
     }
 

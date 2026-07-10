@@ -26,7 +26,7 @@ object EffectSetGlowing : Effect<NoCompileData>("set_glowing") {
             "duration",
             description = "How long to apply the glow, in ticks. Reverts when expired. Supports expressions.",
             type = ArgType.EXPRESSION,
-            example = "100"
+            example = "20 * %level%"
         )
     }
     override val parameters = setOf(

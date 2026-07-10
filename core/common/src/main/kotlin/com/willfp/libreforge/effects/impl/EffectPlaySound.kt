@@ -30,15 +30,13 @@ object EffectPlaySound : Effect<NoCompileData>("play_sound") {
             "pitch",
             "You must specify the sound pitch (0.5-2)!",
             description = "The pitch of the sound, between 0.5 and 2.0. Supports expressions.",
-            type = ArgType.EXPRESSION,
-            example = "1.2"
+            type = ArgType.EXPRESSION
         )
         require(
             "volume",
             "You must specify the sound volume!",
             description = "The volume of the sound. Supports expressions.",
-            type = ArgType.EXPRESSION,
-            example = "1.0"
+            type = ArgType.EXPRESSION
         )
         optional(
             "category",

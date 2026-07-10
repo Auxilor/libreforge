@@ -30,7 +30,7 @@ object EffectMineRadiusOneDeep : MineBlockEffect<NoCompileData>("mine_radius_one
             "You must specify the radius to break!",
             description = "The radius of blocks to break in the flat layer. Supports expressions.",
             type = ArgType.EXPRESSION,
-            example = "3"
+            example = "3 + %level% / 20"
         )
         optional(
             "prevent_trigger",

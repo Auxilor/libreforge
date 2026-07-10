@@ -27,7 +27,7 @@ object EffectMultiplyGlobalPoints : Effect<NoCompileData>("multiply_global_point
             "You must specify the multiplier!",
             description = "The multiplier to apply to the global point counter. Supports expressions.",
             type = ArgType.EXPRESSION,
-            example = "1.5"
+            example = "1 + %level% * 0.1"
         )
     }
 

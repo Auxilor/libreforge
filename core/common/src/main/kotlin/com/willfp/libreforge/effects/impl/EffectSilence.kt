@@ -24,7 +24,7 @@ object EffectSilence : Effect<NoCompileData>("silence") {
             "You must specify the silence duration in ticks!",
             description = "How long to silence the entity, in ticks. Supports expressions.",
             type = ArgType.EXPRESSION,
-            example = "100"
+            example = "20 * %level%"
         )
     }
 

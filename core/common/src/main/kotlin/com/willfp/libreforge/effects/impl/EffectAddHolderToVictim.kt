@@ -43,7 +43,7 @@ object EffectAddHolderToVictim : Effect<HolderTemplate>("add_holder_to_victim") 
             "You must specify the duration (in ticks)!",
             description = "How long to apply the holder, in ticks. Supports expressions.",
             type = ArgType.EXPRESSION,
-            example = "60"
+            example = "20 * %level%"
         )
         optional(
             "conditions",

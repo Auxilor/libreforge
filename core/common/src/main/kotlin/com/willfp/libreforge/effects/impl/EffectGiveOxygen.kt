@@ -23,7 +23,7 @@ object EffectGiveOxygen : Effect<NoCompileData>("give_oxygen") {
             "You must specify the amount of oxygen to give!",
             description = "The number of air ticks to add to the player's remaining air. Supports expressions.",
             type = ArgType.EXPRESSION,
-            example = "100"
+            example = "%level% * 10"
         )
     }
 

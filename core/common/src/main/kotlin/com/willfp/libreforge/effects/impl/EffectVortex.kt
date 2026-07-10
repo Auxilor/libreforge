@@ -28,28 +28,28 @@ object EffectVortex : Effect<NoCompileData>("vortex") {
             "You must specify the radius!",
             description = "The radius within which entities will be pulled toward the vortex. Supports expressions.",
             type = ArgType.EXPRESSION,
-            example = "8"
+            example = "5 + %level% * 0.5"
         )
         require(
             "duration",
             "You must specify the pull duration in ticks!",
             description = "How many ticks to pull entities before dealing damage. Supports expressions.",
             type = ArgType.EXPRESSION,
-            example = "60"
+            example = "20 * %level%"
         )
         require(
             "damage",
             "You must specify the damage dealt at the end!",
             description = "The damage dealt to all affected entities at the end of the vortex. Supports expressions.",
             type = ArgType.EXPRESSION,
-            example = "6"
+            example = "%level% * 2"
         )
         optional(
             "pull_strength",
             description = "How strongly entities are pulled per tick. Supports expressions.",
             type = ArgType.EXPRESSION,
             default = "0.3",
-            example = "0.3"
+            example = "0.1 + %level% * 0.02"
         )
         optional(
             "whitelist",

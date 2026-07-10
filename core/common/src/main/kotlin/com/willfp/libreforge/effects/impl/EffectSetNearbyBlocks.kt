@@ -31,7 +31,7 @@ object EffectSetNearbyBlocks : Effect<TestableBlock>("set_nearby_blocks") {
             "You must specify the radius!",
             description = "The radius of the cube around the trigger location.",
             type = ArgType.EXPRESSION,
-            example = "3"
+            example = "3 + %level% * 0.3"
         )
     }
 

@@ -33,7 +33,7 @@ object EffectCreateHologram : Effect<NoCompileData>("create_hologram") {
             "You must specify the duration to display for!",
             description = "How long to show the hologram, in ticks. Supports expressions.",
             type = ArgType.EXPRESSION,
-            example = "100"
+            example = "20 * %level%"
         )
     }
 

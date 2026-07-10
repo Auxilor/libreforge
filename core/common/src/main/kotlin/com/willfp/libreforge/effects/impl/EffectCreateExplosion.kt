@@ -25,15 +25,13 @@ object EffectCreateExplosion : Effect<NoCompileData>("create_explosion"), Listen
             "amount",
             "You must specify the amount of explosions!",
             description = "The number of explosions to create (one per tick). Supports expressions.",
-            type = ArgType.EXPRESSION,
-            example = "1"
+            type = ArgType.EXPRESSION
         )
         require(
             "power",
             "You must specify the explosion power!",
             description = "The explosion power. Vanilla TNT is 4. Supports expressions.",
-            type = ArgType.EXPRESSION,
-            example = "4"
+            type = ArgType.EXPRESSION
         )
         optional(
             "player_as_damager",

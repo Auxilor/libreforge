@@ -49,8 +49,7 @@ object EffectParticleAnimation : Effect<ParticleAnimationBlock<*>?>("particle_an
             "particle-amount",
             description = "The number of particles to spawn per animation point per tick. Supports expressions.",
             type = ArgType.EXPRESSION,
-            default = "1",
-            example = "2"
+            default = "1"
         )
         optional(
             "use-eye-location",

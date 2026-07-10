@@ -41,14 +41,14 @@ object EffectGlowNearbyBlocks : Effect<NoCompileData>("glow_nearby_blocks") {
             "You must specify the radius!",
             description = "The radius around the trigger location to search for matching blocks. Supports expressions.",
             type = ArgType.EXPRESSION,
-            example = "5"
+            example = "5 + %level% * 0.5"
         )
         require(
             "duration",
             "You must specify the duration to glow for!",
             description = "How long in ticks the blocks should glow. Supports expressions.",
             type = ArgType.EXPRESSION,
-            example = "100"
+            example = "20 * %level%"
         )
         require(
             "colors",

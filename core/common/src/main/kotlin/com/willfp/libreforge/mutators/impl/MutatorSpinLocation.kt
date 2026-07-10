@@ -26,7 +26,7 @@ object MutatorSpinLocation : Mutator<NoCompileData>("spin_location") {
             "You must specify the distance from the current location!",
             description = "The distance from the current location to offset in the rotated direction.",
             type = ArgType.EXPRESSION,
-            example = "1.5"
+            example = "1 + %level% * 0.1"
         )
     }
 

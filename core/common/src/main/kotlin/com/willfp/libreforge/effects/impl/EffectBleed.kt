@@ -41,8 +41,7 @@ object EffectBleed : Effect<NoCompileData>("bleed") {
             "interval",
             "You must specify the tick delay between damages!",
             description = "The number of ticks between each damage application. Supports expressions.",
-            type = ArgType.EXPRESSION,
-            example = "20"
+            type = ArgType.EXPRESSION
         )
     }
 

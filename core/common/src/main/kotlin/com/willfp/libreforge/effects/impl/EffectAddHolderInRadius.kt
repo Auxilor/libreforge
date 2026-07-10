@@ -41,7 +41,7 @@ object EffectAddHolderInRadius : Effect<HolderTemplate>("add_holder_in_radius") 
             "You must specify the duration (in ticks)!",
             description = "How long to apply the holder, in ticks. Supports expressions.",
             type = ArgType.EXPRESSION,
-            example = "100"
+            example = "20 * %level%"
         )
         require(
             "radius",

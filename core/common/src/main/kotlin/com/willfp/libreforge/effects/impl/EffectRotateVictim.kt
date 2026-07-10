@@ -23,7 +23,7 @@ object EffectRotateVictim : Effect<NoCompileData>("rotate_victim") {
             "You must specify the angle to rotate by!",
             description = "The number of degrees to add to the victim's current yaw. Supports expressions.",
             type = ArgType.EXPRESSION,
-            example = "90"
+            example = "%level% * 10"
         )
     }
 

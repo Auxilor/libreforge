@@ -24,7 +24,7 @@ object EffectRepairItem : Effect<NoCompileData>("repair_item") {
             "You must specify the amount of damage to repair!",
             description = "The amount of durability to restore. Supports expressions.",
             type = ArgType.EXPRESSION,
-            example = "50"
+            example = "50 + %level% * 10"
         )
     }
 

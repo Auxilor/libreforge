@@ -46,7 +46,7 @@ object EffectPotionEffect : Effect<NoCompileData>("potion_effect") {
             "You must specify the duration!",
             description = "How long the effect lasts in ticks. Supports expressions.",
             type = ArgType.EXPRESSION,
-            example = "100"
+            example = "20 * %level%"
         )
         optional(
             "apply_to_player",

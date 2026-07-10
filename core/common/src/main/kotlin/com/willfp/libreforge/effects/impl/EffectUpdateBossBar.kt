@@ -33,8 +33,7 @@ object EffectUpdateBossBar : Effect<NoCompileData>("update_boss_bar") {
             "progress",
             description = "The new progress value (0–100). Supports expressions.",
             type = ArgType.EXPRESSION,
-            default = "",
-            example = "50"
+            default = ""
         )
         optional(
             "name",

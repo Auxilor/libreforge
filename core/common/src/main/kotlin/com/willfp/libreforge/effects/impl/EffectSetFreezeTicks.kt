@@ -23,7 +23,7 @@ object EffectSetFreezeTicks : Effect<NoCompileData>("set_freeze_ticks") {
             "You must specify the freeze ticks!",
             description = "The number of freeze ticks to apply to the victim. Supports expressions.",
             type = ArgType.EXPRESSION,
-            example = "140"
+            example = "20 * %level%"
         )
     }
 

@@ -33,7 +33,7 @@ object EffectChainLightning : Effect<NoCompileData>("chain_lightning") {
             "You must specify the chain range!",
             description = "The maximum distance between chain targets. Supports expressions.",
             type = ArgType.EXPRESSION,
-            example = "5"
+            example = "5 + %level% * 0.5"
         )
         require(
             "damage",

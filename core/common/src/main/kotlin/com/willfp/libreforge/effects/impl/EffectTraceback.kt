@@ -26,7 +26,7 @@ object EffectTraceback : Effect<NoCompileData>("traceback") {
             "You must specify the amount of seconds to go back in time (1-30)!",
             description = "How many seconds into the past to teleport the player (clamped to 1–30). Supports expressions.",
             type = ArgType.EXPRESSION,
-            example = "5"
+            example = "1 + %level% / 10"
         )
     }
 
