@@ -22,7 +22,8 @@ object EffectBurningTimeMultiplier : AttributeEffect(
             "multiplier",
             "You must specify the burning time multiplier!",
             description = "The burning time multiplier. Values below 1 reduce burn duration. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "1 - %level% * 0.05"
         )
     }
 

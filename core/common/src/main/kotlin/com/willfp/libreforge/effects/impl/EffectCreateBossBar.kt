@@ -36,7 +36,8 @@ object EffectCreateBossBar : Effect<NoCompileData>("create_boss_bar") {
             "name",
             "You must specify the name of the boss bar!",
             description = "The display text shown on the boss bar. Supports placeholders.",
-            type = ArgType.STRING
+            type = ArgType.STRING,
+            example = "&6%player%'s Charge"
         )
         require("color", "You must specify a valid boss bar color!", Config::getFormattedString) {
             enumValueOfOrNull<BossBar.Color>(it.uppercase()) != null
@@ -60,7 +61,8 @@ object EffectCreateBossBar : Effect<NoCompileData>("create_boss_bar") {
             "progress",
             "You must specify the boss bar progress percentage!",
             description = "The fill percentage of the boss bar, from 0 to 100. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "50 + %level%"
         )
     }
 

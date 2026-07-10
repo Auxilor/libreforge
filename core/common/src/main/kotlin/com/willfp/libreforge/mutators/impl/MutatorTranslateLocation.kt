@@ -18,19 +18,22 @@ object MutatorTranslateLocation : Mutator<NoCompileData>("translate_location") {
             "add_x",
             "You must specify the value to add to x!",
             description = "The amount to add to the X coordinate.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "0.5"
         )
         require(
             "add_y",
             "You must specify the value to add to y!",
             description = "The amount to add to the Y coordinate.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "1.0"
         )
         require(
             "add_z",
             "You must specify the value to add to z!",
             description = "The amount to add to the Z coordinate.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "-0.5"
         )
     }
 

@@ -25,7 +25,8 @@ object EffectRunPlayerCommand : Effect<NoCompileData>("run_player_command") {
             listOf("commands", "command"),
             "You must specify the command to run!",
             description = "The command or list of commands to run as the player. Use %player% and %victim% as placeholders.",
-            type = ArgType.STRING_LIST
+            type = ArgType.STRING_LIST,
+            example = listOf("me does a flip!", "kill %victim%")
         )
         optional(
             "as_op",

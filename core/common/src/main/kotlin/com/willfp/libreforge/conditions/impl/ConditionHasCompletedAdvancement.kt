@@ -21,7 +21,8 @@ object ConditionHasCompletedAdvancement : Condition<NoCompileData>("has_complete
             "advancement",
             "You must specify the advancement!",
             description = "The namespaced key of the advancement (e.g. minecraft:story/mine_stone).",
-            type = ArgType.STRING
+            type = ArgType.STRING,
+            example = "minecraft:story/mine_stone"
         )
     }
 

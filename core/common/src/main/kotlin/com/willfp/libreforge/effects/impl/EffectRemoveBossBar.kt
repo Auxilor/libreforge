@@ -21,7 +21,8 @@ object EffectRemoveBossBar : Effect<NoCompileData>("remove_boss_bar") {
             "id",
             "You must specify the id of the boss bar!",
             description = "The unique ID of the boss bar to remove. Supports placeholders.",
-            type = ArgType.STRING
+            type = ArgType.STRING,
+            example = "boss_%player_name%"
         )
     }
 

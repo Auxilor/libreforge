@@ -22,7 +22,8 @@ object EffectSetSaturation : Effect<NoCompileData>("set_saturation") {
             "amount",
             "You must specify the amount of saturation to set!",
             description = "The saturation level to set for the player. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "6"
         )
     }
 

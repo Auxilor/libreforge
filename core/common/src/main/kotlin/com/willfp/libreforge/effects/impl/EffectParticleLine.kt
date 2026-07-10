@@ -30,19 +30,22 @@ object EffectParticleLine : Effect<SpawnableParticle>("particle_line") {
             "particle",
             "You must specify the particle!",
             description = "The particle type to spawn along the line.",
-            type = ArgType.STRING
+            type = ArgType.STRING,
+            example = "flame"
         )
         require(
             "amount",
             "You must specify the amount of particles to spawn!",
             description = "The number of particles to spawn at each point along the line. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "1"
         )
         require(
             "spacing",
             "You must specify the spacing between particles!",
             description = "The distance between each particle point along the line. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "0.5"
         )
     }
 

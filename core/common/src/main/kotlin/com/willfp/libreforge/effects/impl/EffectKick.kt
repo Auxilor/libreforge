@@ -22,7 +22,8 @@ object EffectKick : Effect<NoCompileData>("kick") {
             "message",
             "You must specify the message to kick with!",
             description = "The kick screen message shown to the player.",
-            type = ArgType.STRING
+            type = ArgType.STRING,
+            example = "&cYou have been kicked, %player%."
         )
     }
 

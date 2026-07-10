@@ -28,7 +28,8 @@ object EffectMineVein : MineBlockEffect<FilterList>("mine_vein") {
             "limit",
             "You must specify the most blocks to break!",
             description = "The maximum number of connected blocks to break in one vein. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "10 + %level%"
         )
         optional(
             "blocks",

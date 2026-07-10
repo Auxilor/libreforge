@@ -25,7 +25,8 @@ object ConditionAboveHungerPercent : Condition<NoCompileData>("above_hunger_perc
             "percent",
             "You must specify the hunger percentage!",
             description = "The minimum hunger percentage (0–100).",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "50 + %level%"
         )
     }
 

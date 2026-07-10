@@ -24,25 +24,29 @@ object EffectTeleportTo : Effect<NoCompileData>("teleport_to") {
             "world",
             "You must specify the world to go to!",
             description = "The name of the world to teleport to.",
-            type = ArgType.STRING
+            type = ArgType.STRING,
+            example = "world_nether"
         )
         require(
             "x",
             "You must specify the x coordinate!",
             description = "The X coordinate to teleport to. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "100"
         )
         require(
             "y",
             "You must specify the y coordinate!",
             description = "The Y coordinate to teleport to. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "64"
         )
         require(
             "z",
             "You must specify the z coordinate!",
             description = "The Z coordinate to teleport to. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "-200"
         )
     }
 

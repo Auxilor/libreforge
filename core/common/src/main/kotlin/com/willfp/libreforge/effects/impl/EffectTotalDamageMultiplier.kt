@@ -26,7 +26,8 @@ object EffectTotalDamageMultiplier : Effect<NoCompileData>("total_damage_multipl
             "multiplier",
             "You must specify the damage multiplier!",
             description = "The value to multiply the event's damage by. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "1.5"
         )
     }
 

@@ -25,19 +25,22 @@ object EffectChainLightning : Effect<NoCompileData>("chain_lightning") {
             "jumps",
             "You must specify the number of jumps!",
             description = "The number of entities the lightning can chain to. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "3 + %level%"
         )
         require(
             "range",
             "You must specify the chain range!",
             description = "The maximum distance between chain targets. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "5"
         )
         require(
             "damage",
             "You must specify the damage per jump!",
             description = "The damage dealt to each entity struck. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%level% * 1.5"
         )
     }
 

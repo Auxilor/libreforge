@@ -22,7 +22,8 @@ object ConditionInSlot : Condition<List<SlotType>>("in_slot") {
             listOf("slot", "slots"),
             "You must specify the slot(s)!",
             description = "The slot(s) to check — e.g. mainhand, offhand, armor, or a numeric hotbar index.",
-            type = ArgType.STRING_LIST
+            type = ArgType.STRING_LIST,
+            example = listOf("mainhand", "9")
         )
     }
 

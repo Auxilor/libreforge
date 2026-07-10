@@ -26,7 +26,8 @@ object EffectAddDamage : Effect<NoCompileData>("add_damage") {
             "damage",
             "You must specify the damage to add!",
             description = "The amount of extra damage to add. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%victim_max_health% * 0.1"
         )
     }
 

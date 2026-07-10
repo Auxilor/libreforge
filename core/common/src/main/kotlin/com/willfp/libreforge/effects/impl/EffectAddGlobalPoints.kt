@@ -27,7 +27,8 @@ object EffectAddGlobalPoints : Effect<NoCompileData>("add_global_points") {
             "amount",
             "You must specify the amount of points!",
             description = "The amount of global points to add. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%level% * 10"
         )
     }
 

@@ -22,7 +22,8 @@ object EffectJumpStrengthMultiplier : AttributeEffect(
             "multiplier",
             "You must specify the jump strength multiplier!",
             description = "The jump strength multiplier to apply. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "1 + %level% * 0.05"
         )
     }
 

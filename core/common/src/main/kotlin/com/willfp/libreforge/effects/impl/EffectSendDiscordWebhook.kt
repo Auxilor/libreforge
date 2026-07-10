@@ -26,13 +26,15 @@ object EffectSendDiscordWebhook: Effect<NoCompileData>("send_discord_webhook") {
             "webhook_url",
             "You must specify the webhook URL!",
             description = "The Discord webhook URL to send the message to.",
-            type = ArgType.STRING
+            type = ArgType.STRING,
+            example = "https://discord.com/api/webhooks/123456789012345678/abcDEF-token"
         )
         require(
             "text",
             "You must specify the text to send!",
             description = "The message content to send to the webhook.",
-            type = ArgType.STRING
+            type = ArgType.STRING,
+            example = "%player_name% just found a legendary item!"
         )
         optional(
             "username",
@@ -42,7 +44,8 @@ object EffectSendDiscordWebhook: Effect<NoCompileData>("send_discord_webhook") {
         optional(
             "avatar_url",
             description = "A URL to an image to use as the webhook avatar.",
-            type = ArgType.STRING
+            type = ArgType.STRING,
+            example = "https://example.com/avatar.png"
         )
         optional(
             "tts",

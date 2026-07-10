@@ -27,7 +27,8 @@ object EffectCritMultiplier : Effect<NoCompileData>("crit_multiplier") {
             "multiplier",
             "You must specify the crit damage multiplier!",
             description = "The damage multiplier applied on a critical hit. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "1.5 + %level% * 0.05"
         )
     }
 

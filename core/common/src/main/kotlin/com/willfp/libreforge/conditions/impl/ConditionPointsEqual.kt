@@ -26,7 +26,8 @@ object ConditionPointsEqual : Condition<NoCompileData>("points_equal") {
             "amount",
             "You must specify the amount of points!",
             description = "The exact points amount the player must have.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%level% * 10"
         )
     }
 

@@ -27,7 +27,8 @@ object EffectMineRadius : MineBlockEffect<NoCompileData>("mine_radius") {
             "radius",
             "You must specify the radius to break!",
             description = "The radius of blocks to break around the triggered block. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "2 + %level% / 20"
         )
         optional(
             "prevent_trigger",

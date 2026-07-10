@@ -29,7 +29,8 @@ object EffectItemDurabilityMultiplier : Effect<NoCompileData>("item_durability_m
             "multiplier",
             "You must specify the durability multiplier!",
             description = "The durability multiplier to apply (e.g. 2 means the item lasts twice as long). Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "2"
         )
     }
 

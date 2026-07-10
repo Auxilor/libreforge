@@ -19,7 +19,8 @@ object ConditionHasPotionEffect : Condition<NoCompileData>("has_potion_effect") 
             listOf("effect", "effects"),
             "You must specify the potion effect!",
             description = "The potion effect(s) to check for.",
-            type = ArgType.POTION_EFFECT_LIST
+            type = ArgType.POTION_EFFECT_LIST,
+            example = listOf("speed", "strength")
         )
         optional(
             "level",

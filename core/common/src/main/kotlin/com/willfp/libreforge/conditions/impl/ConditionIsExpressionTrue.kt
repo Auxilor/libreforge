@@ -24,7 +24,8 @@ object ConditionIsExpressionTrue : Condition<NoCompileData>("is_expression_true"
             "expression",
             "You must specify the expression!",
             description = "A mathematical expression or placeholder that must evaluate to 1 for the condition to pass.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%player_level% >= 10"
         )
     }
 

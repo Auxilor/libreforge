@@ -27,19 +27,22 @@ object EffectBleed : Effect<NoCompileData>("bleed") {
             "amount",
             "You must specify the amount of bleed ticks!",
             description = "The number of times damage is dealt. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "3 + %level%"
         )
         require(
             "damage",
             "You must specify the amount of damage to deal!",
             description = "The damage dealt per interval. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%level% * 0.5"
         )
         require(
             "interval",
             "You must specify the tick delay between damages!",
             description = "The number of ticks between each damage application. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "20"
         )
     }
 

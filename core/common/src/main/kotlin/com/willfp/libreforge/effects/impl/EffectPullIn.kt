@@ -24,7 +24,8 @@ object EffectPullIn : Effect<NoCompileData>("pull_in") {
             "velocity",
             "You must specify the movement velocity!",
             description = "The strength of the pull force applied to the victim. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "1.5"
         )
     }
 

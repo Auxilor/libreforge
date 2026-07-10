@@ -20,7 +20,8 @@ object ConditionAboveBalance : Condition<NoCompileData>("above_balance") {
             "balance",
             "You must specify the minimum balance!",
             description = "The minimum economy balance required.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%level% * 500"
         )
     }
 

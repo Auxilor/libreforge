@@ -33,7 +33,8 @@ object EffectSetUnbreakable : Effect<NoCompileData>("set_unbreakable") {
             "slot",
             description = "The equipment slot to target: holder, mainhand, offhand, helmet, chestplate, leggings, or boots.",
             type = ArgType.STRING,
-            default = "holder"
+            default = "holder",
+            example = "mainhand"
         )
         optional(
             "persist_on_disable",

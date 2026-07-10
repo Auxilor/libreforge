@@ -29,7 +29,8 @@ object EffectGivePoints : Effect<NoCompileData>("give_points") {
             "amount",
             description = "The amount of points to add to the player. Supports expressions. Defaults to 0.",
             type = ArgType.EXPRESSION,
-            default = "0"
+            default = "0",
+            example = "%level% * 10"
         )
     }
 

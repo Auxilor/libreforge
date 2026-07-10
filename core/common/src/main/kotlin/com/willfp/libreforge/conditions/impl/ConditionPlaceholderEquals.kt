@@ -21,7 +21,8 @@ object ConditionPlaceholderEquals : Condition<NoCompileData>("placeholder_equals
             "placeholder",
             "You must specify the placeholder!",
             description = "The placeholder string to resolve and compare.",
-            type = ArgType.STRING
+            type = ArgType.STRING,
+            example = "%player_gamemode%"
         )
         require(
             "value",

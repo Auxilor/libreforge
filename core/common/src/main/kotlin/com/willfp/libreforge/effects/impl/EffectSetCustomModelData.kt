@@ -22,7 +22,8 @@ object EffectSetCustomModelData : Effect<NoCompileData>("set_custom_model_data")
             "model",
             "You must specify the custom model data ID!",
             description = "The custom model data integer to apply to the item. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "1001"
         )
     }
 

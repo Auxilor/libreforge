@@ -22,7 +22,8 @@ object EffectScale : AttributeEffect(
             "multiplier",
             "You must specify the scale multiplier!",
             description = "The scale multiplier to apply to the entity's size. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "1.5"
         )
     }
 

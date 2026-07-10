@@ -26,7 +26,8 @@ object EffectGiveGlobalPoints : Effect<NoCompileData>("give_global_points") {
             "amount",
             description = "The amount of global points to add. Supports expressions. Defaults to 0.",
             type = ArgType.EXPRESSION,
-            default = "0"
+            default = "0",
+            example = "%level% * 10"
         )
     }
 

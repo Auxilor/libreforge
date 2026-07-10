@@ -22,7 +22,8 @@ object EffectWaterMovementEfficiencyMultiplier : AttributeEffect(
             "multiplier",
             "You must specify the movement efficiency multiplier!",
             description = "The multiplier to apply to water movement efficiency. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "1 + %level% * 0.05"
         )
     }
 

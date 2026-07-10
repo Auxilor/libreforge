@@ -22,7 +22,8 @@ object EffectOxygenBonus : AttributeEffect(
             "amount",
             "You must specify the oxygen bonus to add!",
             description = "The flat amount of oxygen bonus to add. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%level% * 0.1"
         )
     }
 

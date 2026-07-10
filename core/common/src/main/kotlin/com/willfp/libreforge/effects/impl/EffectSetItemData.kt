@@ -23,13 +23,15 @@ object EffectSetItemData : Effect<NoCompileData>("set_item_data") {
             "key",
             "You must specify the data key!",
             description = "The custom data key to set on the item.",
-            type = ArgType.STRING
+            type = ArgType.STRING,
+            example = "custom_id"
         )
         require(
             "value",
             "You must specify the data value!",
             description = "The value to store under the given key.",
-            type = ArgType.STRING
+            type = ArgType.STRING,
+            example = "epic_sword_tier_3"
         )
     }
 

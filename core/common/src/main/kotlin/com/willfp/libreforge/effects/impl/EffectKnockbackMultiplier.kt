@@ -22,7 +22,8 @@ object EffectKnockbackMultiplier : AttributeEffect(
             "multiplier",
             "You must specify the knockback multiplier!",
             description = "The knockback multiplier to apply. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "1 + %level% * 0.1"
         )
     }
 

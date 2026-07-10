@@ -24,7 +24,8 @@ object EffectDropXp : Effect<NoCompileData>("drop_xp") {
             "xp",
             "You must specify the amount of xp to drop!",
             description = "The amount of experience to drop. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "10 + %level% * 5"
         )
     }
 

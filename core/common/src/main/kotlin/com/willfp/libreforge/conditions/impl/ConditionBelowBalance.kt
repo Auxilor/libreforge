@@ -20,7 +20,8 @@ object ConditionBelowBalance : Condition<NoCompileData>("below_balance") {
             "balance",
             "You must specify the maximum balance!",
             description = "The balance threshold; the player must be below this amount.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%level% * 500"
         )
     }
 

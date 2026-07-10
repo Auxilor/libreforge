@@ -29,7 +29,8 @@ object EffectMineShape : MineBlockEffect<NoCompileData>("mine_shape") {
             "shape",
             "You must specify the shape to break!",
             description = "A list of strings forming a grid where 'T' is the trigger block and 'X' marks blocks to break.",
-            type = ArgType.STRING_LIST
+            type = ArgType.STRING_LIST,
+            example = listOf("XXX", "XTX", "XXX")
         )
         optional(
             "depth",

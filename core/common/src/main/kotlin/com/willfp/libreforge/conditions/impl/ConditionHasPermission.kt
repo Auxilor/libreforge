@@ -20,7 +20,8 @@ object ConditionHasPermission : Condition<NoCompileData>("has_permission") {
             "permission",
             "You must specify the permission!",
             description = "The permission node to check.",
-            type = ArgType.STRING
+            type = ArgType.STRING,
+            example = "myplugin.vip.access"
         )
     }
 

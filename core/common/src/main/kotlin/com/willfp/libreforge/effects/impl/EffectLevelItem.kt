@@ -24,13 +24,15 @@ object EffectLevelItem : Effect<NoCompileData>("level_item") {
         describe(
             "id",
             description = "The ID of the level type to grant XP for.",
-            type = ArgType.STRING
+            type = ArgType.STRING,
+            example = "mining"
         )
         require(
             "xp",
             "You must specify the amount of xp to give!",
             description = "The amount of XP to grant to the item. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%level% * 10"
         )
     }
 

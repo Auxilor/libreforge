@@ -27,13 +27,15 @@ object EffectIgnite : Effect<NoCompileData>("ignite") {
             "damage_per_tick",
             "You must specify the damage per fire tick!",
             description = "The amount of damage dealt per fire tick. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%level%"
         )
         require(
             "ticks",
             "You must specify the duration!",
             description = "The number of fire ticks to apply to the victim. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "100"
         )
     }
 

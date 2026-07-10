@@ -22,7 +22,8 @@ object EffectSetFood : Effect<NoCompileData>("set_food") {
             "amount",
             "You must specify the amount of food to set!",
             description = "The food level to set (0–20). Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "20"
         )
     }
 

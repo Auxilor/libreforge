@@ -18,7 +18,8 @@ object MutatorSpinVelocity : Mutator<NoCompileData>("spin_velocity") {
             "angle",
             "You must specify the angle to rotate by!",
             description = "The angle in degrees to rotate the velocity around the Y axis.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%level% * 5"
         )
     }
 

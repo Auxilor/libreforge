@@ -29,7 +29,8 @@ object ConditionItemLevelBelow : Condition<NoCompileData>("item_level_below") {
             "level",
             "You must specify the maximum level!",
             description = "The maximum level the item must be below.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "5 + %level%"
         )
     }
 

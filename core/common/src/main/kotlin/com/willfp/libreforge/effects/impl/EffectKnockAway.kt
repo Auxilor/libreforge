@@ -24,7 +24,8 @@ object EffectKnockAway : Effect<NoCompileData>("knock_away") {
             "velocity",
             "You must specify the movement velocity!",
             description = "The speed at which the victim is knocked away from the player. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "1.5"
         )
     }
 

@@ -31,13 +31,15 @@ object EffectSpawnPotionCloud : Effect<NoCompileData>("spawn_potion_cloud") {
             "level",
             "You must specify the effect level!",
             description = "The amplifier level of the potion effect. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "1 + %level% / 10"
         )
         require(
             "duration",
             "You must specify the duration of the effect applied!",
             description = "How long the cloud and its applied effect last, in ticks. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "100"
         )
     }
 

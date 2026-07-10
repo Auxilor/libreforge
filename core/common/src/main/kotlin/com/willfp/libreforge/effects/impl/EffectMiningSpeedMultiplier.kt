@@ -22,7 +22,8 @@ object EffectMiningSpeedMultiplier : AttributeEffect(
             "multiplier",
             "You must specify the mining speed multiplier!",
             description = "The mining speed multiplier to apply (e.g. 2 = double speed). Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "1 + %level% * 0.02"
         )
     }
 

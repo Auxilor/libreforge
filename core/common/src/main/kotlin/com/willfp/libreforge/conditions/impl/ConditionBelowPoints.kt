@@ -26,7 +26,8 @@ object ConditionBelowPoints : Condition<NoCompileData>("below_points") {
             "amount",
             "You must specify the maximum amount of points!",
             description = "The points threshold; the player must be below this amount.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%level% * 10"
         )
     }
 

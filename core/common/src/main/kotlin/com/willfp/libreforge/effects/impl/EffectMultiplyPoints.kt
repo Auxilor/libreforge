@@ -29,7 +29,8 @@ object EffectMultiplyPoints : Effect<NoCompileData>("multiply_points") {
             "multiplier",
             "You must specify the multiplier!",
             description = "The multiplier to apply to the player's point value. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "1.5"
         )
     }
 

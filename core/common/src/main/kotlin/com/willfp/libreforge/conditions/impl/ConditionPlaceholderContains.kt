@@ -20,7 +20,8 @@ object ConditionPlaceholderContains : Condition<NoCompileData>("placeholder_cont
             "placeholder",
             "You must specify the placeholder!",
             description = "The placeholder string to resolve and check.",
-            type = ArgType.STRING
+            type = ArgType.STRING,
+            example = "%player_name%"
         )
         optional(
             "value",

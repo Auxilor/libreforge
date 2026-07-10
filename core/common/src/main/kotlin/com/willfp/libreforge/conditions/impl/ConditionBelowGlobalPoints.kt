@@ -26,7 +26,8 @@ object ConditionBelowGlobalPoints : Condition<NoCompileData>("below_global_point
             "amount",
             "You must specify the maximum amount of points!",
             description = "The global points threshold; the value must be below this amount.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%level% * 10"
         )
     }
 

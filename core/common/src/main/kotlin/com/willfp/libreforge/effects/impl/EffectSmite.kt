@@ -22,7 +22,8 @@ object EffectSmite : Effect<NoCompileData>("smite") {
             "damage",
             "You must specify the damage to deal!",
             description = "The amount of damage the lightning strike deals to the victim. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "6"
         )
     }
 

@@ -31,7 +31,8 @@ object EffectParticleAnimation : Effect<ParticleAnimationBlock<*>?>("particle_an
             "particle",
             "You must specify the particle!",
             description = "The particle type to spawn during the animation.",
-            type = ArgType.STRING
+            type = ArgType.STRING,
+            example = "flame"
         )
         require("animation", "You must specify a valid animation!", Config::getString) {
             ParticleAnimations[it] != null
@@ -48,7 +49,8 @@ object EffectParticleAnimation : Effect<ParticleAnimationBlock<*>?>("particle_an
             "particle-amount",
             description = "The number of particles to spawn per animation point per tick. Supports expressions.",
             type = ArgType.EXPRESSION,
-            default = "1"
+            default = "1",
+            example = "2"
         )
         optional(
             "use-eye-location",

@@ -24,7 +24,8 @@ object EffectReflect : Effect<NoCompileData>("reflect") {
             "multiplier",
             "You must specify the damage multiplier!",
             description = "The fraction of incoming damage to reflect back at the attacker. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "0.5"
         )
     }
 

@@ -22,7 +22,8 @@ object EffectMovementEfficiencyMultiplier : AttributeEffect(
             "multiplier",
             "You must specify the movement efficiency multiplier!",
             description = "The movement efficiency multiplier to apply (e.g. 2 = double efficiency). Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "1 + %level% * 0.05"
         )
     }
 

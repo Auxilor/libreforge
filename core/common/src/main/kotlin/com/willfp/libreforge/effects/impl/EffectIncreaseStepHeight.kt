@@ -22,7 +22,8 @@ object EffectIncreaseStepHeight : AttributeEffect(
             "height",
             "You must specify the increase in step height!",
             description = "The number of extra blocks the player can step up automatically. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "0.5 + %level% * 0.1"
         )
     }
 

@@ -24,7 +24,8 @@ object EffectDamageVictim : Effect<NoCompileData>("damage_victim") {
             "damage",
             "You must specify the amount of damage!",
             description = "The amount of damage to deal. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%level% * 2"
         )
         optional(
             "true_damage",

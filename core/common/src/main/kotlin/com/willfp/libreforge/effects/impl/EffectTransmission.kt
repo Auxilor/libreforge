@@ -23,7 +23,8 @@ object EffectTransmission : Effect<NoCompileData>("transmission") {
             "distance",
             "You must specify the distance to transmit!",
             description = "The maximum distance to teleport the player forward. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "10"
         )
     }
 

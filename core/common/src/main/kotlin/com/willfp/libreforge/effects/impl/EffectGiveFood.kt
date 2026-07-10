@@ -22,7 +22,8 @@ object EffectGiveFood : Effect<NoCompileData>("give_food") {
             "amount",
             "You must specify the amount of food to give!",
             description = "The number of food points to add to the player's hunger bar. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%level%"
         )
     }
 

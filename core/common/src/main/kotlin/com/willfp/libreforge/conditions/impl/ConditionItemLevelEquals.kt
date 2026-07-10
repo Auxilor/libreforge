@@ -29,7 +29,8 @@ object ConditionItemLevelEquals : Condition<NoCompileData>("item_level_equals") 
             "level",
             "You must specify the level!",
             description = "The exact level the item must have.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "5 + %level%"
         )
     }
 

@@ -28,24 +28,28 @@ object EffectArrowStorm : Effect<NoCompileData>("arrow_storm") {
             "amount",
             "You must specify the number of arrows!",
             description = "The number of arrows to rain down. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "10 + %level%"
         )
         require(
             "height",
             "You must specify the spawn height above target!",
             description = "The height above the target to spawn the arrows. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "10"
         )
         require(
             "spread",
             "You must specify the spread radius!",
             description = "The horizontal spread radius for arrow spawning. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "3"
         )
         optional(
             "damage",
             description = "The damage each arrow deals. If omitted, uses the arrow's default damage.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%level% * 2"
         )
         optional(
             "respect_flame",

@@ -22,7 +22,8 @@ object EffectMovementSpeedMultiplier : AttributeEffect(
             "multiplier",
             "You must specify the movement speed multiplier!",
             description = "The movement speed multiplier to apply (e.g. 1.5 = 50% faster). Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "1 + %level% * 0.05"
         )
     }
 

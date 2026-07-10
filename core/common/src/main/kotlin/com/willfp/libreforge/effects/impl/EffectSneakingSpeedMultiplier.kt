@@ -22,7 +22,8 @@ object EffectSneakingSpeedMultiplier : AttributeEffect(
             "multiplier",
             "You must specify the speed multiplier!",
             description = "The multiplier applied to sneaking speed. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "1 + %level% * 0.05"
         )
     }
 

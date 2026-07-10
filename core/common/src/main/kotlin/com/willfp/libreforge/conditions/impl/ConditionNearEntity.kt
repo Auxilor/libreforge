@@ -27,7 +27,8 @@ object ConditionNearEntity : Condition<Collection<TestableEntity>>("near_entity"
             "radius",
             "You must specify the radius!",
             description = "The radius in blocks to search for nearby entities.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "5 + %level% * 0.5"
         )
         optional(
             "amount",

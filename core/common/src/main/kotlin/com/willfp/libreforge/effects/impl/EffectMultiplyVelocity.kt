@@ -22,7 +22,8 @@ object EffectMultiplyVelocity : Effect<NoCompileData>("multiply_velocity") {
             "multiplier",
             "You must specify the velocity multiplier!",
             description = "The factor to multiply all velocity components by (e.g. 2 = double speed). Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "2"
         )
     }
 

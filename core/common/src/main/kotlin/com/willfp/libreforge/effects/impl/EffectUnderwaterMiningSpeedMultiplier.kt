@@ -22,7 +22,8 @@ object EffectUnderwaterMiningSpeedMultiplier : AttributeEffect(
             "multiplier",
             "You must specify the mining speed multiplier!",
             description = "The multiplier to apply to underwater mining speed. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "1 + %level% * 0.02"
         )
     }
 

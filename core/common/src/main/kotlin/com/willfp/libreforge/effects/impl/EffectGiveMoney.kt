@@ -23,7 +23,8 @@ object EffectGiveMoney : Effect<NoCompileData>("give_money") {
             "amount",
             "You must specify the amount of money to give!",
             description = "The amount of money to deposit into the player's balance. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "%level% * 10"
         )
     }
 

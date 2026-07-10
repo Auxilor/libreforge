@@ -38,19 +38,22 @@ object EffectSpawnMobs : Effect<TestableEntity>("spawn_mobs") {
             "amount",
             "You must specify the amount of mobs to spawn!",
             description = "The number of mobs to spawn. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "3"
         )
         require(
             "ticks_to_live",
             "You must specify the mob lifespan!",
             description = "How many ticks the mobs will live before being removed. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "200"
         )
         require(
             "range",
             "You must specify the range to spawn in!",
             description = "The radius around the trigger location in which mobs can spawn. Supports expressions.",
-            type = ArgType.EXPRESSION
+            type = ArgType.EXPRESSION,
+            example = "5"
         )
         require(
             "entity",
@@ -62,7 +65,8 @@ object EffectSpawnMobs : Effect<TestableEntity>("spawn_mobs") {
             "health",
             description = "The max health (and starting health) to set on each spawned mob. Supports expressions.",
             type = ArgType.EXPRESSION,
-            default = "20"
+            default = "20",
+            example = "20"
         )
     }
 
