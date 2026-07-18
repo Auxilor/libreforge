@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.templates.AttributeEffect
 import org.bukkit.attribute.Attribute
@@ -13,8 +14,17 @@ object EffectBlockReach : AttributeEffect(
     Attribute.BLOCK_INTERACTION_RANGE,
     AttributeModifier.Operation.ADD_NUMBER
 ) {
+    override val description = "Increases the player's block interaction range while the holder is active."
+    override val categories = setOf("player", "attribute")
+
     override val arguments = arguments {
-        require("reach", "You must specify the amount of reach to add!")
+        require(
+            "reach",
+            "You must specify the amount of reach to add!",
+            description = "The number of blocks to add to the interaction range. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            example = "%level% * 0.5"
+        )
     }
 
     override fun canApplyTo(entity: LivingEntity): Boolean {

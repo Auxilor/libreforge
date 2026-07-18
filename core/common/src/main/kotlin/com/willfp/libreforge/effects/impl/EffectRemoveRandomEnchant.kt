@@ -1,16 +1,31 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.inventory.meta.EnchantmentStorageMeta
 
 object EffectRemoveRandomEnchant : Effect<NoCompileData>("remove_random_enchant") {
+    override val description = "Removes a randomly chosen enchantment from the triggering item."
+    override val categories = setOf("inventory")
+
     override val parameters = setOf(
         TriggerParameter.ITEM
     )
+
+    override val arguments = arguments {
+        optional(
+            "mode",
+            description = "Set to 'level' to reduce the enchantment level by 1 instead of removing it entirely. Defaults to removing the enchantment.",
+            type = ArgType.STRING,
+            default = "full",
+            choices = listOf("full", "level")
+        )
+    }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val item = data.foundItem ?: return false

@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -10,6 +11,9 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.potion.PotionEffectType
 
 object EffectRemovePotionEffect : Effect<NoCompileData>("remove_potion_effect") {
+    override val description = "Removes a specified potion effect from the player or victim."
+    override val categories = setOf("potion")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER
     )
@@ -24,6 +28,17 @@ object EffectRemovePotionEffect : Effect<NoCompileData>("remove_potion_effect") 
             @Suppress("DEPRECATION")
             PotionEffectType.getByName(it.uppercase()) != null
         }
+        describe(
+            "effect",
+            description = "The potion effect type to remove.",
+            type = ArgType.POTION_EFFECT
+        )
+        optional(
+            "apply_to_player",
+            description = "If true, removes the effect from the player instead of the victim.",
+            type = ArgType.BOOLEAN,
+            default = "false"
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {

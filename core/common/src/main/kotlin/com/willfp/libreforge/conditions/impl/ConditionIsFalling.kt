@@ -9,6 +9,14 @@ import com.willfp.libreforge.get
 import org.bukkit.entity.Entity
 
 object ConditionIsFalling : Condition<NoCompileData>("is_falling") {
+    override val description = "Passes when the entity has a significant downward velocity, indicating it is falling."
+
+    override val categories = setOf("player")
+
+    override val additionalInfo = listOf(
+        "Detected via a downward Y-velocity threshold rather than a falling flag — may briefly trigger at the apex of a jump."
+    )
+
     override fun isMet(
         dispatcher: Dispatcher<*>,
         config: Config,

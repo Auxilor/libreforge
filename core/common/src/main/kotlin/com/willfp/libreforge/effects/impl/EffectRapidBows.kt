@@ -2,6 +2,7 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.map.listMap
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
@@ -17,8 +18,17 @@ import java.util.UUID
 import kotlin.math.min
 
 object EffectRapidBows : Effect<NoCompileData>("rapid_bows") {
+    override val description = "Allows the player to fire bows faster by a given percentage, as a permanent passive effect."
+    override val categories = setOf("combat")
+
     override val arguments = arguments {
-        require("percent_faster", "You must specify how many percent faster to make bow pulls!")
+        require(
+            "percent_faster",
+            "You must specify how many percent faster to make bow pulls!",
+            description = "How many percent faster the bow charges. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            example = "10 + %level%"
+        )
     }
 
     private val modifiers = listMap<UUID, IdentifiedModifier>()

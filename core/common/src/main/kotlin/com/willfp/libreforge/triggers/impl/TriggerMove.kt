@@ -12,12 +12,24 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerMoveEvent
 
 object TriggerMove : Trigger("move") {
+    override val description = "Fires when the player or a living entity moves to a new block."
+
+    override val categories = setOf("movement")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The location that was moved to.",
+        TriggerParameter.VELOCITY to "The velocity of the entity.",
+        TriggerParameter.ITEM to "The item held in the main hand.",
+        TriggerParameter.VALUE to "The distance moved."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
+        TriggerParameter.EVENT,
         TriggerParameter.LOCATION,
         TriggerParameter.VELOCITY,
-        TriggerParameter.EVENT,
-        TriggerParameter.ITEM
+        TriggerParameter.ITEM,
+        TriggerParameter.VALUE
     )
 
     @EventHandler(ignoreCancelled = true)

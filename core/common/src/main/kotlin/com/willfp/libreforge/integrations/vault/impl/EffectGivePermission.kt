@@ -2,6 +2,7 @@ package com.willfp.libreforge.integrations.vault.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.map.listMap
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
@@ -16,8 +17,16 @@ import java.util.UUID
 class EffectGivePermission(
     private val handler: Permission
 ) : Effect<NoCompileData>("give_permission") {
+    override val description = "Grants a Vault permission node to the player while the holder is active, removing it when the holder is disabled."
+    override val categories = setOf("player")
+
     override val arguments = arguments {
-        require("permission", "You must specify the permission!")
+        require(
+            "permission",
+            "You must specify the permission!",
+            description = "The permission node to grant the player.",
+            type = ArgType.STRING
+        )
     }
 
     private val permissions = listMap<UUID, GivenPermission>()

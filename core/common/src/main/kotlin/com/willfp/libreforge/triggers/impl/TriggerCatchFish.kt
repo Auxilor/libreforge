@@ -12,11 +12,22 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerFishEvent
 
 object TriggerCatchFish : Trigger("catch_fish") {
+    override val description = "Fires when the player successfully catches a fish."
+
+    override val categories = setOf("fishing")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The location of the catch.",
+        TriggerParameter.ITEM to "The item that was caught.",
+        TriggerParameter.VALUE to "The amount of XP dropped."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.LOCATION,
         TriggerParameter.EVENT,
-        TriggerParameter.ITEM
+        TriggerParameter.LOCATION,
+        TriggerParameter.ITEM,
+        TriggerParameter.VALUE
     )
 
     @EventHandler(ignoreCancelled = true)

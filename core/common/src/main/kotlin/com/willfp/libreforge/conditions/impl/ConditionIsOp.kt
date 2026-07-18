@@ -9,6 +9,10 @@ import com.willfp.libreforge.get
 import org.bukkit.entity.Player
 
 object ConditionIsOp : Condition<NoCompileData>("is_op") {
+    override val description = "Passes when the player has operator status on the server."
+
+    override val categories = setOf("permission")
+
     override fun isMet(
         dispatcher: Dispatcher<*>,
         config: Config,

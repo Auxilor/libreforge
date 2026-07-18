@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.enumValueOfOrNull
@@ -18,9 +19,23 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 
 object ConditionHasSkillLevel : Condition<NoCompileData>("has_skill_level") {
+    override val description = "Passes when the player has reached at least the specified level in a given AuraSkills skill."
+    override val categories = setOf("player", "economy")
+    override val additionalInfo = listOf("Requires the AuraSkills plugin.")
+
     override val arguments = arguments {
-        require("skill", "You must specify the skill!")
-        require("level", "You must specify the level!")
+        require(
+            "skill",
+            "You must specify the skill!",
+            description = "The AuraSkills skill to check (e.g. FARMING, MINING).",
+            type = ArgType.STRING
+        )
+        require(
+            "level",
+            "You must specify the level!",
+            description = "The minimum skill level the player must have.",
+            type = ArgType.EXPRESSION
+        )
     }
 
     override fun isMet(

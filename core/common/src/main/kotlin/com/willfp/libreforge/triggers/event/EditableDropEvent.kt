@@ -2,6 +2,7 @@ package com.willfp.libreforge.triggers.event
 
 import org.bukkit.Location
 import org.bukkit.block.Block
+import org.bukkit.block.BlockState
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.event.Cancellable
@@ -65,6 +66,9 @@ data class DropContext(
 
     /** The block that was broken (only relevant for [DropCause.BLOCK]). */
     val block: Block? = null,
+
+    /** A snapshot of the broken block's state before it was removed (only relevant for [DropCause.BLOCK]). */
+    val blockState: BlockState? = null,
 
     /** The entity that dropped/was sheared (only relevant for [DropCause.ENTITY] / [DropCause.SHEAR]). */
     val entity: Entity? = null,

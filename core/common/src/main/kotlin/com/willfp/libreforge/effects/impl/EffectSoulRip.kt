@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -12,13 +13,35 @@ import org.bukkit.attribute.Attribute
 import org.bukkit.entity.LivingEntity
 
 object EffectSoulRip : Effect<NoCompileData>("soul_rip") {
+    override val description = "Damages nearby enemies within a radius and heals the player based on the damage dealt."
+    override val categories = setOf("combat", "player")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER
     )
 
     override val arguments = arguments {
-        require("radius", "You must specify the radius!")
-        require("damage", "You must specify the damage to deal!")
+        require(
+            "radius",
+            "You must specify the radius!",
+            description = "The radius around the player to search for targets. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            example = "5 + %level% * 0.5"
+        )
+        require(
+            "damage",
+            "You must specify the damage to deal!",
+            description = "The amount of damage dealt to each nearby entity. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            example = "%level% * 2"
+        )
+        optional(
+            "heal_multiplier",
+            description = "A multiplier applied to the total damage dealt before it is converted to healing.",
+            type = ArgType.EXPRESSION,
+            default = "1.0",
+            example = "0.5 + %level% * 0.02"
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {

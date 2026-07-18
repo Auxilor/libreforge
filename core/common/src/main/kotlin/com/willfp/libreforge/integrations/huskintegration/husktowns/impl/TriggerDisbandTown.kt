@@ -8,6 +8,12 @@ import net.william278.husktowns.events.TownDisbandEvent
 import org.bukkit.event.EventHandler
 
 object TriggerDisbandTown : Trigger("disband_town") {
+    override val description = "Fires when the player disbands their HuskTowns town."
+
+    override val categories = setOf("player")
+
+    override val additionalInfo = listOf("Requires HuskTowns to be installed.")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT

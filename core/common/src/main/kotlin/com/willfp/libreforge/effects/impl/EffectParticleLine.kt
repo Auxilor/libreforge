@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.particle.Particles
 import com.willfp.eco.core.particle.SpawnableParticle
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -16,15 +17,34 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import kotlin.math.floor
 
 object EffectParticleLine : Effect<SpawnableParticle>("particle_line") {
+    override val description = "Spawns a line of particles between the player's eye and the trigger location."
+    override val categories = setOf("visual")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION
     )
 
     override val arguments = arguments {
-        require("particle", "You must specify the particle!")
-        require("amount", "You must specify the amount of particles to spawn!")
-        require("spacing", "You must specify the spacing between particles!")
+        require(
+            "particle",
+            "You must specify the particle!",
+            description = "The particle type to spawn along the line.",
+            type = ArgType.STRING,
+            example = "flame"
+        )
+        require(
+            "amount",
+            "You must specify the amount of particles to spawn!",
+            description = "The number of particles to spawn at each point along the line. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
+        require(
+            "spacing",
+            "You must specify the spacing between particles!",
+            description = "The distance between each particle point along the line. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: SpawnableParticle): Boolean {

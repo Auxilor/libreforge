@@ -1,6 +1,7 @@
 package com.willfp.libreforge.mutators.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.getDoubleFromExpression
@@ -8,9 +9,25 @@ import com.willfp.libreforge.mutators.Mutator
 import com.willfp.libreforge.triggers.TriggerData
 
 object MutatorSpinLocation : Mutator<NoCompileData>("spin_location") {
+    override val description = "Offsets the location by a distance in a direction rotated from the current facing direction."
+
+    override val categories = setOf("location")
+
     override val arguments = arguments {
-        require("angle", "You must specify the angle to rotate by!")
-        require("distance", "You must specify the distance from the current location!")
+        require(
+            "angle",
+            "You must specify the angle to rotate by!",
+            description = "The angle in degrees to rotate around the Y axis.",
+            type = ArgType.EXPRESSION,
+            example = "%level% * 10"
+        )
+        require(
+            "distance",
+            "You must specify the distance from the current location!",
+            description = "The distance from the current location to offset in the rotated direction.",
+            type = ArgType.EXPRESSION,
+            example = "1 + %level% * 0.1"
+        )
     }
 
     override fun mutate(data: TriggerData, config: Config, compileData: NoCompileData): TriggerData {

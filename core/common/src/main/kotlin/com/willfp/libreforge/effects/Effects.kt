@@ -101,8 +101,10 @@ import com.willfp.libreforge.effects.impl.EffectIgnite
 import com.willfp.libreforge.effects.impl.EffectIncreaseStepHeight
 import com.willfp.libreforge.effects.impl.EffectInfiniteBucket
 import com.willfp.libreforge.effects.impl.EffectItemDurabilityMultiplier
+import com.willfp.libreforge.effects.impl.EffectItemMagnet
 import com.willfp.libreforge.effects.impl.EffectJumpStrengthMultiplier
 import com.willfp.libreforge.effects.impl.EffectKeepInventory
+import com.willfp.libreforge.effects.impl.EffectKeepItem
 import com.willfp.libreforge.effects.impl.EffectKeepLevel
 import com.willfp.libreforge.effects.impl.EffectKick
 import com.willfp.libreforge.effects.impl.EffectKill
@@ -178,6 +180,9 @@ import com.willfp.libreforge.effects.impl.EffectSetGlowing
 import com.willfp.libreforge.effects.impl.EffectSetGlobalPoints
 import com.willfp.libreforge.effects.impl.EffectSetItemData
 import com.willfp.libreforge.effects.impl.EffectSetItemPoints
+import com.willfp.libreforge.effects.impl.EffectSetNearbyBlocks
+import com.willfp.libreforge.effects.impl.EffectSetPlayerTime
+import com.willfp.libreforge.effects.impl.EffectSetPlayerWeather
 import com.willfp.libreforge.effects.impl.EffectSetPoints
 import com.willfp.libreforge.effects.impl.EffectSetSaturation
 import com.willfp.libreforge.effects.impl.EffectSetUnbreakable
@@ -187,9 +192,11 @@ import com.willfp.libreforge.effects.impl.EffectShoot
 import com.willfp.libreforge.effects.impl.EffectShootArrow
 import com.willfp.libreforge.effects.impl.EffectShootFirework
 import com.willfp.libreforge.effects.impl.EffectShuffleHotbar
+import com.willfp.libreforge.effects.impl.EffectSilkTouch
 import com.willfp.libreforge.effects.impl.EffectSmite
 import com.willfp.libreforge.effects.impl.EffectSneakingSpeedMultiplier
 import com.willfp.libreforge.effects.impl.EffectSpawnEntity
+import com.willfp.libreforge.effects.impl.EffectSpawnFallingBlock
 import com.willfp.libreforge.effects.impl.EffectSpawnMobs
 import com.willfp.libreforge.effects.impl.EffectShockwave
 import com.willfp.libreforge.effects.impl.EffectSortInventory
@@ -591,7 +598,9 @@ object Effects : Registry<Effect<*>>() {
         register(EffectHungerMultiplier)
         register(EffectIgnite)
         register(EffectItemDurabilityMultiplier)
+        register(EffectItemMagnet)
         register(EffectKeepInventory)
+        register(EffectKeepItem)
         register(EffectKeepLevel)
         register(EffectKick)
         register(EffectKill)
@@ -660,6 +669,9 @@ object Effects : Registry<Effect<*>>() {
         register(EffectSetGlobalPoints)
         register(EffectSetItemData)
         register(EffectSetItemPoints)
+        register(EffectSetNearbyBlocks)
+        register(EffectSetPlayerTime)
+        register(EffectSetPlayerWeather)
         register(EffectSetPoints)
         register(EffectSetSaturation)
         register(EffectSetUnbreakable)
@@ -669,8 +681,10 @@ object Effects : Registry<Effect<*>>() {
         register(EffectShootArrow)
         register(EffectShootFirework)
         register(EffectShuffleHotbar)
+        register(EffectSilkTouch)
         register(EffectSmite)
         register(EffectSpawnEntity)
+        register(EffectSpawnFallingBlock)
         register(EffectSpawnMobs)
         register(EffectShockwave)
         register(EffectSortInventory)

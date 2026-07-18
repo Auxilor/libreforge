@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -12,14 +13,34 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 
 object EffectSpawnPotionCloud : Effect<NoCompileData>("spawn_potion_cloud") {
+    override val description = "Spawns a lingering potion cloud at the trigger location that applies a potion effect."
+    override val categories = setOf("potion", "visual")
+
     override val parameters = setOf(
         TriggerParameter.LOCATION
     )
 
     override val arguments = arguments {
-        require("effect", "You must specify the potion effect!")
-        require("level", "You must specify the effect level!")
-        require("duration", "You must specify the duration of the effect applied!")
+        require(
+            "effect",
+            "You must specify the potion effect!",
+            description = "The potion effect to apply to entities in the cloud.",
+            type = ArgType.POTION_EFFECT
+        )
+        require(
+            "level",
+            "You must specify the effect level!",
+            description = "The amplifier level of the potion effect. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            example = "1 + %level% / 10"
+        )
+        require(
+            "duration",
+            "You must specify the duration of the effect applied!",
+            description = "How long the cloud and its applied effect last, in ticks. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            example = "20 * %level%"
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {

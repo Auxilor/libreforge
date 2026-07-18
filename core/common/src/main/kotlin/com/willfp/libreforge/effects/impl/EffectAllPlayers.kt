@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Chain
@@ -12,10 +13,24 @@ import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.Bukkit
 
 object EffectAllPlayers : Effect<Chain?>("all_players") {
+    override val description = "Runs a set of effects on every online player."
+    override val categories = setOf("meta")
+
     override val isPermanent = false
 
     override val arguments = arguments {
-        require("effects", "You must specify the effects!")
+        require(
+            "effects",
+            "You must specify the effects!",
+            description = "The effects to run on every online player.",
+            type = ArgType.EFFECT_LIST
+        )
+        optional(
+            "run-type",
+            description = "The chain executor to use.",
+            type = ArgType.STRING,
+            choices = listOf("normal", "cycle", "random")
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: Chain?): Boolean {

@@ -8,10 +8,19 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.event.EventHandler
 
 object TriggerJump : Trigger("jump") {
+    override val description = "Fires when the player jumps."
+
+    override val categories = setOf("movement")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The player's location.",
+        TriggerParameter.VELOCITY to "The player's velocity."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.LOCATION,
         TriggerParameter.EVENT,
+        TriggerParameter.LOCATION,
         TriggerParameter.VELOCITY
     )
 

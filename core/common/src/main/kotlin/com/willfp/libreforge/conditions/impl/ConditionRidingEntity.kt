@@ -3,6 +3,7 @@ package com.willfp.libreforge.conditions.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.entities.Entities
 import com.willfp.eco.core.entities.TestableEntity
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.ViolationContext
@@ -18,8 +19,16 @@ import org.bukkit.event.entity.EntityDismountEvent
 import org.bukkit.event.entity.EntityMountEvent
 
 object ConditionRidingEntity : Condition<Collection<TestableEntity>>("riding_entity") {
+    override val description = "Passes when the entity is riding one of the specified entity types."
+    override val categories = setOf("entity")
+
     override val arguments = arguments {
-        require("entities", "You must specify the list of allowed entities!")
+        require(
+            "entities",
+            "You must specify the list of allowed entities!",
+            description = "The list of entity types the player must be riding.",
+            type = ArgType.ENTITY_LIST
+        )
     }
 
     override fun isMet(

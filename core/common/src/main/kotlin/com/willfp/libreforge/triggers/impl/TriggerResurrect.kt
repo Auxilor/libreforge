@@ -9,15 +9,23 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityResurrectEvent
 
 object TriggerResurrect : Trigger("resurrect") {
+    override val description = "Fires when the player is resurrected by a totem of undying."
+
+    override val categories = setOf("player")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The player's location."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.LOCATION,
-        TriggerParameter.EVENT
+        TriggerParameter.EVENT,
+        TriggerParameter.LOCATION
     )
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: EntityResurrectEvent) {
-        val player = event.entity as Player? ?: return
+        val player = event.entity as? Player ?: return
 
         this.dispatch(
             player.toDispatcher(),

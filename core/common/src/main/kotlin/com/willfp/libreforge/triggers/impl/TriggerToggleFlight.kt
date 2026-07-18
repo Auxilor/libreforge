@@ -8,10 +8,19 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerToggleFlightEvent
 
 object TriggerToggleFlight : Trigger("toggle_flight") {
+    override val description = "Fires when the player toggles creative flight."
+
+    override val categories = setOf("movement")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The player's location.",
+        TriggerParameter.VELOCITY to "The player's velocity at the time of the toggle."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.LOCATION,
         TriggerParameter.EVENT,
+        TriggerParameter.LOCATION,
         TriggerParameter.VELOCITY
     )
 

@@ -1,7 +1,8 @@
 package com.willfp.libreforge.effects.impl
 
-import com.github.benmanes.caffeine.cache.Caffeine
+import com.willfp.eco.core.cache.EcoCache
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.Holder
 import com.willfp.libreforge.HolderTemplate
@@ -20,22 +21,53 @@ import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.Location
 import java.util.Objects
 import java.util.UUID
-import java.util.concurrent.TimeUnit
+import java.time.Duration
 
 object EffectAddHolderInRadius : Effect<HolderTemplate>("add_holder_in_radius") {
+    override val description = "Temporarily applies a set of effects and conditions to all nearby entities within a radius."
+    override val categories = setOf("meta")
+
     override val isPermanent = false
 
     override val arguments = arguments {
-        require("effects", "You must specify the effects!")
-        require("duration", "You must specify the duration (in ticks)!")
-        require("radius", "You must specify the radius!")
+        require(
+            "effects",
+            "You must specify the effects!",
+            description = "The effects to apply temporarily to nearby entities.",
+            type = ArgType.EFFECT_LIST
+        )
+        require(
+            "duration",
+            "You must specify the duration (in ticks)!",
+            description = "How long to apply the holder, in ticks. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            example = "20 * %level%"
+        )
+        require(
+            "radius",
+            "You must specify the radius!",
+            description = "The radius to apply effects within. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            example = "5 + %level% * 0.5"
+        )
+        optional(
+            "apply-to-self",
+            description = "Whether to also apply the effects to the dispatcher.",
+            type = ArgType.BOOLEAN,
+            default = "false"
+        )
+        optional(
+            "conditions",
+            description = "The conditions the holder requires to be active.",
+            type = ArgType.CONDITION_LIST
+        )
     }
 
     private val holders = mutableSetOf<NearbyHolder>()
 
-    private val nearbyCache = Caffeine.newBuilder()
-        .expireAfterWrite(250L, TimeUnit.MILLISECONDS)
-        .build<UUID, Collection<SimpleProvidedHolder>>()
+    private val nearbyCache = EcoCache.builder<UUID, Collection<SimpleProvidedHolder>>()
+        .expireAfterWrite(Duration.ofMillis(250L))
+        .build()
 
     init {
         registerGenericHolderProvider { dispatcher ->

@@ -10,6 +10,14 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityTargetEvent
 
 object TriggerEntityTarget : Trigger("entity_target") {
+    override val description = "Fires when an entity selects a new target."
+
+    override val categories = setOf("entity")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.VICTIM to "The entity that is doing the targeting."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM

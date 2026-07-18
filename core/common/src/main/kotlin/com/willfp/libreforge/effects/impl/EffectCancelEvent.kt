@@ -9,6 +9,10 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.event.Cancellable
 
 object EffectCancelEvent : Effect<NoCompileData>("cancel_event") {
+    override val description = "Cancels the triggering event."
+    override val categories = setOf("meta")
+    override val additionalInfo = listOf("Requires a trigger that provides a cancellable EVENT.")
+
     override val supportsDelay = false
 
     override val runOrder = RunOrder.START

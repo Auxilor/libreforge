@@ -1,6 +1,6 @@
 package com.willfp.libreforge
 
-import com.github.benmanes.caffeine.cache.Caffeine
+import com.willfp.eco.core.cache.EcoCache
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.data.Profile
 import com.willfp.eco.core.data.ServerProfile
@@ -19,8 +19,8 @@ import com.willfp.eco.util.toNiceString
 import org.bukkit.entity.Player
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
+import java.time.Duration
 
 class PointPriceFactory(private val type: String) : PriceFactory {
     override fun getNames() = listOf(type)
@@ -34,9 +34,9 @@ class PointPriceFactory(private val type: String) : PriceFactory {
         private val baseContext: PlaceholderContext,
         private val function: (PlaceholderContext) -> Double
     ) : Price {
-        private val multipliers = Caffeine.newBuilder()
-            .expireAfterAccess(5, TimeUnit.MINUTES)
-            .build<UUID, Double>()
+        private val multipliers = EcoCache.builder<UUID, Double>()
+            .expireAfterAccess(Duration.ofMinutes(5))
+            .build()
 
         override fun canAfford(player: Player, multiplier: Double): Boolean {
             return player.points[type] >= getValue(player, multiplier)
@@ -55,7 +55,7 @@ class PointPriceFactory(private val type: String) : PriceFactory {
         }
 
         override fun getMultiplier(player: Player): Double {
-            return multipliers.getIfPresent(player.uniqueId) ?: 1.0
+            return multipliers.get(player.uniqueId) ?: 1.0
         }
 
         override fun setMultiplier(player: Player, multiplier: Double) {

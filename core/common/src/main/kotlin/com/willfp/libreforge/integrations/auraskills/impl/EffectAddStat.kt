@@ -1,6 +1,7 @@
 package com.willfp.libreforge.integrations.auraskills.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
@@ -14,9 +15,22 @@ import dev.aurelium.auraskills.api.stat.StatModifier
 import org.bukkit.entity.Player
 
 object EffectAddStat : Effect<NoCompileData>("add_stat") {
+    override val description = "Permanently adds a flat bonus to an AuraSkills stat while the holder is active."
+    override val categories = setOf("player")
+
     override val arguments = arguments {
-        require("stat", "You must specify the stat!")
-        require("amount", "You must specify the amount!")
+        require(
+            "stat",
+            "You must specify the stat!",
+            description = "The AuraSkills stat ID to add to, e.g. strength.",
+            type = ArgType.STRING
+        )
+        require(
+            "amount",
+            "You must specify the amount!",
+            description = "The amount to add to the stat. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
     }
 
     override val shouldReload = false

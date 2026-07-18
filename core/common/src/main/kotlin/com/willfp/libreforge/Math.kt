@@ -107,3 +107,12 @@ fun lerp(a: Float3, b: Float3, t: Float): Float3 {
     val z = a.z * (1 - t) + b.z * t
     return Float3(x, y, z)
 }
+
+fun Float3.rotateAroundY(angle: Float): Float3 {
+    val angleCos: Double = cos(angle.toDouble())
+    val angleSin: Double = sin(angle.toDouble())
+
+    val x: Double = angleCos * this.x + angleSin * this.z
+    val z: Double = -angleSin * this.x + angleCos * this.z
+    return Float3(x.toFloat(), this.y, z.toFloat())
+}

@@ -5,7 +5,7 @@ libreforge is a powerful yaml-based 'scripting' language to create powerful conf
     <a href="https://github.com/Auxilor/libreforge/releases">
         <img alt="spigot" src="https://img.shields.io/github/v/release/Auxilor/libreforge?color=informational"/>
     </a>
-    <a href="https://plugins.auxilor.io/" alt="Docs">
+    <a href="https://hub.auxilor.io" alt="Docs">
         <img src="https://img.shields.io/badge/docs-docusaurus-informational"/>
     </a>
     <a href="https://discord.gg/ZcwpSsE/" alt="Discord">

@@ -9,6 +9,15 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityTeleportEvent
 
 object TriggerEntityTeleport : Trigger("entity_teleport") {
+    override val description = "Fires when an entity teleports."
+
+    override val categories = setOf("entity")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.VICTIM to "The entity that teleported.",
+        TriggerParameter.LOCATION to "The entity's location before teleporting."
+    )
+
     override val parameters = setOf(
         TriggerParameter.VICTIM,
         TriggerParameter.LOCATION

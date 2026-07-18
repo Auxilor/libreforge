@@ -9,6 +9,9 @@ import com.willfp.libreforge.get
 import org.bukkit.entity.Entity
 
 object ConditionInRain : Condition<NoCompileData>("in_rain") {
+    override val description = "Passes when the entity is currently being rained on."
+    override val categories = setOf("world", "player")
+
     override fun isMet(
         dispatcher: Dispatcher<*>,
         config: Config,

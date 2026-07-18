@@ -8,16 +8,27 @@ import com.willfp.libreforge.effects.RunOrder
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import com.willfp.libreforge.ArgType
 import org.bukkit.Bukkit
 import org.bukkit.event.entity.EntityDamageEvent
 
 object EffectAddDamage : Effect<NoCompileData>("add_damage") {
+    override val description = "Adds extra damage to the triggering attack."
+    override val categories = setOf("combat")
+    override val additionalInfo = listOf("Requires a trigger that provides EVENT (e.g. take_damage, on_attack).")
+
     override val parameters = setOf(
         TriggerParameter.EVENT
     )
 
     override val arguments = arguments {
-        require("damage", "You must specify the damage to add!")
+        require(
+            "damage",
+            "You must specify the damage to add!",
+            description = "The amount of extra damage to add. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            example = "%victim_max_health% * 0.1"
+        )
     }
 
     override val supportsDelay = false

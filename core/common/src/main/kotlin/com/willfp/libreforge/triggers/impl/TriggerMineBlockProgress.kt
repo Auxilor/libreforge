@@ -8,11 +8,21 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.block.BlockDamageEvent
 
 object TriggerMineBlockProgress : Trigger("mine_block_progress") {
+    override val description = "Fires each time the player deals a hit of damage to a block while mining."
+
+    override val categories = setOf("world")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.BLOCK to "The block being mined.",
+        TriggerParameter.LOCATION to "The location of the block being mined.",
+        TriggerParameter.ITEM to "The item in the player's main hand."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.BLOCK,
-        TriggerParameter.LOCATION,
         TriggerParameter.EVENT,
+        TriggerParameter.LOCATION,
         TriggerParameter.ITEM
     )
 

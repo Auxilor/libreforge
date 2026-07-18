@@ -1,6 +1,6 @@
 package com.willfp.libreforge.triggers.impl
 
-import com.github.benmanes.caffeine.cache.Caffeine
+import com.willfp.eco.core.cache.EcoCache
 import com.willfp.eco.core.gui.player
 import com.willfp.eco.core.recipe.parts.EmptyTestableItem
 import com.willfp.libreforge.plugin
@@ -14,18 +14,29 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.inventory.BrewEvent
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.inventory.BrewerInventory
-import java.util.concurrent.TimeUnit
+import java.time.Duration
 
 object TriggerBrewIngredient : Trigger("brew_ingredient") {
-    private val playerCache = Caffeine.newBuilder()
+    private val playerCache = EcoCache.builder<Location, Player>()
         // Arbitrary long time
-        .expireAfterWrite(15, TimeUnit.MINUTES)
-        .build<Location, Player>()
+        .expireAfterWrite(Duration.ofMinutes(15))
+        .build()
+
+    override val description = "Fires when an ingredient finishes brewing in a brewing stand."
+
+    override val categories = setOf("inventory")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The location of the brewing stand.",
+        TriggerParameter.ITEM to "The ingredient that was used.",
+        TriggerParameter.VALUE to "The number of potions brewed."
+    )
 
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,
-        TriggerParameter.ITEM
+        TriggerParameter.ITEM,
+        TriggerParameter.VALUE
     )
 
     @EventHandler
@@ -48,7 +59,7 @@ object TriggerBrewIngredient : Trigger("brew_ingredient") {
     fun handle(event: BrewEvent) {
         val location = event.block.location
 
-        val player = playerCache.getIfPresent(location) ?: return
+        val player = playerCache.get(location) ?: return
 
         if (!player.isOnline) {
             playerCache.invalidate(location)

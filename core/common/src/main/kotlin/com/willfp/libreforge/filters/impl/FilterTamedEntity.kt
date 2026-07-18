@@ -4,12 +4,17 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.entities.Entities
 import com.willfp.eco.core.entities.TestableEntity
 import com.willfp.eco.util.containsIgnoreCase
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.filters.Filter
 import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.entity.Tameable
 
 object FilterTamedEntity : Filter<Collection<TestableEntity>, List<String>>("tamed_entity") {
+    override val description = "Matches when the victim is a tamed entity of one of the given types."
+    override val categories = setOf("entity")
+    override val valueType = ArgType.ENTITY_LIST
+
     override fun getValue(config: Config, data: TriggerData?, key: String): List<String> {
         return config.getStrings(key)
     }

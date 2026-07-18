@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.entities.Entities
 import com.willfp.eco.core.entities.TestableEntity
 import com.willfp.eco.core.entities.impl.EmptyTestableEntity
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.ViolationContext
@@ -12,9 +13,29 @@ import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.get
 
 object ConditionNearEntity : Condition<Collection<TestableEntity>>("near_entity") {
+    override val description = "Passes when the specified number of matching entities are within the given radius."
+    override val categories = setOf("entity")
+
     override val arguments = arguments {
-        require("entities", "You must specify the list of allowed entities!")
-        require("radius", "You must specify the radius!")
+        require(
+            "entities",
+            "You must specify the list of allowed entities!",
+            description = "The list of entity types to look for nearby.",
+            type = ArgType.ENTITY_LIST
+        )
+        require(
+            "radius",
+            "You must specify the radius!",
+            description = "The radius in blocks to search for nearby entities.",
+            type = ArgType.EXPRESSION,
+            example = "5 + %level% * 0.5"
+        )
+        optional(
+            "amount",
+            description = "The minimum number of matching entities required (defaults to 1).",
+            type = ArgType.INT,
+            default = "1"
+        )
     }
 
     override fun isMet(

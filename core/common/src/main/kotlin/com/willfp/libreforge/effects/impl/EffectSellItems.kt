@@ -5,7 +5,9 @@ import com.willfp.eco.core.integrations.shop.getUnitValue
 import com.willfp.eco.core.integrations.shop.isSellable
 import com.willfp.eco.core.items.Items
 import com.willfp.eco.core.items.TestableItem
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.ViolationContext
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.RunOrder
 import com.willfp.libreforge.getDoubleFromExpression
@@ -18,9 +20,27 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
 object EffectSellItems : Effect<Collection<TestableItem>?>("sell_items") {
+    override val description = "Sells sellable items from the drop trigger."
+    override val categories = setOf("economy", "inventory")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER
     )
+
+    override val arguments = arguments {
+        optional(
+            "multiplier",
+            description = "A multiplier applied to the sell price of each item. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            default = "1.0",
+            example = "1 + %level% * 0.05"
+        )
+        optional(
+            "whitelist",
+            description = "A list of item types that are allowed to be sold. If omitted, all sellable items are sold.",
+            type = ArgType.ITEM_LIST
+        )
+    }
 
     override val runOrder = RunOrder.END
 

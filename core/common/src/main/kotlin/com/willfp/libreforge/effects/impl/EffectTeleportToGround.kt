@@ -8,6 +8,9 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.Material
 
 object EffectTeleportToGround : Effect<NoCompileData>("teleport_to_ground") {
+    override val description = "Teleports the player straight down to the first solid ground beneath them."
+    override val categories = setOf("movement")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER
     )

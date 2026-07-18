@@ -5,14 +5,24 @@ import com.willfp.eco.core.integrations.economy.EconomyManager
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.get
 import org.bukkit.entity.Player
 
 object ConditionBelowBalance : Condition<NoCompileData>("below_balance") {
+    override val description = "Passes when the player's economy balance is below the specified amount."
+    override val categories = setOf("economy")
+
     override val arguments = arguments {
-        require("balance", "You must specify the maximum balance!")
+        require(
+            "balance",
+            "You must specify the maximum balance!",
+            description = "The balance threshold; the player must be below this amount.",
+            type = ArgType.EXPRESSION,
+            example = "%level% * 500"
+        )
     }
 
     override fun isMet(

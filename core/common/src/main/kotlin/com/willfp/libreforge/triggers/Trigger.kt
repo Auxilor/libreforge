@@ -25,6 +25,28 @@ abstract class Trigger(
     abstract val parameters: Set<TriggerParameter>
 
     /**
+     * Human-readable description of when this trigger fires, shown on the wiki.
+     */
+    open val description: String = ""
+
+    /**
+     * Category tags for grouping and filtering on the wiki, e.g. "combat", "movement".
+     */
+    open val categories: Set<String> = emptySet()
+
+    /**
+     * Additional notes, warnings, or constraints shown on the wiki.
+     */
+    open val additionalInfo: List<String> = emptyList()
+
+    /**
+     * Per-parameter descriptions giving context specific to this trigger.
+     * Describes what each TriggerParameter value represents when this trigger fires,
+     * e.g. what VICTIM or VALUE actually contains for this specific event.
+     */
+    open val parameterDescriptions: Map<TriggerParameter, String> = emptyMap()
+
+    /**
      * Whether this trigger is enabled.
      */
     open var isEnabled: Boolean = false

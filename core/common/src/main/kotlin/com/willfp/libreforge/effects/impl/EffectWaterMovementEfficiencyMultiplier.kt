@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.templates.AttributeEffect
 import org.bukkit.attribute.Attribute
@@ -13,8 +14,17 @@ object EffectWaterMovementEfficiencyMultiplier : AttributeEffect(
     Attribute.WATER_MOVEMENT_EFFICIENCY,
     AttributeModifier.Operation.MULTIPLY_SCALAR_1
 ) {
+    override val description = "Multiplies the player's movement efficiency while in water."
+    override val categories = setOf("movement", "player", "attribute")
+
     override val arguments = arguments {
-        require("multiplier", "You must specify the movement efficiency multiplier!")
+        require(
+            "multiplier",
+            "You must specify the movement efficiency multiplier!",
+            description = "The multiplier to apply to water movement efficiency. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            example = "1 + %level% * 0.05"
+        )
     }
 
     override fun getValue(config: Config, entity: LivingEntity) =

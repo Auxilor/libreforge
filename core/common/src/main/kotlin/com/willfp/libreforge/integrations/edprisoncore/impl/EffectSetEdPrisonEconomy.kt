@@ -2,6 +2,7 @@ package com.willfp.libreforge.integrations.edprisoncore.impl
 
 import com.edwardbelt.edprison.utils.EconomyUtils
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
@@ -11,13 +12,26 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
 object EffectSetEdPrisonEconomy : Effect<String?>("set_edprison_economy") {
+    override val description = "Sets the player's EdPrison economy balance for a given currency to a specific value."
+    override val categories = setOf("economy")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER
     )
 
     override val arguments = arguments {
-        require("type", "You must specify the type of economy to give!")
-        require("amount", "You must specify the amount of economy to give!")
+        require(
+            "type",
+            "You must specify the type of economy to give!",
+            description = "The EdPrison economy currency ID to set.",
+            type = ArgType.STRING
+        )
+        require(
+            "amount",
+            "You must specify the amount of economy to give!",
+            description = "The value to set the economy balance to. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: String?): Boolean {

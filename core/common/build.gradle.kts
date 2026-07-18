@@ -21,7 +21,6 @@ dependencies {
     compileOnly("com.github.MilkBowl:VaultAPI:1.7") {
         exclude("*", "*")
     }
-    compileOnly("com.github.ben-manes.caffeine:caffeine:3.2.3")
     compileOnly("com.github.brcdev-minecraft:shopgui-api:3.2.0") {
         exclude("*", "*")
     }
@@ -45,6 +44,9 @@ dependencies {
     compileOnly("com.nexomc:nexo:1.17.0") {
         exclude(group = "*", module = "*")
     }
+    compileOnly("com.github.LoneDev6:API-ItemsAdder:2.4.7")
+    compileOnly("net.momirealms:craft-engine-core:26.6.2")
+    compileOnly("net.momirealms:craft-engine-bukkit:26.6.2")
 
     compileOnly(fileTree("../../lib") {
         include("*.jar")
@@ -53,6 +55,7 @@ dependencies {
 
 repositories {
     maven("https://jitpack.io/")
+    maven("https://repo.momirealms.net/releases/")
 }
 
 configurations.all {

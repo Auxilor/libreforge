@@ -2,6 +2,7 @@ package com.willfp.libreforge.filters.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.util.NamespacedKeyUtils
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.filters.Filter
 import com.willfp.libreforge.triggers.TriggerData
@@ -11,6 +12,11 @@ import org.bukkit.persistence.PersistentDataType
 
 @Deprecated("Use is_boss instead")
 object FilterOnlyNonBosses : Filter<NoCompileData, Boolean>("only_non_bosses") {
+    override val description = "Matches when the victim is not a boss entity."
+    override val categories = setOf("entity")
+    override val valueType = ArgType.BOOLEAN
+    override val additionalInfo = listOf("Deprecated: use is_boss instead.", "Passes automatically when no victim is present in the trigger data.")
+
     override fun getValue(config: Config, data: TriggerData?, key: String): Boolean {
         return config.getBool(key)
     }

@@ -4,6 +4,7 @@ import com.gmail.nossr50.datatypes.skills.PrimarySkillType
 import com.gmail.nossr50.events.experience.McMMOPlayerLevelChangeEvent
 import com.gmail.nossr50.util.player.UserManager
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
@@ -17,9 +18,23 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 
 object ConditionHasMcMMOLevel : Condition<NoCompileData>("has_mcmmo_skill_level") {
+    override val description = "Passes when the player's mcMMO skill level meets or exceeds the specified level."
+    override val categories = setOf("player", "economy")
+    override val additionalInfo = listOf("Requires the mcMMO plugin.")
+
     override val arguments = arguments {
-        require("skill", "You must specify the skill!")
-        require("level", "You must specify the skill level!")
+        require(
+            "skill",
+            "You must specify the skill!",
+            description = "The mcMMO primary skill name (e.g. MINING, WOODCUTTING).",
+            type = ArgType.STRING
+        )
+        require(
+            "level",
+            "You must specify the skill level!",
+            description = "The minimum skill level required.",
+            type = ArgType.INT
+        )
     }
 
     override fun isMet(

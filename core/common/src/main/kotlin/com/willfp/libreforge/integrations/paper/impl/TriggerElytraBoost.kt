@@ -8,6 +8,16 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.event.EventHandler
 
 object TriggerElytraBoost : Trigger("elytra_boost") {
+    override val description = "Fires when the player boosts their elytra with a firework rocket."
+
+    override val categories = setOf("movement")
+
+    override val additionalInfo = listOf("Requires Paper to be installed.")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The player's location."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION

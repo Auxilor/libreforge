@@ -14,11 +14,22 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.block.BlockBreakEvent
 
 object TriggerBlockXpDrop : Trigger("block_xp_drop") {
+    override val description = "Fires when a block broken by the player drops experience."
+
+    override val categories = setOf("world")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.BLOCK to "The block that was broken.",
+        TriggerParameter.LOCATION to "The location of the broken block.",
+        TriggerParameter.VALUE to "The amount of XP dropped."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.BLOCK,
         TriggerParameter.EVENT,
-        TriggerParameter.LOCATION
+        TriggerParameter.LOCATION,
+        TriggerParameter.VALUE
     )
 
     @EventHandler(

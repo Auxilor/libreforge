@@ -12,11 +12,23 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 
 object TriggerKill : Trigger("kill") {
+    override val description = "Fires when the player kills an entity."
+
+    override val categories = setOf("combat")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.VICTIM to "The entity that was killed.",
+        TriggerParameter.LOCATION to "The location of the killed entity.",
+        TriggerParameter.ITEM to "The item in the killer's main hand.",
+        TriggerParameter.VALUE to "The maximum health of the killed entity."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
         TriggerParameter.LOCATION,
-        TriggerParameter.ITEM
+        TriggerParameter.ITEM,
+        TriggerParameter.VALUE
     )
 
     @EventHandler(ignoreCancelled = true)

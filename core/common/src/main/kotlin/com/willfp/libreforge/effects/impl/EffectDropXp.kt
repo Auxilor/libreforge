@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -11,12 +12,21 @@ import org.bukkit.entity.ExperienceOrb
 import kotlin.random.Random
 
 object EffectDropXp : Effect<NoCompileData>("drop_xp") {
+    override val description = "Drops experience orbs at the trigger location."
+    override val categories = setOf("economy")
+
     override val parameters = setOf(
         TriggerParameter.LOCATION
     )
 
     override val arguments = arguments {
-        require("xp", "You must specify the amount of xp to drop!")
+        require(
+            "xp",
+            "You must specify the amount of xp to drop!",
+            description = "The amount of experience to drop. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            example = "10 + %level% * 5"
+        )
     }
 
     private val XP_TIERS = intArrayOf(2477, 1237, 617, 307, 149, 73, 37, 17, 7, 3, 1)

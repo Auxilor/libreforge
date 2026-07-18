@@ -10,6 +10,8 @@ import org.bukkit.Material
 import org.bukkit.entity.LivingEntity
 
 object ConditionIsSubmerged: Condition<NoCompileData>("is_submerged") {
+    override val description = "Passes when the entity is fully submerged in a liquid."
+    override val categories = setOf("player")
 
     override fun isMet(
         dispatcher: Dispatcher<*>,
