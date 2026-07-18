@@ -161,7 +161,7 @@ inline fun <reified T> registerSpecificRefreshFunction(crossinline function: (T)
 
 private val holderCooldown: EcoCache<UUID, Unit>? =
     plugin.configYml.getInt("refresh.cooldown").takeIf { it > 0 }?.let {
-        EcoCache.builder()
+        EcoCache.builder<UUID, Unit>()
             .expireAfterWrite(Duration.ofMillis(it.toLong()))
             .build()
     }
@@ -255,7 +255,7 @@ fun ProvidedHolder.generatePlaceholders(dispatcher: Dispatcher<*>): List<NamedVa
 }
 
 private val previousHolders: EcoCache<UUID, Collection<ProvidedHolder>> =
-    EcoCache.builder()
+    EcoCache.builder<UUID, Collection<ProvidedHolder>>()
         .expireAfterAccess(Duration.ofSeconds(30))
         .build()
 

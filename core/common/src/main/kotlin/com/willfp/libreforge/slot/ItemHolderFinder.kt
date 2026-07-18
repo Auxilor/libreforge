@@ -58,7 +58,7 @@ abstract class ItemHolderFinder<T : Holder> {
     }
 
     private inner class ItemHolderFinderProvider : TypedHolderProvider<T> {
-        private val cache: EcoCache<UUID, List<TypedProvidedHolder<T>>> = EcoCache.builder()
+        private val cache: EcoCache<UUID, List<TypedProvidedHolder<T>>> = EcoCache.builder<UUID, List<TypedProvidedHolder<T>>>()
             .expireAfterWrite(Duration.ofMillis(500))
             .build()
 
