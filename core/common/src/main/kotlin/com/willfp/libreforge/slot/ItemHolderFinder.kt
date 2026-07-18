@@ -1,7 +1,6 @@
 package com.willfp.libreforge.slot
 
-import com.github.benmanes.caffeine.cache.Cache
-import com.github.benmanes.caffeine.cache.Caffeine
+import com.willfp.eco.core.cache.EcoCache
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.Holder
 import com.willfp.libreforge.HolderProvider
@@ -15,7 +14,7 @@ import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import java.util.UUID
-import java.util.concurrent.TimeUnit
+import java.time.Duration
 
 /**
  * Finds holders on items for entities, allows for easy implementation of [HolderProvider].
@@ -59,8 +58,8 @@ abstract class ItemHolderFinder<T : Holder> {
     }
 
     private inner class ItemHolderFinderProvider : TypedHolderProvider<T> {
-        private val cache: Cache<UUID, List<TypedProvidedHolder<T>>> = Caffeine.newBuilder()
-            .expireAfterWrite(500, TimeUnit.MILLISECONDS)
+        private val cache: EcoCache<UUID, List<TypedProvidedHolder<T>>> = EcoCache.builder<UUID, List<TypedProvidedHolder<T>>>()
+            .expireAfterWrite(Duration.ofMillis(500))
             .build()
 
         init {
