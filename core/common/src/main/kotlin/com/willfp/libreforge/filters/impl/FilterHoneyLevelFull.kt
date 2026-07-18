@@ -1,6 +1,7 @@
 package com.willfp.libreforge.filters.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.filters.Filter
 import com.willfp.libreforge.triggers.TriggerData
@@ -8,6 +9,10 @@ import org.bukkit.Material
 import org.bukkit.block.data.type.Beehive
 
 object FilterHoneyLevelFull : Filter<NoCompileData, Boolean>("honey_level_full") {
+    override val description = "Matches when the beehive or bee nest block has a full honey level."
+    override val categories = setOf("world")
+    override val valueType = ArgType.BOOLEAN
+
     override fun getValue(config: Config, data: TriggerData?, key: String): Boolean {
         return true
     }

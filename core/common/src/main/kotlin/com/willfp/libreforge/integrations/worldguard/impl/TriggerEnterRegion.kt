@@ -11,10 +11,20 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerMoveEvent
 
 object TriggerEnterRegion : Trigger("enter_region") {
+    override val description = "Fires when the player enters a WorldGuard region."
+
+    override val categories = setOf("movement")
+
+    override val additionalInfo = listOf("Requires WorldGuard to be installed.")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The player's location in the region."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.LOCATION,
-        TriggerParameter.EVENT
+        TriggerParameter.EVENT,
+        TriggerParameter.LOCATION
     )
 
     private val regionContainer = WorldGuard.getInstance().platform.regionContainer

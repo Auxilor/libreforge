@@ -11,6 +11,10 @@ import me.angeschossen.lands.api.LandsIntegration
 import org.bukkit.entity.Player
 
 object ConditionInTrustedClaim : Condition<NoCompileData>("in_trusted_claim") {
+    override val description = "Passes when the player is standing inside a Lands area where they are trusted."
+    override val categories = setOf("world", "player")
+    override val additionalInfo = listOf("Requires the Lands plugin.")
+
     override fun isMet(
         dispatcher: Dispatcher<*>,
         config: Config,

@@ -18,6 +18,15 @@ import java.time.Duration
 
 object TriggerBrew : Trigger("brew") {
     private val playerCache = EcoCache.builder<Location, Player>()
+    override val description = "Fires when the player brews potions in a brewing stand."
+
+    override val categories = setOf("inventory")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The location of the brewing stand.",
+        TriggerParameter.ITEM to "One of the potion items that was brewed.",
+        TriggerParameter.VALUE to "The number of potions brewed."
+    )
         // Arbitrary long time
         .expireAfterWrite(Duration.ofMinutes(15))
         .build()
@@ -25,7 +34,8 @@ object TriggerBrew : Trigger("brew") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,
-        TriggerParameter.ITEM
+        TriggerParameter.ITEM,
+        TriggerParameter.VALUE
     )
 
     @EventHandler

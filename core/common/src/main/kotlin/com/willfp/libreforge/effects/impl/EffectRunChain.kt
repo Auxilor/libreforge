@@ -1,7 +1,9 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.util.evaluateExpressionOrNull
 import com.willfp.eco.util.formatEco
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NamedValue
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
@@ -12,10 +14,29 @@ import com.willfp.libreforge.toPlaceholderContext
 import com.willfp.libreforge.triggers.TriggerData
 
 object EffectRunChain : Effect<NoCompileData>("run_chain") {
+    override val description = "Runs a named chain of effects defined in `plugins/libreforge/chains.yml`."
+    override val categories = setOf("meta")
+
     override val isPermanent = false
 
     override val arguments = arguments {
-        require("chain", "You must specify the chain to run!")
+        require(
+            "chain",
+            "You must specify the chain to run!",
+            description = "The ID of the chain to execute.",
+            type = ArgType.STRING
+        )
+        optional(
+            "chain_args",
+            description = "A subsection of key-value pairs to expose as placeholders within the chain.",
+            type = ArgType.ANY
+        )
+        optional(
+            "run-type",
+            description = "The chain executor type to use when running the chain.",
+            type = ArgType.STRING,
+            choices = listOf("normal", "cycle", "random")
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
@@ -23,12 +44,18 @@ object EffectRunChain : Effect<NoCompileData>("run_chain") {
 
         val args = config.getSubsection("chain_args")
 
+        val context = config.toPlaceholderContext(data)
+
         for (key in args.getKeys(false)) {
+            val raw = args.getString(key)
+            val value = evaluateExpressionOrNull(raw, context)
+                ?.takeIf { it.isFinite() }
+                ?.let { if (it % 1.0 == 0.0) it.toLong().toString() else it.toString() }
+                ?: raw.formatEco(context)
             dispatch.addPlaceholder(
                 NamedValue(
                     listOf(key, key.replace("_", "")),
-                    args.getString(key)
-                        .formatEco(args.toPlaceholderContext(data))
+                    value
                 )
             )
         }

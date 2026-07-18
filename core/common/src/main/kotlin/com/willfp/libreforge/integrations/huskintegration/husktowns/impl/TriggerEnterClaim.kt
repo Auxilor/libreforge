@@ -8,6 +8,16 @@ import net.william278.husktowns.events.PlayerEnterTownEvent
 import org.bukkit.event.EventHandler
 
 object TriggerEnterClaim : Trigger("enter_claim") {
+    override val description = "Fires when the player enters a HuskTowns town claim."
+
+    override val categories = setOf("movement")
+
+    override val additionalInfo = listOf("Requires HuskTowns to be installed.")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.TEXT to "The name of the town whose claim was entered."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT,

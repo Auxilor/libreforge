@@ -4,14 +4,23 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.get
 import org.bukkit.entity.LivingEntity
 
 object ConditionInBlock : Condition<NoCompileData>("in_block") {
+    override val description = "Passes when the entity's head or feet are inside the specified block type."
+    override val categories = setOf("world")
+
     override val arguments = arguments {
-        require("block", "You must specify the block!")
+        require(
+            "block",
+            "You must specify the block!",
+            description = "The block material name to check (e.g. WATER).",
+            type = ArgType.BLOCK
+        )
     }
 
     override fun isMet(

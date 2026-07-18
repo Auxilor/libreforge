@@ -10,6 +10,10 @@ import net.william278.husktowns.api.BukkitHuskTownsAPI
 import org.bukkit.entity.Player
 
 object ConditionInOwnClaim : Condition<NoCompileData>("in_own_claim") {
+    override val description = "Passes when the player is standing inside a HuskTowns claim owned by their town."
+    override val categories = setOf("world", "player")
+    override val additionalInfo = listOf("Requires the HuskTowns plugin.")
+
     override fun isMet(
         dispatcher: Dispatcher<*>,
         config: Config,

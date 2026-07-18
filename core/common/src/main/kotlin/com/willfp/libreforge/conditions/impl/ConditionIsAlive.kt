@@ -10,6 +10,10 @@ import org.bukkit.entity.Entity
 
 
 object ConditionIsAlive : Condition<NoCompileData>("is_alive") {
+    override val description = "Passes when the entity is alive."
+
+    override val categories = setOf("entity")
+
     override fun isMet(
         dispatcher: Dispatcher<*>,
         config: Config,

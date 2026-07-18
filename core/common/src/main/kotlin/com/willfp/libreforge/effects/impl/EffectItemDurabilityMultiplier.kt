@@ -2,6 +2,7 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.util.NumberUtils
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -14,6 +15,9 @@ import org.bukkit.inventory.ItemStack
 import kotlin.math.roundToInt
 
 object EffectItemDurabilityMultiplier : Effect<NoCompileData>("item_durability_multiplier") {
+    override val description = "Multiplies the durability loss of the held item, effectively making it more or less durable."
+    override val categories = setOf("inventory")
+
     override val supportsDelay = false
 
     override val parameters = setOf(
@@ -21,7 +25,13 @@ object EffectItemDurabilityMultiplier : Effect<NoCompileData>("item_durability_m
     )
 
     override val arguments = arguments {
-        require("multiplier", "You must specify the durability multiplier!")
+        require(
+            "multiplier",
+            "You must specify the durability multiplier!",
+            description = "The durability multiplier to apply (e.g. 2 means the item lasts twice as long). Supports expressions.",
+            type = ArgType.EXPRESSION,
+            example = "1 + %level% * 0.05"
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {

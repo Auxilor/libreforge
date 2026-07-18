@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.entities.Entities
 import com.willfp.eco.core.entities.TestableEntity
 import com.willfp.eco.util.NumberUtils
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -15,6 +16,7 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Mob
+import org.bukkit.entity.Tameable
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.entity.EntityDeathEvent
@@ -23,16 +25,49 @@ import java.util.UUID
 
 
 object EffectSpawnMobs : Effect<TestableEntity>("spawn_mobs") {
+    override val description = "Spawns multiple mobs near the trigger location that target the victim."
+    override val categories = setOf("entity")
+
     override val parameters: Set<TriggerParameter> = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION
     )
 
     override val arguments = arguments {
-        require("amount", "You must specify the amount of mobs to spawn!")
-        require("ticks_to_live", "You must specify the mob lifespan!")
-        require("range", "You must specify the range to spawn in!")
-        require("entity", "You must specify the mob to spawn!")
+        require(
+            "amount",
+            "You must specify the amount of mobs to spawn!",
+            description = "The number of mobs to spawn. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            example = "1 + %level% / 5"
+        )
+        require(
+            "ticks_to_live",
+            "You must specify the mob lifespan!",
+            description = "How many ticks the mobs will live before being removed. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            example = "20 * %level%"
+        )
+        require(
+            "range",
+            "You must specify the range to spawn in!",
+            description = "The radius around the trigger location in which mobs can spawn. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            example = "5 + %level% * 0.5"
+        )
+        require(
+            "entity",
+            "You must specify the mob to spawn!",
+            description = "The entity type to spawn.",
+            type = ArgType.ENTITY
+        )
+        optional(
+            "health",
+            description = "The max health (and starting health) to set on each spawned mob. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            default = "20",
+            example = "20 + %level% * 5"
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: TestableEntity): Boolean {
@@ -74,6 +109,10 @@ object EffectSpawnMobs : Effect<TestableEntity>("spawn_mobs") {
             }
 
             mob.health = health
+
+            if (config.getBool("owner") && mob is Tameable) {
+                mob.owner = player
+            }
 
             plugin.scheduler.runLater(ticksToLive.toLong()) { mob.remove() }
         }

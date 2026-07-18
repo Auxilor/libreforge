@@ -5,6 +5,7 @@ import com.willfp.eco.util.containsIgnoreCase
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.get
@@ -12,8 +13,17 @@ import net.william278.husktowns.api.BukkitHuskTownsAPI
 import org.bukkit.entity.Player
 
 object ConditionHasTownRole : Condition<NoCompileData>("has_town_role") {
+    override val description = "Passes when the player holds one of the specified roles in their HuskTowns town."
+    override val categories = setOf("world", "player")
+    override val additionalInfo = listOf("Requires the HuskTowns plugin.")
+
     override val arguments = arguments {
-        require("roles", "You must specify the roles!")
+        require(
+            "roles",
+            "You must specify the roles!",
+            description = "A list of HuskTowns town role names to check against (e.g. mayor, resident).",
+            type = ArgType.STRING_LIST
+        )
     }
 
     override fun isMet(

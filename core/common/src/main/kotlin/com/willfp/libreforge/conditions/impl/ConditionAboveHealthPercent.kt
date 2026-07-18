@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.get
@@ -18,8 +19,17 @@ import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.EntityRegainHealthEvent
 
 object ConditionAboveHealthPercent : Condition<NoCompileData>("above_health_percent") {
+    override val description = "Passes when the entity's health is at or above the given percentage of its maximum."
+    override val categories = setOf("combat")
+
     override val arguments = arguments {
-        require("percent", "You must specify the health percentage!")
+        require(
+            "percent",
+            "You must specify the health percentage!",
+            description = "The minimum health percentage (0–100).",
+            type = ArgType.EXPRESSION,
+            example = "50 + %level%"
+        )
     }
 
     override fun isMet(

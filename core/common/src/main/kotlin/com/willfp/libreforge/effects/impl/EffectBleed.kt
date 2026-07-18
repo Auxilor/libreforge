@@ -2,6 +2,7 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -14,14 +15,34 @@ import com.willfp.libreforge.triggers.impl.TriggerKill
 
 
 object EffectBleed : Effect<NoCompileData>("bleed") {
+    override val description = "Deals damage to the victim repeatedly over a set number of ticks."
+    override val categories = setOf("combat")
+
     override val parameters = setOf(
         TriggerParameter.VICTIM
     )
 
     override val arguments = arguments {
-        require("amount", "You must specify the amount of bleed ticks!")
-        require("damage", "You must specify the amount of damage to deal!")
-        require("interval", "You must specify the tick delay between damages!")
+        require(
+            "amount",
+            "You must specify the amount of bleed ticks!",
+            description = "The number of times damage is dealt. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            example = "3 + %level%"
+        )
+        require(
+            "damage",
+            "You must specify the amount of damage to deal!",
+            description = "The damage dealt per interval. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            example = "%level% * 0.5"
+        )
+        require(
+            "interval",
+            "You must specify the tick delay between damages!",
+            description = "The number of ticks between each damage application. Supports expressions.",
+            type = ArgType.EXPRESSION
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {

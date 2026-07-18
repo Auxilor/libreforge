@@ -9,6 +9,7 @@ import com.willfp.eco.core.integrations.discord.DiscordEmbedFooter
 import com.willfp.eco.core.integrations.discord.DiscordEmbedMedia
 import com.willfp.eco.core.integrations.discord.DiscordEmbedAuthor
 import com.willfp.eco.core.integrations.discord.DiscordEmbedField
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.ConfigArguments
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
@@ -17,9 +18,46 @@ import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 
 object EffectSendDiscordWebhook: Effect<NoCompileData>("send_discord_webhook") {
+    override val description = "Sends a message to a Discord channel via a webhook URL."
+    override val categories = setOf("chat")
+
     override val arguments: ConfigArguments = arguments {
-        require("webhook_url", "You must specify the webhook URL!")
-        require("text", "You must specify the text to send!")
+        require(
+            "webhook_url",
+            "You must specify the webhook URL!",
+            description = "The Discord webhook URL to send the message to.",
+            type = ArgType.STRING,
+            example = "https://discord.com/api/webhooks/123456789012345678/abcDEF-token"
+        )
+        require(
+            "text",
+            "You must specify the text to send!",
+            description = "The message content to send to the webhook.",
+            type = ArgType.STRING,
+            example = "%player_name% just found a legendary item!"
+        )
+        optional(
+            "username",
+            description = "The display name to use for the webhook message.",
+            type = ArgType.STRING
+        )
+        optional(
+            "avatar_url",
+            description = "A URL to an image to use as the webhook avatar.",
+            type = ArgType.STRING,
+            example = "https://example.com/avatar.png"
+        )
+        optional(
+            "tts",
+            description = "Whether to send the message as text-to-speech.",
+            type = ArgType.BOOLEAN,
+            default = "false"
+        )
+        optional(
+            "embeds",
+            description = "A list of embed objects to include in the webhook message.",
+            type = ArgType.ANY
+        )
     }
 
     override val isPermanent = false

@@ -1,11 +1,13 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.ConfigWarning
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.ViolationContext
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.get
@@ -17,6 +19,31 @@ import org.bukkit.inventory.ItemStack
 import java.util.UUID
 
 object EffectSetUnbreakable : Effect<NoCompileData>("set_unbreakable") {
+    override val description = "Makes an item in a specific slot unbreakable while the effect is active."
+    override val categories = setOf("inventory")
+
+    override val arguments = arguments {
+        optional(
+            "value",
+            description = "Whether to make the item unbreakable (true) or breakable (false).",
+            type = ArgType.BOOLEAN,
+            default = "true"
+        )
+        optional(
+            "slot",
+            description = "The equipment slot to target: holder, mainhand, offhand, helmet, chestplate, leggings, or boots.",
+            type = ArgType.STRING,
+            default = "holder",
+            example = "mainhand"
+        )
+        optional(
+            "persist_on_disable",
+            description = "Whether the unbreakable state should remain when the effect is removed.",
+            type = ArgType.BOOLEAN,
+            default = "true"
+        )
+    }
+
     private val VALID_SLOTS = setOf("holder", "mainhand", "offhand", "helmet", "chestplate", "leggings", "boots")
 
     private data class EnabledState(val slot: String, val persistOnDisable: Boolean)

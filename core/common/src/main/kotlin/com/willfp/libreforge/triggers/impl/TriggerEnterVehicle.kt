@@ -10,11 +10,20 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.vehicle.VehicleEnterEvent
 
 object TriggerEnterVehicle : Trigger("enter_vehicle") {
+    override val description = "Fires when the player enters a vehicle."
+
+    override val categories = setOf("interaction", "movement")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.VICTIM to "The vehicle, if it is a living entity.",
+        TriggerParameter.LOCATION to "The player's location."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
-        TriggerParameter.LOCATION,
-        TriggerParameter.EVENT
+        TriggerParameter.EVENT,
+        TriggerParameter.LOCATION
     )
 
     @EventHandler(ignoreCancelled = true)

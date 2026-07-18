@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -9,12 +10,21 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
 object EffectGiveFood : Effect<NoCompileData>("give_food") {
+    override val description = "Restores a set amount of food level to the player, capped at 20."
+    override val categories = setOf("player")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER
     )
 
     override val arguments = arguments {
-        require("amount", "You must specify the amount of food to give!")
+        require(
+            "amount",
+            "You must specify the amount of food to give!",
+            description = "The number of food points to add to the player's hunger bar. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            example = "%level%"
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {

@@ -8,11 +8,22 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.enchantment.EnchantItemEvent
 
 object TriggerEnchantItem : Trigger("enchant_item") {
+    override val description = "Fires when the player enchants an item at an enchanting table."
+
+    override val categories = setOf("inventory")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The player's location.",
+        TriggerParameter.ITEM to "The item that was enchanted.",
+        TriggerParameter.VALUE to "The XP level cost of the enchantment."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.LOCATION,
         TriggerParameter.EVENT,
-        TriggerParameter.ITEM
+        TriggerParameter.LOCATION,
+        TriggerParameter.ITEM,
+        TriggerParameter.VALUE
     )
 
     @EventHandler(ignoreCancelled = true)

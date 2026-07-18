@@ -10,6 +10,17 @@ import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 
 object TriggerExitClaim : Trigger("exit_claim") {
+    override val description = "Fires when the player exits a Lands claim area."
+
+    override val categories = setOf("movement")
+
+    override val additionalInfo = listOf("Requires Lands to be installed.")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The player's location.",
+        TriggerParameter.TEXT to "The name of the land area exited."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT,

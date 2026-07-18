@@ -6,14 +6,24 @@ import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.ViolationContext
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.get
 import org.bukkit.entity.Player
 
 object ConditionHasEdPrisonRobot : Condition<String?>("has_edprison_robot") {
+    override val description = "Passes when the player owns the specified EDPrisonCore robot type."
+    override val categories = setOf("player", "economy")
+    override val additionalInfo = listOf("Requires the EDPrisonCore plugin.")
+
     override val arguments = arguments {
-        require("robot", "You must specify the robot type!")
+        require(
+            "robot",
+            "You must specify the robot type!",
+            description = "The EDPrisonCore robot type the player must own.",
+            type = ArgType.STRING
+        )
     }
 
     override fun isMet(

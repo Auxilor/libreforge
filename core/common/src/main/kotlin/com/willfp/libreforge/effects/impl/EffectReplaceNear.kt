@@ -5,6 +5,7 @@ import com.willfp.eco.core.blocks.matches
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.eco.core.items.Items
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -20,14 +21,68 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.block.BlockBreakEvent
 
 object EffectReplaceNear : Effect<NoCompileData>("replace_near") {
+    override val description = "Replaces blocks of one type with another within a specified radius around the trigger location."
+    override val categories = setOf("world")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER
     )
 
     override val arguments = arguments {
-        require("radius", "You must specify the radius!")
-        require("radius_y", "You must specify the y radius!")
-        require("replace_to", "You must specify the block to replace to!")
+        require(
+            "radius",
+            "You must specify the radius!",
+            description = "The horizontal radius to search for blocks. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            example = "3 + %level% * 0.3"
+        )
+        require(
+            "radius_y",
+            "You must specify the y radius!",
+            description = "The vertical radius to search for blocks. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            example = "2 + %level% * 0.2"
+        )
+        require(
+            "replace_to",
+            "You must specify the block to replace to!",
+            description = "The block type to replace matching blocks with.",
+            type = ArgType.BLOCK
+        )
+        optional(
+            "whitelist",
+            description = "A list of block types that are allowed to be replaced. If omitted, all non-air blocks are eligible.",
+            type = ArgType.BLOCK_LIST
+        )
+        optional(
+            "blacklist",
+            description = "A list of block types that should never be replaced.",
+            type = ArgType.BLOCK_LIST
+        )
+        optional(
+            "duration",
+            description = "How long (in ticks) before the replaced blocks revert to their original type. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            example = "20 * %level%"
+        )
+        optional(
+            "disable_on_sneak",
+            description = "Whether to skip replacement when the player is sneaking.",
+            type = ArgType.BOOLEAN,
+            default = "false"
+        )
+        optional(
+            "exposed_only",
+            description = "Whether to only replace blocks that have air directly above them.",
+            type = ArgType.BOOLEAN,
+            default = "false"
+        )
+        optional(
+            "source_only",
+            description = "Whether to only replace source liquid blocks (level 0).",
+            type = ArgType.BOOLEAN,
+            default = "false"
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {

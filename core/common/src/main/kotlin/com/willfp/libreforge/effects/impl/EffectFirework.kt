@@ -1,7 +1,9 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.ViolationContext
+import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -10,6 +12,24 @@ import org.bukkit.FireworkEffect
 import org.bukkit.entity.Firework
 
 object EffectFirework : Effect<List<FireworkEffect>>("firework") {
+    override val description = "Launches a firework at the trigger location with configurable colors, shape, and effects."
+    override val categories = setOf("visual")
+
+    override val arguments = arguments {
+        optional(
+            "power",
+            description = "The flight duration of the firework (0–255). Defaults to 0.",
+            type = ArgType.INT,
+            default = "0"
+        )
+        optional(
+            "effects",
+            description = "A list of firework effect subsections, each with type, colors, fade-colors, trail, and flicker.",
+            type = ArgType.DYNAMIC,
+            schema = FireworkEffectSpec::class
+        )
+    }
+
     override val parameters = setOf(
         TriggerParameter.LOCATION
     )

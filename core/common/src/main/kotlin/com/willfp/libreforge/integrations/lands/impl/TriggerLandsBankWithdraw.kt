@@ -9,6 +9,18 @@ import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 
 object TriggerLandsBankWithdraw : Trigger("lands_bank_withdraw") {
+    override val description = "Fires when the player withdraws money from a Lands bank."
+
+    override val categories = setOf("economy")
+
+    override val additionalInfo = listOf("Requires Lands to be installed.")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The player's location.",
+        TriggerParameter.VALUE to "The amount withdrawn.",
+        TriggerParameter.ALT_VALUE to "The new bank balance after the withdrawal."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.EVENT,

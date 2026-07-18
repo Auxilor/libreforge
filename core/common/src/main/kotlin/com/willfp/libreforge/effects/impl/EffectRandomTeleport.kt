@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.impl
 import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.util.NumberUtils
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.getIntFromExpression
@@ -12,12 +13,28 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
 object EffectRandomTeleport : Effect<NoCompileData>("random_teleport") {
+    override val description = "Teleports the player to a random location within a radius, landing on the highest safe block."
+    override val categories = setOf("movement")
+
     override val parameters = setOf(
         TriggerParameter.PLAYER
     )
 
     override val arguments = arguments {
-        require("radius", "You must specify the radius!")
+        require(
+            "radius",
+            "You must specify the radius!",
+            description = "The maximum distance from the player's current position to teleport. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            example = "10 + %level%"
+        )
+        optional(
+            "min_radius",
+            description = "The minimum distance from the player's current position to teleport. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            default = "0",
+            example = "%level% * 0.1"
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {

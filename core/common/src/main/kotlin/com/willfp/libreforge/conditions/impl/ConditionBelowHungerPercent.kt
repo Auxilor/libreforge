@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.get
@@ -16,8 +17,17 @@ import org.bukkit.event.entity.FoodLevelChangeEvent
 
 
 object ConditionBelowHungerPercent : Condition<NoCompileData>("below_hunger_percent") {
+    override val description = "Passes when the player's hunger level is at or below the given percentage."
+    override val categories = setOf("player")
+
     override val arguments = arguments {
-        require("percent", "You must specify the hunger percentage!")
+        require(
+            "percent",
+            "You must specify the hunger percentage!",
+            description = "The maximum hunger percentage (0–100).",
+            type = ArgType.EXPRESSION,
+            example = "25 + %level% * 0.5"
+        )
     }
 
     override fun isMet(

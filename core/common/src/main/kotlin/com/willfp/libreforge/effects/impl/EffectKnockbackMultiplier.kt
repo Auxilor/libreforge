@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.templates.AttributeEffect
 import org.bukkit.attribute.Attribute
@@ -13,8 +14,17 @@ object EffectKnockbackMultiplier : AttributeEffect(
     Attribute.ATTACK_KNOCKBACK,
     AttributeModifier.Operation.MULTIPLY_SCALAR_1
 ) {
+    override val description = "Multiplies the knockback dealt by the player when attacking."
+    override val categories = setOf("combat", "player", "attribute")
+
     override val arguments = arguments {
-        require("multiplier", "You must specify the knockback multiplier!")
+        require(
+            "multiplier",
+            "You must specify the knockback multiplier!",
+            description = "The knockback multiplier to apply. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            example = "1 + %level% * 0.1"
+        )
     }
 
     override fun getValue(config: Config, entity: LivingEntity) =

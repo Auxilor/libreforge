@@ -1,6 +1,7 @@
 package com.willfp.libreforge.conditions.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
@@ -10,8 +11,16 @@ import com.willfp.libreforge.get
 import org.bukkit.entity.Player
 
 object ConditionStandingOnBlock : Condition<NoCompileData>("standing_on_block") {
+    override val description = "Passes when the player is standing on or inside the specified block type."
+    override val categories = setOf("world")
+
     override val arguments = arguments {
-        require("block", "You must specify the type of block!")
+        require(
+            "block",
+            "You must specify the type of block!",
+            description = "The block type (material name) the player must be standing on.",
+            type = ArgType.BLOCK
+        )
     }
 
     override fun isMet(

@@ -9,6 +9,15 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityBreakDoorEvent
 
 object TriggerEntityBreakDoor : Trigger("entity_break_door") {
+    override val description = "Fires when an entity breaks a door."
+
+    override val categories = setOf("entity")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.VICTIM to "The entity that broke the door.",
+        TriggerParameter.LOCATION to "The entity's location."
+    )
+
     override val parameters = setOf(
         TriggerParameter.VICTIM,
         TriggerParameter.LOCATION

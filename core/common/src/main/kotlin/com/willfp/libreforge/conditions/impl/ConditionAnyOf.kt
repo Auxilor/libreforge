@@ -4,14 +4,23 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.ViolationContext
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.conditions.ConditionList
 import com.willfp.libreforge.conditions.Conditions
 
 object ConditionAnyOf : Condition<ConditionList>("any_of") {
+    override val description = "Passes when at least one of the listed conditions is met."
+    override val categories = setOf("meta")
+
     override val arguments = arguments {
-        require("conditions", "You must specify the conditions that can be met!")
+        require(
+            "conditions",
+            "You must specify the conditions that can be met!",
+            description = "List of conditions — passes when any one is met.",
+            type = ArgType.ANY
+        )
     }
 
     override fun isMet(

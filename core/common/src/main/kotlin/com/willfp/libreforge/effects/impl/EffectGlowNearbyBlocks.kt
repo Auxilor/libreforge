@@ -4,6 +4,7 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.util.TeamUtils
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -27,14 +28,34 @@ import org.bukkit.scoreboard.Team
 import java.util.UUID
 
 object EffectGlowNearbyBlocks : Effect<NoCompileData>("glow_nearby_blocks") {
+    override val description = "Makes nearby blocks glow with configurable colors for a set duration."
+    override val categories = setOf("visual", "world")
+
     override val parameters = setOf(
         TriggerParameter.LOCATION
     )
 
     override val arguments = arguments {
-        require("radius", "You must specify the radius!")
-        require("duration", "You must specify the duration to glow for!")
-        require("colors", "You must specify the block colors!")
+        require(
+            "radius",
+            "You must specify the radius!",
+            description = "The radius around the trigger location to search for matching blocks. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            example = "5 + %level% * 0.5"
+        )
+        require(
+            "duration",
+            "You must specify the duration to glow for!",
+            description = "How long in ticks the blocks should glow. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            example = "20 * %level%"
+        )
+        require(
+            "colors",
+            "You must specify the block colors!",
+            description = "A subsection mapping block material names to ChatColor names (e.g. DIAMOND_ORE: AQUA).",
+            type = ArgType.ANY
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {

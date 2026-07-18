@@ -25,3 +25,5 @@ gradle-app.setting
 # Claude
 /.claude/settings.local.json
 .worktrees
+
+.codegraph

@@ -25,6 +25,7 @@ import com.willfp.libreforge.conditions.impl.ConditionCanAffordPrice
 import com.willfp.libreforge.conditions.impl.ConditionGlobalPointsEqual
 import com.willfp.libreforge.conditions.impl.ConditionHasCompletedAdvancement
 import com.willfp.libreforge.conditions.impl.ConditionHasEnchant
+import com.willfp.libreforge.conditions.impl.ConditionHasInventorySpace
 import com.willfp.libreforge.conditions.impl.ConditionHasItem
 import com.willfp.libreforge.conditions.impl.ConditionHasItemData
 import com.willfp.libreforge.conditions.impl.ConditionHasPermission
@@ -59,6 +60,7 @@ import com.willfp.libreforge.conditions.impl.ConditionItemPointsAbove
 import com.willfp.libreforge.conditions.impl.ConditionItemPointsBelow
 import com.willfp.libreforge.conditions.impl.ConditionItemPointsEqual
 import com.willfp.libreforge.conditions.impl.ConditionLightLevelBelow
+import com.willfp.libreforge.conditions.impl.ConditionNearBlock
 import com.willfp.libreforge.conditions.impl.ConditionNearEntity
 import com.willfp.libreforge.conditions.impl.ConditionOnFire
 import com.willfp.libreforge.conditions.impl.ConditionOnGround
@@ -166,6 +168,7 @@ object Conditions : Registry<Condition<*>>() {
         register(ConditionBelowXPLevel)
         register(ConditionBelowY)
         register(ConditionCanAffordPrice)
+        register(ConditionHasInventorySpace)
         register(ConditionHasItem)
         register(ConditionHasPermission)
         register(ConditionHasPotionEffect)
@@ -184,6 +187,7 @@ object Conditions : Registry<Condition<*>>() {
         register(ConditionIsSprinting)
         register(ConditionIsStorm)
         register(ConditionIsSwimming)
+        register(ConditionNearBlock)
         register(ConditionNearEntity)
         register(ConditionOnFire)
         register(ConditionPlaceholderContains)

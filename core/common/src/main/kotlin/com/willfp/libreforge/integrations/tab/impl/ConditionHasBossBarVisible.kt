@@ -10,6 +10,10 @@ import me.neznamy.tab.api.TabAPI
 import org.bukkit.entity.Player
 
 object ConditionHasBossBarVisible: Condition<NoCompileData>("has_boss_bar_visible") {
+    override val description = "Passes when the player has the TAB boss bar visible."
+    override val categories = setOf("player")
+    override val additionalInfo = listOf("Requires the TAB plugin.")
+
     override fun isMet(
         dispatcher: Dispatcher<*>,
         config: Config,

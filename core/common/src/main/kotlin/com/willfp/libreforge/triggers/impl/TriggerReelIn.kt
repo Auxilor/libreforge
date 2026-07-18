@@ -9,10 +9,19 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerFishEvent
 
 object TriggerReelIn : Trigger("reel_in") {
+    override val description = "Fires when the player reels in their fishing rod without a catch."
+
+    override val categories = setOf("fishing")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.LOCATION to "The location of the fishing hook.",
+        TriggerParameter.ITEM to "The item on the hook, if any."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.LOCATION,
         TriggerParameter.EVENT,
+        TriggerParameter.LOCATION,
         TriggerParameter.ITEM
     )
 

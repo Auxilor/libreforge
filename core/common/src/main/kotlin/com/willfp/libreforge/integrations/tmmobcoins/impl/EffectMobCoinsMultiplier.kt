@@ -6,6 +6,9 @@ import net.devtm.tmmobcoins.API.MobCoinReceiveEvent
 import org.bukkit.event.EventHandler
 
 object EffectMobCoinsMultiplier : MultiplierEffect("mob_coins_multiplier") {
+    override val description = "Multiplies TMMobCoins earned from mob kills while the holder is active."
+    override val categories = setOf("economy")
+
     @EventHandler(ignoreCancelled = true)
     fun handle(event: MobCoinReceiveEvent) {
         val player = event.player

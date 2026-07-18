@@ -12,13 +12,25 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.ProjectileHitEvent
 
 object TriggerProjectileHit : Trigger("projectile_hit") {
+    override val description = "Fires when the player's projectile hits a block or entity."
+
+    override val categories = setOf("combat")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.VICTIM to "The entity hit by the projectile, if any.",
+        TriggerParameter.PROJECTILE to "The projectile that hit.",
+        TriggerParameter.LOCATION to "The projectile's location at impact.",
+        TriggerParameter.BLOCK to "The block hit by the projectile, if any.",
+        TriggerParameter.VELOCITY to "The velocity of the projectile at impact."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
-        TriggerParameter.PROJECTILE,
-        TriggerParameter.LOCATION,
         TriggerParameter.BLOCK,
         TriggerParameter.EVENT,
+        TriggerParameter.LOCATION,
+        TriggerParameter.PROJECTILE,
         TriggerParameter.VELOCITY
     )
 

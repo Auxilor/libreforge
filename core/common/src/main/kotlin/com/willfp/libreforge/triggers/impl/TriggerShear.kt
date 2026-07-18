@@ -15,13 +15,26 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerShearEntityEvent
 
 object TriggerShear : Trigger("shear") {
+    override val description = "Fires when the player shears an entity or a block."
+
+    override val categories = setOf("interaction")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.VICTIM to "The entity that was sheared, if shearing an entity.",
+        TriggerParameter.BLOCK to "The block that was sheared, if shearing a block.",
+        TriggerParameter.ITEM to "The shears item used.",
+        TriggerParameter.LOCATION to "The location of the entity or block that was sheared.",
+        TriggerParameter.VALUE to "The number of items dropped."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
         TriggerParameter.BLOCK,
-        TriggerParameter.ITEM,
         TriggerParameter.EVENT,
-        TriggerParameter.LOCATION
+        TriggerParameter.LOCATION,
+        TriggerParameter.ITEM,
+        TriggerParameter.VALUE
     )
 
     @EventHandler(ignoreCancelled = true)

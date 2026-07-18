@@ -4,14 +4,30 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.get
 import org.bukkit.entity.LivingEntity
 
 object ConditionHasPotionEffect : Condition<NoCompileData>("has_potion_effect") {
+    override val description = "Passes when the entity has the specified potion effect active."
+    override val categories = setOf("player")
+
     override val arguments = arguments {
-        require(listOf("effect", "effects"), "You must specify the potion effect!")
+        require(
+            listOf("effect", "effects"),
+            "You must specify the potion effect!",
+            description = "The potion effect(s) to check for.",
+            type = ArgType.POTION_EFFECT_LIST,
+            example = listOf("speed", "strength")
+        )
+        optional(
+            "level",
+            description = "The minimum amplifier level required (1-based).",
+            type = ArgType.INT,
+            default = "1"
+        )
     }
 
     override fun isMet(

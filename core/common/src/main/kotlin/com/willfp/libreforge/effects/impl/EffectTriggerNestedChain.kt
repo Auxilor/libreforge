@@ -15,6 +15,9 @@ as an internal component. It's used to make nested chains work.
  */
 
 object EffectTriggerNestedChain : Effect<RichChain?>("trigger_nested_chain") {
+    override val description = "Runs a nested effect chain inline as part of the current trigger dispatch. Used internally by the chain system."
+    override val categories = setOf("meta")
+
     override val isPermanent = false
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: RichChain?): Boolean {

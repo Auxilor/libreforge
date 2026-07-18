@@ -9,9 +9,19 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 
 object TriggerSellItem : Trigger("sell_item") {
+    override val description = "Fires when the player sells an item to a shop."
+
+    override val categories = setOf("economy")
+
+    override val parameterDescriptions = mapOf(
+        TriggerParameter.ITEM to "The item that was sold.",
+        TriggerParameter.VALUE to "The total sell value of the items."
+    )
+
     override val parameters = setOf(
         TriggerParameter.PLAYER,
-        TriggerParameter.ITEM
+        TriggerParameter.ITEM,
+        TriggerParameter.VALUE
     )
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)

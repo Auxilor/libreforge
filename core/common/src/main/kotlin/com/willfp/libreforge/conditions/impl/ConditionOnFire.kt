@@ -14,6 +14,9 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.entity.EntityDamageEvent
 
 object ConditionOnFire : Condition<NoCompileData>("on_fire") {
+    override val description = "Passes when the entity is currently on fire."
+    override val categories = setOf("player", "combat")
+
     override fun isMet(
         dispatcher: Dispatcher<*>,
         config: Config,
