@@ -44,7 +44,9 @@ object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
     }
 
     private val players = listMap<UUID, UUID>()
-    private var allowTamedMobKills: Boolean = false
+
+    internal var allowTamedMobKills: Boolean = false
+        private set
 
     override fun onEnable(
         dispatcher: Dispatcher<*>,
