@@ -11,9 +11,8 @@ import com.willfp.libreforge.levels.levels
 import com.willfp.libreforge.toPlaceholderContext
 import com.willfp.libreforge.triggers.TriggerData
 
-@Deprecated("Use give_item_level_xp instead")
-object EffectLevelItem : Effect<NoCompileData>("level_item") {
-    override val description = "Grants XP to the triggered item's level system."
+object EffectGiveItemLevel : Effect<NoCompileData>("give_item_level") {
+    override val description = "Grants levels to the triggered item's level system, bypassing XP."
     override val categories = setOf("inventory")
 
     override val isPermanent = false
@@ -24,16 +23,14 @@ object EffectLevelItem : Effect<NoCompileData>("level_item") {
         }
         describe(
             "id",
-            description = "The ID of the level type to grant XP for.",
-            type = ArgType.STRING,
-            example = "mining"
+            description = "The ID of the level type to grant levels for.",
+            type = ArgType.STRING
         )
         require(
-            "xp",
-            "You must specify the amount of xp to give!",
-            description = "The amount of XP to grant to the item. Supports expressions.",
-            type = ArgType.EXPRESSION,
-            example = "%level% * 10"
+            "levels",
+            "You must specify the amount of levels to give!",
+            description = "The amount of levels to grant to the item. Supports expressions. Negative values remove levels.",
+            type = ArgType.EXPRESSION
         )
     }
 
@@ -41,8 +38,8 @@ object EffectLevelItem : Effect<NoCompileData>("level_item") {
         val item = data.foundItem ?: return false
         val level = LevelTypes[config.getString("id")] ?: return false
 
-        val xp = config.getDoubleFromExpression("xp", data)
-        item.levels.gainXP(level, xp, config.toPlaceholderContext(data))
+        val levels = config.getDoubleFromExpression("levels", data).toInt()
+        item.levels.gainLevels(level, levels, config.toPlaceholderContext(data))
 
         return true
     }
