@@ -1,14 +1,11 @@
 package com.willfp.libreforge.integrations.custom_blocks.itemsadder.impl
 
-import com.willfp.eco.core.drops.DropQueue
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
+import com.willfp.libreforge.drops.LibreforgeDrops
 import com.willfp.libreforge.filterNotEmpty
 import com.willfp.libreforge.plugin
-import com.willfp.libreforge.toDispatcher
-import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.event.DropCause
 import com.willfp.libreforge.triggers.event.DropContext
-import com.willfp.libreforge.triggers.event.EditableDropEvent
 import com.willfp.libreforge.triggers.impl.TriggerBlockItemDrop
 import dev.lone.itemsadder.api.Events.CustomBlockBreakEvent
 import org.bukkit.Bukkit
@@ -67,49 +64,24 @@ object TriggerItemsAdderBlockItemDrop : Listener {
         if (items.isEmpty()) return
 
         val player = Bukkit.getPlayer(playerUuid) ?: return
-        val block = loc.block
 
-        val editableEvent = EditableDropEvent(
-            initialDrops = items,
-            cause = DropCause.BLOCK,
-            context = DropContext(
-                player = player,
-                block = block,
-                tool = player.inventory.itemInMainHand
-            ),
-            dropLocation = loc
-        )
-
-        TriggerBlockItemDrop.dispatch(
-            player.toDispatcher(),
-            TriggerData(
-                player = player,
-                block = block,
-                location = loc,
-                event = editableEvent,
-                item = null,
-                value = items.sumOf { it.amount.toDouble() }
-            )
-        )
-
-        val dropResults = editableEvent.items
-
-        val world = loc.world ?: return
+        // The pipeline delivers through a DropQueue, which drops in the world
+        // when the player has no telekinesis - guard so we don't re-collect our
+        // own drops in the ItemSpawnEvent handler above.
         reDropping.set(true)
         try {
-            for (item in editableEvent.drops) {
-                world.dropItemNaturally(loc, item)
-            }
+            LibreforgeDrops.dropAll(
+                items,
+                DropCause.BLOCK,
+                DropContext(
+                    player = player,
+                    block = loc.block,
+                    tool = player.inventory.itemInMainHand
+                ),
+                loc
+            )
         } finally {
             reDropping.set(false)
-        }
-
-        val totalXP = dropResults.sumOf { it.xp }
-        if (totalXP > 0) {
-            DropQueue(player)
-                .setLocation(loc)
-                .addXP(totalXP)
-                .push()
         }
     }
 }

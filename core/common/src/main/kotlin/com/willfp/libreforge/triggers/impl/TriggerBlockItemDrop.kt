@@ -2,6 +2,7 @@ package com.willfp.libreforge.triggers.impl
 
 import com.willfp.eco.core.drops.DropQueue
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
+import com.willfp.libreforge.drops.LibreforgeDrops
 import com.willfp.libreforge.filterNotEmpty
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
@@ -63,17 +64,24 @@ object TriggerBlockItemDrop : Trigger("block_item_drop") {
         val brokenBlock = BrokenBlock(block, event.blockState.type, event.blockState.blockData)
 
         val itemEntityToStack = event.items.associateWith { it.itemStack }
-        val originalDrops = itemEntityToStack.values.toList().filterNotEmpty()
+
+        val context = DropContext(
+            player = player,
+            block = brokenBlock,
+            blockState = event.blockState,
+            tool = player.inventory.itemInMainHand
+        )
+
+        // Contributed drops join the same event as the natural ones, so they're
+        // modified and cancellable like any other drop and the trigger still
+        // only fires once for the break.
+        val contributed = LibreforgeDrops.contributions(DropCause.BLOCK, context, block.location)
+        val originalDrops = itemEntityToStack.values.toList().filterNotEmpty() + contributed.items
 
         val editableEvent = EditableDropEvent(
             initialDrops = originalDrops,
             cause = DropCause.BLOCK,
-            context = DropContext(
-                player = player,
-                block = brokenBlock,
-                blockState = event.blockState,
-                tool = player.inventory.itemInMainHand
-            ),
+            context = context,
             dropLocation = block.location,
             cancellable = event
         )
@@ -118,7 +126,7 @@ object TriggerBlockItemDrop : Trigger("block_item_drop") {
                 .push()
         }
 
-        val totalXP = dropResults.sumOf { it.xp }
+        val totalXP = dropResults.sumOf { it.xp } + contributed.xp
         if (totalXP > 0) {
             DropQueue(player)
                 .setLocation(block.location)

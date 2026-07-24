@@ -1,5 +1,6 @@
 package com.willfp.libreforge.triggers.impl
 
+import com.willfp.libreforge.drops.LibreforgeDrops
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
@@ -39,13 +40,18 @@ object TriggerCatchFish : Trigger("catch_fish") {
 
         val caughtStack = caught.itemStack
 
+        val context = DropContext(
+            player = player,
+            tool = player.inventory.itemInMainHand
+        )
+
+        val contributed = LibreforgeDrops.contributions(DropCause.FISHING, context, event.hook.location)
+        val initialDrops = listOf(caughtStack) + contributed.items
+
         val editableEvent = EditableDropEvent(
-            initialDrops = listOf(caughtStack),
+            initialDrops = initialDrops,
             cause = DropCause.FISHING,
-            context = DropContext(
-                player = player,
-                tool = player.inventory.itemInMainHand
-            ),
+            context = context,
             dropLocation = event.hook.location,
             cancellable = event
         )
@@ -73,6 +79,6 @@ object TriggerCatchFish : Trigger("catch_fish") {
             }
         }
 
-        event.expToDrop += dropResults.sumOf { it.xp }
+        event.expToDrop += dropResults.sumOf { it.xp } + contributed.xp
     }
 }
