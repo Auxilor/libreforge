@@ -41,7 +41,16 @@ object EffectParticleAnimation : Effect<ParticleAnimationBlock<*>?>("particle_an
             "animation",
             description = "The animation pattern to use (e.g. circle, helix).",
             type = ArgType.STRING,
-            choices = listOf("circle", "double_helix", "ground_spiral", "helix", "trace", "twirl")
+            choices = listOf(
+                "circle",
+                "double_helix",
+                "ground_spiral",
+                "helix",
+                "trace",
+                "twirl",
+                "wing_tips",
+                "projectile_trail"
+            )
         )
 
         inherit("particle_args") { ParticleAnimations[it.getString("animation")] }
@@ -50,6 +59,13 @@ object EffectParticleAnimation : Effect<ParticleAnimationBlock<*>?>("particle_an
             description = "The number of particles to spawn per animation point per tick. Supports expressions.",
             type = ArgType.EXPRESSION,
             default = "1"
+        )
+        optional(
+            "entity",
+            description = "The entity to anchor the animation to.",
+            type = ArgType.STRING,
+            default = "player",
+            choices = listOf("player", "victim", "projectile")
         )
         optional(
             "use-eye-location",
