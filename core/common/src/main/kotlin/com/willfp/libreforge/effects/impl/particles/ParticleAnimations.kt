@@ -27,7 +27,7 @@ object ParticleAnimations : Registry<ParticleAnimation<*>>() {
             return null
         }
 
-        return makeBlock(animation, config.getSubsection("particle-args"), context.with("shape args"))
+        return makeBlock(animation, config.getSubsection("particle_args"), context.with("shape args"))
     }
 
     private fun <T> makeBlock(
