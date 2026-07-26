@@ -1,7 +1,6 @@
 package com.willfp.libreforge.effects
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.map.defaultMap
 import com.willfp.libreforge.Compilable
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.ProvidedHolder
@@ -20,9 +19,6 @@ import java.util.UUID
 abstract class Effect<T>(
     final override val id: String
 ) : Compilable<T>(), Listener {
-    // Maps Dispatcher UUIDs to the effect count.
-    private val effectCounter = defaultMap<UUID, Int>(0)
-
     // The identifier factory.
     private val identifierFactory = IdentifierFactory(UUID.nameUUIDFromBytes(id.toByteArray()))
 
@@ -64,6 +60,10 @@ abstract class Effect<T>(
     fun supportsTrigger(trigger: Trigger, mutators: MutatorList) =
         Triggers.withParameters(parameters)(trigger, mutators)
 
+    private fun discriminator(holder: ProvidedHolder, blockIndex: Int, elementIndex: Int, occurrence: Int): String {
+        return "${holder.holder.id}|$blockIndex|$elementIndex|$occurrence"
+    }
+
     /**
      * Enable a permanent effect for a [dispatcher].
      */
@@ -71,19 +71,20 @@ abstract class Effect<T>(
         dispatcher: Dispatcher<*>,
         holder: ProvidedHolder,
         config: ChainElement<T>,
+        blockIndex: Int = 0,
+        elementIndex: Int = 0,
+        occurrence: Int = 0,
         isReload: Boolean = false
     ) {
         if (isReload && !shouldReload) {
             return
         }
 
-        // Increment first to fix reload bug where effects are applied twice.
-        effectCounter[dispatcher.uuid]++
-        val count = effectCounter[dispatcher.uuid]
-
         val withHolder = config.config.applyHolder(holder, dispatcher)
 
-        onEnable(dispatcher, withHolder, identifierFactory.makeIdentifiers(count), holder, config.compileData)
+        val identifiers = identifierFactory.makeIdentifiers(discriminator(holder, blockIndex, elementIndex, occurrence))
+
+        onEnable(dispatcher, withHolder, identifiers, holder, config.compileData)
     }
 
     /**
@@ -105,19 +106,18 @@ abstract class Effect<T>(
     fun disable(
         dispatcher: Dispatcher<*>,
         holder: ProvidedHolder,
+        blockIndex: Int = 0,
+        elementIndex: Int = 0,
+        occurrence: Int = 0,
         isReload: Boolean = false
     ) {
         if (isReload && !shouldReload) {
             return
         }
 
-        if (effectCounter[dispatcher.uuid] == 0) {
-            return
-        }
+        val identifiers = identifierFactory.makeIdentifiers(discriminator(holder, blockIndex, elementIndex, occurrence))
 
-        val count = effectCounter[dispatcher.uuid]--
-
-        onDisable(dispatcher, identifierFactory.makeIdentifiers(count), holder)
+        onDisable(dispatcher, identifiers, holder)
     }
 
     /**

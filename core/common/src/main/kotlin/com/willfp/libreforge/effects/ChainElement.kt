@@ -51,25 +51,31 @@ class ChainElement<T> internal constructor(
     fun enable(
         dispatcher: Dispatcher<*>,
         holder: ProvidedHolder,
+        blockIndex: Int = 0,
+        elementIndex: Int = 0,
+        occurrence: Int = 0,
         isReload: Boolean = false
     ) {
         if (!isReload) {
             Bukkit.getPluginManager().callEvent(EffectEnableEvent(dispatcher, effect, holder))
         }
 
-        effect.enable(dispatcher, holder, this, isReload = isReload)
+        effect.enable(dispatcher, holder, this, blockIndex, elementIndex, occurrence, isReload = isReload)
     }
 
     fun disable(
         dispatcher: Dispatcher<*>,
         holder: ProvidedHolder,
+        blockIndex: Int = 0,
+        elementIndex: Int = 0,
+        occurrence: Int = 0,
         isReload: Boolean = false
     ) {
         if (!isReload) {
             Bukkit.getPluginManager().callEvent(EffectDisableEvent(dispatcher, effect, holder))
         }
 
-        effect.disable(dispatcher, holder, isReload = isReload)
+        effect.disable(dispatcher, holder, blockIndex, elementIndex, occurrence, isReload = isReload)
     }
 
     override fun doTrigger(trigger: DispatchedTrigger) =
