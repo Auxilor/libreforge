@@ -1,10 +1,10 @@
 package com.willfp.libreforge.effects.impl
 
-import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
+import com.willfp.libreforge.dealDamage
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
@@ -46,26 +46,14 @@ object EffectDamageVictim : Effect<NoCompileData>("damage_victim") {
         val player = data.player
 
         val damage = config.getDoubleFromExpression("damage", data)
+        val useSource = config.getBool("use_source")
 
-        if (config.getBool("true_damage")) {
-            if (damage >= victim.health) {
-                victim.health = 0.0
-                if (Prerequisite.HAS_PAPER.isMet) {
-                    victim.killer = player
-                }
-            } else {
-                victim.health -= damage
-            }
-        } else {
-            if (config.getBool("use_source")) {
-                if (player == victim) {
-                    return true
-                }
-                victim.damage(damage, player)
-            } else {
-                victim.damage(damage)
-            }
-        }
+        victim.dealDamage(
+            damage,
+            source = if (useSource) player else null,
+            trueDamage = config.getBool("true_damage"),
+            checkAntigrief = false
+        )
 
         return true
     }
