@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
+import com.willfp.libreforge.dealDamage
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.getIntFromExpression
@@ -42,6 +43,18 @@ object EffectChainLightning : Effect<NoCompileData>("chain_lightning") {
             type = ArgType.EXPRESSION,
             example = "%level% * 1.5"
         )
+        optional(
+            "true_damage",
+            description = "If true, damage bypasses armor and resistance effects.",
+            type = ArgType.BOOLEAN,
+            default = "false"
+        )
+        optional(
+            "use_source",
+            description = "If true, the player is attributed as the damage source.",
+            type = ArgType.BOOLEAN,
+            default = "false"
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
@@ -50,6 +63,8 @@ object EffectChainLightning : Effect<NoCompileData>("chain_lightning") {
         val range = config.getDoubleFromExpression("range", data)
         val damage = config.getDoubleFromExpression("damage", data)
         val player = data.player
+        val trueDamage = config.getBool("true_damage")
+        val source = if (config.getBool("use_source")) player else null
 
         val hit = mutableSetOf<LivingEntity>()
         var current = startVictim
@@ -57,7 +72,7 @@ object EffectChainLightning : Effect<NoCompileData>("chain_lightning") {
         repeat(jumps) {
             hit.add(current)
             current.world.strikeLightningEffect(current.location)
-            current.damage(damage)
+            current.dealDamage(damage, source, trueDamage)
 
             val next = current.getNearbyEntities(range, range, range)
                 .filterIsInstance<LivingEntity>()
