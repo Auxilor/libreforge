@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
+import com.willfp.libreforge.dealDamage
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
@@ -27,13 +28,27 @@ object EffectReflect : Effect<NoCompileData>("reflect") {
             type = ArgType.EXPRESSION,
             example = "0.2 + %level% * 0.02"
         )
+        optional(
+            "true_damage",
+            description = "If true, damage bypasses armor and resistance effects.",
+            type = ArgType.BOOLEAN,
+            default = "false"
+        )
+        optional(
+            "use_source",
+            description = "If true, the player is attributed as the damage source.",
+            type = ArgType.BOOLEAN,
+            default = "false"
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val event = data.event as? EntityDamageByEntityEvent ?: return false
         val attacker = event.damager as? LivingEntity ?: return false
         val reflected = event.finalDamage * config.getDoubleFromExpression("multiplier", data)
-        attacker.damage(reflected)
+        val trueDamage = config.getBool("true_damage")
+        val source = if (config.getBool("use_source")) data.player else null
+        attacker.dealDamage(reflected, source, trueDamage)
         return true
     }
 }
