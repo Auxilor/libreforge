@@ -115,7 +115,8 @@ object EffectDamageNearbyEntities : Effect<Collection<TestableEntity>>("damage_n
                 damage,
                 source = if (useSource) player else null,
                 trueDamage = trueDamage,
-                checkAntigrief = false
+                checkAntigrief = false,
+                allowSelf = damageSelf
             )
         }
 

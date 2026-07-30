@@ -9,12 +9,9 @@ fun LivingEntity.dealDamage(
     amount: Double,
     source: Player? = null,
     trueDamage: Boolean = false,
-    checkAntigrief: Boolean = true
+    checkAntigrief: Boolean = true,
+    allowSelf: Boolean = false
 ): Boolean {
-    if (source != null && source == this) {
-        return false
-    }
-
     if (checkAntigrief && source != null && !AntigriefManager.canInjure(source, this)) {
         return false
     }
@@ -32,11 +29,16 @@ fun LivingEntity.dealDamage(
         return true
     }
 
-    if (source != null) {
-        this.damage(amount, source)
-    } else {
+    if (source == null) {
         this.damage(amount)
+        return true
     }
+
+    if (!allowSelf && source == this) {
+        return false
+    }
+
+    this.damage(amount, source)
 
     return true
 }
