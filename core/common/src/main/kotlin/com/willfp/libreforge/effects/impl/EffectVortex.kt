@@ -5,6 +5,7 @@ import com.willfp.eco.core.entities.Entities
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
+import com.willfp.libreforge.dealDamage
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.getIntFromExpression
@@ -63,6 +64,18 @@ object EffectVortex : Effect<NoCompileData>("vortex") {
             type = ArgType.ENTITY_LIST,
             default = ""
         )
+        optional(
+            "true_damage",
+            description = "If true, damage bypasses armor and resistance effects.",
+            type = ArgType.BOOLEAN,
+            default = "false"
+        )
+        optional(
+            "use_source",
+            description = "If true, the player is attributed as the damage source.",
+            type = ArgType.BOOLEAN,
+            default = "false"
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
@@ -72,6 +85,8 @@ object EffectVortex : Effect<NoCompileData>("vortex") {
         val duration = config.getIntFromExpression("duration", data)
         val damage = config.getDoubleFromExpression("damage", data)
         val pullStrength = config.getOrNull("pull_strength") { getDoubleFromExpression(it, data) } ?: 0.3
+        val trueDamage = config.getBool("true_damage")
+        val source = if (config.getBool("use_source")) player else null
 
         val whitelist = config.getStringsOrNull("whitelist")?.map { Entities.lookup(it) }
         val blacklist = config.getStrings("blacklist").map { Entities.lookup(it) }
@@ -99,7 +114,7 @@ object EffectVortex : Effect<NoCompileData>("vortex") {
                 }
 
             if (tick >= duration) {
-                affected.forEach { it.damage(damage) }
+                affected.forEach { it.dealDamage(damage, source, trueDamage) }
                 task.cancel()
             }
         }.runTaskTimer(0L, 1L)

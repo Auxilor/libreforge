@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
+import com.willfp.libreforge.dealDamage
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.getOrNull
@@ -42,6 +43,18 @@ object EffectSoulRip : Effect<NoCompileData>("soul_rip") {
             default = "1.0",
             example = "0.5 + %level% * 0.02"
         )
+        optional(
+            "true_damage",
+            description = "If true, damage bypasses armor and resistance effects.",
+            type = ArgType.BOOLEAN,
+            default = "false"
+        )
+        optional(
+            "use_source",
+            description = "If true, the player is attributed as the damage source.",
+            type = ArgType.BOOLEAN,
+            default = "false"
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
@@ -50,6 +63,8 @@ object EffectSoulRip : Effect<NoCompileData>("soul_rip") {
         val radius = config.getDoubleFromExpression("radius", data)
         val damage = config.getDoubleFromExpression("damage", data)
         val healMultiplier = config.getOrNull("heal_multiplier") { getDoubleFromExpression(it, data) } ?: 1.0
+        val trueDamage = config.getBool("true_damage")
+        val source = if (config.getBool("use_source")) player else null
 
         val targets = location.world?.getNearbyEntities(location, radius, radius, radius)
             ?.filterIsInstance<LivingEntity>()
@@ -60,7 +75,7 @@ object EffectSoulRip : Effect<NoCompileData>("soul_rip") {
         var totalHeal = 0.0
         for (entity in targets) {
             totalHeal += minOf(damage, entity.health)
-            entity.damage(damage)
+            entity.dealDamage(damage, source, trueDamage)
         }
 
         val maxHealth = player.getAttribute(Attribute.MAX_HEALTH)!!.value
