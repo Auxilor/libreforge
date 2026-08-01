@@ -15,6 +15,10 @@ object TriggerClickBlock : Trigger("click_block") {
 
     override val categories = setOf("interaction")
 
+    override val additionalInfo = listOf(
+        "Fishing rods, bows, crossbows, and tridents fire on both left and right click; all other items fire on right click only."
+    )
+
     override val parameterDescriptions = mapOf(
         TriggerParameter.BLOCK to "The block that was clicked.",
         TriggerParameter.LOCATION to "The location of the clicked block."
@@ -44,7 +48,7 @@ object TriggerClickBlock : Trigger("click_block") {
         }
 
         if (LEFT_CLICK_ITEMS.contains(event.item?.type)) {
-            if (event.action != Action.LEFT_CLICK_BLOCK) {
+            if (event.action != Action.LEFT_CLICK_BLOCK && event.action != Action.RIGHT_CLICK_BLOCK) {
                 return
             }
         } else {
