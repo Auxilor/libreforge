@@ -7,6 +7,7 @@ import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
+import com.willfp.libreforge.dealDamage
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.plugin
@@ -33,11 +34,23 @@ object EffectDamageNearbyEntities : Effect<Collection<TestableEntity>>("damage_n
             type = ArgType.EXPRESSION,
             example = "5 + %level% * 0.5"
         )
-        require(
+        optional(
+            "use_source",
+            description = "If true, the player is attributed as the damage source.",
+            type = ArgType.BOOLEAN,
+            default = "false"
+        )
+        optional(
             "damage_as_player",
-            "You must specify if the player should be marked as the damager!",
-            description = "Whether the player is attributed as the source of damage.",
-            type = ArgType.BOOLEAN
+            description = "Deprecated alias for use_source.",
+            type = ArgType.BOOLEAN,
+            default = "false"
+        )
+        optional(
+            "true_damage",
+            description = "If true, damage bypasses armor and resistance effects.",
+            type = ArgType.BOOLEAN,
+            default = "false"
         )
         require(
             "damage",
@@ -65,7 +78,8 @@ object EffectDamageNearbyEntities : Effect<Collection<TestableEntity>>("damage_n
         val player = data.player ?: return false
 
         val radius = config.getDoubleFromExpression("radius", data)
-        val damageAsPlayer = config.getBool("damage_as_player")
+        val useSource = config.getBool("use_source") || config.getBool("damage_as_player")
+        val trueDamage = config.getBool("true_damage")
         val damage = config.getDoubleFromExpression("damage", data)
         val damageSelf = config.getBoolOrNull("damage_self") ?: true
 
@@ -97,11 +111,13 @@ object EffectDamageNearbyEntities : Effect<Collection<TestableEntity>>("damage_n
 
             damagedEntities.add(entity.uniqueId)
 
-            if (damageAsPlayer) {
-                entity.damage(damage, player)
-            } else {
-                entity.damage(damage)
-            }
+            entity.dealDamage(
+                damage,
+                source = if (useSource) player else null,
+                trueDamage = trueDamage,
+                checkAntigrief = false,
+                allowSelf = damageSelf
+            )
         }
 
         damagedEntities.clear()
