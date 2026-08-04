@@ -1,6 +1,5 @@
 package com.willfp.libreforge.triggers.impl
 
-import com.willfp.eco.core.events.EntityDeathByEntityEvent
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
@@ -10,6 +9,9 @@ import org.bukkit.attribute.Attribute
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
+import org.bukkit.event.entity.EntityDamageByEntityEvent
+import org.bukkit.event.entity.EntityDeathEvent
 
 object TriggerKill : Trigger("kill") {
     override val description = "Fires when the player kills an entity."
@@ -31,11 +33,16 @@ object TriggerKill : Trigger("kill") {
         TriggerParameter.VALUE
     )
 
-    @EventHandler(ignoreCancelled = true)
-    fun handle(event: EntityDeathByEntityEvent) {
-        val killer = event.killer.tryAsLivingEntity() ?: return
+    // Resolved from the entity's own death state (rather than a snapshot taken
+    // at a specific EntityDamageEvent priority) so that it correctly reflects
+    // damage multiplier effects, which are applied at EventPriority.MONITOR.
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    fun handle(event: EntityDeathEvent) {
+        val victim = event.entity
 
-        val victim = event.victim
+        val killer = victim.killer
+            ?: (victim.lastDamageCause as? EntityDamageByEntityEvent)?.damager?.tryAsLivingEntity()
+            ?: return
 
         this.dispatch(
             killer.toDispatcher(),
