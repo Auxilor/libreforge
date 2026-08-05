@@ -73,6 +73,17 @@ class ItemLevelMap(
         val newLevel = currentLevel.gainXP(level, xp, itemStack, context)
         this[level] = newLevel
     }
+
+    fun setLevel(level: LevelType, newLevel: Int, context: PlaceholderContext) {
+        require(newLevel >= 0) { "Level must be positive" }
+
+        val currentLevel = this[level]
+        this[level] = LevelData(newLevel, 0.0)
+
+        if (newLevel > currentLevel.level) {
+            level.handleLevelUp(newLevel, itemStack, context)
+        }
+    }
 }
 
 val ItemStack.levels: ItemLevelMap
