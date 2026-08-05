@@ -21,7 +21,8 @@ object TriggerTakeDamage : Trigger("take_damage") {
 
     override val parameterDescriptions = mapOf(
         TriggerParameter.VICTIM to "The entity that took the damage.",
-        TriggerParameter.VALUE to "The final damage taken."
+        TriggerParameter.VALUE to "The final damage taken.",
+        TriggerParameter.ALT_VALUE to "The base damage, before armour, resistance, or other modifiers."
     )
 
     var blockEntityDamageByEntity: Boolean = false
@@ -30,7 +31,8 @@ object TriggerTakeDamage : Trigger("take_damage") {
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
         TriggerParameter.EVENT,
-        TriggerParameter.VALUE
+        TriggerParameter.VALUE,
+        TriggerParameter.ALT_VALUE
     )
 
     private val ignoredCauses = setOf(
@@ -53,7 +55,8 @@ object TriggerTakeDamage : Trigger("take_damage") {
                 player = victim as? Player,
                 victim = victim as? LivingEntity,
                 event = event,
-                value = event.finalDamage
+                value = event.finalDamage,
+                altValue = event.getDamage(EntityDamageEvent.DamageModifier.BASE)
             )
         )
     }

@@ -9,6 +9,7 @@ import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageByEntityEvent
+import org.bukkit.event.entity.EntityDamageEvent
 
 object TriggerHeadshot : Trigger("headshot") {
     override val description = "Fires when the player hits an entity in the head with a projectile."
@@ -20,7 +21,8 @@ object TriggerHeadshot : Trigger("headshot") {
         TriggerParameter.LOCATION to "The victim's location at impact.",
         TriggerParameter.VELOCITY to "The velocity of the projectile at impact.",
         TriggerParameter.PROJECTILE to "The projectile that hit the target.",
-        TriggerParameter.VALUE to "The damage dealt."
+        TriggerParameter.VALUE to "The damage dealt.",
+        TriggerParameter.ALT_VALUE to "The base damage, before armour, resistance, or other modifiers."
     )
 
     override val parameters = setOf(
@@ -30,7 +32,8 @@ object TriggerHeadshot : Trigger("headshot") {
         TriggerParameter.LOCATION,
         TriggerParameter.PROJECTILE,
         TriggerParameter.VELOCITY,
-        TriggerParameter.VALUE
+        TriggerParameter.VALUE,
+        TriggerParameter.ALT_VALUE
     )
 
     @EventHandler(ignoreCancelled = true)
@@ -53,6 +56,7 @@ object TriggerHeadshot : Trigger("headshot") {
                 event = event,
                 velocity = projectile.velocity,
                 value = event.finalDamage,
+                altValue = event.getDamage(EntityDamageEvent.DamageModifier.BASE),
                 projectile = projectile
             )
         )

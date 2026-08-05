@@ -23,7 +23,8 @@ object TriggerTakeEntityDamage : Trigger("take_entity_damage") {
     override val parameterDescriptions = mapOf(
         TriggerParameter.VICTIM to "The entity that dealt the damage (the attacker).",
         TriggerParameter.LOCATION to "The attacker's location.",
-        TriggerParameter.VALUE to "The damage taken."
+        TriggerParameter.VALUE to "The damage taken.",
+        TriggerParameter.ALT_VALUE to "The base damage, before armour, resistance, or other modifiers."
     )
 
     override val parameters = setOf(
@@ -31,7 +32,8 @@ object TriggerTakeEntityDamage : Trigger("take_entity_damage") {
         TriggerParameter.VICTIM,
         TriggerParameter.EVENT,
         TriggerParameter.LOCATION,
-        TriggerParameter.VALUE
+        TriggerParameter.VALUE,
+        TriggerParameter.ALT_VALUE
     )
 
     @EventHandler(ignoreCancelled = true)
@@ -48,7 +50,8 @@ object TriggerTakeEntityDamage : Trigger("take_entity_damage") {
                 victim = attacker,
                 location = attacker.location,
                 event = event,
-                value = event.finalDamage
+                value = event.finalDamage,
+                altValue = event.getDamage(EntityDamageEvent.DamageModifier.BASE)
             )
         )
     }

@@ -11,6 +11,7 @@ import org.bukkit.entity.Trident
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.entity.EntityDamageByEntityEvent
+import org.bukkit.event.entity.EntityDamageEvent
 
 object TriggerBowAttack : Trigger("bow_attack") {
     override val description = "Fires when the player hits an entity with an arrow."
@@ -22,7 +23,8 @@ object TriggerBowAttack : Trigger("bow_attack") {
         TriggerParameter.LOCATION to "The victim's location at impact.",
         TriggerParameter.VELOCITY to "The velocity of the arrow at impact.",
         TriggerParameter.PROJECTILE to "The arrow that hit the entity.",
-        TriggerParameter.VALUE to "The damage dealt."
+        TriggerParameter.VALUE to "The damage dealt.",
+        TriggerParameter.ALT_VALUE to "The base damage, before armour, resistance, or other modifiers."
     )
 
     override val parameters = setOf(
@@ -32,7 +34,8 @@ object TriggerBowAttack : Trigger("bow_attack") {
         TriggerParameter.LOCATION,
         TriggerParameter.PROJECTILE,
         TriggerParameter.VELOCITY,
-        TriggerParameter.VALUE
+        TriggerParameter.VALUE,
+        TriggerParameter.ALT_VALUE
     )
     
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
@@ -55,7 +58,8 @@ object TriggerBowAttack : Trigger("bow_attack") {
                 event = event,
                 velocity = arrow.velocity,
                 projectile = arrow,
-                value = event.finalDamage
+                value = event.finalDamage,
+                altValue = event.getDamage(EntityDamageEvent.DamageModifier.BASE)
             )
         )
     }

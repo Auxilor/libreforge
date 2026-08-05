@@ -12,6 +12,7 @@ import org.bukkit.entity.Player
 import org.bukkit.entity.Trident
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageByEntityEvent
+import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.ProjectileLaunchEvent
 
 private const val META_KEY = "libreforge_trident_holders"
@@ -29,7 +30,8 @@ object TriggerTridentAttack : Trigger("trident_attack") {
         TriggerParameter.PROJECTILE to "The trident projectile.",
         TriggerParameter.ITEM to "The trident item stack.",
         TriggerParameter.VELOCITY to "The trident's velocity at impact.",
-        TriggerParameter.VALUE to "The damage dealt."
+        TriggerParameter.VALUE to "The damage dealt.",
+        TriggerParameter.ALT_VALUE to "The base damage, before armour, resistance, or other modifiers."
     )
 
     override val parameters = setOf(
@@ -40,7 +42,8 @@ object TriggerTridentAttack : Trigger("trident_attack") {
         TriggerParameter.PROJECTILE,
         TriggerParameter.VELOCITY,
         TriggerParameter.ITEM,
-        TriggerParameter.VALUE
+        TriggerParameter.VALUE,
+        TriggerParameter.ALT_VALUE
     )
 
     @EventHandler(ignoreCancelled = true)
@@ -72,7 +75,8 @@ object TriggerTridentAttack : Trigger("trident_attack") {
                 event = event,
                 item = trident.itemStack,
                 velocity = trident.velocity,
-                value = event.finalDamage
+                value = event.finalDamage,
+                altValue = event.getDamage(EntityDamageEvent.DamageModifier.BASE)
             ),
             forceHolders = trident.getMetadata(META_KEY).firstOrNull()?.value() as? Collection<ProvidedHolder>
         )

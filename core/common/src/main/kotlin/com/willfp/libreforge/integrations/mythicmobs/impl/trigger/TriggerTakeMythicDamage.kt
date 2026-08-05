@@ -10,6 +10,7 @@ import io.lumine.mythic.bukkit.events.MythicDamageEvent
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageByEntityEvent
+import org.bukkit.event.entity.EntityDamageEvent
 
 object TriggerTakeMythicDamage : Trigger("take_mythic_damage") {
     override val description = "Fires when a player or entity takes damage from a MythicMobs mob."
@@ -23,7 +24,8 @@ object TriggerTakeMythicDamage : Trigger("take_mythic_damage") {
     override val parameterDescriptions = mapOf(
         TriggerParameter.VICTIM to "The MythicMobs entity that dealt the damage.",
         TriggerParameter.LOCATION to "The attacker's location.",
-        TriggerParameter.VALUE to "The damage dealt."
+        TriggerParameter.VALUE to "The damage dealt.",
+        TriggerParameter.ALT_VALUE to "For vanilla damage, the base damage before armour, resistance, or other modifiers. Equal to the value for non-vanilla damage."
     )
 
     override val parameters = setOf(
@@ -31,7 +33,8 @@ object TriggerTakeMythicDamage : Trigger("take_mythic_damage") {
         TriggerParameter.VICTIM,
         TriggerParameter.EVENT,
         TriggerParameter.LOCATION,
-        TriggerParameter.VALUE
+        TriggerParameter.VALUE,
+        TriggerParameter.ALT_VALUE
     )
 
     // Handler for non-vanilla damage, custom projectiles or lightning 'triggered' by MythicMobs.
@@ -46,7 +49,8 @@ object TriggerTakeMythicDamage : Trigger("take_mythic_damage") {
                 victim = caster,
                 location = caster.location,
                 event = event,
-                value = event.damage
+                value = event.damage,
+                altValue = event.damage
             )
         )
     }
@@ -64,7 +68,8 @@ object TriggerTakeMythicDamage : Trigger("take_mythic_damage") {
                 victim = caster,
                 location = caster.location,
                 event = event,
-                value = event.damage
+                value = event.damage,
+                altValue = event.getDamage(EntityDamageEvent.DamageModifier.BASE)
             )
         )
     }

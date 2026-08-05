@@ -8,6 +8,7 @@ import org.bukkit.entity.LivingEntity
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.entity.EntityDamageByEntityEvent
+import org.bukkit.event.entity.EntityDamageEvent
 
 object TriggerEntityDamageByEntity : Trigger("entity_damage_by_entity") {
     override val description = "Fires when an entity is damaged by another entity."
@@ -17,13 +18,15 @@ object TriggerEntityDamageByEntity : Trigger("entity_damage_by_entity") {
     override val parameterDescriptions = mapOf(
         TriggerParameter.VICTIM to "The entity that dealt the damage (the attacker).",
         TriggerParameter.LOCATION to "The location of the damaged entity.",
-        TriggerParameter.VALUE to "The damage dealt."
+        TriggerParameter.VALUE to "The damage dealt.",
+        TriggerParameter.ALT_VALUE to "The base damage, before armour, resistance, or other modifiers."
     )
 
     override val parameters = setOf(
         TriggerParameter.VICTIM,
         TriggerParameter.LOCATION,
-        TriggerParameter.VALUE
+        TriggerParameter.VALUE,
+        TriggerParameter.ALT_VALUE
     )
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -36,7 +39,8 @@ object TriggerEntityDamageByEntity : Trigger("entity_damage_by_entity") {
             TriggerData(
                 victim = damager,
                 location = entity.location,
-                value = event.finalDamage
+                value = event.finalDamage,
+                altValue = event.getDamage(EntityDamageEvent.DamageModifier.BASE)
             )
         )
     }
