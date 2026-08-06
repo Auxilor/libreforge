@@ -22,6 +22,7 @@ import com.willfp.libreforge.configs.TagsYml
 import com.willfp.libreforge.configs.lrcdb.CommandLrcdb
 import com.willfp.libreforge.display.ItemFlagDisplay
 import com.willfp.libreforge.effects.Effects
+import com.willfp.libreforge.filters.DropProvenanceListener
 import com.willfp.libreforge.effects.arguments.custom.CustomEffectArguments
 import com.willfp.libreforge.effects.impl.bossbar.BossBarProgressPlaceholder
 import com.willfp.libreforge.filters.Filters
@@ -226,7 +227,8 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
         val listeners = mutableListOf(
             EffectDataFixer,
             ItemRefreshListener,
-            EntityRefreshListener
+            EntityRefreshListener,
+            DropProvenanceListener,
         )
 
         if (Prerequisite.HAS_PAPER.isMet) {
