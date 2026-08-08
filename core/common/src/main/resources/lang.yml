@@ -35,6 +35,12 @@ messages:
   must-specify-point: "&cYou must specify the point!"
   invalid-point: "&cInvalid point name!"
 
+  must-specify-level-id: "&cYou must specify a level ID!"
+  invalid-level-id: "&cInvalid level ID!"
+  must-have-item: "&cThat player must be holding an item!"
+  item-level-xp-given: "&a%amount% &fXP added to &a%playername%'s &fheld item for level &a%level%&f!"
+  item-level-given: "&a%amount% &flevel(s) added to &a%playername%'s &fheld item for level &a%level%&f!"
+
   must-specify-amount: "&cYou must specify the amount!"
   invalid-amount: "&cInvalid amount!"
 

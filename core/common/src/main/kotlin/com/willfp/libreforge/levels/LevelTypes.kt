@@ -19,4 +19,8 @@ object LevelTypes : NativeConfigCategory("levels") {
     operator fun get(id: String): LevelType? {
         return registry[id]
     }
+
+    fun values(): Set<LevelType> {
+        return registry.values()
+    }
 }
