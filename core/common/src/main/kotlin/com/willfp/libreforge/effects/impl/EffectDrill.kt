@@ -44,9 +44,12 @@ object EffectDrill : MineBlockEffect<NoCompileData>("drill") {
         )
         optional(
             "prevent_trigger",
-            description = "If true, breaking additional blocks will not fire further libreforge triggers.",
-            type = ArgType.BOOLEAN,
-            default = "false"
+            description = "Whether the additional blocks should fire further libreforge triggers. " +
+                    "true breaks them silently, firing no events at all; keep_events breaks them normally, " +
+                    "so drops and block events still happen, but stops the mine_block trigger from running again.",
+            type = ArgType.STRING,
+            default = "false",
+            choices = listOf("false", "true", "keep_events")
         )
         optional(
             "whitelist",
@@ -82,7 +85,7 @@ object EffectDrill : MineBlockEffect<NoCompileData>("drill") {
         val whitelist = config.getStringsOrNull("whitelist")?.map { Blocks.lookup(it) }
         val blacklist = config.getStrings("blacklisted_blocks").map { Blocks.lookup(it) }
 
-        val preventTriggers = config.getBool("prevent_trigger")
+        val preventTriggers = preventTriggerMode(config)
 
         val blocks = mutableSetOf<Block>()
 

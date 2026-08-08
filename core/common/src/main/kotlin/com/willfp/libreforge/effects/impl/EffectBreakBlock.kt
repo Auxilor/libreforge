@@ -19,9 +19,12 @@ object EffectBreakBlock : MineBlockEffect<NoCompileData>("break_block") {
     override val arguments = arguments {
         optional(
             "prevent_trigger",
-            description = "If true, breaking this block will not fire further libreforge triggers.",
-            type = ArgType.BOOLEAN,
-            default = "false"
+            description = "Whether the broken block should fire further libreforge triggers. " +
+                    "true breaks it silently, firing no events at all; keep_events breaks it normally, " +
+                    "so drops and block events still happen, but stops the mine_block trigger from running again.",
+            type = ArgType.STRING,
+            default = "false",
+            choices = listOf("false", "true", "keep_events")
         )
     }
 
@@ -30,7 +33,7 @@ object EffectBreakBlock : MineBlockEffect<NoCompileData>("break_block") {
 
         val player = data.player ?: return false
 
-        val preventTriggers = config.getBool("prevent_trigger")
+        val preventTriggers = preventTriggerMode(config)
 
         player.breakBlocksSafely(listOf(block), preventTriggers)
 

@@ -50,9 +50,12 @@ object EffectMineShape : MineBlockEffect<NoCompileData>("mine_shape") {
         )
         optional(
             "prevent_trigger",
-            description = "Whether to prevent the broken blocks from re-triggering this effect.",
-            type = ArgType.BOOLEAN,
-            default = "false"
+            description = "Whether the broken blocks should fire further libreforge triggers. " +
+                    "true breaks them silently, firing no events at all; keep_events breaks them normally, " +
+                    "so drops and block events still happen, but stops the mine_block trigger from running again.",
+            type = ArgType.STRING,
+            default = "false",
+            choices = listOf("false", "true", "keep_events")
         )
         optional(
             "disable_on_sneak",
@@ -112,7 +115,7 @@ object EffectMineShape : MineBlockEffect<NoCompileData>("mine_shape") {
         val upAxis = axes.up
         val rightAxis = axes.right
 
-        val preventTriggers = config.getBool("prevent_trigger")
+        val preventTriggers = preventTriggerMode(config)
         val whitelist = config.getStringsOrNull("whitelist")?.map { Blocks.lookup(it) }
         val blacklist = config.getStrings("blacklisted_blocks").map { Blocks.lookup(it) }
 
