@@ -3,7 +3,7 @@ title: "Item Levels"
 sidebar_position: 11
 ---
 
-Item levels let an item gain **XP** and **level up** as it is used, instead of having a value set directly. Each item level is a config file that defines how much XP each level needs and what happens on level-up, and you grant XP with the `level_item` **effect**. This page covers creating one, naming it, its structure, and the placeholders it exposes.
+Item levels let an item gain **XP** and **level up** as it is used, instead of having a value set directly. Each item level is a config file that defines how much XP each level needs and what happens on level-up, and you grant XP with the `level_item` **effect**, or set the level directly with `set_item_level`. This page covers creating one, naming it, its structure, and the placeholders it exposes.
 
 ## Quick start
 
@@ -119,6 +119,18 @@ effects:
       - mine_block
 
 conditions: [ ]
+```
+
+To set an item straight to a level instead of granting XP towards it, use `set_item_level`. XP progress on the item resets to 0, and level-up effects fire if the new level is higher than the current one (nothing fires if it's the same or lower):
+
+```yaml
+effects:
+  - id: set_item_level
+    args:
+      id: example # The item level ID (the level file name without .yml)
+      level: 5 # The level to set the item to. Supports expressions.
+    triggers:
+      - some_trigger
 ```
 
 ## Internal placeholders

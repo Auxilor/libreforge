@@ -179,6 +179,7 @@ import com.willfp.libreforge.effects.impl.EffectSetFreezeTicks
 import com.willfp.libreforge.effects.impl.EffectSetGlowing
 import com.willfp.libreforge.effects.impl.EffectSetGlobalPoints
 import com.willfp.libreforge.effects.impl.EffectSetItemData
+import com.willfp.libreforge.effects.impl.EffectSetItemLevel
 import com.willfp.libreforge.effects.impl.EffectSetItemPoints
 import com.willfp.libreforge.effects.impl.EffectSetNearbyBlocks
 import com.willfp.libreforge.effects.impl.EffectSetPlayerTime
@@ -668,6 +669,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectSetGlowing)
         register(EffectSetGlobalPoints)
         register(EffectSetItemData)
+        register(EffectSetItemLevel)
         register(EffectSetItemPoints)
         register(EffectSetNearbyBlocks)
         register(EffectSetPlayerTime)
