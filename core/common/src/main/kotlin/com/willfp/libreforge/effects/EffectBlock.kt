@@ -37,8 +37,14 @@ class EffectBlock internal constructor(
     fun enable(
         dispatcher: Dispatcher<*>,
         holder: ProvidedHolder,
+        occurrence: Int = 0,
         isReload: Boolean = false
-    ) = effects.forEach { it.enable(dispatcher, holder, isReload = isReload) }
+    ) {
+        val blockIndex = holder.holder.effects.indexOf(this)
+        effects.forEachIndexed { elementIndex, it ->
+            it.enable(dispatcher, holder, blockIndex, elementIndex, occurrence, isReload = isReload)
+        }
+    }
 
     /**
      * Disable the effects.
@@ -46,8 +52,14 @@ class EffectBlock internal constructor(
     fun disable(
         dispatcher: Dispatcher<*>,
         holder: ProvidedHolder,
+        occurrence: Int = 0,
         isReload: Boolean = false
-    ) = effects.forEach { it.disable(dispatcher, holder, isReload = isReload) }
+    ) {
+        val blockIndex = holder.holder.effects.indexOf(this)
+        effects.forEachIndexed { elementIndex, it ->
+            it.disable(dispatcher, holder, blockIndex, elementIndex, occurrence, isReload = isReload)
+        }
+    }
 
     fun tryTrigger(trigger: DispatchedTrigger) {
         if (canBeTriggeredBy(trigger.trigger)) {
