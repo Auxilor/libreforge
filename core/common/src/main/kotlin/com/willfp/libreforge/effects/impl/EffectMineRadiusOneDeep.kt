@@ -4,7 +4,6 @@ import com.willfp.eco.core.blocks.Blocks
 import com.willfp.eco.core.blocks.matches
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
-import com.willfp.eco.util.simplify
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
@@ -16,6 +15,7 @@ import org.bukkit.Material
 import org.bukkit.block.Block
 import kotlin.math.abs
 
+@Deprecated("Use mine_radius with depth: 1 instead")
 object EffectMineRadiusOneDeep : MineBlockEffect<NoCompileData>("mine_radius_one_deep") {
     override val description = "Mines blocks in a radius around the triggered block, only one layer deep in the direction the player is facing."
     override val categories = setOf("world")
@@ -68,6 +68,14 @@ object EffectMineRadiusOneDeep : MineBlockEffect<NoCompileData>("mine_radius_one
             type = ArgType.BOOLEAN,
             default = "true"
         )
+        optional(
+            "use_blockface",
+            description = "Whether to orient the layer by the face of the block the player is " +
+                    "looking at, rather than by their look direction. Falls back to the look " +
+                    "direction if the player isn't looking at the triggered block.",
+            type = ArgType.BOOLEAN,
+            default = "false"
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
@@ -87,7 +95,7 @@ object EffectMineRadiusOneDeep : MineBlockEffect<NoCompileData>("mine_radius_one
 
         val blocks = mutableSetOf<Block>()
 
-        val ignoreVector = player.location.direction.simplify()
+        val ignoreVector = resolveForwardAxis(config, player, block)
 
         for (x in (-radius..radius)) {
             for (y in (-radius..radius)) {
