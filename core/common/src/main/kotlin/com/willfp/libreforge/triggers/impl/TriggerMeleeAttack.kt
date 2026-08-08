@@ -21,7 +21,8 @@ object TriggerMeleeAttack : Trigger("melee_attack") {
         TriggerParameter.VICTIM to "The entity that was hit.",
         TriggerParameter.LOCATION to "The victim's location at the time of the hit.",
         TriggerParameter.ITEM to "The item in the attacker's main hand.",
-        TriggerParameter.VALUE to "The damage dealt."
+        TriggerParameter.VALUE to "The damage dealt.",
+        TriggerParameter.ALT_VALUE to "The attack's base damage, before armour, resistance, or other modifiers."
     )
 
     override val parameters = setOf(
@@ -30,7 +31,8 @@ object TriggerMeleeAttack : Trigger("melee_attack") {
         TriggerParameter.EVENT,
         TriggerParameter.LOCATION,
         TriggerParameter.ITEM,
-        TriggerParameter.VALUE
+        TriggerParameter.VALUE,
+        TriggerParameter.ALT_VALUE
     )
 
     private val processedEvents = mutableSetOf<UUID>()
@@ -58,7 +60,8 @@ object TriggerMeleeAttack : Trigger("melee_attack") {
                 location = victim.location,
                 event = event,
                 item = attacker.equipment?.itemInMainHand,
-                value = event.finalDamage
+                value = event.finalDamage,
+                altValue = event.getDamage(EntityDamageEvent.DamageModifier.BASE)
             )
         )
 
