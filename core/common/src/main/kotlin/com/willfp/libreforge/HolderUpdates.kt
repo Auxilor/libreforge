@@ -88,6 +88,12 @@ object ItemRefreshListener : Listener {
 
         inventoryClickTimeouts.put(player.uniqueId, Unit)
 
-        player.toDispatcher().refreshHolders()
+        val dispatcher = player.toDispatcher()
+
+        // The click hasn't been applied to the inventory yet, so refreshing now would cache
+        // the holders from before the click for as long as the holder cache lives.
+        plugin.scheduler.run {
+            dispatcher.refreshHolders()
+        }
     }
 }
