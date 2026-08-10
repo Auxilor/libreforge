@@ -4,7 +4,6 @@ import com.willfp.eco.core.blocks.Blocks
 import com.willfp.eco.core.blocks.matches
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
-import com.willfp.eco.util.simplify
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
@@ -14,7 +13,6 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.Material
 import org.bukkit.block.Block
-import org.bukkit.util.Vector
 
 object EffectMineShape : MineBlockEffect<NoCompileData>("mine_shape") {
     override val description = "Breaks blocks in a custom 2D grid shape relative to the block the player mines."
@@ -68,6 +66,14 @@ object EffectMineShape : MineBlockEffect<NoCompileData>("mine_shape") {
             type = ArgType.BOOLEAN,
             default = "true"
         )
+        optional(
+            "use_blockface",
+            description = "Whether to orient the shape by the face of the block the player is " +
+                    "looking at, rather than by their look direction. Falls back to the look " +
+                    "direction if the player isn't looking at the trigger block.",
+            type = ArgType.BOOLEAN,
+            default = "false"
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
@@ -101,19 +107,10 @@ object EffectMineShape : MineBlockEffect<NoCompileData>("mine_shape") {
             return false
         }
 
-        val direction = player.location.direction
-        val forwardAxis = direction.clone().simplify()
-        val worldUp = Vector(0.0, 1.0, 0.0)
-
-        val upAxis: Vector
-        val rightAxis: Vector
-        if (forwardAxis.y != 0.0) {
-            upAxis = Vector(direction.x, 0.0, direction.z).simplify()
-            rightAxis = upAxis.clone().crossProduct(worldUp).simplify()
-        } else {
-            upAxis = worldUp.clone()
-            rightAxis = forwardAxis.clone().crossProduct(worldUp).simplify()
-        }
+        val axes = resolveMiningAxes(config, player, triggerBlock)
+        val forwardAxis = axes.forward
+        val upAxis = axes.up
+        val rightAxis = axes.right
 
         val preventTriggers = config.getBool("prevent_trigger")
         val whitelist = config.getStringsOrNull("whitelist")?.map { Blocks.lookup(it) }

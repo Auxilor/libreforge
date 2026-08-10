@@ -4,7 +4,6 @@ import com.willfp.eco.core.blocks.Blocks
 import com.willfp.eco.core.blocks.matches
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
-import com.willfp.eco.util.VectorUtils
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
@@ -59,6 +58,14 @@ object EffectDrill : MineBlockEffect<NoCompileData>("drill") {
             description = "These block types will never be broken by the drill.",
             type = ArgType.BLOCK_LIST
         )
+        optional(
+            "use_blockface",
+            description = "Whether to drill into the face of the block the player is looking at, " +
+                    "rather than in their look direction. Falls back to the look direction if the " +
+                    "player isn't looking at the trigger block.",
+            type = ArgType.BOOLEAN,
+            default = "false"
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
@@ -79,9 +86,11 @@ object EffectDrill : MineBlockEffect<NoCompileData>("drill") {
 
         val blocks = mutableSetOf<Block>()
 
+        val forwardAxis = resolveForwardAxis(config, player, block)
+
         for (i in 1..amount) {
-            val simplified = VectorUtils.simplifyVector(player.location.direction.normalize()).multiply(i)
-            val toBreak = block.world.getBlockAt(block.location.clone().add(simplified))
+            val offset = forwardAxis.clone().multiply(i)
+            val toBreak = block.world.getBlockAt(block.location.clone().add(offset))
 
             if (blacklist.matches(toBreak)) {
                 continue
