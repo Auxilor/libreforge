@@ -1,7 +1,6 @@
 package com.willfp.libreforge
 
 import com.destroystokyo.paper.event.entity.EntityRemoveFromWorldEvent
-import com.willfp.libreforge.effects.Effects
 import org.bukkit.Registry
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.Player
@@ -12,13 +11,17 @@ import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 
 object EffectDataFixer : Listener {
+
+    private val MODIFIER_PATTERN = Regex("\\d+_\\d+")
+
     @EventHandler(priority = EventPriority.LOWEST)
     fun clearOnQuit(event: PlayerQuitEvent) {
         val player = event.player
         val dispatcher = player.toDispatcher()
 
-        for ((effect, holder) in dispatcher.providedActiveEffects) {
-            effect.disable(dispatcher, holder)
+        for ((block, occurrence) in dispatcher.providedActiveEffects.withOccurrences()) {
+            val (effect, holder) = block
+            effect.disable(dispatcher, holder, occurrence = occurrence)
         }
 
         // Extra fix for pre-4.2.3
@@ -44,12 +47,10 @@ object EffectDataFixer : Listener {
     }
 
     private fun Player.fixAttributes() {
-        val effectIds = Effects.values().map { it.id }.toSet()
-
         for (attribute in Registry.ATTRIBUTE) {
             val inst = this.getAttribute(attribute) ?: continue
-            for (mod in inst.modifiers) {
-                if (mod.name.startsWith("libreforge") || effectIds.any { mod.name.startsWith(it) }) {
+            for (mod in inst.modifiers.toList()) {
+                if (mod.key.namespace == "eco" && mod.key.key.matches(MODIFIER_PATTERN)) {
                     inst.removeModifier(mod)
                 }
             }
