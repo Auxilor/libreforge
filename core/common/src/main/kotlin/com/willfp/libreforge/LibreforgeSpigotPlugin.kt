@@ -38,6 +38,7 @@ import com.willfp.libreforge.integrations.terra.TerraIntegration
 import com.willfp.libreforge.integrations.terraformgenerator.TerraformGeneratorIntegration
 import com.willfp.libreforge.integrations.edprisoncore.EdPrisonCoreIntegration
 import com.willfp.libreforge.integrations.fancynpcs.FancyNPCsIntegration
+import com.willfp.libreforge.integrations.floodgate.FloodgateIntegration
 import com.willfp.libreforge.integrations.huskintegration.huskclaims.HuskClaimsIntegration
 import com.willfp.libreforge.integrations.huskintegration.husktowns.HuskTownsIntegration
 import com.willfp.libreforge.integrations.jobs.JobsIntegration
@@ -257,6 +258,7 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             IntegrationLoader("ModelEngine") { ModelEngineIntegration.load(this) },
             IntegrationLoader("BetterModel") { BetterModelIntegration.load(this) },
             IntegrationLoader("FancyNpcs") { FancyNPCsIntegration.load(this) },
+            IntegrationLoader("floodgate") { FloodgateIntegration.load(this) },
             IntegrationLoader("UltimateMobCoins") { UltimateMobCoinsIntegration.load(this) },
             IntegrationLoader("HuskTowns") { HuskTownsIntegration.load(this) },
             IntegrationLoader("HuskClaims") { HuskClaimsIntegration.load(this) },

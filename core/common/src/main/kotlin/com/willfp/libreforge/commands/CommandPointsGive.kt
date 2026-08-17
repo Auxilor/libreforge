@@ -1,6 +1,7 @@
 package com.willfp.libreforge.commands
 
 import com.willfp.eco.core.command.impl.Subcommand
+import com.willfp.eco.core.floodgate.FloodgateService
 import com.willfp.eco.util.toNiceString
 import com.willfp.libreforge.globalPoints
 import com.willfp.libreforge.plugin
@@ -70,7 +71,7 @@ internal object CommandPointsGive : Subcommand(
             return
         }
 
-        val player = Bukkit.getPlayer(playerString)
+        val player = FloodgateService.findOnlinePlayer(playerString)
 
         if (player == null) {
             sender.sendMessage(plugin.langYml.getMessage("invalid-player"))
