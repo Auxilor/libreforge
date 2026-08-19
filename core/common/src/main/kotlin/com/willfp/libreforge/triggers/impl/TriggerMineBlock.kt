@@ -1,6 +1,7 @@
 package com.willfp.libreforge.triggers.impl
 
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
+import com.willfp.libreforge.effects.templates.MineBlockEffect
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
@@ -34,6 +35,12 @@ object TriggerMineBlock : Trigger("mine_block") {
         val block = event.block
 
         if (!AntigriefManager.canBreakBlock(player, block)) {
+            return
+        }
+
+        // Broken by a mine effect with prevent_trigger: keep_events, so the events fire as normal
+        // but the block shouldn't re-run the effect chain that broke it.
+        if (block.hasMetadata(MineBlockEffect.preventTriggerKey)) {
             return
         }
 
