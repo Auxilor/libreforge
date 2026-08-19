@@ -14,9 +14,33 @@ import org.bukkit.block.BlockFace
 import org.bukkit.entity.Player
 import org.bukkit.util.Vector
 
-abstract class MineBlockEffect<T : Any>(id: String) : Effect<T>(id) {
-    private val ignoreKey = "blockbreakevent-ignore"
+/**
+ * How the extra blocks broken by a mine effect interact with triggers.
+ */
+enum class PreventTriggerMode {
+    /**
+     * Break the blocks as the player, firing all events and triggers.
+     *
+     * Other mine effects are still stopped from re-triggering, to prevent infinite recursion.
+     */
+    NONE,
 
+    /**
+     * Break the blocks without firing any events at all.
+     */
+    ALL,
+
+    /**
+     * Break the blocks as the player, firing all events, but stop the mine_block trigger from
+     * dispatching for them.
+     *
+     * Drops, block break events, and the triggers derived from them (eg block_item_drop) still
+     * fire, so block regeneration plugins and effect chains bound to those triggers keep working.
+     */
+    KEEP_EVENTS
+}
+
+abstract class MineBlockEffect<T : Any>(id: String) : Effect<T>(id) {
     // Slightly beyond the furthest a player can reach a block from, so that the block face
     // raytrace can't miss but also doesn't scan needlessly far.
     private val reachDistance = 7.0
@@ -83,23 +107,62 @@ abstract class MineBlockEffect<T : Any>(id: String) : Effect<T>(id) {
         }
     }
 
-    protected fun Player.breakBlocksSafely(blocks: Collection<Block>, preventTriggers: Boolean = false) {
+    protected fun Player.breakBlocksSafely(blocks: Collection<Block>, mode: PreventTriggerMode) {
         if (plugin.configYml.getBool("effects.use-setblock-break")) {
             blocks.forEach { it.type = Material.AIR }
-        } else if (preventTriggers) {
-            blocks.forEach { it.breakNaturally() }
-        } else {
-            this.runExempted {
-                for (block in blocks) {
-                    if (block.world != this.world) {
-                        continue
-                    }
+            return
+        }
 
-                    block.setMetadata(ignoreKey, plugin.createMetadataValue(true))
-                    this.breakBlock(block)
-                    block.removeMetadata(ignoreKey, plugin)
+        if (mode == PreventTriggerMode.ALL) {
+            blocks.forEach { it.breakNaturally() }
+            return
+        }
+
+        this.runExempted {
+            for (block in blocks) {
+                if (block.world != this.world) {
+                    continue
                 }
+
+                block.setMetadata(ignoreKey, plugin.createMetadataValue(true))
+
+                if (mode == PreventTriggerMode.KEEP_EVENTS) {
+                    block.setMetadata(preventTriggerKey, plugin.createMetadataValue(true))
+                }
+
+                this.breakBlock(block)
+
+                block.removeMetadata(ignoreKey, plugin)
+                block.removeMetadata(preventTriggerKey, plugin)
             }
+        }
+    }
+
+    @Deprecated("Use the PreventTriggerMode overload instead.")
+    protected fun Player.breakBlocksSafely(blocks: Collection<Block>, preventTriggers: Boolean = false) =
+        breakBlocksSafely(
+            blocks,
+            if (preventTriggers) PreventTriggerMode.ALL else PreventTriggerMode.NONE
+        )
+
+    companion object {
+        internal const val ignoreKey = "blockbreakevent-ignore"
+        internal const val preventTriggerKey = "blockbreakevent-prevent-trigger"
+
+        /**
+         * Read the prevent_trigger mode from a [config].
+         *
+         * Anything other than the literal string keep_events is read with getBool, exactly as
+         * before, so existing configs keep the behaviour they already had.
+         */
+        @JvmStatic
+        fun preventTriggerMode(config: Config) = when {
+            config.get("prevent_trigger")?.toString()?.lowercase() == "keep_events" ->
+                PreventTriggerMode.KEEP_EVENTS
+
+            config.getBool("prevent_trigger") -> PreventTriggerMode.ALL
+
+            else -> PreventTriggerMode.NONE
         }
     }
 }

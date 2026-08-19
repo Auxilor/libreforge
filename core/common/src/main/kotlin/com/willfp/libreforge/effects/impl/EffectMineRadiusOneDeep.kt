@@ -34,9 +34,12 @@ object EffectMineRadiusOneDeep : MineBlockEffect<NoCompileData>("mine_radius_one
         )
         optional(
             "prevent_trigger",
-            description = "Whether breaking these blocks should prevent triggering further effects.",
-            type = ArgType.BOOLEAN,
-            default = "false"
+            description = "Whether the broken blocks should fire further libreforge triggers. " +
+                    "true breaks them silently, firing no events at all; keep_events breaks them normally, " +
+                    "so drops and block events still happen, but stops the mine_block trigger from running again.",
+            type = ArgType.STRING,
+            default = "false",
+            choices = listOf("false", "true", "keep_events")
         )
         optional(
             "disable_on_sneak",
@@ -84,7 +87,7 @@ object EffectMineRadiusOneDeep : MineBlockEffect<NoCompileData>("mine_radius_one
 
         val radius = config.getIntFromExpression("radius", data)
 
-        val preventTriggers = config.getBool("prevent_trigger")
+        val preventTriggers = preventTriggerMode(config)
 
         if (player.isSneaking && config.getBool("disable_on_sneak")) {
             return false
