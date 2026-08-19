@@ -107,6 +107,24 @@ data class ProvidedEffectBlock(
     }
 }
 
+/**
+ * Pairs each [ProvidedEffectBlock] with its occurrence index: how many prior entries in this
+ * list share the same (effect, holder id) pair, in list order.
+ *
+ * Used to derive a modifier identity that is independent of the physical holder (e.g. the
+ * inventory slot an item occupies), while still allowing distinct holders with the same id
+ * (e.g. the same enchantment on two armor pieces) to stack.
+ */
+internal fun List<ProvidedEffectBlock>.withOccurrences(): List<Pair<ProvidedEffectBlock, Int>> {
+    val seen = HashMap<Pair<EffectBlock, Any>, Int>()
+    return map { block ->
+        val key = block.effect to block.holder.holder.id
+        val occurrence = seen.getOrDefault(key, 0)
+        seen[key] = occurrence + 1
+        block to occurrence
+    }
+}
+
 private val providers = mutableListOf<HolderProvider>()
 
 /**
@@ -386,29 +404,39 @@ fun Dispatcher<*>.updateEffects() {
 
     previousStates[this.uuid] = after
 
-    // Permanent effects also have a run order, so we need to sort them.
-    val added = (after without before).sorted()
-    val removed = (before without after).sorted()
+    // Pair each block with its occurrence index so identity survives holders that are equal
+    // but physically distinct (e.g. an item roaming between inventory slots), while distinct
+    // holders sharing the same id still get distinct occurrences and stack correctly.
+    val beforeWithOcc = before.withOccurrences()
+    val afterWithOcc = after.withOccurrences()
 
-    for ((effect, holder) in removed) {
-        effect.disable(this, holder)
+    // Permanent effects also have a run order, so we need to sort them.
+    val added = (afterWithOcc without beforeWithOcc).sortedBy { it.first }
+    val removed = (beforeWithOcc without afterWithOcc).sortedBy { it.first }
+
+    for ((block, occurrence) in removed) {
+        val (effect, holder) = block
+        effect.disable(this, holder, occurrence = occurrence)
     }
 
-    for ((effect, holder) in added) {
-        effect.enable(this, holder)
+    for ((block, occurrence) in added) {
+        val (effect, holder) = block
+        effect.enable(this, holder, occurrence = occurrence)
     }
 
     // Reloading is now done by disabling all, then enabling all. Effect#reload is deprecated.
     // Since permanent effects are not allowed in chains, they are always done in the correct
     // order as mixing weights is not a concern.
-    val toReload = (after without added).sorted()
+    val toReload = (afterWithOcc without added).sortedBy { it.first }
 
-    for ((effect, holder) in toReload) {
-        effect.disable(this, holder, isReload = true)
+    for ((block, occurrence) in toReload) {
+        val (effect, holder) = block
+        effect.disable(this, holder, occurrence = occurrence, isReload = true)
     }
 
-    for ((effect, holder) in toReload) {
-        effect.enable(this, holder, isReload = true)
+    for ((block, occurrence) in toReload) {
+        val (effect, holder) = block
+        effect.enable(this, holder, occurrence = occurrence, isReload = true)
     }
 }
 

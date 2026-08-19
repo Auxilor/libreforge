@@ -16,6 +16,11 @@ class IdentifierFactory(
         makeKey(offset)
     )
 
+    fun makeIdentifiers(discriminator: String) = Identifiers(
+        UUID.nameUUIDFromBytes("$uuid$discriminator".toByteArray()),
+        NamespacedKeyUtils.createEcoKey("${abs(uuid.hashCode())}_${discriminator.hashCode().toUInt()}")
+    )
+
     private fun makeUUID(offset: Int) =
         UUID.nameUUIDFromBytes("$uuid$offset".toByteArray())
 
