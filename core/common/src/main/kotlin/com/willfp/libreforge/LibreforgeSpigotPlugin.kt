@@ -41,6 +41,7 @@ import com.willfp.libreforge.integrations.fancynpcs.FancyNPCsIntegration
 import com.willfp.libreforge.integrations.huskintegration.huskclaims.HuskClaimsIntegration
 import com.willfp.libreforge.integrations.huskintegration.husktowns.HuskTownsIntegration
 import com.willfp.libreforge.integrations.jobs.JobsIntegration
+import com.willfp.libreforge.integrations.ecobits.EcoBitsIntegration
 import com.willfp.libreforge.integrations.lands.LandsIntegration
 import com.willfp.libreforge.integrations.levelledmobs.LevelledMobsIntegration
 import com.willfp.libreforge.integrations.mcmmo.McMMOIntegration
@@ -264,6 +265,7 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             IntegrationLoader("CustomFishing") { CustomFishingIntegration.load(this) },
             IntegrationLoader("PyroFishingPro") { PyroFishingProIntegration.load(this) },
             IntegrationLoader("Lands") { LandsIntegration.load(this) },
+            IntegrationLoader("EcoBits") { EcoBitsIntegration.load(this) },
             IntegrationLoader("EdPrison") { EdPrisonCoreIntegration.load(this) },
             IntegrationLoader("MythicMobs") { MythicMobsIntegration.load(this) },
             IntegrationLoader("Nexo") { NexoIntegration.load(this) },

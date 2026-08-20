@@ -41,6 +41,7 @@ dependencies {
     compileOnly("com.artillexstudios:AxTrade:1.21.1")
     compileOnly("com.artillexstudios.axenvoy:AxEnvoy:2.2.1")
     compileOnly("com.github.angeschossen:LandsAPI:7.23.1")
+    compileOnly("com.willfp:EcoBits:2026.34")
     compileOnly("com.nexomc:nexo:1.17.0") {
         exclude(group = "*", module = "*")
     }
