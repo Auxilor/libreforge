@@ -2,12 +2,11 @@ package com.willfp.libreforge.integrations.ecobits
 
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.libreforge.integrations.LoadableIntegration
-import com.willfp.libreforge.integrations.ecobits.impl.TriggerGainCurrency
-import com.willfp.libreforge.triggers.Triggers
+import com.willfp.libreforge.integrations.ecobits.impl.EcoBitsCurrencyGainListener
 
 object EcoBitsIntegration : LoadableIntegration {
     override fun load(plugin: EcoPlugin) {
-        Triggers.register(TriggerGainCurrency)
+        plugin.eventManager.registerListener(EcoBitsCurrencyGainListener)
     }
 
     override fun getPluginName(): String {
