@@ -41,7 +41,9 @@ object TriggerKill : Trigger("kill") {
         val victim = event.entity
 
         val killer = victim.killer
-            ?: (victim.lastDamageCause as? EntityDamageByEntityEvent)?.damager?.tryAsLivingEntity()
+            ?: (victim.lastDamageCause as? EntityDamageByEntityEvent)
+                ?.takeUnless { it.isCancelled }
+                ?.damager?.tryAsLivingEntity()
             ?: return
 
         this.dispatch(
