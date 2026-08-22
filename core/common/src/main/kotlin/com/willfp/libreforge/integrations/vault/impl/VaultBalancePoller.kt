@@ -9,12 +9,14 @@ import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerQuitEvent
+import org.bukkit.scheduler.BukkitTask
 import java.math.BigDecimal
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 
 object VaultBalancePoller : Listener {
     private val lastSeenBalances = ConcurrentHashMap<UUID, BigDecimal>()
+    private var task: BukkitTask? = null
 
     fun start() {
         val intervalTicks = plugin.configYml.getInt("triggers.gain-currency.vault-poll-interval").toLong()
@@ -23,9 +25,14 @@ object VaultBalancePoller : Listener {
             return
         }
 
-        plugin.scheduler.runTimer(intervalTicks, intervalTicks) {
+        task = plugin.scheduler.runTimer(intervalTicks, intervalTicks) {
             poll()
         }
+    }
+
+    fun stop() {
+        task?.cancel()
+        task = null
     }
 
     private fun poll() {

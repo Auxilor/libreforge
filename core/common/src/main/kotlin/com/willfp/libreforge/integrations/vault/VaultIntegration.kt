@@ -21,6 +21,10 @@ object VaultIntegration : LoadableIntegration {
         if (Bukkit.getServer().servicesManager.getRegistration(Economy::class.java) != null) {
             plugin.eventManager.registerListener(VaultBalancePoller)
             VaultBalancePoller.start()
+
+            plugin.onDisable {
+                VaultBalancePoller.stop()
+            }
         }
     }
 
