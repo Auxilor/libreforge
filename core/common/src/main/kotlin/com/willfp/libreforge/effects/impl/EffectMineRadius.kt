@@ -153,7 +153,7 @@ object EffectMineRadius : MineBlockEffect<NoCompileData>("mine_radius") {
             blocks.add(toBreak)
         }
 
-        player.breakBlocksSafely(blocks, preventTriggers)
+        data.breakBlocksSafely(blocks, preventTriggers)
 
         return true
     }

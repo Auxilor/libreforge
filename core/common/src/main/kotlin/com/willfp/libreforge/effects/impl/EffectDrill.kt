@@ -122,7 +122,7 @@ object EffectDrill : MineBlockEffect<NoCompileData>("drill") {
             blocks.add(toBreak)
         }
 
-        player.breakBlocksSafely(blocks, preventTriggers)
+        data.breakBlocksSafely(blocks, preventTriggers)
 
         return true
     }

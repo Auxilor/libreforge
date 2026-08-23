@@ -173,7 +173,7 @@ object EffectMineRadiusOneDeep : MineBlockEffect<NoCompileData>("mine_radius_one
             }
         }
 
-        player.breakBlocksSafely(blocks, preventTriggers)
+        data.breakBlocksSafely(blocks, preventTriggers)
 
         return true
     }
