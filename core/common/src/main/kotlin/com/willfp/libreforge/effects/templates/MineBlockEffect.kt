@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.templates
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.util.runExempted
 import com.willfp.eco.util.simplify
+import com.willfp.libreforge.BlockBreaker
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
@@ -105,6 +106,24 @@ abstract class MineBlockEffect<T : Any>(id: String) : Effect<T>(id) {
         } else {
             MiningAxes(forward, worldUp.clone(), forward.clone().crossProduct(worldUp).simplify())
         }
+    }
+
+    /**
+     * Break [blocks] the way the dispatcher of this trigger wants them broken.
+     *
+     * A dispatcher that owns the blocks it mines - a minion, a machine - implements
+     * [BlockBreaker] to take the drops and the removal itself. Anything else falls
+     * through to the player, which is every dispatcher that exists today.
+     */
+    protected fun TriggerData.breakBlocksSafely(blocks: Collection<Block>, mode: PreventTriggerMode) {
+        val breaker = this.dispatcher as? BlockBreaker
+
+        if (breaker != null) {
+            breaker.breakBlocks(blocks, this)
+            return
+        }
+
+        this.player?.breakBlocksSafely(blocks, mode)
     }
 
     protected fun Player.breakBlocksSafely(blocks: Collection<Block>, mode: PreventTriggerMode) {

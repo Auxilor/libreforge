@@ -183,7 +183,7 @@ object EffectMineShape : MineBlockEffect<NoCompileData>("mine_shape") {
             }
         }
 
-        player.breakBlocksSafely(blocksToBreak, preventTriggers)
+        data.breakBlocksSafely(blocksToBreak, preventTriggers)
 
         return true
     }
