@@ -51,6 +51,7 @@ import com.willfp.libreforge.triggers.impl.TriggerEntityTarget
 import com.willfp.libreforge.triggers.impl.TriggerEntityTeleport
 import com.willfp.libreforge.triggers.impl.TriggerFallDamage
 import com.willfp.libreforge.triggers.impl.TriggerFillBucket
+import com.willfp.libreforge.triggers.impl.TriggerGainCurrency
 import com.willfp.libreforge.triggers.impl.TriggerGainHunger
 import com.willfp.libreforge.triggers.impl.TriggerGainXp
 import com.willfp.libreforge.triggers.impl.TriggerGroupCustom
@@ -205,6 +206,7 @@ object Triggers : Registry<Trigger>() {
         register(TriggerEntityTeleport)
         register(TriggerFallDamage)
         register(TriggerFillBucket)
+        register(TriggerGainCurrency)
         register(TriggerGainHunger)
         register(TriggerGainXp)
         register(TriggerHeadshot)

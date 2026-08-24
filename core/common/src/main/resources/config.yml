@@ -143,6 +143,12 @@ refresh:
     # Setting a timeout ensures only one click triggers a refresh within the specified time (in milliseconds).
     timeout: 500
 
+triggers:
+  gain-currency:
+    # How often (in ticks) to poll Vault economies for balance changes, so the gain_currency
+    # trigger can react to money given by plugins other than EcoBits. Set to -1 to disable.
+    vault-poll-interval: 100
+
 # Optional features (opt-in early by choice).
 opt-in:
   # Internal change to make the trigger 'take_damage' block 'take_entity_damage'.
