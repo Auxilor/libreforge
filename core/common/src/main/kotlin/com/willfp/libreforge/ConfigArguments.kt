@@ -42,6 +42,9 @@ enum class ArgType {
     // List of structured subsections described by a schema DTO (see ArgumentMeta.Regular.schema)
     DYNAMIC,
 
+    // Arbitrary user-chosen keys mapping to a known value type (see mapKeyType / mapValueType)
+    MAP,
+
     // Fallback
     ANY
 }
@@ -82,7 +85,17 @@ sealed class ArgumentMeta {
          * for list types. Never read at runtime; the wiki parser reads it from
          * source to build usage examples.
          */
-        val example: Any? = null
+        val example: Any? = null,
+        /**
+         * For [ArgType.MAP] args: the data type of the user-chosen keys. Documentation-only.
+         */
+        val mapKeyType: ArgType? = null,
+        /**
+         * For [ArgType.MAP] args: the data type of the values. Documentation-only. When the
+         * values are structured rather than scalar, this is [ArgType.ANY] and the value's keys
+         * are described by [schema].
+         */
+        val mapValueType: ArgType? = null
     ) : ArgumentMeta()
 
     /**
@@ -119,9 +132,11 @@ class ConfigArgumentsBuilder {
         type: ArgType = ArgType.ANY,
         choices: List<String> = emptyList(),
         schema: KClass<*>? = null,
-        example: Any? = null
+        example: Any? = null,
+        mapKeyType: ArgType? = null,
+        mapValueType: ArgType? = null
     ) {
-        require(listOf(name), message, description, type, choices, schema, example)
+        require(listOf(name), message, description, type, choices, schema, example, mapKeyType, mapValueType)
     }
 
     fun <T> require(
@@ -141,9 +156,23 @@ class ConfigArgumentsBuilder {
         type: ArgType = ArgType.ANY,
         choices: List<String> = emptyList(),
         schema: KClass<*>? = null,
-        example: Any? = null
+        example: Any? = null,
+        mapKeyType: ArgType? = null,
+        mapValueType: ArgType? = null
     ) {
-        require(names, message, { get(it) }, { true }, description, type, choices, schema, example)
+        require(
+            names,
+            message,
+            { get(it) },
+            { true },
+            description,
+            type,
+            choices,
+            schema,
+            example,
+            mapKeyType,
+            mapValueType
+        )
     }
 
     @JvmOverloads
@@ -156,9 +185,23 @@ class ConfigArgumentsBuilder {
         type: ArgType = ArgType.ANY,
         choices: List<String> = emptyList(),
         schema: KClass<*>? = null,
-        example: Any? = null
+        example: Any? = null,
+        mapKeyType: ArgType? = null,
+        mapValueType: ArgType? = null
     ) {
-        arguments += RequiredArgument(names, message, getter, predicate, description, type, choices, schema, example)
+        arguments += RequiredArgument(
+            names,
+            message,
+            getter,
+            predicate,
+            description,
+            type,
+            choices,
+            schema,
+            example,
+            mapKeyType,
+            mapValueType
+        )
     }
 
     @JvmOverloads
@@ -169,9 +212,21 @@ class ConfigArgumentsBuilder {
         default: String? = null,
         choices: List<String> = emptyList(),
         schema: KClass<*>? = null,
-        example: Any? = null
+        example: Any? = null,
+        mapKeyType: ArgType? = null,
+        mapValueType: ArgType? = null
     ) {
-        arguments += OptionalArgument(listOf(name), description, type, default, choices, schema, example)
+        arguments += OptionalArgument(
+            listOf(name),
+            description,
+            type,
+            default,
+            choices,
+            schema,
+            example,
+            mapKeyType,
+            mapValueType
+        )
     }
 
     @JvmOverloads
@@ -182,9 +237,11 @@ class ConfigArgumentsBuilder {
         default: String? = null,
         choices: List<String> = emptyList(),
         schema: KClass<*>? = null,
-        example: Any? = null
+        example: Any? = null,
+        mapKeyType: ArgType? = null,
+        mapValueType: ArgType? = null
     ) {
-        arguments += OptionalArgument(names, description, type, default, choices, schema, example)
+        arguments += OptionalArgument(names, description, type, default, choices, schema, example, mapKeyType, mapValueType)
     }
 
     /**
@@ -197,7 +254,9 @@ class ConfigArgumentsBuilder {
         description: String = "",
         type: ArgType = ArgType.ANY,
         choices: List<String> = emptyList(),
-        example: Any? = null
+        example: Any? = null,
+        mapKeyType: ArgType? = null,
+        mapValueType: ArgType? = null
     ) {
         val arg = arguments
             .filterIsInstance<RequiredArgument<*>>()
@@ -208,7 +267,9 @@ class ConfigArgumentsBuilder {
             description = description,
             type = type,
             choices = choices,
-            example = example ?: arg.meta.example
+            example = example ?: arg.meta.example,
+            mapKeyType = mapKeyType ?: arg.meta.mapKeyType,
+            mapValueType = mapValueType ?: arg.meta.mapValueType
         )
     }
 
@@ -263,7 +324,9 @@ private class RequiredArgument<T>(
     type: ArgType,
     choices: List<String>,
     schema: KClass<*>? = null,
-    example: Any? = null
+    example: Any? = null,
+    mapKeyType: ArgType? = null,
+    mapValueType: ArgType? = null
 ) : ConfigArgument {
     override var meta: ArgumentMeta.Regular = ArgumentMeta.Regular(
         names = argNames,
@@ -273,7 +336,9 @@ private class RequiredArgument<T>(
         default = null,
         choices = choices,
         schema = schema,
-        example = example
+        example = example,
+        mapKeyType = mapKeyType,
+        mapValueType = mapValueType
     )
 
     override fun test(config: Config): List<ConfigViolation> {
@@ -295,7 +360,9 @@ private class OptionalArgument(
     private val default: String?,
     private val choices: List<String>,
     schema: KClass<*>? = null,
-    example: Any? = null
+    example: Any? = null,
+    mapKeyType: ArgType? = null,
+    mapValueType: ArgType? = null
 ) : ConfigArgument {
     override val meta = ArgumentMeta.Regular(
         names = names,
@@ -305,7 +372,9 @@ private class OptionalArgument(
         default = default,
         choices = choices,
         schema = schema,
-        example = example
+        example = example,
+        mapKeyType = mapKeyType,
+        mapValueType = mapValueType
     )
 
     override fun test(config: Config): List<ConfigViolation> = emptyList()
