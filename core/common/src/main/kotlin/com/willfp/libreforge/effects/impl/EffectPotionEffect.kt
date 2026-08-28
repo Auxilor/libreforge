@@ -5,6 +5,7 @@ import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getFormattedString
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -78,7 +79,7 @@ object EffectPotionEffect : Effect<NoCompileData>("potion_effect") {
         toApply.addPotionEffect(
             PotionEffect(
                 @Suppress("DEPRECATION")
-                PotionEffectType.getByName(config.getString("effect").uppercase())
+                PotionEffectType.getByName(config.getFormattedString("effect", data).uppercase())
                     ?: PotionEffectType.LUCK,
                 config.getIntFromExpression("duration", data),
                 config.getIntFromExpression("level", data) - 1,

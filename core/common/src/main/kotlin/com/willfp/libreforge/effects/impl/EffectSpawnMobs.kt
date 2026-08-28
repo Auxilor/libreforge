@@ -2,13 +2,13 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.entities.Entities
-import com.willfp.eco.core.entities.TestableEntity
 import com.willfp.eco.util.NumberUtils
 import com.willfp.libreforge.ArgType
-import com.willfp.libreforge.ViolationContext
+import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
+import com.willfp.libreforge.getFormattedString
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
@@ -24,7 +24,7 @@ import org.bukkit.event.entity.EntityTargetEvent
 import java.util.UUID
 
 
-object EffectSpawnMobs : Effect<TestableEntity>("spawn_mobs") {
+object EffectSpawnMobs : Effect<NoCompileData>("spawn_mobs") {
     override val description = "Spawns multiple mobs near the trigger location that target the victim."
     override val categories = setOf("entity")
 
@@ -70,7 +70,7 @@ object EffectSpawnMobs : Effect<TestableEntity>("spawn_mobs") {
         )
     }
 
-    override fun onTrigger(config: Config, data: TriggerData, compileData: TestableEntity): Boolean {
+    override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val location = data.location ?: return false
         location.world ?: return false
         val victim = data.victim
@@ -87,7 +87,7 @@ object EffectSpawnMobs : Effect<TestableEntity>("spawn_mobs") {
         val health = config.getDoubleFromExpression("health", data)
         val range = config.getDoubleFromExpression("range", data)
 
-        val entityType = Entities.lookup(config.getString("entity"))
+        val entityType = Entities.lookup(config.getFormattedString("entity", data))
 
         for (i in 1..amount) {
             val locationToSpawn = location.clone().add(
@@ -118,10 +118,6 @@ object EffectSpawnMobs : Effect<TestableEntity>("spawn_mobs") {
         }
 
         return true
-    }
-
-    override fun makeCompileData(config: Config, context: ViolationContext): TestableEntity {
-        return Entities.lookup(config.getString("entity"))
     }
 
     @EventHandler

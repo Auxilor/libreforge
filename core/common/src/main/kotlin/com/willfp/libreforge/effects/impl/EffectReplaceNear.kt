@@ -9,6 +9,8 @@ import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getFormattedString
+import com.willfp.libreforge.getFormattedStrings
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.getOrNull
 import com.willfp.libreforge.plugin
@@ -96,10 +98,10 @@ object EffectReplaceNear : Effect<NoCompileData>("replace_near") {
             return false
         }
 
-        val replaceTo = Items.lookup(config.getString("replace_to")).item.type
+        val replaceTo = Items.lookup(config.getFormattedString("replace_to", data)).item.type
 
         val whitelist = config.getStringsOrNull("whitelist")?.map { Blocks.lookup(it) }
-        val blacklist = config.getStrings("blacklist").map { Blocks.lookup(it) }
+        val blacklist = config.getFormattedStrings("blacklist", data).map { Blocks.lookup(it) }
 
         val duration = config.getOrNull("duration") { getIntFromExpression(it, data) }
 

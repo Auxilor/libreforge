@@ -6,6 +6,7 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
+import com.willfp.libreforge.getFormattedString
 import com.willfp.libreforge.levels.LevelTypes
 import com.willfp.libreforge.levels.levels
 import com.willfp.libreforge.toPlaceholderContext
@@ -36,7 +37,7 @@ object EffectGiveItemLevelXp : Effect<NoCompileData>("give_item_level_xp") {
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val item = data.foundItem ?: return false
-        val level = LevelTypes[config.getString("id")] ?: return false
+        val level = LevelTypes[config.getFormattedString("id", data)] ?: return false
 
         val xp = config.getDoubleFromExpression("xp", data)
         item.levels.gainXP(level, xp, config.toPlaceholderContext(data))

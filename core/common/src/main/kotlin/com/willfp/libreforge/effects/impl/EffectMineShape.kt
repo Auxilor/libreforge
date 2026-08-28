@@ -8,6 +8,7 @@ import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.templates.MineBlockEffect
+import com.willfp.libreforge.getFormattedStrings
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -87,7 +88,7 @@ object EffectMineShape : MineBlockEffect<NoCompileData>("mine_shape") {
             return false
         }
 
-        val shape = config.getStrings("shape")
+        val shape = config.getFormattedStrings("shape", data)
         if (shape.isEmpty()) {
             return false
         }
@@ -117,7 +118,7 @@ object EffectMineShape : MineBlockEffect<NoCompileData>("mine_shape") {
 
         val preventTriggers = preventTriggerMode(config)
         val whitelist = config.getStringsOrNull("whitelist")?.map { Blocks.lookup(it) }
-        val blacklist = config.getStrings("blacklisted_blocks").map { Blocks.lookup(it) }
+        val blacklist = config.getFormattedStrings("blacklisted_blocks", data).map { Blocks.lookup(it) }
 
         val depthLayers = (if (config.has("depth")) config.getIntFromExpression("depth", data) else 1)
             .coerceAtLeast(1)

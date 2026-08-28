@@ -6,6 +6,7 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
+import com.willfp.libreforge.getFormattedString
 import com.willfp.libreforge.globalPoints
 import com.willfp.libreforge.triggers.TriggerData
 
@@ -32,7 +33,7 @@ object EffectGiveGlobalPoints : Effect<NoCompileData>("give_global_points") {
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
-        globalPoints[config.getString("type")] += config.getDoubleFromExpression("amount", data)
+        globalPoints[config.getFormattedString("type", data)] += config.getDoubleFromExpression("amount", data)
 
         return true
     }

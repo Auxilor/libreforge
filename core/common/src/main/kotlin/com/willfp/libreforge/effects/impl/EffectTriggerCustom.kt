@@ -6,6 +6,7 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
+import com.willfp.libreforge.getFormattedString
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.impl.TriggerGroupCustom
 
@@ -32,7 +33,7 @@ object EffectTriggerCustom : Effect<NoCompileData>("trigger_custom") {
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val dispatcher = data.dispatcher
-        val trigger = TriggerGroupCustom.create(config.getString("trigger"))
+        val trigger = TriggerGroupCustom.create(config.getFormattedString("trigger", data))
         val value = config.getDoubleFromExpression("value", data)
 
         trigger.dispatch(dispatcher, data.copy(value = value))
