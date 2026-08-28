@@ -1,5 +1,6 @@
 package com.willfp.libreforge.integrations.rosestacker.impl
 
+import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.impl.TriggerEntityDeath
 import com.willfp.libreforge.triggers.impl.TriggerKill
 import dev.rosewood.rosestacker.event.EntityStackMultipleDeathEvent
@@ -23,9 +24,12 @@ object RoseStackerStackedDeathListener : Listener {
         val victim = event.mainEntity
         val killer = event.killer
 
-        repeat(extraDeaths) {
-            TriggerEntityDeath.force(victim)
-            killer?.let { TriggerKill.force(it, victim) }
+        // RoseStacker calls this event asynchronously when death-event-trigger-async is enabled.
+        plugin.scheduler.run {
+            repeat(extraDeaths) {
+                TriggerEntityDeath.force(victim)
+                killer?.let { TriggerKill.force(it, victim) }
+            }
         }
     }
 }
