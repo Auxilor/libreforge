@@ -5,6 +5,7 @@ import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getFormattedString
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -51,7 +52,7 @@ object EffectRemovePotionEffect : Effect<NoCompileData>("remove_potion_effect") 
         plugin.scheduler.run {
             toApply.removePotionEffect(
                 @Suppress("DEPRECATION")
-                PotionEffectType.getByName(config.getString("effect").uppercase())
+                PotionEffectType.getByName(config.getFormattedString("effect", data).uppercase())
                     ?: PotionEffectType.LUCK
             )
         }

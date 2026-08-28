@@ -9,6 +9,7 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
+import com.willfp.libreforge.getFormattedStrings
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
@@ -67,7 +68,7 @@ object EffectMultiplyDrops : Effect<NoCompileData>("multiply_drops") {
         event.addModifier {
             var matches = true
             if (config.has("on_items")) {
-                val items = config.getStrings("on_items").map { string -> Items.lookup(string) }
+                val items = config.getFormattedStrings("on_items", data).map { string -> Items.lookup(string) }
                 matches = items.any { test -> test.matches(it) }
             }
 

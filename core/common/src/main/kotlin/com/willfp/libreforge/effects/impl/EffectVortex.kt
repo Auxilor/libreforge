@@ -8,6 +8,7 @@ import com.willfp.libreforge.arguments
 import com.willfp.libreforge.dealDamage
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
+import com.willfp.libreforge.getFormattedStrings
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.getOrNull
 import com.willfp.libreforge.plugin
@@ -89,7 +90,7 @@ object EffectVortex : Effect<NoCompileData>("vortex") {
         val source = if (config.getBool("use_source")) player else null
 
         val whitelist = config.getStringsOrNull("whitelist")?.map { Entities.lookup(it) }
-        val blacklist = config.getStrings("blacklist").map { Entities.lookup(it) }
+        val blacklist = config.getFormattedStrings("blacklist", data).map { Entities.lookup(it) }
 
         val affected = mutableSetOf<LivingEntity>()
         var tick = 0

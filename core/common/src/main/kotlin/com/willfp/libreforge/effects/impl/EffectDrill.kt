@@ -8,6 +8,7 @@ import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.templates.MineBlockEffect
+import com.willfp.libreforge.getFormattedStrings
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -83,7 +84,7 @@ object EffectDrill : MineBlockEffect<NoCompileData>("drill") {
         }
 
         val whitelist = config.getStringsOrNull("whitelist")?.map { Blocks.lookup(it) }
-        val blacklist = config.getStrings("blacklisted_blocks").map { Blocks.lookup(it) }
+        val blacklist = config.getFormattedStrings("blacklisted_blocks", data).map { Blocks.lookup(it) }
 
         val preventTriggers = preventTriggerMode(config)
 

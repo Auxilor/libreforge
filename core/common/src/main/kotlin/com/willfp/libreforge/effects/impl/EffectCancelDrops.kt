@@ -7,6 +7,7 @@ import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getFormattedStrings
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.event.EditableDropEvent
@@ -31,7 +32,7 @@ object EffectCancelDrops : Effect<NoCompileData>("cancel_drops") {
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val event = data.event as? EditableDropEvent ?: return false
 
-        val onDrops = config.getStrings("on_drops").map { Items.lookup(it) }
+        val onDrops = config.getFormattedStrings("on_drops", data).map { Items.lookup(it) }
 
         if (onDrops.isEmpty()) {
             event.drops.clear()

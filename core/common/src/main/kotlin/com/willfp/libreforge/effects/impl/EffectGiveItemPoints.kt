@@ -6,6 +6,7 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
+import com.willfp.libreforge.getFormattedString
 import com.willfp.libreforge.points
 import com.willfp.libreforge.triggers.TriggerData
 
@@ -34,7 +35,7 @@ object EffectGiveItemPoints : Effect<NoCompileData>("give_item_points") {
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val item = data.foundItem ?: return false
 
-        val type = config.getString("type")
+        val type = config.getFormattedString("type", data)
         val amount = config.getDoubleFromExpression("amount", data)
 
         item.points[type] += amount

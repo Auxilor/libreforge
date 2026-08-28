@@ -10,6 +10,7 @@ import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.executors.ChainExecutors
+import com.willfp.libreforge.getFormattedString
 import com.willfp.libreforge.toPlaceholderContext
 import com.willfp.libreforge.triggers.TriggerData
 
@@ -62,7 +63,7 @@ object EffectRunChain : Effect<NoCompileData>("run_chain") {
             )
         }
 
-        val chain = Effects.getChainByID(config.getString("chain")) ?: return false
+        val chain = Effects.getChainByID(config.getFormattedString("chain", data)) ?: return false
 
         return chain.trigger(
             dispatch,

@@ -5,6 +5,7 @@ import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getFormattedString
 import com.willfp.libreforge.isEcoEmpty
 import com.willfp.libreforge.slot.SlotTypes
 import com.willfp.libreforge.triggers.TriggerData
@@ -36,7 +37,7 @@ object EffectDropItemSlot : Effect<NoCompileData>("drop_item_slot") {
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val player = data.player ?: return false
 
-        val slotType = SlotTypes[config.getString("slot")] ?: return false
+        val slotType = SlotTypes[config.getFormattedString("slot", data)] ?: return false
         val amount = config.getIntFromExpression("amount", player).takeIf { it > 0 }
 
         for (slot in slotType.getItemSlots(player)) {

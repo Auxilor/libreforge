@@ -7,6 +7,7 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.enumValueOfOrNull
+import com.willfp.libreforge.getFormattedString
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.AbstractArrow
@@ -62,7 +63,7 @@ object EffectShoot : Effect<NoCompileData>("shoot") {
         val velocity = data.velocity
         val fire = ((data.event as? EntityShootBowEvent)?.projectile?.fireTicks ?: 0) > 0
 
-        val projectileClass = enumValueOfOrNull<EntityType>(config.getString("projectile").uppercase())?.entityClass
+        val projectileClass = enumValueOfOrNull<EntityType>(config.getFormattedString("projectile", data).uppercase())?.entityClass
             ?: return false
 
         player.runExempted {

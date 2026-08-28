@@ -6,6 +6,7 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
+import com.willfp.libreforge.getFormattedString
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.Bukkit
@@ -53,7 +54,7 @@ object EffectTeleportTo : Effect<NoCompileData>("teleport_to") {
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val player = data.player ?: return false
 
-        val world = Bukkit.getWorld(config.getString("world")) ?: return false
+        val world = Bukkit.getWorld(config.getFormattedString("world", data)) ?: return false
         val loc = Location(
             world,
             config.getDoubleFromExpression("x", data),

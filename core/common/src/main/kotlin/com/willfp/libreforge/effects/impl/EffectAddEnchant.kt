@@ -6,6 +6,7 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getEnchantment
+import com.willfp.libreforge.getFormattedString
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -39,7 +40,7 @@ object EffectAddEnchant : Effect<NoCompileData>("add_enchant") {
         val item = data.foundItem ?: return false
         val meta = item.itemMeta ?: return false
 
-        val enchant = getEnchantment(config.getString("enchant")) ?: return false
+        val enchant = getEnchantment(config.getFormattedString("enchant", data)) ?: return false
         val level = config.getIntFromExpression("level", data)
 
         if (meta is EnchantmentStorageMeta) {

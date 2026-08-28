@@ -8,6 +8,7 @@ import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getFormattedString
 import com.willfp.libreforge.getStrings
 import com.willfp.libreforge.slot.SlotTypes
 import com.willfp.libreforge.triggers.TriggerData
@@ -40,7 +41,7 @@ object EffectGiveItem : Effect<List<ItemStack>>("give_item") {
     override fun onTrigger(config: Config, data: TriggerData, compileData: List<ItemStack>): Boolean {
         val player = data.player ?: return false
 
-        val slotType = SlotTypes[config.getString("slot")]
+        val slotType = SlotTypes[config.getFormattedString("slot", data)]
 
         if (compileData.isEmpty()) return false
 

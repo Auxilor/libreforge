@@ -5,6 +5,7 @@ import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getFormattedString
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.levels.LevelTypes
 import com.willfp.libreforge.levels.levels
@@ -38,7 +39,7 @@ object EffectSetItemLevel : Effect<NoCompileData>("set_item_level") {
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val item = data.foundItem ?: return false
-        val level = LevelTypes[config.getString("id")] ?: return false
+        val level = LevelTypes[config.getFormattedString("id", data)] ?: return false
 
         val newLevel = config.getIntFromExpression("level", data)
         item.levels.setLevel(level, newLevel, config.toPlaceholderContext(data))
