@@ -186,6 +186,7 @@ There are extra placeholders passed in that you can use:
 | `%victim_max_health%` | The victim's max health | |
 | `%distance%` | The distance between the player and the victim | |
 | `%victim_level%` | The victim's level (requires LevelledMobs) | |
+| `%victim_stack_size%` | The number of entities in the victim's stack (requires RoseStacker) | |
 | `%hits%` | The number of times the player has hit the victim | |
 | `%text%` | The message text from the trigger, e.g. a chat message | `%string%`, `%message%` |
 | `%location_x%` | The X coordinate of the location | `%loc_x%`, `%x%` |
@@ -195,6 +196,10 @@ There are extra placeholders passed in that you can use:
 | `%location_block_y%` | The Y coordinate of the block location | `%loc_b_y%`, `%block_y%`, `%by%` |
 | `%location_block_z%` | The Z coordinate of the block location | `%loc_b_z%`, `%block_z%`, `%bz%` |
 | `%location_world%` | The world name of the location | `%loc_w%`, `%world%` |
+
+:::caution %victim_stack_size% and stacked deaths
+By default, killing a stack fires `kill` and `entity_death` once for every entity in it, so multiplying a value by `%victim_stack_size%` will apply the whole stack size once per entity killed. Set `integrations.rosestacker.trigger-per-killed-entity` to false in config.yml if you want the triggers to fire a single time for the whole stack instead.
+:::
 
 ## Load weight
 
