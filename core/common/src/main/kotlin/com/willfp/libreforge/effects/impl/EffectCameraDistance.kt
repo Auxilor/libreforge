@@ -16,8 +16,6 @@ object EffectCameraDistance : AttributeEffect(
     override val description = "Adds to the distance the third person camera sits behind the player."
     override val categories = setOf("visual", "player", "attribute")
 
-    override val additionalInfo = listOf("Requires Minecraft 1.21.6 or newer.")
-
     override val arguments = arguments {
         require(
             "distance",

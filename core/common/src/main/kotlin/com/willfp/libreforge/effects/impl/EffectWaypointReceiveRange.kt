@@ -16,8 +16,6 @@ object EffectWaypointReceiveRange : AttributeEffect(
     override val description = "Adds to the range at which the entity can receive waypoints from others."
     override val categories = setOf("player", "attribute")
 
-    override val additionalInfo = listOf("Requires Minecraft 1.21.6 or newer.")
-
     override val arguments = arguments {
         require(
             "range",

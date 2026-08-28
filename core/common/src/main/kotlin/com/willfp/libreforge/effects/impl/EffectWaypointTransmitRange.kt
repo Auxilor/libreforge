@@ -16,8 +16,6 @@ object EffectWaypointTransmitRange : AttributeEffect(
     override val description = "Adds to the range at which the entity transmits its waypoint to others."
     override val categories = setOf("player", "attribute")
 
-    override val additionalInfo = listOf("Requires Minecraft 1.21.6 or newer.")
-
     override val arguments = arguments {
         require(
             "range",
