@@ -3,12 +3,15 @@ package com.willfp.libreforge.effects.impl.particles.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.effects.impl.particles.ParticleAnimation
+import com.willfp.libreforge.effects.impl.particles.ParticleAnimationWingTipsSpec
 import com.willfp.libreforge.rotateAroundY
 import dev.romainguy.kotlin.math.Float2
 import dev.romainguy.kotlin.math.Float3
 import org.bukkit.entity.Player
 
 object ParticleAnimationWingTips : ParticleAnimation<NoCompileData>("wing_tips") {
+    override val schema = ParticleAnimationWingTipsSpec::class
+
     private val angle90 by lazy { Math.toRadians(90.0).toFloat() }
     private val angleNeg90 by lazy { Math.toRadians(-90.0).toFloat() }
 

@@ -3,19 +3,47 @@ package com.willfp.libreforge.effects.impl.particles.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.util.NumberUtils
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.impl.particles.ParticleAnimation
+import com.willfp.libreforge.effects.impl.particles.ParticleAnimationHelixSpec
 import dev.romainguy.kotlin.math.Float2
 import dev.romainguy.kotlin.math.Float3
 import org.bukkit.entity.Player
 import kotlin.math.PI
 
 object ParticleAnimationHelix : ParticleAnimation<NoCompileData>("helix") {
+    override val schema = ParticleAnimationHelixSpec::class
+
     override val arguments = arguments {
-        require("height", "You must specify the height!")
-        require("duration", "You must specify the duration!")
-        require("speed", "You must specify the speed!")
-        require("radius", "You must specify the radius!")
+        require(
+            "height",
+            "You must specify the height!",
+            description = "The total height the helix climbs over one duration. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            example = "2"
+        )
+        require(
+            "duration",
+            "You must specify the duration!",
+            description = "How long in ticks the animation runs for. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            example = "40"
+        )
+        require(
+            "speed",
+            "You must specify the speed!",
+            description = "How quickly the helix rotates as it climbs. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            example = "1"
+        )
+        require(
+            "radius",
+            "You must specify the radius!",
+            description = "The radius of the helix in blocks. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            example = "1"
+        )
     }
 
     override fun getParticleLocations(

@@ -43,7 +43,7 @@ object EffectPlaySound : Effect<NoCompileData>("play_sound") {
             description = "The sound category to play the sound in.",
             type = ArgType.STRING,
             default = "MASTER",
-            choices = SoundCategory.entries.map { it.name }
+            enumClass = SoundCategory::class
         )
     }
 

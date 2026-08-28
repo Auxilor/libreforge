@@ -2,8 +2,10 @@ package com.willfp.libreforge.effects.impl.particles.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.impl.particles.ParticleAnimation
+import com.willfp.libreforge.effects.impl.particles.ParticleAnimationProjectileTrailSpec
 import com.willfp.libreforge.rotateAroundY
 import dev.romainguy.kotlin.math.Float2
 import dev.romainguy.kotlin.math.Float3
@@ -11,8 +13,16 @@ import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 
 object ParticleAnimationProjectileTrail : ParticleAnimation<NoCompileData>("projectile_trail") {
+    override val schema = ParticleAnimationProjectileTrailSpec::class
+
     override val arguments = arguments {
-        require("gap", "You must specify the gap between particles!")
+        require(
+            "gap",
+            "You must specify the gap between particles!",
+            description = "How many ticks to wait between each particle of the trail. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            example = "2"
+        )
     }
 
     override fun getParticleLocations(

@@ -2,8 +2,10 @@ package com.willfp.libreforge.effects.impl.particles.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.impl.particles.ParticleAnimation
+import com.willfp.libreforge.effects.impl.particles.ParticleAnimationGroundSpiralSpec
 import dev.romainguy.kotlin.math.Float2
 import dev.romainguy.kotlin.math.Float3
 import org.bukkit.entity.Player
@@ -12,10 +14,30 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 object ParticleAnimationGroundSpiral : ParticleAnimation<NoCompileData>("ground_spiral") {
+    override val schema = ParticleAnimationGroundSpiralSpec::class
+
     override val arguments = arguments {
-        require("scalar", "You must specify the scalar!")
-        require("distance-scalar", "You must specify the distance scalar!")
-        require("duration", "You must specify the duration!")
+        require(
+            "scalar",
+            "You must specify the scalar!",
+            description = "How quickly the spiral rotates around the entity. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            example = "1"
+        )
+        require(
+            "distance-scalar",
+            "You must specify the distance scalar!",
+            description = "How quickly the spiral expands outwards from the entity. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            example = "0.5"
+        )
+        require(
+            "duration",
+            "You must specify the duration!",
+            description = "How long in ticks the animation runs for. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            example = "40"
+        )
     }
 
     override fun getParticleLocations(
