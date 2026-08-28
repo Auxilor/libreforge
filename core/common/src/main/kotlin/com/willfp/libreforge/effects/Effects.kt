@@ -169,6 +169,21 @@ import com.willfp.libreforge.effects.impl.EffectRemoveNearbyEntities
 import com.willfp.libreforge.effects.impl.EffectRemovePotionEffect
 import com.willfp.libreforge.effects.impl.EffectRemoveRandomEnchant
 import com.willfp.libreforge.effects.impl.EffectRemoveVictim
+import com.willfp.libreforge.effects.impl.EffectAirDragMultiplier
+import com.willfp.libreforge.effects.impl.EffectAttackDamage
+import com.willfp.libreforge.effects.impl.EffectBelowNameDistance
+import com.willfp.libreforge.effects.impl.EffectBounciness
+import com.willfp.libreforge.effects.impl.EffectCameraDistance
+import com.willfp.libreforge.effects.impl.EffectFallDamageMultiplier
+import com.willfp.libreforge.effects.impl.EffectFlyingSpeedMultiplier
+import com.willfp.libreforge.effects.impl.EffectFollowRange
+import com.willfp.libreforge.effects.impl.EffectFrictionMultiplier
+import com.willfp.libreforge.effects.impl.EffectNameTagDistance
+import com.willfp.libreforge.effects.impl.EffectSpawnReinforcementsChance
+import com.willfp.libreforge.effects.impl.EffectSweepingDamageRatio
+import com.willfp.libreforge.effects.impl.EffectTemptRange
+import com.willfp.libreforge.effects.impl.EffectWaypointReceiveRange
+import com.willfp.libreforge.effects.impl.EffectWaypointTransmitRange
 import com.willfp.libreforge.effects.impl.EffectRenameItem
 import com.willfp.libreforge.effects.impl.EffectRepairItem
 import com.willfp.libreforge.effects.impl.EffectReplaceNear
@@ -759,6 +774,21 @@ object Effects : Registry<Effect<*>>() {
         register(EffectSendDiscordWebhook)
         register(EffectRemoveDispatcher)
         register(EffectRemoveVictim)
+        register(EffectAirDragMultiplier)
+        register(EffectAttackDamage)
+        register(EffectBelowNameDistance)
+        register(EffectBounciness)
+        register(EffectCameraDistance)
+        register(EffectFallDamageMultiplier)
+        register(EffectFlyingSpeedMultiplier)
+        register(EffectFollowRange)
+        register(EffectFrictionMultiplier)
+        register(EffectNameTagDistance)
+        register(EffectSpawnReinforcementsChance)
+        register(EffectSweepingDamageRatio)
+        register(EffectTemptRange)
+        register(EffectWaypointReceiveRange)
+        register(EffectWaypointTransmitRange)
         register(EffectOpenAnvil)
         register(EffectOpenGrindstone)
         register(EffectOpenLoom)
