@@ -28,7 +28,8 @@ object EffectShoot : Effect<NoCompileData>("shoot") {
             "projectile",
             "You must specify the projectile!",
             description = "The entity type to launch as a projectile, e.g. ARROW or SNOWBALL.",
-            type = ArgType.ENTITY
+            type = ArgType.ENTITY,
+            enumClass = EntityType::class
         )
         optional(
             "inherit_velocity",

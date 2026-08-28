@@ -54,7 +54,10 @@ object EffectGlowNearbyBlocks : Effect<NoCompileData>("glow_nearby_blocks") {
             "colors",
             "You must specify the block colors!",
             description = "A subsection mapping block material names to ChatColor names (e.g. DIAMOND_ORE: AQUA).",
-            type = ArgType.ANY
+            type = ArgType.MAP,
+            mapKeyType = ArgType.BLOCK,
+            mapValueType = ArgType.STRING,
+            mapValueEnumClass = ChatColor::class
         )
     }
 

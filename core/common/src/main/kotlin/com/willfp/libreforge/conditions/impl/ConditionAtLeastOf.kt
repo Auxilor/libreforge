@@ -21,7 +21,7 @@ object ConditionAtLeastOf : Condition<ConditionList>("at_least_of") {
             "conditions",
             "You must specify the conditions that can be met!",
             description = "List of conditions to evaluate.",
-            type = ArgType.ANY
+            type = ArgType.CONDITION_LIST
         )
         require(
             "amount",

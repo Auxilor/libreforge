@@ -8,6 +8,7 @@ import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.get
+import org.bukkit.GameMode
 import org.bukkit.entity.Player
 
 object ConditionInGamemode : Condition<NoCompileData>("in_gamemode") {
@@ -18,8 +19,9 @@ object ConditionInGamemode : Condition<NoCompileData>("in_gamemode") {
         require(
             "gamemode",
             "You must specify the gamemode!",
-            description = "The gamemode name (e.g. SURVIVAL, CREATIVE, ADVENTURE, SPECTATOR).",
-            type = ArgType.STRING
+            description = "The gamemode name.",
+            type = ArgType.STRING,
+            enumClass = GameMode::class
         )
     }
 

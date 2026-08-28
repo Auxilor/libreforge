@@ -8,6 +8,7 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.effects.RunOrder
 import com.willfp.libreforge.triggers.TriggerData
+import kotlin.reflect.KClass
 
 abstract class Filter<T, V>(
     override val id: String
@@ -23,6 +24,15 @@ abstract class Filter<T, V>(
      * the filter ID is the config key and this field declares what value type it expects.
      */
     open val valueType: ArgType = ArgType.ANY
+
+    /**
+     * For filters whose value is the constant(s) of an enum (usually a Bukkit enum such as
+     * org.bukkit.event.entity.EntityDamageEvent.DamageCause): the enum the value belongs to.
+     * Documentation-only — the wiki links to the enum's JavaDoc rather than listing constants,
+     * which drift between Minecraft versions. See ArgumentMeta.Regular.enumClass, the
+     * equivalent for arguments blocks.
+     */
+    open val valueEnumClass: KClass<out Enum<*>>? = null
 
     /**
      * Fetch value from config.

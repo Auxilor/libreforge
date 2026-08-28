@@ -43,7 +43,7 @@ object EffectSendDiscordWebhook: Effect<NoCompileData>("send_discord_webhook") {
         )
         optional(
             "avatar_url",
-            description = "A URL to an image to use as the webhook avatar.",
+            description = "A URL to an image to use as the webhook avatar. Taken literally: unlike username and text, this is not formatted, so placeholders in it are not replaced.",
             type = ArgType.STRING,
             example = "https://example.com/avatar.png"
         )
@@ -55,8 +55,9 @@ object EffectSendDiscordWebhook: Effect<NoCompileData>("send_discord_webhook") {
         )
         optional(
             "embeds",
-            description = "A list of embed objects to include in the webhook message.",
-            type = ArgType.ANY
+            description = "A list of embed subsections to include in the webhook message, each with title, description, url, color, timestamp, author, footer, image, thumbnail, and fields.",
+            type = ArgType.DYNAMIC,
+            schema = DiscordEmbedSpec::class
         )
     }
 
