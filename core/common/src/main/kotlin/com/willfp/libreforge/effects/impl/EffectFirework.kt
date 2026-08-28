@@ -5,6 +5,7 @@ import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.Color
@@ -18,8 +19,8 @@ object EffectFirework : Effect<List<FireworkEffect>>("firework") {
     override val arguments = arguments {
         optional(
             "power",
-            description = "The flight duration of the firework (0–255). Defaults to 0.",
-            type = ArgType.INT,
+            description = "The flight duration of the firework (0–255). Defaults to 0. Supports expressions.",
+            type = ArgType.EXPRESSION,
             default = "0"
         )
         optional(
@@ -41,7 +42,7 @@ object EffectFirework : Effect<List<FireworkEffect>>("firework") {
 
         val firework = world.createEntity(location, Firework::class.java)
 
-        val power = if (config.getInt("power") !in 0..255) 0 else config.getInt("power")
+        val power = config.getIntFromExpression("power", data).let { if (it in 0..255) it else 0 }
 
         val meta = firework.fireworkMeta
         meta.addEffects(compileData)
