@@ -8,17 +8,37 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.get
 import com.willfp.libreforge.plugin
+import org.bukkit.NamespacedKey
+import org.bukkit.Registry
 import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeInstance
 import org.bukkit.attribute.AttributeModifier
 import org.bukkit.entity.LivingEntity
 import org.bukkit.inventory.EquipmentSlotGroup
 
-abstract class AttributeEffect(
+abstract class AttributeEffect private constructor(
     id: String,
-    private val attribute: Attribute,
+    attributeProvider: () -> Attribute?,
     private val operation: AttributeModifier.Operation
 ) : Effect<NoCompileData>(id) {
+    constructor(
+        id: String,
+        attribute: Attribute,
+        operation: AttributeModifier.Operation
+    ) : this(id, { attribute }, operation)
+
+    /**
+     * For attributes that don't exist on all supported server versions, looked up by key at
+     * runtime. The effect silently does nothing if the attribute isn't present.
+     */
+    constructor(
+        id: String,
+        attributeKey: String,
+        operation: AttributeModifier.Operation
+    ) : this(id, { Registry.ATTRIBUTE.get(NamespacedKey.minecraft(attributeKey)) }, operation)
+
+    private val attribute by lazy(attributeProvider)
+
     protected abstract fun getValue(config: Config, entity: LivingEntity): Double
 
     protected open fun canApplyTo(entity: LivingEntity): Boolean = true
@@ -48,6 +68,7 @@ abstract class AttributeEffect(
             return
         }
 
+        val attribute = this.attribute ?: return
         val instance = entity.getAttribute(attribute) ?: return
         val modifierName = "libreforge:${this.id} - ${identifiers.key.key} (${holder.holder.id})"
 
@@ -72,6 +93,7 @@ abstract class AttributeEffect(
             return
         }
 
+        val attribute = this.attribute ?: return
         val instance = entity.getAttribute(attribute) ?: return
         val modifierName = "libreforge:${this.id} - ${identifiers.key.key} (${holder.holder.id})"
 
