@@ -15,6 +15,10 @@ import org.bukkit.event.Listener
 object RoseStackerStackedDeathListener : Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     fun handle(event: EntityStackMultipleDeathEvent) {
+        if (!plugin.configYml.getBool("integrations.rosestacker.trigger-per-killed-entity")) {
+            return
+        }
+
         val extraDeaths = event.entityKillCount - 1
 
         if (extraDeaths <= 0) {
@@ -27,8 +31,10 @@ object RoseStackerStackedDeathListener : Listener {
         // RoseStacker calls this event asynchronously when death-event-trigger-async is enabled.
         plugin.scheduler.run {
             repeat(extraDeaths) {
-                TriggerEntityDeath.force(victim)
-                killer?.let { TriggerKill.force(it, victim) }
+                // The entity at the top of the stack has already been dispatched for by the
+                // EntityDeathEvent, so these would otherwise be filtered out as duplicates.
+                TriggerEntityDeath.force(victim, allowDuplicates = true)
+                killer?.let { TriggerKill.force(it, victim, allowDuplicates = true) }
             }
         }
     }

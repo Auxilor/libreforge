@@ -87,11 +87,13 @@ abstract class Trigger(
     fun dispatch(
         dispatcher: Dispatcher<*>,
         data: TriggerData,
-        forceHolders: Collection<ProvidedHolder>? = null
+        forceHolders: Collection<ProvidedHolder>? = null,
+        allowDuplicates: Boolean = false
     ) = dispatchOnEffects(
         dispatcher,
         data,
-        forceHolders?.getProvidedActiveEffects(dispatcher) ?: dispatcher.providedActiveEffects
+        forceHolders?.getProvidedActiveEffects(dispatcher) ?: dispatcher.providedActiveEffects,
+        allowDuplicates
     )
 
     /**
@@ -100,10 +102,11 @@ abstract class Trigger(
     private fun dispatchOnEffects(
         dispatcher: Dispatcher<*>,
         data: TriggerData,
-        effects: List<ProvidedEffectBlock>
+        effects: List<ProvidedEffectBlock>,
+        allowDuplicates: Boolean = false
     ) {
         // Do this first to filter disabled triggers
-        val dispatch = plugin.dispatchedTriggerFactory.create(dispatcher, this, data) ?: return
+        val dispatch = plugin.dispatchedTriggerFactory.create(dispatcher, this, data, allowDuplicates) ?: return
 
         // Filter out effects that can't be triggered by this trigger
         val triggerableEffects = mutableListOf<ProvidedEffectBlock>()

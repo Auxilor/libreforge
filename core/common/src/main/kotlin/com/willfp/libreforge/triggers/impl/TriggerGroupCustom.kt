@@ -42,7 +42,8 @@ object TriggerGroupCustom : TriggerGroup("custom") {
             super.dispatch(
                 dispatcher,
                 data,
-                null
+                null,
+                false
             )
         }
     }

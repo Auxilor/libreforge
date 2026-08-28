@@ -149,6 +149,16 @@ triggers:
     # trigger can react to money given by plugins other than EcoBits. Set to -1 to disable.
     vault-poll-interval: 100
 
+integrations:
+  rosestacker:
+    # If the kill and entity_death triggers should fire once for every entity in a stack that is
+    # killed at once, instead of a single time for the whole stack.
+    # Leave this enabled if you want things like quests and jobs to count every entity killed.
+    # If you disable it, use %victim_stack_size% to scale effects by the size of the killed stack.
+    # Note that %victim_stack_size% is the size of the whole stack either way, so multiplying by it
+    # while this is enabled will count every entity in the stack once for each entity killed.
+    trigger-per-killed-entity: true
+
 # Optional features (opt-in early by choice).
 opt-in:
   # Internal change to make the trigger 'take_damage' block 'take_entity_damage'.
