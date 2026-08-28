@@ -36,4 +36,14 @@ object TriggerEntityDeath : Trigger("entity_death") {
             )
         )
     }
+
+    fun force(victim: LivingEntity) {
+        this.dispatch(
+            victim.toDispatcher(),
+            TriggerData(
+                victim = victim,
+                location = victim.location
+            )
+        )
+    }
 }
