@@ -12,6 +12,7 @@ object FilterDamageCause : Filter<NoCompileData, Collection<String>>("damage_cau
     override val description = "Matches when the damage cause matches one of the given causes."
     override val categories = setOf("combat")
     override val valueType = ArgType.STRING_LIST
+    override val valueEnumClass = EntityDamageEvent.DamageCause::class
     override val additionalInfo = listOf("Passes automatically when the event is not a damage event.")
 
     override fun getValue(config: Config, data: TriggerData?, key: String): Collection<String> {

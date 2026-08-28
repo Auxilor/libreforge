@@ -29,7 +29,9 @@ object EffectRunChain : Effect<NoCompileData>("run_chain") {
         optional(
             "chain_args",
             description = "A subsection of key-value pairs to expose as placeholders within the chain.",
-            type = ArgType.ANY
+            type = ArgType.MAP,
+            mapKeyType = ArgType.STRING,
+            mapValueType = ArgType.STRING
         )
         optional(
             "run-type",

@@ -46,7 +46,7 @@ object EffectCreateBossBar : Effect<NoCompileData>("create_boss_bar") {
             "color",
             description = "The boss bar color.",
             type = ArgType.STRING,
-            choices = listOf("BLUE", "GREEN", "PINK", "PURPLE", "RED", "WHITE", "YELLOW")
+            enumClass = BossBar.Color::class
         )
         require("style", "You must specify a valid boss bar style!", Config::getFormattedString) {
             enumValueOfOrNull<BossBar.Overlay>(it.uppercase()) != null
@@ -55,7 +55,7 @@ object EffectCreateBossBar : Effect<NoCompileData>("create_boss_bar") {
             "style",
             description = "The boss bar overlay style.",
             type = ArgType.STRING,
-            choices = listOf("PROGRESS", "NOTCHED_6", "NOTCHED_10", "NOTCHED_12", "NOTCHED_20")
+            enumClass = BossBar.Overlay::class
         )
         require(
             "progress",

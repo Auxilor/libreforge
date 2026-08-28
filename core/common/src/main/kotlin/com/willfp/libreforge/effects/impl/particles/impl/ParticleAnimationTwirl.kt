@@ -3,8 +3,10 @@ package com.willfp.libreforge.effects.impl.particles.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.util.NumberUtils
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.impl.particles.ParticleAnimation
+import com.willfp.libreforge.effects.impl.particles.ParticleAnimationTwirlSpec
 import com.willfp.libreforge.lerp
 import dev.romainguy.kotlin.math.Float2
 import dev.romainguy.kotlin.math.Float3
@@ -12,13 +14,51 @@ import org.bukkit.entity.Player
 import kotlin.math.PI
 
 object ParticleAnimationTwirl : ParticleAnimation<NoCompileData>("twirl") {
+    override val schema = ParticleAnimationTwirlSpec::class
+
     override val arguments = arguments {
-        require("small-radius", "You must specify the small radius!")
-        require("large-radius", "You must specify the large radius!")
-        require("duration", "You must specify the duration!")
-        require("start-height", "You must specify the start height!")
-        require("end-height", "You must specify the end height!")
-        require("speed", "You must specify the speed!")
+        require(
+            "small-radius",
+            "You must specify the small radius!",
+            description = "The radius the twirl starts at, in blocks. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            example = "0.5"
+        )
+        require(
+            "large-radius",
+            "You must specify the large radius!",
+            description = "The radius the twirl ends at, in blocks. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            example = "2"
+        )
+        require(
+            "duration",
+            "You must specify the duration!",
+            description = "How long in ticks the animation runs for. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            example = "40"
+        )
+        require(
+            "start-height",
+            "You must specify the start height!",
+            description = "The height above the anchor location the twirl starts at. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            example = "0"
+        )
+        require(
+            "end-height",
+            "You must specify the end height!",
+            description = "The height above the anchor location the twirl ends at. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            example = "2"
+        )
+        require(
+            "speed",
+            "You must specify the speed!",
+            description = "How quickly the twirl rotates as it grows. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            example = "1"
+        )
     }
 
     override fun getParticleLocations(

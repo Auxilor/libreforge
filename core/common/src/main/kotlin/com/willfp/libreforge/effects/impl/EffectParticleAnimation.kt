@@ -54,6 +54,12 @@ object EffectParticleAnimation : Effect<ParticleAnimationBlock<*>?>("particle_an
         )
 
         inherit("particle_args") { ParticleAnimations[it.getString("animation")] }
+        describeInherit(
+            "particle_args",
+            "The shape arguments for the chosen animation. The accepted keys depend on the " +
+                    "animation — see its own documentation. Every animation additionally accepts an " +
+                    "optional tick-multiplier, the number of animation steps to advance per tick."
+        )
         optional(
             "particle-amount",
             description = "The number of particles to spawn per animation point per tick. Supports expressions.",

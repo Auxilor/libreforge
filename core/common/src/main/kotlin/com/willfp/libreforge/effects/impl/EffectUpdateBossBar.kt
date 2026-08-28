@@ -44,17 +44,19 @@ object EffectUpdateBossBar : Effect<NoCompileData>("update_boss_bar") {
         )
         optional(
             "color",
-            description = "The new color of the boss bar (e.g. BLUE, RED).",
+            description = "The new color of the boss bar.",
             type = ArgType.STRING,
             default = "",
-            example = "RED"
+            example = "RED",
+            enumClass = BossBar.Color::class
         )
         optional(
             "style",
-            description = "The new overlay style of the boss bar (e.g. PROGRESS, NOTCHED_10).",
+            description = "The new overlay style of the boss bar.",
             type = ArgType.STRING,
             default = "",
-            example = "NOTCHED_10"
+            example = "NOTCHED_10",
+            enumClass = BossBar.Overlay::class
         )
     }
 

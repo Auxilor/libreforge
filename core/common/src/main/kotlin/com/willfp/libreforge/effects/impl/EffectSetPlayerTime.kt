@@ -5,6 +5,7 @@ import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
@@ -20,8 +21,9 @@ object EffectSetPlayerTime : Effect<NoCompileData>("set_player_time") {
         require(
             "time",
             "You must specify the time (ticks: 0=dawn, 6000=noon, 12000=dusk, 18000=midnight)!",
-            description = "The time in ticks to display (0=dawn, 6000=noon, 12000=dusk, 18000=midnight).",
-            type = ArgType.INT
+            description = "The time in ticks to display (0=dawn, 6000=noon, 12000=dusk, 18000=midnight). Supports expressions.",
+            type = ArgType.EXPRESSION,
+            example = "%player_level% * 1000"
         )
         optional(
             "relative",
@@ -45,7 +47,7 @@ object EffectSetPlayerTime : Effect<NoCompileData>("set_player_time") {
             return true
         }
 
-        val time = config.getInt("time").toLong()
+        val time = config.getIntFromExpression("time", data).toLong()
         val relative = config.getBool("relative")
 
         player.setPlayerTime(time, relative)

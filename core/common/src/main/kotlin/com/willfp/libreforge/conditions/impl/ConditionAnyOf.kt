@@ -19,7 +19,7 @@ object ConditionAnyOf : Condition<ConditionList>("any_of") {
             "conditions",
             "You must specify the conditions that can be met!",
             description = "List of conditions — passes when any one is met.",
-            type = ArgType.ANY
+            type = ArgType.CONDITION_LIST
         )
     }
 

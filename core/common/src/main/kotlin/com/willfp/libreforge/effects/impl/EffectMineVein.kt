@@ -52,6 +52,11 @@ object EffectMineVein : MineBlockEffect<FilterList>("mine_vein") {
             type = ArgType.BOOLEAN,
             default = "false"
         )
+        optional(
+            "filters",
+            description = "A standard filters block restricting which blocks in the vein are broken. Each block in the vein is tested against these filters, and only the blocks that pass are broken.",
+            type = ArgType.ANY
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: FilterList): Boolean {

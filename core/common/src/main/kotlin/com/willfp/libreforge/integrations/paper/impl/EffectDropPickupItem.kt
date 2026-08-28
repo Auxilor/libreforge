@@ -44,7 +44,7 @@ object EffectDropPickupItem : Effect<Chain?>("drop_pickup_item") {
             "effects",
             "You must specify the effects to run on pickup!",
             description = "The effects to run when a player picks up the dropped item.",
-            type = ArgType.ANY
+            type = ArgType.EFFECT_LIST
         )
         optional(
             "glow-color",
