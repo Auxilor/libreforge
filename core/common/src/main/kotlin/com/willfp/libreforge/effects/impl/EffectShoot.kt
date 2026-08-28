@@ -7,6 +7,9 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.enumValueOfOrNull
+import com.willfp.libreforge.getDoubleFromExpression
+import com.willfp.libreforge.getIntFromExpression
+import com.willfp.libreforge.getOrNull
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.entity.AbstractArrow
@@ -55,12 +58,29 @@ object EffectShoot : Effect<NoCompileData>("shoot") {
             type = ArgType.BOOLEAN,
             default = "false"
         )
+        optional(
+            "damage",
+            description = "The base damage of the projectile (applies to arrows). " +
+                    "If omitted, uses the arrow's default damage.",
+            type = ArgType.EXPRESSION,
+            default = "2",
+            example = "2 + %level%"
+        )
+        optional(
+            "pierce_level",
+            description = "The number of entities the projectile can pierce through (applies to arrows).",
+            type = ArgType.EXPRESSION,
+            default = "0",
+            example = "1 + %level% / 20"
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val player = data.player ?: return false
         val velocity = data.velocity
         val fire = ((data.event as? EntityShootBowEvent)?.projectile?.fireTicks ?: 0) > 0
+        val damage = config.getOrNull("damage") { getDoubleFromExpression(it, data) }
+        val pierceLevel = config.getOrNull("pierce_level") { getIntFromExpression(it, data) }
 
         val projectileClass = enumValueOfOrNull<EntityType>(config.getString("projectile").uppercase())?.entityClass
             ?: return false
@@ -85,6 +105,13 @@ object EffectShoot : Effect<NoCompileData>("shoot") {
 
                 projectile.pickupStatus = pickupStatus
 
+                if (damage != null) {
+                    projectile.damage = damage
+                }
+
+                if (pierceLevel != null) {
+                    projectile.pierceLevel = pierceLevel
+                }
             }
 
             if (fire) {
