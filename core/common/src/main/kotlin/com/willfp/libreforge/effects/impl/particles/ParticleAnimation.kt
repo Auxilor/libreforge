@@ -7,10 +7,22 @@ import dev.romainguy.kotlin.math.Float3
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import java.util.Objects
+import kotlin.reflect.KClass
 
 abstract class ParticleAnimation<T>(
     override val id: String
 ) : Compilable<T>() {
+    /**
+     * A documentation-only DTO describing the keys of the particle_args subsection for this
+     * animation, in the same way as ArgumentMeta.Regular.schema. Non-null properties are
+     * required keys, nullable properties are optional keys; KDoc `@property` lines supply
+     * per-key descriptions.
+     *
+     * particle_args is a single subsection whose keys depend on the chosen animation, so each
+     * animation declares its own schema rather than the effect declaring one for all of them.
+     * The wiki parser reads this class from source — it is never instantiated at runtime.
+     */
+    open val schema: KClass<*>? = null
 
     /**
      * Get the particle locations with a 2D direction.

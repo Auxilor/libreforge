@@ -7,11 +7,13 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.filters.Filter
 import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.block.CreatureSpawner
+import org.bukkit.entity.EntityType
 
 object FilterSpawnerEntity : Filter<NoCompileData, Collection<String>>("spawner_entity") {
     override val description = "Matches when the block is a spawner and its spawn type matches one of the given entity types."
     override val categories = setOf("world", "entity")
     override val valueType = ArgType.STRING_LIST
+    override val valueEnumClass = EntityType::class
 
     override fun getValue(config: Config, data: TriggerData?, key: String): Collection<String> {
         return config.getStrings(key)

@@ -14,6 +14,21 @@ enum class ArgType {
     STRING,
     EXPRESSION,       // Mathematical expression supporting placeholders
 
+    /*
+
+    Minecraft types.
+
+    These carry eco-specific lookup semantics — resource pack sounds, custom items,
+    custom entities, and so on — so the accepted values are wider than the constants of any
+    one Bukkit enum. Reach for them whenever the argument is resolved through an eco lookup
+    (Items.lookup, Entities.lookup, PlayableSound, Particles.lookup, ...).
+
+    For an argument that really is a bare Bukkit enum constant name, use STRING (or
+    STRING_LIST / MAP) together with ArgumentMeta.Regular.enumClass instead, so the wiki
+    links to the enum's JavaDoc rather than misrepresenting the lookup semantics.
+
+     */
+
     // Minecraft types
     BLOCK,
     ITEM,
@@ -95,7 +110,22 @@ sealed class ArgumentMeta {
          * values are structured rather than scalar, this is [ArgType.ANY] and the value's keys
          * are described by [schema].
          */
-        val mapValueType: ArgType? = null
+        val mapValueType: ArgType? = null,
+        /** For arguments whose accepted values are the constants of an enum (usually a Bukkit
+         *  enum such as org.bukkit.SoundCategory). The wiki links to the enum's JavaDoc rather
+         *  than listing constants, which drift between Minecraft versions. When set and
+         *  [choices] is empty, choices are derived from the enum's constants at runtime. */
+        val enumClass: KClass<out Enum<*>>? = null,
+        /**
+         * For [ArgType.MAP] args whose user-chosen keys are enum constant names: the enum the
+         * keys belong to. Documented in the same way as [enumClass].
+         */
+        val mapKeyEnumClass: KClass<out Enum<*>>? = null,
+        /**
+         * For [ArgType.MAP] args whose values are enum constant names: the enum the values
+         * belong to. Documented in the same way as [enumClass].
+         */
+        val mapValueEnumClass: KClass<out Enum<*>>? = null
     ) : ArgumentMeta()
 
     /**
@@ -134,9 +164,25 @@ class ConfigArgumentsBuilder {
         schema: KClass<*>? = null,
         example: Any? = null,
         mapKeyType: ArgType? = null,
-        mapValueType: ArgType? = null
+        mapValueType: ArgType? = null,
+        enumClass: KClass<out Enum<*>>? = null,
+        mapKeyEnumClass: KClass<out Enum<*>>? = null,
+        mapValueEnumClass: KClass<out Enum<*>>? = null
     ) {
-        require(listOf(name), message, description, type, choices, schema, example, mapKeyType, mapValueType)
+        require(
+            listOf(name),
+            message,
+            description,
+            type,
+            choices,
+            schema,
+            example,
+            mapKeyType,
+            mapValueType,
+            enumClass,
+            mapKeyEnumClass,
+            mapValueEnumClass
+        )
     }
 
     fun <T> require(
@@ -158,7 +204,10 @@ class ConfigArgumentsBuilder {
         schema: KClass<*>? = null,
         example: Any? = null,
         mapKeyType: ArgType? = null,
-        mapValueType: ArgType? = null
+        mapValueType: ArgType? = null,
+        enumClass: KClass<out Enum<*>>? = null,
+        mapKeyEnumClass: KClass<out Enum<*>>? = null,
+        mapValueEnumClass: KClass<out Enum<*>>? = null
     ) {
         require(
             names,
@@ -171,7 +220,10 @@ class ConfigArgumentsBuilder {
             schema,
             example,
             mapKeyType,
-            mapValueType
+            mapValueType,
+            enumClass,
+            mapKeyEnumClass,
+            mapValueEnumClass
         )
     }
 
@@ -187,7 +239,10 @@ class ConfigArgumentsBuilder {
         schema: KClass<*>? = null,
         example: Any? = null,
         mapKeyType: ArgType? = null,
-        mapValueType: ArgType? = null
+        mapValueType: ArgType? = null,
+        enumClass: KClass<out Enum<*>>? = null,
+        mapKeyEnumClass: KClass<out Enum<*>>? = null,
+        mapValueEnumClass: KClass<out Enum<*>>? = null
     ) {
         arguments += RequiredArgument(
             names,
@@ -200,7 +255,10 @@ class ConfigArgumentsBuilder {
             schema,
             example,
             mapKeyType,
-            mapValueType
+            mapValueType,
+            enumClass,
+            mapKeyEnumClass,
+            mapValueEnumClass
         )
     }
 
@@ -214,7 +272,10 @@ class ConfigArgumentsBuilder {
         schema: KClass<*>? = null,
         example: Any? = null,
         mapKeyType: ArgType? = null,
-        mapValueType: ArgType? = null
+        mapValueType: ArgType? = null,
+        enumClass: KClass<out Enum<*>>? = null,
+        mapKeyEnumClass: KClass<out Enum<*>>? = null,
+        mapValueEnumClass: KClass<out Enum<*>>? = null
     ) {
         arguments += OptionalArgument(
             listOf(name),
@@ -225,7 +286,10 @@ class ConfigArgumentsBuilder {
             schema,
             example,
             mapKeyType,
-            mapValueType
+            mapValueType,
+            enumClass,
+            mapKeyEnumClass,
+            mapValueEnumClass
         )
     }
 
@@ -239,9 +303,25 @@ class ConfigArgumentsBuilder {
         schema: KClass<*>? = null,
         example: Any? = null,
         mapKeyType: ArgType? = null,
-        mapValueType: ArgType? = null
+        mapValueType: ArgType? = null,
+        enumClass: KClass<out Enum<*>>? = null,
+        mapKeyEnumClass: KClass<out Enum<*>>? = null,
+        mapValueEnumClass: KClass<out Enum<*>>? = null
     ) {
-        arguments += OptionalArgument(names, description, type, default, choices, schema, example, mapKeyType, mapValueType)
+        arguments += OptionalArgument(
+            names,
+            description,
+            type,
+            default,
+            choices,
+            schema,
+            example,
+            mapKeyType,
+            mapValueType,
+            enumClass,
+            mapKeyEnumClass,
+            mapValueEnumClass
+        )
     }
 
     /**
@@ -256,20 +336,28 @@ class ConfigArgumentsBuilder {
         choices: List<String> = emptyList(),
         example: Any? = null,
         mapKeyType: ArgType? = null,
-        mapValueType: ArgType? = null
+        mapValueType: ArgType? = null,
+        enumClass: KClass<out Enum<*>>? = null,
+        mapKeyEnumClass: KClass<out Enum<*>>? = null,
+        mapValueEnumClass: KClass<out Enum<*>>? = null
     ) {
         val arg = arguments
             .filterIsInstance<RequiredArgument<*>>()
             .lastOrNull { name in it.argNames }
             ?: return
 
+        val resolvedEnumClass = enumClass ?: arg.meta.enumClass
+
         arg.meta = arg.meta.copy(
             description = description,
             type = type,
-            choices = choices,
+            choices = resolveChoices(choices, resolvedEnumClass),
             example = example ?: arg.meta.example,
             mapKeyType = mapKeyType ?: arg.meta.mapKeyType,
-            mapValueType = mapValueType ?: arg.meta.mapValueType
+            mapValueType = mapValueType ?: arg.meta.mapValueType,
+            enumClass = resolvedEnumClass,
+            mapKeyEnumClass = mapKeyEnumClass ?: arg.meta.mapKeyEnumClass,
+            mapValueEnumClass = mapValueEnumClass ?: arg.meta.mapValueEnumClass
         )
     }
 
@@ -309,6 +397,21 @@ fun arguments(block: ConfigArgumentsBuilder.() -> Unit): ConfigArguments {
     return ConfigArgumentsBuilder().apply(block).build()
 }
 
+/**
+ * Explicitly passed [choices] always win; otherwise derive the choices from the constants
+ * of [enumClass], if one was declared.
+ */
+private fun resolveChoices(
+    choices: List<String>,
+    enumClass: KClass<out Enum<*>>?
+): List<String> {
+    if (choices.isNotEmpty() || enumClass == null) {
+        return choices
+    }
+
+    return enumClass.java.enumConstants?.map { it.name } ?: emptyList()
+}
+
 interface ConfigArgument {
     val meta: ArgumentMeta
 
@@ -326,7 +429,10 @@ private class RequiredArgument<T>(
     schema: KClass<*>? = null,
     example: Any? = null,
     mapKeyType: ArgType? = null,
-    mapValueType: ArgType? = null
+    mapValueType: ArgType? = null,
+    enumClass: KClass<out Enum<*>>? = null,
+    mapKeyEnumClass: KClass<out Enum<*>>? = null,
+    mapValueEnumClass: KClass<out Enum<*>>? = null
 ) : ConfigArgument {
     override var meta: ArgumentMeta.Regular = ArgumentMeta.Regular(
         names = argNames,
@@ -334,11 +440,14 @@ private class RequiredArgument<T>(
         type = type,
         required = true,
         default = null,
-        choices = choices,
+        choices = resolveChoices(choices, enumClass),
         schema = schema,
         example = example,
         mapKeyType = mapKeyType,
-        mapValueType = mapValueType
+        mapValueType = mapValueType,
+        enumClass = enumClass,
+        mapKeyEnumClass = mapKeyEnumClass,
+        mapValueEnumClass = mapValueEnumClass
     )
 
     override fun test(config: Config): List<ConfigViolation> {
@@ -362,7 +471,10 @@ private class OptionalArgument(
     schema: KClass<*>? = null,
     example: Any? = null,
     mapKeyType: ArgType? = null,
-    mapValueType: ArgType? = null
+    mapValueType: ArgType? = null,
+    enumClass: KClass<out Enum<*>>? = null,
+    mapKeyEnumClass: KClass<out Enum<*>>? = null,
+    mapValueEnumClass: KClass<out Enum<*>>? = null
 ) : ConfigArgument {
     override val meta = ArgumentMeta.Regular(
         names = names,
@@ -370,11 +482,14 @@ private class OptionalArgument(
         type = type,
         required = false,
         default = default,
-        choices = choices,
+        choices = resolveChoices(choices, enumClass),
         schema = schema,
         example = example,
         mapKeyType = mapKeyType,
-        mapValueType = mapValueType
+        mapValueType = mapValueType,
+        enumClass = enumClass,
+        mapKeyEnumClass = mapKeyEnumClass,
+        mapValueEnumClass = mapValueEnumClass
     )
 
     override fun test(config: Config): List<ConfigViolation> = emptyList()
