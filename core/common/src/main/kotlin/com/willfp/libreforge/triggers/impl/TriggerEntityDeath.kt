@@ -36,4 +36,15 @@ object TriggerEntityDeath : Trigger("entity_death") {
             )
         )
     }
+
+    fun force(victim: LivingEntity, allowDuplicates: Boolean = false) {
+        this.dispatch(
+            victim.toDispatcher(),
+            TriggerData(
+                victim = victim,
+                location = victim.location
+            ),
+            allowDuplicates = allowDuplicates
+        )
+    }
 }

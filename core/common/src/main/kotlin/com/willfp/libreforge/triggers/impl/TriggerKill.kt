@@ -57,7 +57,7 @@ object TriggerKill : Trigger("kill") {
         )
     }
 
-    fun force(player: Player, victim: LivingEntity) {
+    fun force(player: Player, victim: LivingEntity, allowDuplicates: Boolean = false) {
         this.dispatch(
             player.toDispatcher(),
             TriggerData(
@@ -65,7 +65,8 @@ object TriggerKill : Trigger("kill") {
                 victim = victim,
                 location = victim.location,
                 value = victim.getAttribute(Attribute.MAX_HEALTH)!!.value
-            )
+            ),
+            allowDuplicates = allowDuplicates
         )
     }
 }

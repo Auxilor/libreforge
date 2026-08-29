@@ -49,6 +49,7 @@ import com.willfp.libreforge.integrations.modelengine.ModelEngineIntegration
 import com.willfp.libreforge.integrations.mythicmobs.MythicMobsIntegration
 import com.willfp.libreforge.integrations.paper.PaperIntegration
 import com.willfp.libreforge.integrations.purpur.PurpurIntegration
+import com.willfp.libreforge.integrations.rosestacker.RoseStackerIntegration
 import com.willfp.libreforge.integrations.scyther.ScytherIntegration
 import com.willfp.libreforge.integrations.shopkeepers.ShopkeepersIntegration
 import com.willfp.libreforge.integrations.tab.TabIntegration
@@ -242,6 +243,7 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             IntegrationLoader("AuraSkills") { AuraSkillsIntegration.load(this) },
             IntegrationLoader("Jobs") { JobsIntegration.load(this) },
             IntegrationLoader("LevelledMobs") { LevelledMobsIntegration.load(this) },
+            IntegrationLoader("RoseStacker") { RoseStackerIntegration.load(this) },
             IntegrationLoader("mcMMO") { McMMOIntegration.load(this) },
             IntegrationLoader("Citizens") { CitizensIntegration.load(this) },
             IntegrationLoader("Scyther") { ScytherIntegration.load(this) },

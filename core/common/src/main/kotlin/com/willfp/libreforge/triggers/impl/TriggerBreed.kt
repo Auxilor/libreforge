@@ -5,9 +5,11 @@ import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityBreedEvent
+import org.bukkit.inventory.ItemStack
 
 object TriggerBreed : Trigger("breed") {
     override val description = "Fires when two entities are bred."
@@ -41,6 +43,19 @@ object TriggerBreed : Trigger("breed") {
                 location = event.entity.location,
                 item = event.bredWith,
                 value = event.experience.toDouble()
+            )
+        )
+    }
+
+    fun force(breeder: Player, offspring: LivingEntity, bredWith: ItemStack, experience: Double) {
+        this.dispatch(
+            breeder.toDispatcher(),
+            TriggerData(
+                player = breeder,
+                victim = offspring,
+                location = offspring.location,
+                item = bredWith,
+                value = experience
             )
         )
     }
