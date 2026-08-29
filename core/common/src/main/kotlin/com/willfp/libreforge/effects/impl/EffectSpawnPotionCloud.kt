@@ -5,6 +5,7 @@ import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getFormattedString
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -48,7 +49,7 @@ object EffectSpawnPotionCloud : Effect<NoCompileData>("spawn_potion_cloud") {
         val world = location.world ?: return false
 
         @Suppress("DEPRECATION")
-        val effect = PotionEffectType.getByName(config.getString("effect").uppercase()) ?: return false
+        val effect = PotionEffectType.getByName(config.getFormattedString("effect", data).uppercase()) ?: return false
         val level = config.getIntFromExpression("level", data)
         val duration = config.getIntFromExpression("duration", data)
 

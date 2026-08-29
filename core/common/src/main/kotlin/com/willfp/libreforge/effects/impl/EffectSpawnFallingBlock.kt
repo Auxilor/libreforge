@@ -5,6 +5,7 @@ import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getFormattedString
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -35,7 +36,7 @@ object EffectSpawnFallingBlock : Effect<NoCompileData>("spawn_falling_block") {
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val location = data.location ?: return false
-        val material = Material.matchMaterial(config.getString("block").uppercase()) ?: return false
+        val material = Material.matchMaterial(config.getFormattedString("block", data).uppercase()) ?: return false
 
         if (!material.isBlock) return false
 

@@ -8,6 +8,7 @@ import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.enumValueOfOrNull
 import com.willfp.libreforge.getDoubleFromExpression
+import com.willfp.libreforge.getFormattedString
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.getOrNull
 import com.willfp.libreforge.triggers.TriggerData
@@ -82,7 +83,7 @@ object EffectShoot : Effect<NoCompileData>("shoot") {
         val damage = config.getOrNull("damage") { getDoubleFromExpression(it, data) }
         val pierceLevel = config.getOrNull("pierce_level") { getIntFromExpression(it, data) }
 
-        val projectileClass = enumValueOfOrNull<EntityType>(config.getString("projectile").uppercase())?.entityClass
+        val projectileClass = enumValueOfOrNull<EntityType>(config.getFormattedString("projectile", data).uppercase())?.entityClass
             ?: return false
 
         player.runExempted {

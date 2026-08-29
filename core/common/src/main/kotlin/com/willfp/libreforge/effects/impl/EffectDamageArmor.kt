@@ -6,6 +6,7 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.enumValueOfOrNull
+import com.willfp.libreforge.getFormattedStrings
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -52,7 +53,7 @@ object EffectDamageArmor : Effect<NoCompileData>("damage_armor") {
 
         val equipment = victim.equipment ?: return false
 
-        val slots = config.getStrings("slots").mapNotNull {
+        val slots = config.getFormattedStrings("slots", data).mapNotNull {
             enumValueOfOrNull<EquipmentSlot>(it.uppercase())
         }
 

@@ -5,6 +5,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
+import com.willfp.libreforge.getFormattedString
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.getOrNull
 import com.willfp.libreforge.plugin
@@ -38,7 +39,7 @@ object EffectPlaceBlock : Effect<NoCompileData>("place_block") {
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val location = data.location ?: return false
         val block = location.block
-        val toPlace = Blocks.lookup(config.getString("block"))
+        val toPlace = Blocks.lookup(config.getFormattedString("block", data))
         val duration = config.getOrNull("duration") { getIntFromExpression(it, data) }
 
         if (duration != null && duration > 0) {

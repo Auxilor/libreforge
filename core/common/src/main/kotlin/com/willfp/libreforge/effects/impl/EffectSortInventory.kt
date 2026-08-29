@@ -5,6 +5,7 @@ import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getFormattedString
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
@@ -29,7 +30,7 @@ object EffectSortInventory : Effect<NoCompileData>("sort_inventory") {
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val player = data.player ?: return false
 
-        val slots = when (config.getString("type").lowercase()) {
+        val slots = when (config.getFormattedString("type", data).lowercase()) {
             "all" -> 0..35
             "hotbar" -> 0..8
             "main" -> 9..35

@@ -8,6 +8,7 @@ import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.impl.particles.ParticleAnimationBlock
 import com.willfp.libreforge.effects.impl.particles.ParticleAnimations
+import com.willfp.libreforge.getFormattedString
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.toFloat3
@@ -86,7 +87,7 @@ object EffectParticleAnimation : Effect<ParticleAnimationBlock<*>?>("particle_an
         val player = data.player ?: return false
         compileData ?: return false
 
-        val entity = when (config.getString("entity").lowercase()) {
+        val entity = when (config.getFormattedString("entity", data).lowercase()) {
             "victim" -> data.victim
             "projectile" -> data.projectile
             else -> data.player
@@ -94,7 +95,7 @@ object EffectParticleAnimation : Effect<ParticleAnimationBlock<*>?>("particle_an
 
         val world = location.world ?: return false
 
-        val particle = Particles.lookup(config.getString("particle"))
+        val particle = Particles.lookup(config.getFormattedString("particle", data))
 
         var tick = 0
 

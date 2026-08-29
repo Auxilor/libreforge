@@ -6,6 +6,7 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
+import com.willfp.libreforge.getFormattedString
 import com.willfp.libreforge.globalPoints
 import com.willfp.libreforge.triggers.TriggerData
 
@@ -32,7 +33,7 @@ object EffectMultiplyGlobalPoints : Effect<NoCompileData>("multiply_global_point
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
-        val type = config.getString("type")
+        val type = config.getFormattedString("type", data)
 
         globalPoints[type] *= config.getDoubleFromExpression("multiplier", data)
 

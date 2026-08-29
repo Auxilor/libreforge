@@ -5,6 +5,7 @@ import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getFormattedString
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.NamespacedKey
@@ -48,9 +49,9 @@ object EffectSetArmorTrim : Effect<NoCompileData>("set_armor_trim") {
         val meta = item.itemMeta as? ArmorMeta ?: return false
 
         @Suppress("DEPRECATION")
-        val material = Registry.TRIM_MATERIAL.get(NamespacedKey.minecraft(config.getString("material"))) ?: return false
+        val material = Registry.TRIM_MATERIAL.get(NamespacedKey.minecraft(config.getFormattedString("material", data))) ?: return false
         @Suppress("DEPRECATION")
-        val pattern = Registry.TRIM_PATTERN.get(NamespacedKey.minecraft(config.getString("pattern"))) ?: return false
+        val pattern = Registry.TRIM_PATTERN.get(NamespacedKey.minecraft(config.getFormattedString("pattern", data))) ?: return false
 
         meta.trim = ArmorTrim(material, pattern)
         item.itemMeta = meta
