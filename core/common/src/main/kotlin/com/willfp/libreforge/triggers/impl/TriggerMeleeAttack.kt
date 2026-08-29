@@ -1,6 +1,5 @@
 package com.willfp.libreforge.triggers.impl
 
-import com.willfp.eco.core.Prerequisite
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
@@ -23,11 +22,6 @@ import org.bukkit.event.Listener
 
 object TriggerMeleeAttack : Trigger("melee_attack") {
     private val dataMap = ConcurrentHashMap<UUID, Float>()
-    init {
-        if (Prerequisite.HAS_PAPER.isMet) {
-            registerPaperExclusiveListeners()
-        }
-    }
 
     override val description = "Fires when the player lands a melee hit on an entity."
 
