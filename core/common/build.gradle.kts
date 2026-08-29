@@ -33,9 +33,6 @@ dependencies {
     compileOnly("net.momirealms:custom-fishing:2.3.20")
     compileOnly("io.lumine:Mythic:5.11.1")
     compileOnly("io.lumine:LumineUtils:1.21-SNAPSHOT")
-    compileOnly("net.citizensnpcs:citizens-main:2.0.41-SNAPSHOT") {
-        exclude(group = "net.byteflux", module = "libby-bukkit")
-    }
     // For mobcoins
     compileOnly("com.github.shynixn.mccoroutine:mccoroutine-folia-api:2.22.0")
     compileOnly("com.artillexstudios:AxTrade:1.21.1")
