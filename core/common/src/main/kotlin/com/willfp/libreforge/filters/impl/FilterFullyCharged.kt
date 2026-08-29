@@ -25,11 +25,9 @@ object FilterFullyCharged : Filter<NoCompileData, Boolean>("fully_charged") {
         return when (val event = data.event) {
             is TriggerMeleeAttack.EcoEntityDamageByEntityEvent -> {
                 val player = event.damager as? Player ?: return true
-                Bukkit.getConsoleSender().sendMessage("Attack cooldown: ${player.attackCooldown}/${event.attackCooldown}")
                 event.attackCooldown >= 1f == value
             }
             is EntityShootBowEvent -> {
-                Bukkit.getConsoleSender().sendMessage("Force: ${event.force}")
                 event.force >= 1f == value
             }
             else -> true
