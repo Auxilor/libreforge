@@ -75,6 +75,7 @@ import com.willfp.libreforge.tags.CustomEntityTag
 import com.willfp.libreforge.tags.CustomTag
 import com.willfp.libreforge.triggers.DispatchedTriggerFactory
 import com.willfp.libreforge.triggers.Triggers
+import com.willfp.libreforge.triggers.impl.TriggerMeleeAttack
 import org.bukkit.Bukkit
 import org.bukkit.entity.LivingEntity
 import org.bukkit.event.Listener
@@ -128,6 +129,7 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
 
         if (Prerequisite.HAS_PAPER.isMet) {
             PaperIntegration.load(this)
+            TriggerMeleeAttack.registerPaperExclusiveListeners()
         }
 
         if (ClassUtils.exists("org.purpurmc.purpur.event.inventory.AnvilTakeResultEvent")
