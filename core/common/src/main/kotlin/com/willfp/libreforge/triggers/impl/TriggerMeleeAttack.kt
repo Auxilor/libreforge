@@ -14,9 +14,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
-import com.google.common.base.Function
 import org.bukkit.Bukkit
-import org.bukkit.damage.DamageSource
 import org.bukkit.entity.Entity
 import org.bukkit.event.Listener
 
@@ -66,20 +64,8 @@ object TriggerMeleeAttack : Trigger("melee_attack") {
         }
     }
 
-    class EcoEntityDamageByEntityEvent(
-        damager: Entity,
-        damagee: Entity,
-        cause: DamageCause,
-        damage: Double,
-        val attackCooldown: Float,
-    ) : EntityDamageByEntityEvent(damager, damagee, cause, damage) {
-        constructor(event: EntityDamageByEntityEvent, attackCooldown: Float) : this(
-            damager = event.damager,
-            damagee = event.entity,
-            cause = event.cause,
-            damage = event.damage,
-            attackCooldown = attackCooldown
-        )
+    fun getAttackCooldown(damager: Entity): Float? {
+        return dataMap[damager.uniqueId]
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
@@ -103,10 +89,7 @@ object TriggerMeleeAttack : Trigger("melee_attack") {
                 player = attacker as? Player,
                 victim = victim,
                 location = victim.location,
-                event = EcoEntityDamageByEntityEvent(
-                    event = event,
-                    attackCooldown = dataMap[event.damager.uniqueId] ?: (attacker as? Player)?.attackCooldown ?: 0f
-                ),
+                event = event,
                 item = attacker.equipment?.itemInMainHand,
                 value = event.finalDamage,
                 altValue = event.getDamage(EntityDamageEvent.DamageModifier.BASE)
