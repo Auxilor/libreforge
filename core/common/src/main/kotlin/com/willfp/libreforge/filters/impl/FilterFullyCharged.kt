@@ -6,7 +6,6 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.filters.Filter
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.impl.TriggerMeleeAttack
-import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityShootBowEvent
@@ -23,9 +22,10 @@ object FilterFullyCharged : Filter<NoCompileData, Boolean>("fully_charged") {
 
     override fun isMet(data: TriggerData, value: Boolean, compileData: NoCompileData): Boolean {
         return when (val event = data.event) {
-            is TriggerMeleeAttack.EcoEntityDamageByEntityEvent -> {
+            is EntityDamageByEntityEvent -> {
                 val player = event.damager as? Player ?: return true
-                event.attackCooldown >= 1f == value
+                val cooldown = TriggerMeleeAttack.getAttackCooldown(player) ?: player.attackCooldown
+                cooldown >= 1f == value
             }
             is EntityShootBowEvent -> {
                 event.force >= 1f == value
