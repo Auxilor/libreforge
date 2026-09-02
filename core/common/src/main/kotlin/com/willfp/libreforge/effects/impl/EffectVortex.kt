@@ -95,7 +95,7 @@ object EffectVortex : Effect<NoCompileData>("vortex") {
         val affected = mutableSetOf<LivingEntity>()
         var tick = 0
 
-        plugin.runnableFactory.create { task ->
+        plugin.scheduler.at(origin).runTimer({ task ->
             tick++
 
             origin.world?.getNearbyEntities(origin, radius, radius, radius)
@@ -118,7 +118,7 @@ object EffectVortex : Effect<NoCompileData>("vortex") {
                 affected.forEach { it.dealDamage(damage, source, trueDamage) }
                 task.cancel()
             }
-        }.runTaskTimer(0L, 1L)
+        }, 0L, 1L)
 
         return true
     }

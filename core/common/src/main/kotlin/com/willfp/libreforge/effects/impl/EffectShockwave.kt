@@ -76,7 +76,7 @@ object EffectShockwave : Effect<NoCompileData>("shockwave") {
         val hit = mutableSetOf<LivingEntity>()
         var pulse = 0
 
-        plugin.runnableFactory.create { task ->
+        plugin.scheduler.at(origin).runTimer({ task ->
             pulse++
             val currentRadius = radius * pulse / pulses
 
@@ -93,7 +93,7 @@ object EffectShockwave : Effect<NoCompileData>("shockwave") {
                 }
 
             if (pulse >= pulses) task.cancel()
-        }.runTaskTimer(0L, 3L)
+        }, 0L, 3L)
 
         return true
     }

@@ -48,7 +48,7 @@ object EffectAnimation : Effect<AnimationBlock<*, *>?>("animation") {
                 data
             )
 
-            plugin.runnableFactory.create {
+            plugin.scheduler.at(location).runTimer({ task ->
                 if (
                     animationBlock.play(
                         tick,
@@ -64,11 +64,11 @@ object EffectAnimation : Effect<AnimationBlock<*, *>?>("animation") {
                         data,
                         animationData
                     )
-                    it.cancel()
+                    task.cancel()
                 }
 
                 tick++
-            }.runTaskTimer(0, 1)
+            }, 0, 1)
         }
 
         playAnimation(compileData)

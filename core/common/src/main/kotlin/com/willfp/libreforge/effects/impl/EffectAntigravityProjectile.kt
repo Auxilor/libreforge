@@ -39,22 +39,22 @@ object EffectAntigravityProjectile : Effect<NoCompileData>("antigravity_projecti
         val projectile = event.entity
         projectile.setGravity(false)
         val launchSpeed = projectile.velocity.length()
-        plugin.runnableFactory.create { task ->
+        plugin.scheduler.on(projectile).runTimer({ task ->
             if (projectile.isDead || projectile.isOnGround) {
                 task.cancel()
-                return@create
+                return@runTimer
             }
             val velocity = projectile.velocity
             val nextChunk = projectile.location.add(velocity).chunk
             if (!nextChunk.isLoaded) {
                 projectile.setGravity(true)
                 task.cancel()
-                return@create
+                return@runTimer
             }
             val currentSpeed = velocity.length()
             if (currentSpeed > 0) {
                 projectile.velocity = velocity.multiply(launchSpeed / currentSpeed)
             }
-        }.runTaskTimer(0L, 1L)
+        }, 0L, 1L)
     }
 }
