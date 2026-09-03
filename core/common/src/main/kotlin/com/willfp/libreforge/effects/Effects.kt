@@ -240,6 +240,7 @@ import com.willfp.libreforge.effects.impl.EffectSpawnParticle
 import com.willfp.libreforge.effects.impl.EffectSpawnPotionCloud
 import com.willfp.libreforge.effects.impl.EffectStrikeLightning
 import com.willfp.libreforge.effects.impl.EffectStripAI
+import com.willfp.libreforge.effects.impl.EffectStripLogs
 import com.willfp.libreforge.effects.impl.EffectStun
 import com.willfp.libreforge.effects.impl.EffectSwapPositions
 import com.willfp.libreforge.effects.impl.EffectSwarm
@@ -736,6 +737,7 @@ object Effects : Registry<Effect<*>>() {
         register(EffectStrikeLightning)
         register(EffectTimeBomb)
         register(EffectStripAI)
+        register(EffectStripLogs)
         register(EffectStun)
         register(EffectSwapPositions)
         register(EffectSwarm)
