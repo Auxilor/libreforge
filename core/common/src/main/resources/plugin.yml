@@ -14,6 +14,7 @@ website: willfp.com
 softdepend:
   - eco
   - Jobs
+  - CMI
   - LevelledMobs
   - mcMMO
   - Scyther

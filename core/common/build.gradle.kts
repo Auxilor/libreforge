@@ -18,6 +18,12 @@ dependencies {
     compileOnly("com.github.Zrips:Jobs:v5.2.6.3") {
         exclude(group = "com.bgsoftware", module = "WildStackerAPI")
     }
+    compileOnly("com.github.Zrips:CMI-API:9.8.6.4") {
+        exclude("*", "*")
+    }
+    compileOnly("com.github.Zrips:CMILib:1.5.8.1") {
+        exclude("*", "*")
+    }
     compileOnly("com.github.MilkBowl:VaultAPI:1.7") {
         exclude("*", "*")
     }

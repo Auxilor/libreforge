@@ -30,6 +30,7 @@ import com.willfp.libreforge.integrations.axplugins.axenvoy.AxEnvoyIntegration
 import com.willfp.libreforge.integrations.axplugins.axtrade.AxTradeIntegration
 import com.willfp.libreforge.integrations.bettermodel.BetterModelIntegration
 import com.willfp.libreforge.integrations.citizens.CitizensIntegration
+import com.willfp.libreforge.integrations.cmi.CMIIntegration
 import com.willfp.libreforge.integrations.custom_blocks.craftengine.CraftEngineIntegration
 import com.willfp.libreforge.integrations.custom_blocks.itemsadder.ItemsAdderIntegration
 import com.willfp.libreforge.integrations.custom_blocks.nexo.NexoIntegration
@@ -244,6 +245,7 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
         return listOf(
             IntegrationLoader("AuraSkills") { AuraSkillsIntegration.load(this) },
             IntegrationLoader("Jobs") { JobsIntegration.load(this) },
+            IntegrationLoader("CMI") { CMIIntegration.load(this) },
             IntegrationLoader("LevelledMobs") { LevelledMobsIntegration.load(this) },
             IntegrationLoader("RoseStacker") { RoseStackerIntegration.load(this) },
             IntegrationLoader("mcMMO") { McMMOIntegration.load(this) },
