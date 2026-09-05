@@ -101,7 +101,7 @@ object EffectParticleAnimation : Effect<ParticleAnimationBlock<*>?>("particle_an
 
         val args = config.getSubsection("particle_args")
 
-        plugin.runnableFactory.create {
+        plugin.scheduler.async().runTimer({ task ->
             val entityVector = if (config.getBool("use-eye-location") && entity is LivingEntity) {
                 entity.eyeLocation.toFloat3()
             } else {
@@ -155,11 +155,11 @@ object EffectParticleAnimation : Effect<ParticleAnimationBlock<*>?>("particle_an
                         entity
                     )
                 }) {
-                it.cancel()
+                task.cancel()
             }
 
             tick++
-        }.runTaskTimerAsynchronously(1, 1)
+        }, 1, 1)
 
         return true
     }

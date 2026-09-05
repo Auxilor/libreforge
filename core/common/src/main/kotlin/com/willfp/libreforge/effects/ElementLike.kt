@@ -165,14 +165,18 @@ abstract class ElementLike : ConfigurableElement {
         } else {
             // Delay between each repeat.
             var repeats = 0
-            plugin.runnableFactory.create { task ->
+            val context = mutatedData.player?.let { plugin.scheduler.on(it) }
+                ?: mutatedData.location?.let { plugin.scheduler.at(it) }
+                ?: plugin.scheduler.global()
+
+            context.runTimer({ task ->
                 repeats++
                 trigger()
 
                 if (repeats >= repeatTimes) {
                     task.cancel()
                 }
-            }.runTaskTimer(delay, delay)
+            }, delay, delay)
         }
 
         // Code here is fucking disgusting duplicating the delay check.

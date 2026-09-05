@@ -114,12 +114,12 @@ object EffectHoming : Effect<List<TestableEntity>>("homing") {
 
         arrow.setMetadata(META_KEY_TRACKED, plugin.createMetadataValue(true))
 
-        plugin.runnableFactory.create { task ->
+        plugin.scheduler.on(arrow).runTimer({ task ->
             checks++
 
             if (checks > MAX_CHECKS || arrow.isDead || arrow.isInBlock || arrow.isOnGround) {
                 task.cancel()
-                return@create
+                return@runTimer
             }
 
             val arrowPos = arrow.location.toFloat3()
@@ -129,7 +129,7 @@ object EffectHoming : Effect<List<TestableEntity>>("homing") {
             val speed = arrow.velocity.length().toFloat()
 
             if (speed < 1e-3f) {
-                return@create
+                return@runTimer
             }
 
             val entities = arrow.getNearbyEntities(distance, distance, distance)
@@ -151,7 +151,7 @@ object EffectHoming : Effect<List<TestableEntity>>("homing") {
 
                 if (dist < 1.0f) {
                     task.cancel()
-                    return@create
+                    return@runTimer
                 }
 
                 // Line of sight: skip targets hidden behind solid blocks.
@@ -184,7 +184,7 @@ object EffectHoming : Effect<List<TestableEntity>>("homing") {
                 break
             }
 
-        }.runTaskTimer(3L, CHECK_DELAY)
+        }, 3L, CHECK_DELAY)
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.willfp.libreforge.integrations.vault.impl
 
+import com.willfp.eco.core.scheduling.EcoTask
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.TriggerData
@@ -9,14 +10,13 @@ import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerQuitEvent
-import org.bukkit.scheduler.BukkitTask
 import java.math.BigDecimal
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 
 object VaultBalancePoller : Listener {
     private val lastSeenBalances = ConcurrentHashMap<UUID, BigDecimal>()
-    private var task: BukkitTask? = null
+    private var task: EcoTask? = null
 
     fun start() {
         val intervalTicks = plugin.configYml.getInt("triggers.gain-currency.vault-poll-interval").toLong()

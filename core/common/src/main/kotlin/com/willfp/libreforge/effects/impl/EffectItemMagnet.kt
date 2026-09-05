@@ -3,7 +3,7 @@ package com.willfp.libreforge.effects.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.items.Items
 import com.willfp.eco.core.items.TestableItem
-import com.willfp.eco.core.scheduling.RunnableTask
+import com.willfp.eco.core.scheduling.EcoTask
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.ProvidedHolder
@@ -15,6 +15,7 @@ import com.willfp.libreforge.get
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.getOrNull
 import com.willfp.libreforge.plugin
+import org.bukkit.entity.Entity
 import org.bukkit.entity.Item
 
 object EffectItemMagnet : Effect<EffectItemMagnet.ItemMagnetFilter>("item_magnet") {
@@ -50,7 +51,7 @@ object EffectItemMagnet : Effect<EffectItemMagnet.ItemMagnetFilter>("item_magnet
         )
     }
 
-    private val tasks = mutableMapOf<Identifiers, RunnableTask>()
+    private val tasks = mutableMapOf<Identifiers, EcoTask>()
 
     override fun onEnable(
         dispatcher: Dispatcher<*>,
@@ -62,9 +63,13 @@ object EffectItemMagnet : Effect<EffectItemMagnet.ItemMagnetFilter>("item_magnet
         val radius = config.getDoubleFromExpression("radius", dispatcher.get())
         val pullStrength = config.getOrNull("pull_strength") { getDoubleFromExpression(it, dispatcher.get()) } ?: 0.3
 
-        val runnable = plugin.runnableFactory.create { _ ->
-            val location = dispatcher.location ?: return@create
-            val world = location.world ?: return@create
+        val context = dispatcher.get<Entity>()?.let { plugin.scheduler.on(it) }
+            ?: dispatcher.location?.let { plugin.scheduler.at(it) }
+            ?: plugin.scheduler.global()
+
+        tasks[identifiers] = context.runTimer({ _ ->
+            val location = dispatcher.location ?: return@runTimer
+            val world = location.world ?: return@runTimer
 
             for (entity in world.getNearbyEntities(location, radius, radius, radius)) {
                 val item = entity as? Item ?: continue
@@ -86,10 +91,7 @@ object EffectItemMagnet : Effect<EffectItemMagnet.ItemMagnetFilter>("item_magnet
 
                 item.velocity = item.velocity.add(pull.normalize().multiply(pullStrength))
             }
-        }
-
-        runnable.runTaskTimer(0L, 1L)
-        tasks[identifiers] = runnable
+        }, 0L, 1L)
     }
 
     override fun onDisable(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder) {

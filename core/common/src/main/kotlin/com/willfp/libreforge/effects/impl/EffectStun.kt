@@ -34,11 +34,11 @@ object EffectStun : Effect<NoCompileData>("stun") {
         val ticks = config.getIntFromExpression("ticks", data)
 
         var current = 0
-        plugin.runnableFactory.create {
+        plugin.scheduler.on(victim).runTimer({ task ->
             current++
             victim.velocity = Vector(0, 0, 0)
-            if (current >= ticks) it.cancel()
-        }.runTaskTimer(0L, 1L)
+            if (current >= ticks) task.cancel()
+        }, 0L, 1L)
 
         return true
     }

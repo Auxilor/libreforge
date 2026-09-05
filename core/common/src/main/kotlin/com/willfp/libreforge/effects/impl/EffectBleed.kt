@@ -69,7 +69,7 @@ object EffectBleed : Effect<NoCompileData>("bleed") {
 
         var current = 0
 
-        plugin.runnableFactory.create {
+        plugin.scheduler.on(victim).runTimer({ task ->
             current++
 
             val killed = damage >= victim.health
@@ -90,9 +90,9 @@ object EffectBleed : Effect<NoCompileData>("bleed") {
             victim.dealDamage(damage, source, trueDamage)
 
             if (current >= amount || killed) {
-                it.cancel()
+                task.cancel()
             }
-        }.runTaskTimer(interval.toLong(), interval.toLong())
+        }, interval.toLong(), interval.toLong())
 
         return true
     }
