@@ -51,6 +51,7 @@ dependencies {
     compileOnly("com.github.LoneDev6:API-ItemsAdder:2.4.7")
     compileOnly("net.momirealms:craft-engine-core:26.6.2")
     compileOnly("net.momirealms:craft-engine-bukkit:26.6.2")
+    compileOnly("org.geysermc.floodgate:api:2.2.5-SNAPSHOT")
 
     compileOnly(fileTree("../../lib") {
         include("*.jar")

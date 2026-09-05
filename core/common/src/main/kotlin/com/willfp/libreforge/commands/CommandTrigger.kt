@@ -1,6 +1,7 @@
 package com.willfp.libreforge.commands
 
 import com.willfp.eco.core.command.impl.Subcommand
+import com.willfp.eco.core.floodgate.FloodgateService
 import com.willfp.eco.util.formatEco
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.GlobalDispatcher
@@ -42,7 +43,7 @@ internal object CommandTrigger : Subcommand(
             dispatchers += Bukkit.getOnlinePlayers().map { it.toDispatcher() }
         }
 
-        Bukkit.getPlayer(dispatcherName)?.toDispatcher()?.let { dispatchers += it }
+        FloodgateService.findOnlinePlayer(dispatcherName)?.toDispatcher()?.let { dispatchers += it }
 
         if (dispatcherUUID != null) {
             Bukkit.getEntity(dispatcherUUID)?.toDispatcher()?.let { dispatchers += it }
@@ -60,7 +61,7 @@ internal object CommandTrigger : Subcommand(
             return
         }
 
-        val value = args.getOrNull(2)?.formatEco(Bukkit.getPlayer(dispatcherName), true)
+        val value = args.getOrNull(2)?.formatEco(FloodgateService.findOnlinePlayer(dispatcherName), true)
             ?.toDoubleOrNull()
 
         for (dispatcher in dispatchers) {

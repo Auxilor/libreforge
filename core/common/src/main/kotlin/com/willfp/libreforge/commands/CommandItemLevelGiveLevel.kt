@@ -1,6 +1,7 @@
 package com.willfp.libreforge.commands
 
 import com.willfp.eco.core.command.impl.Subcommand
+import com.willfp.eco.core.floodgate.FloodgateService
 import com.willfp.eco.core.placeholder.context.PlaceholderContext
 import com.willfp.libreforge.levels.LevelTypes
 import com.willfp.libreforge.levels.levels
@@ -23,7 +24,7 @@ internal object CommandItemLevelGiveLevel : Subcommand(
             return
         }
 
-        val player = Bukkit.getPlayer(playerString)
+        val player = FloodgateService.findOnlinePlayer(playerString)
 
         if (player == null) {
             sender.sendMessage(plugin.langYml.getMessage("invalid-player"))

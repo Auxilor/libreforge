@@ -3,6 +3,7 @@ package com.willfp.libreforge.commands.custom
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.command.impl.PluginCommand
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.floodgate.FloodgateService
 import com.willfp.eco.core.registry.KRegistrable
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.effects.Effects
@@ -114,7 +115,7 @@ class CustomCommand(
             return null
         }
 
-        val player = Bukkit.getPlayer(playerString)
+        val player = FloodgateService.findOnlinePlayer(playerString)
 
         if (player == null) {
             sender.sendMessage(plugin.langYml.getMessage("invalid-player"))
