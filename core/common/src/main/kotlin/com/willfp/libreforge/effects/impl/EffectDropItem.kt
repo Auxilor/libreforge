@@ -46,23 +46,61 @@ object EffectDropItem : Effect<ItemStack>("drop_item") {
         if (config.getBool("add_to_drops")) {
             val dropEvent = data.event as? EditableDropEvent
             if (dropEvent != null) {
-                dropEvent.drops.add(compileData.clone())
+                dropEvent.drops.addStacking(compileData.clone())
                 return true
             }
         }
 
         val player = data.player
 
+        // Clone here too: compileData is shared across every invocation, and the
+        // stack handed to a DropQueue is exposed to (and mutated by) drop queue
+        // listeners.
+        val item = compileData.clone()
+
         if (player == null) {
-            location.world?.dropItem(location, compileData)
+            location.world?.dropItem(location, item)
         } else {
             DropQueue(player)
                 .setLocation(location)
-                .addItem(compileData)
+                .addItem(item)
                 .push()
         }
 
         return true
+    }
+
+    /**
+     * Add [item] to the drop list, merging it into stacks that are already
+     * there rather than appending a second entry for the same item, so that it
+     * drops as one stack instead of one per trigger.
+     */
+    private fun MutableList<ItemStack>.addStacking(item: ItemStack) {
+        var remaining = item.amount
+
+        for (existing in this) {
+            if (remaining <= 0) {
+                break
+            }
+
+            if (!existing.isSimilar(item)) {
+                continue
+            }
+
+            val space = existing.maxStackSize - existing.amount
+
+            if (space <= 0) {
+                continue
+            }
+
+            val toAdd = minOf(space, remaining)
+            existing.amount += toAdd
+            remaining -= toAdd
+        }
+
+        if (remaining > 0) {
+            add(item.apply { amount = remaining })
+        }
     }
 
     override fun makeCompileData(config: Config, context: ViolationContext): ItemStack {

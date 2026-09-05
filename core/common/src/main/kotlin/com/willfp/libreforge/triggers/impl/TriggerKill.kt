@@ -1,9 +1,13 @@
 package com.willfp.libreforge.triggers.impl
 
+import com.willfp.libreforge.filterNotEmpty
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import com.willfp.libreforge.triggers.event.DropCause
+import com.willfp.libreforge.triggers.event.DropContext
+import com.willfp.libreforge.triggers.event.EditableDropEvent
 import com.willfp.libreforge.triggers.tryAsLivingEntity
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.LivingEntity
@@ -28,6 +32,7 @@ object TriggerKill : Trigger("kill") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.VICTIM,
+        TriggerParameter.EVENT,
         TriggerParameter.LOCATION,
         TriggerParameter.ITEM,
         TriggerParameter.VALUE
@@ -46,15 +51,42 @@ object TriggerKill : Trigger("kill") {
                 ?.damager?.tryAsLivingEntity()
             ?: return
 
+        // The death's drops are exposed as an editable drop event so that drop
+        // effects (drop_item with add_to_drops, multiply_drops, ...) can edit
+        // the entity's own drop list rather than dropping alongside it.
+        val dropEvent = EditableDropEvent(
+            initialDrops = event.drops.filterNotEmpty(),
+            cause = DropCause.ENTITY,
+            context = DropContext(
+                player = killer as? Player,
+                entity = victim
+            ),
+            dropLocation = victim.location
+        )
+
         this.dispatch(
             killer.toDispatcher(),
             TriggerData(
                 player = killer as? Player,
                 victim = victim,
                 location = victim.location,
+                event = dropEvent,
                 value = victim.getAttribute(Attribute.MAX_HEALTH)!!.value
             )
         )
+
+        // Read once: reading applies the accumulated modifiers in place, so a
+        // second read would apply them twice.
+        val results = dropEvent.items
+
+        event.drops.clear()
+        event.drops.addAll(dropEvent.drops)
+
+        val xp = results.sumOf { it.xp }
+
+        if (xp > 0) {
+            event.droppedExp += xp
+        }
     }
 
     fun force(player: Player, victim: LivingEntity, allowDuplicates: Boolean = false) {
