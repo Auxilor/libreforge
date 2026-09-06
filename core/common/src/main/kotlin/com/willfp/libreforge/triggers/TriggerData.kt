@@ -53,6 +53,9 @@ class TriggerData(
     var holder: ProvidedHolder = EmptyProvidedHolder
         internal set
 
+    var itemEntity: org.bukkit.entity.Item? = null
+        internal set
+
     /*
     This is a bodge inherited from v3, but it's the only real way to do this.
     Essentially, the player can get messed up by mutators, and that causes
@@ -142,6 +145,7 @@ class TriggerData(
         copy.holder = this.holder
         copy.originalPlayer = this.originalPlayer
         copy.inheritedTriggerPlaceholders = this.inheritedTriggerPlaceholders
+        copy.itemEntity = this.itemEntity
 
         return copy
     }
