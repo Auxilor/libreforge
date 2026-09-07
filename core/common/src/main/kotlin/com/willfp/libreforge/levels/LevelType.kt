@@ -10,13 +10,10 @@ import com.willfp.eco.core.progression.LevelCurve
 import com.willfp.eco.core.progression.LevelCurves
 import com.willfp.eco.core.registry.KRegistrable
 import com.willfp.eco.util.NumberUtils
-import com.willfp.eco.util.toNumeral
-import com.willfp.libreforge.NamedValue
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.levels.event.ItemLevelUpEvent
 import com.willfp.libreforge.toDispatcher
-import com.willfp.libreforge.triggers.DispatchedTrigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.impl.TriggerLevelUpItem
 import org.bukkit.Bukkit
@@ -70,20 +67,21 @@ class LevelType(
 
         Bukkit.getPluginManager().callEvent(ItemLevelUpEvent(player, itemStack, level, this))
 
-        levelUpEffects?.trigger(
-            DispatchedTrigger(
-                player.toDispatcher(),
-                TriggerLevelUpItem,
-                TriggerData(
-                    player = player,
-                    item = itemStack,
-                    value = level.toDouble(),
-                    text = this.id
-                )
-            ).apply {
-                addPlaceholder(NamedValue("level", level))
-                addPlaceholder(NamedValue("level_numeral", level.toNumeral()))
-            }
+        // Shared so %level% and its siblings mean the same thing in every level-up-effects
+        // block. This gains %previous_level% and %previous_level_numeral%, which item levels
+        // did not previously offer; the trigger is deliberately not dispatched globally,
+        // matching what this block did before.
+        LevelUpDispatcher.dispatch(
+            player.toDispatcher(),
+            TriggerLevelUpItem,
+            levelUpEffects,
+            level,
+            TriggerData(
+                player = player,
+                item = itemStack,
+                value = level.toDouble(),
+                text = this.id
+            )
         )
     }
 
