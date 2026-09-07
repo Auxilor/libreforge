@@ -81,7 +81,8 @@ class LevelType(
                 item = itemStack,
                 value = level.toDouble(),
                 text = this.id
-            )
+            ),
+            type = "level"
         )
     }
 
