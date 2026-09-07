@@ -6,6 +6,8 @@ import com.willfp.eco.core.placeholder.InjectablePlaceholder
 import com.willfp.eco.core.placeholder.PlaceholderInjectable
 import com.willfp.eco.core.placeholder.context.PlaceholderContext
 import com.willfp.eco.core.placeholder.templates.SimpleInjectablePlaceholder
+import com.willfp.eco.core.progression.LevelCurve
+import com.willfp.eco.core.progression.LevelCurves
 import com.willfp.eco.core.registry.KRegistrable
 import com.willfp.eco.util.NumberUtils
 import com.willfp.eco.util.toNumeral
@@ -25,37 +27,43 @@ class LevelType(
     config: Config,
     plugin: EcoPlugin
 ) : KRegistrable {
-    private val xpFormula = config.getStringOrNull("xp-formula")
+    private val parsedCurve = LevelCurves.parse(
+        config.getStringOrNull("xp-formula"),
+        config.getDoublesOrNull("requirements"),
+        config.getIntOrNull("max-level"),
+        // Item levels start at 1: LevelData's base is LevelData(1, 0.0), and today's
+        // getXPRequired(level) indexes requirements[level - 1].
+        startLevel = 1,
+        freeFirstLevel = false
+    ) { expression, level ->
+        NumberUtils.evaluateExpression(
+            expression,
+            PlaceholderContext.EMPTY.withInjectableContext(LevelInjectable(level - 1))
+        )
+    }
 
-    private val maxLevel = config.getInt("max-level", Int.MAX_VALUE)
-
-    private val requirements = config.getDoublesOrNull("requirements")
+    val curve: LevelCurve = parsedCurve.curve
 
     private val levelUpEffects = Effects.compileChain(
         config.getSubsections("level-up-effects"),
         ViolationContext(plugin, "level $id level-up-effects")
     )
 
-    fun getXPRequired(level: Int, context: PlaceholderContext): Double {
-        if (level >= maxLevel) {
-            return Double.MAX_VALUE
+    init {
+        for (problem in parsedCurve.problems) {
+            plugin.logger.warning("Level type $id: ${problem.path} - ${problem.message}")
         }
-
-        if (xpFormula != null) {
-            return NumberUtils.evaluateExpression(
-                xpFormula,
-                context.withInjectableContext(
-                    LevelInjectable(level)
-                )
-            )
-        }
-
-        if (requirements != null) {
-            return requirements.getOrNull(level - 1) ?: Double.MAX_VALUE
-        }
-
-        throw IllegalStateException("Level $id has no requirements or xp formula")
     }
+
+    /**
+     * The XP needed to go from [level] to [level] + 1.
+     *
+     * Previously threw IllegalStateException when neither key was configured, from a path
+     * reached on every XP gain. A misconfigured level type now simply stops advancing.
+     */
+    @Suppress("UNUSED_PARAMETER") // Kept for source compatibility - the curve captures its own evaluator.
+    fun getXPRequired(level: Int, context: PlaceholderContext): Double =
+        curve.xpToReach(level + 1)
 
     fun handleLevelUp(level: Int, itemStack: ItemStack, context: PlaceholderContext) {
         val player = context.player ?: return
