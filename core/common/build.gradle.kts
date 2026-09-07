@@ -55,6 +55,23 @@ dependencies {
     compileOnly(fileTree("../../lib") {
         include("*.jar")
     })
+
+    // eco reaches this module as `compileOnly` (see core/build.gradle.kts's subprojects
+    // block), and compileOnly is NOT on the test compile classpath. Without this line the
+    // test below cannot resolve com.willfp.eco.core.progression at all, and the failure is a
+    // compile error in a source set nobody has built before, which reads as "the new test is
+    // broken" rather than "the dependency is missing".
+    testImplementation("com.willfp:eco:${findProperty("eco-version")}")
+    testImplementation(kotlin("stdlib", version = "2.3.0"))
+
+    // Versions match eco's own suite so the two repos do not drift apart.
+    testImplementation("org.junit.jupiter:junit-jupiter-api:6.0.3")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:6.0.3")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:6.0.3")
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
 
 repositories {
