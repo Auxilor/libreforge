@@ -73,6 +73,6 @@ object ArgumentPrice : EffectArgument<NoCompileData>("price") {
             player.sendMessage(message)
         }
 
-        PlayableSound.create(plugin.configYml.getSubsection("cannot-afford-type.sound"))?.playTo(player)
+        PlayableSound.create(plugin.configYml.getSubsection("cannot-afford-price.sound"))?.playTo(player)
     }
 }
