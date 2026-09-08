@@ -39,8 +39,8 @@ object ConditionHasPotionEffect : Condition<NoCompileData>("has_potion_effect") 
         val livingEntity = dispatcher.get<LivingEntity>() ?: return false
 
         val targetEffects = buildList {
-            config.getString("effect")?.let { add(it.lowercase()) }
-            addAll(config.getStrings("effects").map { it.lowercase() })
+            config.getStringOrNull("effect")?.takeIf { it.isNotBlank() }?.let { add(it.lowercase()) }
+            addAll(config.getStrings("effects").filter { it.isNotBlank() }.map { it.lowercase() })
         }
 
         if (targetEffects.isEmpty()) return false
