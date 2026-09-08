@@ -36,7 +36,7 @@ object EffectMultiplyItemPoints : Effect<NoCompileData>("multiply_item_points") 
         val item = data.foundItem ?: return false
 
         val type = config.getFormattedString("type", data)
-        val amount = config.getDoubleFromExpression("amount", data)
+        val amount = config.getDoubleFromExpression("multiplier", data)
 
         item.points[type] *= amount
 
