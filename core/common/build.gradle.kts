@@ -52,6 +52,9 @@ dependencies {
     compileOnly("net.momirealms:craft-engine-core:26.6.2")
     compileOnly("net.momirealms:craft-engine-bukkit:26.6.2")
 
+    // SkinsRestorer API
+    compileOnly("net.skinsrestorer:skinsrestorer-api:15.11.0")
+
     compileOnly(fileTree("../../lib") {
         include("*.jar")
     })
@@ -60,6 +63,9 @@ dependencies {
 repositories {
     maven("https://jitpack.io/")
     maven("https://repo.momirealms.net/releases/")
+    maven("https://repo.codemc.org/repository/maven-public/") {
+        name = "codemc"
+    }
 }
 
 configurations.all {
