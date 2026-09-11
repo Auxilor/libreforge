@@ -53,6 +53,7 @@ import com.willfp.libreforge.integrations.paper.PaperIntegration
 import com.willfp.libreforge.integrations.purpur.PurpurIntegration
 import com.willfp.libreforge.integrations.rosestacker.RoseStackerIntegration
 import com.willfp.libreforge.integrations.scyther.ScytherIntegration
+import com.willfp.libreforge.integrations.skinsrestorer.SkinsRestorerIntegration
 import com.willfp.libreforge.integrations.shopkeepers.ShopkeepersIntegration
 import com.willfp.libreforge.integrations.tab.TabIntegration
 import com.willfp.libreforge.integrations.tmmobcoins.TMMobcoinsIntegration
@@ -279,7 +280,8 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             IntegrationLoader("Nexo") { NexoIntegration.load(this) },
             IntegrationLoader("Oraxen") { OraxenIntegration.load(this) },
             IntegrationLoader("ItemsAdder") { ItemsAdderIntegration.load(this) },
-            IntegrationLoader("CraftEngine") { CraftEngineIntegration.load(this) }
+            IntegrationLoader("CraftEngine") { CraftEngineIntegration.load(this) },
+            IntegrationLoader("SkinsRestorer") { SkinsRestorerIntegration.load(this) }
         )
     }
 
