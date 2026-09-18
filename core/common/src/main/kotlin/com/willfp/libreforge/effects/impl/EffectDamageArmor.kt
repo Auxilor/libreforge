@@ -127,8 +127,7 @@ object EffectDamageArmor : Effect<NoCompileData>("damage_armor") {
                 player.playSound(player.location, Sound.ENTITY_ITEM_BREAK, SoundCategory.BLOCKS, 1f, 1f)
             }
 
-            @Suppress("DEPRECATION")
-            itemStack.type = Material.AIR
+            itemStack.amount = 0
         } else {
             itemStack.itemMeta = meta
         }

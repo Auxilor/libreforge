@@ -4,7 +4,6 @@ import com.willfp.eco.core.items.Items
 import com.willfp.eco.util.namespacedKeyOf
 import org.bukkit.Bukkit
 import org.bukkit.Location
-import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.Sound
 import org.bukkit.SoundCategory
@@ -77,8 +76,7 @@ fun ItemStack.applyDamage(damage: Int, player: Player?): Boolean {
             Bukkit.getPluginManager().callEvent(PlayerItemBreakEvent(player, this))
             player.playSound(player.location, Sound.ENTITY_ITEM_BREAK, SoundCategory.BLOCKS, 1f, 1f)
         }
-        @Suppress("DEPRECATION")
-        this.type = Material.AIR
+        this.amount = 0
     } else {
         this.itemMeta = meta
     }

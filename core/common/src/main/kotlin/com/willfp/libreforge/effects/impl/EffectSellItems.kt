@@ -15,7 +15,6 @@ import com.willfp.libreforge.getOrElse
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.event.EditableDropEvent
-import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
@@ -59,8 +58,6 @@ object EffectSellItems : Effect<Collection<TestableItem>?>("sell_items") {
 
         for (soldItem in sold) {
             if (item == soldItem) {
-                @Suppress("DEPRECATION")
-                item.type = Material.AIR
                 item.amount = 0
             }
             event?.removeItem(soldItem)
