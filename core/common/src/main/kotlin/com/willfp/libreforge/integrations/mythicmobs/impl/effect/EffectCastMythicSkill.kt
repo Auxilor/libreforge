@@ -5,6 +5,7 @@ import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import io.lumine.mythic.bukkit.MythicBukkit
@@ -34,6 +35,13 @@ object EffectCastMythicSkill : Effect<NoCompileData>("cast_mythic_skill") {
             type = ArgType.BOOLEAN,
             default = "false"
         )
+        optional(
+            "power",
+            description = "The skill power, which multiplies the damage of the skill's damage mechanics (e.g. 1.5 deals 50% more damage). Also available in the skill as <skill.power>. Supports expressions.",
+            type = ArgType.EXPRESSION,
+            default = "1",
+            example = "1.5"
+        )
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
@@ -56,7 +64,7 @@ object EffectCastMythicSkill : Effect<NoCompileData>("cast_mythic_skill") {
             player.location,
             targets,
             null,
-            1.0F
+            if (config.has("power")) config.getDoubleFromExpression("power", data).toFloat() else 1.0F
         )
 
         return true
