@@ -10,7 +10,6 @@ import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.updateHolders
-import org.bukkit.Material
 
 object EffectConsumeHeldItem : Effect<NoCompileData>("consume_held_item") {
     override val description = "Removes a number of items from the player's main hand."
@@ -38,8 +37,7 @@ object EffectConsumeHeldItem : Effect<NoCompileData>("consume_held_item") {
 
         val newAmount = item.amount - amount
         if (newAmount <= 0) {
-            @Suppress("DEPRECATION")
-            item.type = Material.AIR
+            item.amount = 0
         } else {
             item.amount = newAmount
         }

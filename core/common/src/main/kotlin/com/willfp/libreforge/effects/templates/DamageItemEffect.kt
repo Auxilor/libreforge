@@ -29,7 +29,7 @@ abstract class DamageItemEffect(id: String) : Effect<NoCompileData>(id) {
     abstract fun getItems(data: TriggerData): List<ItemStack>
 
     final override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
-        val victim = data.victim ?: return false
+        val victim = data.victim ?: data.player ?: return false
 
         val damage = config.getIntFromExpression("damage", data)
 
