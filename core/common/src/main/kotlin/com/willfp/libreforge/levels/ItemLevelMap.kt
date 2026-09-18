@@ -76,11 +76,20 @@ class ItemLevelMap(
 
         var remaining = currentData.xp + xp
         var currentLevel = currentData.level
+
         while (remaining < 0 && currentLevel > 1) {
+            val refund = level.getXPRequired(currentLevel - 1, context)
+
+            if (!refund.isFinite() || refund <= 0.0) {
+                // Cannot price this level down; stop rather than looping on a bad curve.
+                break
+            }
+
             currentLevel--
-            remaining += level.getXPRequired(currentLevel, context)
+            remaining += refund
         }
-        this[level] = LevelData(maxOf(1, currentLevel), maxOf(0.0, remaining))
+
+        this[level] = LevelData(maxOf(1, currentLevel), maxOf(0.0, remaining).takeIf { it.isFinite() } ?: 0.0)
     }
 
     fun gainLevels(level: LevelType, levels: Int, context: PlaceholderContext) {
