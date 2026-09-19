@@ -49,6 +49,7 @@ import com.willfp.libreforge.integrations.luckperms.LuckPermsIntegration
 import com.willfp.libreforge.integrations.mcmmo.McMMOIntegration
 import com.willfp.libreforge.integrations.modelengine.ModelEngineIntegration
 import com.willfp.libreforge.integrations.mythicmobs.MythicMobsIntegration
+import com.willfp.libreforge.integrations.notbounties.NotBountiesIntegration
 import com.willfp.libreforge.integrations.paper.PaperIntegration
 import com.willfp.libreforge.integrations.plotsquared.PlotSquaredIntegration
 import com.willfp.libreforge.integrations.purpur.PurpurIntegration
@@ -275,6 +276,7 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             IntegrationLoader("PyroFishingPro") { PyroFishingProIntegration.load(this) },
             IntegrationLoader("Lands") { LandsIntegration.load(this) },
             IntegrationLoader("PlotSquared") { PlotSquaredIntegration.load(this) },
+            IntegrationLoader("NotBounties") { NotBountiesIntegration.load(this) },
             IntegrationLoader("LuckPerms") { LuckPermsIntegration.load(this) },
             IntegrationLoader("EcoBits") { EcoBitsIntegration.load(this) },
             IntegrationLoader("EdPrison") { EdPrisonCoreIntegration.load(this) },

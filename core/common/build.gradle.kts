@@ -47,6 +47,9 @@ dependencies {
     compileOnly("com.intellectualsites.plotsquared:plotsquared-core:7.6.0") {
         isTransitive = false
     }
+    compileOnly("com.github.No-Not-Jaden:NotBounties:1.22.36") {
+        isTransitive = false
+    }
     compileOnly("com.willfp:EcoBits:2026.34")
     compileOnly("com.nexomc:nexo:1.17.0") {
         exclude(group = "*", module = "*")
