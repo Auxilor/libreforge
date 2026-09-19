@@ -11,6 +11,7 @@ import com.willfp.libreforge.integrations.luckperms.impl.ConditionLpGroupCountAb
 import com.willfp.libreforge.integrations.luckperms.impl.ConditionLpGroupWeightAbove
 import com.willfp.libreforge.integrations.luckperms.impl.ConditionLpHasContext
 import com.willfp.libreforge.integrations.luckperms.impl.ConditionLpHasMeta
+import com.willfp.libreforge.integrations.luckperms.impl.ConditionLpHasPermission
 import com.willfp.libreforge.integrations.luckperms.impl.ConditionLpHasTemporaryNode
 import com.willfp.libreforge.integrations.luckperms.impl.ConditionLpInGroup
 import com.willfp.libreforge.integrations.luckperms.impl.ConditionLpInTrack
@@ -30,6 +31,7 @@ import com.willfp.libreforge.integrations.luckperms.impl.EffectLpAddGroup
 import com.willfp.libreforge.integrations.luckperms.impl.EffectLpAddPermission
 import com.willfp.libreforge.integrations.luckperms.impl.EffectLpClearNodes
 import com.willfp.libreforge.integrations.luckperms.impl.EffectLpDemote
+import com.willfp.libreforge.integrations.luckperms.impl.EffectLpGivePermission
 import com.willfp.libreforge.integrations.luckperms.impl.EffectLpLogAction
 import com.willfp.libreforge.integrations.luckperms.impl.EffectLpPromote
 import com.willfp.libreforge.integrations.luckperms.impl.EffectLpPushUserUpdate
@@ -118,6 +120,7 @@ object LuckPermsIntegration : LoadableIntegration {
         Conditions.register(ConditionLpInGroup)
         Conditions.register(ConditionLpGroupCountAbove)
         Conditions.register(ConditionLpPermissionTristate)
+        Conditions.register(ConditionLpHasPermission)
         Conditions.register(ConditionLpHasMeta)
         Conditions.register(ConditionLpMetaEquals)
         Conditions.register(ConditionLpMetaAbove)
@@ -142,6 +145,7 @@ object LuckPermsIntegration : LoadableIntegration {
         Effects.register(EffectLpSetPrimaryGroup)
         Effects.register(EffectLpAddPermission)
         Effects.register(EffectLpRemovePermission)
+        Effects.register(EffectLpGivePermission)
         Effects.register(EffectLpClearNodes)
         Effects.register(EffectLpSetMeta)
         Effects.register(EffectLpRemoveMeta)
