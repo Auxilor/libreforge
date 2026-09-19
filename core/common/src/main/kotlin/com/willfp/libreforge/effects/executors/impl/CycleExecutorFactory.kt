@@ -13,8 +13,11 @@ object CycleExecutorFactory: ChainExecutorFactory("cycle") {
         private val offset = AtomicInteger(0)
 
         override fun execute(chain: Chain, trigger: DispatchedTrigger): Boolean {
-            val index = offset.getAndIncrement() % chain.size
-            return chain[index].trigger(trigger)
+            if (chain.isEmpty()) {
+                return false
+            }
+
+            return chain[Math.floorMod(offset.getAndIncrement(), chain.size)].trigger(trigger)
         }
     }
 }
