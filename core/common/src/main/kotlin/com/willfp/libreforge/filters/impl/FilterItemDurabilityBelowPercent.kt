@@ -5,6 +5,7 @@ import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.filters.Filter
 import com.willfp.libreforge.getDoubleFromExpression
+import com.willfp.libreforge.maxDamageFor
 import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.inventory.meta.Damageable
 
@@ -21,7 +22,9 @@ object FilterItemDurabilityBelowPercent : Filter<NoCompileData, Double>("item_du
     override fun isMet(data: TriggerData, value: Double, compileData: NoCompileData): Boolean {
         val item = data.foundItem ?: return true
         val meta = item.itemMeta as? Damageable ?: return true
+        val maxDamage = meta.maxDamageFor(item)
+        if (maxDamage <= 0) return true
 
-        return (item.type.maxDurability - meta.damage) / item.type.maxDurability <= (value / 100.0)
+        return (maxDamage - meta.damage).toDouble() / maxDamage <= (value / 100.0)
     }
 }
