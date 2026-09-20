@@ -37,6 +37,7 @@ softdepend:
   - CustomCrops
   - CustomFishing
   - Lands
+  - PlotSquared
   - EdPrison
 
 commands:

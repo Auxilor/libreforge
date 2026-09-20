@@ -40,7 +40,7 @@ object EffectRemoveItem : Effect<TestableItem>("remove_item") {
 
         PriceItem(amount, compileData).pay(player)
 
-        return false
+        return true
     }
 
     override fun makeCompileData(config: Config, context: ViolationContext): TestableItem {

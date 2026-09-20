@@ -45,13 +45,16 @@ import com.willfp.libreforge.integrations.jobs.JobsIntegration
 import com.willfp.libreforge.integrations.ecobits.EcoBitsIntegration
 import com.willfp.libreforge.integrations.lands.LandsIntegration
 import com.willfp.libreforge.integrations.levelledmobs.LevelledMobsIntegration
+import com.willfp.libreforge.integrations.luckperms.LuckPermsIntegration
 import com.willfp.libreforge.integrations.mcmmo.McMMOIntegration
 import com.willfp.libreforge.integrations.modelengine.ModelEngineIntegration
 import com.willfp.libreforge.integrations.mythicmobs.MythicMobsIntegration
 import com.willfp.libreforge.integrations.paper.PaperIntegration
+import com.willfp.libreforge.integrations.plotsquared.PlotSquaredIntegration
 import com.willfp.libreforge.integrations.purpur.PurpurIntegration
 import com.willfp.libreforge.integrations.rosestacker.RoseStackerIntegration
 import com.willfp.libreforge.integrations.scyther.ScytherIntegration
+import com.willfp.libreforge.integrations.skinsrestorer.SkinsRestorerIntegration
 import com.willfp.libreforge.integrations.shopkeepers.ShopkeepersIntegration
 import com.willfp.libreforge.integrations.tab.TabIntegration
 import com.willfp.libreforge.integrations.tmmobcoins.TMMobcoinsIntegration
@@ -271,13 +274,16 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             IntegrationLoader("CustomFishing") { CustomFishingIntegration.load(this) },
             IntegrationLoader("PyroFishingPro") { PyroFishingProIntegration.load(this) },
             IntegrationLoader("Lands") { LandsIntegration.load(this) },
+            IntegrationLoader("PlotSquared") { PlotSquaredIntegration.load(this) },
+            IntegrationLoader("LuckPerms") { LuckPermsIntegration.load(this) },
             IntegrationLoader("EcoBits") { EcoBitsIntegration.load(this) },
             IntegrationLoader("EdPrison") { EdPrisonCoreIntegration.load(this) },
             IntegrationLoader("MythicMobs") { MythicMobsIntegration.load(this) },
             IntegrationLoader("Nexo") { NexoIntegration.load(this) },
             IntegrationLoader("Oraxen") { OraxenIntegration.load(this) },
             IntegrationLoader("ItemsAdder") { ItemsAdderIntegration.load(this) },
-            IntegrationLoader("CraftEngine") { CraftEngineIntegration.load(this) }
+            IntegrationLoader("CraftEngine") { CraftEngineIntegration.load(this) },
+            IntegrationLoader("SkinsRestorer") { SkinsRestorerIntegration.load(this) }
         )
     }
 

@@ -44,6 +44,9 @@ dependencies {
     compileOnly("com.artillexstudios:AxTrade:1.21.1")
     compileOnly("com.artillexstudios.axenvoy:AxEnvoy:2.2.1")
     compileOnly("com.github.angeschossen:LandsAPI:7.23.1")
+    compileOnly("com.intellectualsites.plotsquared:plotsquared-core:7.6.0") {
+        isTransitive = false
+    }
     compileOnly("com.willfp:EcoBits:2026.34")
     compileOnly("com.nexomc:nexo:1.17.0") {
         exclude(group = "*", module = "*")
@@ -51,6 +54,10 @@ dependencies {
     compileOnly("com.github.LoneDev6:API-ItemsAdder:2.4.7")
     compileOnly("net.momirealms:craft-engine-core:26.6.2")
     compileOnly("net.momirealms:craft-engine-bukkit:26.6.2")
+    compileOnly("net.luckperms:api:5.5")
+
+    // SkinsRestorer API
+    compileOnly("net.skinsrestorer:skinsrestorer-api:15.11.0")
 
     compileOnly(fileTree("../../lib") {
         include("*.jar")
@@ -77,6 +84,9 @@ tasks.test {
 repositories {
     maven("https://jitpack.io/")
     maven("https://repo.momirealms.net/releases/")
+    maven("https://repo.codemc.org/repository/maven-public/") {
+        name = "codemc"
+    }
 }
 
 configurations.all {

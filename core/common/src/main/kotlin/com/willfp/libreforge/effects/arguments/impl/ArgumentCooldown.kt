@@ -58,7 +58,7 @@ object ArgumentCooldown : EffectArgument<Chain?>("cooldown") {
             return
         }
 
-        if (!plugin.configYml.getBool("cannot-afford-type.message-enabled")) {
+        if (!plugin.configYml.getBool("cooldown.message-enabled")) {
             return
         }
 
