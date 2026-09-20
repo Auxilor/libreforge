@@ -1,13 +1,12 @@
 package com.willfp.libreforge.integrations.notbounties.impl
 
+import com.willfp.libreforge.integrations.notbounties.listenForBountyClaim
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import me.jadenp.notbounties.bounty_events.BountyClaimEvent
 import org.bukkit.Bukkit
-import org.bukkit.event.EventHandler
-import org.bukkit.event.EventPriority
 
 object TriggerNbBountyClaimed : Trigger("nb_bounty_claimed") {
     override val description = "Fires when another player claims the player's NotBounties bounty."
@@ -30,8 +29,11 @@ object TriggerNbBountyClaimed : Trigger("nb_bounty_claimed") {
         TriggerParameter.TEXT
     )
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    fun handle(event: BountyClaimEvent) {
+    override fun postRegister() {
+        listenForBountyClaim { handle(it) }
+    }
+
+    private fun handle(event: BountyClaimEvent) {
         val killer = event.killer ?: return
         val bounty = event.bounty
         val player = Bukkit.getPlayer(bounty.uuid) ?: return

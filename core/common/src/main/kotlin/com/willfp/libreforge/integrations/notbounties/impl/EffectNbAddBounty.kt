@@ -13,7 +13,7 @@ import me.jadenp.notbounties.utils.BountyManager
 import java.util.TreeSet
 
 object EffectNbAddBounty : Effect<NoCompileData>("nb_add_bounty") {
-    override val description = "Sets a NotBounties bounty on the player from the console."
+    override val description = "Adds a NotBounties bounty on the player, set by the console."
     override val categories = setOf("player")
     override val additionalInfo = listOf("Requires the NotBounties plugin.")
 
@@ -25,7 +25,7 @@ object EffectNbAddBounty : Effect<NoCompileData>("nb_add_bounty") {
         require(
             "amount",
             "You must specify the amount!",
-            description = "The amount of the bounty to set on the player.",
+            description = "The amount to add to the bounty on the player.",
             type = ArgType.EXPRESSION,
             example = "%level% * 100"
         )
