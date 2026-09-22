@@ -78,13 +78,22 @@ requirements: # XP for each level, in order; the list length sets the max level
 
 ### Level-up effects
 
-These effects run each time the item levels up. The `%level%` placeholder is the level the item just reached.
+These effects run each time the item levels up, once per level. A grant large enough to cross several levels at once runs the chain once for each level crossed, not once for the whole grant.
+
+These placeholders are available inside the chain:
+
+| Placeholder | Resolves to |
+| --- | --- |
+| `%level%` | The level just reached. |
+| `%level_numeral%` | The level just reached, as a Roman numeral. |
+| `%previous_level%` | The level before this one, i.e. `%level%` minus 1. |
+| `%previous_level_numeral%` | The previous level, as a Roman numeral. |
 
 ```yaml
 level-up-effects:
   - id: send_message
     args:
-      message: "&fYou leveled up to &a%level%&f!"
+      message: "&fYou leveled up to &a%level%&f! (was &7%previous_level%&f)"
 ```
 
 :::danger Effects are their own system
