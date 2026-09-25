@@ -7,11 +7,15 @@ import com.willfp.eco.core.registry.Registry
 import com.willfp.libreforge.ConfigWarning
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.deprecationMessage
+import com.willfp.libreforge.filters.impl.FilterAboveHealth
 import com.willfp.libreforge.filters.impl.FilterAboveHealthPercent
+import com.willfp.libreforge.filters.impl.FilterAboveHunger
 import com.willfp.libreforge.filters.impl.FilterAdvancements
 import com.willfp.libreforge.filters.impl.FilterAltValueAbove
 import com.willfp.libreforge.filters.impl.FilterAltValueBelow
 import com.willfp.libreforge.filters.impl.FilterAltValueEquals
+import com.willfp.libreforge.filters.impl.FilterBelowHealth
+import com.willfp.libreforge.filters.impl.FilterBelowHunger
 import com.willfp.libreforge.filters.impl.FilterBlocks
 import com.willfp.libreforge.filters.impl.FilterDamageCause
 import com.willfp.libreforge.filters.impl.FilterEnchant
@@ -101,11 +105,15 @@ object Filters : Registry<Filter<*, *>>() {
     }
 
     init {
+        register(FilterAboveHealth)
         register(FilterAboveHealthPercent)
+        register(FilterAboveHunger)
         register(FilterAdvancements)
         register(FilterAltValueAbove)
         register(FilterAltValueBelow)
         register(FilterAltValueEquals)
+        register(FilterBelowHealth)
+        register(FilterBelowHunger)
         register(FilterBlocks)
         register(FilterDamageCause)
         register(FilterEnchant)

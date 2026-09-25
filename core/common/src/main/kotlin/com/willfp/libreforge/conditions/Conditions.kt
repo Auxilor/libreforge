@@ -7,7 +7,9 @@ import com.willfp.libreforge.ConfigWarning
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.conditions.impl.ConditionAboveBalance
 import com.willfp.libreforge.conditions.impl.ConditionAboveGlobalPoints
+import com.willfp.libreforge.conditions.impl.ConditionAboveHealth
 import com.willfp.libreforge.conditions.impl.ConditionAboveHealthPercent
+import com.willfp.libreforge.conditions.impl.ConditionAboveHunger
 import com.willfp.libreforge.conditions.impl.ConditionAboveHungerPercent
 import com.willfp.libreforge.conditions.impl.ConditionAbovePoints
 import com.willfp.libreforge.conditions.impl.ConditionAboveXPLevel
@@ -16,7 +18,9 @@ import com.willfp.libreforge.conditions.impl.ConditionAnyOf
 import com.willfp.libreforge.conditions.impl.ConditionAtLeastOf
 import com.willfp.libreforge.conditions.impl.ConditionBelowBalance
 import com.willfp.libreforge.conditions.impl.ConditionBelowGlobalPoints
+import com.willfp.libreforge.conditions.impl.ConditionBelowHealth
 import com.willfp.libreforge.conditions.impl.ConditionBelowHealthPercent
+import com.willfp.libreforge.conditions.impl.ConditionBelowHunger
 import com.willfp.libreforge.conditions.impl.ConditionBelowHungerPercent
 import com.willfp.libreforge.conditions.impl.ConditionBelowPoints
 import com.willfp.libreforge.conditions.impl.ConditionBelowXPLevel
@@ -154,7 +158,9 @@ object Conditions : Registry<Condition<*>>() {
 
     init {
         register(ConditionAboveBalance)
+        register(ConditionAboveHealth)
         register(ConditionAboveHealthPercent)
+        register(ConditionAboveHunger)
         register(ConditionAboveHungerPercent)
         register(ConditionAbovePoints)
         register(ConditionAboveXPLevel)
@@ -162,7 +168,9 @@ object Conditions : Registry<Condition<*>>() {
         register(ConditionAnyOf)
         register(ConditionAtLeastOf)
         register(ConditionBelowBalance)
+        register(ConditionBelowHealth)
         register(ConditionBelowHealthPercent)
+        register(ConditionBelowHunger)
         register(ConditionBelowHungerPercent)
         register(ConditionBelowPoints)
         register(ConditionBelowXPLevel)
