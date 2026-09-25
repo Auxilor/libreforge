@@ -38,6 +38,7 @@ softdepend:
   - CustomFishing
   - Lands
   - PlotSquared
+  - NotBounties
   - EdPrison
 
 commands:
