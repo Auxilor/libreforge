@@ -109,10 +109,18 @@ conditions:
   default-state-off-main-thread: true
 
 refresh:
-  # Reduces lag by only allowing holders to refresh every X milliseconds.
+  # Reduces lag by only allowing a player's or entity's holders to refresh every X milliseconds.
+  # A refresh requested within the cooldown is delayed until it ends, not dropped.
   # Higher values will save performance, but can make effects feel less responsive.
   # Set to 0 to disable.
   cooldown: 0
+
+  # How often permanent effects are re-applied, in case something outside libreforge removed them (in ticks).
+  repair-interval: 600
+
+  # How many newly loaded entities get their holders checked per tick, to spread the cost of chunk loads.
+  # Players are never delayed.
+  max-new-states-per-tick: 50
 
   pickup:
     # If picked up items should trigger a refresh
@@ -140,7 +148,8 @@ refresh:
 
   inventory-click:
     # Inventory clicks refresh active holders, but a group of malicious users spamming can cause server lag.
-    # Setting a timeout ensures only one click triggers a refresh within the specified time (in milliseconds).
+    # Setting a timeout ensures clicks refresh at most once within the specified time (in milliseconds);
+    # a click within the timeout is applied when it ends, so the final inventory is never missed.
     timeout: 500
 
 triggers:

@@ -1,6 +1,5 @@
 package com.willfp.libreforge
 
-import com.destroystokyo.paper.event.entity.EntityRemoveFromWorldEvent
 import org.bukkit.Registry
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.Player
@@ -17,33 +16,23 @@ object EffectDataFixer : Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     fun clearOnQuit(event: PlayerQuitEvent) {
         val player = event.player
-        val dispatcher = player.toDispatcher()
 
-        for ((block, occurrence) in dispatcher.providedActiveEffects.withOccurrences()) {
-            val (effect, holder) = block
-            effect.disable(dispatcher, holder, occurrence = occurrence)
-        }
+        // Disables every active effect with the provided holder it was enabled with.
+        HolderStates.untrackPlayer(player)
 
         // Extra fix for pre-4.2.3
         player.fixAttributes()
-
-        dispatcher.updateHolders()
-        dispatcher.purgePreviousHolders()
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     fun scanOnJoin(event: PlayerJoinEvent) {
         val player = event.player
-        val dispatcher = player.toDispatcher()
 
         // Extra fix for pre-4.2.3
         player.fixAttributes()
 
-        dispatcher.updateHolders()
-
-        plugin.scheduler.run {
-            dispatcher.updateEffects()
-        }
+        // Effects are enabled in the next flush.
+        HolderStates.trackPlayer(player)
     }
 
     private fun Player.fixAttributes() {
@@ -61,17 +50,5 @@ object EffectDataFixer : Listener {
         if (this.health > maxHealth) {
             this.health = maxHealth
         }
-    }
-}
-
-object PaperEffectDataFixer : Listener {
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-    fun purgeOnRemove(event: EntityRemoveFromWorldEvent) {
-        if (event.entity is Player) {
-            return
-        }
-
-        val dispatcher = event.entity.toDispatcher()
-        dispatcher.purgePreviousHolders()
     }
 }

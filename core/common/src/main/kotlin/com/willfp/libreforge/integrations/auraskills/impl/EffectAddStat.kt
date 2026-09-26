@@ -6,6 +6,7 @@ import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
+import com.willfp.libreforge.effects.ProviderBinding
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.get
@@ -34,6 +35,8 @@ object EffectAddStat : Effect<NoCompileData>("add_stat") {
     }
 
     override val shouldReload = false
+
+    override val providerBinding = ProviderBinding.NONE
 
     override fun onEnable(
         dispatcher: Dispatcher<*>,

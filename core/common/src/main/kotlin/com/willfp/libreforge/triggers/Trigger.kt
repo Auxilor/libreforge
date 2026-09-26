@@ -162,9 +162,9 @@ abstract class Trigger(
             block.tryTrigger(dispatchWithHolder)
         }
 
-        // Probably a better way to work with counters, but this works for now.
-        for (bound in BoundCounters.bindingsFor(this)) {
-            bound.accept(dispatch)
+        // Only the counters listening to this trigger.
+        for (binding in BoundCounters.bindingsFor(this)) {
+            binding.accept(dispatch)
         }
     }
 

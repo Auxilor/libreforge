@@ -54,5 +54,10 @@ private class ProvidedHolderConfig(
 
 fun Config.applyHolder(providedHolder: ProvidedHolder, dispatcher: Dispatcher<*>): Config =
     ProvidedHolderConfig(this, providedHolder).apply {
-        addInjectablePlaceholder(providedHolder.generatePlaceholders(dispatcher).mapToPlaceholders())
+        // Placeholders are cached per holder while the dispatcher's state holds it; injection still
+        // happens on every call, as holders sharing a compiled config would otherwise see each other's.
+        addInjectablePlaceholder(
+            HolderStates.cachedPlaceholders(dispatcher, providedHolder.holder)
+                ?: providedHolder.generatePlaceholders(dispatcher).mapToPlaceholders()
+        )
     }

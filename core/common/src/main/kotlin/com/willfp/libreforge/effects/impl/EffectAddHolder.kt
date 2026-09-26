@@ -3,7 +3,10 @@ package com.willfp.libreforge.effects.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.map.listMap
 import com.willfp.libreforge.ArgType
+import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.Holder
+import com.willfp.libreforge.HolderChange
+import com.willfp.libreforge.HolderProvider
 import com.willfp.libreforge.HolderTemplate
 import com.willfp.libreforge.SimpleProvidedHolder
 import com.willfp.libreforge.ViolationContext
@@ -12,9 +15,10 @@ import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.getIntFromExpression
+import com.willfp.libreforge.invalidate
 import com.willfp.libreforge.nest
 import com.willfp.libreforge.plugin
-import com.willfp.libreforge.registerGenericHolderProvider
+import com.willfp.libreforge.registerHolderProvider
 import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -51,10 +55,20 @@ object EffectAddHolder : Effect<HolderTemplate>("add_holder") {
 
     private val holders = listMap<UUID, Holder>()
 
+    // Libreforge knows exactly when these change, so the provider is never polled.
+    private val provider = object : HolderProvider {
+        override val id = "libreforge:add_holder"
+
+        override val invalidatedBy = emptySet<HolderChange>()
+
+        override fun maxAge(dispatcher: Dispatcher<*>): Int? = null
+
+        override fun provide(dispatcher: Dispatcher<*>) =
+            holders[dispatcher.uuid].map { h -> SimpleProvidedHolder(h) }
+    }
+
     init {
-        registerGenericHolderProvider {
-            holders[it.uuid].map { h -> SimpleProvidedHolder(h) }
-        }
+        registerHolderProvider(provider)
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: HolderTemplate): Boolean {
@@ -63,12 +77,14 @@ object EffectAddHolder : Effect<HolderTemplate>("add_holder") {
         val holder = compileData.toHolder().nest(data.holder)
 
         holders[dispatcher.uuid].add(holder)
+        dispatcher.invalidate(provider)
 
         plugin.scheduler.runLater(duration.toLong()) {
             holders[dispatcher.uuid].remove(holder)
             if (holders[dispatcher.uuid].isEmpty()) {
                 holders.remove(dispatcher.uuid)
             }
+            dispatcher.invalidate(provider)
         }
 
         return true

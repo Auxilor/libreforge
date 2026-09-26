@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.arguments
+import com.willfp.libreforge.effects.ProviderBinding
 import com.willfp.libreforge.effects.templates.AttributeEffect
 import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeModifier
@@ -28,6 +29,8 @@ object EffectBonusHealth : AttributeEffect(
     }
 
     override val shouldReload = false
+
+    override val providerBinding = ProviderBinding.NONE
 
     override fun getValue(config: Config, entity: LivingEntity) =
         config.getDoubleFromExpression("health", entity as? Player)

@@ -1,10 +1,12 @@
 package com.willfp.libreforge.effects.impl
 
-import com.willfp.eco.core.cache.EcoCache
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.Holder
+import com.willfp.libreforge.HolderChange
+import com.willfp.libreforge.HolderPolling
+import com.willfp.libreforge.HolderProvider
 import com.willfp.libreforge.HolderTemplate
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.SimpleProvidedHolder
@@ -15,12 +17,13 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.get
+import com.willfp.libreforge.invalidateEverywhere
+import com.willfp.libreforge.isPolledAsEntity
 import com.willfp.libreforge.nest
-import com.willfp.libreforge.registerGenericHolderProvider
+import com.willfp.libreforge.registerHolderProvider
 import org.bukkit.Bukkit
 import java.util.Objects
 import java.util.UUID
-import java.time.Duration
 
 object EffectAddPermanentHolderInRadius : Effect<HolderTemplate>("add_permanent_holder_in_radius") {
     override val description = "Permanently applies a set of effects and conditions to all nearby entities within a radius while the holder is active."
@@ -55,19 +58,25 @@ object EffectAddPermanentHolderInRadius : Effect<HolderTemplate>("add_permanent_
 
     private val holders = mutableSetOf<PermanentNearbyHolder>()
 
-    private val nearbyCache = EcoCache.builder<UUID, Collection<SimpleProvidedHolder>>()
-        .expireAfterWrite(Duration.ofMillis(250L))
-        .build()
+    // Invalidated everywhere on a real enable or disable; polling covers movement.
+    private val provider = object : HolderProvider {
+        override val id = "libreforge:add_permanent_holder_in_radius"
+
+        override val invalidatedBy = emptySet<HolderChange>()
+
+        override fun maxAge(dispatcher: Dispatcher<*>): Int =
+            if (dispatcher.isPolledAsEntity) HolderPolling.defaultMaxAge(dispatcher) else 20
+
+        override fun provide(dispatcher: Dispatcher<*>): Collection<ProvidedHolder> {
+            if (holders.isEmpty()) return emptyList()
+
+            return holders.filter { it.canApplyTo(dispatcher) }
+                .map { SimpleProvidedHolder(it.holder) }
+        }
+    }
 
     init {
-        registerGenericHolderProvider { dispatcher ->
-            if (holders.isEmpty()) return@registerGenericHolderProvider emptyList()
-
-            nearbyCache.get(dispatcher.uuid) { _ ->
-                holders.filter { it.canApplyTo(dispatcher) }
-                    .map { SimpleProvidedHolder(it.holder) }
-            }
-        }
+        registerHolderProvider(provider)
     }
 
     override fun onEnable(
@@ -88,10 +97,33 @@ object EffectAddPermanentHolderInRadius : Effect<HolderTemplate>("add_permanent_
         )
 
         holders += nearbyHolder
+        provider.invalidateEverywhere()
+    }
+
+    override fun onReload(
+        dispatcher: Dispatcher<*>,
+        config: Config,
+        identifiers: Identifiers,
+        previous: ProvidedHolder,
+        current: ProvidedHolder,
+        compileData: HolderTemplate
+    ) {
+        val existing = holders.firstOrNull { it.holder.id == identifiers.key }
+
+        if (existing == null) {
+            onEnable(dispatcher, config, identifiers, current, compileData)
+            return
+        }
+
+        // Update in place, without touching the holder set; movement is picked up by polling.
+        existing.radius = config.getDoubleFromExpression("radius", dispatcher.get())
+        existing.applyToSelf = config.getBool("apply-to-self")
     }
 
     override fun onDisable(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder) {
-        holders.removeIf { it.holder.id == identifiers.key }
+        if (holders.removeIf { it.holder.id == identifiers.key }) {
+            provider.invalidateEverywhere()
+        }
     }
 
     override fun makeCompileData(config: Config, context: ViolationContext): HolderTemplate {
@@ -111,11 +143,11 @@ object EffectAddPermanentHolderInRadius : Effect<HolderTemplate>("add_permanent_
         )
     }
 
-    private data class PermanentNearbyHolder(
+    private class PermanentNearbyHolder(
         val holder: Holder,
-        val radius: Double,
+        var radius: Double,
         val owner: UUID,
-        val applyToSelf: Boolean
+        var applyToSelf: Boolean
     ) {
         fun canApplyTo(dispatcher: Dispatcher<*>): Boolean {
             val dispatcherLocation = dispatcher.location ?: return false

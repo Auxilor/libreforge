@@ -175,6 +175,9 @@ open class SimpleProvidedHolder(
 
 /**
  * A provided holder for an ItemStack.
+ *
+ * Equality compares the holder and the ItemStack by reference, as item mirrors are new objects on
+ * every scan and deep ItemStack comparison is expensive.
  */
 open class ItemProvidedHolder(
     override val holder: Holder,
@@ -183,7 +186,7 @@ open class ItemProvidedHolder(
     private val cachedHashCode = calculateHashCode()
 
     private fun calculateHashCode(): Int {
-        return Objects.hash(holder, provider)
+        return Objects.hash(holder, System.identityHashCode(provider))
     }
 
     override fun hashCode(): Int {
@@ -196,7 +199,7 @@ open class ItemProvidedHolder(
         }
 
         return other.holder == this.holder
-                && other.provider == this.provider
+                && other.provider === this.provider
     }
 }
 
