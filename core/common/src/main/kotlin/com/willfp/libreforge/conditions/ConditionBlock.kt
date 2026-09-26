@@ -7,8 +7,10 @@ import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.applyHolder
 import com.willfp.libreforge.effects.Chain
+import com.willfp.libreforge.isType
 import com.willfp.libreforge.plugin
 import org.bukkit.Bukkit
+import org.bukkit.entity.Player
 import java.util.UUID
 import java.time.Duration
 
@@ -57,7 +59,10 @@ class ConditionBlock<T> internal constructor(
 
         val isMet = dispatcherMet xor isInverted
 
-        syncMetCache.put(dispatcher.uuid, isMet)
+        // Only player-facing display and placeholders read this off the main thread
+        if (dispatcher.isType<Player>()) {
+            syncMetCache.put(dispatcher.uuid, isMet)
+        }
 
         return isMet
     }

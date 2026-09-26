@@ -8,35 +8,29 @@ import com.willfp.libreforge.triggers.Trigger
 internal object BoundCounters {
     private val lock = Any()
     private var bindings = listMap<Counter, BoundCounter>()
-    private var cachedValues: Set<Counter>? = null
-    private var cachedBindings = HashMap<Counter, List<BoundCounter>>()
+    private var cachedByTrigger: Map<Trigger, List<BoundCounter>>? = null
 
     fun bind(counter: Counter, accumulator: Accumulator) {
         synchronized(lock) {
             bindings[counter].add(BoundCounter(counter, accumulator))
-            cachedValues = null
-            cachedBindings.remove(counter)
+            cachedByTrigger = null
         }
     }
 
     fun unbind(counter: Counter) {
         synchronized(lock) {
             bindings.remove(counter)
-            cachedValues = null
-            cachedBindings.remove(counter)
+            cachedByTrigger = null
         }
     }
 
-    fun values(): Set<Counter> = synchronized(lock) {
-        cachedValues ?: bindings.keys.toSet().also { cachedValues = it }
+    fun bindingsFor(trigger: Trigger): List<BoundCounter> = synchronized(lock) {
+        val byTrigger = cachedByTrigger
+            ?: bindings.values.flatten().groupBy { it.counter.trigger }.also { cachedByTrigger = it }
+
+        byTrigger[trigger].orEmpty()
     }
 
-    fun anyCanBeTriggeredBy(trigger: Trigger): Boolean = synchronized(lock) {
-        bindings.keys.any { it.canBeTriggeredBy(trigger) }
-    }
-
-    val Counter.bindings: List<BoundCounter>
-        get() = synchronized(lock) {
-            cachedBindings.getOrPut(this) { BoundCounters.bindings[this].toList() }
-        }
+    fun anyCanBeTriggeredBy(trigger: Trigger): Boolean =
+        bindingsFor(trigger).isNotEmpty()
 }
