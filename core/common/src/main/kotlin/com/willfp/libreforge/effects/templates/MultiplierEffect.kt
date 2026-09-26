@@ -39,13 +39,29 @@ abstract class MultiplierEffect(id: String) : Effect<NoCompileData>(id) {
     }
 
     override fun onDisable(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder) {
-        modifiers[dispatcher.uuid].removeIf { it.uuid == identifiers.uuid }
+        val uuid = dispatcher.uuid
+
+        if (!modifiers.containsKey(uuid)) {
+            return
+        }
+
+        val dispatcherModifiers = modifiers[uuid]
+        dispatcherModifiers.removeIf { it.uuid == identifiers.uuid }
+
+        if (dispatcherModifiers.isEmpty()) {
+            modifiers.remove(uuid)
+        }
     }
 
     protected fun getMultiplier(dispatcher: Dispatcher<*>): Double {
+        val uuid = dispatcher.uuid
         var multiplier = 1.0
 
-        for (modifier in modifiers[dispatcher.uuid]) {
+        if (!modifiers.containsKey(uuid)) {
+            return multiplier
+        }
+
+        for (modifier in modifiers[uuid]) {
             multiplier *= modifier.modifier
         }
 
