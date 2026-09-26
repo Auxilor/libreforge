@@ -16,6 +16,7 @@ import com.willfp.libreforge.filters.impl.FilterAltValueBelow
 import com.willfp.libreforge.filters.impl.FilterAltValueEquals
 import com.willfp.libreforge.filters.impl.FilterBelowHealth
 import com.willfp.libreforge.filters.impl.FilterBelowHunger
+import com.willfp.libreforge.filters.impl.FilterBlockUsed
 import com.willfp.libreforge.filters.impl.FilterBlocks
 import com.willfp.libreforge.filters.impl.FilterDamageCause
 import com.willfp.libreforge.filters.impl.FilterEnchant
@@ -114,6 +115,7 @@ object Filters : Registry<Filter<*, *>>() {
         register(FilterAltValueEquals)
         register(FilterBelowHealth)
         register(FilterBelowHunger)
+        register(FilterBlockUsed)
         register(FilterBlocks)
         register(FilterDamageCause)
         register(FilterEnchant)
