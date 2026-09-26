@@ -16,6 +16,46 @@ import com.willfp.libreforge.triggers.Triggers
 import org.bukkit.event.Listener
 import java.util.UUID
 
+/**
+ * What a permanent effect's applied state depends on.
+ */
+enum class ProviderBinding {
+    /**
+     * Keyed only by [Identifiers]; unaffected by the slot or the item.
+     */
+    NONE,
+
+    /**
+     * Depends on the slot the holder is provided from.
+     */
+    SLOT,
+
+    /**
+     * Acts on the item that provides the holder.
+     */
+    ITEM
+}
+
+/**
+ * The result of [Effect.checkIntegrity].
+ */
+enum class Integrity {
+    /**
+     * The effect's applied state is present.
+     */
+    INTACT,
+
+    /**
+     * The effect's applied state is gone, so it can safely be applied again.
+     */
+    MISSING,
+
+    /**
+     * The effect cannot tell.
+     */
+    UNKNOWN
+}
+
 abstract class Effect<T>(
     final override val id: String
 ) : Compilable<T>(), Listener {
@@ -26,6 +66,20 @@ abstract class Effect<T>(
      * If the effect should be reloaded.
      */
     open val shouldReload = true
+
+    /**
+     * What this effect's applied state depends on, deciding what happens when the holder moves slot
+     * or its item changes.
+     */
+    open val providerBinding: ProviderBinding
+        get() = ProviderBinding.SLOT
+
+    /**
+     * If the effect should be reloaded on every condition pass, for effects whose [onEnable] reads
+     * dispatcher or item state directly rather than through placeholders.
+     */
+    open val alwaysReload: Boolean
+        get() = false
 
     /**
      * The run order.
@@ -98,6 +152,89 @@ abstract class Effect<T>(
         compileData: T
     ) {
         // Override when needed.
+    }
+
+    /**
+     * Handle a reload of this permanent effect from the [previous] provided holder to the [current] one.
+     *
+     * Only called when [shouldReload] is true. Defaults to disabling and re-enabling.
+     */
+    protected open fun onReload(
+        dispatcher: Dispatcher<*>,
+        config: Config,
+        identifiers: Identifiers,
+        previous: ProvidedHolder,
+        current: ProvidedHolder,
+        compileData: T
+    ) {
+        onDisable(dispatcher, identifiers, previous)
+        onEnable(dispatcher, config, identifiers, current, compileData)
+    }
+
+    /**
+     * Check if the applied state of this permanent effect is still present.
+     */
+    open fun checkIntegrity(
+        dispatcher: Dispatcher<*>,
+        identifiers: Identifiers,
+        holder: ProvidedHolder
+    ): Integrity = Integrity.UNKNOWN
+
+    internal fun makeIdentifiers(discriminator: String): Identifiers =
+        identifierFactory.makeIdentifiers(discriminator)
+
+    internal fun enableWith(
+        dispatcher: Dispatcher<*>,
+        holder: ProvidedHolder,
+        element: ChainElement<T>,
+        identifiers: Identifiers
+    ) {
+        onEnable(dispatcher, element.config.applyHolder(holder, dispatcher), identifiers, holder, element.compileData)
+    }
+
+    internal fun disableWith(
+        dispatcher: Dispatcher<*>,
+        holder: ProvidedHolder,
+        identifiers: Identifiers
+    ) {
+        onDisable(dispatcher, identifiers, holder)
+    }
+
+    /**
+     * Returns false if skipped because the effect must not be reloaded.
+     */
+    internal fun reloadWith(
+        dispatcher: Dispatcher<*>,
+        previous: ProvidedHolder,
+        current: ProvidedHolder,
+        element: ChainElement<T>,
+        identifiers: Identifiers
+    ): Boolean {
+        if (!shouldReload) {
+            return false
+        }
+
+        onReload(
+            dispatcher,
+            element.config.applyHolder(current, dispatcher),
+            identifiers,
+            previous,
+            current,
+            element.compileData
+        )
+
+        return true
+    }
+
+    internal fun repairWith(
+        dispatcher: Dispatcher<*>,
+        previous: ProvidedHolder,
+        current: ProvidedHolder,
+        element: ChainElement<T>,
+        identifiers: Identifiers
+    ) {
+        onDisable(dispatcher, identifiers, previous)
+        enableWith(dispatcher, current, element, identifiers)
     }
 
     /**

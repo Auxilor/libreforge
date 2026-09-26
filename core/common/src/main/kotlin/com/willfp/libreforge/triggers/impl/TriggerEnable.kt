@@ -33,7 +33,7 @@ object TriggerEnable : Trigger("enable") {
                 victim = dispatcher.get(),
                 event = event
             ),
-            forceHolders = event.newHolders
+            forceHolders = listOf(event.holder)
         )
     }
 }

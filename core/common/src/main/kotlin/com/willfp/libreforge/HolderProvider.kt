@@ -1,15 +1,10 @@
 package com.willfp.libreforge
 
-import com.willfp.eco.core.cache.EcoCache
-import com.willfp.eco.core.map.listMap
 import com.willfp.libreforge.effects.EffectBlock
 import com.willfp.libreforge.slot.ItemHolderFinder
-import org.bukkit.Bukkit
-import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.event.HandlerList
-import java.util.UUID
-import java.time.Duration
+import java.util.IdentityHashMap
 
 
 /**
@@ -18,8 +13,71 @@ import java.time.Duration
 interface HolderProvider {
     /**
      * Provide the holders.
+     *
+     * Holders must be returned in a stable order across calls: duplicates of one holder id are
+     * identified by their position among the holders with that id, so a provider that iterates an
+     * unordered collection can make an unchanged holder look moved.
      */
     fun provide(dispatcher: Dispatcher<*>): Collection<ProvidedHolder>
+
+    /**
+     * Stable id, unique among registered providers (duplicates are suffixed with `#<n>`).
+     */
+    val id: String
+        get() = this::class.java.name
+
+    /**
+     * The maximum number of ticks between re-asks for a [dispatcher] without invalidation,
+     * or null to only re-ask when invalidated.
+     */
+    fun maxAge(dispatcher: Dispatcher<*>): Int? = HolderPolling.defaultMaxAge(dispatcher)
+
+    /**
+     * The change signals that invalidate this provider.
+     */
+    val invalidatedBy: Set<HolderChange>
+        get() = HolderChange.BUILT_IN
+}
+
+/**
+ * A signal that the holders of a dispatcher may have changed.
+ */
+sealed interface HolderChange {
+    /**
+     * Any inventory, equipment, held item, pickup, drop or use change.
+     */
+    data object Items : HolderChange
+
+    /**
+     * The player respawned.
+     */
+    data object Respawn : HolderChange
+
+    /**
+     * The player changed world.
+     */
+    data object WorldChange : HolderChange
+
+    /**
+     * Any Bukkit event. [dispatcherOf] names the one dispatcher to refresh; null ignores the event.
+     */
+    class Custom<E : Event>(
+        val event: Class<E>,
+        val dispatcherOf: (E) -> Dispatcher<*>?
+    ) : HolderChange
+
+    companion object {
+        /**
+         * The signals wired by libreforge.
+         */
+        val BUILT_IN: Set<HolderChange> = setOf(Items, Respawn, WorldChange)
+
+        /**
+         * Create a [Custom] signal for an event type.
+         */
+        inline fun <reified E : Event> custom(noinline dispatcherOf: (E) -> Dispatcher<*>?) =
+            Custom(E::class.java, dispatcherOf)
+    }
 }
 
 /**
@@ -107,38 +165,94 @@ data class ProvidedEffectBlock(
     }
 }
 
-/**
- * Pairs each [ProvidedEffectBlock] with its occurrence index: how many prior entries in this
- * list share the same (effect, holder id) pair, in list order.
- *
- * Used to derive a modifier identity that is independent of the physical holder (e.g. the
- * inventory slot an item occupies), while still allowing distinct holders with the same id
- * (e.g. the same enchantment on two armor pieces) to stack.
- */
-internal fun List<ProvidedEffectBlock>.withOccurrences(): List<Pair<ProvidedEffectBlock, Int>> {
-    val seen = HashMap<Pair<EffectBlock, Any>, Int>()
-    return map { block ->
-        val key = block.effect to block.holder.holder.id
-        val occurrence = seen.getOrDefault(key, 0)
-        seen[key] = occurrence + 1
-        block to occurrence
-    }
-}
-
 private val providers = mutableListOf<HolderProvider>()
+
+private val providerIds = IdentityHashMap<HolderProvider, String>()
+
+private val providerIdCounts = mutableMapOf<String, Int>()
+
+/**
+ * The registered providers, in registration order.
+ */
+internal val registeredHolderProviders: List<HolderProvider>
+    get() = providers
+
+/**
+ * The unique id of a registered [provider].
+ */
+internal fun registeredProviderId(provider: HolderProvider): String =
+    providerIds[provider] ?: provider.id
 
 /**
  * Register a new holder provider.
  */
-fun registerHolderProvider(provider: HolderProvider) = providers.add(provider)
+fun registerHolderProvider(provider: HolderProvider): Boolean {
+    if (providerIds.containsKey(provider)) {
+        return false
+    }
+
+    val baseId = provider.id
+    val count = providerIdCounts.getOrDefault(baseId, 0)
+    providerIdCounts[baseId] = count + 1
+    providerIds[provider] = if (count == 0) baseId else "$baseId#$count"
+
+    providers.add(provider)
+    HolderSignals.registerProvider(provider)
+    HolderStates.onProviderRegistered(provider)
+    return true
+}
+
+/**
+ * Remove holder providers, used when the plugin that registered them is disabled.
+ */
+internal fun unregisterHolderProviders(filter: (HolderProvider) -> Boolean): List<HolderProvider> {
+    val removed = providers.filter(filter)
+    providers.removeAll(removed)
+    removed.forEach { providerIds.remove(it) }
+    return removed
+}
+
+/**
+ * The class that owns a provider, used to find the plugin that registered it.
+ */
+internal val HolderProvider.ownerClass: Class<*>
+    get() = when (this) {
+        is GenericHolderProvider -> function.javaClass
+        is ItemHolderFinder<*>.ItemHolderFinderProvider -> finderClass
+        else -> this.javaClass
+    }
+
+internal class GenericHolderProvider(
+    val function: (Dispatcher<*>) -> Collection<ProvidedHolder>,
+    private val explicitId: String?,
+    private val maxAgeFunction: ((Dispatcher<*>) -> Int?)?,
+    override val invalidatedBy: Set<HolderChange>
+) : HolderProvider {
+    override val id: String
+        get() = explicitId ?: function.javaClass.name
+
+    override fun maxAge(dispatcher: Dispatcher<*>): Int? =
+        if (maxAgeFunction != null) maxAgeFunction(dispatcher) else HolderPolling.defaultMaxAge(dispatcher)
+
+    override fun provide(dispatcher: Dispatcher<*>) = function(dispatcher)
+}
 
 /**
  * Register a new holder provider for all possible dispatchers.
  */
 fun registerGenericHolderProvider(provider: (Dispatcher<*>) -> Collection<ProvidedHolder>) =
-    registerHolderProvider(object : HolderProvider {
-        override fun provide(dispatcher: Dispatcher<*>) = provider(dispatcher)
-    })
+    registerGenericHolderProvider(id = null, provider = provider)
+
+/**
+ * Register a new holder provider for all possible dispatchers, with an [id], a [maxAge] (see
+ * [HolderProvider.maxAge], null to use the default) and the signals it is [invalidatedBy].
+ */
+fun registerGenericHolderProvider(
+    id: String? = null,
+    maxAge: ((Dispatcher<*>) -> Int?)? = null,
+    invalidatedBy: Set<HolderChange> = HolderChange.BUILT_IN,
+    provider: (Dispatcher<*>) -> Collection<ProvidedHolder>
+) = registerHolderProvider(GenericHolderProvider(provider, id, maxAge, invalidatedBy))
 
 /**
  * Register a new holder provider for a specific type of dispatcher.
@@ -154,20 +268,54 @@ inline fun <reified T> registerSpecificHolderProvider(crossinline provider: (T) 
         }
     })
 
+/**
+ * Register a new holder provider for a specific type of dispatcher, with an [id], a [maxAge] (see
+ * [HolderProvider.maxAge], null to use the default) and the signals it is [invalidatedBy].
+ */
+inline fun <reified T> registerSpecificHolderProvider(
+    id: String? = null,
+    noinline maxAge: ((Dispatcher<*>) -> Int?)? = null,
+    invalidatedBy: Set<HolderChange> = HolderChange.BUILT_IN,
+    crossinline provider: (T) -> Collection<ProvidedHolder>
+): Boolean {
+    val explicitId = id
+    val maxAgeFunction = maxAge
+    val signals = invalidatedBy
+
+    return registerHolderProvider(object : HolderProvider {
+        override val id: String
+            get() = explicitId ?: this::class.java.name
+
+        override val invalidatedBy: Set<HolderChange>
+            get() = signals
+
+        override fun maxAge(dispatcher: Dispatcher<*>): Int? =
+            if (maxAgeFunction != null) maxAgeFunction(dispatcher) else HolderPolling.defaultMaxAge(dispatcher)
+
+        override fun provide(dispatcher: Dispatcher<*>): Collection<ProvidedHolder> {
+            return if (dispatcher.isType<T>()) {
+                provider(dispatcher.get<T>()!!)
+            } else {
+                emptyList()
+            }
+        }
+    })
+}
+
 fun registerSlotHolderFinderAsProvider(finder: ItemHolderFinder<*>) =
     registerHolderProvider(finder.toHolderProvider())
 
 private val refreshFunctions = mutableListOf<(Dispatcher<*>) -> Unit>()
 
 /**
- * Register a function to be called when a dispatcher's holders are refreshed.
+ * Register a function to be called before a dispatcher's providers are re-asked.
  */
 fun registerRefreshFunction(function: (Dispatcher<*>) -> Unit) {
     refreshFunctions += function
 }
 
 /**
- * Register a function to be called when a dispatcher's holders are refreshed for a specific dispatcher.
+ * Register a function to be called before a dispatcher's providers are re-asked, for a specific dispatcher.
  */
 inline fun <reified T> registerSpecificRefreshFunction(crossinline function: (T) -> Unit) {
     registerRefreshFunction {
@@ -177,52 +325,42 @@ inline fun <reified T> registerSpecificRefreshFunction(crossinline function: (T)
     }
 }
 
-private val holderCooldown: EcoCache<UUID, Unit>? =
-    plugin.configYml.getInt("refresh.cooldown").takeIf { it > 0 }?.let {
-        EcoCache.builder<UUID, Unit>()
-            .expireAfterWrite(Duration.ofMillis(it.toLong()))
-            .build()
-    }
-
-/**
- * Update holders, effects, and call refresh functions.
- */
-fun Dispatcher<*>.refreshHolders() {
-    if (holderCooldown != null) {
-        val isOnCooldown = holderCooldown.get(this.uuid) != null
-        if (isOnCooldown) {
-            return
-        }
-
-        holderCooldown.put(this.uuid, Unit)
-    }
-
-    this.forceRefreshHolders()
-}
-
-/**
- * Forcibly refresh holders, ignoring cooldown.
- */
-fun Dispatcher<*>.forceRefreshHolders() {
+internal fun Dispatcher<*>.runRefreshFunctions() {
     refreshFunctions.forEach { it(this) }
-    // Pre-populate cache so updateEffects() gets a hit instead of a miss
-    holderCache.put(this.uuid, this.computeHolders())
-    this.updateEffects()
 }
 
 /**
- * Re-evaluate active effects against the current (possibly cached) holders.
- *
- * Used by the periodic polling task: holders are presumed stable between events,
- * so we skip the provider rescan and only re-check conditions. The holder cache
- * still expires naturally (4 s TTL), so providers are still rescanned periodically.
- * Event-based callers (equipment change, inventory click, etc.) use [refreshHolders]
- * or [forceRefreshHolders] which explicitly invalidate the cache.
+ * Remove the refresh functions and placeholder providers whose code was loaded by [classLoader].
  */
-internal fun Dispatcher<*>.pollEffects() {
-    refreshFunctions.forEach { it(this) }
-    this.updateEffects()
+internal fun unregisterHolderFunctions(classLoader: ClassLoader) {
+    refreshFunctions.removeAll { it.javaClass.classLoader === classLoader }
+    holderPlaceholderProviders.removeAll { it.javaClass.classLoader === classLoader }
 }
+
+/**
+ * Invalidate one [provider] on this dispatcher, for changes with no event. Callable from any thread.
+ */
+fun Dispatcher<*>.invalidate(provider: HolderProvider) =
+    HolderStates.markProvider(this, provider)
+
+/**
+ * Invalidate this provider on every tracked dispatcher. Callable from any thread.
+ */
+fun HolderProvider.invalidateEverywhere() =
+    HolderStates.markProviderEverywhere(this)
+
+/**
+ * Invalidate every provider for this dispatcher; applied in the next tick. Callable from any thread.
+ */
+fun Dispatcher<*>.refreshHolders() =
+    HolderStates.markAllProviders(this)
+
+/**
+ * Invalidate every provider for this dispatcher, ignoring `refresh.cooldown`; applied in the next
+ * tick. Callable from any thread.
+ */
+fun Dispatcher<*>.forceRefreshHolders() =
+    HolderStates.forceMarkAllProviders(this)
 
 private val holderPlaceholderProviders = mutableListOf<(ProvidedHolder, Dispatcher<*>) -> Collection<NamedValue>>()
 
@@ -272,59 +410,11 @@ fun ProvidedHolder.generatePlaceholders(dispatcher: Dispatcher<*>): List<NamedVa
     }
 }
 
-private val previousHolders: EcoCache<UUID, Collection<ProvidedHolder>> =
-    EcoCache.builder<UUID, Collection<ProvidedHolder>>()
-        .expireAfterAccess(Duration.ofSeconds(30))
-        .build()
-
-private val holderCache = EcoCache.builder<UUID, Collection<ProvidedHolder>>()
-    .expireAfterWrite(Duration.ofSeconds(4))
-    .build()
-
-private fun Dispatcher<*>.computeHolders(): Collection<ProvidedHolder> {
-    if (this is EntityDispatcher && this.dispatcher !is Player && !plugin.configYml.getBool("refresh.entities.enabled")) {
-        return emptyList()
-    }
-
-    val holders = providers.flatMap { it.provide(this) }
-
-    val old = previousHolders.get(this.uuid) ?: emptyList()
-
-    val newByID = holders.associateBy { it.holder.id }
-    val oldByID = old.associateBy { it.holder.id }
-
-    val added = newByID.keys - oldByID.keys
-    val removed = oldByID.keys - newByID.keys
-
-    for (id in added) {
-        Bukkit.getPluginManager().callEvent(
-            HolderEnableEvent(this, newByID[id]!!, holders)
-        )
-    }
-
-    for (id in removed) {
-        Bukkit.getPluginManager().callEvent(
-            HolderDisableEvent(this, oldByID[id]!!, old)
-        )
-    }
-
-    previousHolders.put(this.uuid, holders)
-
-    if (added.isNotEmpty() || removed.isNotEmpty()) {
-        @Suppress("DEPRECATION")
-        Bukkit.getPluginManager().callEvent(
-            HolderProvideEvent(this, holders)
-        )
-    }
-
-    return holders
-}
-
 /**
  * The holders.
  */
 val Dispatcher<*>.holders: Collection<ProvidedHolder>
-    get() = holderCache.get(this.uuid) { computeHolders() }
+    get() = HolderStates.holders(this)
 
 /**
  * Get holders of a specific type.
@@ -334,24 +424,10 @@ inline fun <reified T : Holder> Dispatcher<*>.getHoldersOfType(): Collection<T> 
 }
 
 /**
- * Invalidate holder cache to force rescan.
+ * Invalidate every provider for this dispatcher; applied in the next tick. Callable from any thread.
  */
-fun Dispatcher<*>.updateHolders() {
-    holderCache.invalidate(this.uuid)
-}
-
-internal fun Dispatcher<*>.purgePreviousHolders() {
-    previousHolders.invalidate(this.uuid)
-    previousStates.remove(this.uuid)
-}
-
-internal fun clearAllHolderCaches() {
-    holderCache.invalidateAll()
-    previousHolders.invalidateAll()
-}
-
-// Effects that were active on previous update
-private val previousStates = listMap<UUID, ProvidedEffectBlock>() // Optimisation.
+fun Dispatcher<*>.updateHolders() =
+    HolderStates.markAllProviders(this)
 
 /**
  * Get active effects for a [dispatcher] from holders mapped to the holder
@@ -387,59 +463,19 @@ fun Dispatcher<*>.calculateActiveEffects() =
  * The active effects.
  */
 val Dispatcher<*>.activeEffects: List<EffectBlock>
-    get() = previousStates[this.uuid].map { it.effect }
+    get() = HolderStates.providedActiveEffects(this).map { it.effect }
 
 /**
  * The active effects mapped to the holder that provided them.
  */
 val Dispatcher<*>.providedActiveEffects: List<ProvidedEffectBlock>
-    get() = previousStates[this.uuid]
+    get() = HolderStates.providedActiveEffects(this)
 
 /**
- * Update the active effects.
+ * Re-evaluate the conditions of every holder; applied in the next tick. Callable from any thread.
  */
-fun Dispatcher<*>.updateEffects() {
-    val before = this.providedActiveEffects
-    val after = this.calculateActiveEffects()
-
-    previousStates[this.uuid] = after
-
-    // Pair each block with its occurrence index so identity survives holders that are equal
-    // but physically distinct (e.g. an item roaming between inventory slots), while distinct
-    // holders sharing the same id still get distinct occurrences and stack correctly.
-    val beforeWithOcc = before.withOccurrences()
-    val afterWithOcc = after.withOccurrences()
-
-    // Permanent effects also have a run order, so we need to sort them.
-    val added = (afterWithOcc without beforeWithOcc).sortedBy { it.first }
-    val removed = (beforeWithOcc without afterWithOcc).sortedBy { it.first }
-
-    for ((block, occurrence) in removed) {
-        val (effect, holder) = block
-        effect.disable(this, holder, occurrence = occurrence)
-    }
-
-    for ((block, occurrence) in added) {
-        val (effect, holder) = block
-        effect.enable(this, holder, occurrence = occurrence)
-    }
-
-    // Reloading is now done by disabling all, then enabling all. Effect#reload is deprecated.
-    // Since permanent effects are not allowed in chains, they are always done in the correct
-    // order as mixing weights is not a concern.
-    val toReload = (afterWithOcc without added).sortedBy { it.first }
-
-    for ((block, occurrence) in toReload) {
-        val (effect, holder) = block
-        effect.disable(this, holder, occurrence = occurrence, isReload = true)
-    }
-
-    for ((block, occurrence) in toReload) {
-        val (effect, holder) = block
-        effect.enable(this, holder, occurrence = occurrence, isReload = true)
-    }
-}
-
+fun Dispatcher<*>.updateEffects() =
+    HolderStates.markConditionsAll(this)
 
 /**
  * Removes all elements from the given [other] list that are contained in this list.

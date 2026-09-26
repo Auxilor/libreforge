@@ -5,6 +5,7 @@ import com.willfp.eco.core.map.listMap
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
+import com.willfp.libreforge.effects.ProviderBinding
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.get
@@ -16,6 +17,8 @@ object EffectFlight : Effect<NoCompileData>("flight") {
     override val categories = setOf("movement", "player")
 
     override val shouldReload = false
+
+    override val providerBinding = ProviderBinding.NONE
 
     private val players = listMap<UUID, UUID>()
 

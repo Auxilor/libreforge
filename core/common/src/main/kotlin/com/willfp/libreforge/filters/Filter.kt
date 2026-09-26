@@ -35,6 +35,14 @@ abstract class Filter<T, V>(
     open val valueEnumClass: KClass<out Enum<*>>? = null
 
     /**
+     * If [getValue] depends on the trigger data only through placeholders and expressions in the
+     * config value at its key, so a value with neither can be read once. True for libreforge's
+     * own filters; filters from other plugins must opt in.
+     */
+    open val isValueCacheable: Boolean
+        get() = this.javaClass.classLoader === Filter::class.java.classLoader
+
+    /**
      * Fetch value from config.
      *
      * [data] is null when generating compile data.
@@ -52,12 +60,12 @@ abstract class Filter<T, V>(
         data: TriggerData,
         config: FilterBlock<T, V>
     ): Boolean {
-        val cfg = config.config
+        val value = config.valueFor(data)
 
         return if (config.isInverted) {
-            !isMet(data, getValue(cfg, data, "not_$id"), config.compileData)
+            !isMet(data, value, config.compileData)
         } else {
-            isMet(data, getValue(cfg, data, id), config.compileData)
+            isMet(data, value, config.compileData)
         }
     }
 

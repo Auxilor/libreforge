@@ -32,6 +32,12 @@ class EffectBlock internal constructor(
     val weight = effects.weight
 
     /**
+     * If this block holds permanent effects, i.e. it has no triggers.
+     */
+    internal val isPermanent: Boolean
+        get() = triggers.isEmpty()
+
+    /**
      * Enable the effects.
      */
     fun enable(
