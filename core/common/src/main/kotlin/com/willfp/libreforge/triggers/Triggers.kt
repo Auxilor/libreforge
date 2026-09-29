@@ -28,6 +28,7 @@ import com.willfp.libreforge.triggers.impl.TriggerCompleteAdvancement
 import com.willfp.libreforge.triggers.impl.TriggerConsume
 import com.willfp.libreforge.triggers.impl.TriggerCraft
 import com.willfp.libreforge.triggers.impl.TriggerDamageItem
+import com.willfp.libreforge.triggers.impl.TriggerDateBoundary
 import com.willfp.libreforge.triggers.impl.TriggerDeath
 import com.willfp.libreforge.triggers.impl.TriggerDeployElytra
 import com.willfp.libreforge.triggers.impl.TriggerDisable
@@ -261,5 +262,6 @@ object Triggers : Registry<Trigger>() {
         register(TriggerWinRaid)
         register(TriggerTakeDamage)
         register(TriggerTakeEntityDamage)
+        TriggerDateBoundary.values.forEach { register(it) }
     }
 }

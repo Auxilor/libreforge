@@ -5,6 +5,14 @@ import com.willfp.eco.core.registry.Registry
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.ConfigWarning
 import com.willfp.libreforge.ViolationContext
+import com.willfp.libreforge.conditions.impl.ConditionIsMonth
+import com.willfp.libreforge.conditions.impl.ConditionIsDayOfWeek
+import com.willfp.libreforge.conditions.impl.ConditionIsDayOfMonth
+import com.willfp.libreforge.conditions.impl.ConditionIsDate
+import com.willfp.libreforge.conditions.impl.ConditionIsHour
+import com.willfp.libreforge.conditions.impl.ConditionIsDateBetween
+import com.willfp.libreforge.conditions.impl.ConditionIsHourBetween
+import com.willfp.libreforge.conditions.impl.ConditionIsTimeBetween
 import com.willfp.libreforge.conditions.impl.ConditionAboveBalance
 import com.willfp.libreforge.conditions.impl.ConditionAboveGlobalPoints
 import com.willfp.libreforge.conditions.impl.ConditionAboveHealth
@@ -191,6 +199,14 @@ object Conditions : Registry<Condition<*>>() {
         register(ConditionIsFrozen)
         register(ConditionIsGliding)
         register(ConditionIsNight)
+        register(ConditionIsMonth)
+        register(ConditionIsDayOfWeek)
+        register(ConditionIsDayOfMonth)
+        register(ConditionIsDate)
+        register(ConditionIsHour)
+        register(ConditionIsDateBetween)
+        register(ConditionIsHourBetween)
+        register(ConditionIsTimeBetween)
         register(ConditionIsSneaking)
         register(ConditionIsSprinting)
         register(ConditionIsStorm)
