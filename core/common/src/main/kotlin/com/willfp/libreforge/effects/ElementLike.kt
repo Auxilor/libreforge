@@ -137,14 +137,13 @@ abstract class ElementLike : ConfigurableElement {
 
         var didTrigger = false
 
-        // Mutate data once (outside repeat loop) since input doesn't change between repeats
-        val mutatedData = mutators.mutate(trigger.data)
-
         fun trigger() {
             // Set to true if triggered.
             didTrigger = didTrigger or doTrigger(
                 trigger.copy(
-                    data = mutatedData
+                    // Mutate again here for each repeat, as mutator args can
+                    // depend on %repeat_count% (e.g. spin_velocity in shoot_extra_arrows).
+                    data = mutators.mutate(trigger.data)
                 )
             )
 
@@ -165,8 +164,8 @@ abstract class ElementLike : ConfigurableElement {
         } else {
             // Delay between each repeat.
             var repeats = 0
-            val context = mutatedData.player?.let { plugin.scheduler.on(it) }
-                ?: mutatedData.location?.let { plugin.scheduler.at(it) }
+            val context = data.player?.let { plugin.scheduler.on(it) }
+                ?: data.location?.let { plugin.scheduler.at(it) }
                 ?: plugin.scheduler.global()
 
             context.runTimer({ task ->
