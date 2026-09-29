@@ -49,6 +49,7 @@ import com.willfp.libreforge.conditions.impl.ConditionIsFalling
 import com.willfp.libreforge.conditions.impl.ConditionIsFlying
 import com.willfp.libreforge.conditions.impl.ConditionIsFrozen
 import com.willfp.libreforge.conditions.impl.ConditionIsGliding
+import com.willfp.libreforge.conditions.impl.ConditionIsHoliday
 import com.willfp.libreforge.conditions.impl.ConditionIsNight
 import com.willfp.libreforge.conditions.impl.ConditionIsOp
 import com.willfp.libreforge.conditions.impl.ConditionIsSneaking
@@ -83,6 +84,7 @@ import com.willfp.libreforge.conditions.impl.ConditionWithinRadiusOf
 import com.willfp.libreforge.deprecationMessage
 import com.willfp.libreforge.effects.Chain
 import com.willfp.libreforge.effects.Effects
+import com.willfp.libreforge.holidays.HolidayEntry
 import com.willfp.libreforge.separatorAmbivalent
 
 object Conditions : Registry<Condition<*>>() {
@@ -232,5 +234,9 @@ object Conditions : Registry<Condition<*>>() {
         register(ConditionIsAlive)
         register(ConditionIsSubmerged)
         register(ConditionInGamemode)
+
+        for (holiday in HolidayEntry.all) {
+            register(ConditionIsHoliday(holiday))
+        }
     }
 }
