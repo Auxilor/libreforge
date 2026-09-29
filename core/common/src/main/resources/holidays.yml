@@ -1,0 +1,71 @@
+# Holidays, each of which gets an is_<id> condition, an is_<id> filter, and an <id>_start trigger.
+# Dates are worked out in the timezone set by holidays.timezone in config.yml.
+#
+# Each holiday sets exactly one of:
+#
+#   active: An expression that is true (1) on every day the holiday is on. It can use:
+#     %day%                       Day of the month (1-31)
+#     %month%                     Month (1-12)
+#     %year%                      Year, e.g. 2026
+#     %weekday%                   Day of the week (1 = Monday ... 7 = Sunday)
+#     %day_of_year%               Day of the year (1-366)
+#     %days_in_month%             Number of days in the month (28-31)
+#     %is_leap_year%              1 in a leap year, otherwise 0
+#     %weekday_ordinal%           Which occurrence of this weekday in the month it is (1 = first)
+#     %weekday_ordinal_from_end%  The same, counted from the end of the month (1 = last)
+#     %days_from_easter%          Days since Easter Sunday this year (negative before Easter)
+#
+#   dates: A list of dates ("YYYY-MM-DD") or inclusive ranges ("YYYY-MM-DD..YYYY-MM-DD"),
+#     for holidays that can't be calculated, like those on lunar calendars. Always quote them.
+#
+#   from / to: The IDs of two other holidays. On from each start of the first holiday
+#     up to and including the next end of the second, even across New Year.
+#
+# In expressions, && and || have the same precedence and are read left to right,
+# so always use brackets when mixing them: "(a && b) || (c && d)".
+#
+# A holiday is multi-day if it's on for more than one day in a row;
+# its <id>_start trigger fires on the first day.
+
+holidays:
+  - id: new_years_day
+    active: "%month% == 1 && %day% == 1"
+  - id: valentines_day
+    active: "%month% == 2 && %day% == 14"
+  - id: easter_sunday
+    active: "%days_from_easter% == 0"
+  # The fourth Thursday of November
+  - id: thanksgiving
+    active: "%month% == 11 && %weekday% == 4 && %weekday_ordinal% == 4"
+  # The Friday after Thanksgiving
+  - id: black_friday
+    active: "%month% == 11 && %weekday% == 5 && %day% >= 23 && %day% <= 29"
+  - id: christmas_eve
+    active: "%month% == 12 && %day% == 24"
+  - id: christmas_day
+    active: "%month% == 12 && %day% == 25"
+  - id: boxing_day
+    active: "%month% == 12 && %day% == 26"
+  - id: new_years_eve
+    active: "%month% == 12 && %day% == 31"
+
+  # More examples:
+  #
+  # - id: good_friday
+  #   active: "%days_from_easter% == -2"
+  # - id: memorial_day
+  #   active: "%month% == 5 && %weekday% == 1 && %weekday_ordinal_from_end% == 1"
+  # - id: twelve_days_of_christmas
+  #   active: "(%month% == 12 && %day% >= 25) || (%month% == 1 && %day% <= 5)"
+  # - id: advent_sunday
+  #   active: "%weekday% == 7 && ((%month% == 11 && %day% >= 27) || (%month% == 12 && %day% <= 3))"
+  # - id: advent
+  #   from: advent_sunday
+  #   to: christmas_eve
+  # - id: diwali
+  #   dates:
+  #     - "2026-11-08"
+  #     - "2027-10-29"
+  # - id: chinese_new_year_festival
+  #   dates:
+  #     - "2027-02-06..2027-02-20"

@@ -60,7 +60,6 @@ import com.willfp.libreforge.triggers.impl.TriggerGroupStatic
 import com.willfp.libreforge.triggers.impl.TriggerHeadshot
 import com.willfp.libreforge.triggers.impl.TriggerHeal
 import com.willfp.libreforge.triggers.impl.TriggerHoldItem
-import com.willfp.libreforge.triggers.impl.TriggerHolidayStart
 import com.willfp.libreforge.triggers.impl.TriggerHookInGround
 import com.willfp.libreforge.triggers.impl.TriggerItemBreak
 import com.willfp.libreforge.triggers.impl.TriggerJoin
@@ -262,9 +261,5 @@ object Triggers : Registry<Trigger>() {
         register(TriggerWinRaid)
         register(TriggerTakeDamage)
         register(TriggerTakeEntityDamage)
-
-        for (trigger in TriggerHolidayStart.all) {
-            register(trigger)
-        }
     }
 }

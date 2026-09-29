@@ -28,7 +28,6 @@ import com.willfp.libreforge.filters.impl.FilterHoneyLevelFull
 import com.willfp.libreforge.filters.impl.FilterIsBehindVictim
 import com.willfp.libreforge.filters.impl.FilterIsBoss
 import com.willfp.libreforge.filters.impl.FilterIsExpressionTrue
-import com.willfp.libreforge.filters.impl.FilterIsHoliday
 import com.willfp.libreforge.filters.impl.FilterIsNPC
 import com.willfp.libreforge.filters.impl.FilterIsPassive
 import com.willfp.libreforge.filters.impl.FilterIsTamedEntityOwner
@@ -56,7 +55,6 @@ import com.willfp.libreforge.filters.impl.FilterValueBelow
 import com.willfp.libreforge.filters.impl.FilterValueEquals
 import com.willfp.libreforge.filters.impl.FilterVictimConditions
 import com.willfp.libreforge.filters.impl.FilterVictimName
-import com.willfp.libreforge.holidays.HolidayEntry
 
 object Filters : Registry<Filter<*, *>>() {
     /**
@@ -156,9 +154,5 @@ object Filters : Registry<Filter<*, *>>() {
         register(FilterValueEquals)
         register(FilterVictimConditions)
         register(FilterVictimName)
-
-        for (holiday in HolidayEntry.all) {
-            register(FilterIsHoliday(holiday))
-        }
     }
 }

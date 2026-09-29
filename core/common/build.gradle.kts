@@ -74,6 +74,9 @@ dependencies {
     testImplementation("com.willfp:eco:${findProperty("eco-version")}")
     testImplementation(kotlin("stdlib", version = "2.3.0"))
 
+    // Reads the bundled holidays.yml in tests; the server provides SnakeYAML at runtime.
+    testImplementation("org.yaml:snakeyaml:2.2")
+
     // Versions match eco's own suite so the two repos do not drift apart.
     testImplementation("org.junit.jupiter:junit-jupiter-api:6.0.3")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:6.0.3")
