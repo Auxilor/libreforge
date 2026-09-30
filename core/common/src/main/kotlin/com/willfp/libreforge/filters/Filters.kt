@@ -12,6 +12,7 @@ import com.willfp.libreforge.filters.impl.FilterAboveHealthPercent
 import com.willfp.libreforge.filters.impl.FilterAboveHunger
 import com.willfp.libreforge.filters.impl.FilterAdvancements
 import com.willfp.libreforge.filters.impl.FilterAltValueAbove
+import com.willfp.libreforge.filters.impl.FilterAnyPlayerDropped
 import com.willfp.libreforge.filters.impl.FilterAltValueBelow
 import com.willfp.libreforge.filters.impl.FilterAltValueEquals
 import com.willfp.libreforge.filters.impl.FilterBelowHealth
@@ -38,6 +39,7 @@ import com.willfp.libreforge.filters.impl.FilterItems
 import com.willfp.libreforge.filters.impl.FilterOnMaxHealth
 import com.willfp.libreforge.filters.impl.FilterOnlyBosses
 import com.willfp.libreforge.filters.impl.FilterOnlyNonBosses
+import com.willfp.libreforge.filters.impl.FilterPlayerDropped
 import com.willfp.libreforge.filters.impl.FilterPlayerName
 import com.willfp.libreforge.filters.impl.FilterPlayerPlaced
 import com.willfp.libreforge.filters.impl.FilterPotionEffect
@@ -109,6 +111,7 @@ object Filters : Registry<Filter<*, *>>() {
         register(FilterAboveHealthPercent)
         register(FilterAboveHunger)
         register(FilterAdvancements)
+        register(FilterAnyPlayerDropped)
         register(FilterAltValueAbove)
         register(FilterAltValueBelow)
         register(FilterAltValueEquals)
@@ -137,6 +140,7 @@ object Filters : Registry<Filter<*, *>>() {
         register(FilterOnlyBosses)
         register(FilterOnlyNonBosses)
         register(FilterPlayerName)
+        register(FilterPlayerDropped)
         register(FilterPlayerPlaced)
         register(FilterPotionEffect)
         register(FilterProjectiles)
