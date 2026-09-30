@@ -16,19 +16,7 @@ object EffectDataFixer : Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     fun clearOnQuit(event: PlayerQuitEvent) {
-        val player = event.player
-        val dispatcher = player.toDispatcher()
-
-        for ((block, occurrence) in dispatcher.providedActiveEffects.withOccurrences()) {
-            val (effect, holder) = block
-            effect.disable(dispatcher, holder, occurrence = occurrence)
-        }
-
-        // Extra fix for pre-4.2.3
-        player.fixAttributes()
-
-        dispatcher.updateHolders()
-        dispatcher.purgePreviousHolders()
+        event.player.clearEffects()
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -36,14 +24,26 @@ object EffectDataFixer : Listener {
         val player = event.player
         val dispatcher = player.toDispatcher()
 
-        // Extra fix for pre-4.2.3
-        player.fixAttributes()
-
-        dispatcher.updateHolders()
+        player.clearEffects()
 
         plugin.scheduler.run {
             dispatcher.updateEffects()
         }
+    }
+
+    private fun Player.clearEffects() {
+        val dispatcher = this.toDispatcher()
+
+        for ((block, occurrence) in dispatcher.providedActiveEffects.withOccurrences()) {
+            val (effect, holder) = block
+            effect.disable(dispatcher, holder, occurrence = occurrence)
+        }
+
+        // Extra fix for pre-4.2.3
+        this.fixAttributes()
+
+        dispatcher.updateHolders()
+        dispatcher.purgePreviousHolders()
     }
 
     private fun Player.fixAttributes() {
