@@ -23,6 +23,8 @@ fun interface DateTimeMatcher {
  * when given a value it can't read.
  */
 object DateTimeMatchers {
+    private const val LAST_WEEK = -1
+
     private val annualDatePattern = Regex("(\\d{1,2})-(\\d{1,2})")
     private val exactDatePattern = Regex("(\\d{4})-(\\d{1,2})-(\\d{1,2})")
     private val timePattern = Regex("(\\d{1,2}):(\\d{2})")
@@ -49,6 +51,20 @@ object DateTimeMatchers {
     fun daysOfMonth(values: List<String>): DateTimeMatcher {
         val days = parseAll(values) { parseNumber(it, "day of the month", 1..31) }
         return DateTimeMatcher { it.dayOfMonth in days }
+    }
+
+    /**
+     * Which occurrence of its day of the week the date is in its month, `1` to `5`, or `last`.
+     */
+    fun weeksOfMonth(values: List<String>): DateTimeMatcher {
+        val weeks = parseAll(values) {
+            if (it.equals("last", ignoreCase = true)) LAST_WEEK else parseNumber(it, "week", 1..5)
+        }
+
+        return DateTimeMatcher {
+            (it.dayOfMonth - 1) / 7 + 1 in weeks ||
+                    (LAST_WEEK in weeks && it.dayOfMonth + 7 > it.toLocalDate().lengthOfMonth())
+        }
     }
 
     /**

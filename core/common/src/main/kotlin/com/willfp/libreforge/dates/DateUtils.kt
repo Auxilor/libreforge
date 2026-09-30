@@ -31,4 +31,11 @@ internal fun Config.getStringOrStrings(key: String): List<String> =
  * The strings at whichever of [keys] is set first, each of which may be a single string or a list.
  */
 internal fun Config.getStringOrStrings(keys: List<String>): List<String> =
-    keys.firstOrNull { has(it) }?.let { getStringOrStrings(it) } ?: emptyList()
+    getStringOrStringsOrNull(*keys.toTypedArray()) ?: emptyList()
+
+/**
+ * The strings at whichever of [keys] is set first, each of which may be a single string or a list,
+ * or null if none are set.
+ */
+internal fun Config.getStringOrStringsOrNull(vararg keys: String): List<String>? =
+    keys.firstOrNull { has(it) }?.let { getStringOrStrings(it) }

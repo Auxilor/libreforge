@@ -1,8 +1,6 @@
 package com.willfp.libreforge.dates
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.placeholder.context.PlaceholderContext
-import com.willfp.eco.util.evaluateExpressionOrNull
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.filters.Filter
@@ -102,17 +100,17 @@ abstract class DateCalendar<T : DateEntry>(
         val definitions = config.getSubsections(fileName).map {
             DateDefinition(
                 id = it.getString("id"),
-                active = it.getStringOrNull("active"),
-                dates = it.getStringsOrNull("dates"),
-                from = it.getStringOrNull("from"),
-                to = it.getStringOrNull("to")
+                dates = it.getStringOrStringsOrNull("date", "dates"),
+                months = it.getStringOrStringsOrNull("month", "months"),
+                daysOfWeek = it.getStringOrStringsOrNull("day_of_week", "days_of_week"),
+                weeks = it.getStringOrStringsOrNull("week", "weeks"),
+                dateOffset = it.getStringOrNull("date_offset")
             )
         }
 
         val compiler = DateCompiler(
             kind = kind,
             create = create,
-            evaluate = { evaluateExpressionOrNull(it, PlaceholderContext.EMPTY) },
             warn = { plugin.logger.warning("$fileName.yml: $it") }
         )
 
