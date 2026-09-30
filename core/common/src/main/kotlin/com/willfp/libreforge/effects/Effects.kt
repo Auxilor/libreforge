@@ -94,7 +94,9 @@ import com.willfp.libreforge.effects.impl.EffectGiveMoney
 import com.willfp.libreforge.effects.impl.EffectGiveOxygen
 import com.willfp.libreforge.effects.impl.EffectGivePoints
 import com.willfp.libreforge.effects.impl.EffectGivePrice
+import com.willfp.libreforge.effects.impl.EffectGiveRandomItem
 import com.willfp.libreforge.effects.impl.EffectGiveSaturation
+import com.willfp.libreforge.effects.impl.EffectGiveWeightedRandomItem
 import com.willfp.libreforge.effects.impl.EffectGiveXp
 import com.willfp.libreforge.effects.impl.EffectGlowNearbyBlocks
 import com.willfp.libreforge.effects.impl.EffectGravityMultiplier
@@ -625,6 +627,8 @@ object Effects : Registry<Effect<*>>() {
         register(EffectGiveHealth)
         register(EffectGiveItem)
         register(EffectGiveItemPoints)
+        register(EffectGiveRandomItem)
+        register(EffectGiveWeightedRandomItem)
         register(EffectGiveMoney)
         register(EffectGiveOxygen)
         register(EffectGivePoints)
