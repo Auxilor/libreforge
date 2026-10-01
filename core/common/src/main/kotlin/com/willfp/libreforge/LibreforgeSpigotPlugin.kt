@@ -23,6 +23,9 @@ import com.willfp.libreforge.configs.SeasonsYml
 import com.willfp.libreforge.configs.TagsYml
 import com.willfp.libreforge.configs.lrcdb.CommandLrcdb
 import com.willfp.libreforge.dates.DateClock
+import com.willfp.libreforge.dates.DateEdge
+import com.willfp.libreforge.dates.DatePeriod
+import com.willfp.libreforge.dates.dispatchForOnlinePlayers
 import com.willfp.libreforge.display.ItemFlagDisplay
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.arguments.custom.CustomEffectArguments
@@ -85,6 +88,7 @@ import com.willfp.libreforge.tags.CustomEntityTag
 import com.willfp.libreforge.tags.CustomTag
 import com.willfp.libreforge.triggers.DispatchedTriggerFactory
 import com.willfp.libreforge.triggers.Triggers
+import com.willfp.libreforge.triggers.impl.TriggerDateBoundary
 import com.willfp.libreforge.triggers.impl.TriggerMeleeAttack
 import org.bukkit.Bukkit
 import org.bukkit.entity.LivingEntity
@@ -150,9 +154,18 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
         }
 
 
-        DateClock.onNewDay {
-            Holidays.dispatchStarts(it)
-            Seasons.dispatchStarts(it)
+        for (trigger in TriggerDateBoundary.values) {
+            DateClock.on(trigger.period, trigger.edge) { trigger.dispatchForOnlinePlayers() }
+        }
+
+        DateClock.on(DatePeriod.DAY, DateEdge.END) {
+            Holidays.dispatchEnds(it.toLocalDate())
+            Seasons.dispatchEnds(it.toLocalDate())
+        }
+
+        DateClock.on(DatePeriod.DAY, DateEdge.START) {
+            Holidays.dispatchStarts(it.toLocalDate())
+            Seasons.dispatchStarts(it.toLocalDate())
         }
 
         pointsPlaceholder(this).register()

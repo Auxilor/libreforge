@@ -7,6 +7,14 @@ import com.willfp.eco.core.registry.Registry
 import com.willfp.libreforge.ConfigWarning
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.deprecationMessage
+import com.willfp.libreforge.filters.impl.FilterIsMonth
+import com.willfp.libreforge.filters.impl.FilterIsDayOfWeek
+import com.willfp.libreforge.filters.impl.FilterIsDayOfMonth
+import com.willfp.libreforge.filters.impl.FilterIsDate
+import com.willfp.libreforge.filters.impl.FilterIsHour
+import com.willfp.libreforge.filters.impl.FilterIsDateBetween
+import com.willfp.libreforge.filters.impl.FilterIsHourBetween
+import com.willfp.libreforge.filters.impl.FilterIsTimeBetween
 import com.willfp.libreforge.filters.impl.FilterAboveHealth
 import com.willfp.libreforge.filters.impl.FilterAboveHealthPercent
 import com.willfp.libreforge.filters.impl.FilterAboveHunger
@@ -127,6 +135,14 @@ object Filters : Registry<Filter<*, *>>() {
         register(FilterIsBehindVictim)
         register(FilterIsBoss)
         register(FilterIsExpressionTrue)
+        register(FilterIsMonth)
+        register(FilterIsDayOfWeek)
+        register(FilterIsDayOfMonth)
+        register(FilterIsDate)
+        register(FilterIsHour)
+        register(FilterIsDateBetween)
+        register(FilterIsHourBetween)
+        register(FilterIsTimeBetween)
         register(FilterIsNPC)
         register(FilterIsPassive)
         register(FilterIsTamedEntityOwner)

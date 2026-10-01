@@ -6,6 +6,7 @@ import com.willfp.libreforge.dates.DateCalendar
 import com.willfp.libreforge.filters.Filter
 import com.willfp.libreforge.filters.impl.FilterIsSeason
 import com.willfp.libreforge.triggers.Trigger
+import com.willfp.libreforge.triggers.impl.TriggerSeasonEnd
 import com.willfp.libreforge.triggers.impl.TriggerSeasonStart
 
 /**
@@ -16,5 +17,7 @@ object Seasons : DateCalendar<Season>("season", "seasons", ::Season) {
 
     override fun createFilter(id: String): Filter<*, *> = FilterIsSeason(id)
 
-    override fun createTrigger(id: String): Trigger = TriggerSeasonStart(id)
+    override fun createStartTrigger(id: String): Trigger = TriggerSeasonStart(id)
+
+    override fun createEndTrigger(id: String): Trigger = TriggerSeasonEnd(id)
 }

@@ -6,6 +6,7 @@ import com.willfp.libreforge.dates.DateCalendar
 import com.willfp.libreforge.filters.Filter
 import com.willfp.libreforge.filters.impl.FilterIsHoliday
 import com.willfp.libreforge.triggers.Trigger
+import com.willfp.libreforge.triggers.impl.TriggerHolidayEnd
 import com.willfp.libreforge.triggers.impl.TriggerHolidayStart
 
 /**
@@ -16,5 +17,7 @@ object Holidays : DateCalendar<Holiday>("holiday", "holidays", ::Holiday) {
 
     override fun createFilter(id: String): Filter<*, *> = FilterIsHoliday(id)
 
-    override fun createTrigger(id: String): Trigger = TriggerHolidayStart(id)
+    override fun createStartTrigger(id: String): Trigger = TriggerHolidayStart(id)
+
+    override fun createEndTrigger(id: String): Trigger = TriggerHolidayEnd(id)
 }

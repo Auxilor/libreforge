@@ -8,18 +8,15 @@ import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.filters.Filter
 import com.willfp.libreforge.filters.Filters
 import com.willfp.libreforge.plugin
-import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
-import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.Triggers
-import org.bukkit.Bukkit
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 
 /**
  * A set of [DateEntry]s loaded from a config file, each of which gets an `is_<id>` condition
- * and filter and an `<id>_start` trigger.
+ * and filter and `<id>_start` and `<id>_end` triggers.
  */
 abstract class DateCalendar<T : DateEntry>(
     /**
@@ -42,8 +39,12 @@ abstract class DateCalendar<T : DateEntry>(
     private class DateComponents(
         val condition: Condition<*>,
         val filter: Filter<*, *>,
-        val trigger: Trigger
-    )
+        val startTrigger: Trigger,
+        val endTrigger: Trigger
+    ) {
+        val triggers: List<Trigger>
+            get() = listOf(startTrigger, endTrigger)
+    }
 
     /**
      * The `is_<id>` condition for the entry [id].
@@ -58,7 +59,12 @@ abstract class DateCalendar<T : DateEntry>(
     /**
      * The `<id>_start` trigger for the entry [id], fired for every online player when it begins.
      */
-    protected abstract fun createTrigger(id: String): Trigger
+    protected abstract fun createStartTrigger(id: String): Trigger
+
+    /**
+     * The `<id>_end` trigger for the entry [id], fired for every online player in the last minute of it.
+     */
+    protected abstract fun createEndTrigger(id: String): Trigger
 
     /**
      * Get an entry by its [id], or null if none match.
@@ -120,21 +126,23 @@ abstract class DateCalendar<T : DateEntry>(
             val removed = components.remove(id) ?: continue
             Conditions.remove(removed.condition)
             Filters.remove(removed.filter)
-            Triggers.remove(removed.trigger)
+            removed.triggers.forEach { Triggers.remove(it) }
         }
 
         for (id in ids - components.keys) {
             val dateComponents = DateComponents(
                 createCondition(id),
                 createFilter(id),
-                createTrigger(id)
+                createStartTrigger(id),
+                createEndTrigger(id)
             )
 
             val clashes = listOfNotNull(
                 dateComponents.condition.id.takeIf { Conditions.values().any { it.id == dateComponents.condition.id } },
-                dateComponents.filter.id.takeIf { Filters.values().any { it.id == dateComponents.filter.id } },
-                dateComponents.trigger.id.takeIf { Triggers.values().any { it.id == dateComponents.trigger.id } }
-            )
+                dateComponents.filter.id.takeIf { Filters.values().any { it.id == dateComponents.filter.id } }
+            ) + dateComponents.triggers
+                .map { it.id }
+                .filter { triggerId -> Triggers.values().any { it.id == triggerId } }
 
             if (clashes.isNotEmpty()) {
                 plugin.logger.warning("$fileName.yml: ${kind.replaceFirstChar { it.uppercase() }} '$id' clashes with existing ${clashes.joinToString()}, skipping it")
@@ -143,7 +151,7 @@ abstract class DateCalendar<T : DateEntry>(
 
             Conditions.register(dateComponents.condition)
             Filters.register(dateComponents.filter)
-            Triggers.register(dateComponents.trigger)
+            dateComponents.triggers.forEach { Triggers.register(it) }
             components[id] = dateComponents
         }
     }
@@ -154,20 +162,19 @@ abstract class DateCalendar<T : DateEntry>(
     internal fun dispatchStarts(date: LocalDate) {
         for ((id, dateComponents) in components.toMap()) {
             if (getByID(id)?.startsOn(date) == true) {
-                dispatchForOnlinePlayers(dateComponents.trigger)
+                dateComponents.startTrigger.dispatchForOnlinePlayers()
             }
         }
     }
 
-    private fun dispatchForOnlinePlayers(trigger: Trigger) {
-        for (player in Bukkit.getOnlinePlayers()) {
-            trigger.dispatch(
-                player.toDispatcher(),
-                TriggerData(
-                    player = player,
-                    location = player.location
-                )
-            )
+    /**
+     * Fire the end trigger of every entry finishing on [date].
+     */
+    internal fun dispatchEnds(date: LocalDate) {
+        for ((id, dateComponents) in components.toMap()) {
+            if (getByID(id)?.endsOn(date) == true) {
+                dateComponents.endTrigger.dispatchForOnlinePlayers()
+            }
         }
     }
 }
