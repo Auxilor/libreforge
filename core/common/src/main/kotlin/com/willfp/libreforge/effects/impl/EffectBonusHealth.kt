@@ -27,6 +27,8 @@ object EffectBonusHealth : AttributeEffect(
         )
     }
 
+    override val shouldReload = false
+
     override fun getValue(config: Config, entity: LivingEntity) =
         config.getDoubleFromExpression("health", entity as? Player)
 
