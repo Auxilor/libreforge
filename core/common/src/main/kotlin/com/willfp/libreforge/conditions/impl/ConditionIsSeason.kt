@@ -6,22 +6,22 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.dates.Dates
-import com.willfp.libreforge.holidays.Holidays
+import com.willfp.libreforge.seasons.Seasons
 import java.time.LocalDate
 
 /**
- * `is_<holiday>`, generated for every holiday in holidays.yml.
+ * `is_<season>`, generated for every season in seasons.yml.
  */
-class ConditionIsHoliday(
-    private val holidayId: String
-) : Condition<NoCompileData>("is_$holidayId") {
-    override val description = "Passes when it is ${holidayId.replace('_', ' ')}."
+class ConditionIsSeason(
+    private val seasonId: String
+) : Condition<NoCompileData>("is_$seasonId") {
+    override val description = "Passes when it is ${seasonId.replace('_', ' ')}."
 
-    override val categories = setOf("holiday")
+    override val categories = setOf("season")
 
     override val additionalInfo = listOf(
         "The date is worked out in the timezone set by dates.timezone in config.yml.",
-        "Holidays are defined in holidays.yml."
+        "Seasons are defined in seasons.yml."
     )
 
     override fun isMet(
@@ -30,6 +30,6 @@ class ConditionIsHoliday(
         holder: ProvidedHolder,
         compileData: NoCompileData
     ): Boolean {
-        return Holidays.getByID(holidayId)?.isOn(LocalDate.now(Dates.zone)) ?: false
+        return Seasons.getByID(seasonId)?.isOn(LocalDate.now(Dates.zone)) ?: false
     }
 }

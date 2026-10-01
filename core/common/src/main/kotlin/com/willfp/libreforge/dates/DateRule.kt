@@ -1,11 +1,11 @@
-package com.willfp.libreforge.holidays
+package com.willfp.libreforge.dates
 
 import java.time.LocalDate
 
 /**
- * How a [Holiday] decides which dates it is on.
+ * How a [DateEntry] decides which dates it is on.
  */
-sealed interface HolidayRule {
+sealed interface DateRule {
     fun isOn(date: LocalDate): Boolean
 
     /**
@@ -14,17 +14,17 @@ sealed interface HolidayRule {
     class Expression(
         val expression: String,
         private val evaluate: (String) -> Double?
-    ) : HolidayRule {
+    ) : DateRule {
         override fun isOn(date: LocalDate): Boolean =
-            evaluate(HolidayDateVariables.substitute(expression, date)) == 1.0
+            evaluate(DateVariables.substitute(expression, date)) == 1.0
     }
 
     /**
      * On for each date in [dates].
      */
-    class Dates(
+    class Explicit(
         private val dates: Set<LocalDate>
-    ) : HolidayRule {
+    ) : DateRule {
         override fun isOn(date: LocalDate): Boolean = date in dates
     }
 
@@ -32,9 +32,9 @@ sealed interface HolidayRule {
      * On from each start of [from] up to and including the next end of [to].
      */
     class Range(
-        private val from: Holiday,
-        private val to: Holiday
-    ) : HolidayRule {
+        private val from: DateEntry,
+        private val to: DateEntry
+    ) : DateRule {
         override fun isOn(date: LocalDate): Boolean {
             // Walk back to the latest start of [from]; an end of [to] before today means the range already closed
             for (daysBack in 0..MAX_LENGTH_DAYS) {

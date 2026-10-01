@@ -1,5 +1,9 @@
 package com.willfp.libreforge.holidays
 
+import com.willfp.libreforge.dates.DateCompiler
+import com.willfp.libreforge.dates.DateDefinition
+import com.willfp.libreforge.dates.Dates
+import com.willfp.libreforge.dates.TestExpressionEvaluator
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -13,16 +17,16 @@ import java.time.temporal.TemporalAdjusters
 class HolidayTest {
     @Test
     fun easterSundayKnownYears() {
-        assertEquals(LocalDate.of(2024, 3, 31), Holidays.easterSunday(2024))
-        assertEquals(LocalDate.of(2025, 4, 20), Holidays.easterSunday(2025))
-        assertEquals(LocalDate.of(2026, 4, 5), Holidays.easterSunday(2026))
-        assertEquals(LocalDate.of(2038, 4, 25), Holidays.easterSunday(2038))
-        assertEquals(LocalDate.of(2285, 3, 22), Holidays.easterSunday(2285))
+        assertEquals(LocalDate.of(2024, 3, 31), Dates.easterSunday(2024))
+        assertEquals(LocalDate.of(2025, 4, 20), Dates.easterSunday(2025))
+        assertEquals(LocalDate.of(2026, 4, 5), Dates.easterSunday(2026))
+        assertEquals(LocalDate.of(2038, 4, 25), Dates.easterSunday(2038))
+        assertEquals(LocalDate.of(2285, 3, 22), Dates.easterSunday(2285))
     }
 
     @Test
     fun defaultFileLoadsCleanly() {
-        val ids = DefaultHolidays.holidays.keys
+        val ids = DefaultHolidays.entries.keys
         assertEquals(emptyList<String>(), DefaultHolidays.warnings)
         assertEquals(
             setOf(
@@ -39,10 +43,10 @@ class HolidayTest {
      */
     @Test
     fun matchesLegacyRules() {
-        val examples = HolidayCompiler(TestExpressionEvaluator) { throw AssertionError(it) }
+        val examples = DateCompiler("holiday", ::Holiday, TestExpressionEvaluator) { throw AssertionError(it) }
             .compile(exampleDefinitions)
             .associateBy { it.id }
-        val holidays = DefaultHolidays.holidays + examples
+        val holidays = DefaultHolidays.entries + examples
 
         val start = LocalDate.of(2000, 1, 1)
         val end = LocalDate.of(2040, 12, 31)
@@ -69,7 +73,7 @@ class HolidayTest {
             { MonthDay.from(it) == MonthDay.of(month, day) }
 
         fun easter(offset: Long): (LocalDate) -> Boolean =
-            { Holidays.easterSunday(it.year).plusDays(offset) == it }
+            { Dates.easterSunday(it.year).plusDays(offset) == it }
 
         fun weekdayDate(year: Int, month: Month, ordinal: Int, dayOfWeek: DayOfWeek): LocalDate {
             val first = LocalDate.of(year, month, 1)
@@ -95,18 +99,18 @@ class HolidayTest {
         }
 
         fun easterPeriod(startOffset: Long, endOffset: Long) = period(
-            { Holidays.easterSunday(it).plusDays(startOffset) },
-            { Holidays.easterSunday(it).plusDays(endOffset) }
+            { Dates.easterSunday(it).plusDays(startOffset) },
+            { Dates.easterSunday(it).plusDays(endOffset) }
         )
 
         // Mirrors the commented examples in holidays.yml
         val exampleDefinitions = listOf(
-            HolidayDefinition("good_friday", active = "%days_from_easter% == -2"),
-            HolidayDefinition("memorial_day", active = "%month% == 5 && %weekday% == 1 && %weekday_ordinal_from_end% == 1"),
-            HolidayDefinition("twelve_days_of_christmas", active = "(%month% == 12 && %day% >= 25) || (%month% == 1 && %day% <= 5)"),
-            HolidayDefinition("advent_sunday", active = "%weekday% == 7 && ((%month% == 11 && %day% >= 27) || (%month% == 12 && %day% <= 3))"),
-            HolidayDefinition("christmas_eve", active = "%month% == 12 && %day% == 24"),
-            HolidayDefinition("advent", from = "advent_sunday", to = "christmas_eve")
+            DateDefinition("good_friday", active = "%days_from_easter% == -2"),
+            DateDefinition("memorial_day", active = "%month% == 5 && %weekday% == 1 && %weekday_ordinal_from_end% == 1"),
+            DateDefinition("twelve_days_of_christmas", active = "(%month% == 12 && %day% >= 25) || (%month% == 1 && %day% <= 5)"),
+            DateDefinition("advent_sunday", active = "%weekday% == 7 && ((%month% == 11 && %day% >= 27) || (%month% == 12 && %day% <= 3))"),
+            DateDefinition("christmas_eve", active = "%month% == 12 && %day% == 24"),
+            DateDefinition("advent", from = "advent_sunday", to = "christmas_eve")
         )
 
         val legacyRules: Map<String, (LocalDate) -> Boolean> = mapOf(

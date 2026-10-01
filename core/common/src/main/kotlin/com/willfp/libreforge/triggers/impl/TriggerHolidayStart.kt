@@ -1,13 +1,10 @@
 package com.willfp.libreforge.triggers.impl
 
-import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
-import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import org.bukkit.Bukkit
 
 /**
- * `<holiday>_start`, generated for every holiday in holidays.yml.
+ * `<holiday>_start`, generated for every holiday in holidays.yml and fired by [com.willfp.libreforge.holidays.Holidays].
  */
 class TriggerHolidayStart(
     holidayId: String
@@ -17,7 +14,7 @@ class TriggerHolidayStart(
     override val categories = setOf("holiday")
 
     override val additionalInfo = listOf(
-        "Midnight is in the timezone set by holidays.timezone in config.yml.",
+        "Midnight is in the timezone set by dates.timezone in config.yml.",
         "Players who join later in the day are not triggered; use the is_$holidayId condition for that.",
         "Holidays are defined in holidays.yml."
     )
@@ -30,16 +27,4 @@ class TriggerHolidayStart(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION
     )
-
-    internal fun dispatchForOnlinePlayers() {
-        for (player in Bukkit.getOnlinePlayers()) {
-            this.dispatch(
-                player.toDispatcher(),
-                TriggerData(
-                    player = player,
-                    location = player.location
-                )
-            )
-        }
-    }
 }

@@ -19,14 +19,15 @@ import com.willfp.libreforge.configs.ChainsYml
 import com.willfp.libreforge.configs.CommandsYml
 import com.willfp.libreforge.configs.HolidaysYml
 import com.willfp.libreforge.configs.PlaceholdersYml
+import com.willfp.libreforge.configs.SeasonsYml
 import com.willfp.libreforge.configs.TagsYml
 import com.willfp.libreforge.configs.lrcdb.CommandLrcdb
+import com.willfp.libreforge.dates.DateClock
 import com.willfp.libreforge.display.ItemFlagDisplay
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.arguments.custom.CustomEffectArguments
 import com.willfp.libreforge.effects.impl.bossbar.BossBarProgressPlaceholder
 import com.willfp.libreforge.filters.Filters
-import com.willfp.libreforge.holidays.HolidayClock
 import com.willfp.libreforge.holidays.Holidays
 import com.willfp.libreforge.integrations.auraskills.AuraSkillsIntegration
 import com.willfp.libreforge.integrations.axplugins.axenvoy.AxEnvoyIntegration
@@ -78,6 +79,7 @@ import com.willfp.libreforge.levels.placeholder.ItemProgressPlaceholder
 import com.willfp.libreforge.levels.placeholder.ItemXPPlaceholder
 import com.willfp.libreforge.levels.placeholder.ItemXPRequiredPlaceholder
 import com.willfp.libreforge.placeholders.CustomPlaceholders
+import com.willfp.libreforge.seasons.Seasons
 import com.willfp.libreforge.tags.CustomBlockTag
 import com.willfp.libreforge.tags.CustomEntityTag
 import com.willfp.libreforge.tags.CustomTag
@@ -95,6 +97,7 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
     val chainsYml = ChainsYml(this)
     val tagsYml = TagsYml(this)
     val holidaysYml = HolidaysYml(this)
+    val seasonsYml = SeasonsYml(this)
     val placeholdersYml = PlaceholdersYml(this)
     val commandsYml = CommandsYml(this)
 
@@ -147,7 +150,10 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
         }
 
 
-        HolidayClock.onNewDay { Holidays.dispatchStarts(it) }
+        DateClock.onNewDay {
+            Holidays.dispatchStarts(it)
+            Seasons.dispatchStarts(it)
+        }
 
         pointsPlaceholder(this).register()
         globalPointsPlaceholder(this).register()
@@ -182,6 +188,7 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
         }
 
         Holidays.reload(holidaysYml)
+        Seasons.reload(seasonsYml)
 
         for (customPlaceholder in this.placeholdersYml.getSubsections("placeholders")) {
             CustomPlaceholders.load(customPlaceholder, this)

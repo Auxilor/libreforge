@@ -1,8 +1,8 @@
-package com.willfp.libreforge.holidays
+package com.willfp.libreforge.dates
 
 /**
  * A stand-in for eco's expression evaluator (which needs a running server), covering the
- * operators holidays.yml uses with the same precedence as eco: `|| && | &` share the lowest
+ * operators holidays.yml and seasons.yml use with the same precedence as eco: `|| && | &` share the lowest
  * level and read left to right, then comparisons, then `+ -`, then `* / %`.
  *
  * Returns null for anything it can't parse, like eco.
