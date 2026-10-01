@@ -1,13 +1,13 @@
-package com.willfp.libreforge.holidays
+package com.willfp.libreforge.dates
 
 import com.willfp.libreforge.plugin
 import java.time.LocalDate
 import java.util.concurrent.CopyOnWriteArrayList
 
 /**
- * Watches for the date changing (in [Holidays.zone]) and notifies listeners at each new day.
+ * Watches for the date changing (in [Dates.zone]) and notifies listeners at each new day.
  */
-object HolidayClock {
+object DateClock {
     private val listeners = CopyOnWriteArrayList<(LocalDate) -> Unit>()
 
     private var isStarted = false
@@ -31,7 +31,7 @@ object HolidayClock {
         isStarted = true
 
         plugin.scheduler.runTimer(20, 20) {
-            val today = LocalDate.now(Holidays.zone)
+            val today = LocalDate.now(Dates.zone)
             val previous = lastDate
             lastDate = today
 

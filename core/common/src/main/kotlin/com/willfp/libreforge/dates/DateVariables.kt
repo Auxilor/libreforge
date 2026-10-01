@@ -1,12 +1,12 @@
-package com.willfp.libreforge.holidays
+package com.willfp.libreforge.dates
 
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
 /**
- * The date placeholders available in holiday expressions, e.g. `%month%`.
+ * The date placeholders available in holiday and season expressions, e.g. `%month%`.
  */
-object HolidayDateVariables {
+object DateVariables {
     private val placeholderPattern = Regex("%([a-z_]+)%")
 
     private val variables: Map<String, (LocalDate) -> Int> = linkedMapOf(
@@ -19,7 +19,7 @@ object HolidayDateVariables {
         "is_leap_year" to { if (it.isLeapYear) 1 else 0 },
         "weekday_ordinal" to { (it.dayOfMonth - 1) / 7 + 1 },
         "weekday_ordinal_from_end" to { (it.lengthOfMonth() - it.dayOfMonth) / 7 + 1 },
-        "days_from_easter" to { ChronoUnit.DAYS.between(Holidays.easterSunday(it.year), it).toInt() }
+        "days_from_easter" to { ChronoUnit.DAYS.between(Dates.easterSunday(it.year), it).toInt() }
     )
 
     /**

@@ -1,5 +1,5 @@
 # Holidays, each of which gets an is_<id> condition, an is_<id> filter, and an <id>_start trigger.
-# Dates are worked out in the timezone set by holidays.timezone in config.yml.
+# Dates are worked out in the timezone set by dates.timezone in config.yml.
 #
 # Each holiday sets exactly one of:
 #
