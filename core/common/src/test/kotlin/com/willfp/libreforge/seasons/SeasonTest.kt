@@ -3,7 +3,6 @@ package com.willfp.libreforge.seasons
 import com.willfp.libreforge.dates.DateCompiler
 import com.willfp.libreforge.dates.DateDefinition
 import com.willfp.libreforge.dates.DefaultCalendar
-import com.willfp.libreforge.dates.TestExpressionEvaluator
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -39,7 +38,7 @@ class SeasonTest {
 
     @Test
     fun everyDateHasExactlyOneSeason() {
-        val southern = DateCompiler("season", ::Season, TestExpressionEvaluator) { throw AssertionError(it) }
+        val southern = DateCompiler("season", ::Season) { throw AssertionError(it) }
             .compile(southernDefinitions)
 
         for (seasons in listOf(DefaultSeasons.entries.values, southern)) {
@@ -51,7 +50,7 @@ class SeasonTest {
 
     @Test
     fun southernSeasonsAreOffsetBySixMonths() {
-        val southern = DateCompiler("season", ::Season, TestExpressionEvaluator) { throw AssertionError(it) }
+        val southern = DateCompiler("season", ::Season) { throw AssertionError(it) }
             .compile(southernDefinitions)
 
         for (date in LocalDate.of(2026, 1, 1).datesUntil(LocalDate.of(2027, 1, 1))) {
@@ -66,10 +65,10 @@ class SeasonTest {
 
         // Mirrors the commented southern hemisphere example in seasons.yml
         val southernDefinitions = listOf(
-            DateDefinition("spring", active = "%month% >= 9 && %month% <= 11"),
-            DateDefinition("summer", active = "%month% == 12 || %month% <= 2"),
-            DateDefinition("autumn", active = "%month% >= 3 && %month% <= 5"),
-            DateDefinition("winter", active = "%month% >= 6 && %month% <= 8")
+            DateDefinition("spring", months = listOf("september", "october", "november")),
+            DateDefinition("summer", months = listOf("december", "january", "february")),
+            DateDefinition("autumn", months = listOf("march", "april", "may")),
+            DateDefinition("winter", months = listOf("june", "july", "august"))
         )
     }
 }

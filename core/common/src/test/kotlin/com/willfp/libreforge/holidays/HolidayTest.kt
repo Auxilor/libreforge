@@ -3,7 +3,6 @@ package com.willfp.libreforge.holidays
 import com.willfp.libreforge.dates.DateCompiler
 import com.willfp.libreforge.dates.DateDefinition
 import com.willfp.libreforge.dates.Dates
-import com.willfp.libreforge.dates.TestExpressionEvaluator
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -43,7 +42,7 @@ class HolidayTest {
      */
     @Test
     fun matchesLegacyRules() {
-        val examples = DateCompiler("holiday", ::Holiday, TestExpressionEvaluator) { throw AssertionError(it) }
+        val examples = DateCompiler("holiday", ::Holiday) { throw AssertionError(it) }
             .compile(exampleDefinitions)
             .associateBy { it.id }
         val holidays = DefaultHolidays.entries + examples
@@ -105,12 +104,15 @@ class HolidayTest {
 
         // Mirrors the commented examples in holidays.yml
         val exampleDefinitions = listOf(
-            DateDefinition("good_friday", active = "%days_from_easter% == -2"),
-            DateDefinition("memorial_day", active = "%month% == 5 && %weekday% == 1 && %weekday_ordinal_from_end% == 1"),
-            DateDefinition("twelve_days_of_christmas", active = "(%month% == 12 && %day% >= 25) || (%month% == 1 && %day% <= 5)"),
-            DateDefinition("advent_sunday", active = "%weekday% == 7 && ((%month% == 11 && %day% >= 27) || (%month% == 12 && %day% <= 3))"),
-            DateDefinition("christmas_eve", active = "%month% == 12 && %day% == 24"),
-            DateDefinition("advent", from = "advent_sunday", to = "christmas_eve")
+            DateDefinition("good_friday", dates = listOf("%easter%"), dateOffset = "-2"),
+            DateDefinition("memorial_day", months = listOf("may"), daysOfWeek = listOf("monday"), weeks = listOf("last")),
+            DateDefinition("thanksgiving", months = listOf("november"), daysOfWeek = listOf("thursday"), weeks = listOf("4")),
+            DateDefinition("cyber_monday", dates = listOf("%thanksgiving%"), dateOffset = "4"),
+            DateDefinition("twelve_days_of_christmas", dates = listOf("%christmas_day%"), dateOffset = "0..11"),
+            DateDefinition("christmas_day", dates = listOf("12-25")),
+            DateDefinition("advent_sunday", dates = listOf("11-27..12-03"), daysOfWeek = listOf("sunday")),
+            DateDefinition("christmas_eve", dates = listOf("12-24")),
+            DateDefinition("advent", dates = listOf("%advent_sunday%..%christmas_eve%"))
         )
 
         val legacyRules: Map<String, (LocalDate) -> Boolean> = mapOf(

@@ -5,35 +5,71 @@ import java.time.LocalDate
 /**
  * How a [DateEntry] decides which dates it is on.
  */
-sealed interface DateRule {
+fun interface DateRule {
     fun isOn(date: LocalDate): Boolean
 
     /**
-     * On whenever [expression] evaluates to 1 with the date placeholders filled in.
+     * If this begins on [date], i.e. it is on for [date] but not the day before.
      */
-    class Expression(
-        val expression: String,
-        private val evaluate: (String) -> Double?
+    fun startsOn(date: LocalDate): Boolean = isOn(date) && !isOn(date.minusDays(1))
+
+    /**
+     * If this ends on [date], i.e. it is on for [date] but not the day after.
+     */
+    fun endsOn(date: LocalDate): Boolean = isOn(date) && !isOn(date.plusDays(1))
+
+    /**
+     * On whenever [matcher] matches the date.
+     */
+    class Matching(
+        private val matcher: DateTimeMatcher
     ) : DateRule {
-        override fun isOn(date: LocalDate): Boolean =
-            evaluate(DateVariables.substitute(expression, date)) == 1.0
+        override fun isOn(date: LocalDate): Boolean = matcher.matches(date.atStartOfDay())
     }
 
     /**
-     * On for each date in [dates].
+     * On whenever every one of [rules] is.
      */
-    class Explicit(
-        private val dates: Set<LocalDate>
+    class AllOf(
+        private val rules: List<DateRule>
     ) : DateRule {
-        override fun isOn(date: LocalDate): Boolean = date in dates
+        override fun isOn(date: LocalDate): Boolean = rules.all { it.isOn(date) }
+    }
+
+    /**
+     * On whenever any of [rules] is.
+     */
+    class AnyOf(
+        private val rules: List<DateRule>
+    ) : DateRule {
+        override fun isOn(date: LocalDate): Boolean = rules.any { it.isOn(date) }
+    }
+
+    /**
+     * On [days] days after each day [rule] is on (before, if negative).
+     */
+    class Offset(
+        private val rule: DateRule,
+        private val days: Long
+    ) : DateRule {
+        override fun isOn(date: LocalDate): Boolean = rule.isOn(date.minusDays(days))
+    }
+
+    /**
+     * On whenever [entry] is.
+     */
+    class Reference(
+        private val entry: DateEntry
+    ) : DateRule {
+        override fun isOn(date: LocalDate): Boolean = entry.isOn(date)
     }
 
     /**
      * On from each start of [from] up to and including the next end of [to].
      */
     class Range(
-        private val from: DateEntry,
-        private val to: DateEntry
+        private val from: DateRule,
+        private val to: DateRule
     ) : DateRule {
         override fun isOn(date: LocalDate): Boolean {
             // Walk back to the latest start of [from]; an end of [to] before today means the range already closed

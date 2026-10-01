@@ -1,67 +1,44 @@
-# Seasons, each of which gets an is_<id> condition, an is_<id> filter, and an <id>_start trigger.
+# Seasons, each of which gets an is_<id> condition, an is_<id> filter, and <id>_start and <id>_end triggers.
 # Dates are worked out in the timezone set by dates.timezone in config.yml.
 #
-# Seasons are written exactly like holidays in holidays.yml; see there for everything
-# active, dates and from / to can do. Each season sets exactly one of:
-#
-#   active: An expression that is true (1) on every day of the season. It can use:
-#     %day%                       Day of the month (1-31)
-#     %month%                     Month (1-12)
-#     %year%                      Year, e.g. 2026
-#     %weekday%                   Day of the week (1 = Monday ... 7 = Sunday)
-#     %day_of_year%               Day of the year (1-366)
-#     %days_in_month%             Number of days in the month (28-31)
-#     %is_leap_year%              1 in a leap year, otherwise 0
-#     %weekday_ordinal%           Which occurrence of this weekday in the month it is (1 = first)
-#     %weekday_ordinal_from_end%  The same, counted from the end of the month (1 = last)
-#     %days_from_easter%          Days since Easter Sunday this year (negative before Easter)
-#
-#   dates: A list of dates ("YYYY-MM-DD") or inclusive ranges ("YYYY-MM-DD..YYYY-MM-DD"). Always quote them.
-#
-#   from / to: The IDs of two other seasons. On from each start of the first season
-#     up to and including the next end of the second, even across New Year.
-#
-# In expressions, && and || have the same precedence and are read left to right,
-# so always use brackets when mixing them: "(a && b) || (c && d)".
-#
+# Seasons are written exactly like holidays in holidays.yml; see there for every option.
 # Seasons can overlap, and don't have to cover the whole year.
-# A season's <id>_start trigger fires on its first day.
 #
 # The defaults are the northern hemisphere's meteorological seasons: three whole months each.
 # Southern hemisphere servers should swap them around (see below).
 
 seasons:
   - id: spring
-    active: "%month% >= 3 && %month% <= 5"
+    months: [ march, april, may ]
   - id: summer
-    active: "%month% >= 6 && %month% <= 8"
+    months: [ june, july, august ]
   - id: autumn
-    active: "%month% >= 9 && %month% <= 11"
+    months: [ september, october, november ]
   - id: winter
-    active: "%month% == 12 || %month% <= 2"
+    months: [ december, january, february ]
 
   # More examples:
   #
   # Southern hemisphere meteorological seasons
   # - id: spring
-  #   active: "%month% >= 9 && %month% <= 11"
+  #   months: [ september, october, november ]
   # - id: summer
-  #   active: "%month% == 12 || %month% <= 2"
+  #   months: [ december, january, february ]
   # - id: autumn
-  #   active: "%month% >= 3 && %month% <= 5"
+  #   months: [ march, april, may ]
   # - id: winter
-  #   active: "%month% >= 6 && %month% <= 8"
+  #   months: [ june, july, august ]
   #
   # Northern hemisphere astronomical winter, from the solstice to the equinox (approximate)
   # - id: astronomical_winter
-  #   active: "(%month% == 12 && %day% >= 21) || %month% <= 2 || (%month% == 3 && %day% < 20)"
+  #   date: "12-21..03-19"
   #
   # Tropical wet and dry seasons (e.g. South and Southeast Asia)
   # - id: wet_season
-  #   active: "%month% >= 5 && %month% <= 10"
+  #   months: [ may, june, july, august, september, october ]
   # - id: dry_season
-  #   active: "%month% >= 11 || %month% <= 4"
+  #   months: [ november, december, january, february, march, april ]
   #
   # The Indian subcontinent's monsoon
   # - id: monsoon
-  #   active: "%month% >= 6 && %month% <= 9"
+  #   months: [ june, july, august, september ]
