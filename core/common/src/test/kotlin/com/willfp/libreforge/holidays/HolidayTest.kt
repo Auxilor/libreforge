@@ -1,0 +1,175 @@
+package com.willfp.libreforge.holidays
+
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.Month
+import java.time.MonthDay
+import java.time.temporal.TemporalAdjusters
+
+class HolidayTest {
+    @Test
+    fun easterSundayKnownYears() {
+        assertEquals(LocalDate.of(2024, 3, 31), Holidays.easterSunday(2024))
+        assertEquals(LocalDate.of(2025, 4, 20), Holidays.easterSunday(2025))
+        assertEquals(LocalDate.of(2026, 4, 5), Holidays.easterSunday(2026))
+        assertEquals(LocalDate.of(2038, 4, 25), Holidays.easterSunday(2038))
+        assertEquals(LocalDate.of(2285, 3, 22), Holidays.easterSunday(2285))
+    }
+
+    @Test
+    fun defaultFileLoadsCleanly() {
+        val ids = DefaultHolidays.holidays.keys
+        assertEquals(emptyList<String>(), DefaultHolidays.warnings)
+        assertEquals(
+            setOf(
+                "new_years_day", "valentines_day", "easter_sunday", "thanksgiving", "black_friday",
+                "christmas_eve", "christmas_day", "boxing_day", "new_years_eve"
+            ),
+            ids
+        )
+    }
+
+    /**
+     * Every default holiday, and every example in holidays.yml's comments, is on exactly
+     * the days the old hardcoded rules gave.
+     */
+    @Test
+    fun matchesLegacyRules() {
+        val examples = HolidayCompiler(TestExpressionEvaluator) { throw AssertionError(it) }
+            .compile(exampleDefinitions)
+            .associateBy { it.id }
+        val holidays = DefaultHolidays.holidays + examples
+
+        val start = LocalDate.of(2000, 1, 1)
+        val end = LocalDate.of(2040, 12, 31)
+
+        for ((id, holiday) in holidays) {
+            val legacyIsOn = legacyRules.getValue(id)
+            for (date in start.datesUntil(end.plusDays(1))) {
+                assertEquals(legacyIsOn(date), holiday.isOn(date), "$id on $date")
+            }
+        }
+    }
+
+    @Test
+    fun blackFriday2026() {
+        val blackFriday = DefaultHolidays["black_friday"]
+        assertTrue(blackFriday.startsOn(LocalDate.of(2026, 11, 27)))
+        assertFalse(blackFriday.isOn(LocalDate.of(2026, 11, 26)))
+        assertFalse(blackFriday.isOn(LocalDate.of(2026, 11, 28)))
+    }
+
+    private companion object {
+        // The rules holidays were hardcoded with before holidays.yml
+        fun fixed(month: Month, day: Int): (LocalDate) -> Boolean =
+            { MonthDay.from(it) == MonthDay.of(month, day) }
+
+        fun easter(offset: Long): (LocalDate) -> Boolean =
+            { Holidays.easterSunday(it.year).plusDays(offset) == it }
+
+        fun weekdayDate(year: Int, month: Month, ordinal: Int, dayOfWeek: DayOfWeek): LocalDate {
+            val first = LocalDate.of(year, month, 1)
+            return if (ordinal > 0) {
+                first.with(TemporalAdjusters.dayOfWeekInMonth(ordinal, dayOfWeek))
+            } else {
+                first.with(TemporalAdjusters.lastInMonth(dayOfWeek)).minusWeeks((-ordinal - 1).toLong())
+            }
+        }
+
+        fun weekday(month: Month, ordinal: Int, dayOfWeek: DayOfWeek): (LocalDate) -> Boolean =
+            { weekdayDate(it.year, month, ordinal, dayOfWeek) == it }
+
+        fun thanksgiving(year: Int) = weekdayDate(year, Month.NOVEMBER, 4, DayOfWeek.THURSDAY)
+
+        fun adventSunday(year: Int): LocalDate =
+            LocalDate.of(year, Month.DECEMBER, 24)
+                .with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY))
+                .minusWeeks(3)
+
+        fun period(start: (Int) -> LocalDate, end: (Int) -> LocalDate): (LocalDate) -> Boolean = { date ->
+            (date.year - 1..date.year).any { !date.isBefore(start(it)) && !date.isAfter(end(it)) }
+        }
+
+        fun easterPeriod(startOffset: Long, endOffset: Long) = period(
+            { Holidays.easterSunday(it).plusDays(startOffset) },
+            { Holidays.easterSunday(it).plusDays(endOffset) }
+        )
+
+        // Mirrors the commented examples in holidays.yml
+        val exampleDefinitions = listOf(
+            HolidayDefinition("good_friday", active = "%days_from_easter% == -2"),
+            HolidayDefinition("memorial_day", active = "%month% == 5 && %weekday% == 1 && %weekday_ordinal_from_end% == 1"),
+            HolidayDefinition("twelve_days_of_christmas", active = "(%month% == 12 && %day% >= 25) || (%month% == 1 && %day% <= 5)"),
+            HolidayDefinition("advent_sunday", active = "%weekday% == 7 && ((%month% == 11 && %day% >= 27) || (%month% == 12 && %day% <= 3))"),
+            HolidayDefinition("christmas_eve", active = "%month% == 12 && %day% == 24"),
+            HolidayDefinition("advent", from = "advent_sunday", to = "christmas_eve")
+        )
+
+        val legacyRules: Map<String, (LocalDate) -> Boolean> = mapOf(
+            "new_years_day" to fixed(Month.JANUARY, 1),
+            "epiphany" to fixed(Month.JANUARY, 6),
+            "groundhog_day" to fixed(Month.FEBRUARY, 2),
+            "valentines_day" to fixed(Month.FEBRUARY, 14),
+            "st_davids_day" to fixed(Month.MARCH, 1),
+            "international_womens_day" to fixed(Month.MARCH, 8),
+            "st_patricks_day" to fixed(Month.MARCH, 17),
+            "april_fools_day" to fixed(Month.APRIL, 1),
+            "earth_day" to fixed(Month.APRIL, 22),
+            "st_georges_day" to fixed(Month.APRIL, 23),
+            "may_day" to fixed(Month.MAY, 1),
+            "cinco_de_mayo" to fixed(Month.MAY, 5),
+            "juneteenth" to fixed(Month.JUNE, 19),
+            "canada_day" to fixed(Month.JULY, 1),
+            "independence_day" to fixed(Month.JULY, 4),
+            "bastille_day" to fixed(Month.JULY, 14),
+            "halloween" to fixed(Month.OCTOBER, 31),
+            "all_saints_day" to fixed(Month.NOVEMBER, 1),
+            "day_of_the_dead" to fixed(Month.NOVEMBER, 2),
+            "guy_fawkes_night" to fixed(Month.NOVEMBER, 5),
+            "remembrance_day" to fixed(Month.NOVEMBER, 11),
+            "st_andrews_day" to fixed(Month.NOVEMBER, 30),
+            "christmas_eve" to fixed(Month.DECEMBER, 24),
+            "christmas_day" to fixed(Month.DECEMBER, 25),
+            "boxing_day" to fixed(Month.DECEMBER, 26),
+            "new_years_eve" to fixed(Month.DECEMBER, 31),
+            "shrove_tuesday" to easter(-47),
+            "ash_wednesday" to easter(-46),
+            "mothering_sunday" to easter(-21),
+            "palm_sunday" to easter(-7),
+            "good_friday" to easter(-2),
+            "easter_sunday" to easter(0),
+            "easter_monday" to easter(1),
+            "ascension_day" to easter(39),
+            "pentecost" to easter(49),
+            "whit_monday" to easter(50),
+            "corpus_christi" to easter(60),
+            "martin_luther_king_day" to weekday(Month.JANUARY, 3, DayOfWeek.MONDAY),
+            "presidents_day" to weekday(Month.FEBRUARY, 3, DayOfWeek.MONDAY),
+            "early_may_bank_holiday" to weekday(Month.MAY, 1, DayOfWeek.MONDAY),
+            "mothers_day" to weekday(Month.MAY, 2, DayOfWeek.SUNDAY),
+            "memorial_day" to weekday(Month.MAY, -1, DayOfWeek.MONDAY),
+            "spring_bank_holiday" to weekday(Month.MAY, -1, DayOfWeek.MONDAY),
+            "fathers_day" to weekday(Month.JUNE, 3, DayOfWeek.SUNDAY),
+            "summer_bank_holiday" to weekday(Month.AUGUST, -1, DayOfWeek.MONDAY),
+            "labor_day" to weekday(Month.SEPTEMBER, 1, DayOfWeek.MONDAY),
+            "columbus_day" to weekday(Month.OCTOBER, 2, DayOfWeek.MONDAY),
+            "canadian_thanksgiving" to weekday(Month.OCTOBER, 2, DayOfWeek.MONDAY),
+            "thanksgiving" to { thanksgiving(it.year) == it },
+            "black_friday" to { thanksgiving(it.year).plusDays(1) == it },
+            "advent_sunday" to { adventSunday(it.year) == it },
+            "cyber_monday" to { thanksgiving(it.year).plusDays(4) == it },
+            "advent" to period(::adventSunday) { LocalDate.of(it, Month.DECEMBER, 24) },
+            "twelve_days_of_christmas" to period(
+                { LocalDate.of(it, Month.DECEMBER, 25) },
+                { LocalDate.of(it + 1, Month.JANUARY, 5) }
+            ),
+            "lent" to easterPeriod(-46, -1),
+            "holy_week" to easterPeriod(-7, -1),
+            "eastertide" to easterPeriod(0, 49),
+        )
+    }
+}
