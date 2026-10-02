@@ -1,5 +1,6 @@
 package com.willfp.libreforge.display
 
+import com.willfp.eco.core.display.DisplayContext
 import com.willfp.eco.core.display.DisplayModule
 import com.willfp.eco.core.display.DisplayPriority
 import com.willfp.eco.core.fast.fast
@@ -36,26 +37,18 @@ class ItemFlagDisplay(
         }
     }
 
-    override fun display(itemStack: ItemStack, vararg args: Any) {
+    override fun display(context: DisplayContext) {
         if (!enabled) {
             return
         }
 
-        val fis = itemStack.fast()
-
-        var existingFlags = ""
-
-        for (flag in flags) {
-            if (fis.hasItemFlag(flag)) {
-                existingFlags += flag.toString()
-            }
-        }
+        val fis = context.itemStack.fast()
 
         fis.persistentDataContainer.set(pdcKey, PersistentDataType.STRING, flags.joinToString(","))
-
         fis.addItemFlags(*flags.toTypedArray())
     }
 
+    @Suppress("OVERRIDE_DEPRECATION")
     override fun revert(itemStack: ItemStack) {
         if (!enabled) {
             return
