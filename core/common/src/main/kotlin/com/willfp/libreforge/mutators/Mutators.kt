@@ -1,7 +1,7 @@
 package com.willfp.libreforge.mutators
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.registry.Registry
+import com.willfp.libreforge.AliasedRegistry
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.mutators.impl.MutatorBlockAsDispatcher
@@ -64,7 +64,7 @@ import com.willfp.libreforge.mutators.impl.MutatorVictimToOwner
 import com.willfp.libreforge.mutators.impl.MutatorVictimToPassenger
 import com.willfp.libreforge.mutators.impl.MutatorVictimToVehicle
 
-object Mutators: Registry<Mutator<*>>() {
+object Mutators : AliasedRegistry<Mutator<*>>() {
     /**
      * Compile a list of [configs] into a MutatorList in a given [context].
      */
