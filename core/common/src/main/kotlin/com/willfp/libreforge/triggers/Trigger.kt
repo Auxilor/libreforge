@@ -5,7 +5,6 @@ import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.ProvidedEffectBlock
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.counters.bind.BoundCounters
-import com.willfp.libreforge.counters.bind.BoundCounters.bindings
 import com.willfp.libreforge.generatePlaceholders
 import com.willfp.libreforge.getProvidedActiveEffects
 import com.willfp.libreforge.plugin
@@ -164,8 +163,8 @@ abstract class Trigger(
         }
 
         // Probably a better way to work with counters, but this works for now.
-        for (counter in BoundCounters.values()) {
-            counter.bindings.forEach { it.accept(dispatch) }
+        for (bound in BoundCounters.bindingsFor(this)) {
+            bound.accept(dispatch)
         }
     }
 
