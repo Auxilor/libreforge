@@ -1,7 +1,7 @@
 package com.willfp.libreforge.conditions
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.registry.Registry
+import com.willfp.libreforge.AliasedRegistry
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.ConfigWarning
 import com.willfp.libreforge.ViolationContext
@@ -93,7 +93,7 @@ import com.willfp.libreforge.effects.Chain
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.separatorAmbivalent
 
-object Conditions : Registry<Condition<*>>() {
+object Conditions : AliasedRegistry<Condition<*>>() {
     /**
      * Get a condition by [id].
      *

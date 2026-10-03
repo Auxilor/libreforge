@@ -1,7 +1,6 @@
 package com.willfp.libreforge
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.registry.KRegistrable
 
 /*
 Sometimes you don't need any compile data,
@@ -19,11 +18,16 @@ interface Compiled<T> {
     val compileData: T
 }
 
-abstract class Compilable<T> : KRegistrable {
+abstract class Compilable<T> : Aliased {
     /**
      * The ID.
      */
     abstract override val id: String
+
+    /**
+     * Alternative IDs that resolve to this, such as IDs it was previously known by.
+     */
+    override val aliases: Set<String> = emptySet()
 
     /**
      * Human-readable description of what this does, shown on the wiki.
