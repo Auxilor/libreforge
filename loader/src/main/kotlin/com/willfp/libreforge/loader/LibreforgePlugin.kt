@@ -7,6 +7,8 @@ import com.willfp.eco.core.config.emptyConfig
 import com.willfp.eco.core.config.readConfig
 import com.willfp.eco.core.registry.Registry
 import com.willfp.eco.core.version.Version
+import com.willfp.eco.util.containsIgnoreCase
+import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.Plugins
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.configs.LibreforgeConfigCategory
@@ -19,6 +21,7 @@ import com.willfp.libreforge.loader.internal.checkHighestVersion
 import com.willfp.libreforge.loader.internal.configs.RegistrableConfig
 import com.willfp.libreforge.loader.internal.loadHighestLibreforgeVersion
 import com.willfp.libreforge.loader.internal.tryLoadForceVersion
+import org.bukkit.World
 import java.io.File
 import java.util.zip.ZipFile
 
@@ -227,6 +230,18 @@ abstract class LibreforgePlugin : EcoPlugin() {
     open fun loadConfigCategories(): List<ConfigCategory> {
         return listOf()
     }
+
+    /**
+     * If this plugin is disabled in [world], set by disabled-in-worlds in config.yml.
+     */
+    fun isDisabledIn(world: World): Boolean =
+        configYml.getStrings("disabled-in-worlds").containsIgnoreCase(world.name)
+
+    /**
+     * If this plugin is disabled in the world [dispatcher] is in.
+     */
+    fun isDisabledFor(dispatcher: Dispatcher<*>): Boolean =
+        dispatcher.location?.world?.let { isDisabledIn(it) } ?: false
 
     /**
      * Add a new [category].

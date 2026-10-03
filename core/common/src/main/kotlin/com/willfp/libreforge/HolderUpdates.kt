@@ -9,6 +9,7 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityPickupItemEvent
 import org.bukkit.event.inventory.InventoryClickEvent
+import org.bukkit.event.player.PlayerChangedWorldEvent
 import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
 import org.bukkit.event.player.PlayerJoinEvent
@@ -71,6 +72,11 @@ object ItemRefreshListener : Listener {
     @EventHandler
     fun onRespawn(event: PlayerRespawnEvent) {
         event.player.toDispatcher().refreshHolders()
+    }
+
+    @EventHandler
+    fun onChangeWorld(event: PlayerChangedWorldEvent) {
+        event.player.toDispatcher().forceRefreshHolders()
     }
 
     @EventHandler
