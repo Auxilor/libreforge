@@ -40,6 +40,7 @@ softdepend:
   - PlotSquared
   - NotBounties
   - EdPrison
+  - SmartPets
 
 commands:
   lrcdb:
