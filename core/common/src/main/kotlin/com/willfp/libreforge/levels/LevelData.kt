@@ -1,24 +1,32 @@
 package com.willfp.libreforge.levels
 
 import com.willfp.eco.core.placeholder.context.PlaceholderContext
+import com.willfp.eco.core.progression.LevelProgression
 import org.bukkit.inventory.ItemStack
 
 data class LevelData(
     val level: Int,
     val xp: Double
 ) {
-    fun gainXP(type: LevelType, xp: Double, itemStack: ItemStack, context: PlaceholderContext): LevelData {
-        var currentLevel = this.level
-        var remaining = this.xp + xp
+    /**
+     * Apply an XP gain, returning the new data.
+     *
+     * The previous implementation was `while (true) { ... }`, which never terminated when the
+     * configured xp-formula evaluated to <= 0 at any level - a single bad config value hung
+     * the main thread with no crash log. The shared progression loop cannot do that.
+     */
+    fun gainXP(
+        type: LevelType,
+        xp: Double,
+        itemStack: ItemStack,
+        context: PlaceholderContext
+    ): LevelData {
+        val change = LevelProgression.progress(type.curve, this.level, this.xp, xp)
 
-        while (true) {
-            val required = type.getXPRequired(currentLevel, context)
-            if (remaining < required) {
-                return LevelData(currentLevel, remaining)
-            }
-            remaining -= required
-            currentLevel++
-            type.handleLevelUp(currentLevel, itemStack, context)
+        change.levelsGained?.forEach { level ->
+            type.handleLevelUp(level, itemStack, context)
         }
+
+        return LevelData(change.newLevel, change.newXp)
     }
 }

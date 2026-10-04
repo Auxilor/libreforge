@@ -17,14 +17,21 @@ import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.commands.custom.CustomCommands
 import com.willfp.libreforge.configs.ChainsYml
 import com.willfp.libreforge.configs.CommandsYml
+import com.willfp.libreforge.configs.HolidaysYml
 import com.willfp.libreforge.configs.PlaceholdersYml
+import com.willfp.libreforge.configs.SeasonsYml
 import com.willfp.libreforge.configs.TagsYml
 import com.willfp.libreforge.configs.lrcdb.CommandLrcdb
+import com.willfp.libreforge.dates.DateClock
+import com.willfp.libreforge.dates.DateEdge
+import com.willfp.libreforge.dates.DatePeriod
+import com.willfp.libreforge.dates.dispatchForOnlinePlayers
 import com.willfp.libreforge.display.ItemFlagDisplay
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.arguments.custom.CustomEffectArguments
 import com.willfp.libreforge.effects.impl.bossbar.BossBarProgressPlaceholder
 import com.willfp.libreforge.filters.Filters
+import com.willfp.libreforge.holidays.Holidays
 import com.willfp.libreforge.integrations.auraskills.AuraSkillsIntegration
 import com.willfp.libreforge.integrations.axplugins.axenvoy.AxEnvoyIntegration
 import com.willfp.libreforge.integrations.axplugins.axtrade.AxTradeIntegration
@@ -56,6 +63,7 @@ import com.willfp.libreforge.integrations.purpur.PurpurIntegration
 import com.willfp.libreforge.integrations.rosestacker.RoseStackerIntegration
 import com.willfp.libreforge.integrations.scyther.ScytherIntegration
 import com.willfp.libreforge.integrations.skinsrestorer.SkinsRestorerIntegration
+import com.willfp.libreforge.integrations.smartpets.SmartPetsIntegration
 import com.willfp.libreforge.integrations.shopkeepers.ShopkeepersIntegration
 import com.willfp.libreforge.integrations.tab.TabIntegration
 import com.willfp.libreforge.integrations.tmmobcoins.TMMobcoinsIntegration
@@ -75,11 +83,13 @@ import com.willfp.libreforge.levels.placeholder.ItemProgressPlaceholder
 import com.willfp.libreforge.levels.placeholder.ItemXPPlaceholder
 import com.willfp.libreforge.levels.placeholder.ItemXPRequiredPlaceholder
 import com.willfp.libreforge.placeholders.CustomPlaceholders
+import com.willfp.libreforge.seasons.Seasons
 import com.willfp.libreforge.tags.CustomBlockTag
 import com.willfp.libreforge.tags.CustomEntityTag
 import com.willfp.libreforge.tags.CustomTag
 import com.willfp.libreforge.triggers.DispatchedTriggerFactory
 import com.willfp.libreforge.triggers.Triggers
+import com.willfp.libreforge.triggers.impl.TriggerDateBoundary
 import com.willfp.libreforge.triggers.impl.TriggerMeleeAttack
 import org.bukkit.Bukkit
 import org.bukkit.entity.LivingEntity
@@ -91,6 +101,8 @@ internal lateinit var plugin: LibreforgeSpigotPlugin
 class LibreforgeSpigotPlugin : EcoPlugin() {
     val chainsYml = ChainsYml(this)
     val tagsYml = TagsYml(this)
+    val holidaysYml = HolidaysYml(this)
+    val seasonsYml = SeasonsYml(this)
     val placeholdersYml = PlaceholdersYml(this)
     val commandsYml = CommandsYml(this)
 
@@ -143,6 +155,20 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
         }
 
 
+        for (trigger in TriggerDateBoundary.values) {
+            DateClock.on(trigger.period, trigger.edge) { trigger.dispatchForOnlinePlayers() }
+        }
+
+        DateClock.on(DatePeriod.DAY, DateEdge.END) {
+            Holidays.dispatchEnds(it.toLocalDate())
+            Seasons.dispatchEnds(it.toLocalDate())
+        }
+
+        DateClock.on(DatePeriod.DAY, DateEdge.START) {
+            Holidays.dispatchStarts(it.toLocalDate())
+            Seasons.dispatchStarts(it.toLocalDate())
+        }
+
         pointsPlaceholder(this).register()
         globalPointsPlaceholder(this).register()
         ItemPointsPlaceholder(this).register()
@@ -174,6 +200,9 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             Blocks.registerTag(CustomBlockTag(config, this))
             Entities.registerTag(CustomEntityTag(config, this))
         }
+
+        Holidays.reload(holidaysYml)
+        Seasons.reload(seasonsYml)
 
         for (customPlaceholder in this.placeholdersYml.getSubsections("placeholders")) {
             CustomPlaceholders.load(customPlaceholder, this)
@@ -285,7 +314,8 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             IntegrationLoader("Oraxen") { OraxenIntegration.load(this) },
             IntegrationLoader("ItemsAdder") { ItemsAdderIntegration.load(this) },
             IntegrationLoader("CraftEngine") { CraftEngineIntegration.load(this) },
-            IntegrationLoader("SkinsRestorer") { SkinsRestorerIntegration.load(this) }
+            IntegrationLoader("SkinsRestorer") { SkinsRestorerIntegration.load(this) },
+            IntegrationLoader("SmartPets") { SmartPetsIntegration.load(this) }
         )
     }
 

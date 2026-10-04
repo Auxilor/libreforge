@@ -16,7 +16,9 @@ import io.lumine.mythic.core.utils.MythicUtil
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 
-object EffectCastMythicSkill : Effect<NoCompileData>("cast_mythic_skill") {
+object EffectCastMythicSkill : Effect<NoCompileData>("mm_cast_skill") {
+    override val aliases = setOf("cast_mythic_skill")
+
     override val description = "Casts a MythicMobs skill from the player, targeting the victim or the player's current target."
     override val categories = setOf("meta")
 

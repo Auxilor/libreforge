@@ -3,10 +3,18 @@
 package com.willfp.libreforge.filters
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.registry.Registry
+import com.willfp.libreforge.AliasedRegistry
 import com.willfp.libreforge.ConfigWarning
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.deprecationMessage
+import com.willfp.libreforge.filters.impl.FilterIsMonth
+import com.willfp.libreforge.filters.impl.FilterIsDayOfWeek
+import com.willfp.libreforge.filters.impl.FilterIsDayOfMonth
+import com.willfp.libreforge.filters.impl.FilterIsDate
+import com.willfp.libreforge.filters.impl.FilterIsHour
+import com.willfp.libreforge.filters.impl.FilterIsDateBetween
+import com.willfp.libreforge.filters.impl.FilterIsHourBetween
+import com.willfp.libreforge.filters.impl.FilterIsTimeBetween
 import com.willfp.libreforge.filters.impl.FilterAboveHealth
 import com.willfp.libreforge.filters.impl.FilterAboveHealthPercent
 import com.willfp.libreforge.filters.impl.FilterAboveHunger
@@ -16,6 +24,7 @@ import com.willfp.libreforge.filters.impl.FilterAltValueBelow
 import com.willfp.libreforge.filters.impl.FilterAltValueEquals
 import com.willfp.libreforge.filters.impl.FilterBelowHealth
 import com.willfp.libreforge.filters.impl.FilterBelowHunger
+import com.willfp.libreforge.filters.impl.FilterBlockUsed
 import com.willfp.libreforge.filters.impl.FilterBlocks
 import com.willfp.libreforge.filters.impl.FilterDamageCause
 import com.willfp.libreforge.filters.impl.FilterEnchant
@@ -55,7 +64,7 @@ import com.willfp.libreforge.filters.impl.FilterValueEquals
 import com.willfp.libreforge.filters.impl.FilterVictimConditions
 import com.willfp.libreforge.filters.impl.FilterVictimName
 
-object Filters : Registry<Filter<*, *>>() {
+object Filters : AliasedRegistry<Filter<*, *>>() {
     /**
      * Compile a [config] into a FilterList a given [context].
      */
@@ -65,10 +74,10 @@ object Filters : Registry<Filter<*, *>>() {
         for (key in config.getKeys(false)) {
             if (key.startsWith("not_")) {
                 val filter = get(key.removePrefix("not_")) ?: continue
-                blocks += makeBlock(filter, config, true, context) ?: continue
+                blocks += makeBlock(filter, config, key.removePrefix("not_"), true, context) ?: continue
             } else {
                 val filter = get(key) ?: continue
-                blocks += makeBlock(filter, config, false, context) ?: continue
+                blocks += makeBlock(filter, config, key, false, context) ?: continue
             }
         }
 
@@ -78,6 +87,7 @@ object Filters : Registry<Filter<*, *>>() {
     private fun <T, V> makeBlock(
         filter: Filter<T, V>,
         config: Config,
+        key: String,
         inverted: Boolean,
         context: ViolationContext
     ): FilterBlock<T, V>? {
@@ -95,13 +105,13 @@ object Filters : Registry<Filter<*, *>>() {
         }
 
         val configKey = if (inverted) {
-            "not_${filter.id}"
+            "not_$key"
         } else {
-            filter.id
+            key
         }
 
         val compileData = filter.makeCompileData(config, context, filter.getValue(config, null, configKey))
-        return FilterBlock(filter, config, compileData, inverted)
+        return FilterBlock(filter, config, compileData, inverted, key)
     }
 
     init {
@@ -114,6 +124,7 @@ object Filters : Registry<Filter<*, *>>() {
         register(FilterAltValueEquals)
         register(FilterBelowHealth)
         register(FilterBelowHunger)
+        register(FilterBlockUsed)
         register(FilterBlocks)
         register(FilterDamageCause)
         register(FilterEnchant)
@@ -125,6 +136,14 @@ object Filters : Registry<Filter<*, *>>() {
         register(FilterIsBehindVictim)
         register(FilterIsBoss)
         register(FilterIsExpressionTrue)
+        register(FilterIsMonth)
+        register(FilterIsDayOfWeek)
+        register(FilterIsDayOfMonth)
+        register(FilterIsDate)
+        register(FilterIsHour)
+        register(FilterIsDateBetween)
+        register(FilterIsHourBetween)
+        register(FilterIsTimeBetween)
         register(FilterIsNPC)
         register(FilterIsPassive)
         register(FilterIsTamedEntityOwner)

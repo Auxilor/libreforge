@@ -55,9 +55,9 @@ abstract class Filter<T, V>(
         val cfg = config.config
 
         return if (config.isInverted) {
-            !isMet(data, getValue(cfg, data, "not_$id"), config.compileData)
+            !isMet(data, getValue(cfg, data, "not_${config.key}"), config.compileData)
         } else {
-            isMet(data, getValue(cfg, data, id), config.compileData)
+            isMet(data, getValue(cfg, data, config.key), config.compileData)
         }
     }
 

@@ -1,11 +1,10 @@
 package com.willfp.libreforge.triggers
 
-import com.willfp.eco.core.registry.KRegistrable
+import com.willfp.libreforge.Aliased
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.ProvidedEffectBlock
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.counters.bind.BoundCounters
-import com.willfp.libreforge.counters.bind.BoundCounters.bindings
 import com.willfp.libreforge.generatePlaceholders
 import com.willfp.libreforge.getProvidedActiveEffects
 import com.willfp.libreforge.plugin
@@ -18,7 +17,7 @@ import org.bukkit.event.Listener
 
 abstract class Trigger(
     override val id: String
-) : Listener, KRegistrable {
+) : Listener, Aliased {
     /**
      * The TriggerData parameters that are sent.
      */
@@ -45,6 +44,11 @@ abstract class Trigger(
      * e.g. what VICTIM or VALUE actually contains for this specific event.
      */
     open val parameterDescriptions: Map<TriggerParameter, String> = emptyMap()
+
+    /**
+     * Alternative IDs that resolve to this trigger, such as IDs it was previously known by.
+     */
+    override val aliases: Set<String> = emptySet()
 
     /**
      * Whether this trigger is enabled.
@@ -164,8 +168,8 @@ abstract class Trigger(
         }
 
         // Probably a better way to work with counters, but this works for now.
-        for (counter in BoundCounters.values()) {
-            counter.bindings.forEach { it.accept(dispatch) }
+        for (bound in BoundCounters.bindingsFor(this)) {
+            bound.accept(dispatch)
         }
     }
 

@@ -1,6 +1,7 @@
 package com.willfp.libreforge.triggers
 
 import com.willfp.eco.core.registry.Registry
+import com.willfp.libreforge.AliasedRegistry
 import com.willfp.libreforge.mutators.MutatorList
 import com.willfp.libreforge.triggers.impl.TriggerAltClick
 import com.willfp.libreforge.triggers.impl.TriggerBite
@@ -28,6 +29,7 @@ import com.willfp.libreforge.triggers.impl.TriggerCompleteAdvancement
 import com.willfp.libreforge.triggers.impl.TriggerConsume
 import com.willfp.libreforge.triggers.impl.TriggerCraft
 import com.willfp.libreforge.triggers.impl.TriggerDamageItem
+import com.willfp.libreforge.triggers.impl.TriggerDateBoundary
 import com.willfp.libreforge.triggers.impl.TriggerDeath
 import com.willfp.libreforge.triggers.impl.TriggerDeployElytra
 import com.willfp.libreforge.triggers.impl.TriggerDisable
@@ -109,7 +111,7 @@ import com.willfp.libreforge.triggers.impl.TriggerToggleSprint
 import com.willfp.libreforge.triggers.impl.TriggerUnleashEntity
 import com.willfp.libreforge.triggers.impl.TriggerWinRaid
 
-object Triggers : Registry<Trigger>() {
+object Triggers : AliasedRegistry<Trigger>() {
     private val groupRegistry = Registry<TriggerGroup>()
 
     /**
@@ -261,5 +263,6 @@ object Triggers : Registry<Trigger>() {
         register(TriggerWinRaid)
         register(TriggerTakeDamage)
         register(TriggerTakeEntityDamage)
+        TriggerDateBoundary.values.forEach { register(it) }
     }
 }

@@ -11,7 +11,8 @@ class FilterBlock<T, V> internal constructor(
     val filter: Filter<T, V>,
     override val config: Config,
     override val compileData: T,
-    val isInverted: Boolean
+    val isInverted: Boolean,
+    val key: String
 ) : Compiled<T> {
     fun isMet(data: TriggerData) =
         filter.isMet(data, this)

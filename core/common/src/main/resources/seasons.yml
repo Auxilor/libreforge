@@ -1,0 +1,44 @@
+# Seasons, each of which gets an is_<id> condition, an is_<id> filter, and <id>_start and <id>_end triggers.
+# Dates are worked out in the timezone set by dates.timezone in config.yml.
+#
+# Seasons are written exactly like holidays in holidays.yml; see there for every option.
+# Seasons can overlap, and don't have to cover the whole year.
+#
+# The defaults are the northern hemisphere's meteorological seasons: three whole months each.
+# Southern hemisphere servers should swap them around (see below).
+
+seasons:
+  - id: spring
+    months: [ march, april, may ]
+  - id: summer
+    months: [ june, july, august ]
+  - id: autumn
+    months: [ september, october, november ]
+  - id: winter
+    months: [ december, january, february ]
+
+  # More examples:
+  #
+  # Southern hemisphere meteorological seasons
+  # - id: spring
+  #   months: [ september, october, november ]
+  # - id: summer
+  #   months: [ december, january, february ]
+  # - id: autumn
+  #   months: [ march, april, may ]
+  # - id: winter
+  #   months: [ june, july, august ]
+  #
+  # Northern hemisphere astronomical winter, from the solstice to the equinox (approximate)
+  # - id: astronomical_winter
+  #   date: "12-21..03-19"
+  #
+  # Tropical wet and dry seasons (e.g. South and Southeast Asia)
+  # - id: wet_season
+  #   months: [ may, june, july, august, september, october ]
+  # - id: dry_season
+  #   months: [ november, december, january, february, march, april ]
+  #
+  # The Indian subcontinent's monsoon
+  # - id: monsoon
+  #   months: [ june, july, august, september ]

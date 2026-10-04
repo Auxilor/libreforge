@@ -12,7 +12,9 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
 
-object TriggerTakeMythicDamage : Trigger("take_mythic_damage") {
+object TriggerTakeMythicDamage : Trigger("mm_take_damage") {
+    override val aliases = setOf("take_mythic_damage")
+
     override val description = "Fires when a player or entity takes damage from a MythicMobs mob."
 
     override val categories = setOf("combat")

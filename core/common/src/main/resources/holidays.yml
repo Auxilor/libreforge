@@ -1,0 +1,79 @@
+# Holidays, each of which gets an is_<id> condition, an is_<id> filter, and <id>_start and <id>_end triggers.
+# Dates are worked out in the timezone set by dates.timezone in config.yml.
+#
+# A holiday is on for every day that matches all of the options it sets:
+#
+#   date / dates:                The date, or a list of dates, as:
+#                                  "12-25"                   The same day every year
+#                                  "2026-11-08"              One day only
+#                                  "12-25..01-05"            Every day in between (can cross New Year)
+#                                  "2027-02-06..2027-02-20"  Every day in between, once
+#                                  "%easter%"                Easter Sunday
+#                                  "%<id>%"                  Whenever another holiday is on
+#                                  "%<id>%..%<id>%"          From the start of one holiday to the end of another
+#   month / months:              Month names (november) or numbers (1-12)
+#   day_of_week / days_of_week:  Day names (thursday) or numbers (1 = Monday ... 7 = Sunday)
+#   week / weeks:                Which one of its day of the week in the month (1-5, or last)
+#   date_offset:                 Moves the holiday this many days later (or earlier, if negative),
+#                                or a range like 0..11 to also cover every day in between
+#
+# Always quote dates.
+# A holiday is multi-day if it's on for more than one day in a row;
+# its <id>_start trigger fires on the first day, and its <id>_end trigger on the last.
+
+holidays:
+  - id: new_years_day
+    date: "01-01"
+  - id: new_years_eve
+    date: "%new_years_day%"
+    date_offset: -1
+  - id: valentines_day
+    date: "02-14"
+  - id: easter_sunday
+    date: "%easter%"
+  # The fourth Thursday of November
+  - id: thanksgiving
+    month: november
+    day_of_week: thursday
+    week: 4
+  - id: black_friday
+    date: "%thanksgiving%"
+    date_offset: 1
+  - id: christmas_eve
+    date: "%christmas_day%"
+    date_offset: -1
+  - id: christmas_day
+    date: "12-25"
+  - id: boxing_day
+    date: "%christmas_day%"
+    date_offset: 1
+
+  # More examples:
+  #
+  # - id: good_friday
+  #   date: "%easter%"
+  #   date_offset: -2
+  # - id: memorial_day
+  #   month: may
+  #   day_of_week: monday
+  #   week: last
+  # - id: cyber_monday
+  #   date: "%black_friday%"
+  #   date_offset: 3
+  # - id: twelve_days_of_christmas
+  #   date: "%christmas_day%"
+  #   date_offset: 0..11
+  # - id: holy_week
+  #   date: "%easter%"
+  #   date_offset: -7..-1
+  # - id: advent_sunday
+  #   date: "11-27..12-03"
+  #   day_of_week: sunday
+  # - id: advent
+  #   date: "%advent_sunday%..%christmas_eve%"
+  # - id: diwali
+  #   dates:
+  #     - "2026-11-08"
+  #     - "2027-10-29"
+  # - id: chinese_new_year_festival
+  #   date: "2027-02-06..2027-02-20"
