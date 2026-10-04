@@ -1,6 +1,6 @@
 package com.willfp.libreforge.triggers
 
-import com.willfp.eco.core.registry.KRegistrable
+import com.willfp.libreforge.Aliased
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.ProvidedEffectBlock
 import com.willfp.libreforge.ProvidedHolder
@@ -17,7 +17,7 @@ import org.bukkit.event.Listener
 
 abstract class Trigger(
     override val id: String
-) : Listener, KRegistrable {
+) : Listener, Aliased {
     /**
      * The TriggerData parameters that are sent.
      */
@@ -44,6 +44,11 @@ abstract class Trigger(
      * e.g. what VICTIM or VALUE actually contains for this specific event.
      */
     open val parameterDescriptions: Map<TriggerParameter, String> = emptyMap()
+
+    /**
+     * Alternative IDs that resolve to this trigger, such as IDs it was previously known by.
+     */
+    override val aliases: Set<String> = emptySet()
 
     /**
      * Whether this trigger is enabled.

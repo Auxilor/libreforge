@@ -19,8 +19,10 @@ import java.util.UUID
 abstract class Effect<T>(
     final override val id: String
 ) : Compilable<T>(), Listener {
-    // The identifier factory.
-    private val identifierFactory = IdentifierFactory(UUID.nameUUIDFromBytes(id.toByteArray()))
+    // Seeded from the original ID so renamed effects keep the identifiers they already gave out.
+    private val identifierFactory by lazy {
+        IdentifierFactory(UUID.nameUUIDFromBytes((aliases.firstOrNull() ?: id).toByteArray()))
+    }
 
     /**
      * If the effect should be reloaded.

@@ -3,7 +3,7 @@
 package com.willfp.libreforge.effects
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.registry.Registry
+import com.willfp.libreforge.AliasedRegistry
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.ConfigWarning
 import com.willfp.libreforge.ViolationContext
@@ -279,7 +279,7 @@ import com.willfp.libreforge.triggers.Triggers
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 
-object Effects : Registry<Effect<*>>() {
+object Effects : AliasedRegistry<Effect<*>>() {
     private val identifiedChains = ConcurrentHashMap<String, Chain>()
 
     /**
