@@ -6,7 +6,6 @@ import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
-import com.willfp.libreforge.effects.ProviderBinding
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.get
@@ -24,8 +23,6 @@ object EffectPermanentPotionEffect : Effect<NoCompileData>("permanent_potion_eff
     override val categories = setOf("potion", "player")
 
     override val shouldReload = false
-
-    override val providerBinding = ProviderBinding.NONE
 
     override val arguments = arguments {
         require(
@@ -135,6 +132,12 @@ object EffectPermanentPotionEffect : Effect<NoCompileData>("permanent_potion_eff
         player.setMetadata(metaKey, plugin.metadataValueFactory.create(holderData))
 
         refreshEffectsOfType(player, effectType)
+    }
+
+    override fun isApplied(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder): Boolean {
+        val player = dispatcher.get<Player>() ?: return true
+        val data = getHolderData(player)[identifiers.uuid] ?: return false
+        return player.hasPotionEffect(data.effectType)
     }
 
     override fun onDisable(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder) {

@@ -1,10 +1,13 @@
 package com.willfp.libreforge
 
+import com.willfp.libreforge.conditions.ConditionList
 import com.willfp.libreforge.effects.EffectBlock
 import com.willfp.libreforge.slot.ItemHolderFinder
+import org.bukkit.Location
 import org.bukkit.event.Event
 import org.bukkit.event.HandlerList
 import java.util.IdentityHashMap
+import java.util.UUID
 
 
 /**
@@ -198,7 +201,7 @@ fun registerHolderProvider(provider: HolderProvider): Boolean {
 
     providers.add(provider)
     HolderSignals.registerProvider(provider)
-    HolderStates.onProviderRegistered(provider)
+    HolderStates.markProviderEverywhere(provider)
     return true
 }
 
@@ -228,11 +231,13 @@ internal class GenericHolderProvider(
     private val maxAgeFunction: ((Dispatcher<*>) -> Int?)?,
     override val invalidatedBy: Set<HolderChange>
 ) : HolderProvider {
+    // Lambdas compile to hidden classes named `Owner$$Lambda/0x...`, whose suffix changes every run;
+    // several from one owner are told apart by registration order.
     override val id: String
-        get() = explicitId ?: function.javaClass.name
+        get() = explicitId ?: function.javaClass.name.substringBefore("\$\$Lambda")
 
     override fun maxAge(dispatcher: Dispatcher<*>): Int? =
-        if (maxAgeFunction != null) maxAgeFunction(dispatcher) else HolderPolling.defaultMaxAge(dispatcher)
+        if (maxAgeFunction != null) maxAgeFunction(dispatcher) else super.maxAge(dispatcher)
 
     override fun provide(dispatcher: Dispatcher<*>) = function(dispatcher)
 }
@@ -258,15 +263,7 @@ fun registerGenericHolderProvider(
  * Register a new holder provider for a specific type of dispatcher.
  */
 inline fun <reified T> registerSpecificHolderProvider(crossinline provider: (T) -> Collection<ProvidedHolder>) =
-    registerHolderProvider(object : HolderProvider {
-        override fun provide(dispatcher: Dispatcher<*>): Collection<ProvidedHolder> {
-            return if (dispatcher.isType<T>()) {
-                provider(dispatcher.get<T>()!!)
-            } else {
-                emptyList()
-            }
-        }
-    })
+    registerSpecificHolderProvider<T>(id = null, provider = provider)
 
 /**
  * Register a new holder provider for a specific type of dispatcher, with an [id], a [maxAge] (see
@@ -290,7 +287,7 @@ inline fun <reified T> registerSpecificHolderProvider(
             get() = signals
 
         override fun maxAge(dispatcher: Dispatcher<*>): Int? =
-            if (maxAgeFunction != null) maxAgeFunction(dispatcher) else HolderPolling.defaultMaxAge(dispatcher)
+            if (maxAgeFunction != null) maxAgeFunction(dispatcher) else super.maxAge(dispatcher)
 
         override fun provide(dispatcher: Dispatcher<*>): Collection<ProvidedHolder> {
             return if (dispatcher.isType<T>()) {
@@ -348,6 +345,13 @@ fun Dispatcher<*>.invalidate(provider: HolderProvider) =
  */
 fun HolderProvider.invalidateEverywhere() =
     HolderStates.markProviderEverywhere(this)
+
+/**
+ * Invalidate this provider on the dispatchers a radius [holder] can reach or currently has: those
+ * within [radius] of [location], its [owner], and every dispatcher it is provided to.
+ */
+internal fun HolderProvider.invalidateNear(holder: Holder, owner: UUID, location: Location?, radius: Double) =
+    HolderStates.markProviderNear(this, holder, owner, location, radius)
 
 /**
  * Invalidate every provider for this dispatcher; applied in the next tick. Callable from any thread.
@@ -437,8 +441,10 @@ fun Collection<ProvidedHolder>.getProvidedActiveEffects(dispatcher: Dispatcher<*
     val blocks = mutableListOf<ProvidedEffectBlock>()
 
     for (holder in this) {
-        if (holder.holder.conditions.areMet(dispatcher, holder)) {
-            for (block in holder.getActiveEffects(dispatcher)) {
+        val met = holder.metBlocks(dispatcher)
+
+        holder.holder.effects.forEachIndexed { blockIndex, block ->
+            if (met[blockIndex] && block.effects.any { !HolderStates.isUnloaded(it.effect) }) {
                 blocks += ProvidedEffectBlock(block, holder)
             }
         }
@@ -451,11 +457,38 @@ fun Collection<ProvidedHolder>.getProvidedActiveEffects(dispatcher: Dispatcher<*
  * Get active effects for a [dispatcher].
  */
 fun ProvidedHolder.getActiveEffects(dispatcher: Dispatcher<*>) =
-    this.holder.effects.filter { it.conditions.areMet(dispatcher, this) }.toSet()
+    this.holder.effects.filter { it.conditions.areMetIfLoaded(dispatcher, this) }.toSet()
+
+/**
+ * Which of the holder's effect blocks are met. Effect-level conditions are skipped when the
+ * holder's own conditions fail.
+ */
+internal fun ProvidedHolder.metBlocks(dispatcher: Dispatcher<*>): BooleanArray {
+    val met = BooleanArray(holder.effects.size)
+
+    if (!holder.conditions.areMetIfLoaded(dispatcher, this)) {
+        return met
+    }
+
+    holder.effects.forEachIndexed { blockIndex, block ->
+        met[blockIndex] = block.conditions.areMetIfLoaded(dispatcher, this)
+    }
+
+    return met
+}
+
+// Conditions from a plugin disabled at runtime can no longer run.
+private fun ConditionList.areMetIfLoaded(dispatcher: Dispatcher<*>, holder: ProvidedHolder): Boolean =
+    this.none { HolderStates.isUnloaded(it.condition) } && this.areMet(dispatcher, holder)
 
 /**
  * Recalculate active effects.
  */
+@Deprecated(
+    "Active effects are tracked by libreforge; recalculating them ignores that state.",
+    ReplaceWith("this.providedActiveEffects"),
+    DeprecationLevel.WARNING
+)
 fun Dispatcher<*>.calculateActiveEffects() =
     this.holders.getProvidedActiveEffects(this)
 
@@ -476,6 +509,14 @@ val Dispatcher<*>.providedActiveEffects: List<ProvidedEffectBlock>
  */
 fun Dispatcher<*>.updateEffects() =
     HolderStates.markConditionsAll(this)
+
+/**
+ * Apply the refreshes and updates marked on this dispatcher now, so [activeEffects] and [holders]
+ * read in the same tick see them. Main thread only; inside a holder update (e.g. from an effect or
+ * a holder event) it does nothing and the changes are applied in the next tick.
+ */
+fun Dispatcher<*>.flushHolders() =
+    HolderStates.flushNow(this)
 
 /**
  * Removes all elements from the given [other] list that are contained in this list.

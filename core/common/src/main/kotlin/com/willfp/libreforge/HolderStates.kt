@@ -6,12 +6,10 @@ import com.willfp.eco.core.placeholder.InjectablePlaceholder
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.conditions.ConditionBlock
 import org.bukkit.Bukkit
+import org.bukkit.Location
+import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
-import org.bukkit.event.Event
-import org.bukkit.event.EventPriority
-import org.bukkit.event.Listener
-import org.bukkit.plugin.EventExecutor
 import org.bukkit.scheduler.BukkitTask
 import java.util.Collections
 import java.util.IdentityHashMap
@@ -30,6 +28,7 @@ internal object HolderStates {
         val cooldown: Long,
         val inventoryClickTimeout: Long,
         val repairInterval: Int,
+        val reloadInterval: Int,
         val maxNewStatesPerTick: Int,
         val entitiesEnabled: Boolean,
         val skipAFKPlayers: Boolean
@@ -44,7 +43,8 @@ internal object HolderStates {
     // Classloaders of libreforge-based plugins disabled at runtime; their code must not run again.
     private val unloadedClassLoaders: MutableSet<ClassLoader> = Collections.newSetFromMap(IdentityHashMap())
 
-    private val states = HashMap<UUID, HolderState>()
+    // In creation order, which a reset follows.
+    private val states = LinkedHashMap<UUID, HolderState>()
 
     private val dirty = LinkedHashSet<HolderState>()
 
@@ -64,8 +64,6 @@ internal object HolderStates {
 
     private var resetRequested = false
 
-    private var creationIndex = 0L
-
     private var task: BukkitTask? = null
 
     private var shutdownSweepDone = false
@@ -76,10 +74,11 @@ internal object HolderStates {
     var tick = 0
         private set
 
-    var settings = Settings(0, 500, 600, 50, entitiesEnabled = true, skipAFKPlayers = true)
+    private val defaultSettings = Settings(0, 500, 20, 600, 50, entitiesEnabled = true, skipAFKPlayers = true)
+
+    var settings = defaultSettings
         private set
 
-    // Published for reads from other threads.
     private class PublishedHolders(
         val all: List<ProvidedHolder>,
         val byProvider: Map<HolderProvider, List<ProvidedHolder>>
@@ -89,7 +88,7 @@ internal object HolderStates {
 
     private val publishedActiveEffects = ConcurrentHashMap<UUID, List<ProvidedEffectBlock>>()
 
-    private val conditionResults = ConcurrentHashMap<UUID, Map<ConditionBlock<*>, Boolean>>()
+    private val conditionResults = ConcurrentHashMap<UUID, ConcurrentHashMap<ConditionBlock<*>, Boolean>>()
 
     /**
      * Read settings from config. Called on every reload.
@@ -101,8 +100,9 @@ internal object HolderStates {
         settings = Settings(
             config.getInt("refresh.cooldown").toLong().coerceAtLeast(0),
             config.getInt("refresh.inventory-click.timeout").toLong().coerceAtLeast(0),
-            config.getInt("refresh.repair-interval").takeIf { it > 0 } ?: 600,
-            config.getInt("refresh.max-new-states-per-tick").takeIf { it > 0 } ?: 50,
+            config.getInt("refresh.repair-interval").takeIf { it > 0 } ?: defaultSettings.repairInterval,
+            config.getInt("refresh.reload-interval").takeIf { it > 0 } ?: defaultSettings.reloadInterval,
+            config.getInt("refresh.max-new-states-per-tick").takeIf { it > 0 } ?: defaultSettings.maxNewStatesPerTick,
             config.getBool("refresh.entities.enabled"),
             config.getBool("refresh.players.skip-afk-players")
         )
@@ -144,10 +144,6 @@ internal object HolderStates {
         }
     }
 
-    /*
-    Marks. Callable from any thread; applied to states on the main thread.
-     */
-
     private fun mark(action: () -> Unit) {
         when {
             !Bukkit.isPrimaryThread() -> offThreadMarks.add(action)
@@ -157,14 +153,35 @@ internal object HolderStates {
     }
 
     private inline fun withState(dispatcher: Dispatcher<*>, crossinline action: (HolderState) -> Unit) {
-        val uuid = dispatcher.uuid
         mark {
-            val state = states[uuid]
+            val state = stateFor(dispatcher)
             if (state != null) {
                 action(state)
                 markDirty(state)
             }
         }
+    }
+
+    /**
+     * The state of [dispatcher], created on demand for a custom dispatcher that is not an entity.
+     */
+    private fun stateFor(dispatcher: Dispatcher<*>): HolderState? {
+        val existing = states[dispatcher.uuid]
+
+        if (existing != null && (existing.kind != StateKind.CUSTOM || existing.dispatcher.dispatcher === dispatcher.dispatcher)) {
+            return existing
+        }
+
+        if (shutdownSweepDone || dispatcher.dispatcher is Entity || dispatcher === GlobalDispatcher) {
+            return existing
+        }
+
+        // A new object behind the same custom dispatcher, e.g. a re-placed minion.
+        if (existing != null) {
+            remove(existing)
+        }
+
+        return create(dispatcher, StateKind.CUSTOM)
     }
 
     fun markDirty(state: HolderState) {
@@ -188,6 +205,30 @@ internal object HolderStates {
             }
         }
     }
+
+    /**
+     * Mark [provider] on the dispatchers within [radius] of [location], on [owner], and on every
+     * dispatcher it currently provides [holder] to.
+     */
+    fun markProviderNear(provider: HolderProvider, holder: Holder, owner: UUID, location: Location?, radius: Double) =
+        mark {
+            if (provider !in registeredHolderProviders) {
+                return@mark
+            }
+
+            val nearby = hashSetOf(owner)
+            val world = location?.world
+            if (world != null) {
+                world.getNearbyEntities(location, radius, radius, radius).mapTo(nearby) { it.uniqueId }
+            }
+
+            for (state in states.values) {
+                if (state.uuid in nearby || state.provides(provider, holder)) {
+                    state.dirtyProviders += provider
+                    markDirty(state)
+                }
+            }
+        }
 
     fun markAllProviders(dispatcher: Dispatcher<*>) =
         withState(dispatcher) { it.dirtyProviders.addAll(registeredHolderProviders) }
@@ -230,8 +271,6 @@ internal object HolderStates {
     fun signalInventoryClick(dispatcher: Dispatcher<*>) =
         withState(dispatcher) { it.clickPending = true }
 
-    fun onProviderRegistered(provider: HolderProvider) = markProviderEverywhere(provider)
-
     /**
      * Disable and re-enable every active effect from the current configuration, once, in the next
      * flush however many times it is requested.
@@ -239,12 +278,6 @@ internal object HolderStates {
     fun resetAllStates() = mark {
         resetRequested = true
     }
-
-    /*
-    Tracking. Main thread only.
-     */
-
-    fun isTracked(uuid: UUID): Boolean = states.containsKey(uuid)
 
     fun trackPlayer(player: Player) {
         if (shutdownSweepDone || !player.isRealPlayer || states.containsKey(player.uniqueId)) {
@@ -262,7 +295,7 @@ internal object HolderStates {
             return
         }
 
-        if (entity is Player && !isNPC && entity.isRealPlayer) {
+        if (!isNPC && entity.isRealPlayer) {
             return
         }
 
@@ -288,7 +321,7 @@ internal object HolderStates {
      * Stop tracking [entity], disabling its active effects.
      */
     fun untrackEntity(entity: LivingEntity, isNPC: Boolean = false) {
-        if (entity is Player && !isNPC && entity.isRealPlayer) {
+        if (!isNPC && entity.isRealPlayer) {
             return
         }
 
@@ -314,22 +347,33 @@ internal object HolderStates {
     }
 
     private fun create(dispatcher: Dispatcher<*>, kind: StateKind): HolderState {
-        val state = HolderState(dispatcher, kind, creationIndex++)
+        val state = HolderState(dispatcher, kind)
         states[state.uuid] = state
 
         // Holders are evaluated when first provided, and effects were just enabled.
         state.conditionsCheckedAt = tick
         state.repairedAt = tick
+        state.reloadedAt = tick
 
         state.dirtyProviders.addAll(registeredHolderProviders)
 
-        if (kind == StateKind.ENTITY) {
-            entityBuckets[bucketOf(state.uuid, entityBuckets.size)] += state
-            newStates.addLast(state)
-        } else {
-            playerBuckets[bucketOf(state.uuid, PLAYER_BUCKETS)] += state
-            state.admitted = true
-            markDirty(state)
+        when (kind) {
+            StateKind.ENTITY -> {
+                entityBuckets[bucketOf(state.uuid, entityBuckets.size)] += state
+                newStates.addLast(state)
+            }
+
+            // Custom dispatchers are never polled, only updated when marked.
+            StateKind.CUSTOM -> {
+                state.admitted = true
+                markDirty(state)
+            }
+
+            else -> {
+                playerBuckets[bucketOf(state.uuid, PLAYER_BUCKETS)] += state
+                state.admitted = true
+                markDirty(state)
+            }
         }
 
         return state
@@ -357,10 +401,6 @@ internal object HolderStates {
 
     private fun bucketOf(uuid: UUID, buckets: Int): Int =
         (uuid.leastSignificantBits.toInt() and Int.MAX_VALUE) % buckets
-
-    /*
-    The flush.
-     */
 
     private fun flush() {
         if (shutdownSweepDone) {
@@ -417,18 +457,21 @@ internal object HolderStates {
             }
         }
 
-        for (state in states.values.sortedBy { it.creationIndex }) {
+        for (state in states.values.toList()) {
             state.resetPending = true
 
-            if (state.kind == StateKind.ENTITY) {
+            when (state.kind) {
                 // Spread large mob counts over ticks, in the same budget as new states.
-                if (state.admitted) {
+                StateKind.ENTITY -> if (state.admitted) {
                     state.admitted = false
                     dirty.remove(state)
                     newStates.addLast(state)
                 }
-            } else {
-                markDirty(state)
+
+                StateKind.CUSTOM -> markDirty(state)
+
+                // Players and the global dispatcher are reset when their bucket is next visited.
+                else -> Unit
             }
         }
     }
@@ -462,20 +505,15 @@ internal object HolderStates {
     }
 
     private fun visitBuckets() {
-        val repairInterval = settings.repairInterval
-
         for (state in playerBuckets[tick % PLAYER_BUCKETS].toList()) {
-            if (state.kind == StateKind.PLAYER && settings.skipAFKPlayers) {
+            if (state.kind == StateKind.PLAYER && settings.skipAFKPlayers && !state.resetPending) {
                 val player = state.dispatcher.dispatcher as Player
                 if (AFKManager.isAfk(player)) {
                     continue
                 }
             }
 
-            guarded("visit holders for ${state.uuid}") { state.visit(tick, repairInterval) }
-            if (state.hasWork) {
-                markDirty(state)
-            }
+            visit(state)
         }
 
         for (state in entityBuckets[tick % entityBuckets.size].toList()) {
@@ -489,10 +527,14 @@ internal object HolderStates {
                 continue
             }
 
-            guarded("visit holders for ${state.uuid}") { state.visit(tick, repairInterval) }
-            if (state.hasWork) {
-                markDirty(state)
-            }
+            visit(state)
+        }
+    }
+
+    private fun visit(state: HolderState) {
+        guarded("visit holders for ${state.uuid}") { state.visit(tick, settings) }
+        if (state.hasWork) {
+            markDirty(state)
         }
     }
 
@@ -543,27 +585,50 @@ internal object HolderStates {
         dirty.clear()
 
         val now = System.currentTimeMillis()
-        val settings = settings
 
         for (state in batch) {
-            if (states[state.uuid] !== state || !state.admitted) {
-                continue
-            }
-
-            var heldBack = false
-            guarded("update holders for ${state.uuid}") {
-                heldBack = state.update(tick, now, settings)
-            }
-
-            if (heldBack) {
-                dirty += state
-            }
+            update(state, now)
         }
     }
 
-    /*
-    Reads.
+    private fun update(state: HolderState, now: Long) {
+        if (states[state.uuid] !== state || !state.admitted) {
+            return
+        }
+
+        var heldBack = false
+        guarded("update holders for ${state.uuid}") {
+            heldBack = state.update(tick, now, settings)
+        }
+
+        if (heldBack) {
+            dirty += state
+        } else if (state.kind == StateKind.CUSTOM && state.isIdle && states[state.uuid] === state) {
+            remove(state)
+        }
+    }
+
+    /**
+     * Apply what is marked on [dispatcher] now rather than in the next tick. Does nothing off the
+     * main thread or during a holder update, where the changes are applied in the next tick.
      */
+    fun flushNow(dispatcher: Dispatcher<*>) {
+        if (!Bukkit.isPrimaryThread() || flushing) {
+            return
+        }
+
+        val state = states[dispatcher.uuid] ?: return
+        if (!dirty.remove(state)) {
+            return
+        }
+
+        flushing = true
+        try {
+            update(state, System.currentTimeMillis())
+        } finally {
+            flushing = false
+        }
+    }
 
     /**
      * The holders of a [dispatcher]: the state's immutable snapshot, off-thread the published one,
@@ -581,7 +646,6 @@ internal object HolderStates {
 
     private fun askOnDemand(dispatcher: Dispatcher<*>): List<ProvidedHolder> {
         val entity = dispatcher.dispatcher
-        // As before: only non-player entities are empty with entity refresh disabled.
         if (entity is LivingEntity && entity !is Player && !settings.entitiesEnabled) {
             return emptyList()
         }
@@ -636,34 +700,24 @@ internal object HolderStates {
         }
     }
 
-    /*
-    Condition results, for reads from other threads. Only tracked dispatchers are stored.
-     */
-
     fun conditionResult(dispatcher: Dispatcher<*>, block: ConditionBlock<*>): Boolean? =
         conditionResults[dispatcher.uuid]?.get(block)
 
+    /**
+     * Keep a condition result for reads from other threads. Only tracked dispatchers are stored.
+     */
     fun recordConditionResult(dispatcher: Dispatcher<*>, block: ConditionBlock<*>, isMet: Boolean) {
         val uuid = dispatcher.uuid
         if (!states.containsKey(uuid)) {
             return
         }
 
-        val current = conditionResults[uuid]
-        if (current != null && current[block] == isMet) {
-            return
-        }
-
-        conditionResults[uuid] = if (current == null) mapOf(block to isMet) else current + (block to isMet)
+        conditionResults.getOrPut(uuid) { ConcurrentHashMap() }[block] = isMet
     }
 
     fun clearConditionResults(uuid: UUID) {
         conditionResults.remove(uuid)
     }
-
-    /*
-    Shutdown and plugin disable.
-     */
 
     /**
      * Disable every active effect and drop every state. Idempotent.
@@ -723,7 +777,7 @@ internal object HolderStates {
         val classLoader = disabledPlugin.javaClass.classLoader
         unloadedClassLoaders += classLoader
         val removed = unregisterHolderProviders { it.ownerClass.classLoader === classLoader }
-        HolderSignals.unregisterProviders(removed)
+        HolderSignals.unregisterOwnedBy(classLoader, removed)
         unregisterHolderFunctions(classLoader)
 
         for (state in states.values.toList()) {
@@ -734,100 +788,5 @@ internal object HolderStates {
             "${disabledPlugin.name} was disabled while the server is running; its effects have been disabled. " +
                     "A restart is required to use it again."
         )
-    }
-}
-
-/**
- * Routes change signals to the providers and conditions that declared them.
- */
-internal object HolderSignals {
-    private val providersBySignal = HashMap<HolderChange, MutableList<HolderProvider>>()
-
-    private val conditionsBySignal = HashMap<HolderChange, MutableSet<Condition<*>>>()
-
-    private class CustomHandler(
-        val owner: Any,
-        val action: (Event) -> Unit
-    )
-
-    private val customHandlers = HashMap<Class<out Event>, MutableList<CustomHandler>>()
-
-    private val listening = mutableSetOf<Class<out Event>>()
-
-    private val registeredConditions: MutableSet<Condition<*>> = Collections.newSetFromMap(IdentityHashMap())
-
-    private object SignalListener : Listener
-
-    fun providersFor(change: HolderChange): List<HolderProvider> =
-        providersBySignal[change] ?: emptyList()
-
-    fun conditionsFor(change: HolderChange): Set<Condition<*>> =
-        conditionsBySignal[change] ?: emptySet()
-
-    fun registerProvider(provider: HolderProvider) {
-        for (change in provider.invalidatedBy) {
-            if (change is HolderChange.Custom<*>) {
-                addCustom(change, provider) { HolderStates.markProvider(it, provider) }
-            } else {
-                providersBySignal.getOrPut(change) { mutableListOf() } += provider
-            }
-        }
-    }
-
-    fun registerCondition(condition: Condition<*>) {
-        // Registration re-runs on every reload.
-        if (!registeredConditions.add(condition)) {
-            return
-        }
-
-        val signals = condition.invalidatedBy ?: return
-
-        for (change in signals) {
-            if (change is HolderChange.Custom<*>) {
-                addCustom(change, condition) { HolderStates.markCondition(it, condition) }
-            } else {
-                conditionsBySignal.getOrPut(change) { mutableSetOf() } += condition
-            }
-        }
-    }
-
-    fun unregisterProviders(providers: Collection<HolderProvider>) {
-        val removed: MutableSet<Any> = Collections.newSetFromMap(IdentityHashMap())
-        removed.addAll(providers)
-
-        for (list in providersBySignal.values) {
-            list.removeAll { it in removed }
-        }
-
-        for (handlers in customHandlers.values) {
-            handlers.removeAll { it.owner in removed }
-        }
-    }
-
-    private fun addCustom(change: HolderChange.Custom<*>, owner: Any, mark: (Dispatcher<*>) -> Unit) {
-        @Suppress("UNCHECKED_CAST")
-        val dispatcherOf = change.dispatcherOf as (Event) -> Dispatcher<*>?
-
-        customHandlers.getOrPut(change.event) { mutableListOf() } += CustomHandler(owner) { event ->
-            dispatcherOf(event)?.let(mark)
-        }
-
-        val eventClass = change.event
-        plugin.runWhenEnabled {
-            if (listening.add(eventClass)) {
-                Bukkit.getPluginManager().registerEvent(
-                    eventClass,
-                    SignalListener,
-                    EventPriority.MONITOR,
-                    EventExecutor { _, event ->
-                        if (eventClass.isInstance(event)) {
-                            customHandlers[eventClass]?.toList()?.forEach { it.action(event) }
-                        }
-                    },
-                    plugin,
-                    true
-                )
-            }
-        }
     }
 }

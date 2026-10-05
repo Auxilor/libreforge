@@ -1,14 +1,11 @@
 package com.willfp.libreforge
 
-import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.placeholder.InjectablePlaceholder
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.conditions.ConditionBlock
-import com.willfp.libreforge.conditions.ConditionList
 import com.willfp.libreforge.effects.ChainElement
 import com.willfp.libreforge.effects.EffectBlock
 import com.willfp.libreforge.effects.Identifiers
-import com.willfp.libreforge.effects.Integrity
 import com.willfp.libreforge.effects.ProviderBinding
 import com.willfp.libreforge.slot.SlotItemProvidedHolder
 import org.bukkit.Bukkit
@@ -112,7 +109,7 @@ internal class HolderData(
                 || holder.effects.any { block -> block.conditions.any { isPolled(it) } }
 
         val hasDynamicEffect = holder.effects.any { block ->
-            block.isPermanent && block.effects.any { it.effect.alwaysReload || isDynamic(it) }
+            block.isPermanent && block.effects.any { isDynamic(it) }
         }
 
         return (hasPolledCondition || hasDynamicEffect).also { isPolled = it }
@@ -132,60 +129,43 @@ internal class HolderData(
 }
 
 /**
- * Decides whether a config can change value while its holder stays the same.
+ * The keys of the re-asked providers, classified against what was applied.
  */
-internal object DynamicConfigs {
-    // Matched exactly as eco's findPlaceholders.
-    private val PLACEHOLDER = Regex("%[^% ]+%")
+internal class HolderDiff(
+    val holdersChanged: Boolean
+) : KeyChanges<HolderKey, ProvidedHolder>()
 
-    /**
-     * If any string in [config] contains a placeholder other than [ownPlaceholders], or `rand`
-     * outside placeholders (eco's only impure built-ins are `rand` and `random`).
-     */
-    fun isDynamic(config: Config, ownPlaceholders: Set<String>): Boolean =
-        anyString(config) { isDynamic(it, ownPlaceholders) }
+/**
+ * Which effect blocks of a provided holder are met.
+ */
+internal class Evaluation(
+    val key: HolderKey,
+    val holder: ProvidedHolder,
+    val met: BooleanArray
+)
 
-    /**
-     * If [value] (a config, list, or string) is dynamic by the same rule, with no own placeholders.
-     */
-    fun isDynamicValue(value: Any?): Boolean =
-        anyString(value) { isDynamic(it, emptySet()) }
+/**
+ * An active effect to reload with the [current] provided holder.
+ */
+internal class Reload(
+    val activeEffect: ActiveEffect,
+    val current: ProvidedHolder
+)
 
-    /**
-     * If any string in [config] references a placeholder.
-     */
-    fun hasPlaceholder(config: Config): Boolean =
-        anyString(config) { '%' in it && PLACEHOLDER.containsMatchIn(it) }
-
-    private fun isDynamic(value: String, ownPlaceholders: Set<String>): Boolean {
-        var stripped = value
-
-        if ('%' in stripped) {
-            for (name in ownPlaceholders) {
-                stripped = stripped.replace("%$name%", "")
-            }
-
-            if (PLACEHOLDER.containsMatchIn(stripped)) {
-                return true
-            }
-        }
-
-        return "rand" in stripped
-    }
-
-    private fun anyString(value: Any?, predicate: (String) -> Boolean): Boolean = when (value) {
-        is String -> predicate(value)
-        is Config -> value.getKeys(false).any { anyString(value.get(it), predicate) }
-        is Map<*, *> -> value.values.any { anyString(it, predicate) }
-        is Iterable<*> -> value.any { anyString(it, predicate) }
-        else -> false
-    }
+/**
+ * The effects one update disables, enables and reloads.
+ */
+internal class EffectDelta {
+    val disables = ArrayList<ActiveEffect>()
+    val enables = ArrayList<ActiveEffect>()
+    val reloads = LinkedHashMap<EffectKey, Reload>()
 }
 
 internal enum class StateKind {
     PLAYER,
     GLOBAL,
-    ENTITY
+    ENTITY,
+    CUSTOM
 }
 
 /**
@@ -193,15 +173,13 @@ internal enum class StateKind {
  */
 internal class HolderState(
     val dispatcher: Dispatcher<*>,
-    val kind: StateKind,
-    val creationIndex: Long
+    val kind: StateKind
 ) {
     val uuid: UUID = dispatcher.uuid
 
     // Each provider's last answer, keyed. A provider with no entry has never been asked.
     private val answers = IdentityHashMap<HolderProvider, LinkedHashMap<HolderKey, ProvidedHolder>>()
 
-    // The answers effects are currently applied from.
     private val applied = IdentityHashMap<HolderProvider, LinkedHashMap<HolderKey, ProvidedHolder>>()
 
     private var appliedByKey = HashMap<HolderKey, ProvidedHolder>()
@@ -210,10 +188,19 @@ internal class HolderState(
 
     private var appliedSnapshot = emptyList<ProvidedHolder>()
 
+    // The holders events were last fired for, by id. Kept through a reset, so a reload only fires for
+    // holders that really came or went.
+    private var announced = emptyMap<NamespacedKey, ProvidedHolder>()
+
+    private var announcedSnapshot = emptyList<ProvidedHolder>()
+
+    private var settlingReset = false
+
     private val providerCheckedAt = IdentityHashMap<HolderProvider, Int>()
 
     var conditionsCheckedAt = 0
     var repairedAt = 0
+    var reloadedAt = 0
     var lastHolderUpdateAt = 0L
     var lastClickRefreshAt = 0L
 
@@ -225,6 +212,7 @@ internal class HolderState(
     val conditionDirtyHolders = HashSet<HolderKey>()
     var conditionDirtyAll = false
     var repairDue = false
+    var reloadDue = false
     var reloadAll = false
     var resetPending = false
     var clickPending = false
@@ -254,7 +242,13 @@ internal class HolderState(
 
     val hasWork: Boolean
         get() = dirtyProviders.isNotEmpty() || pendingProviders.isNotEmpty() || conditionDirtyAll
-                || conditionDirtyHolders.isNotEmpty() || repairDue || reloadAll || resetPending || clickPending
+                || conditionDirtyHolders.isNotEmpty() || repairDue || reloadDue || reloadAll || resetPending || clickPending
+
+    /**
+     * If this state holds nothing and has nothing to do, so dropping it changes nothing.
+     */
+    val isIdle: Boolean
+        get() = active.isEmpty() && appliedOrder.isEmpty() && !hasWork
 
     /**
      * The cached placeholders for [holder], or null if no provided holder in this state has it.
@@ -289,23 +283,20 @@ internal class HolderState(
      * The stored answer of [provider], asking it now if it has never been asked.
      */
     fun answerOf(provider: HolderProvider, tick: Int): Collection<ProvidedHolder> {
-        if (!answers.containsKey(provider)) {
-            ask(provider, tick)
-            dirtyProviders.remove(provider)
-            rebuildSnapshot()
-            HolderStates.markDirty(this)
-        }
-
+        askUnasked(listOf(provider), tick)
         return answers[provider]?.values?.let { Collections.unmodifiableCollection(it) } ?: emptyList()
     }
 
     /**
      * Ask every provider that has never been asked, as reads must see the right holders.
      */
-    fun ensureAsked(tick: Int) {
+    fun ensureAsked(tick: Int) =
+        askUnasked(registeredHolderProviders, tick)
+
+    private fun askUnasked(providers: List<HolderProvider>, tick: Int) {
         var asked = false
 
-        for (provider in registeredHolderProviders) {
+        for (provider in providers) {
             if (!answers.containsKey(provider)) {
                 ask(provider, tick)
                 dirtyProviders.remove(provider)
@@ -319,6 +310,12 @@ internal class HolderState(
         }
     }
 
+    /**
+     * If the last answer of [provider] contains [holder].
+     */
+    fun provides(provider: HolderProvider, holder: Holder): Boolean =
+        answers[provider]?.values?.any { it.holder === holder } == true
+
     fun answersByProvider(): Map<HolderProvider, List<ProvidedHolder>> {
         val map = IdentityHashMap<HolderProvider, List<ProvidedHolder>>()
         for ((provider, keyed) in answers) {
@@ -327,7 +324,10 @@ internal class HolderState(
         return map
     }
 
-    private fun ask(provider: HolderProvider, tick: Int) {
+    /**
+     * Ask [provider] again. Returns true if its answer changed, so it must be applied.
+     */
+    private fun ask(provider: HolderProvider, tick: Int): Boolean {
         val providerId = registeredProviderId(provider)
         val occurrences = HashMap<NamespacedKey, Int>()
         val keyed = LinkedHashMap<HolderKey, ProvidedHolder>()
@@ -339,9 +339,16 @@ internal class HolderState(
             keyed[HolderKey(providerId, holderId, occurrence)] = ph
         }
 
-        answers[provider] = keyed
         providerCheckedAt[provider] = tick
+
+        val previous = answers[provider]
+        if (previous != null && isSameAnswer(previous, keyed) { it.slotType }) {
+            return false
+        }
+
+        answers[provider] = keyed
         pendingProviders += provider
+        return true
     }
 
     private fun rebuildSnapshot() {
@@ -384,7 +391,7 @@ internal class HolderState(
     /**
      * Visit this state from its bucket: mark what has aged.
      */
-    fun visit(tick: Int, repairInterval: Int) {
+    fun visit(tick: Int, settings: HolderStates.Settings) {
         for (provider in registeredHolderProviders) {
             val checkedAt = providerCheckedAt[provider] ?: continue
             val maxAge = provider.maxAge(dispatcher) ?: continue
@@ -402,8 +409,12 @@ internal class HolderState(
             }
         }
 
-        if (tick - repairedAt >= repairInterval) {
+        if (tick - repairedAt >= settings.repairInterval) {
             repairDue = true
+        }
+
+        if (tick - reloadedAt >= settings.reloadInterval) {
+            reloadDue = true
         }
     }
 
@@ -435,108 +446,177 @@ internal class HolderState(
             reset()
         }
 
-        var heldBack = false
+        val clickHeldBack = applyPendingClick(now, settings)
+        val askHeldBack = reaskDirtyProviders(tick, now, settings)
 
-        if (clickPending) {
-            if (lastClickRefreshAt == 0L || now - lastClickRefreshAt >= settings.inventoryClickTimeout) {
-                clickPending = false
-                lastClickRefreshAt = now
-                applySignal(HolderChange.Items)
-            } else {
-                heldBack = true
-            }
+        val diff = classifyPendingProviders()
+        fireHolderEvents(diff)
+
+        val fullConditionPass = conditionDirtyAll
+        val toEvaluate = takeHoldersToEvaluate(diff)
+
+        // A handler may have removed this state (e.g. kicked the player); its effects are already disabled.
+        if (isRemoved) {
+            return false
         }
 
-        // 1. Re-ask dirty providers only.
-        if (dirtyProviders.isNotEmpty()) {
-            if (bypassCooldown || lastHolderUpdateAt == 0L || now - lastHolderUpdateAt >= settings.cooldown) {
-                bypassCooldown = false
-                dispatcher.runRefreshFunctions()
+        val delta = effectDelta(diff, evaluateAll(toEvaluate))
 
-                for (provider in registeredHolderProviders) {
-                    if (provider in dirtyProviders) {
-                        ask(provider, tick)
-                    }
-                }
-
-                dirtyProviders.clear()
-                lastHolderUpdateAt = now
-                rebuildSnapshot()
-            } else {
-                heldBack = true
-            }
+        if (!applyDelta(delta)) {
+            return false
         }
 
-        // 2-3. Classify the keys of the re-asked providers.
-        val before = appliedSnapshot
-        val added = ArrayList<Pair<HolderKey, ProvidedHolder>>()
-        val removed = ArrayList<Pair<HolderKey, ProvidedHolder>>()
-        val moved = HashSet<HolderKey>()
-        val holdersChanged = pendingProviders.isNotEmpty()
-
-        if (holdersChanged) {
-            for (provider in pendingProviders) {
-                val old = applied[provider] ?: emptyMap()
-                val new = answers[provider] ?: LinkedHashMap()
-
-                for ((key, ph) in new) {
-                    val previous = old[key]
-                    when {
-                        previous == null -> added += key to ph
-                        previous.holder != ph.holder -> {
-                            removed += key to previous
-                            added += key to ph
-                        }
-
-                        previous.slotType != ph.slotType -> moved += key
-                    }
-                }
-
-                for ((key, previous) in old) {
-                    if (!new.containsKey(key)) {
-                        removed += key to previous
-                    }
-                }
-
-                if (new.isEmpty()) {
-                    applied.remove(provider)
-                } else {
-                    applied[provider] = new
-                }
-            }
-
-            pendingProviders.clear()
-            rebuildApplied()
+        if (delta.disables.isNotEmpty() || delta.enables.isNotEmpty() || diff.holdersChanged) {
+            rebuildProvidedActiveEffects()
         }
 
-        // 4. Holder events, per key.
-        if (added.isNotEmpty() || removed.isNotEmpty()) {
-            val after = appliedSnapshot
-
-            for ((_, ph) in added) {
-                Bukkit.getPluginManager().callEvent(HolderEnableEvent(dispatcher, ph, after))
-            }
-
-            for ((_, ph) in removed) {
-                Bukkit.getPluginManager().callEvent(HolderDisableEvent(dispatcher, ph, before))
-            }
-
-            @Suppress("DEPRECATION")
-            Bukkit.getPluginManager().callEvent(HolderProvideEvent(dispatcher, after))
-        }
-
-        // 5. Choose the holders to evaluate.
-        val toEvaluate = LinkedHashMap<HolderKey, ProvidedHolder>()
-        for ((key, ph) in added) {
-            toEvaluate[key] = ph
-        }
-        for (key in moved) {
-            appliedByKey[key]?.let { toEvaluate[key] = it }
-        }
+        runSlowPasses(tick)
 
         // Only a full pass stamps; periodic marks are stamped when made (visit), so a frequent partial
         // signal never starves the periodic check.
-        val fullConditionPass = conditionDirtyAll
+        if (fullConditionPass) {
+            conditionsCheckedAt = tick
+        }
+
+        return clickHeldBack || askHeldBack
+    }
+
+    /**
+     * Turn a pending inventory click into an item signal, unless rate limited. Returns true if held back.
+     */
+    private fun applyPendingClick(now: Long, settings: HolderStates.Settings): Boolean {
+        if (!clickPending) {
+            return false
+        }
+
+        if (lastClickRefreshAt != 0L && now - lastClickRefreshAt < settings.inventoryClickTimeout) {
+            return true
+        }
+
+        clickPending = false
+        lastClickRefreshAt = now
+        applySignal(HolderChange.Items)
+        return false
+    }
+
+    /**
+     * Re-ask the dirty providers, unless delayed by `refresh.cooldown`. Returns true if held back.
+     */
+    private fun reaskDirtyProviders(tick: Int, now: Long, settings: HolderStates.Settings): Boolean {
+        if (dirtyProviders.isEmpty()) {
+            return false
+        }
+
+        if (!bypassCooldown && lastHolderUpdateAt != 0L && now - lastHolderUpdateAt < settings.cooldown) {
+            return true
+        }
+
+        bypassCooldown = false
+        dispatcher.runRefreshFunctions()
+
+        var changed = false
+        for (provider in registeredHolderProviders) {
+            if (provider in dirtyProviders && ask(provider, tick)) {
+                changed = true
+            }
+        }
+
+        dirtyProviders.clear()
+        lastHolderUpdateAt = now
+
+        if (changed) {
+            rebuildSnapshot()
+        }
+
+        return false
+    }
+
+    /**
+     * Apply the answers of the re-asked providers, classifying each key against what was applied.
+     */
+    private fun classifyPendingProviders(): HolderDiff {
+        val diff = HolderDiff(pendingProviders.isNotEmpty())
+
+        if (!diff.holdersChanged) {
+            return diff
+        }
+
+        for (provider in pendingProviders) {
+            val old = applied[provider] ?: emptyMap()
+            val new = answers[provider] ?: LinkedHashMap()
+
+            diff.classify(old, new, { it.holder }, { it.slotType })
+
+            if (new.isEmpty()) {
+                applied.remove(provider)
+            } else {
+                applied[provider] = new
+            }
+        }
+
+        pendingProviders.clear()
+        rebuildApplied()
+        return diff
+    }
+
+    /**
+     * Fire holder events per holder id: enable when an id is first provided, disable when its last
+     * copy goes. During a reset, disables wait until every provider has been asked again.
+     */
+    private fun fireHolderEvents(diff: HolderDiff) {
+        val settled = settlingReset && dirtyProviders.isEmpty()
+        if (!diff.holdersChanged && !settled) {
+            return
+        }
+
+        val current = LinkedHashMap<NamespacedKey, ProvidedHolder>()
+        for (ph in appliedSnapshot) {
+            current.putIfAbsent(ph.holder.id, ph)
+        }
+
+        val enabled = current.filterKeys { it !in announced }
+        val disabled = if (settlingReset && !settled) emptyMap() else announced.filterKeys { it !in current }
+        val before = announcedSnapshot
+        val after = appliedSnapshot
+
+        if (settlingReset && !settled) {
+            announced = announced + enabled
+        } else {
+            settlingReset = false
+            announced = current
+            announcedSnapshot = after
+        }
+
+        if (enabled.isEmpty() && disabled.isEmpty()) {
+            return
+        }
+
+        for (ph in enabled.values) {
+            Bukkit.getPluginManager().callEvent(HolderEnableEvent(dispatcher, ph, after))
+        }
+
+        for (ph in disabled.values) {
+            Bukkit.getPluginManager().callEvent(HolderDisableEvent(dispatcher, ph, before))
+        }
+
+        @Suppress("DEPRECATION")
+        Bukkit.getPluginManager().callEvent(HolderProvideEvent(dispatcher, after))
+    }
+
+    /**
+     * The holders whose conditions must be evaluated: new, moved, and condition-dirty ones.
+     */
+    private fun takeHoldersToEvaluate(diff: HolderDiff): Map<HolderKey, ProvidedHolder> {
+        val toEvaluate = LinkedHashMap<HolderKey, ProvidedHolder>()
+
+        for ((key, ph) in diff.added) {
+            toEvaluate[key] = ph
+        }
+
+        for (key in diff.moved) {
+            appliedByKey[key]?.let { toEvaluate[key] = it }
+        }
+
         if (conditionDirtyAll) {
             for ((key, ph) in appliedOrder) {
                 toEvaluate[key] = ph
@@ -546,59 +626,65 @@ internal class HolderState(
                 appliedByKey[key]?.let { toEvaluate[key] = it }
             }
         }
+
         conditionDirtyAll = false
         conditionDirtyHolders.clear()
+        return toEvaluate
+    }
 
-        // A handler may have removed this state (e.g. kicked the player); its effects are already disabled.
-        if (isRemoved) {
-            return false
-        }
+    /**
+     * Evaluate everything before changing anything, so a throwing condition leaves the holder as it was.
+     */
+    private fun evaluateAll(toEvaluate: Map<HolderKey, ProvidedHolder>): List<Evaluation> {
+        val evaluations = ArrayList<Evaluation>(toEvaluate.size)
 
-        // 5 (cont). Evaluate everything before changing anything, so a throwing condition leaves the
-        // holder as it was.
-        val plans = ArrayList<Pair<Pair<HolderKey, ProvidedHolder>, BooleanArray>>(toEvaluate.size)
         for ((key, ph) in toEvaluate) {
             val met = try {
-                evaluate(ph)
+                ph.metBlocks(dispatcher)
             } catch (e: Exception) {
                 plugin.logger.warning("Failed to evaluate conditions of ${ph.holder.id} for $uuid")
                 e.printStackTrace()
                 continue
             }
 
-            plans += (key to ph) to met
+            evaluations += Evaluation(key, ph, met)
         }
 
-        // 6. Work out the effect delta.
-        val disables = ArrayList<ActiveEffect>()
-        val enables = ArrayList<ActiveEffect>()
-        val reloads = LinkedHashMap<EffectKey, Pair<ActiveEffect, ProvidedHolder>>()
+        return evaluations
+    }
 
-        if (removed.isNotEmpty()) {
-            val removedKeys = removed.mapTo(HashSet()) { it.first }
+    /**
+     * Work out which effects to disable, enable and reload, removing the disabled ones from active.
+     */
+    private fun effectDelta(diff: HolderDiff, evaluations: List<Evaluation>): EffectDelta {
+        val delta = EffectDelta()
+
+        if (diff.removed.isNotEmpty()) {
+            val removedKeys = diff.removed.mapTo(HashSet()) { it.first }
             val iterator = active.values.iterator()
             while (iterator.hasNext()) {
                 val activeEffect = iterator.next()
                 if (activeEffect.key.holder in removedKeys) {
-                    disables += activeEffect
+                    delta.disables += activeEffect
                     iterator.remove()
                 }
             }
         }
 
-        for ((holderEntry, met) in plans) {
-            val (key, ph) = holderEntry
+        for (evaluation in evaluations) {
+            val key = evaluation.key
+            val ph = evaluation.holder
             val data = dataFor(ph)
 
             ph.holder.effects.forEachIndexed { blockIndex, block ->
                 block.effects.forEachIndexed { elementIndex, element ->
                     val effectKey = EffectKey(key, blockIndex, elementIndex)
                     val current = active[effectKey]
-                    val isMet = met[blockIndex] && !HolderStates.isUnloaded(element.effect)
+                    val isMet = evaluation.met[blockIndex] && !HolderStates.isUnloaded(element.effect)
 
                     if (isMet && current == null) {
                         // Added to active only once enabled, so a removal mid-update never disables it unenabled.
-                        enables += ActiveEffect(
+                        delta.enables += ActiveEffect(
                             effectKey,
                             block,
                             element,
@@ -607,116 +693,102 @@ internal class HolderState(
                         )
                     } else if (!isMet && current != null) {
                         active.remove(effectKey)
-                        disables += current
+                        delta.disables += current
                     } else if (current != null && block.isPermanent) {
-                        val rebind = key in moved && element.effect.providerBinding != ProviderBinding.NONE
-                        if (rebind || element.effect.alwaysReload || data.isDynamic(element)) {
-                            reloads[effectKey] = current to ph
+                        val rebind = key in diff.moved && element.effect.providerBinding != ProviderBinding.NONE
+                        if (rebind || data.isDynamic(element)) {
+                            delta.reloads[effectKey] = Reload(current, ph)
                         }
                     }
                 }
             }
         }
 
-        // Unchanged holders whose item changed, for effects acting on the item.
-        if (holdersChanged) {
-            for (activeEffect in active.values) {
-                if (!activeEffect.isPermanent || activeEffect.element.effect.providerBinding != ProviderBinding.ITEM) {
-                    continue
-                }
-
-                if (activeEffect.key in reloads) {
-                    continue
-                }
-
-                val current = appliedByKey[activeEffect.key.holder] ?: continue
-                if (current.getProvider<ItemStack>() != activeEffect.enabledWith.getProvider<ItemStack>()) {
-                    reloads[activeEffect.key] = activeEffect to current
-                }
-            }
+        if (diff.holdersChanged) {
+            addItemRebinds(delta)
         }
 
+        return delta
+    }
+
+    /**
+     * Reload effects acting on the item of unchanged holders whose item changed.
+     */
+    private fun addItemRebinds(delta: EffectDelta) {
+        for (activeEffect in active.values) {
+            if (!activeEffect.isPermanent || activeEffect.element.effect.providerBinding != ProviderBinding.ITEM) {
+                continue
+            }
+
+            if (activeEffect.key in delta.reloads) {
+                continue
+            }
+
+            val current = appliedByKey[activeEffect.key.holder] ?: continue
+            if (current.getProvider<ItemStack>() != activeEffect.enabledWith.getProvider<ItemStack>()) {
+                delta.reloads[activeEffect.key] = Reload(activeEffect, current)
+            }
+        }
+    }
+
+    /**
+     * Disable, then enable, then reload. Returns false if the state was removed meanwhile.
+     */
+    private fun applyDelta(delta: EffectDelta): Boolean {
         // Disables always run, even if the state is removed meanwhile: these are no longer in active.
-        for (activeEffect in disables.sortedBy { it.block.weight }) {
-            safely(activeEffect, "disable") {
-                activeEffect.element.disableActive(dispatcher, activeEffect.enabledWith, activeEffect.identifiers)
-            }
+        for (activeEffect in delta.disables.sortedBy { it.block.weight }) {
+            disable(activeEffect)
         }
 
-        for (activeEffect in enables.sortedBy { it.block.weight }) {
+        for (activeEffect in delta.enables.sortedBy { it.block.weight }) {
             if (isRemoved) {
+                return false
+            }
+
+            safely(activeEffect, "enable") {
+                activeEffect.element.enableActive(dispatcher, activeEffect.enabledWith, activeEffect.identifiers)
+            }
+
+            // Removed by a handler inside the enable: disableAll has already run without it.
+            if (isRemoved) {
+                disable(activeEffect)
                 return false
             }
 
             active[activeEffect.key] = activeEffect
-            safely(activeEffect, "enable") {
-                activeEffect.element.enableActive(dispatcher, activeEffect.enabledWith, activeEffect.identifiers)
-            }
         }
 
-        for ((activeEffect, current) in reloads.values.sortedBy { it.first.block.weight }) {
+        for (pending in delta.reloads.values.sortedBy { it.activeEffect.block.weight }) {
             if (isRemoved) {
                 return false
             }
 
-            reload(activeEffect, current)
+            reload(pending.activeEffect, pending.current)
         }
 
-        if (isRemoved) {
-            return false
-        }
+        return !isRemoved
+    }
 
-        // 7. Rebuild what triggers read.
-        if (disables.isNotEmpty() || enables.isNotEmpty() || holdersChanged) {
-            rebuildProvidedActiveEffects()
-        }
-
-        // 9. Slow passes.
+    private fun runSlowPasses(tick: Int) {
         if (reloadAll) {
             reloadAll = false
             repairDue = false
+            reloadDue = false
             repairedAt = tick
+            reloadedAt = tick
             reloadAllPermanent()
-        } else if (repairDue) {
+        } else if (repairDue || reloadDue) {
+            val blind = reloadDue
             repairDue = false
+            reloadDue = false
             repairedAt = tick
-            repair()
+
+            if (blind) {
+                reloadedAt = tick
+            }
+
+            repair(blind)
         }
-
-        // 10.
-        if (fullConditionPass) {
-            conditionsCheckedAt = tick
-        }
-
-        return heldBack
-    }
-
-    /**
-     * Which of the holder's effect blocks are met. Effect-level conditions are skipped when the
-     * holder's own conditions fail.
-     */
-    private fun evaluate(ph: ProvidedHolder): BooleanArray {
-        val holder = ph.holder
-        val met = BooleanArray(holder.effects.size)
-
-        if (!areMet(holder.conditions, ph)) {
-            return met
-        }
-
-        holder.effects.forEachIndexed { blockIndex, block ->
-            met[blockIndex] = areMet(block.conditions, ph)
-        }
-
-        return met
-    }
-
-    private fun areMet(conditions: ConditionList, ph: ProvidedHolder): Boolean {
-        // Conditions from a plugin disabled at runtime can no longer run.
-        if (conditions.any { HolderStates.isUnloaded(it.condition) }) {
-            return false
-        }
-
-        return conditions.areMet(dispatcher, ph)
     }
 
     private fun reload(activeEffect: ActiveEffect, current: ProvidedHolder): Boolean {
@@ -739,58 +811,70 @@ internal class HolderState(
         return reloaded
     }
 
-    private fun repair(activeEffect: ActiveEffect, current: ProvidedHolder) {
-        safely(activeEffect, "repair") {
-            activeEffect.element.repairActive(dispatcher, activeEffect.enabledWith, current, activeEffect.identifiers)
+    /**
+     * Re-apply static permanent effects whose applied state is gone, and if [blind], reload those
+     * that can't tell. Dynamic ones are already reloaded on every condition pass.
+     */
+    private fun repair(blind: Boolean) {
+        var missing: ArrayList<ActiveEffect>? = null
+        var unknown: ArrayList<ActiveEffect>? = null
+
+        for (activeEffect in active.values) {
+            if (!activeEffect.isPermanent || HolderStates.isUnloaded(activeEffect.element.effect)) {
+                continue
+            }
+
+            val current = appliedByKey[activeEffect.key.holder] ?: continue
+
+            if (dataFor(current).isDynamic(activeEffect.element)) {
+                continue
+            }
+
+            when (isApplied(activeEffect)) {
+                true -> Unit
+                false -> (missing ?: ArrayList<ActiveEffect>().also { missing = it }) += activeEffect
+                null -> if (blind) {
+                    (unknown ?: ArrayList<ActiveEffect>().also { unknown = it }) += activeEffect
+                }
+            }
+        }
+
+        missing?.sortedBy { it.block.weight }?.forEach { activeEffect ->
+            val current = appliedByKey[activeEffect.key.holder] ?: return@forEach
+            reapply(activeEffect, current)
+        }
+
+        unknown?.sortedBy { it.block.weight }?.forEach { activeEffect ->
+            val current = appliedByKey[activeEffect.key.holder] ?: return@forEach
+            reload(activeEffect, current)
+        }
+    }
+
+    // A throwing check counts as applied, so a broken effect is not re-applied on every pass.
+    private fun isApplied(activeEffect: ActiveEffect): Boolean? {
+        var applied: Boolean? = true
+
+        safely(activeEffect, "check") {
+            applied = activeEffect.element.effect.isApplied(dispatcher, activeEffect.identifiers, activeEffect.enabledWith)
+        }
+
+        return applied
+    }
+
+    private fun reapply(activeEffect: ActiveEffect, current: ProvidedHolder) {
+        safely(activeEffect, "re-apply") {
+            activeEffect.element.reapplyActive(dispatcher, activeEffect.enabledWith, current, activeEffect.identifiers)
             activeEffect.enabledWith = current
         }
     }
 
-    private fun checkIntegrity(activeEffect: ActiveEffect): Integrity {
-        var integrity = Integrity.UNKNOWN
-
-        safely(activeEffect, "integrity check") {
-            integrity = activeEffect.element.effect.checkIntegrity(
-                dispatcher,
-                activeEffect.identifiers,
-                activeEffect.enabledWith
-            )
-        }
-
-        return integrity
-    }
-
     /**
-     * Reload static permanent effects, or repair them if they report their applied state is gone.
-     */
-    private fun repair() {
-        for (activeEffect in permanentEffectsByWeight()) {
-            val current = appliedByKey[activeEffect.key.holder] ?: continue
-
-            if (activeEffect.element.effect.alwaysReload || dataFor(current).isDynamic(activeEffect.element)) {
-                continue
-            }
-
-            when (checkIntegrity(activeEffect)) {
-                Integrity.INTACT -> Unit
-                Integrity.MISSING -> repair(activeEffect, current)
-                Integrity.UNKNOWN -> reload(activeEffect, current)
-            }
-        }
-    }
-
-    /**
-     * Reload every permanent effect, then repair those reporting their applied state is gone.
+     * Reload every permanent effect.
      */
     private fun reloadAllPermanent() {
         for (activeEffect in permanentEffectsByWeight()) {
             val current = appliedByKey[activeEffect.key.holder] ?: continue
-
             reload(activeEffect, current)
-
-            if (checkIntegrity(activeEffect) == Integrity.MISSING) {
-                repair(activeEffect, current)
-            }
         }
     }
 
@@ -824,6 +908,7 @@ internal class HolderState(
      */
     private fun reset() {
         resetPending = false
+        settlingReset = true
         disableAll()
 
         answers.clear()
@@ -837,6 +922,7 @@ internal class HolderState(
         conditionDirtyAll = false
         conditionDirtyHolders.clear()
         dirtyProviders.addAll(registeredHolderProviders)
+        bypassCooldown = true
         HolderStates.clearConditionResults(uuid)
     }
 
@@ -848,9 +934,7 @@ internal class HolderState(
         active.clear()
 
         for (activeEffect in toDisable) {
-            safely(activeEffect, "disable") {
-                activeEffect.element.disableActive(dispatcher, activeEffect.enabledWith, activeEffect.identifiers)
-            }
+            disable(activeEffect)
         }
 
         rebuildProvidedActiveEffects()
@@ -872,9 +956,7 @@ internal class HolderState(
 
         for (activeEffect in toDisable) {
             active.remove(activeEffect.key)
-            safely(activeEffect, "disable") {
-                activeEffect.element.disableActive(dispatcher, activeEffect.enabledWith, activeEffect.identifiers)
-            }
+            disable(activeEffect)
         }
 
         for (provider in removedProviders) {
@@ -888,6 +970,12 @@ internal class HolderState(
         rebuildApplied()
         rebuildSnapshot()
         rebuildProvidedActiveEffects()
+    }
+
+    private fun disable(activeEffect: ActiveEffect) {
+        safely(activeEffect, "disable") {
+            activeEffect.element.disableActive(dispatcher, activeEffect.enabledWith, activeEffect.identifiers)
+        }
     }
 
     private inline fun safely(activeEffect: ActiveEffect, operation: String, block: () -> Unit) {

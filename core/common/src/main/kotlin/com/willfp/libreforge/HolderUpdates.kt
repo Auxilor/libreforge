@@ -20,6 +20,7 @@ import org.bukkit.event.player.PlayerItemConsumeEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
 import org.bukkit.event.player.PlayerRespawnEvent
 import org.bukkit.event.player.PlayerSwapHandItemsEvent
+import org.bukkit.inventory.ItemStack
 
 /**
  * Signals [HolderChange.Items] on item changes. Every change is applied in the next tick, after the
@@ -29,6 +30,10 @@ import org.bukkit.event.player.PlayerSwapHandItemsEvent
 object ItemRefreshListener : Listener {
     private fun Entity.signalItems() =
         HolderStates.signal(this.toDispatcher(), HolderChange.Items)
+
+    // Using up a plain item can't change holders when refresh.held.require-meta is on.
+    private fun isPlain(item: ItemStack?): Boolean =
+        plugin.configYml.getBool("refresh.held.require-meta") && (item == null || !item.hasItemMeta())
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun onItemPickup(event: EntityPickupItemEvent) {
@@ -80,7 +85,8 @@ object ItemRefreshListener : Listener {
         event.player.signalItems()
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    // Cancelled clicks and drags count too: GUI plugins cancel them and move the items themselves.
+    @EventHandler(priority = EventPriority.MONITOR)
     fun onInventoryClick(event: InventoryClickEvent) {
         val player = event.whoClicked as? Player ?: return
 
@@ -88,9 +94,11 @@ object ItemRefreshListener : Listener {
         HolderStates.signalInventoryClick(player.toDispatcher())
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR)
     fun onInventoryDrag(event: InventoryDragEvent) {
-        event.whoClicked.signalItems()
+        val player = event.whoClicked as? Player ?: return
+
+        HolderStates.signalInventoryClick(player.toDispatcher())
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -105,6 +113,10 @@ object ItemRefreshListener : Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun onBlockPlace(event: BlockPlaceEvent) {
+        if (isPlain(event.itemInHand)) {
+            return
+        }
+
         event.player.signalItems()
     }
 
@@ -120,7 +132,14 @@ object ItemRefreshListener : Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun onShootBow(event: EntityShootBowEvent) {
-        event.entity.signalItems()
+        // Mobs' equipment changes are signalled by the equipment listener, or picked up by polling.
+        val player = event.entity as? Player ?: return
+
+        if (isPlain(event.consumable)) {
+            return
+        }
+
+        player.signalItems()
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

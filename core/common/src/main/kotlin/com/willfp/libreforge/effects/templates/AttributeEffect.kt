@@ -118,6 +118,19 @@ abstract class AttributeEffect private constructor(
         }
     }
 
+    override fun isApplied(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder): Boolean {
+        val entity = dispatcher.get<LivingEntity>() ?: return true
+
+        if (!canApplyTo(entity)) {
+            return true
+        }
+
+        val attribute = this.attribute ?: return true
+        val instance = entity.getAttribute(attribute) ?: return true
+
+        return instance.getModifier(identifiers.key) != null
+    }
+
     private fun attributeModifier(
         identifiers: Identifiers,
         name: String,

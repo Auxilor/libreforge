@@ -7,7 +7,6 @@ import io.papermc.paper.event.entity.EntityEquipmentChangedEvent
 import org.bukkit.Bukkit
 import org.bukkit.Registry
 import org.bukkit.entity.LivingEntity
-import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
@@ -17,14 +16,14 @@ import org.bukkit.event.player.PlayerChangedWorldEvent
 import org.bukkit.event.server.PluginDisableEvent
 import org.bukkit.event.world.EntitiesLoadEvent
 import org.bukkit.event.world.EntitiesUnloadEvent
+import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.Damageable
 import java.lang.reflect.Method
 
 /**
  * Which dispatchers have a [HolderState], and when they are created and removed.
  */
 internal object HolderLifecycle {
-    private val MODIFIER_PATTERN = Regex("\\d+_\\d+")
-
     /**
      * True while the shutdown sweep runs.
      */
@@ -59,25 +58,24 @@ internal object HolderLifecycle {
             SpigotHolderLifecycleListener.isServerStopping()
         }
     }
+}
 
-    /**
-     * Remove eco attribute modifiers left over from effects, matched on the modifier key.
-     */
-    fun removeEcoAttributeModifiers(entity: LivingEntity) {
-        for (attribute in Registry.ATTRIBUTE) {
-            val instance = entity.getAttribute(attribute) ?: continue
+private val ECO_MODIFIER_PATTERN = Regex("\\d+_\\d+")
 
-            for (modifier in instance.modifiers.toList()) {
-                if (modifier.key.namespace == "eco" && modifier.key.key.matches(MODIFIER_PATTERN)) {
-                    instance.removeModifier(modifier)
-                }
+/**
+ * Remove eco attribute modifiers left over from effects, matched on the modifier key.
+ */
+internal fun LivingEntity.removeEcoAttributeModifiers() {
+    for (attribute in Registry.ATTRIBUTE) {
+        val instance = this.getAttribute(attribute) ?: continue
+
+        for (modifier in instance.modifiers.toList()) {
+            if (modifier.key.namespace == "eco" && modifier.key.key.matches(ECO_MODIFIER_PATTERN)) {
+                instance.removeModifier(modifier)
             }
         }
     }
 }
-
-internal fun LivingEntity.removeEcoAttributeModifiers() =
-    HolderLifecycle.removeEcoAttributeModifiers(this)
 
 internal object HolderLifecycleListener : Listener {
     @EventHandler(priority = EventPriority.MONITOR)
@@ -174,11 +172,29 @@ internal object PaperHolderLifecycleListener : Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun onEquipmentChange(event: EntityEquipmentChangedEvent) {
         val entity = event.entity
-        if (entity is Player && entity.isRealPlayer) {
+        if (entity.isRealPlayer) {
+            return
+        }
+
+        if (event.equipmentChanges.values.all { isDamageOnly(it.oldItem(), it.newItem()) }) {
             return
         }
 
         HolderStates.signal(entity.toDispatcher(), HolderChange.Items)
+    }
+
+    // Durability loss on every hit of an armoured mob must not re-ask its providers.
+    private fun isDamageOnly(oldItem: ItemStack, newItem: ItemStack): Boolean {
+        if (oldItem.type != newItem.type || oldItem.amount != newItem.amount) {
+            return false
+        }
+
+        val oldMeta = oldItem.itemMeta as? Damageable ?: return oldItem.isSimilar(newItem)
+        val newMeta = newItem.itemMeta as? Damageable ?: return false
+
+        oldMeta.damage = 0
+        newMeta.damage = 0
+        return oldMeta == newMeta
     }
 
     fun isServerStopping(): Boolean = Bukkit.isStopping()

@@ -17,8 +17,7 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.getIntFromExpression
-import com.willfp.libreforge.invalidateEverywhere
-import com.willfp.libreforge.isPolledAsEntity
+import com.willfp.libreforge.invalidateNear
 import com.willfp.libreforge.nest
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.registerHolderProvider
@@ -69,14 +68,13 @@ object EffectAddHolderInRadius : Effect<HolderTemplate>("add_holder_in_radius") 
 
     private val holders = mutableSetOf<NearbyHolder>()
 
-    // Invalidated everywhere when a holder is added or expires; polling covers movement.
+    // Invalidated near a holder when it is added or expires; polling covers movement.
     private val provider = object : HolderProvider {
         override val id = "libreforge:add_holder_in_radius"
 
         override val invalidatedBy = emptySet<HolderChange>()
 
-        override fun maxAge(dispatcher: Dispatcher<*>): Int =
-            if (dispatcher.isPolledAsEntity) HolderPolling.defaultMaxAge(dispatcher) else 20
+        override fun maxAge(dispatcher: Dispatcher<*>): Int = HolderPolling.conditionMaxAge(dispatcher)
 
         override fun provide(dispatcher: Dispatcher<*>): Collection<ProvidedHolder> {
             if (holders.isEmpty()) return emptyList()
@@ -107,11 +105,11 @@ object EffectAddHolderInRadius : Effect<HolderTemplate>("add_holder_in_radius") 
         )
 
         holders += holder
-        provider.invalidateEverywhere()
+        provider.invalidateNear(holder.holder, holder.uuid, holder.location, holder.radius)
 
         plugin.scheduler.runLater(duration.toLong()) {
             holders -= holder
-            provider.invalidateEverywhere()
+            provider.invalidateNear(holder.holder, holder.uuid, holder.location, holder.radius)
         }
 
         return true

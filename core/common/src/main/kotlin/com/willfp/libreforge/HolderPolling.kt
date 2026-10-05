@@ -1,5 +1,6 @@
 package com.willfp.libreforge
 
+import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 
@@ -11,6 +12,12 @@ object HolderPolling {
      * The default maximum age of a provider's answer for players and the global dispatcher, in ticks.
      */
     const val PLAYER_MAX_AGE = 80
+
+    /**
+     * The default maximum age of a provider's answer for mobs and NPCs, in ticks. Mobs are visited
+     * every `refresh.entities.interval`, so they are re-asked on the first visit after this age.
+     */
+    const val ENTITY_MAX_AGE = 81
 
     /**
      * How often players' and the global dispatcher's conditions are polled, in ticks.
@@ -25,11 +32,10 @@ object HolderPolling {
         internal set
 
     /**
-     * The default maximum age of a provider's answer for a [dispatcher], in ticks: 80 for players
-     * and the global dispatcher, `refresh.entities.interval` for mobs and NPCs.
+     * The default maximum age of a provider's answer for a [dispatcher], in ticks.
      */
     fun defaultMaxAge(dispatcher: Dispatcher<*>): Int =
-        if (dispatcher.isPolledAsEntity) entityInterval else PLAYER_MAX_AGE
+        if (dispatcher.isPolledAsEntity) ENTITY_MAX_AGE else PLAYER_MAX_AGE
 
     /**
      * How often the conditions of a [dispatcher] are polled, in ticks.
@@ -41,11 +47,11 @@ object HolderPolling {
 /**
  * If this is a real (non-NPC) player.
  */
-internal val Player.isRealPlayer: Boolean
-    get() = !this.hasMetadata("NPC")
+internal val Entity.isRealPlayer: Boolean
+    get() = this is Player && !this.hasMetadata("NPC")
 
 internal val Dispatcher<*>.isPolledAsEntity: Boolean
     get() {
         val entity = this.dispatcher as? LivingEntity ?: return false
-        return entity !is Player || !entity.isRealPlayer
+        return !entity.isRealPlayer
     }

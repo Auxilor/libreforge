@@ -36,26 +36,6 @@ enum class ProviderBinding {
     ITEM
 }
 
-/**
- * The result of [Effect.checkIntegrity].
- */
-enum class Integrity {
-    /**
-     * The effect's applied state is present.
-     */
-    INTACT,
-
-    /**
-     * The effect's applied state is gone, so it can safely be applied again.
-     */
-    MISSING,
-
-    /**
-     * The effect cannot tell.
-     */
-    UNKNOWN
-}
-
 abstract class Effect<T>(
     final override val id: String
 ) : Compilable<T>(), Listener {
@@ -75,13 +55,6 @@ abstract class Effect<T>(
      */
     open val providerBinding: ProviderBinding
         get() = ProviderBinding.SLOT
-
-    /**
-     * If the effect should be reloaded on every condition pass, for effects whose [onEnable] reads
-     * dispatcher or item state directly rather than through placeholders.
-     */
-    open val alwaysReload: Boolean
-        get() = false
 
     /**
      * The run order.
@@ -123,6 +96,10 @@ abstract class Effect<T>(
     /**
      * Enable a permanent effect for a [dispatcher].
      */
+    @Deprecated(
+        "Permanent effects are enabled and disabled by libreforge's holder tracking. Calling this bypasses it with different identifiers, so a disable can miss what libreforge enabled.",
+        level = DeprecationLevel.ERROR
+    )
     fun enable(
         dispatcher: Dispatcher<*>,
         holder: ProvidedHolder,
@@ -174,13 +151,16 @@ abstract class Effect<T>(
     }
 
     /**
-     * Check if the applied state of this permanent effect is still present.
+     * If the applied state of this permanent effect is still present, or null if it can't tell.
+     *
+     * Runs on every repair pass for every active effect, so it must be cheap. An effect reporting
+     * false is re-applied; one returning null is only re-applied every `refresh.reload-interval`.
      */
-    open fun checkIntegrity(
+    open fun isApplied(
         dispatcher: Dispatcher<*>,
         identifiers: Identifiers,
         holder: ProvidedHolder
-    ): Integrity = Integrity.UNKNOWN
+    ): Boolean? = null
 
     internal fun makeIdentifiers(discriminator: String): Identifiers =
         identifierFactory.makeIdentifiers(discriminator)
@@ -228,7 +208,10 @@ abstract class Effect<T>(
         return true
     }
 
-    internal fun repairWith(
+    /**
+     * Apply again an effect whose applied state is gone, even if it must not be reloaded.
+     */
+    internal fun reapplyWith(
         dispatcher: Dispatcher<*>,
         previous: ProvidedHolder,
         current: ProvidedHolder,
@@ -242,6 +225,10 @@ abstract class Effect<T>(
     /**
      * Disable a permanent effect for a [dispatcher].
      */
+    @Deprecated(
+        "Permanent effects are enabled and disabled by libreforge's holder tracking. Calling this bypasses it with different identifiers, so a disable can miss what libreforge enabled.",
+        level = DeprecationLevel.ERROR
+    )
     fun disable(
         dispatcher: Dispatcher<*>,
         holder: ProvidedHolder,

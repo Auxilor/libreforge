@@ -17,11 +17,11 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.get
-import com.willfp.libreforge.invalidateEverywhere
-import com.willfp.libreforge.isPolledAsEntity
+import com.willfp.libreforge.invalidateNear
 import com.willfp.libreforge.nest
 import com.willfp.libreforge.registerHolderProvider
 import org.bukkit.Bukkit
+import org.bukkit.NamespacedKey
 import java.util.Objects
 import java.util.UUID
 
@@ -58,14 +58,13 @@ object EffectAddPermanentHolderInRadius : Effect<HolderTemplate>("add_permanent_
 
     private val holders = mutableSetOf<PermanentNearbyHolder>()
 
-    // Invalidated everywhere on a real enable or disable; polling covers movement.
+    // Invalidated near a holder on a real enable or disable; polling covers movement.
     private val provider = object : HolderProvider {
         override val id = "libreforge:add_permanent_holder_in_radius"
 
         override val invalidatedBy = emptySet<HolderChange>()
 
-        override fun maxAge(dispatcher: Dispatcher<*>): Int =
-            if (dispatcher.isPolledAsEntity) HolderPolling.defaultMaxAge(dispatcher) else 20
+        override fun maxAge(dispatcher: Dispatcher<*>): Int = HolderPolling.conditionMaxAge(dispatcher)
 
         override fun provide(dispatcher: Dispatcher<*>): Collection<ProvidedHolder> {
             if (holders.isEmpty()) return emptyList()
@@ -97,7 +96,7 @@ object EffectAddPermanentHolderInRadius : Effect<HolderTemplate>("add_permanent_
         )
 
         holders += nearbyHolder
-        provider.invalidateEverywhere()
+        provider.invalidateNear(nearbyHolder.holder, nearbyHolder.owner, dispatcher.location, radius)
     }
 
     override fun onReload(
@@ -108,7 +107,7 @@ object EffectAddPermanentHolderInRadius : Effect<HolderTemplate>("add_permanent_
         current: ProvidedHolder,
         compileData: HolderTemplate
     ) {
-        val existing = holders.firstOrNull { it.holder.id == identifiers.key }
+        val existing = holders.firstOrNull { it.isFor(dispatcher.uuid, identifiers.key) }
 
         if (existing == null) {
             onEnable(dispatcher, config, identifiers, current, compileData)
@@ -121,9 +120,11 @@ object EffectAddPermanentHolderInRadius : Effect<HolderTemplate>("add_permanent_
     }
 
     override fun onDisable(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder) {
-        if (holders.removeIf { it.holder.id == identifiers.key }) {
-            provider.invalidateEverywhere()
-        }
+        val existing = holders.firstOrNull { it.isFor(dispatcher.uuid, identifiers.key) } ?: return
+        holders -= existing
+
+        val location = Bukkit.getPlayer(existing.owner)?.location
+        provider.invalidateNear(existing.holder, existing.owner, location, existing.radius)
     }
 
     override fun makeCompileData(config: Config, context: ViolationContext): HolderTemplate {
@@ -168,16 +169,19 @@ object EffectAddPermanentHolderInRadius : Effect<HolderTemplate>("add_permanent_
             return true
         }
 
+        fun isFor(owner: UUID, key: NamespacedKey): Boolean =
+            this.owner == owner && this.holder.id == key
+
         override fun equals(other: Any?): Boolean {
             if (other !is PermanentNearbyHolder) {
                 return false
             }
 
-            return this.holder.id == other.holder.id
+            return this.isFor(other.owner, other.holder.id)
         }
 
         override fun hashCode(): Int {
-            return Objects.hash(this.holder.id)
+            return Objects.hash(this.owner, this.holder.id)
         }
     }
 }

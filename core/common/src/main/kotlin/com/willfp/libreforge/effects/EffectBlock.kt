@@ -40,6 +40,11 @@ class EffectBlock internal constructor(
     /**
      * Enable the effects.
      */
+    @Deprecated(
+        "Permanent effects are enabled and disabled by libreforge's holder tracking. Calling this bypasses it with different identifiers, so a disable can miss what libreforge enabled.",
+        level = DeprecationLevel.ERROR
+    )
+    @Suppress("DEPRECATION_ERROR")
     fun enable(
         dispatcher: Dispatcher<*>,
         holder: ProvidedHolder,
@@ -55,6 +60,11 @@ class EffectBlock internal constructor(
     /**
      * Disable the effects.
      */
+    @Deprecated(
+        "Permanent effects are enabled and disabled by libreforge's holder tracking. Calling this bypasses it with different identifiers, so a disable can miss what libreforge enabled.",
+        level = DeprecationLevel.ERROR
+    )
+    @Suppress("DEPRECATION_ERROR")
     fun disable(
         dispatcher: Dispatcher<*>,
         holder: ProvidedHolder,

@@ -50,7 +50,11 @@ object EffectSetUnbreakable : Effect<NoCompileData>("set_unbreakable") {
     private val VALID_SLOTS = setOf("holder", "mainhand", "offhand", "helmet", "chestplate", "leggings", "boots")
 
     private data class EnabledState(val slot: String, val persistOnDisable: Boolean)
-    private val enabledStates = HashMap<UUID, EnabledState>()
+
+    // Identifiers are the same for every player with the same holder, so the dispatcher is part of the key.
+    private data class EnabledKey(val dispatcher: UUID, val effect: UUID)
+
+    private val enabledStates = HashMap<EnabledKey, EnabledState>()
 
     override fun makeCompileData(config: Config, context: ViolationContext): NoCompileData {
         val slot = config.getStringOrNull("slot")
@@ -74,7 +78,7 @@ object EffectSetUnbreakable : Effect<NoCompileData>("set_unbreakable") {
         val slot = config.getStringOrNull("slot") ?: "holder"
         val persistOnDisable = config.getBoolOrNull("persist_on_disable") ?: true
 
-        enabledStates[identifiers.uuid] = EnabledState(slot, persistOnDisable)
+        enabledStates[EnabledKey(dispatcher.uuid, identifiers.uuid)] = EnabledState(slot, persistOnDisable)
 
         val player = dispatcher.get<Player>()
         val item = resolveItem(slot, player, holder) ?: return
@@ -82,7 +86,7 @@ object EffectSetUnbreakable : Effect<NoCompileData>("set_unbreakable") {
     }
 
     override fun onDisable(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder) {
-        val state = enabledStates.remove(identifiers.uuid) ?: return
+        val state = enabledStates.remove(EnabledKey(dispatcher.uuid, identifiers.uuid)) ?: return
         if (state.persistOnDisable) return
 
         val player = dispatcher.get<Player>()

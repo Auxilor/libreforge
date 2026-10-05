@@ -48,6 +48,11 @@ class ChainElement<T> internal constructor(
         }.getOrDefault(weight)
     }
 
+    @Deprecated(
+        "Permanent effects are enabled and disabled by libreforge's holder tracking. Calling this bypasses it with different identifiers, so a disable can miss what libreforge enabled.",
+        level = DeprecationLevel.ERROR
+    )
+    @Suppress("DEPRECATION_ERROR")
     fun enable(
         dispatcher: Dispatcher<*>,
         holder: ProvidedHolder,
@@ -63,6 +68,11 @@ class ChainElement<T> internal constructor(
         effect.enable(dispatcher, holder, this, blockIndex, elementIndex, occurrence, isReload = isReload)
     }
 
+    @Deprecated(
+        "Permanent effects are enabled and disabled by libreforge's holder tracking. Calling this bypasses it with different identifiers, so a disable can miss what libreforge enabled.",
+        level = DeprecationLevel.ERROR
+    )
+    @Suppress("DEPRECATION_ERROR")
     fun disable(
         dispatcher: Dispatcher<*>,
         holder: ProvidedHolder,
@@ -95,12 +105,12 @@ class ChainElement<T> internal constructor(
         identifiers: Identifiers
     ): Boolean = effect.reloadWith(dispatcher, previous, current, this, identifiers)
 
-    internal fun repairActive(
+    internal fun reapplyActive(
         dispatcher: Dispatcher<*>,
         previous: ProvidedHolder,
         current: ProvidedHolder,
         identifiers: Identifiers
-    ) = effect.repairWith(dispatcher, previous, current, this, identifiers)
+    ) = effect.reapplyWith(dispatcher, previous, current, this, identifiers)
 
     override fun doTrigger(trigger: DispatchedTrigger) =
         effect.trigger(trigger, this)

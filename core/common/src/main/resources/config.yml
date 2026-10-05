@@ -120,8 +120,12 @@ refresh:
   # Set to 0 to disable.
   cooldown: 0
 
-  # How often permanent effects are re-applied, in case something outside libreforge removed them (in ticks).
-  repair-interval: 600
+  # How often permanent effects are checked, and re-applied if something outside libreforge removed them
+  # (in ticks). Only effects that can cheaply tell they are missing are checked this often.
+  repair-interval: 20
+
+  # How often permanent effects that can't tell if they are missing are reloaded anyway (in ticks).
+  reload-interval: 600
 
   # How many newly loaded entities get their holders checked per tick, to spread the cost of chunk loads.
   # Players are never delayed.
