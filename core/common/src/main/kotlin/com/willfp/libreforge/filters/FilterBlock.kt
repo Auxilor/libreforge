@@ -12,17 +12,18 @@ class FilterBlock<T, V> internal constructor(
     val filter: Filter<T, V>,
     override val config: Config,
     override val compileData: T,
-    val isInverted: Boolean
+    val isInverted: Boolean,
+    val key: String
 ) : Compiled<T> {
-    internal val key: String
-        get() = if (isInverted) "not_${filter.id}" else filter.id
+    private val configKey: String
+        get() = if (isInverted) "not_$key" else key
 
     private class Constant<V>(val value: V)
 
     // Read once if it cannot change between triggers: no placeholders and no random.
     private val constant: Constant<V>? by lazy(LazyThreadSafetyMode.PUBLICATION) {
-        if (filter.isValueCacheable && !DynamicConfigs.isDynamicValue(config.get(key))) {
-            Constant(filter.getValue(config, null, key))
+        if (filter.isValueCacheable && !DynamicConfigs.isDynamicValue(config.get(configKey))) {
+            Constant(filter.getValue(config, null, configKey))
         } else {
             null
         }
@@ -33,7 +34,7 @@ class FilterBlock<T, V> internal constructor(
      */
     internal fun valueFor(data: TriggerData): V {
         val cached = constant
-        return if (cached != null) cached.value else filter.getValue(config, data, key)
+        return if (cached != null) cached.value else filter.getValue(config, data, configKey)
     }
 
     fun isMet(data: TriggerData) =

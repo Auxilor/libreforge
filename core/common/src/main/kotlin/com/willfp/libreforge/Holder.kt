@@ -1,8 +1,10 @@
 package com.willfp.libreforge
 
 import com.willfp.eco.util.NamespacedKeyUtils
+import com.willfp.eco.util.toComponent
 import com.willfp.libreforge.conditions.ConditionList
 import com.willfp.libreforge.effects.EffectList
+import net.kyori.adventure.text.Component
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
@@ -103,6 +105,12 @@ interface ProvidedHolder {
      */
     fun getNotMetLines(player: Player): List<String> =
         getNotMetLines(player.toDispatcher())
+
+    /**
+     * Get not met lines for a [player], as components for display lore.
+     */
+    fun getNotMetLineComponents(player: Player): List<Component> =
+        getNotMetLines(player).map { it.toComponent() }
 
     /**
      * Get if the holder is showing any not met lines for a [dispatcher], or if any

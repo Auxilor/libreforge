@@ -3,7 +3,7 @@
 package com.willfp.libreforge.effects
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.registry.Registry
+import com.willfp.libreforge.AliasedRegistry
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.ConfigWarning
 import com.willfp.libreforge.ViolationContext
@@ -94,7 +94,9 @@ import com.willfp.libreforge.effects.impl.EffectGiveMoney
 import com.willfp.libreforge.effects.impl.EffectGiveOxygen
 import com.willfp.libreforge.effects.impl.EffectGivePoints
 import com.willfp.libreforge.effects.impl.EffectGivePrice
+import com.willfp.libreforge.effects.impl.EffectGiveRandomItem
 import com.willfp.libreforge.effects.impl.EffectGiveSaturation
+import com.willfp.libreforge.effects.impl.EffectGiveWeightedRandomItem
 import com.willfp.libreforge.effects.impl.EffectGiveXp
 import com.willfp.libreforge.effects.impl.EffectGlowNearbyBlocks
 import com.willfp.libreforge.effects.impl.EffectGravityMultiplier
@@ -277,7 +279,7 @@ import com.willfp.libreforge.triggers.Triggers
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 
-object Effects : Registry<Effect<*>>() {
+object Effects : AliasedRegistry<Effect<*>>() {
     private val identifiedChains = ConcurrentHashMap<String, Chain>()
 
     /**
@@ -625,6 +627,8 @@ object Effects : Registry<Effect<*>>() {
         register(EffectGiveHealth)
         register(EffectGiveItem)
         register(EffectGiveItemPoints)
+        register(EffectGiveRandomItem)
+        register(EffectGiveWeightedRandomItem)
         register(EffectGiveMoney)
         register(EffectGiveOxygen)
         register(EffectGivePoints)

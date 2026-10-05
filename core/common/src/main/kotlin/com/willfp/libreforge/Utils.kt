@@ -67,11 +67,15 @@ fun Collection<ItemStack?>.filterNotEmpty() =
 internal val ItemStack?.isEcoEmpty: Boolean
     get() = Items.isEmpty(this)
 
+fun Damageable.maxDamageFor(item: ItemStack): Int =
+    if (this.hasMaxDamage()) this.maxDamage else item.type.maxDurability.toInt()
+
 fun ItemStack.applyDamage(damage: Int, player: Player?): Boolean {
     val meta = this.itemMeta as? Damageable ?: return false
+    val maxDamage = meta.maxDamageFor(this)
     meta.damage += damage
-    if (meta.damage >= this.type.maxDurability) {
-        meta.damage = this.type.maxDurability.toInt()
+    if (meta.damage >= maxDamage) {
+        meta.damage = maxDamage
         if (player != null) {
             Bukkit.getPluginManager().callEvent(PlayerItemBreakEvent(player, this))
             player.playSound(player.location, Sound.ENTITY_ITEM_BREAK, SoundCategory.BLOCKS, 1f, 1f)

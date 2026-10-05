@@ -47,6 +47,9 @@ dependencies {
     compileOnly("com.intellectualsites.plotsquared:plotsquared-core:7.6.0") {
         isTransitive = false
     }
+    compileOnly("com.github.No-Not-Jaden:NotBounties:1.22.36") {
+        isTransitive = false
+    }
     compileOnly("com.willfp:EcoBits:2026.34")
     compileOnly("com.nexomc:nexo:1.17.0") {
         exclude(group = "*", module = "*")
@@ -62,6 +65,26 @@ dependencies {
     compileOnly(fileTree("../../lib") {
         include("*.jar")
     })
+
+    // eco reaches this module as `compileOnly` (see core/build.gradle.kts's subprojects
+    // block), and compileOnly is NOT on the test compile classpath. Without this line the
+    // test below cannot resolve com.willfp.eco.core.progression at all, and the failure is a
+    // compile error in a source set nobody has built before, which reads as "the new test is
+    // broken" rather than "the dependency is missing".
+    testImplementation("com.willfp:eco:${findProperty("eco-version")}")
+    testImplementation(kotlin("stdlib", version = "2.3.0"))
+
+    // Reads the bundled holidays.yml in tests; the server provides SnakeYAML at runtime.
+    testImplementation("org.yaml:snakeyaml:2.2")
+
+    // Versions match eco's own suite so the two repos do not drift apart.
+    testImplementation("org.junit.jupiter:junit-jupiter-api:6.0.3")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:6.0.3")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:6.0.3")
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
 
 repositories {

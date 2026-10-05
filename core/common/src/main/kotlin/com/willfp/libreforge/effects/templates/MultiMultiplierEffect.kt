@@ -57,22 +57,50 @@ abstract class MultiMultiplierEffect<T : Any>(id: String) : Effect<NoCompileData
     }
 
     override fun onDisable(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder) {
-        globalModifiers[dispatcher.uuid].removeIf { it.uuid == identifiers.uuid }
+        val uuid = dispatcher.uuid
 
-        for (element in getAllElements()) {
-            modifiers[dispatcher.uuid][element].removeIf { it.uuid == identifiers.uuid }
+        if (globalModifiers.containsKey(uuid)) {
+            val dispatcherGlobalModifiers = globalModifiers[uuid]
+            dispatcherGlobalModifiers.removeIf { it.uuid == identifiers.uuid }
+
+            if (dispatcherGlobalModifiers.isEmpty()) {
+                globalModifiers.remove(uuid)
+            }
+        }
+
+        if (modifiers.containsKey(uuid)) {
+            val dispatcherModifiers = modifiers[uuid]
+
+            for (elementModifiers in dispatcherModifiers.values) {
+                elementModifiers.removeIf { it.uuid == identifiers.uuid }
+            }
+
+            dispatcherModifiers.values.removeIf { it.isEmpty() }
+
+            if (dispatcherModifiers.isEmpty()) {
+                modifiers.remove(uuid)
+            }
         }
     }
 
     protected fun getMultiplier(dispatcher: Dispatcher<*>, element: T): Double {
+        val uuid = dispatcher.uuid
         var multiplier = 1.0
 
-        for (modifier in globalModifiers[dispatcher.uuid]) {
-            multiplier *= modifier.modifier
+        if (globalModifiers.containsKey(uuid)) {
+            for (modifier in globalModifiers[uuid]) {
+                multiplier *= modifier.modifier
+            }
         }
 
-        for (modifier in modifiers[dispatcher.uuid][element]) {
-            multiplier *= modifier.modifier
+        if (modifiers.containsKey(uuid)) {
+            val dispatcherModifiers = modifiers[uuid]
+
+            if (dispatcherModifiers.containsKey(element)) {
+                for (modifier in dispatcherModifiers[element]) {
+                    multiplier *= modifier.modifier
+                }
+            }
         }
 
         return multiplier
