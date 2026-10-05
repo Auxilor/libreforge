@@ -12,6 +12,7 @@ import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
+import com.willfp.libreforge.effects.ProviderBinding
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.isEcoEmpty
@@ -28,6 +29,8 @@ import java.util.UUID
 object EffectKeepItem : Effect<NoCompileData>("keep_item") {
     override val description = "Keeps an item in the player's inventory when they die, instead of it being dropped."
     override val categories = setOf("player", "inventory")
+
+    override val providerBinding = ProviderBinding.ITEM
 
     override val arguments = arguments {
         optional(

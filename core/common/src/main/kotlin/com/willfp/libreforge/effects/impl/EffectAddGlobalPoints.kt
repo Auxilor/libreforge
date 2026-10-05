@@ -52,7 +52,7 @@ object EffectAddGlobalPoints : Effect<NoCompileData>("add_global_points") {
     }
 
     override fun onDisable(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder) {
-        val addedPoint = tracker[identifiers.uuid] ?: return
+        val addedPoint = tracker.remove(identifiers.uuid) ?: return
 
         globalPoints[addedPoint.point] -= addedPoint.amount
     }

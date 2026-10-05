@@ -1,6 +1,7 @@
 package com.willfp.libreforge
 
 import com.willfp.eco.core.EcoPlugin
+import com.willfp.eco.core.LifecyclePosition
 import com.willfp.eco.core.PluginLike
 import com.willfp.eco.core.registry.Registrable
 import com.willfp.eco.core.registry.Registry
@@ -27,5 +28,15 @@ interface LoadedLibreforgePlugin : Registrable, PluginLike {
 
     override fun onRegister() {
         pointsPlaceholder(plugin).register()
+
+        // After the plugin's categories have reloaded, so the re-ask sees the new holders.
+        plugin.onReload(LifecyclePosition.END) {
+            HolderStates.resetAllStates()
+        }
+
+        // While the plugin's code is still usable.
+        plugin.onDisable(LifecyclePosition.START) {
+            HolderStates.onPluginDisable(plugin)
+        }
     }
 }

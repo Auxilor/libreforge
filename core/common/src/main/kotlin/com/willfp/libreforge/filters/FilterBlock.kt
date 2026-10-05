@@ -2,6 +2,7 @@ package com.willfp.libreforge.filters
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Compiled
+import com.willfp.libreforge.DynamicConfigs
 import com.willfp.libreforge.triggers.TriggerData
 
 /**
@@ -14,6 +15,28 @@ class FilterBlock<T, V> internal constructor(
     val isInverted: Boolean,
     val key: String
 ) : Compiled<T> {
+    private val configKey: String
+        get() = if (isInverted) "not_$key" else key
+
+    private class Constant<V>(val value: V)
+
+    // Read once if it cannot change between triggers: no placeholders and no random.
+    private val constant: Constant<V>? by lazy(LazyThreadSafetyMode.PUBLICATION) {
+        if (filter.isValueCacheable && !DynamicConfigs.isDynamicValue(config.get(configKey))) {
+            Constant(filter.getValue(config, null, configKey))
+        } else {
+            null
+        }
+    }
+
+    /**
+     * The config value for a trigger, cached when it is constant.
+     */
+    internal fun valueFor(data: TriggerData): V {
+        val cached = constant
+        return if (cached != null) cached.value else filter.getValue(config, data, configKey)
+    }
+
     fun isMet(data: TriggerData) =
         filter.isMet(data, this)
 }

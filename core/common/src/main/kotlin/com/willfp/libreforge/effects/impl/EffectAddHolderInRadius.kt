@@ -1,10 +1,13 @@
 package com.willfp.libreforge.effects.impl
 
-import com.willfp.eco.core.cache.EcoCache
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.Holder
+import com.willfp.libreforge.HolderChange
+import com.willfp.libreforge.HolderPolling
+import com.willfp.libreforge.HolderProvider
+import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.HolderTemplate
 import com.willfp.libreforge.SimpleProvidedHolder
 import com.willfp.libreforge.ViolationContext
@@ -14,14 +17,14 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.getIntFromExpression
+import com.willfp.libreforge.invalidateNear
 import com.willfp.libreforge.nest
 import com.willfp.libreforge.plugin
-import com.willfp.libreforge.registerGenericHolderProvider
+import com.willfp.libreforge.registerHolderProvider
 import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.Location
 import java.util.Objects
 import java.util.UUID
-import java.time.Duration
 
 object EffectAddHolderInRadius : Effect<HolderTemplate>("add_holder_in_radius") {
     override val description = "Temporarily applies a set of effects and conditions to all nearby entities within a radius."
@@ -65,19 +68,24 @@ object EffectAddHolderInRadius : Effect<HolderTemplate>("add_holder_in_radius") 
 
     private val holders = mutableSetOf<NearbyHolder>()
 
-    private val nearbyCache = EcoCache.builder<UUID, Collection<SimpleProvidedHolder>>()
-        .expireAfterWrite(Duration.ofMillis(250L))
-        .build()
+    // Invalidated near a holder when it is added or expires; polling covers movement.
+    private val provider = object : HolderProvider {
+        override val id = "libreforge:add_holder_in_radius"
+
+        override val invalidatedBy = emptySet<HolderChange>()
+
+        override fun maxAge(dispatcher: Dispatcher<*>): Int = HolderPolling.conditionMaxAge(dispatcher)
+
+        override fun provide(dispatcher: Dispatcher<*>): Collection<ProvidedHolder> {
+            if (holders.isEmpty()) return emptyList()
+
+            return holders.filter { it.canApplyTo(dispatcher) }
+                .map { SimpleProvidedHolder(it.holder) }
+        }
+    }
 
     init {
-        registerGenericHolderProvider { dispatcher ->
-            if (holders.isEmpty()) return@registerGenericHolderProvider emptyList()
-
-            nearbyCache.get(dispatcher.uuid) { _ ->
-                holders.filter { it.canApplyTo(dispatcher) }
-                    .map { SimpleProvidedHolder(it.holder) }
-            }
-        }
+        registerHolderProvider(provider)
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: HolderTemplate): Boolean {
@@ -97,8 +105,11 @@ object EffectAddHolderInRadius : Effect<HolderTemplate>("add_holder_in_radius") 
         )
 
         holders += holder
+        provider.invalidateNear(holder.holder, holder.uuid, holder.location, holder.radius)
+
         plugin.scheduler.runLater(duration.toLong()) {
             holders -= holder
+            provider.invalidateNear(holder.holder, holder.uuid, holder.location, holder.radius)
         }
 
         return true

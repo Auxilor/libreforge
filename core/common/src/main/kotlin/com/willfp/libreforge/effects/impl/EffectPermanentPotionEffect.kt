@@ -134,6 +134,12 @@ object EffectPermanentPotionEffect : Effect<NoCompileData>("permanent_potion_eff
         refreshEffectsOfType(player, effectType)
     }
 
+    override fun isApplied(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder): Boolean {
+        val player = dispatcher.get<Player>() ?: return true
+        val data = getHolderData(player)[identifiers.uuid] ?: return false
+        return player.hasPotionEffect(data.effectType)
+    }
+
     override fun onDisable(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder) {
         val player = dispatcher.get<Player>() ?: return
 

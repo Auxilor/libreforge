@@ -1,20 +1,19 @@
 package com.willfp.libreforge.slot
 
-import com.willfp.eco.core.cache.EcoCache
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.Holder
 import com.willfp.libreforge.HolderProvider
+import com.willfp.libreforge.HolderStates
+import com.willfp.libreforge.ScanningHolderProvider
 import com.willfp.libreforge.TypedHolderProvider
 import com.willfp.libreforge.TypedProvidedHolder
 import com.willfp.libreforge.get
 import com.willfp.libreforge.ifType
-import com.willfp.libreforge.registerRefreshFunction
+import com.willfp.libreforge.isEcoEmpty
 import com.willfp.libreforge.slot.impl.NumericSlotType
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import java.util.UUID
-import java.time.Duration
 
 /**
  * Finds holders on items for entities, allows for easy implementation of [HolderProvider].
@@ -42,6 +41,10 @@ abstract class ItemHolderFinder<T : Holder> {
         val items = slot.getItems(entity)
 
         val holders = items.flatMap { item ->
+            if (item.isEcoEmpty) {
+                return@flatMap emptyList()
+            }
+
             this.find(item)
                 .filter { holder -> isValidInSlot(holder, slot) }
                 .map { holder -> SlotItemProvidedHolder(holder, item, slot) }
@@ -57,31 +60,33 @@ abstract class ItemHolderFinder<T : Holder> {
         return provider
     }
 
-    private inner class ItemHolderFinderProvider : TypedHolderProvider<T> {
-        private val cache: EcoCache<UUID, List<TypedProvidedHolder<T>>> = EcoCache.builder<UUID, List<TypedProvidedHolder<T>>>()
-            .expireAfterWrite(Duration.ofMillis(500))
-            .build()
+    internal inner class ItemHolderFinderProvider : TypedHolderProvider<T>, ScanningHolderProvider {
+        val finderClass: Class<*>
+            get() = this@ItemHolderFinder.javaClass
 
-        init {
-            registerRefreshFunction {
-                cache.invalidate(it.uuid)
-            }
-        }
+        override val id: String
+            get() = finderClass.name
 
         override fun provide(dispatcher: Dispatcher<*>): Collection<TypedProvidedHolder<T>> {
-            return cache.get(dispatcher.uuid) {
-                val entity = dispatcher.get<LivingEntity>() ?: return@get emptyList()
+            // Served from the dispatcher's state when it is tracked.
+            @Suppress("UNCHECKED_CAST")
+            return HolderStates.storedAnswer(dispatcher, this) as? Collection<TypedProvidedHolder<T>>
+                ?: scan(dispatcher)
+        }
 
-                val slots = SlotTypes.baseTypes.toMutableSet()
+        override fun scan(dispatcher: Dispatcher<*>): List<TypedProvidedHolder<T>> {
+            val entity = dispatcher.get<LivingEntity>() ?: return emptyList()
 
-                // Prevents double scanning of held item slot
-                dispatcher.ifType<Player> {
-                    slots.remove(NumericSlotType(it.inventory.heldItemSlot))
-                }
+            // Ordered, so duplicate holders keep their occurrence between scans.
+            val slots = LinkedHashSet(SlotTypes.baseTypes)
 
-                // Only check for non-combined slot types
-                slots.flatMap { slot -> findHolders(entity, slot) }
+            // Prevents double scanning of held item slot
+            dispatcher.ifType<Player> {
+                slots.remove(NumericSlotType(it.inventory.heldItemSlot))
             }
+
+            // Only check for non-combined slot types
+            return slots.flatMap { slot -> findHolders(entity, slot) }
         }
     }
 }

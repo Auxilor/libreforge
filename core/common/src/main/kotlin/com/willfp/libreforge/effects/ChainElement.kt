@@ -48,6 +48,11 @@ class ChainElement<T> internal constructor(
         }.getOrDefault(weight)
     }
 
+    @Deprecated(
+        "Permanent effects are enabled and disabled by libreforge's holder tracking. Calling this bypasses it with different identifiers, so a disable can miss what libreforge enabled.",
+        level = DeprecationLevel.ERROR
+    )
+    @Suppress("DEPRECATION_ERROR")
     fun enable(
         dispatcher: Dispatcher<*>,
         holder: ProvidedHolder,
@@ -63,6 +68,11 @@ class ChainElement<T> internal constructor(
         effect.enable(dispatcher, holder, this, blockIndex, elementIndex, occurrence, isReload = isReload)
     }
 
+    @Deprecated(
+        "Permanent effects are enabled and disabled by libreforge's holder tracking. Calling this bypasses it with different identifiers, so a disable can miss what libreforge enabled.",
+        level = DeprecationLevel.ERROR
+    )
+    @Suppress("DEPRECATION_ERROR")
     fun disable(
         dispatcher: Dispatcher<*>,
         holder: ProvidedHolder,
@@ -77,6 +87,30 @@ class ChainElement<T> internal constructor(
 
         effect.disable(dispatcher, holder, blockIndex, elementIndex, occurrence, isReload = isReload)
     }
+
+    internal fun enableActive(dispatcher: Dispatcher<*>, holder: ProvidedHolder, identifiers: Identifiers) {
+        Bukkit.getPluginManager().callEvent(EffectEnableEvent(dispatcher, effect, holder))
+        effect.enableWith(dispatcher, holder, this, identifiers)
+    }
+
+    internal fun disableActive(dispatcher: Dispatcher<*>, holder: ProvidedHolder, identifiers: Identifiers) {
+        Bukkit.getPluginManager().callEvent(EffectDisableEvent(dispatcher, effect, holder))
+        effect.disableWith(dispatcher, holder, identifiers)
+    }
+
+    internal fun reloadActive(
+        dispatcher: Dispatcher<*>,
+        previous: ProvidedHolder,
+        current: ProvidedHolder,
+        identifiers: Identifiers
+    ): Boolean = effect.reloadWith(dispatcher, previous, current, this, identifiers)
+
+    internal fun reapplyActive(
+        dispatcher: Dispatcher<*>,
+        previous: ProvidedHolder,
+        current: ProvidedHolder,
+        identifiers: Identifiers
+    ) = effect.reapplyWith(dispatcher, previous, current, this, identifiers)
 
     override fun doTrigger(trigger: DispatchedTrigger) =
         effect.trigger(trigger, this)

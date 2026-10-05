@@ -32,6 +32,11 @@ object EffectFlight : Effect<NoCompileData>("flight") {
         player.allowFlight = players[player.uniqueId].isNotEmpty()
     }
 
+    override fun isApplied(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder): Boolean {
+        val player = dispatcher.get<Player>() ?: return true
+        return player.allowFlight
+    }
+
     override fun onDisable(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder) {
         val player = dispatcher.get<Player>() ?: return
 

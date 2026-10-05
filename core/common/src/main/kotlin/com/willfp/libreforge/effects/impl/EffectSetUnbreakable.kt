@@ -8,6 +8,7 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
+import com.willfp.libreforge.effects.ProviderBinding
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.get
@@ -21,6 +22,8 @@ import java.util.UUID
 object EffectSetUnbreakable : Effect<NoCompileData>("set_unbreakable") {
     override val description = "Makes an item in a specific slot unbreakable while the effect is active."
     override val categories = setOf("inventory")
+
+    override val providerBinding = ProviderBinding.ITEM
 
     override val arguments = arguments {
         optional(
@@ -71,7 +74,7 @@ object EffectSetUnbreakable : Effect<NoCompileData>("set_unbreakable") {
         val slot = config.getStringOrNull("slot") ?: "holder"
         val persistOnDisable = config.getBoolOrNull("persist_on_disable") ?: true
 
-        enabledStates[identifiers.uuid] = EnabledState(slot, persistOnDisable)
+        enabledStates[identifiers.uuid] =EnabledState(slot, persistOnDisable)
 
         val player = dispatcher.get<Player>()
         val item = resolveItem(slot, player, holder) ?: return

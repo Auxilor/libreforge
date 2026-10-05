@@ -2,6 +2,7 @@ package com.willfp.libreforge.effects.templates
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Dispatcher
+import com.willfp.libreforge.HolderLifecycle
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.effects.Effect
@@ -109,9 +110,25 @@ abstract class AttributeEffect private constructor(
         )
 
         // Run on next tick to prevent constraining to the lower value during reloads.
-        plugin.scheduler.run {
-            constrainAttribute(entity, instance.value)
+        // Skipped while the server is stopping: the scheduler may refuse it, and the tick never comes.
+        if (!HolderLifecycle.isStopping()) {
+            plugin.scheduler.run {
+                constrainAttribute(entity, instance.value)
+            }
         }
+    }
+
+    override fun isApplied(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder): Boolean {
+        val entity = dispatcher.get<LivingEntity>() ?: return true
+
+        if (!canApplyTo(entity)) {
+            return true
+        }
+
+        val attribute = this.attribute ?: return true
+        val instance = entity.getAttribute(attribute) ?: return true
+
+        return instance.getModifier(identifiers.key) != null
     }
 
     private fun attributeModifier(
