@@ -34,8 +34,12 @@ internal data class EffectKey(
     val blockIndex: Int,
     val elementIndex: Int
 ) {
-    val discriminator: String
-        get() = "${holder.providerId}|${holder.holderId}|$blockIndex|$elementIndex|${holder.occurrence}"
+    /**
+     * The identifier discriminator on [dispatcher]. Includes the dispatcher, so effects that key
+     * shared state by their identifiers never collide between dispatchers with the same holder.
+     */
+    fun discriminator(dispatcher: UUID): String =
+        "$dispatcher|${holder.providerId}|${holder.holderId}|$blockIndex|$elementIndex|${holder.occurrence}"
 }
 
 /**
@@ -688,7 +692,7 @@ internal class HolderState(
                             effectKey,
                             block,
                             element,
-                            element.effect.makeIdentifiers(effectKey.discriminator),
+                            element.effect.makeIdentifiers(effectKey.discriminator(uuid)),
                             ph
                         )
                     } else if (!isMet && current != null) {
