@@ -1,8 +1,10 @@
 package com.willfp.libreforge.effects
 
+import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.eco.core.placeholder.InjectablePlaceholder
 import com.willfp.libreforge.ConfigurableElement
+import com.willfp.libreforge.DynamicConfigs
 import com.willfp.libreforge.DynamicNumericValue
 import com.willfp.libreforge.NamedValue
 import com.willfp.libreforge.conditions.ConditionList
@@ -30,14 +32,21 @@ abstract class ElementLike : ConfigurableElement {
      */
     open val shouldDelegateExecution: Boolean = false
 
+    // Only configs that reference a placeholder need trigger placeholders injected.
+    private val mutatorConfigsToInject: List<Config> by lazy(LazyThreadSafetyMode.PUBLICATION) {
+        mutators.map { it.config }.filter { DynamicConfigs.hasPlaceholder(it) }
+    }
+
+    private val configsToInject: List<Config> by lazy(LazyThreadSafetyMode.PUBLICATION) {
+        (arguments.map { it.config } + conditions.map { it.config } + mutators.map { it.config }
+                + filters.map { it.config } + config).filter { DynamicConfigs.hasPlaceholder(it) }
+    }
+
     // Inject placeholders into all config blocks.
     private fun injectPlaceholders(placeholders: List<InjectablePlaceholder>) {
-        arguments.forEach { it.config.addInjectablePlaceholder(placeholders) }
-        conditions.forEach { it.config.addInjectablePlaceholder(placeholders) }
-        mutators.forEach { it.config.addInjectablePlaceholder(placeholders) }
-        filters.forEach { it.config.addInjectablePlaceholder(placeholders) }
-
-        config.addInjectablePlaceholder(placeholders)
+        for (config in configsToInject) {
+            config.addInjectablePlaceholder(placeholders)
+        }
     }
 
     /*
@@ -90,7 +99,9 @@ abstract class ElementLike : ConfigurableElement {
         }
 
         // Initial injection into mutators
-        mutators.forEach { it.config.addInjectablePlaceholder(trigger.placeholders) }
+        for (config in mutatorConfigsToInject) {
+            config.addInjectablePlaceholder(trigger.placeholders)
+        }
 
         val data = mutators.mutate(trigger.data)
 

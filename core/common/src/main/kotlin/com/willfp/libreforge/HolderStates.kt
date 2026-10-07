@@ -275,9 +275,19 @@ internal object HolderStates {
      * Disable and re-enable every active effect from the current configuration, once, in the next
      * flush however many times it is requested.
      */
-    fun resetAllStates() = mark {
-        resetRequested = true
+    fun resetAllStates() {
+        resetGeneration++
+        mark {
+            resetRequested = true
+        }
     }
+
+    /**
+     * Bumped on every [resetAllStates], so what was remembered from the old configuration is dropped.
+     */
+    @Volatile
+    var resetGeneration = 0
+        private set
 
     fun trackPlayer(player: Player) {
         if (shutdownSweepDone || !player.isRealPlayer || states.containsKey(player.uniqueId)) {
@@ -504,8 +514,11 @@ internal object HolderStates {
         }
     }
 
+    // Reused each flush, as a visit may change its bucket.
+    private val visiting = ArrayList<HolderState>()
+
     private fun visitBuckets() {
-        for (state in playerBuckets[tick % PLAYER_BUCKETS].toList()) {
+        for (state in snapshotOf(playerBuckets[tick % PLAYER_BUCKETS])) {
             if (state.kind == StateKind.PLAYER && settings.skipAFKPlayers && !state.resetPending) {
                 val player = state.dispatcher.dispatcher as Player
                 if (AFKManager.isAfk(player)) {
@@ -516,7 +529,7 @@ internal object HolderStates {
             visit(state)
         }
 
-        for (state in entityBuckets[tick % entityBuckets.size].toList()) {
+        for (state in snapshotOf(entityBuckets[tick % entityBuckets.size])) {
             if (!state.admitted) {
                 continue
             }
@@ -529,6 +542,12 @@ internal object HolderStates {
 
             visit(state)
         }
+    }
+
+    private fun snapshotOf(bucket: Set<HolderState>): List<HolderState> {
+        visiting.clear()
+        bucket.forEach { visiting += it }
+        return visiting
     }
 
     private fun visit(state: HolderState) {
@@ -708,11 +727,18 @@ internal object HolderStates {
      */
     fun recordConditionResult(dispatcher: Dispatcher<*>, block: ConditionBlock<*>, isMet: Boolean) {
         val uuid = dispatcher.uuid
-        if (!states.containsKey(uuid)) {
-            return
+        val results = conditionResults[uuid] ?: run {
+            if (!states.containsKey(uuid)) {
+                return
+            }
+
+            conditionResults.computeIfAbsent(uuid) { ConcurrentHashMap() }
         }
 
-        conditionResults.getOrPut(uuid) { ConcurrentHashMap() }[block] = isMet
+        // Reads take no lock; a write only when the result changed.
+        if (results[block] != isMet) {
+            results[block] = isMet
+        }
     }
 
     fun clearConditionResults(uuid: UUID) {

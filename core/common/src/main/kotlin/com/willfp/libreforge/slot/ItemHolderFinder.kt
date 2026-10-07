@@ -54,6 +54,38 @@ abstract class ItemHolderFinder<T : Holder> {
     }
 
     /**
+     * As [findHolders], only searching items that changed since the scan in [memory].
+     */
+    private fun findHolders(entity: LivingEntity, slot: SlotType, memory: SlotScanMemory): List<TypedProvidedHolder<T>> {
+        val items = slot.getItems(entity)
+        val previous = memory[slot]
+
+        val snapshots = ArrayList<ItemStack>(items.size)
+        val found = ArrayList<List<Any>>(items.size)
+
+        items.forEachIndexed { index, item ->
+            val snapshot = previous?.items?.getOrNull(index)
+            val holders = previous?.holders?.getOrNull(index)
+
+            if (snapshot != null && holders != null && snapshot.amount == item.amount && snapshot.isSimilar(item)) {
+                snapshots += snapshot
+                found += holders
+            } else {
+                // A copy, as the item in the slot can change in place.
+                snapshots += item.clone()
+                found += if (item.isEcoEmpty) emptyList() else this.find(item).filter { holder -> isValidInSlot(holder, slot) }
+            }
+        }
+
+        memory[slot] = SlotScanMemory.SlotScan(snapshots, found)
+
+        return items.flatMapIndexed { index, item ->
+            @Suppress("UNCHECKED_CAST")
+            (found[index] as List<T>).map { holder -> SlotItemProvidedHolder(holder, item, slot) }
+        }
+    }
+
+    /**
      * Convert this finder to a [HolderProvider].
      */
     fun toHolderProvider(): TypedHolderProvider<T> {
@@ -74,7 +106,10 @@ abstract class ItemHolderFinder<T : Holder> {
                 ?: scan(dispatcher)
         }
 
-        override fun scan(dispatcher: Dispatcher<*>): List<TypedProvidedHolder<T>> {
+        override fun scan(dispatcher: Dispatcher<*>): List<TypedProvidedHolder<T>> =
+            scan(dispatcher, null)
+
+        override fun scan(dispatcher: Dispatcher<*>, memory: SlotScanMemory?): List<TypedProvidedHolder<T>> {
             val entity = dispatcher.get<LivingEntity>() ?: return emptyList()
 
             // Ordered, so duplicate holders keep their occurrence between scans.
@@ -86,7 +121,11 @@ abstract class ItemHolderFinder<T : Holder> {
             }
 
             // Only check for non-combined slot types
-            return slots.flatMap { slot -> findHolders(entity, slot) }
+            if (memory == null) {
+                return slots.flatMap { slot -> findHolders(entity, slot) }
+            }
+
+            return slots.flatMap { slot -> findHolders(entity, slot, memory) }
         }
     }
 }

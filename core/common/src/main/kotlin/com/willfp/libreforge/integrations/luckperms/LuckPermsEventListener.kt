@@ -2,6 +2,7 @@ package com.willfp.libreforge.integrations.luckperms
 
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.libreforge.GlobalDispatcher
+import com.willfp.libreforge.conditions.PermissionCache
 import com.willfp.libreforge.integrations.luckperms.impl.TriggerLpConfigReload
 import com.willfp.libreforge.integrations.luckperms.impl.TriggerLpContextUpdate
 import com.willfp.libreforge.integrations.luckperms.impl.TriggerLpCustomMessage
@@ -111,6 +112,7 @@ internal object LuckPermsEventListener {
 
         bus.subscribe(ecoPlugin, ContextUpdateEvent::class.java) { event ->
             val player = event.getSubject(Player::class.java).orElse(null) ?: return@subscribe
+            PermissionCache.invalidate(player.uniqueId)
             dispatchForUuid(player.uniqueId, event, TriggerLpContextUpdate)
         }
 
@@ -152,12 +154,15 @@ internal object LuckPermsEventListener {
         far too often to be useful as one.
          */
         bus.subscribe(ecoPlugin, UserDataRecalculateEvent::class.java) { event ->
+            PermissionCache.invalidate(event.user.uniqueId)
             val player = Bukkit.getPlayer(event.user.uniqueId) ?: return@subscribe
 
             plugin.scheduler.on(player).run {
                 player.toDispatcher().updateEffects()
             }
         }
+
+        PermissionCache.enable()
     }
 
     private fun handleNodeMutate(event: NodeMutateEvent, node: Node, isAdd: Boolean) {

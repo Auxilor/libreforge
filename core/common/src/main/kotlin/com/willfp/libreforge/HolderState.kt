@@ -8,6 +8,7 @@ import com.willfp.libreforge.effects.EffectBlock
 import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.effects.ProviderBinding
 import com.willfp.libreforge.slot.SlotItemProvidedHolder
+import com.willfp.libreforge.slot.SlotScanMemory
 import org.bukkit.Bukkit
 import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemStack
@@ -62,6 +63,12 @@ internal class ActiveEffect(
  */
 internal interface ScanningHolderProvider {
     fun scan(dispatcher: Dispatcher<*>): Collection<ProvidedHolder>
+
+    /**
+     * As [scan], reusing what [memory] holds from the last scan of the same dispatcher.
+     */
+    fun scan(dispatcher: Dispatcher<*>, memory: SlotScanMemory?): Collection<ProvidedHolder> =
+        scan(dispatcher)
 }
 
 internal fun HolderProvider.ask(dispatcher: Dispatcher<*>): Collection<ProvidedHolder> =
@@ -84,7 +91,16 @@ internal class HolderData(
         placeholderNames = values.flatMapTo(mutableSetOf()) { it.identifiers }
     }
 
-    private val dynamicElements = IdentityHashMap<ChainElement<*>, Boolean>()
+    // Per effect block, which elements are dynamic; null for blocks that are not permanent.
+    private val dynamicElements: Array<BooleanArray?> = providedHolder.holder.effects.map { block ->
+        if (block.isPermanent) {
+            BooleanArray(block.effects.size) { DynamicConfigs.isDynamic(block.effects[it].config, placeholderNames) }
+        } else {
+            null
+        }
+    }.toTypedArray()
+
+    private val hasDynamicEffect = dynamicElements.any { flags -> flags != null && flags.any { it } }
 
     private val polledConditions = IdentityHashMap<ConditionBlock<*>, Boolean>()
 
@@ -93,10 +109,23 @@ internal class HolderData(
     private var isPolled: Boolean? = null
 
     /**
-     * If an effect [element] must be reloaded on every condition pass for this holder.
+     * If the effect element at [blockIndex] and [elementIndex] of a permanent block must be reloaded
+     * on every condition pass for this holder.
      */
-    fun isDynamic(element: ChainElement<*>): Boolean =
-        dynamicElements.getOrPut(element) { DynamicConfigs.isDynamic(element.config, placeholderNames) }
+    fun isDynamic(blockIndex: Int, elementIndex: Int): Boolean =
+        dynamicElements.getOrNull(blockIndex)?.getOrNull(elementIndex) == true
+
+    /**
+     * As [isDynamic] by index, for an [element] that may be from an earlier compile of the holder.
+     */
+    fun isDynamic(key: EffectKey, element: ChainElement<*>, holder: Holder): Boolean {
+        val block = holder.effects.getOrNull(key.blockIndex)
+        if (block != null && block.effects.getOrNull(key.elementIndex) === element) {
+            return isDynamic(key.blockIndex, key.elementIndex)
+        }
+
+        return DynamicConfigs.isDynamic(element.config, placeholderNames)
+    }
 
     private fun isPolled(block: ConditionBlock<*>): Boolean =
         polledConditions.getOrPut(block) {
@@ -111,10 +140,6 @@ internal class HolderData(
 
         val hasPolledCondition = holder.conditions.any { isPolled(it) }
                 || holder.effects.any { block -> block.conditions.any { isPolled(it) } }
-
-        val hasDynamicEffect = holder.effects.any { block ->
-            block.isPermanent && block.effects.any { isDynamic(it) }
-        }
 
         return (hasPolledCondition || hasDynamicEffect).also { isPolled = it }
     }
@@ -201,6 +226,8 @@ internal class HolderState(
     private var settlingReset = false
 
     private val providerCheckedAt = IdentityHashMap<HolderProvider, Int>()
+
+    private val scanMemory = IdentityHashMap<HolderProvider, SlotScanMemory>()
 
     var conditionsCheckedAt = 0
     var repairedAt = 0
@@ -336,7 +363,13 @@ internal class HolderState(
         val occurrences = HashMap<NamespacedKey, Int>()
         val keyed = LinkedHashMap<HolderKey, ProvidedHolder>()
 
-        for (ph in provider.ask(dispatcher)) {
+        val answer = if (provider is ScanningHolderProvider) {
+            provider.scan(dispatcher, scanMemory.getOrPut(provider) { SlotScanMemory() })
+        } else {
+            provider.provide(dispatcher)
+        }
+
+        for (ph in answer) {
             val holderId = ph.holder.id
             val occurrence = occurrences.getOrDefault(holderId, 0)
             occurrences[holderId] = occurrence + 1
@@ -680,8 +713,12 @@ internal class HolderState(
             val ph = evaluation.holder
             val data = dataFor(ph)
 
-            ph.holder.effects.forEachIndexed { blockIndex, block ->
-                block.effects.forEachIndexed { elementIndex, element ->
+            val effects = ph.holder.effects
+            for (blockIndex in 0 until effects.size) {
+                val block = effects[blockIndex]
+                val elements = block.effects
+                for (elementIndex in 0 until elements.size) {
+                    val element = elements[elementIndex]
                     val effectKey = EffectKey(key, blockIndex, elementIndex)
                     val current = active[effectKey]
                     val isMet = evaluation.met[blockIndex] && !HolderStates.isUnloaded(element.effect)
@@ -700,7 +737,7 @@ internal class HolderState(
                         delta.disables += current
                     } else if (current != null && block.isPermanent) {
                         val rebind = key in diff.moved && element.effect.providerBinding != ProviderBinding.NONE
-                        if (rebind || data.isDynamic(element)) {
+                        if (rebind || data.isDynamic(blockIndex, elementIndex)) {
                             delta.reloads[effectKey] = Reload(current, ph)
                         }
                     }
@@ -830,7 +867,7 @@ internal class HolderState(
 
             val current = appliedByKey[activeEffect.key.holder] ?: continue
 
-            if (dataFor(current).isDynamic(activeEffect.element)) {
+            if (dataFor(current).isDynamic(activeEffect.key, activeEffect.element, current.holder)) {
                 continue
             }
 
@@ -919,6 +956,7 @@ internal class HolderState(
         applied.clear()
         pendingProviders.clear()
         providerCheckedAt.clear()
+        scanMemory.clear()
         holderData.clear()
         rebuildApplied()
         rebuildSnapshot()

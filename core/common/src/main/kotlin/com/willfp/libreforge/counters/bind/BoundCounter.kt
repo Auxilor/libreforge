@@ -23,15 +23,15 @@ internal data class BoundCounter(
     val accumulator: Accumulator
 ) {
     // Only configs that reference a placeholder need trigger placeholders injected.
-    private val filterConfigsToInject: List<Config> by lazy {
+    private val filterConfigsToInject: List<Config> by lazy(LazyThreadSafetyMode.PUBLICATION) {
         counter.filters.map { it.config }.distinct().filter { DynamicConfigs.hasPlaceholder(it) }
     }
 
-    private val conditionConfigsToInject: List<Config> by lazy {
+    private val conditionConfigsToInject: List<Config> by lazy(LazyThreadSafetyMode.PUBLICATION) {
         counter.conditions.map { it.config }.filter { DynamicConfigs.hasPlaceholder(it) }
     }
 
-    private val injectIntoConfig: Boolean by lazy {
+    private val injectIntoConfig: Boolean by lazy(LazyThreadSafetyMode.PUBLICATION) {
         DynamicConfigs.hasPlaceholder(counter.config)
                 || counter.valueExpression?.contains('%') == true
                 || counter.multiplierExpression?.contains('%') == true

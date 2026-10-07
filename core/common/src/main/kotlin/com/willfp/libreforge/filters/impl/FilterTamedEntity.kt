@@ -3,10 +3,11 @@ package com.willfp.libreforge.filters.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.entities.Entities
 import com.willfp.eco.core.entities.TestableEntity
-import com.willfp.eco.util.containsIgnoreCase
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.ViolationContext
+import com.willfp.libreforge.filters.EnumNames
 import com.willfp.libreforge.filters.Filter
+import com.willfp.libreforge.filters.hasEnumName
 import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.entity.Tameable
 
@@ -16,7 +17,7 @@ object FilterTamedEntity : Filter<Collection<TestableEntity>, List<String>>("tam
     override val valueType = ArgType.ENTITY_LIST
 
     override fun getValue(config: Config, data: TriggerData?, key: String): List<String> {
-        return config.getStrings(key)
+        return EnumNames(config.getStrings(key))
     }
 
     override fun isMet(data: TriggerData, value: List<String>, compileData: Collection<TestableEntity>): Boolean {
@@ -24,7 +25,7 @@ object FilterTamedEntity : Filter<Collection<TestableEntity>, List<String>>("tam
 
         if (victim !is Tameable || !victim.isTamed) return false
 
-        return value.containsIgnoreCase(victim.type.name)
+        return value.hasEnumName(victim.type.name)
                 || compileData.any { it.matches(victim) }
     }
 

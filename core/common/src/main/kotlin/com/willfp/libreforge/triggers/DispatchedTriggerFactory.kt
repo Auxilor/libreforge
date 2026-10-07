@@ -1,9 +1,9 @@
 package com.willfp.libreforge.triggers
 
 import com.willfp.eco.core.EcoPlugin
-import com.willfp.eco.core.map.listMap
 import com.willfp.libreforge.Dispatcher
 import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 
 /*
 
@@ -14,8 +14,8 @@ Prevents multiple identical triggers from being triggered in the same tick.
 class DispatchedTriggerFactory(
     private val plugin: EcoPlugin
 ) {
-    private val dispatcherTriggers = listMap<UUID, Int>()
-
+    // Written by triggers on any thread.
+    private val dispatcherTriggers = ConcurrentHashMap<UUID, MutableSet<Int>>()
 
     fun create(
         dispatcher: Dispatcher<*>,
@@ -31,11 +31,9 @@ class DispatchedTriggerFactory(
         // for example killing an entire stack of entities at once.
         if (!allowDuplicates) {
             val hash = (trigger.hashCode() shl 5) xor data.hashCode()
-            if (hash in dispatcherTriggers[dispatcher.uuid]) {
+            if (!dispatcherTriggers.computeIfAbsent(dispatcher.uuid) { ConcurrentHashMap.newKeySet() }.add(hash)) {
                 return null
             }
-
-            dispatcherTriggers[dispatcher.uuid].add(hash)
         }
 
         val dispatchData = if (data.dispatcher == dispatcher) data else data.copy(dispatcher = dispatcher)
