@@ -73,6 +73,12 @@ abstract class ItemHolderFinder<T : Holder> {
         val holders = ArrayList<TypedProvidedHolder<T>>()
 
         items.forEachIndexed { index, item ->
+            if (item.isEcoEmpty) {
+                scan.types[index] = null
+                scan.holders[index] = emptyList()
+                return@forEachIndexed
+            }
+
             val type = item.type
             val amount = item.amount
 
@@ -83,11 +89,7 @@ abstract class ItemHolderFinder<T : Holder> {
             if (!isUnchanged) {
                 scan.types[index] = type
                 scan.amounts[index] = amount
-                scan.holders[index] = if (item.isEcoEmpty) {
-                    emptyList()
-                } else {
-                    this.find(item).filter { holder -> isValidInSlot(holder, slot) }
-                }
+                scan.holders[index] = this.find(item).filter { holder -> isValidInSlot(holder, slot) }
             }
 
             scan.holders[index].mapTo(holders) { holder -> SlotItemProvidedHolder(holder, item, slot) }
