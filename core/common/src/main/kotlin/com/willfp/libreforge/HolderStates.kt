@@ -190,17 +190,17 @@ internal object HolderStates {
         }
     }
 
-    fun markProvider(dispatcher: Dispatcher<*>, provider: HolderProvider) =
+    fun markProvider(dispatcher: Dispatcher<*>, provider: HolderProvider, scope: SignalScope? = null) =
         withState(dispatcher) { state ->
             if (provider in registeredHolderProviders) {
-                state.dirtyProviders += provider
+                state.markProvider(provider, scope)
             }
         }
 
     fun markProviderEverywhere(provider: HolderProvider) = mark {
         if (provider in registeredHolderProviders) {
             for (state in states.values) {
-                state.dirtyProviders += provider
+                state.markProvider(provider)
                 markDirty(state)
             }
         }
@@ -224,21 +224,21 @@ internal object HolderStates {
 
             for (state in states.values) {
                 if (state.uuid in nearby || state.provides(provider, holder)) {
-                    state.dirtyProviders += provider
+                    state.markProvider(provider)
                     markDirty(state)
                 }
             }
         }
 
     fun markAllProviders(dispatcher: Dispatcher<*>) =
-        withState(dispatcher) { it.dirtyProviders.addAll(registeredHolderProviders) }
+        withState(dispatcher) { it.markProviders(registeredHolderProviders) }
 
     /**
      * As [markAllProviders], but not delayed by `refresh.cooldown`.
      */
     fun forceMarkAllProviders(dispatcher: Dispatcher<*>) =
         withState(dispatcher) {
-            it.dirtyProviders.addAll(registeredHolderProviders)
+            it.markProviders(registeredHolderProviders)
             it.bypassCooldown = true
         }
 
@@ -251,43 +251,34 @@ internal object HolderStates {
     fun markConditionsAll(dispatcher: Dispatcher<*>) =
         withState(dispatcher) { it.conditionDirtyAll = true }
 
-    fun markCondition(dispatcher: Dispatcher<*>, condition: Condition<*>) =
-        withState(dispatcher) { it.markConditionHolders(setOf(condition)) }
+    fun markCondition(dispatcher: Dispatcher<*>, condition: Condition<*>, scope: SignalScope? = null) =
+        withState(dispatcher) { it.markConditionHolders(setOf(condition), scope) }
 
     /**
-     * Signal a built-in [change] on a [dispatcher].
+     * Signal a built-in [change] on a [dispatcher], touching only [scope], or everything if null.
      */
-    fun signal(dispatcher: Dispatcher<*>, change: HolderChange) =
+    fun signal(dispatcher: Dispatcher<*>, change: HolderChange, scope: SignalScope? = null) =
         withState(dispatcher) {
-            it.applySignal(change)
+            it.applySignal(change, scope)
             if (change == HolderChange.Respawn || change == HolderChange.WorldChange) {
                 it.reloadAll = true
             }
         }
 
     /**
-     * Signal an inventory click, rate limited by `refresh.inventory-click.timeout`.
+     * Signal an inventory click touching [scope], or everything if null, rate limited by
+     * `refresh.inventory-click.timeout`.
      */
-    fun signalInventoryClick(dispatcher: Dispatcher<*>) =
-        withState(dispatcher) { it.clickPending = true }
+    fun signalInventoryClick(dispatcher: Dispatcher<*>, scope: SignalScope? = null) =
+        withState(dispatcher) { it.addPendingClick(scope) }
 
     /**
      * Disable and re-enable every active effect from the current configuration, once, in the next
      * flush however many times it is requested.
      */
-    fun resetAllStates() {
-        resetGeneration++
-        mark {
-            resetRequested = true
-        }
+    fun resetAllStates() = mark {
+        resetRequested = true
     }
-
-    /**
-     * Bumped on every [resetAllStates], so what was remembered from the old configuration is dropped.
-     */
-    @Volatile
-    var resetGeneration = 0
-        private set
 
     fun trackPlayer(player: Player) {
         if (shutdownSweepDone || !player.isRealPlayer || states.containsKey(player.uniqueId)) {
@@ -365,7 +356,7 @@ internal object HolderStates {
         state.repairedAt = tick
         state.reloadedAt = tick
 
-        state.dirtyProviders.addAll(registeredHolderProviders)
+        state.markProviders(registeredHolderProviders)
 
         when (kind) {
             StateKind.ENTITY -> {
@@ -736,7 +727,8 @@ internal object HolderStates {
         }
 
         // Reads take no lock; a write only when the result changed.
-        if (results[block] != isMet) {
+        val current = results[block]
+        if (current == null || current != isMet) {
             results[block] = isMet
         }
     }

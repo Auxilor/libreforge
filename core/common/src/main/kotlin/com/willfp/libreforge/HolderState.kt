@@ -8,12 +8,12 @@ import com.willfp.libreforge.effects.EffectBlock
 import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.effects.ProviderBinding
 import com.willfp.libreforge.slot.SlotItemProvidedHolder
-import com.willfp.libreforge.slot.SlotScanMemory
 import org.bukkit.Bukkit
 import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemStack
 import java.util.Collections
 import java.util.IdentityHashMap
+import java.util.Objects
 import java.util.UUID
 
 /**
@@ -25,7 +25,15 @@ internal data class HolderKey(
     val providerId: String,
     val holderId: NamespacedKey,
     val occurrence: Int
-)
+) {
+    private val hash = Objects.hash(providerId, holderId, occurrence)
+
+    override fun hashCode(): Int = hash
+
+    override fun equals(other: Any?): Boolean =
+        this === other || other is HolderKey && hash == other.hash && occurrence == other.occurrence
+                && holderId == other.holderId && providerId == other.providerId
+}
 
 /**
  * Identity of one enabled effect element.
@@ -63,12 +71,6 @@ internal class ActiveEffect(
  */
 internal interface ScanningHolderProvider {
     fun scan(dispatcher: Dispatcher<*>): Collection<ProvidedHolder>
-
-    /**
-     * As [scan], reusing what [memory] holds from the last scan of the same dispatcher.
-     */
-    fun scan(dispatcher: Dispatcher<*>, memory: SlotScanMemory?): Collection<ProvidedHolder> =
-        scan(dispatcher)
 }
 
 internal fun HolderProvider.ask(dispatcher: Dispatcher<*>): Collection<ProvidedHolder> =
@@ -147,13 +149,13 @@ internal class HolderData(
     /**
      * If [holder] uses any of [conditions], at holder or effect level.
      */
-    fun usesAny(holder: Holder, conditions: Set<Condition<*>>): Boolean {
+    fun usesAny(holder: ProvidedHolder, conditions: Set<Condition<*>>, scope: SignalScope?): Boolean {
         val types = conditionTypes ?: buildSet {
-            holder.conditions.forEach { add(it.condition) }
-            holder.effects.forEach { block -> block.conditions.forEach { add(it.condition) } }
+            holder.holder.conditions.forEach { add(it.condition) }
+            holder.holder.effects.forEach { block -> block.conditions.forEach { add(it.condition) } }
         }.also { conditionTypes = it }
 
-        return types.any { it in conditions }
+        return types.any { it in conditions && (scope == null || it.isInvalidatedBy(scope, holder)) }
     }
 }
 
@@ -227,15 +229,18 @@ internal class HolderState(
 
     private val providerCheckedAt = IdentityHashMap<HolderProvider, Int>()
 
-    private val scanMemory = IdentityHashMap<HolderProvider, SlotScanMemory>()
-
     var conditionsCheckedAt = 0
     var repairedAt = 0
     var reloadedAt = 0
     var lastHolderUpdateAt = 0L
     var lastClickRefreshAt = 0L
 
-    val dirtyProviders: MutableSet<HolderProvider> = Collections.newSetFromMap(IdentityHashMap())
+    private val dirtyProviders: MutableSet<HolderProvider> = Collections.newSetFromMap(IdentityHashMap())
+
+    // Dirty providers marked only by scoped signals, with those scopes. Absent means full.
+    private val providerScopes = IdentityHashMap<HolderProvider, ArrayList<SignalScope>>()
+
+    private val providerMemory = IdentityHashMap<HolderProvider, ProviderMemory>()
 
     // Answered but not yet applied, e.g. asked by a read before the first flush.
     private val pendingProviders: MutableSet<HolderProvider> = Collections.newSetFromMap(IdentityHashMap())
@@ -247,6 +252,10 @@ internal class HolderState(
     var reloadAll = false
     var resetPending = false
     var clickPending = false
+        private set
+
+    // Scopes of the pending clicks, or null if any click touched everything.
+    private var clickScopes: ArrayList<SignalScope>? = ArrayList()
 
     // Set when the state is dropped, possibly by a handler in the middle of its own update.
     var isRemoved = false
@@ -362,11 +371,18 @@ internal class HolderState(
         val providerId = registeredProviderId(provider)
         val occurrences = HashMap<NamespacedKey, Int>()
         val keyed = LinkedHashMap<HolderKey, ProvidedHolder>()
+        val scopes = providerScopes.remove(provider)
 
-        val answer = if (provider is ScanningHolderProvider) {
-            provider.scan(dispatcher, scanMemory.getOrPut(provider) { SlotScanMemory() })
+        val answer = if (provider is ScopedHolderProvider) {
+            provider.provide(
+                ProvideContext(
+                    dispatcher,
+                    if (scopes == null) SignalScopes.FULL else SignalScopes(scopes),
+                    providerMemory.getOrPut(provider) { ProviderMemory() }
+                )
+            )
         } else {
-            provider.provide(dispatcher)
+            provider.ask(dispatcher)
         }
 
         for (ph in answer) {
@@ -433,7 +449,7 @@ internal class HolderState(
             val checkedAt = providerCheckedAt[provider] ?: continue
             val maxAge = provider.maxAge(dispatcher) ?: continue
             if (tick - checkedAt >= maxAge) {
-                dirtyProviders += provider
+                markProvider(provider)
             }
         }
 
@@ -456,22 +472,73 @@ internal class HolderState(
     }
 
     /**
-     * Mark the providers and conditions that a built-in [change] invalidates.
+     * Mark [provider] to be re-asked for everything.
      */
-    fun applySignal(change: HolderChange) {
-        dirtyProviders.addAll(HolderSignals.providersFor(change))
-        markConditionHolders(HolderSignals.conditionsFor(change))
+    fun markProvider(provider: HolderProvider) {
+        dirtyProviders += provider
+        providerScopes.remove(provider)
     }
 
-    fun markConditionHolders(conditions: Set<Condition<*>>) {
+    fun markProviders(providers: Collection<HolderProvider>) =
+        providers.forEach { markProvider(it) }
+
+    /**
+     * Mark [provider] to be re-asked for [scope], or for everything if null. A provider already
+     * marked for everything stays so.
+     */
+    fun markProvider(provider: HolderProvider, scope: SignalScope?) {
+        if (scope == null) {
+            markProvider(provider)
+            return
+        }
+
+        if (dirtyProviders.add(provider)) {
+            providerScopes[provider] = arrayListOf(scope)
+            return
+        }
+
+        val scopes = providerScopes[provider] ?: return
+        if (scopes.size >= MAX_PENDING_SCOPES) {
+            providerScopes.remove(provider)
+        } else {
+            scopes += scope
+        }
+    }
+
+    /**
+     * Mark the providers and conditions that a built-in [change] invalidates, touching [scope].
+     */
+    fun applySignal(change: HolderChange, scope: SignalScope? = null) {
+        for (provider in HolderSignals.providersFor(change)) {
+            markProvider(provider, scope)
+        }
+
+        markConditionHolders(HolderSignals.conditionsFor(change), scope)
+    }
+
+    fun markConditionHolders(conditions: Set<Condition<*>>, scope: SignalScope? = null) {
         if (conditions.isEmpty()) {
             return
         }
 
         for ((key, ph) in appliedOrder) {
-            if (dataFor(ph).usesAny(ph.holder, conditions)) {
+            if (dataFor(ph).usesAny(ph, conditions, scope)) {
                 conditionDirtyHolders += key
             }
+        }
+    }
+
+    /**
+     * Queue an inventory click touching [scope], or everything if null.
+     */
+    fun addPendingClick(scope: SignalScope?) {
+        clickPending = true
+
+        val scopes = clickScopes ?: return
+        if (scope == null || scopes.size >= MAX_PENDING_SCOPES) {
+            clickScopes = null
+        } else {
+            scopes += scope
         }
     }
 
@@ -532,7 +599,16 @@ internal class HolderState(
 
         clickPending = false
         lastClickRefreshAt = now
-        applySignal(HolderChange.Items)
+
+        val scopes = clickScopes
+        clickScopes = ArrayList()
+
+        if (scopes == null) {
+            applySignal(HolderChange.Items)
+        } else {
+            scopes.forEach { applySignal(HolderChange.Items, it) }
+        }
+
         return false
     }
 
@@ -559,6 +635,7 @@ internal class HolderState(
         }
 
         dirtyProviders.clear()
+        providerScopes.clear()
         lastHolderUpdateAt = now
 
         if (changed) {
@@ -956,14 +1033,14 @@ internal class HolderState(
         applied.clear()
         pendingProviders.clear()
         providerCheckedAt.clear()
-        scanMemory.clear()
+        providerMemory.clear()
         holderData.clear()
         rebuildApplied()
         rebuildSnapshot()
 
         conditionDirtyAll = false
         conditionDirtyHolders.clear()
-        dirtyProviders.addAll(registeredHolderProviders)
+        markProviders(registeredHolderProviders)
         bypassCooldown = true
         HolderStates.clearConditionResults(uuid)
     }
@@ -1005,6 +1082,8 @@ internal class HolderState(
             answers.remove(provider)
             applied.remove(provider)
             providerCheckedAt.remove(provider)
+            providerMemory.remove(provider)
+            providerScopes.remove(provider)
             dirtyProviders.remove(provider)
             pendingProviders.remove(provider)
         }
@@ -1037,6 +1116,9 @@ internal class HolderState(
         }
     }
 }
+
+// Beyond this, pending scopes collapse to a full re-ask, which is cheaper than matching them all.
+private const val MAX_PENDING_SCOPES = 32
 
 private val ProvidedHolder.slotType
     get() = (this as? SlotItemProvidedHolder<*>)?.slotType

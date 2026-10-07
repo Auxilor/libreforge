@@ -39,7 +39,7 @@ internal object HolderSignals {
     fun registerProvider(provider: HolderProvider) {
         for (change in provider.invalidatedBy) {
             if (change is HolderChange.Custom<*>) {
-                addCustom(change, provider) { HolderStates.markProvider(it, provider) }
+                addCustom(change, provider) { dispatcher, scope -> HolderStates.markProvider(dispatcher, provider, scope) }
             } else {
                 providersBySignal.getOrPut(change) { mutableListOf() } += provider
             }
@@ -56,7 +56,7 @@ internal object HolderSignals {
 
         for (change in signals) {
             if (change is HolderChange.Custom<*>) {
-                addCustom(change, condition) { HolderStates.markCondition(it, condition) }
+                addCustom(change, condition) { dispatcher, scope -> HolderStates.markCondition(dispatcher, condition, scope) }
             } else {
                 conditionsBySignal.getOrPut(change) { mutableSetOf() } += condition
             }
@@ -85,12 +85,15 @@ internal object HolderSignals {
         }
     }
 
-    private fun addCustom(change: HolderChange.Custom<*>, owner: Any, mark: (Dispatcher<*>) -> Unit) {
+    private fun addCustom(change: HolderChange.Custom<*>, owner: Any, mark: (Dispatcher<*>, SignalScope?) -> Unit) {
         @Suppress("UNCHECKED_CAST")
         val dispatcherOf = change.dispatcherOf as (Event) -> Dispatcher<*>?
 
+        @Suppress("UNCHECKED_CAST")
+        val scopeOf = change.scopeOf as ((Event) -> SignalScope?)?
+
         customHandlers.getOrPut(change.event) { mutableListOf() } += CustomHandler(owner) { event ->
-            dispatcherOf(event)?.let(mark)
+            dispatcherOf(event)?.let { mark(it, scopeOf?.invoke(event)) }
         }
 
         val eventClass = change.event

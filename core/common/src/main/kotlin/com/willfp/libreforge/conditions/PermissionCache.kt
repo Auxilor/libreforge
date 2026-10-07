@@ -15,11 +15,9 @@ import java.util.concurrent.ConcurrentHashMap
  * cleared from any thread.
  */
 internal object PermissionCache : Listener {
-    // Bounds staleness from changes LuckPerms does not report, such as op status.
-    private const val MAX_AGE_MILLIS = 1000L
-
+    // Op status is the one change LuckPerms does not report.
     private class PlayerPermissions(
-        val createdAt: Long
+        val isOp: Boolean
     ) {
         val results = ConcurrentHashMap<String, Boolean>()
     }
@@ -47,12 +45,12 @@ internal object PermissionCache : Listener {
             return player.hasPermission(permission)
         }
 
-        val now = System.currentTimeMillis()
         val uuid = player.uniqueId
+        val isOp = player.isOp
 
         var permissions = players[uuid]
-        if (permissions == null || now - permissions.createdAt >= MAX_AGE_MILLIS) {
-            permissions = PlayerPermissions(now)
+        if (permissions == null || permissions.isOp != isOp) {
+            permissions = PlayerPermissions(isOp)
             players[uuid] = permissions
         }
 
