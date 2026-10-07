@@ -2,48 +2,41 @@ package com.willfp.libreforge.slot
 
 import com.willfp.libreforge.SignalScope
 import org.bukkit.Material
-import org.bukkit.inventory.ItemStack
 
 /**
- * The items a signal touched. Item holder finders re-check only the slots this matches, plus any
- * slot whose item type or amount changed since it was last checked.
+ * The items a signal touched: the [slots], and every item of the [types] wherever it is. Item
+ * holder finders re-check only what this matches.
  */
-class ItemScope(
-    private val predicate: (SlotType, ItemStack) -> Boolean
+class ItemScope private constructor(
+    val slots: Set<SlotType>,
+    val types: Set<Material>
 ) : SignalScope {
     /**
-     * If the [item] in [slot] may have changed.
+     * If the item of [type] in [slot] may have changed. [type] is null for an empty slot.
      */
-    fun matches(slot: SlotType, item: ItemStack): Boolean =
-        predicate(slot, item)
+    fun matches(slot: SlotType, type: Material?): Boolean =
+        slot in slots || (type != null && type in types)
 
     companion object {
         /**
          * Touches the [slots].
          */
         @JvmStatic
-        fun ofSlots(vararg slots: SlotType): ItemScope {
-            val set = slots.toSet()
-            return ItemScope { slot, _ -> slot in set }
-        }
+        fun ofSlots(vararg slots: SlotType): ItemScope =
+            of(slots.toList(), emptyList())
 
         /**
          * Touches every item of the [types], wherever it is.
          */
         @JvmStatic
-        fun ofTypes(types: Collection<Material>): ItemScope {
-            val set = types.filterTo(HashSet()) { !it.isAir }
-            return ItemScope { _, item -> item.type in set }
-        }
+        fun ofTypes(types: Collection<Material>): ItemScope =
+            of(emptyList(), types)
 
         /**
          * Touches the [slots], and every item of the [types] wherever it is.
          */
         @JvmStatic
-        fun of(slots: Collection<SlotType>, types: Collection<Material>): ItemScope {
-            val slotSet = slots.toSet()
-            val typeSet = types.filterTo(HashSet()) { !it.isAir }
-            return ItemScope { slot, item -> slot in slotSet || item.type in typeSet }
-        }
+        fun of(slots: Collection<SlotType>, types: Collection<Material>): ItemScope =
+            ItemScope(slots.toSet(), types.filterTo(HashSet()) { !it.isAir })
     }
 }

@@ -63,12 +63,29 @@ class ProviderMemory internal constructor() {
 }
 
 /**
+ * Storage shared by every provider asked in one pass over a dispatcher, so what one provider reads
+ * (e.g. the inventory) is read once. Dropped after the pass.
+ */
+class ProvidePass internal constructor() {
+    private val values = HashMap<Any, Any>()
+
+    /**
+     * The value stored under [key] in this pass, or [create] it.
+     */
+    fun <T : Any> getOrPut(key: Any, create: () -> T): T {
+        @Suppress("UNCHECKED_CAST")
+        return values.getOrPut(key, create) as T
+    }
+}
+
+/**
  * What a [ScopedHolderProvider] is asked with.
  */
 class ProvideContext internal constructor(
     val dispatcher: Dispatcher<*>,
     val scopes: SignalScopes,
-    val memory: ProviderMemory
+    val memory: ProviderMemory,
+    val pass: ProvidePass
 )
 
 /**

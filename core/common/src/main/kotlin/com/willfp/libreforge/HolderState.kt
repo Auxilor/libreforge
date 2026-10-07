@@ -211,6 +211,9 @@ internal class HolderState(
     // Each provider's last answer, keyed. A provider with no entry has never been asked.
     private val answers = IdentityHashMap<HolderProvider, LinkedHashMap<HolderKey, ProvidedHolder>>()
 
+    // Each scoped provider's last answer as returned, so an answer handed back unchanged skips keying.
+    private val rawAnswers = IdentityHashMap<HolderProvider, Collection<ProvidedHolder>>()
+
     private val applied = IdentityHashMap<HolderProvider, LinkedHashMap<HolderKey, ProvidedHolder>>()
 
     private var appliedByKey = HashMap<HolderKey, ProvidedHolder>()
@@ -335,10 +338,11 @@ internal class HolderState(
 
     private fun askUnasked(providers: List<HolderProvider>, tick: Int) {
         var asked = false
+        val pass = ProvidePass()
 
         for (provider in providers) {
             if (!answers.containsKey(provider)) {
-                ask(provider, tick)
+                ask(provider, tick, pass)
                 dirtyProviders.remove(provider)
                 asked = true
             }
@@ -367,23 +371,42 @@ internal class HolderState(
     /**
      * Ask [provider] again. Returns true if its answer changed, so it must be applied.
      */
-    private fun ask(provider: HolderProvider, tick: Int): Boolean {
+    private fun ask(provider: HolderProvider, tick: Int, pass: ProvidePass): Boolean {
+        val scopes = providerScopes.remove(provider)
+
+        // A scoped ask only re-checks part of the provider, so only a full ask resets its polling age.
+        if (scopes == null || provider !is ScopedHolderProvider) {
+            providerCheckedAt[provider] = tick
+        }
+
+        if (provider !is ScopedHolderProvider) {
+            return applyAnswer(provider, provider.ask(dispatcher))
+        }
+
+        val answer = provider.provide(
+            ProvideContext(
+                dispatcher,
+                if (scopes == null) SignalScopes.FULL else SignalScopes(scopes),
+                providerMemory.getOrPut(provider) { ProviderMemory() },
+                pass
+            )
+        )
+
+        if (answer === rawAnswers[provider] && answers.containsKey(provider)) {
+            return false
+        }
+
+        rawAnswers[provider] = answer
+        return applyAnswer(provider, answer)
+    }
+
+    /**
+     * Key and store [answer] as the answer of [provider]. Returns true if it changed.
+     */
+    private fun applyAnswer(provider: HolderProvider, answer: Collection<ProvidedHolder>): Boolean {
         val providerId = registeredProviderId(provider)
         val occurrences = HashMap<NamespacedKey, Int>()
         val keyed = LinkedHashMap<HolderKey, ProvidedHolder>()
-        val scopes = providerScopes.remove(provider)
-
-        val answer = if (provider is ScopedHolderProvider) {
-            provider.provide(
-                ProvideContext(
-                    dispatcher,
-                    if (scopes == null) SignalScopes.FULL else SignalScopes(scopes),
-                    providerMemory.getOrPut(provider) { ProviderMemory() }
-                )
-            )
-        } else {
-            provider.ask(dispatcher)
-        }
 
         for (ph in answer) {
             val holderId = ph.holder.id
@@ -391,8 +414,6 @@ internal class HolderState(
             occurrences[holderId] = occurrence + 1
             keyed[HolderKey(providerId, holderId, occurrence)] = ph
         }
-
-        providerCheckedAt[provider] = tick
 
         val previous = answers[provider]
         if (previous != null && isSameAnswer(previous, keyed) { it.slotType }) {
@@ -628,8 +649,9 @@ internal class HolderState(
         dispatcher.runRefreshFunctions()
 
         var changed = false
+        val pass = ProvidePass()
         for (provider in registeredHolderProviders) {
-            if (provider in dirtyProviders && ask(provider, tick)) {
+            if (provider in dirtyProviders && ask(provider, tick, pass)) {
                 changed = true
             }
         }
@@ -1030,6 +1052,7 @@ internal class HolderState(
         disableAll()
 
         answers.clear()
+        rawAnswers.clear()
         applied.clear()
         pendingProviders.clear()
         providerCheckedAt.clear()
@@ -1080,6 +1103,7 @@ internal class HolderState(
 
         for (provider in removedProviders) {
             answers.remove(provider)
+            rawAnswers.remove(provider)
             applied.remove(provider)
             providerCheckedAt.remove(provider)
             providerMemory.remove(provider)

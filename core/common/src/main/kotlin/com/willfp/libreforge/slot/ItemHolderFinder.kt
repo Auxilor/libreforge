@@ -57,58 +57,68 @@ abstract class ItemHolderFinder<T : Holder> {
     }
 
     /**
-     * As [findHolders], re-checking only the items that [scopes] match or whose type or amount
-     * changed since the scan in [memory]. Null [scopes] re-check every item.
+     * The scan of [slot] from [read], re-finding only the items that [scopes] match or whose type
+     * changed since [scan]. Null [scopes] re-find every item. Keeps the provided holders of [scan]
+     * when the holders found are the same.
      */
-    private fun findHolders(
-        entity: LivingEntity,
-        slot: SlotType,
-        memory: ScanMemory,
-        scopes: List<ItemScope>?
-    ): List<TypedProvidedHolder<T>> {
-        val items = slot.getItems(entity)
-        val previous = memory.slots[slot]?.takeIf { it.types.size == items.size }
-        val scan = previous ?: SlotScan(items.size).also { memory.slots[slot] = it }
+    private fun rescan(slot: SlotType, read: ReadSlot, scan: SlotScan?, scopes: List<ItemScope>?): SlotScan {
+        val size = read.items.size
+        val previous = scan?.takeIf { it.types.size == size }
+        val reusable = previous?.takeIf { scopes != null }
+        val holders = Array<List<T>>(size) { emptyList() }
+        var isSame = previous != null
 
-        val holders = ArrayList<TypedProvidedHolder<T>>()
+        for (index in 0 until size) {
+            val type = read.types[index]
 
-        items.forEachIndexed { index, item ->
-            if (item.isEcoEmpty) {
-                scan.types[index] = null
-                scan.holders[index] = emptyList()
-                return@forEachIndexed
+            holders[index] = if (type == null) {
+                emptyList()
+            } else if (reusable != null && reusable.types[index] == type && scopes!!.none { it.matches(slot, type) }) {
+                reusable.holders[index]
+            } else {
+                this.find(read.items[index]).filter { holder -> isValidInSlot(holder, slot) }
             }
 
-            val type = item.type
-            val amount = item.amount
-
-            val isUnchanged = scopes != null && previous != null
-                    && scan.types[index] == type && scan.amounts[index] == amount
-                    && scopes.none { it.matches(slot, item) }
-
-            if (!isUnchanged) {
-                scan.types[index] = type
-                scan.amounts[index] = amount
-                scan.holders[index] = this.find(item).filter { holder -> isValidInSlot(holder, slot) }
+            if (isSame && !isSameHolders(previous!!.holders[index], holders[index])) {
+                isSame = false
             }
-
-            scan.holders[index].mapTo(holders) { holder -> SlotItemProvidedHolder(holder, item, slot) }
         }
 
-        return holders
+        val provided = if (isSame) {
+            previous!!.provided
+        } else {
+            val list = ArrayList<TypedProvidedHolder<T>>()
+            holders.forEachIndexed { index, found ->
+                found.mapTo(list) { holder -> SlotItemProvidedHolder(holder, read.items[index], slot) }
+            }
+            list
+        }
+
+        return SlotScan(read.types.copyOf(), holders, provided)
+    }
+
+    private fun isSameHolders(old: List<T>, new: List<T>): Boolean {
+        if (old.size != new.size) {
+            return false
+        }
+
+        return old.indices.all { old[it] === new[it] }
     }
 
     /**
-     * What one slot held when last scanned: per item, its type, amount and holders.
+     * What one slot held when last scanned: per item, its type (null if empty) and holders, and
+     * the holders as provided.
      */
-    private inner class SlotScan(size: Int) {
-        val types = arrayOfNulls<Material>(size)
-        val amounts = IntArray(size)
-        val holders = Array<List<T>>(size) { emptyList() }
-    }
+    private inner class SlotScan(
+        val types: Array<Material?>,
+        val holders: Array<List<T>>,
+        val provided: List<TypedProvidedHolder<T>>
+    )
 
     private inner class ScanMemory {
         val slots = HashMap<SlotType, SlotScan>()
+        var order: List<SlotType> = emptyList()
+        var answer: List<TypedProvidedHolder<T>>? = null
     }
 
     /**
@@ -140,9 +150,39 @@ abstract class ItemHolderFinder<T : Holder> {
         override fun provide(context: ProvideContext): List<TypedProvidedHolder<T>> {
             val entity = context.dispatcher.get<LivingEntity>() ?: return emptyList()
             val memory = context.memory.getOrPut { ScanMemory() }
+            val reads = context.pass.getOrPut(SlotReads::class.java) { SlotReads(entity) }
             val scopes = context.scopes.allOf<ItemScope>()
+            val previous = memory.answer
+            val order = slotsToScan(context.dispatcher).toList()
 
-            return slotsToScan(context.dispatcher).flatMap { slot -> findHolders(entity, slot, memory, scopes) }
+            // Only a type scope can match an item in any slot; slot scopes name every slot they touch.
+            val walkAll = previous == null || scopes == null || scopes.any { it.types.isNotEmpty() }
+            var isChanged = previous == null || order != memory.order
+
+            for (slot in order) {
+                val scan = memory.slots[slot]
+
+                if (scan != null && !walkAll && scopes!!.none { slot in it.slots }) {
+                    continue
+                }
+
+                val rescanned = rescan(slot, reads.read(slot), scan, scopes)
+                memory.slots[slot] = rescanned
+
+                if (rescanned.provided !== scan?.provided) {
+                    isChanged = true
+                }
+            }
+
+            if (!isChanged && previous != null) {
+                return previous
+            }
+
+            return ArrayList<TypedProvidedHolder<T>>().also { list ->
+                order.forEach { slot -> memory.slots[slot]?.let { list.addAll(it.provided) } }
+                memory.answer = list
+                memory.order = order
+            }
         }
 
         private fun slotsToScan(dispatcher: Dispatcher<*>): Set<SlotType> {
