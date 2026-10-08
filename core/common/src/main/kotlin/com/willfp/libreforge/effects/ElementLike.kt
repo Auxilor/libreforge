@@ -8,6 +8,7 @@ import com.willfp.libreforge.DynamicConfigs
 import com.willfp.libreforge.DynamicNumericValue
 import com.willfp.libreforge.InjectionScope
 import com.willfp.libreforge.NamedValue
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.conditions.ConditionList
 import com.willfp.libreforge.effects.arguments.EffectArgumentList
 import com.willfp.libreforge.filters.FilterList
@@ -68,7 +69,35 @@ abstract class ElementLike : ConfigurableElement {
             return doTrigger(trigger)
         }
 
+        if (!Regions.canReach(trigger.dispatcher)) {
+            Regions.runOwned(trigger.dispatcher) { trigger(trigger) }
+            return true
+        }
+
         return InjectionScope.open { triggerInScope(trigger) }
+    }
+
+    /**
+     * Trigger [mutated], on the region of its dispatcher if a mutator moved it from [original] to one
+     * this thread doesn't own, carrying this call's placeholders there.
+     */
+    private fun doTriggerOwned(original: DispatchedTrigger, mutated: DispatchedTrigger): Boolean {
+        val target = mutated.data.dispatcher
+
+        if (target.dispatcher === original.data.dispatcher.dispatcher || Regions.canReach(target)) {
+            return doTrigger(mutated)
+        }
+
+        val scope = InjectionScope.current()
+        Regions.runOwned(target) {
+            if (scope != null) {
+                InjectionScope.enter(scope) { doTrigger(mutated) }
+            } else {
+                doTrigger(mutated)
+            }
+        }
+
+        return true
     }
 
     private fun triggerInScope(trigger: DispatchedTrigger): Boolean {
@@ -155,7 +184,8 @@ abstract class ElementLike : ConfigurableElement {
 
         fun trigger() {
             // Set to true if triggered.
-            didTrigger = didTrigger or doTrigger(
+            didTrigger = didTrigger or doTriggerOwned(
+                trigger,
                 trigger.copy(
                     // Mutate again here for each repeat, as mutator args can
                     // depend on %repeat_count% (e.g. spin_velocity in shoot_extra_arrows).

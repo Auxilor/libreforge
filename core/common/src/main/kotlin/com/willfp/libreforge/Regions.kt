@@ -84,6 +84,24 @@ internal object Regions {
     }
 
     /**
+     * If [dispatcher] can be touched from here: its entity, else its location, else server-wide
+     * state. Always `true` off Folia.
+     */
+    fun canReach(dispatcher: Dispatcher<*>): Boolean {
+        if (!isFolia) {
+            return true
+        }
+
+        val target = dispatcher.dispatcher
+        if (target is Entity) {
+            return canReach(target)
+        }
+
+        val location = dispatcher.location ?: return Bukkit.isGlobalTickThread()
+        return canReach(location)
+    }
+
+    /**
      * The longest distance up to [distance] that a ray or scan from [origin] can cover without
      * leaving this region. Always [distance] off Folia.
      */

@@ -4,6 +4,7 @@ import com.willfp.libreforge.Aliased
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.ProvidedEffectBlock
 import com.willfp.libreforge.ProvidedHolder
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.counters.bind.BoundCounters
 import com.willfp.libreforge.generatePlaceholders
 import com.willfp.libreforge.getProvidedActiveEffects
@@ -95,12 +96,20 @@ abstract class Trigger(
         data: TriggerData,
         forceHolders: Collection<ProvidedHolder>? = null,
         allowDuplicates: Boolean = false
-    ) = dispatchOnEffects(
-        dispatcher,
-        data,
-        forceHolders?.getProvidedActiveEffects(dispatcher) ?: dispatcher.providedActiveEffects,
-        allowDuplicates
-    )
+    ) {
+        if (!Regions.canReach(dispatcher) && data.event != null) {
+            Regions.isUnsupported("Triggers editing an event for a dispatcher in another region")
+        }
+
+        Regions.runOwned(dispatcher) {
+            dispatchOnEffects(
+                dispatcher,
+                data,
+                forceHolders?.getProvidedActiveEffects(dispatcher) ?: dispatcher.providedActiveEffects,
+                allowDuplicates
+            )
+        }
+    }
 
     /**
      * Dispatch the trigger on a collection of [ProvidedEffectBlock]s.
