@@ -36,7 +36,7 @@ object TriggerNexoBlockItemDrop : Listener {
         val loc = event.block.location
         pending[loc] = PendingBreak(player.uniqueId, mutableListOf())
 
-        plugin.scheduler.runLater(1) {
+        plugin.scheduler.at(loc).runLater(1) {
             val pendingBreak = pending.remove(loc) ?: return@runLater
             processDrops(loc, pendingBreak.playerUuid, pendingBreak.items)
         }

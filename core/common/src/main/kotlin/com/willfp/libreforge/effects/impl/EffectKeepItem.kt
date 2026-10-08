@@ -110,12 +110,12 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
 
     @EventHandler
     fun onRespawn(event: PlayerRespawnEvent) {
-        plugin.scheduler.run { restoreItems(event.player) }
+        plugin.scheduler.on(event.player).run { restoreItems(event.player) }
     }
 
     @EventHandler
     fun onJoin(event: PlayerJoinEvent) {
-        plugin.scheduler.run { restoreItems(event.player) }
+        plugin.scheduler.on(event.player).run { restoreItems(event.player) }
     }
 
     private fun restoreItems(player: Player) {

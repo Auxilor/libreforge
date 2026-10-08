@@ -1,6 +1,7 @@
 package com.willfp.libreforge.integrations.vault.impl
 
 import com.willfp.eco.core.scheduling.EcoTask
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.TriggerData
@@ -25,7 +26,7 @@ object VaultBalancePoller : Listener {
             return
         }
 
-        task = plugin.scheduler.runTimer(intervalTicks, intervalTicks) {
+        task = plugin.scheduler.global().runTimer(intervalTicks, intervalTicks) {
             poll()
         }
     }
@@ -52,15 +53,17 @@ object VaultBalancePoller : Listener {
             lastSeenBalances[player.uniqueId] = newBalance
 
             if (previousBalance != null && newBalance > previousBalance) {
-                TriggerGainCurrency.dispatch(
-                    player.toDispatcher(),
-                    TriggerData(
-                        player = player,
-                        value = (newBalance - previousBalance).toDouble(),
-                        altValue = newBalance.toDouble(),
-                        text = "vault"
+                Regions.runOwned(player) {
+                    TriggerGainCurrency.dispatch(
+                        player.toDispatcher(),
+                        TriggerData(
+                            player = player,
+                            value = (newBalance - previousBalance).toDouble(),
+                            altValue = newBalance.toDouble(),
+                            text = "vault"
+                        )
                     )
-                )
+                }
             }
         }
     }

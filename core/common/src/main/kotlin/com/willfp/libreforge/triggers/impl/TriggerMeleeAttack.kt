@@ -58,9 +58,9 @@ object TriggerMeleeAttack : Trigger("melee_attack") {
         fun handle(event: PrePlayerAttackEntityEvent) {
             if (!(event.willAttack())) return
             dataMap[event.player.uniqueId] = event.player.attackCooldown
-            plugin.scheduler.runLater({
+            plugin.scheduler.global().runLater(1) {
                 dataMap.remove(event.player.uniqueId)
-            }, 1L)
+            }
         }
     }
 

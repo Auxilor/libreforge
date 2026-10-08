@@ -84,7 +84,7 @@ object EffectAddHolderToVictim : Effect<HolderTemplate>("add_holder_to_victim") 
         holders[player.uniqueId].add(holder)
         player.toDispatcher().invalidate(provider)
 
-        plugin.scheduler.runLater(duration.toLong()) {
+        plugin.scheduler.global().runLater(duration.toLong()) {
             holders[player.uniqueId].remove(holder)
             if (holders[player.uniqueId].isEmpty()) {
                 holders.remove(player.uniqueId)

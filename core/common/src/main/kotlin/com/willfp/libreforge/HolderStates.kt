@@ -3,6 +3,7 @@ package com.willfp.libreforge
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.integrations.afk.AFKManager
 import com.willfp.eco.core.placeholder.InjectablePlaceholder
+import com.willfp.eco.core.scheduling.EcoTask
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.conditions.ConditionBlock
 import org.bukkit.Bukkit
@@ -10,7 +11,6 @@ import org.bukkit.Location
 import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
-import org.bukkit.scheduler.BukkitTask
 import java.util.Collections
 import java.util.IdentityHashMap
 import java.util.UUID
@@ -69,7 +69,7 @@ internal object HolderStates {
 
     private var resetRequested = false
 
-    private var task: BukkitTask? = null
+    private var task: EcoTask? = null
 
     private var shutdownSweepDone = false
 
@@ -132,7 +132,7 @@ internal object HolderStates {
         }
 
         task?.cancel()
-        task = Bukkit.getScheduler().runTaskTimer(plugin, Runnable { flush() }, 1, 1)
+        task = plugin.scheduler.global().runTimer(1, 1) { flush() }
 
         if (!states.containsKey(GlobalDispatcher.uuid)) {
             create(GlobalDispatcher, StateKind.GLOBAL)

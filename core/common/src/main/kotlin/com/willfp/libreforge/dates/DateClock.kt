@@ -38,7 +38,7 @@ object DateClock {
 
         isStarted = true
 
-        plugin.scheduler.runTimer(20, 20) {
+        plugin.scheduler.global().runTimer(20, 20) {
             for (boundary in tracker.advance(LocalDateTime.now(Dates.zone))) {
                 for (listener in listeners) {
                     if (listener.period == boundary.period && listener.edge == boundary.edge) {

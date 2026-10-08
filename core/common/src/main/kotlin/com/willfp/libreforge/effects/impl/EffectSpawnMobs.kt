@@ -114,7 +114,7 @@ object EffectSpawnMobs : Effect<NoCompileData>("spawn_mobs") {
                 mob.owner = player
             }
 
-            plugin.scheduler.runLater(ticksToLive.toLong()) { mob.remove() }
+            plugin.scheduler.on(mob).runLater(ticksToLive.toLong()) { mob.remove() }
         }
 
         return true

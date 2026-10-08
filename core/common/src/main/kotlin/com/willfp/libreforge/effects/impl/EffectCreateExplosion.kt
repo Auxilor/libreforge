@@ -66,7 +66,7 @@ object EffectCreateExplosion : Effect<NoCompileData>("create_explosion"), Listen
         val breakBlocks = config.getBoolOrNull("break_blocks") ?: true
 
         for (i in 1..amount) {
-            plugin.scheduler.runLater(i.toLong()) {
+            plugin.scheduler.at(location).runLater(i.toLong()) {
                 world.createExplosion(location, power.toFloat(), fire, breakBlocks, source)
                 }
             }

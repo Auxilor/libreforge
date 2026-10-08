@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.placeholder.translatePlaceholders
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getStrings
@@ -40,11 +41,13 @@ object EffectRunCommand : Effect<NoCompileData>("run_command") {
             .map { it.translatePlaceholders(config.toPlaceholderContext(data)) }
             .dropLastWhile { it.isEmpty() }
 
-        commands.forEach {
-            Bukkit.getServer().dispatchCommand(
-                Bukkit.getConsoleSender(),
-                it
-            )
+        Regions.runGlobal {
+            commands.forEach {
+                Bukkit.getServer().dispatchCommand(
+                    Bukkit.getConsoleSender(),
+                    it
+                )
+            }
         }
 
         return true

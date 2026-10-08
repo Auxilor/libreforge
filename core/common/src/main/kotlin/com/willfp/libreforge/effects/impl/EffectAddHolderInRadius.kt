@@ -107,7 +107,7 @@ object EffectAddHolderInRadius : Effect<HolderTemplate>("add_holder_in_radius") 
         holders += holder
         provider.invalidateNear(holder.holder, holder.uuid, holder.location, holder.radius)
 
-        plugin.scheduler.runLater(duration.toLong()) {
+        plugin.scheduler.global().runLater(duration.toLong()) {
             holders -= holder
             provider.invalidateNear(holder.holder, holder.uuid, holder.location, holder.radius)
         }

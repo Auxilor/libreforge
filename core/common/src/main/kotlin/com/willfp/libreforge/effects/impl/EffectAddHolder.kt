@@ -79,7 +79,7 @@ object EffectAddHolder : Effect<HolderTemplate>("add_holder") {
         holders[dispatcher.uuid].add(holder)
         dispatcher.invalidate(provider)
 
-        plugin.scheduler.runLater(duration.toLong()) {
+        plugin.scheduler.global().runLater(duration.toLong()) {
             holders[dispatcher.uuid].remove(holder)
             if (holders[dispatcher.uuid].isEmpty()) {
                 holders.remove(dispatcher.uuid)

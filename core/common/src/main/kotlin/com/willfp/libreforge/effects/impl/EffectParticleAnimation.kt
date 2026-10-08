@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.particle.Particles
 import com.willfp.libreforge.ArgType
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -101,7 +102,9 @@ object EffectParticleAnimation : Effect<ParticleAnimationBlock<*>?>("particle_an
 
         val args = config.getSubsection("particle_args")
 
-        plugin.scheduler.async().runTimer({ task ->
+        val context = if (Regions.isFolia) plugin.scheduler.on(entity) else plugin.scheduler.async()
+
+        context.runTimer({ task ->
             val entityVector = if (config.getBool("use-eye-location") && entity is LivingEntity) {
                 entity.eyeLocation.toFloat3()
             } else {

@@ -53,7 +53,7 @@ object TriggerGainXp : Trigger("gain_xp") {
         val player = event.player
 
         telekinesisGranted += player.uniqueId
-        plugin.scheduler.run {
+        plugin.scheduler.global().run {
             telekinesisGranted -= player.uniqueId
         }
 

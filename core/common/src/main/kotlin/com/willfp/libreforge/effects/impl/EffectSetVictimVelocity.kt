@@ -46,7 +46,7 @@ object EffectSetVictimVelocity : Effect<NoCompileData>("set_victim_velocity") {
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val victim = data.victim ?: return false
 
-        plugin.scheduler.runLater(1) {
+        plugin.scheduler.on(victim).runLater(1) {
             victim.velocity = Vector(
                 config.getDoubleFromExpression("x", data),
                 config.getDoubleFromExpression("y", data),

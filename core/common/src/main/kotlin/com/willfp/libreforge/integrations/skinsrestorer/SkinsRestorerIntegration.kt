@@ -101,7 +101,7 @@ object SkinsRestorerIntegration : LoadableIntegration {
 
             invalidateSkinCache(player.uniqueId)
 
-            plugin.scheduler.run {
+            plugin.scheduler.global().run {
                 invalidateSkinCache(player.uniqueId)
                 player.toDispatcher().updateEffects()
             }

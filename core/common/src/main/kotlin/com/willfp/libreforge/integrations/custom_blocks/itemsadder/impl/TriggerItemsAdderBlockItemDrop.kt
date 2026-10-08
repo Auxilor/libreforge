@@ -37,7 +37,7 @@ object TriggerItemsAdderBlockItemDrop : Listener {
         val entry = PendingBreak(player.uniqueId, mutableListOf())
         pending[loc] = entry
 
-        plugin.scheduler.runLater(1) {
+        plugin.scheduler.at(loc).runLater(1) {
             val break_ = pending.remove(loc) ?: return@runLater
             processDrops(loc, break_.playerUuid, break_.items)
         }

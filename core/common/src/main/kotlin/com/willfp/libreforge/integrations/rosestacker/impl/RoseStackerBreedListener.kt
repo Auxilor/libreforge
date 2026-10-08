@@ -79,7 +79,7 @@ object RoseStackerBreedListener : Listener {
         }
 
         pending += breed
-        plugin.scheduler.runLater(EXPIRY_TICKS) { pending -= breed }
+        plugin.scheduler.global().runLater(EXPIRY_TICKS) { pending -= breed }
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

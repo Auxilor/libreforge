@@ -42,7 +42,7 @@ object TriggerUnclaim : Trigger("unclaim") {
             multiChunkUnclaimingPlayers[player.uniqueId] = event.affectedChunks.size
         }
 
-        Bukkit.getScheduler().runTask(plugin, Runnable { 
+        plugin.scheduler.on(player).run {
         // TriggerDispatchEvent may only be triggered synchronously.
             this.dispatch(
                 player.toDispatcher(),
@@ -53,7 +53,7 @@ object TriggerUnclaim : Trigger("unclaim") {
                     value = event.affectedChunks.size.toDouble()
                 )
             )
-        })
+        }
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -92,7 +92,7 @@ object TriggerUnclaim : Trigger("unclaim") {
             return
         }
 
-        Bukkit.getScheduler().runTask(plugin, Runnable { 
+        plugin.scheduler.on(player).run {
         // TriggerDispatchEvent may only be triggered synchronously.
             this.dispatch(
                 player.toDispatcher(),
@@ -102,6 +102,6 @@ object TriggerUnclaim : Trigger("unclaim") {
                     location = player.location
                 )
             )
-        })
+        }
     }
 }

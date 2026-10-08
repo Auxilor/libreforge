@@ -24,7 +24,7 @@ object RoseStackerPlaceholderListener : Listener {
         val uuid = event.entity.uniqueId
 
         stackSizes[uuid] = stacked.stackSize
-        plugin.scheduler.runLater(CACHE_TICKS) { stackSizes -= uuid }
+        plugin.scheduler.global().runLater(CACHE_TICKS) { stackSizes -= uuid }
     }
 
     @EventHandler
