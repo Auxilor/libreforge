@@ -1,7 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.map.listMap
+import com.willfp.eco.core.map.concurrentListMap
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
@@ -16,7 +16,7 @@ import java.util.UUID
 object EffectAntigravityProjectile : Effect<NoCompileData>("antigravity_projectile") {
     override val description = "Makes all projectiles the player fires travel in a straight line, unaffected by gravity."
     override val categories = setOf("combat")
-    private val players = listMap<UUID, UUID>()
+    private val players = concurrentListMap<UUID, UUID>()
 
     override fun onEnable(
         dispatcher: Dispatcher<*>,

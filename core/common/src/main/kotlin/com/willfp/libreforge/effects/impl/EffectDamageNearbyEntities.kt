@@ -20,7 +20,10 @@ object EffectDamageNearbyEntities : Effect<Collection<TestableEntity>>("damage_n
     override val description = "Deals damage to all nearby entities within a radius."
     override val categories = setOf("combat")
 
-    private val damagedEntities = mutableSetOf<UUID>()
+    private val damagedEntitiesByThread = ThreadLocal.withInitial { mutableSetOf<UUID>() }
+
+    private val damagedEntities: MutableSet<UUID>
+        get() = damagedEntitiesByThread.get()
 
     override val parameters = setOf(
         TriggerParameter.LOCATION, TriggerParameter.PLAYER

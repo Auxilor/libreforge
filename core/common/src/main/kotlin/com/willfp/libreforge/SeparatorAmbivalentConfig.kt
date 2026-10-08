@@ -10,11 +10,12 @@ import com.willfp.eco.util.NumberUtils
 import com.willfp.eco.util.StringUtils
 import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.entity.Player
+import java.util.concurrent.ConcurrentHashMap
 
 private class SeparatorAmbivalentConfig(
     private val config: Config
 ) : Config {
-    private val resolvedPaths = HashMap<String, String>()
+    private val resolvedPaths = ConcurrentHashMap<String, String>()
 
     private inline fun <reified T> preprocess(path: String, getter: (String) -> T): T? {
         return preprocess(path, getter, { it == null }, null)

@@ -15,6 +15,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 
 object TriggerAltClick : Trigger("alt_click") {
     override val description = "Fires when the player right-clicks with an item in hand, or left-clicks with a bow, rod, or trident."
@@ -73,7 +74,7 @@ object TriggerAltClick : Trigger("alt_click") {
         Material.DROPPER
     )
 
-    private val preventDoubleTriggers = mutableSetOf<UUID>()
+    private val preventDoubleTriggers = ConcurrentHashMap.newKeySet<UUID>()
 
     init {
         BLOCK_BLACKLIST.addAll(Tag.BUTTONS.values)

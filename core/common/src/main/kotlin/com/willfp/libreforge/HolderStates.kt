@@ -41,7 +41,8 @@ internal object HolderStates {
     private const val MAX_ADMISSION_ATTEMPTS = 200
 
     // Classloaders of libreforge-based plugins disabled at runtime; their code must not run again.
-    private val unloadedClassLoaders: MutableSet<ClassLoader> = Collections.newSetFromMap(IdentityHashMap())
+    @Volatile
+    private var unloadedClassLoaders: Set<ClassLoader> = emptySet()
 
     // In creation order, which a reset follows.
     private val states = LinkedHashMap<UUID, HolderState>()
@@ -81,6 +82,7 @@ internal object HolderStates {
 
     private val defaultSettings = Settings(0, 500, 20, 600, 50, entitiesEnabled = true, skipAFKPlayers = true)
 
+    @Volatile
     var settings = defaultSettings
         private set
 
@@ -261,8 +263,10 @@ internal object HolderStates {
     /**
      * If [code] belongs to a libreforge-based plugin that was disabled at runtime.
      */
-    fun isUnloaded(code: Any): Boolean =
-        unloadedClassLoaders.isNotEmpty() && code.javaClass.classLoader in unloadedClassLoaders
+    fun isUnloaded(code: Any): Boolean {
+        val loaders = unloadedClassLoaders
+        return loaders.isNotEmpty() && code.javaClass.classLoader in loaders
+    }
 
     fun markConditionsAll(dispatcher: Dispatcher<*>) =
         withState(dispatcher) { it.conditionDirtyAll = true }
@@ -810,7 +814,10 @@ internal object HolderStates {
         }
 
         val classLoader = disabledPlugin.javaClass.classLoader
-        unloadedClassLoaders += classLoader
+        unloadedClassLoaders = Collections.newSetFromMap(IdentityHashMap<ClassLoader, Boolean>()).apply {
+            addAll(unloadedClassLoaders)
+            add(classLoader)
+        }
         val removed = unregisterHolderProviders { it.ownerClass.classLoader === classLoader }
         HolderSignals.unregisterOwnedBy(classLoader, removed)
         unregisterHolderFunctions(classLoader)

@@ -43,7 +43,10 @@ object TriggerMeleeAttack : Trigger("melee_attack") {
         TriggerParameter.ALT_VALUE
     )
 
-    private val processedEvents = mutableSetOf<UUID>()
+    private val processedEventsByThread = ThreadLocal.withInitial { mutableSetOf<UUID>() }
+
+    private val processedEvents: MutableSet<UUID>
+        get() = processedEventsByThread.get()
 
     fun registerPaperExclusiveListeners() {
         val mcVersion = Bukkit.getServer().bukkitVersion.split("-").getOrNull(0)?.split(".")?.getOrNull(0)?.toInt() ?: 0

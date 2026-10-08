@@ -6,8 +6,10 @@ import com.willfp.libreforge.slot.ItemHolderFinder
 import org.bukkit.Location
 import org.bukkit.event.Event
 import org.bukkit.event.HandlerList
+import java.util.Collections
 import java.util.IdentityHashMap
 import java.util.UUID
+import java.util.concurrent.CopyOnWriteArrayList
 
 
 /**
@@ -178,11 +180,13 @@ data class ProvidedEffectBlock(
     }
 }
 
-private val providers = mutableListOf<HolderProvider>()
+private val providers = CopyOnWriteArrayList<HolderProvider>()
 
-private val providerIds = IdentityHashMap<HolderProvider, String>()
+private val providerIds: MutableMap<HolderProvider, String> = Collections.synchronizedMap(IdentityHashMap())
 
 private val providerIdCounts = mutableMapOf<String, Int>()
+
+private val providerRegistrationLock = Any()
 
 /**
  * The registered providers, in registration order.
@@ -200,16 +204,19 @@ internal fun registeredProviderId(provider: HolderProvider): String =
  * Register a new holder provider.
  */
 fun registerHolderProvider(provider: HolderProvider): Boolean {
-    if (providerIds.containsKey(provider)) {
-        return false
+    synchronized(providerRegistrationLock) {
+        if (providerIds.containsKey(provider)) {
+            return false
+        }
+
+        val baseId = provider.id
+        val count = providerIdCounts.getOrDefault(baseId, 0)
+        providerIdCounts[baseId] = count + 1
+        providerIds[provider] = if (count == 0) baseId else "$baseId#$count"
+
+        providers.add(provider)
     }
 
-    val baseId = provider.id
-    val count = providerIdCounts.getOrDefault(baseId, 0)
-    providerIdCounts[baseId] = count + 1
-    providerIds[provider] = if (count == 0) baseId else "$baseId#$count"
-
-    providers.add(provider)
     HolderSignals.registerProvider(provider)
     HolderStates.markProviderEverywhere(provider)
     return true
@@ -219,10 +226,12 @@ fun registerHolderProvider(provider: HolderProvider): Boolean {
  * Remove holder providers, used when the plugin that registered them is disabled.
  */
 internal fun unregisterHolderProviders(filter: (HolderProvider) -> Boolean): List<HolderProvider> {
-    val removed = providers.filter(filter)
-    providers.removeAll(removed)
-    removed.forEach { providerIds.remove(it) }
-    return removed
+    synchronized(providerRegistrationLock) {
+        val removed = providers.filter(filter)
+        providers.removeAll(removed)
+        removed.forEach { providerIds.remove(it) }
+        return removed
+    }
 }
 
 /**
@@ -312,7 +321,7 @@ inline fun <reified T> registerSpecificHolderProvider(
 fun registerSlotHolderFinderAsProvider(finder: ItemHolderFinder<*>) =
     registerHolderProvider(finder.toHolderProvider())
 
-private val refreshFunctions = mutableListOf<(Dispatcher<*>) -> Unit>()
+private val refreshFunctions = CopyOnWriteArrayList<(Dispatcher<*>) -> Unit>()
 
 /**
  * Register a function to be called before a dispatcher's providers are re-asked.
@@ -376,7 +385,7 @@ fun Dispatcher<*>.refreshHolders() =
 fun Dispatcher<*>.forceRefreshHolders() =
     HolderStates.forceMarkAllProviders(this)
 
-private val holderPlaceholderProviders = mutableListOf<(ProvidedHolder, Dispatcher<*>) -> Collection<NamedValue>>()
+private val holderPlaceholderProviders = CopyOnWriteArrayList<(ProvidedHolder, Dispatcher<*>) -> Collection<NamedValue>>()
 
 /**
  * Register a function to generate placeholders for a holder.

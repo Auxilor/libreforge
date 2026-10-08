@@ -1,7 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.map.listMap
+import com.willfp.eco.core.map.concurrentListMap
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
@@ -17,7 +17,7 @@ object EffectFeatherStep : Effect<NoCompileData>("feather_step") {
     override val description = "Prevents the player trampling crops."
     override val categories = setOf("movement", "player")
 
-    private val players = listMap<UUID, UUID>()
+    private val players = concurrentListMap<UUID, UUID>()
 
     override fun onEnable(
         dispatcher: Dispatcher<*>,

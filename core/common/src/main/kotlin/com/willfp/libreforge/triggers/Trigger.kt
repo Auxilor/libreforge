@@ -53,12 +53,14 @@ abstract class Trigger(
     /**
      * Whether this trigger is enabled.
      */
+    @Volatile
     open var isEnabled: Boolean = false
         protected set
 
     /**
      * If the listener is registered.
      */
+    @Volatile
     private var isListenerRegistered = false
 
     /**

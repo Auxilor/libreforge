@@ -20,6 +20,7 @@ import org.bukkit.event.player.PlayerBucketEmptyEvent
 import org.bukkit.event.player.PlayerItemConsumeEvent
 import org.bukkit.inventory.ItemStack
 import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 
 object EffectInfiniteBucket : Effect<Set<String>>("infinite_bucket") {
     override val description = "Prevents the specified bucket types from being emptied, refilling them automatically."
@@ -34,7 +35,7 @@ object EffectInfiniteBucket : Effect<Set<String>>("infinite_bucket") {
         )
     }
 
-    private val activePlayers = mutableMapOf<UUID, Set<String>>()
+    private val activePlayers = ConcurrentHashMap<UUID, Set<String>>()
 
     @EventHandler
     fun onBucketEmpty(event: PlayerBucketEmptyEvent) {

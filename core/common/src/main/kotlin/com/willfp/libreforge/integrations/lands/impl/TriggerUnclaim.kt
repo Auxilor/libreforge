@@ -11,6 +11,7 @@ import me.angeschossen.lands.api.events.land.claiming.selection.LandUnclaimSelec
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 
 object TriggerUnclaim : Trigger("unclaim") {
     override val description = "Fires when the player unclaims Lands chunks."
@@ -31,7 +32,7 @@ object TriggerUnclaim : Trigger("unclaim") {
         TriggerParameter.VALUE
     )
 
-    private val multiChunkUnclaimingPlayers = mutableMapOf<UUID, Int>()
+    private val multiChunkUnclaimingPlayers = ConcurrentHashMap<UUID, Int>()
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: LandUnclaimSelectionEvent) {

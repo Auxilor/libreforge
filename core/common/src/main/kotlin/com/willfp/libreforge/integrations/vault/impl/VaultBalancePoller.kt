@@ -17,6 +17,7 @@ import java.util.concurrent.ConcurrentHashMap
 
 object VaultBalancePoller : Listener {
     private val lastSeenBalances = ConcurrentHashMap<UUID, BigDecimal>()
+    @Volatile
     private var task: EcoTask? = null
 
     fun start() {

@@ -25,6 +25,7 @@ import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.Location
 import java.util.Objects
 import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 
 object EffectAddHolderInRadius : Effect<HolderTemplate>("add_holder_in_radius") {
     override val description = "Temporarily applies a set of effects and conditions to all nearby entities within a radius."
@@ -66,7 +67,7 @@ object EffectAddHolderInRadius : Effect<HolderTemplate>("add_holder_in_radius") 
         )
     }
 
-    private val holders = mutableSetOf<NearbyHolder>()
+    private val holders = ConcurrentHashMap.newKeySet<NearbyHolder>()
 
     // Invalidated near a holder when it is added or expires; polling covers movement.
     private val provider = object : HolderProvider {
