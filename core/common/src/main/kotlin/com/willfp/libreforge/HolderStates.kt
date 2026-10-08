@@ -62,6 +62,11 @@ internal object HolderStates {
 
     private var flushing = false
 
+    private var flushThread: Thread? = null
+
+    private val isFlushThread: Boolean
+        get() = flushThread?.let { it === Thread.currentThread() } ?: Bukkit.isPrimaryThread()
+
     private var resetRequested = false
 
     private var task: BukkitTask? = null
@@ -146,9 +151,20 @@ internal object HolderStates {
 
     private fun mark(action: () -> Unit) {
         when {
-            !Bukkit.isPrimaryThread() -> offThreadMarks.add(action)
+            !isFlushThread -> offThreadMarks.add(action)
             flushing -> nextFlushMarks.add(action)
             else -> action()
+        }
+    }
+
+    /**
+     * Run [action] now on the flush thread, or queue it for the next flush.
+     */
+    private fun onFlushThread(action: () -> Unit) {
+        if (isFlushThread) {
+            action()
+        } else {
+            offThreadMarks.add(action)
         }
     }
 
@@ -280,9 +296,9 @@ internal object HolderStates {
         resetRequested = true
     }
 
-    fun trackPlayer(player: Player) {
+    fun trackPlayer(player: Player): Unit = onFlushThread {
         if (shutdownSweepDone || !player.isRealPlayer || states.containsKey(player.uniqueId)) {
-            return
+            return@onFlushThread
         }
 
         create(player.toDispatcher(), StateKind.PLAYER)
@@ -291,24 +307,24 @@ internal object HolderStates {
     /**
      * Track a mob or NPC player, stripping stale attribute modifiers before its effects are enabled.
      */
-    fun trackEntity(entity: LivingEntity, isNPC: Boolean = false) {
+    fun trackEntity(entity: LivingEntity, isNPC: Boolean = false): Unit = onFlushThread {
         if (shutdownSweepDone || !settings.entitiesEnabled) {
-            return
+            return@onFlushThread
         }
 
         if (!isNPC && entity.isRealPlayer) {
-            return
+            return@onFlushThread
         }
 
         // Spawn events fire before the entity is in the world, so validity is checked on admission.
         if (entity.isDead) {
-            return
+            return@onFlushThread
         }
 
         val existing = states[entity.uniqueId]
         if (existing != null) {
             if (existing.dispatcher.dispatcher === entity) {
-                return
+                return@onFlushThread
             }
 
             // A new entity object with the same UUID, e.g. after a dimension change.
@@ -321,12 +337,12 @@ internal object HolderStates {
     /**
      * Stop tracking [entity], disabling its active effects.
      */
-    fun untrackEntity(entity: LivingEntity, isNPC: Boolean = false) {
+    fun untrackEntity(entity: LivingEntity, isNPC: Boolean = false): Unit = onFlushThread {
         if (!isNPC && entity.isRealPlayer) {
-            return
+            return@onFlushThread
         }
 
-        val state = states[entity.uniqueId] ?: return
+        val state = states[entity.uniqueId] ?: return@onFlushThread
         if (state.dispatcher.dispatcher === entity) {
             remove(state)
         }
@@ -335,15 +351,15 @@ internal object HolderStates {
     /**
      * Stop tracking a player, disabling its active effects.
      */
-    fun untrackPlayer(player: Player) {
-        val state = states[player.uniqueId] ?: return
+    fun untrackPlayer(player: Player): Unit = onFlushThread {
+        val state = states[player.uniqueId] ?: return@onFlushThread
         remove(state)
     }
 
     /**
      * Re-track an entity by UUID in the next flush.
      */
-    fun retrack(uuid: UUID) {
+    fun retrack(uuid: UUID): Unit = onFlushThread {
         retrack += uuid
     }
 
@@ -409,6 +425,7 @@ internal object HolderStates {
         }
 
         tick++
+        flushThread = Thread.currentThread()
 
         while (true) {
             val action = offThreadMarks.poll() ?: break
@@ -623,7 +640,7 @@ internal object HolderStates {
      * main thread or during a holder update, where the changes are applied in the next tick.
      */
     fun flushNow(dispatcher: Dispatcher<*>) {
-        if (!Bukkit.isPrimaryThread() || flushing) {
+        if (!isFlushThread || flushing) {
             return
         }
 
@@ -645,7 +662,7 @@ internal object HolderStates {
      * and asked on demand, storing nothing, for untracked dispatchers.
      */
     fun holders(dispatcher: Dispatcher<*>): List<ProvidedHolder> {
-        if (!Bukkit.isPrimaryThread()) {
+        if (!isFlushThread) {
             return publishedHolders[dispatcher.uuid]?.all ?: askOnDemand(dispatcher)
         }
 
@@ -667,7 +684,7 @@ internal object HolderStates {
      * The stored answer of [provider] for a tracked [dispatcher], or null if it must be scanned.
      */
     fun storedAnswer(dispatcher: Dispatcher<*>, provider: HolderProvider): Collection<ProvidedHolder>? {
-        if (!Bukkit.isPrimaryThread()) {
+        if (!isFlushThread) {
             return publishedHolders[dispatcher.uuid]?.byProvider?.get(provider)
         }
 
@@ -680,7 +697,7 @@ internal object HolderStates {
     }
 
     fun providedActiveEffects(dispatcher: Dispatcher<*>): List<ProvidedEffectBlock> {
-        if (!Bukkit.isPrimaryThread()) {
+        if (!isFlushThread) {
             return publishedActiveEffects[dispatcher.uuid] ?: emptyList()
         }
 
@@ -691,7 +708,7 @@ internal object HolderStates {
      * The cached placeholders of [holder] on a tracked [dispatcher], or null to generate them.
      */
     fun cachedPlaceholders(dispatcher: Dispatcher<*>, holder: Holder): List<InjectablePlaceholder>? {
-        if (!Bukkit.isPrimaryThread()) {
+        if (!isFlushThread) {
             return null
         }
 
