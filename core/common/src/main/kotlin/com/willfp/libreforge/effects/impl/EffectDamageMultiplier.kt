@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.integrations.DisabledIntegrations
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
@@ -9,7 +10,6 @@ import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import io.lumine.mythic.bukkit.events.MythicDamageEvent
-import org.bukkit.Bukkit
 import org.bukkit.event.entity.EntityDamageEvent
 
 object EffectDamageMultiplier : Effect<NoCompileData>("damage_multiplier") {
@@ -38,7 +38,7 @@ object EffectDamageMultiplier : Effect<NoCompileData>("damage_multiplier") {
 
         val event = data.event
 
-        if (Bukkit.getPluginManager().isPluginEnabled("MythicMobs") && event is MythicDamageEvent) {
+        if (DisabledIntegrations.isEnabled("MythicMobs") && event is MythicDamageEvent) {
             event.damage *= multiplier
             return true
         }
