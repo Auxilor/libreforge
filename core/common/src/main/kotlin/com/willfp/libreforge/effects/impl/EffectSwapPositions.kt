@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.impl
 import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -28,7 +29,7 @@ object EffectSwapPositions : Effect<NoCompileData>("swap_positions") {
         } else {
             player.teleport(victimLoc)
         }
-        victim.teleport(playerLoc)
+        Regions.teleport(victim, playerLoc)
 
         return true
     }

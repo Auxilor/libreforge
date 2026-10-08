@@ -123,6 +123,19 @@ internal object Regions {
     }
 
     /**
+     * Teleport [entity]. Folia has no synchronous teleport, so it moves on a later tick there
+     * and this returns `true` once scheduled.
+     */
+    fun teleport(entity: Entity, location: Location): Boolean {
+        if (isFolia) {
+            entity.teleportAsync(location)
+            return true
+        }
+
+        return entity.teleport(location)
+    }
+
+    /**
      * If [feature] is unavailable here, logging it once. Always `false` off Folia.
      */
     fun isUnsupported(feature: String): Boolean =

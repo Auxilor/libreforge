@@ -2,6 +2,7 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -32,7 +33,7 @@ object EffectTeleportToGround : Effect<NoCompileData>("teleport_to_ground") {
             current = current.subtract(0.0, 1.0, 0.0)
         }
 
-        player.teleport(current)
+        Regions.teleport(player, current)
 
         return true
     }

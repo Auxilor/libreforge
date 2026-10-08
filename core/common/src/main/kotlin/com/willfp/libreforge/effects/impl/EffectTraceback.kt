@@ -47,7 +47,7 @@ object EffectTraceback : Effect<NoCompileData>("traceback") {
 
         val location = times.getOrElse(index) { times.lastOrNull() } ?: return false
 
-        player.teleport(location)
+        Regions.teleport(player, location)
 
         return true
     }
