@@ -2,7 +2,7 @@ name: libreforge
 version: ${projectVersion}
 main: com.willfp.libreforge.LibreforgeSpigotPlugin
 api-version: 1.21.8
-authors: [ Auxilor ]
+authors: [ Auxilor, Exanthiax, Callum ]
 website: willfp.com
 
 # eco is written as a softdepend because otherwise the plugin
