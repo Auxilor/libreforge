@@ -6,6 +6,7 @@ import com.willfp.eco.core.placeholder.InjectablePlaceholder
 import com.willfp.libreforge.ConfigurableElement
 import com.willfp.libreforge.DynamicConfigs
 import com.willfp.libreforge.DynamicNumericValue
+import com.willfp.libreforge.InjectionScope
 import com.willfp.libreforge.NamedValue
 import com.willfp.libreforge.conditions.ConditionList
 import com.willfp.libreforge.effects.arguments.EffectArgumentList
@@ -67,6 +68,10 @@ abstract class ElementLike : ConfigurableElement {
             return doTrigger(trigger)
         }
 
+        return InjectionScope.open { triggerInScope(trigger) }
+    }
+
+    private fun triggerInScope(trigger: DispatchedTrigger): Boolean {
         // It would be nice to abstract repeat/delay away here, but that would be
         // really, really, overengineering it - even for me.
         var repeatTimes = 1
@@ -174,6 +179,7 @@ abstract class ElementLike : ConfigurableElement {
             }
         } else {
             // Delay between each repeat.
+            val scope = InjectionScope.current()!!
             var repeats = 0
             val context = data.player?.let { plugin.scheduler.on(it) }
                 ?: data.location?.let { plugin.scheduler.at(it) }
@@ -181,7 +187,7 @@ abstract class ElementLike : ConfigurableElement {
 
             context.runTimer({ task ->
                 repeats++
-                trigger()
+                InjectionScope.enter(scope) { trigger() }
 
                 if (repeats >= repeatTimes) {
                     task.cancel()
