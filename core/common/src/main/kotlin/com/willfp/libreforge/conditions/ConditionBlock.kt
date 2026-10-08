@@ -3,6 +3,7 @@ package com.willfp.libreforge.conditions
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Compiled
 import com.willfp.libreforge.Dispatcher
+import com.willfp.libreforge.DynamicConfigs
 import com.willfp.libreforge.HolderStates
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.applyHolder
@@ -27,6 +28,9 @@ class ConditionBlock<T> internal constructor(
      */
     val showNotMet = forceShowNotMet || notMetLines.isNotEmpty()
 
+    // Holder placeholders only matter to a config that references a placeholder.
+    private val usesPlaceholders = DynamicConfigs.hasPlaceholder(config)
+
     /**
      * Check if the condition is met for a [dispatcher].
      */
@@ -45,7 +49,7 @@ class ConditionBlock<T> internal constructor(
                 ?: plugin.configYml.getBool("conditions.default-state-off-main-thread")
         }
 
-        val withHolder = config.applyHolder(holder, dispatcher)
+        val withHolder = if (usesPlaceholders) config.applyHolder(holder, dispatcher) else config
 
         val dispatcherMet = condition.isMet(dispatcher, withHolder, holder, compileData)
 

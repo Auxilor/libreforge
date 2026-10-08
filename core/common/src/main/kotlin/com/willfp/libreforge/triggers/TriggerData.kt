@@ -76,7 +76,14 @@ class TriggerData(
     val foundItem: ItemStack?
         get() = holder.getProvider() ?: item
 
-    private val hashCode by lazy {
+    // Computed on first use, as the holder is set after construction. A racing thread computes the same value.
+    private var hashCode = 0
+
+    // Written after hashCode, so a thread that sees it set also sees the hash.
+    @Volatile
+    private var isHashed = false
+
+    private fun computeHashCode(): Int =
         Objects.hash(
             holder,
             player,
@@ -91,8 +98,6 @@ class TriggerData(
             value,
             altValue
         )
-    }
-
 
     /**
      * Turn into a dispatched trigger for a new [dispatcher].
@@ -147,6 +152,11 @@ class TriggerData(
     }
 
     override fun hashCode(): Int {
+        if (!isHashed) {
+            hashCode = computeHashCode()
+            isHashed = true
+        }
+
         return hashCode
     }
 

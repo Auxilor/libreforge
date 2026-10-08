@@ -5,25 +5,36 @@ import com.willfp.eco.core.placeholder.StaticPlaceholder
 import com.willfp.eco.core.placeholder.context.PlaceholderContext
 import com.willfp.eco.core.placeholder.templates.SimpleInjectablePlaceholder
 
-open class NamedValue(
+open class NamedValue private constructor(
     val identifiers: Collection<String>,
-    value: String
+    private val rawValue: Any,
+    @Suppress("UNUSED_PARAMETER") marker: Unit
 ) {
+    constructor(
+        identifiers: Collection<String>,
+        value: String
+    ) : this(identifiers, value, Unit)
+
     constructor(
         identifier: String,
         value: Any
-    ) : this(listOf(identifier), value.toString())
+    ) : this(listOf(identifier), value)
 
+    // Immutable numbers are formatted when first read; anything else could change, so is formatted now.
     constructor(
         identifiers: Collection<String>,
         value: Any
-    ) : this(identifiers, value.toString())
+    ) : this(identifiers, if (value is Double || value is Int || value is Long || value is Float) value else value.toString(), Unit)
 
-    open val placeholders: List<InjectablePlaceholder> by lazy { identifiers.map {
-        StaticPlaceholder(
-            it
-        ) { value }
-    } }
+    private val formattedValue: String by lazy(LazyThreadSafetyMode.PUBLICATION) { rawValue.toString() }
+
+    open val placeholders: List<InjectablePlaceholder> by lazy(LazyThreadSafetyMode.PUBLICATION) {
+        identifiers.map {
+            StaticPlaceholder(
+                it
+            ) { formattedValue }
+        }
+    }
 }
 
 /*

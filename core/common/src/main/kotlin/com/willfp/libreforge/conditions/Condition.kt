@@ -6,6 +6,7 @@ import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.HolderChange
 import com.willfp.libreforge.HolderSignals
 import com.willfp.libreforge.ProvidedHolder
+import com.willfp.libreforge.SignalScope
 import com.willfp.libreforge.plugin
 import org.bukkit.event.Listener
 
@@ -24,6 +25,12 @@ abstract class Condition<T>(
      */
     open val invalidatedBy: Set<HolderChange>?
         get() = null
+
+    /**
+     * If a signal from [invalidatedBy] touching only [scope] can change this condition's result
+     * for [holder]. Unknown scopes must return true.
+     */
+    open fun isInvalidatedBy(scope: SignalScope, holder: ProvidedHolder): Boolean = true
 
     /**
      * Enable the condition.

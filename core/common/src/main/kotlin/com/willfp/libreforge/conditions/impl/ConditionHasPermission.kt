@@ -7,6 +7,7 @@ import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
+import com.willfp.libreforge.conditions.PermissionCache
 import com.willfp.libreforge.get
 import org.bukkit.entity.Player
 
@@ -33,6 +34,6 @@ object ConditionHasPermission : Condition<NoCompileData>("has_permission") {
     ): Boolean {
         val player = dispatcher.get<Player>() ?: return false
 
-        return player.hasPermission(config.getString("permission"))
+        return PermissionCache.has(player, config.getString("permission"))
     }
 }

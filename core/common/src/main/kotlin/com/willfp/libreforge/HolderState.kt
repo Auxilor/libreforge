@@ -13,6 +13,7 @@ import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemStack
 import java.util.Collections
 import java.util.IdentityHashMap
+import java.util.Objects
 import java.util.UUID
 
 /**
@@ -24,7 +25,15 @@ internal data class HolderKey(
     val providerId: String,
     val holderId: NamespacedKey,
     val occurrence: Int
-)
+) {
+    private val hash = Objects.hash(providerId, holderId, occurrence)
+
+    override fun hashCode(): Int = hash
+
+    override fun equals(other: Any?): Boolean =
+        this === other || other is HolderKey && hash == other.hash && occurrence == other.occurrence
+                && holderId == other.holderId && providerId == other.providerId
+}
 
 /**
  * Identity of one enabled effect element.
@@ -84,7 +93,16 @@ internal class HolderData(
         placeholderNames = values.flatMapTo(mutableSetOf()) { it.identifiers }
     }
 
-    private val dynamicElements = IdentityHashMap<ChainElement<*>, Boolean>()
+    // Per effect block, which elements are dynamic; null for blocks that are not permanent.
+    private val dynamicElements: Array<BooleanArray?> = providedHolder.holder.effects.map { block ->
+        if (block.isPermanent) {
+            BooleanArray(block.effects.size) { DynamicConfigs.isDynamic(block.effects[it].config, placeholderNames) }
+        } else {
+            null
+        }
+    }.toTypedArray()
+
+    private val hasDynamicEffect = dynamicElements.any { flags -> flags != null && flags.any { it } }
 
     private val polledConditions = IdentityHashMap<ConditionBlock<*>, Boolean>()
 
@@ -93,10 +111,23 @@ internal class HolderData(
     private var isPolled: Boolean? = null
 
     /**
-     * If an effect [element] must be reloaded on every condition pass for this holder.
+     * If the effect element at [blockIndex] and [elementIndex] of a permanent block must be reloaded
+     * on every condition pass for this holder.
      */
-    fun isDynamic(element: ChainElement<*>): Boolean =
-        dynamicElements.getOrPut(element) { DynamicConfigs.isDynamic(element.config, placeholderNames) }
+    fun isDynamic(blockIndex: Int, elementIndex: Int): Boolean =
+        dynamicElements.getOrNull(blockIndex)?.getOrNull(elementIndex) == true
+
+    /**
+     * As [isDynamic] by index, for an [element] that may be from an earlier compile of the holder.
+     */
+    fun isDynamic(key: EffectKey, element: ChainElement<*>, holder: Holder): Boolean {
+        val block = holder.effects.getOrNull(key.blockIndex)
+        if (block != null && block.effects.getOrNull(key.elementIndex) === element) {
+            return isDynamic(key.blockIndex, key.elementIndex)
+        }
+
+        return DynamicConfigs.isDynamic(element.config, placeholderNames)
+    }
 
     private fun isPolled(block: ConditionBlock<*>): Boolean =
         polledConditions.getOrPut(block) {
@@ -112,23 +143,19 @@ internal class HolderData(
         val hasPolledCondition = holder.conditions.any { isPolled(it) }
                 || holder.effects.any { block -> block.conditions.any { isPolled(it) } }
 
-        val hasDynamicEffect = holder.effects.any { block ->
-            block.isPermanent && block.effects.any { isDynamic(it) }
-        }
-
         return (hasPolledCondition || hasDynamicEffect).also { isPolled = it }
     }
 
     /**
      * If [holder] uses any of [conditions], at holder or effect level.
      */
-    fun usesAny(holder: Holder, conditions: Set<Condition<*>>): Boolean {
+    fun usesAny(holder: ProvidedHolder, conditions: Set<Condition<*>>, scope: SignalScope?): Boolean {
         val types = conditionTypes ?: buildSet {
-            holder.conditions.forEach { add(it.condition) }
-            holder.effects.forEach { block -> block.conditions.forEach { add(it.condition) } }
+            holder.holder.conditions.forEach { add(it.condition) }
+            holder.holder.effects.forEach { block -> block.conditions.forEach { add(it.condition) } }
         }.also { conditionTypes = it }
 
-        return types.any { it in conditions }
+        return types.any { it in conditions && (scope == null || it.isInvalidatedBy(scope, holder)) }
     }
 }
 
@@ -184,6 +211,9 @@ internal class HolderState(
     // Each provider's last answer, keyed. A provider with no entry has never been asked.
     private val answers = IdentityHashMap<HolderProvider, LinkedHashMap<HolderKey, ProvidedHolder>>()
 
+    // Each scoped provider's last answer as returned, so an answer handed back unchanged skips keying.
+    private val rawAnswers = IdentityHashMap<HolderProvider, Collection<ProvidedHolder>>()
+
     private val applied = IdentityHashMap<HolderProvider, LinkedHashMap<HolderKey, ProvidedHolder>>()
 
     private var appliedByKey = HashMap<HolderKey, ProvidedHolder>()
@@ -208,7 +238,12 @@ internal class HolderState(
     var lastHolderUpdateAt = 0L
     var lastClickRefreshAt = 0L
 
-    val dirtyProviders: MutableSet<HolderProvider> = Collections.newSetFromMap(IdentityHashMap())
+    private val dirtyProviders: MutableSet<HolderProvider> = Collections.newSetFromMap(IdentityHashMap())
+
+    // Dirty providers marked only by scoped signals, with those scopes. Absent means full.
+    private val providerScopes = IdentityHashMap<HolderProvider, ArrayList<SignalScope>>()
+
+    private val providerMemory = IdentityHashMap<HolderProvider, ProviderMemory>()
 
     // Answered but not yet applied, e.g. asked by a read before the first flush.
     private val pendingProviders: MutableSet<HolderProvider> = Collections.newSetFromMap(IdentityHashMap())
@@ -220,6 +255,10 @@ internal class HolderState(
     var reloadAll = false
     var resetPending = false
     var clickPending = false
+        private set
+
+    // Scopes of the pending clicks, or null if any click touched everything.
+    private var clickScopes: ArrayList<SignalScope>? = ArrayList()
 
     // Set when the state is dropped, possibly by a handler in the middle of its own update.
     var isRemoved = false
@@ -299,10 +338,11 @@ internal class HolderState(
 
     private fun askUnasked(providers: List<HolderProvider>, tick: Int) {
         var asked = false
+        val pass = ProvidePass()
 
         for (provider in providers) {
             if (!answers.containsKey(provider)) {
-                ask(provider, tick)
+                ask(provider, tick, pass)
                 dirtyProviders.remove(provider)
                 asked = true
             }
@@ -331,19 +371,49 @@ internal class HolderState(
     /**
      * Ask [provider] again. Returns true if its answer changed, so it must be applied.
      */
-    private fun ask(provider: HolderProvider, tick: Int): Boolean {
+    private fun ask(provider: HolderProvider, tick: Int, pass: ProvidePass): Boolean {
+        val scopes = providerScopes.remove(provider)
+
+        // A scoped ask only re-checks part of the provider, so only a full ask resets its polling age.
+        if (scopes == null || provider !is ScopedHolderProvider) {
+            providerCheckedAt[provider] = tick
+        }
+
+        if (provider !is ScopedHolderProvider) {
+            return applyAnswer(provider, provider.ask(dispatcher))
+        }
+
+        val answer = provider.provide(
+            ProvideContext(
+                dispatcher,
+                if (scopes == null) SignalScopes.FULL else SignalScopes(scopes),
+                providerMemory.getOrPut(provider) { ProviderMemory() },
+                pass
+            )
+        )
+
+        if (answer === rawAnswers[provider] && answers.containsKey(provider)) {
+            return false
+        }
+
+        rawAnswers[provider] = answer
+        return applyAnswer(provider, answer)
+    }
+
+    /**
+     * Key and store [answer] as the answer of [provider]. Returns true if it changed.
+     */
+    private fun applyAnswer(provider: HolderProvider, answer: Collection<ProvidedHolder>): Boolean {
         val providerId = registeredProviderId(provider)
         val occurrences = HashMap<NamespacedKey, Int>()
         val keyed = LinkedHashMap<HolderKey, ProvidedHolder>()
 
-        for (ph in provider.ask(dispatcher)) {
+        for (ph in answer) {
             val holderId = ph.holder.id
             val occurrence = occurrences.getOrDefault(holderId, 0)
             occurrences[holderId] = occurrence + 1
             keyed[HolderKey(providerId, holderId, occurrence)] = ph
         }
-
-        providerCheckedAt[provider] = tick
 
         val previous = answers[provider]
         if (previous != null && isSameAnswer(previous, keyed) { it.slotType }) {
@@ -400,7 +470,7 @@ internal class HolderState(
             val checkedAt = providerCheckedAt[provider] ?: continue
             val maxAge = provider.maxAge(dispatcher) ?: continue
             if (tick - checkedAt >= maxAge) {
-                dirtyProviders += provider
+                markProvider(provider)
             }
         }
 
@@ -423,22 +493,73 @@ internal class HolderState(
     }
 
     /**
-     * Mark the providers and conditions that a built-in [change] invalidates.
+     * Mark [provider] to be re-asked for everything.
      */
-    fun applySignal(change: HolderChange) {
-        dirtyProviders.addAll(HolderSignals.providersFor(change))
-        markConditionHolders(HolderSignals.conditionsFor(change))
+    fun markProvider(provider: HolderProvider) {
+        dirtyProviders += provider
+        providerScopes.remove(provider)
     }
 
-    fun markConditionHolders(conditions: Set<Condition<*>>) {
+    fun markProviders(providers: Collection<HolderProvider>) =
+        providers.forEach { markProvider(it) }
+
+    /**
+     * Mark [provider] to be re-asked for [scope], or for everything if null. A provider already
+     * marked for everything stays so.
+     */
+    fun markProvider(provider: HolderProvider, scope: SignalScope?) {
+        if (scope == null) {
+            markProvider(provider)
+            return
+        }
+
+        if (dirtyProviders.add(provider)) {
+            providerScopes[provider] = arrayListOf(scope)
+            return
+        }
+
+        val scopes = providerScopes[provider] ?: return
+        if (scopes.size >= MAX_PENDING_SCOPES) {
+            providerScopes.remove(provider)
+        } else {
+            scopes += scope
+        }
+    }
+
+    /**
+     * Mark the providers and conditions that a built-in [change] invalidates, touching [scope].
+     */
+    fun applySignal(change: HolderChange, scope: SignalScope? = null) {
+        for (provider in HolderSignals.providersFor(change)) {
+            markProvider(provider, scope)
+        }
+
+        markConditionHolders(HolderSignals.conditionsFor(change), scope)
+    }
+
+    fun markConditionHolders(conditions: Set<Condition<*>>, scope: SignalScope? = null) {
         if (conditions.isEmpty()) {
             return
         }
 
         for ((key, ph) in appliedOrder) {
-            if (dataFor(ph).usesAny(ph.holder, conditions)) {
+            if (dataFor(ph).usesAny(ph, conditions, scope)) {
                 conditionDirtyHolders += key
             }
+        }
+    }
+
+    /**
+     * Queue an inventory click touching [scope], or everything if null.
+     */
+    fun addPendingClick(scope: SignalScope?) {
+        clickPending = true
+
+        val scopes = clickScopes ?: return
+        if (scope == null || scopes.size >= MAX_PENDING_SCOPES) {
+            clickScopes = null
+        } else {
+            scopes += scope
         }
     }
 
@@ -499,7 +620,16 @@ internal class HolderState(
 
         clickPending = false
         lastClickRefreshAt = now
-        applySignal(HolderChange.Items)
+
+        val scopes = clickScopes
+        clickScopes = ArrayList()
+
+        if (scopes == null) {
+            applySignal(HolderChange.Items)
+        } else {
+            scopes.forEach { applySignal(HolderChange.Items, it) }
+        }
+
         return false
     }
 
@@ -519,13 +649,15 @@ internal class HolderState(
         dispatcher.runRefreshFunctions()
 
         var changed = false
+        val pass = ProvidePass()
         for (provider in registeredHolderProviders) {
-            if (provider in dirtyProviders && ask(provider, tick)) {
+            if (provider in dirtyProviders && ask(provider, tick, pass)) {
                 changed = true
             }
         }
 
         dirtyProviders.clear()
+        providerScopes.clear()
         lastHolderUpdateAt = now
 
         if (changed) {
@@ -680,8 +812,12 @@ internal class HolderState(
             val ph = evaluation.holder
             val data = dataFor(ph)
 
-            ph.holder.effects.forEachIndexed { blockIndex, block ->
-                block.effects.forEachIndexed { elementIndex, element ->
+            val effects = ph.holder.effects
+            for (blockIndex in 0 until effects.size) {
+                val block = effects[blockIndex]
+                val elements = block.effects
+                for (elementIndex in 0 until elements.size) {
+                    val element = elements[elementIndex]
                     val effectKey = EffectKey(key, blockIndex, elementIndex)
                     val current = active[effectKey]
                     val isMet = evaluation.met[blockIndex] && !HolderStates.isUnloaded(element.effect)
@@ -700,7 +836,7 @@ internal class HolderState(
                         delta.disables += current
                     } else if (current != null && block.isPermanent) {
                         val rebind = key in diff.moved && element.effect.providerBinding != ProviderBinding.NONE
-                        if (rebind || data.isDynamic(element)) {
+                        if (rebind || data.isDynamic(blockIndex, elementIndex)) {
                             delta.reloads[effectKey] = Reload(current, ph)
                         }
                     }
@@ -830,7 +966,7 @@ internal class HolderState(
 
             val current = appliedByKey[activeEffect.key.holder] ?: continue
 
-            if (dataFor(current).isDynamic(activeEffect.element)) {
+            if (dataFor(current).isDynamic(activeEffect.key, activeEffect.element, current.holder)) {
                 continue
             }
 
@@ -916,16 +1052,18 @@ internal class HolderState(
         disableAll()
 
         answers.clear()
+        rawAnswers.clear()
         applied.clear()
         pendingProviders.clear()
         providerCheckedAt.clear()
+        providerMemory.clear()
         holderData.clear()
         rebuildApplied()
         rebuildSnapshot()
 
         conditionDirtyAll = false
         conditionDirtyHolders.clear()
-        dirtyProviders.addAll(registeredHolderProviders)
+        markProviders(registeredHolderProviders)
         bypassCooldown = true
         HolderStates.clearConditionResults(uuid)
     }
@@ -965,8 +1103,11 @@ internal class HolderState(
 
         for (provider in removedProviders) {
             answers.remove(provider)
+            rawAnswers.remove(provider)
             applied.remove(provider)
             providerCheckedAt.remove(provider)
+            providerMemory.remove(provider)
+            providerScopes.remove(provider)
             dirtyProviders.remove(provider)
             pendingProviders.remove(provider)
         }
@@ -999,6 +1140,9 @@ internal class HolderState(
         }
     }
 }
+
+// Beyond this, pending scopes collapse to a full re-ask, which is cheaper than matching them all.
+private const val MAX_PENDING_SCOPES = 32
 
 private val ProvidedHolder.slotType
     get() = (this as? SlotItemProvidedHolder<*>)?.slotType

@@ -63,10 +63,12 @@ sealed interface HolderChange {
 
     /**
      * Any Bukkit event. [dispatcherOf] names the one dispatcher to refresh; null ignores the event.
+     * [scopeOf] narrows what the event touched; null, or a null scope, touches everything.
      */
-    class Custom<E : Event>(
+    class Custom<E : Event> @JvmOverloads constructor(
         val event: Class<E>,
-        val dispatcherOf: (E) -> Dispatcher<*>?
+        val dispatcherOf: (E) -> Dispatcher<*>?,
+        val scopeOf: ((E) -> SignalScope?)? = null
     ) : HolderChange
 
     companion object {
@@ -80,6 +82,14 @@ sealed interface HolderChange {
          */
         inline fun <reified E : Event> custom(noinline dispatcherOf: (E) -> Dispatcher<*>?) =
             Custom(E::class.java, dispatcherOf)
+
+        /**
+         * Create a [Custom] signal for an event type, narrowed by [scopeOf].
+         */
+        inline fun <reified E : Event> custom(
+            noinline dispatcherOf: (E) -> Dispatcher<*>?,
+            noinline scopeOf: (E) -> SignalScope?
+        ) = Custom(E::class.java, dispatcherOf, scopeOf)
     }
 }
 
