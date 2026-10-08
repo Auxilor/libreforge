@@ -2,6 +2,7 @@ package com.willfp.libreforge.commands
 
 import com.willfp.eco.core.command.impl.Subcommand
 import com.willfp.eco.core.placeholder.context.PlaceholderContext
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.levels.LevelTypes
 import com.willfp.libreforge.levels.levels
 import com.willfp.libreforge.plugin
@@ -58,21 +59,23 @@ internal object CommandItemLevelGiveLevel : Subcommand(
             return
         }
 
-        val item = player.inventory.itemInMainHand
+        Regions.runOwned(player) {
+            val item = player.inventory.itemInMainHand
 
-        if (item.type.isAir) {
-            sender.sendMessage(plugin.langYml.getMessage("must-have-item"))
-            return
+            if (item.type.isAir) {
+                sender.sendMessage(plugin.langYml.getMessage("must-have-item"))
+                return@runOwned
+            }
+
+            item.levels.gainLevels(levelType, amount, PlaceholderContext(player))
+
+            sender.sendMessage(
+                plugin.langYml.getMessage("item-level-given")
+                    .replace("%playername%", player.name)
+                    .replace("%level%", levelIdString)
+                    .replace("%amount%", amount.toString())
+            )
         }
-
-        item.levels.gainLevels(levelType, amount, PlaceholderContext(player))
-
-        sender.sendMessage(
-            plugin.langYml.getMessage("item-level-given")
-                .replace("%playername%", player.name)
-                .replace("%level%", levelIdString)
-                .replace("%amount%", amount.toString())
-        )
     }
 
     override fun tabComplete(sender: CommandSender, args: List<String>): List<String> {

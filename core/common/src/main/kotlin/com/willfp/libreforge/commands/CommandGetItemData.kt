@@ -3,6 +3,7 @@ package com.willfp.libreforge.commands
 import com.willfp.eco.core.command.impl.Subcommand
 import com.willfp.eco.core.items.Items
 import com.willfp.eco.util.asAudience
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.isEcoEmpty
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.slot.SlotTypes
@@ -53,43 +54,45 @@ internal object CommandGetItemData : Subcommand(
             return
         }
 
-        val items = slotType.getItemSlots(player)
-            .distinct()
-            .sorted()
-            .map { slot -> slot to player.inventory.getItem(slot) }
-            .filterNot { (_, item) -> item.isEcoEmpty }
+        Regions.runOwned(player) {
+            val items = slotType.getItemSlots(player)
+                .distinct()
+                .sorted()
+                .map { slot -> slot to player.inventory.getItem(slot) }
+                .filterNot { (_, item) -> item.isEcoEmpty }
 
-        if (items.isEmpty()) {
+            if (items.isEmpty()) {
+                sender.sendMessage(
+                    plugin.langYml.getMessage("empty-slot")
+                        .replace("%player%", player.name)
+                        .replace("%slot%", slotString)
+                )
+                return@runOwned
+            }
+
             sender.sendMessage(
-                plugin.langYml.getMessage("empty-slot")
+                plugin.langYml.getMessage("item-data-header")
                     .replace("%player%", player.name)
-                    .replace("%slot%", slotString)
+                    .replace("%slot%", slotType.id)
             )
-            return
-        }
 
-        sender.sendMessage(
-            plugin.langYml.getMessage("item-data-header")
-                .replace("%player%", player.name)
-                .replace("%slot%", slotType.id)
-        )
+            val audience = sender.asAudience()
 
-        val audience = sender.asAudience()
+            for ((slot, item) in items) {
+                val compactSnbt = Items.toSNBT(item!!)
+                    .removeRootField("DataVersion")
+                    .compactOutsideStrings()
+                val escapedSnbt = compactSnbt.escapeAsJsonStringLiteral()
 
-        for ((slot, item) in items) {
-            val compactSnbt = Items.toSNBT(item!!)
-                .removeRootField("DataVersion")
-                .compactOutsideStrings()
-            val escapedSnbt = compactSnbt.escapeAsJsonStringLiteral()
-
-            audience.sendMessage(
-                Component.text("[$slot] ", NamedTextColor.GRAY)
-                    .append(
-                        Component.text(escapedSnbt, NamedTextColor.YELLOW)
-                            .clickEvent(ClickEvent.copyToClipboard(escapedSnbt))
-                            .hoverEvent(HoverEvent.showText(Component.text("Click to copy", NamedTextColor.GRAY)))
-                    )
-            )
+                audience.sendMessage(
+                    Component.text("[$slot] ", NamedTextColor.GRAY)
+                        .append(
+                            Component.text(escapedSnbt, NamedTextColor.YELLOW)
+                                .clickEvent(ClickEvent.copyToClipboard(escapedSnbt))
+                                .hoverEvent(HoverEvent.showText(Component.text("Click to copy", NamedTextColor.GRAY)))
+                        )
+                )
+            }
         }
     }
 

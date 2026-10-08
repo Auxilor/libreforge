@@ -5,6 +5,7 @@ import com.willfp.eco.core.map.concurrentListMap
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.plugin
@@ -45,8 +46,8 @@ object EffectAntigravityProjectile : Effect<NoCompileData>("antigravity_projecti
                 return@runTimer
             }
             val velocity = projectile.velocity
-            val nextChunk = projectile.location.add(velocity).chunk
-            if (!nextChunk.isLoaded) {
+            val next = projectile.location.add(velocity)
+            if (!Regions.canReach(next) || !next.chunk.isLoaded) {
                 projectile.setGravity(true)
                 task.cancel()
                 return@runTimer

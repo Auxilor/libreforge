@@ -2,6 +2,7 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ArgType
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Chain
@@ -29,10 +30,12 @@ object EffectRandomPlayer : Effect<Chain?>("random_player") {
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: Chain?): Boolean {
         Bukkit.getOnlinePlayers().randomOrNull()?.let { player ->
-            compileData?.trigger(
-                data.copy(player = player)
-                    .dispatch(player.toDispatcher()),
-            )
+            Regions.runOwned(player) {
+                compileData?.trigger(
+                    data.copy(player = player)
+                        .dispatch(player.toDispatcher()),
+                )
+            }
         }
 
         return true

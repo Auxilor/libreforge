@@ -7,6 +7,7 @@ import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.ConfigWarning
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -299,6 +300,10 @@ object EffectHoming : Effect<EffectHoming.HomingCompileData>("homing") {
 
             val headingDirection = heading.normalize()
             val rangeSquared = (range * range).toFloat()
+
+            if (!Regions.canReach(arrow.location, range)) {
+                return null
+            }
 
             return arrow.getNearbyEntities(range, range, range)
                 .asSequence()

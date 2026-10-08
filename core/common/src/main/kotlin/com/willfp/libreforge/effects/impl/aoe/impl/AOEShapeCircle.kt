@@ -2,6 +2,7 @@ package com.willfp.libreforge.effects.impl.aoe.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.impl.aoe.AOEShape
 import com.willfp.libreforge.getDoubleFromExpression
@@ -27,8 +28,13 @@ object AOEShapeCircle : AOEShape<NoCompileData>("circle") {
         compileData: NoCompileData
     ): Collection<LivingEntity> {
         val radius = config.getDoubleFromExpression("radius", data)
+        val center = location.toLocation(world)
 
-        return location.toLocation(world).getNearbyEntities(radius, radius, radius)
+        if (!Regions.canReach(center, radius)) {
+            return emptyList()
+        }
+
+        return center.getNearbyEntities(radius, radius, radius)
             .filterIsInstance<LivingEntity>()
     }
 
@@ -41,7 +47,12 @@ object AOEShapeCircle : AOEShape<NoCompileData>("circle") {
         compileData: NoCompileData
     ): Collection<Block> {
         val radius = config.getDoubleFromExpression("radius", data)
+        val center = location.toLocation(world)
 
-        return location.toLocation(world).getNearbyBlocksInSphere(radius)
+        if (!Regions.canReach(center, radius)) {
+            return emptyList()
+        }
+
+        return center.getNearbyBlocksInSphere(radius)
     }
 }

@@ -5,6 +5,7 @@ import com.willfp.eco.core.entities.Entities
 import com.willfp.eco.util.NumberUtils
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
@@ -95,6 +96,11 @@ object EffectSpawnMobs : Effect<NoCompileData>("spawn_mobs") {
                 NumberUtils.randFloat(0.0, range),
                 NumberUtils.randFloat(-range, range)
             )
+
+            if (!Regions.canReach(locationToSpawn)) {
+                continue
+            }
+
             val mob = entityType.spawn(locationToSpawn) as Mob
             val healthAttr = mob.getAttribute(Attribute.MAX_HEALTH) ?: continue
             healthAttr.baseValue = health

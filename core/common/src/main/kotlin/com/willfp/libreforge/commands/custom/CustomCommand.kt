@@ -4,6 +4,7 @@ import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.command.impl.PluginCommand
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.registry.KRegistrable
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.executors.impl.NormalExecutorFactory
@@ -64,13 +65,15 @@ class CustomCommand(
             val player = commandPlayer(sender, args) ?: return
             val value = commandValue(sender, args.getOrNull(valueArgIndex)) ?: return
 
-            commandEffects?.trigger(
-                player.toDispatcher(),
-                TriggerData(
-                    player = player,
-                    value = value
+            Regions.runOwned(player) {
+                commandEffects?.trigger(
+                    player.toDispatcher(),
+                    TriggerData(
+                        player = player,
+                        value = value
+                    )
                 )
-            )
+            }
         }
 
         override fun tabComplete(sender: CommandSender, args: MutableList<String>): List<String> {

@@ -7,6 +7,7 @@ import com.willfp.eco.core.entities.impl.EmptyTestableEntity
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.ProvidedHolder
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
@@ -46,6 +47,10 @@ object ConditionNearEntity : Condition<Collection<TestableEntity>>("near_entity"
     ): Boolean {
         val location = dispatcher.location ?: return false
         val radius = config.getDoubleFromExpression("radius", dispatcher.get())
+
+        if (!Regions.canReach(location, radius)) {
+            return false
+        }
 
         // Default to require there to be at least 1 entity if no minimum is defined by the user.
         val nearbyEntityMinimumRequirement = config.getIntFromExpression("amount", dispatcher.get()).coerceAtLeast(1)

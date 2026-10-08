@@ -1,5 +1,6 @@
 package com.willfp.libreforge.triggers.impl
 
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
@@ -119,13 +120,13 @@ object TriggerAltClick : Trigger("alt_click") {
         val location: Location?
         val world = player.location.world ?: return
         val result = player.rayTraceBlocks(
-            plugin.configYml.getDouble("raytrace-distance"),
+            Regions.reachableDistance(player.eyeLocation, plugin.configYml.getDouble("raytrace-distance")),
             FluidCollisionMode.NEVER
         )
 
         val entityResult = world.rayTraceEntities(
             player.eyeLocation,
-            player.eyeLocation.direction, 50.0, 3.0
+            player.eyeLocation.direction, Regions.reachableDistance(player.eyeLocation, 50.0), 3.0
         ) { entity: Entity? -> entity is LivingEntity }
 
         location = result?.hitPosition?.toLocation(world)

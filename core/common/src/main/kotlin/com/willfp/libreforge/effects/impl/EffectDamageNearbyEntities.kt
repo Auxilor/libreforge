@@ -5,6 +5,7 @@ import com.willfp.eco.core.entities.Entities
 import com.willfp.eco.core.entities.TestableEntity
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.libreforge.ArgType
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.dealDamage
@@ -85,6 +86,10 @@ object EffectDamageNearbyEntities : Effect<Collection<TestableEntity>>("damage_n
         val trueDamage = config.getBool("true_damage")
         val damage = config.getDoubleFromExpression("damage", data)
         val damageSelf = config.getBoolOrNull("damage_self") ?: true
+
+        if (!Regions.canReach(location, radius)) {
+            return false
+        }
 
         for (entity in world.getNearbyEntities(location, radius, radius, radius)) {
             if (entity.hasMetadata("ignore-nearby-damage") || damagedEntities.contains(entity.uniqueId)) {

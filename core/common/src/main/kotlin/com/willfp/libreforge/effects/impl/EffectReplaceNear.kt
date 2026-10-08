@@ -7,6 +7,7 @@ import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.eco.core.items.Items
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getFormattedString
@@ -118,6 +119,10 @@ object EffectReplaceNear : Effect<NoCompileData>("replace_near") {
                     val toReplace = block.world.getBlockAt(
                         block.location.clone().add(x.toDouble(), y.toDouble(), z.toDouble())
                     )
+
+                    if (!Regions.canReach(toReplace.location)) {
+                        continue
+                    }
 
                     if (blacklist.matches(toReplace)) {
                         continue

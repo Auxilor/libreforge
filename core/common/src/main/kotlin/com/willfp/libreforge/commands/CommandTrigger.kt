@@ -4,6 +4,7 @@ import com.willfp.eco.core.command.impl.Subcommand
 import com.willfp.eco.util.formatEco
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.GlobalDispatcher
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.get
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.toDispatcher
@@ -63,16 +64,20 @@ internal object CommandTrigger : Subcommand(
         val value = args.getOrNull(2)?.formatEco(Bukkit.getPlayer(dispatcherName), true)
             ?.toDoubleOrNull()
 
+        val customTrigger = TriggerGroupCustom.create(trigger)
+
         for (dispatcher in dispatchers) {
-            TriggerGroupCustom.create(trigger).dispatch(
-                dispatcher,
-                TriggerData(
-                    player = dispatcher.get(),
-                    victim = dispatcher.get(),
-                    location = dispatcher.get<LivingEntity>()?.location,
-                    value = value ?: 1.0
+            Regions.runOwned(dispatcher) {
+                customTrigger.dispatch(
+                    dispatcher,
+                    TriggerData(
+                        player = dispatcher.get(),
+                        victim = dispatcher.get(),
+                        location = dispatcher.get<LivingEntity>()?.location,
+                        value = value ?: 1.0
+                    )
                 )
-            )
+            }
         }
 
         sender.sendMessage(plugin.langYml.getMessage("triggered").replace("%id%", trigger))

@@ -6,6 +6,7 @@ import com.willfp.eco.core.Prerequisite
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.entity.Entity
+import kotlin.math.ceil
 
 /**
  * The one place libreforge decides which thread may touch what.
@@ -63,6 +64,38 @@ internal object Regions {
      */
     fun canReach(location: Location): Boolean =
         Eco.get().isOwnedByCurrentRegion(location)
+
+    /**
+     * If every chunk within [radius] blocks of [center] can be touched from here, for area scans
+     * such as `getNearbyEntities`, which Folia refuses when they reach into another region.
+     * Always `true` off Folia.
+     */
+    fun canReach(center: Location, radius: Double): Boolean {
+        if (!isFolia) {
+            return true
+        }
+
+        if (center.world == null) {
+            return false
+        }
+
+        val radiusChunks = ceil(radius / 16).toInt() + 1
+        return Bukkit.isOwnedByCurrentRegion(center, radiusChunks)
+    }
+
+    /**
+     * The longest distance up to [distance] that a ray or scan from [origin] can cover without
+     * leaving this region. Always [distance] off Folia.
+     */
+    fun reachableDistance(origin: Location, distance: Double): Double {
+        var reachable = distance
+
+        while (reachable >= 1 && !canReach(origin, reachable)) {
+            reachable /= 2
+        }
+
+        return if (reachable >= 1) reachable else 0.0
+    }
 
     /**
      * If [entity] can be touched from here. Always `true` off Folia.
