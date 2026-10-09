@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.dealDamage
 import com.willfp.libreforge.effects.Effect
@@ -72,6 +73,10 @@ object EffectShockwave : Effect<NoCompileData>("shockwave") {
         val knockback = config.getDoubleFromExpression("knockback", data)
         val trueDamage = config.getBool("true_damage")
         val source = if (config.getBool("use_source")) player else null
+
+        if (!Regions.canReach(origin, radius)) {
+            return false
+        }
 
         val hit = mutableSetOf<LivingEntity>()
         var pulse = 0

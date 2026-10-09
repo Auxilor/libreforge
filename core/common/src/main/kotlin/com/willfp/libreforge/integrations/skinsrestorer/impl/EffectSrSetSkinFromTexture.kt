@@ -57,7 +57,7 @@ object EffectSrSetSkinFromTexture : Effect<NoCompileData>("sr_set_skin_from_text
 
         val property = SkinProperty.of(value, signature)
 
-        plugin.scheduler.runAsync {
+        plugin.scheduler.async().run {
             runCatching { skinApplier?.applySkin(player, property) }
 
             invalidateSkinCache(player.uniqueId)

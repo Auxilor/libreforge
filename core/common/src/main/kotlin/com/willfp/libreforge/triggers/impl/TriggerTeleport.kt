@@ -26,7 +26,7 @@ object TriggerTeleport : Trigger("teleport") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerTeleportEvent) {
-        plugin.scheduler.run {
+        plugin.scheduler.on(event.player).run {
             this.dispatch(
                 event.player.toDispatcher(),
                 TriggerData(

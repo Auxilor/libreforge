@@ -1,7 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.map.nestedListMap
+import com.willfp.eco.core.map.concurrentNestedListMap
 import com.willfp.eco.util.formatEco
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.Dispatcher
@@ -13,6 +13,7 @@ import com.willfp.libreforge.effects.Identifiers
 import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerCommandPreprocessEvent
 import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 
 object EffectBlockCommands : Effect<NoCompileData>("block_commands") {
     override val description = "Prevents the player from using specific commands while the holder is active."
@@ -33,8 +34,8 @@ object EffectBlockCommands : Effect<NoCompileData>("block_commands") {
         )
     }
 
-    private val players = nestedListMap<UUID, UUID, String>()
-    private val messages = mutableMapOf<UUID, List<String>?>()
+    private val players = concurrentNestedListMap<UUID, UUID, String>()
+    private val messages = ConcurrentHashMap<UUID, List<String>>()
 
     override fun onEnable(
         dispatcher: Dispatcher<*>,
@@ -45,7 +46,12 @@ object EffectBlockCommands : Effect<NoCompileData>("block_commands") {
     ) {
         val commands = players[dispatcher.uuid]
         commands[identifiers.uuid] = config.getStrings("commands")
-        messages[identifiers.uuid] = config.getStringsOrNull("messages")
+        val configMessages = config.getStringsOrNull("messages")
+        if (configMessages != null) {
+            messages[identifiers.uuid] = configMessages
+        } else {
+            messages.remove(identifiers.uuid)
+        }
 
         players[dispatcher.uuid] = commands
     }

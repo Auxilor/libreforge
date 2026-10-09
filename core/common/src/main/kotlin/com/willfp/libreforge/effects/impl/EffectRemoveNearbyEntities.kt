@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.entities.Entities
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
@@ -51,6 +52,10 @@ object EffectRemoveNearbyEntities : Effect<NoCompileData>("remove_nearby_entitie
         val entities = config.getFormattedStrings("entities", data).map { Entities.lookup(it) }
 
         var removed = false
+
+        if (!Regions.canReach(location, radius)) {
+            return false
+        }
 
         for (entity in world.getNearbyEntities(location, radius, radius, radius)) {
             if (entity is Player) {

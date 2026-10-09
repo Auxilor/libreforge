@@ -2,6 +2,7 @@ package com.willfp.libreforge.effects.impl.aoe.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.impl.aoe.AOEShape
 import com.willfp.libreforge.getDoubleFromExpression
@@ -31,9 +32,13 @@ object AOEShapeOffsetCircle : AOEShape<NoCompileData>("offset_circle") {
         val radius = config.getDoubleFromExpression("radius", data)
         val offset = config.getDoubleFromExpression("offset", data)
 
-        return (location + direction.normalize() * offset.toFloat())
-            .toLocation(world)
-            .getNearbyEntities(radius, radius, radius).filterIsInstance<LivingEntity>()
+        val center = (location + direction.normalize() * offset.toFloat()).toLocation(world)
+
+        if (!Regions.canReach(center, radius)) {
+            return emptyList()
+        }
+
+        return center.getNearbyEntities(radius, radius, radius).filterIsInstance<LivingEntity>()
     }
 
     override fun getBlocks(
@@ -47,8 +52,12 @@ object AOEShapeOffsetCircle : AOEShape<NoCompileData>("offset_circle") {
         val radius = config.getDoubleFromExpression("radius", data)
         val offset = config.getDoubleFromExpression("offset", data)
 
-        return (location + direction.normalize() * offset.toFloat())
-            .toLocation(world)
-            .getNearbyBlocksInSphere(radius)
+        val center = (location + direction.normalize() * offset.toFloat()).toLocation(world)
+
+        if (!Regions.canReach(center, radius)) {
+            return emptyList()
+        }
+
+        return center.getNearbyBlocksInSphere(radius)
     }
 }

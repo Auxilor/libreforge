@@ -7,6 +7,7 @@ import com.willfp.eco.core.scheduling.EcoTask
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.ProvidedHolder
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -17,6 +18,7 @@ import com.willfp.libreforge.getOrNull
 import com.willfp.libreforge.plugin
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Item
+import java.util.concurrent.ConcurrentHashMap
 
 object EffectItemMagnet : Effect<EffectItemMagnet.ItemMagnetFilter>("item_magnet") {
     override val description = "Pulls nearby dropped items toward the holder while active, optionally restricted to specific item types."
@@ -51,7 +53,7 @@ object EffectItemMagnet : Effect<EffectItemMagnet.ItemMagnetFilter>("item_magnet
         )
     }
 
-    private val tasks = mutableMapOf<Identifiers, EcoTask>()
+    private val tasks = ConcurrentHashMap<Identifiers, EcoTask>()
 
     override fun onEnable(
         dispatcher: Dispatcher<*>,
@@ -70,6 +72,10 @@ object EffectItemMagnet : Effect<EffectItemMagnet.ItemMagnetFilter>("item_magnet
         tasks[identifiers] = context.runTimer({ _ ->
             val location = dispatcher.location ?: return@runTimer
             val world = location.world ?: return@runTimer
+
+            if (!Regions.canReach(location, radius)) {
+                return@runTimer
+            }
 
             for (entity in world.getNearbyEntities(location, radius, radius, radius)) {
                 val item = entity as? Item ?: continue

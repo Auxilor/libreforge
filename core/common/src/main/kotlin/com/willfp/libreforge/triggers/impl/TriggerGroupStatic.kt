@@ -3,6 +3,7 @@ package com.willfp.libreforge.triggers.impl
 import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.placeholder.context.placeholderContext
 import com.willfp.eco.util.evaluateExpressionOrNull
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
@@ -34,20 +35,29 @@ object TriggerGroupStatic : TriggerGroup("static") {
     }
 
     override fun postRegister() {
-        plugin.scheduler.runTimer(1, 1) {
+        plugin.scheduler.global().runTimer(1, 1) {
             tick++
+            val currentTick = tick
 
             for ((interval, trigger) in registry) {
-                if (tick % interval == 0) {
+                if (currentTick % interval == 0) {
                     for (player in Bukkit.getOnlinePlayers()) {
-                        trigger.dispatchFor(player)
+                        Regions.runOwned(player) {
+                            if (player.isOnline) {
+                                trigger.dispatchFor(player)
+                            }
+                        }
                     }
                 }
             }
 
             for ((_, trigger) in dynamicRegistry) {
                 for (player in Bukkit.getOnlinePlayers()) {
-                    trigger.dispatchIfMet(player, tick)
+                    Regions.runOwned(player) {
+                        if (player.isOnline) {
+                            trigger.dispatchIfMet(player, currentTick)
+                        }
+                    }
                 }
             }
         }

@@ -18,6 +18,8 @@ interface BlockBreaker {
     /**
      * Break [blocks] on behalf of this dispatcher.
      *
+     * Called on the thread that owns the blocks: on Folia, blocks in other regions are left out.
+     *
      * @param data The trigger the breaking effect is running for, which carries
      *             the drop event the drops belong in, where one exists.
      */

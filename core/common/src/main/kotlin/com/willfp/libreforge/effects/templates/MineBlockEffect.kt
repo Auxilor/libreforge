@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.util.runExempted
 import com.willfp.eco.util.simplify
 import com.willfp.libreforge.BlockBreaker
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
@@ -119,7 +120,7 @@ abstract class MineBlockEffect<T : Any>(id: String) : Effect<T>(id) {
         val breaker = this.dispatcher as? BlockBreaker
 
         if (breaker != null) {
-            breaker.breakBlocks(blocks, this)
+            breaker.breakBlocks(blocks.filter { Regions.canReach(it.location) }, this)
             return
         }
 
@@ -127,18 +128,20 @@ abstract class MineBlockEffect<T : Any>(id: String) : Effect<T>(id) {
     }
 
     protected fun Player.breakBlocksSafely(blocks: Collection<Block>, mode: PreventTriggerMode) {
+        val reachable = blocks.filter { Regions.canReach(it.location) }
+
         if (plugin.configYml.getBool("effects.use-setblock-break")) {
-            blocks.forEach { it.type = Material.AIR }
+            reachable.forEach { it.type = Material.AIR }
             return
         }
 
         if (mode == PreventTriggerMode.ALL) {
-            blocks.forEach { it.breakNaturally() }
+            reachable.forEach { it.breakNaturally() }
             return
         }
 
         this.runExempted {
-            for (block in blocks) {
+            for (block in reachable) {
                 if (block.world != this.world) {
                     continue
                 }

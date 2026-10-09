@@ -31,7 +31,7 @@ object EffectDamageTwice : Effect<NoCompileData>("damage_twice") {
             return false
         }
 
-        plugin.scheduler.run {
+        plugin.scheduler.on(victim).run {
             victim.setMetadata(META_KEY, plugin.createMetadataValue(true))
             victim.noDamageTicks = 0
             victim.damage(event.damage, event.damager)

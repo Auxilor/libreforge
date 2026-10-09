@@ -2,6 +2,7 @@ package com.willfp.libreforge
 
 import com.willfp.eco.core.registry.KRegistrable
 import com.willfp.eco.core.registry.Registry
+import java.util.concurrent.ConcurrentHashMap
 
 interface Aliased : KRegistrable {
     /**
@@ -16,7 +17,7 @@ interface Aliased : KRegistrable {
  * When an ID and an alias clash, the most recently registered element wins.
  */
 abstract class AliasedRegistry<T : Aliased> : Registry<T>() {
-    private val aliasRegistry = mutableMapOf<String, T>()
+    private val aliasRegistry = ConcurrentHashMap<String, T>()
 
     override fun get(id: String): T? {
         return aliasRegistry[id] ?: super.get(id)

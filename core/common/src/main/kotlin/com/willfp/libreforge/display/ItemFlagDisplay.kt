@@ -12,8 +12,10 @@ import org.bukkit.persistence.PersistentDataType
 class ItemFlagDisplay(
     private val plugin: LibreforgeSpigotPlugin
 ) : DisplayModule(plugin, DisplayPriority.HIGHEST) {
-    private val flags = mutableSetOf<ItemFlag>()
+    @Volatile
+    private var flags = emptySet<ItemFlag>()
 
+    @Volatile
     private var enabled = false
 
     private val pdcKey = plugin.createNamespacedKey("display_flags")
@@ -25,16 +27,18 @@ class ItemFlagDisplay(
     internal fun reload() {
         enabled = plugin.configYml.getBool("display.enabled")
 
-        flags.clear()
+        val newFlags = mutableSetOf<ItemFlag>()
 
         for (flagName in plugin.configYml.getStrings("display.item-flags")) {
             try {
-                flags += ItemFlag.valueOf(flagName.uppercase())
+                newFlags += ItemFlag.valueOf(flagName.uppercase())
             } catch (e: IllegalArgumentException) {
                 plugin.logger.warning("Invalid item flag for display.item-flags: $flagName")
                 plugin.logger.warning("Valid options are: ${ItemFlag.entries.joinToString(", ") { it.name.lowercase() }}")
             }
         }
+
+        flags = newFlags
     }
 
     override fun display(context: DisplayContext) {
@@ -42,6 +46,7 @@ class ItemFlagDisplay(
             return
         }
 
+        val flags = flags
         val fis = context.itemStack.fast()
 
         fis.persistentDataContainer.set(pdcKey, PersistentDataType.STRING, flags.joinToString(","))

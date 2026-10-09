@@ -5,6 +5,7 @@ import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ProvidedHolder
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.get
@@ -49,6 +50,11 @@ object ConditionNearBlock : Condition<NoCompileData>("near_block") {
                         location.blockY + y,
                         location.blockZ + z
                     )
+
+                    if (!Regions.canReach(block.location)) {
+                        continue
+                    }
+
                     if (block.type == targetMaterial) return true
                 }
             }

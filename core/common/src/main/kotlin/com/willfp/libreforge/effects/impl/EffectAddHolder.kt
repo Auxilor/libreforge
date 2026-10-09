@@ -1,7 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.map.listMap
+import com.willfp.eco.core.map.concurrentListMap
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.Holder
@@ -53,7 +53,7 @@ object EffectAddHolder : Effect<HolderTemplate>("add_holder") {
         )
     }
 
-    private val holders = listMap<UUID, Holder>()
+    private val holders = concurrentListMap<UUID, Holder>()
 
     // Libreforge knows exactly when these change, so the provider is never polled.
     private val provider = object : HolderProvider {
@@ -79,7 +79,7 @@ object EffectAddHolder : Effect<HolderTemplate>("add_holder") {
         holders[dispatcher.uuid].add(holder)
         dispatcher.invalidate(provider)
 
-        plugin.scheduler.runLater(duration.toLong()) {
+        plugin.scheduler.global().runLater(duration.toLong()) {
             holders[dispatcher.uuid].remove(holder)
             if (holders[dispatcher.uuid].isEmpty()) {
                 holders.remove(dispatcher.uuid)

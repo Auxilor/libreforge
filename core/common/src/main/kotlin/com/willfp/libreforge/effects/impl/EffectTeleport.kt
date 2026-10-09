@@ -2,6 +2,7 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -20,7 +21,7 @@ object EffectTeleport : Effect<NoCompileData>("teleport") {
         val location = data.location ?: return false
         location.pitch = player.location.pitch
         location.yaw = player.location.yaw
-        player.teleport(location)
+        Regions.teleport(player, location)
 
         return true
     }

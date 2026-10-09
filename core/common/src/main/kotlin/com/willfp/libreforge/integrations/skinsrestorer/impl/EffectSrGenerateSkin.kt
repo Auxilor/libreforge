@@ -67,8 +67,8 @@ object EffectSrGenerateSkin : Effect<NoCompileData>("sr_generate_skin") {
         val variant = parseSkinVariant(config.getStringOrNull("variant"))
         val persist = config.getBoolOrNull("persist") ?: true
 
-        plugin.scheduler.runAsync {
-            val response = runCatching { api.mineSkinAPI.genSkin(url, variant) }.getOrNull() ?: return@runAsync
+        plugin.scheduler.async().run {
+            val response = runCatching { api.mineSkinAPI.genSkin(url, variant) }.getOrNull() ?: return@run
 
             runCatching { api.skinStorage.setURLSkinByResponse(url, response) }
 

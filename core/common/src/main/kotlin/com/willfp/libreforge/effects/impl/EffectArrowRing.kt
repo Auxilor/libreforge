@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
@@ -69,6 +70,10 @@ object EffectArrowRing : Effect<NoCompileData>("arrow_ring") {
         val radius = config.getDoubleFromExpression("radius", data)
         val damage = config.getDoubleFromExpression("arrow_damage", data)
         val flameTicks = config.getIntFromExpression("fire_ticks", data)
+
+        if (!Regions.canReach(location, radius + 0.5)) {
+            return false
+        }
 
         if (data.player != null) {
             if (!location.getNearbyPlayers(radius + 0.5f).all { AntigriefManager.canInjure(data.player, it) }) {

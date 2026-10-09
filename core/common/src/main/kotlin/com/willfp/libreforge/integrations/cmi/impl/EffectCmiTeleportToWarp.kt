@@ -4,6 +4,7 @@ import com.Zrips.CMI.CMI
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
@@ -38,7 +39,7 @@ object EffectCmiTeleportToWarp : Effect<NoCompileData>("cmi_teleport_to_warp") {
             ?.bukkitLoc
             ?: return false
 
-        player.teleport(location)
+        Regions.teleport(player, location)
 
         return true
     }

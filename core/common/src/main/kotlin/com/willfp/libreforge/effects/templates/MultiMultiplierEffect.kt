@@ -1,8 +1,8 @@
 package com.willfp.libreforge.effects.templates
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.map.listMap
-import com.willfp.eco.core.map.nestedListMap
+import com.willfp.eco.core.map.concurrentListMap
+import com.willfp.eco.core.map.concurrentNestedListMap
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
@@ -26,8 +26,8 @@ abstract class MultiMultiplierEffect<T : Any>(id: String) : Effect<NoCompileData
         )
     }
 
-    private val globalModifiers = listMap<UUID, IdentifiedModifier>()
-    private val modifiers = nestedListMap<UUID, T, IdentifiedModifier>()
+    private val globalModifiers = concurrentListMap<UUID, IdentifiedModifier>()
+    private val modifiers = concurrentNestedListMap<UUID, T, IdentifiedModifier>()
 
     /**
      * The key to look for in arguments, e.g. "stat" or "skill".

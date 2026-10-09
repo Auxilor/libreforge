@@ -6,6 +6,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.templates.MineBlockEffect
 import com.willfp.libreforge.getFormattedStrings
@@ -95,6 +96,10 @@ object EffectDrill : MineBlockEffect<NoCompileData>("drill") {
         for (i in 1..amount) {
             val offset = forwardAxis.clone().multiply(i)
             val toBreak = block.world.getBlockAt(block.location.clone().add(offset))
+
+            if (!Regions.canReach(toBreak.location)) {
+                continue
+            }
 
             if (blacklist.matches(toBreak)) {
                 continue

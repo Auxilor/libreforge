@@ -4,7 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.drops.DropQueue
 import com.willfp.eco.core.events.EntityDeathByEntityEvent
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
-import com.willfp.eco.core.map.listMap
+import com.willfp.eco.core.map.concurrentListMap
 import com.willfp.eco.util.TelekinesisUtils
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.Dispatcher
@@ -43,8 +43,9 @@ object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
         )
     }
 
-    private val players = listMap<UUID, UUID>()
+    private val players = concurrentListMap<UUID, UUID>()
 
+    @Volatile
     internal var allowTamedMobKills: Boolean = false
         private set
 

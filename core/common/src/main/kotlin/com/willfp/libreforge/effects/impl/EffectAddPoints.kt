@@ -1,7 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.map.nestedMap
+import com.willfp.eco.core.map.concurrentNestedMap
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
@@ -34,7 +34,7 @@ object EffectAddPoints : Effect<NoCompileData>("add_points") {
         )
     }
 
-    private val tracker = nestedMap<UUID, UUID, AddedPoint>()
+    private val tracker = concurrentNestedMap<UUID, UUID, AddedPoint>()
 
     override fun onEnable(
         dispatcher: Dispatcher<*>,
@@ -53,7 +53,7 @@ object EffectAddPoints : Effect<NoCompileData>("add_points") {
             amount
         )
 
-        player.points[point] += amount
+        player.points.add(point, amount)
     }
 
     override fun onDisable(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder) {
@@ -62,7 +62,7 @@ object EffectAddPoints : Effect<NoCompileData>("add_points") {
         val addedPoint = tracker[player.uniqueId][identifiers.uuid] ?: return
         tracker[player.uniqueId].remove(identifiers.uuid)
 
-        player.points[addedPoint.point] -= addedPoint.amount
+        player.points.add(addedPoint.point, -addedPoint.amount)
     }
 
     private data class AddedPoint(

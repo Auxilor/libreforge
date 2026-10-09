@@ -3,6 +3,7 @@ package com.willfp.libreforge
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.integrations.afk.AFKManager
 import com.willfp.eco.core.placeholder.InjectablePlaceholder
+import com.willfp.eco.core.scheduling.EcoTask
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.conditions.ConditionBlock
 import org.bukkit.Bukkit
@@ -10,7 +11,6 @@ import org.bukkit.Location
 import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
-import org.bukkit.scheduler.BukkitTask
 import java.util.Collections
 import java.util.IdentityHashMap
 import java.util.UUID
@@ -20,8 +20,11 @@ import java.util.concurrent.ConcurrentLinkedQueue
 /**
  * The registry of [HolderState]s, and the flush that applies everything marked on them.
  *
- * States are only touched on the main thread; marks from other threads are queued. Everything
- * marked during a tick is applied at the start of the next one, after the event that caused it.
+ * The registry is only touched on the engine thread (the main thread, or the global region on
+ * Folia); marks from other threads are queued. A state itself is only touched on the thread that
+ * owns its dispatcher, which off Folia is the main thread too, so the flush hands each state's work
+ * to its owner. Everything marked during a tick is applied at the start of the next one, after the
+ * event that caused it.
  */
 internal object HolderStates {
     internal class Settings(
@@ -41,10 +44,11 @@ internal object HolderStates {
     private const val MAX_ADMISSION_ATTEMPTS = 200
 
     // Classloaders of libreforge-based plugins disabled at runtime; their code must not run again.
-    private val unloadedClassLoaders: MutableSet<ClassLoader> = Collections.newSetFromMap(IdentityHashMap())
+    @Volatile
+    private var unloadedClassLoaders: Set<ClassLoader> = emptySet()
 
-    // In creation order, which a reset follows.
-    private val states = LinkedHashMap<UUID, HolderState>()
+    // In creation order, which a reset follows. Written only on the engine thread, read from owners.
+    private val states: MutableMap<UUID, HolderState> = Collections.synchronizedMap(LinkedHashMap())
 
     private val dirty = LinkedHashSet<HolderState>()
 
@@ -62,25 +66,25 @@ internal object HolderStates {
 
     private var flushing = false
 
-    private var flushThread: Thread? = null
-
     private val isFlushThread: Boolean
-        get() = flushThread?.let { it === Thread.currentThread() } ?: Bukkit.isPrimaryThread()
+        get() = Regions.ownsGlobal()
 
     private var resetRequested = false
 
-    private var task: BukkitTask? = null
+    private var task: EcoTask? = null
 
     private var shutdownSweepDone = false
 
     /**
      * The flush counter, used as the tick clock for ages.
      */
+    @Volatile
     var tick = 0
         private set
 
     private val defaultSettings = Settings(0, 500, 20, 600, 50, entitiesEnabled = true, skipAFKPlayers = true)
 
+    @Volatile
     var settings = defaultSettings
         private set
 
@@ -132,7 +136,7 @@ internal object HolderStates {
         }
 
         task?.cancel()
-        task = Bukkit.getScheduler().runTaskTimer(plugin, Runnable { flush() }, 1, 1)
+        task = plugin.scheduler.global().runTimer(1, 1) { flush() }
 
         if (!states.containsKey(GlobalDispatcher.uuid)) {
             create(GlobalDispatcher, StateKind.GLOBAL)
@@ -140,6 +144,10 @@ internal object HolderStates {
 
         for (player in Bukkit.getOnlinePlayers()) {
             trackPlayer(player)
+        }
+
+        if (Regions.isFolia) {
+            return
         }
 
         for (world in Bukkit.getWorlds()) {
@@ -168,12 +176,20 @@ internal object HolderStates {
         }
     }
 
+    /**
+     * Run [action] on the thread that owns [state]'s dispatcher: now off Folia.
+     */
+    private inline fun onOwner(state: HolderState, crossinline action: () -> Unit) =
+        Regions.runOwned(state.dispatcher) { action() }
+
     private inline fun withState(dispatcher: Dispatcher<*>, crossinline action: (HolderState) -> Unit) {
         mark {
             val state = stateFor(dispatcher)
             if (state != null) {
-                action(state)
-                markDirty(state)
+                onOwner(state) {
+                    action(state)
+                    markDirty(state)
+                }
             }
         }
     }
@@ -200,7 +216,7 @@ internal object HolderStates {
         return create(dispatcher, StateKind.CUSTOM)
     }
 
-    fun markDirty(state: HolderState) {
+    fun markDirty(state: HolderState) = onFlushThread {
         if (state.admitted && states[state.uuid] === state) {
             dirty += state
         }
@@ -216,8 +232,10 @@ internal object HolderStates {
     fun markProviderEverywhere(provider: HolderProvider) = mark {
         if (provider in registeredHolderProviders) {
             for (state in states.values) {
-                state.markProvider(provider)
-                markDirty(state)
+                onOwner(state) {
+                    state.markProvider(provider)
+                    markDirty(state)
+                }
             }
         }
     }
@@ -232,19 +250,32 @@ internal object HolderStates {
                 return@mark
             }
 
-            val nearby = hashSetOf(owner)
             val world = location?.world
-            if (world != null) {
-                world.getNearbyEntities(location, radius, radius, radius).mapTo(nearby) { it.uniqueId }
+            if (location == null || world == null) {
+                markNear(provider, holder, hashSetOf(owner))
+                return@mark
             }
 
-            for (state in states.values) {
+            Regions.runOwned(location) {
+                val nearby = hashSetOf(owner)
+                if (Regions.canReach(location, radius)) {
+                    world.getNearbyEntities(location, radius, radius, radius).mapTo(nearby) { it.uniqueId }
+                }
+
+                onFlushThread { markNear(provider, holder, nearby) }
+            }
+        }
+
+    private fun markNear(provider: HolderProvider, holder: Holder, nearby: Set<UUID>) {
+        for (state in states.values) {
+            onOwner(state) {
                 if (state.uuid in nearby || state.provides(provider, holder)) {
                     state.markProvider(provider)
                     markDirty(state)
                 }
             }
         }
+    }
 
     fun markAllProviders(dispatcher: Dispatcher<*>) =
         withState(dispatcher) { it.markProviders(registeredHolderProviders) }
@@ -261,8 +292,10 @@ internal object HolderStates {
     /**
      * If [code] belongs to a libreforge-based plugin that was disabled at runtime.
      */
-    fun isUnloaded(code: Any): Boolean =
-        unloadedClassLoaders.isNotEmpty() && code.javaClass.classLoader in unloadedClassLoaders
+    fun isUnloaded(code: Any): Boolean {
+        val loaders = unloadedClassLoaders
+        return loaders.isNotEmpty() && code.javaClass.classLoader in loaders
+    }
 
     fun markConditionsAll(dispatcher: Dispatcher<*>) =
         withState(dispatcher) { it.conditionDirtyAll = true }
@@ -337,23 +370,49 @@ internal object HolderStates {
     /**
      * Stop tracking [entity], disabling its active effects.
      */
-    fun untrackEntity(entity: LivingEntity, isNPC: Boolean = false): Unit = onFlushThread {
+    fun untrackEntity(entity: LivingEntity, isNPC: Boolean = false) {
         if (!isNPC && entity.isRealPlayer) {
-            return@onFlushThread
+            return
         }
 
-        val state = states[entity.uniqueId] ?: return@onFlushThread
-        if (state.dispatcher.dispatcher === entity) {
-            remove(state)
+        disableNowIfOwned(entity)
+
+        onFlushThread {
+            val state = states[entity.uniqueId] ?: return@onFlushThread
+            if (state.dispatcher.dispatcher === entity) {
+                remove(state)
+            }
         }
     }
 
     /**
      * Stop tracking a player, disabling its active effects.
      */
-    fun untrackPlayer(player: Player): Unit = onFlushThread {
-        val state = states[player.uniqueId] ?: return@onFlushThread
-        remove(state)
+    fun untrackPlayer(player: Player) {
+        disableNowIfOwned(player)
+
+        onFlushThread {
+            val state = states[player.uniqueId] ?: return@onFlushThread
+            remove(state)
+        }
+    }
+
+    /**
+     * On Folia, removal events fire on the entity's region, before the queued untrack reaches the
+     * engine and while the entity can still be touched, so its effects are disabled there and then.
+     */
+    private fun disableNowIfOwned(entity: Entity) {
+        if (isFlushThread || !Regions.owns(entity)) {
+            return
+        }
+
+        val state = states[entity.uniqueId] ?: return
+        if (state.dispatcher.dispatcher !== entity || state.isRemoved) {
+            return
+        }
+
+        state.isRemoved = true
+        guarded("disable effects for ${state.uuid}") { state.disableAll() }
     }
 
     /**
@@ -407,13 +466,28 @@ internal object HolderStates {
         playerBuckets[bucketOf(state.uuid, PLAYER_BUCKETS)].remove(state)
         entityBuckets[bucketOf(state.uuid, entityBuckets.size)].remove(state)
 
-        state.disableAll()
+        disableOnOwner(state)
 
         if (!states.containsKey(state.uuid)) {
             publishedHolders.remove(state.uuid)
             publishedActiveEffects.remove(state.uuid)
             conditionResults.remove(state.uuid)
         }
+    }
+
+    /**
+     * Disable [state]'s effects on its owner, or, if a Folia entity is gone before that runs, where it
+     * was removed, so per-dispatcher state held by effects is still released.
+     */
+    private fun disableOnOwner(state: HolderState) {
+        val entity = state.dispatcher.dispatcher as? Entity
+        if (entity == null || Regions.canReach(entity)) {
+            onOwner(state) { state.disableAll() }
+            return
+        }
+
+        val disable = Runnable { guarded("disable effects for ${state.uuid}") { state.disableAll() } }
+        plugin.scheduler.on(entity).onRetired(disable).run(disable)
     }
 
     private fun bucketOf(uuid: UUID, buckets: Int): Int =
@@ -425,7 +499,6 @@ internal object HolderStates {
         }
 
         tick++
-        flushThread = Thread.currentThread()
 
         while (true) {
             val action = offThreadMarks.poll() ?: break
@@ -476,7 +549,7 @@ internal object HolderStates {
         }
 
         for (state in states.values.toList()) {
-            state.resetPending = true
+            onOwner(state) { state.resetPending = true }
 
             when (state.kind) {
                 // Spread large mob counts over ticks, in the same budget as new states.
@@ -527,14 +600,15 @@ internal object HolderStates {
 
     private fun visitBuckets() {
         for (state in snapshotOf(playerBuckets[tick % PLAYER_BUCKETS])) {
-            if (state.kind == StateKind.PLAYER && settings.skipAFKPlayers && !state.resetPending) {
-                val player = state.dispatcher.dispatcher as Player
-                if (AFKManager.isAfk(player)) {
-                    continue
+            onOwner(state) {
+                if (state.kind == StateKind.PLAYER && settings.skipAFKPlayers && !state.resetPending
+                    && AFKManager.isAfk(state.dispatcher.dispatcher as Player)
+                ) {
+                    return@onOwner
                 }
-            }
 
-            visit(state)
+                visit(state)
+            }
         }
 
         for (state in snapshotOf(entityBuckets[tick % entityBuckets.size])) {
@@ -542,13 +616,15 @@ internal object HolderStates {
                 continue
             }
 
-            val entity = state.dispatcher.dispatcher as LivingEntity
-            if (!entity.isValid) {
-                remove(state)
-                continue
-            }
+            onOwner(state) {
+                val entity = state.dispatcher.dispatcher as LivingEntity
+                if (!entity.isValid) {
+                    onFlushThread { remove(state) }
+                    return@onOwner
+                }
 
-            visit(state)
+                visit(state)
+            }
         }
     }
 
@@ -559,6 +635,10 @@ internal object HolderStates {
     }
 
     private fun visit(state: HolderState) {
+        if (state.isRemoved) {
+            return
+        }
+
         guarded("visit holders for ${state.uuid}") { state.visit(tick, settings) }
         if (state.hasWork) {
             markDirty(state)
@@ -576,31 +656,47 @@ internal object HolderStates {
                 continue
             }
 
-            val entity = state.dispatcher.dispatcher as LivingEntity
-            if (entity.isDead) {
-                remove(state)
-                continue
+            onOwner(state) {
+                if (admit(state)) {
+                    admitted++
+                }
             }
+        }
+    }
 
-            // Not in the world yet; removals are caught by events. Given up on if it never arrives.
-            if (!entity.isValid) {
-                if (++state.admissionAttempts < MAX_ADMISSION_ATTEMPTS) {
+    /**
+     * Admit [state] if its entity is in the world. Returns if it was admitted.
+     */
+    private fun admit(state: HolderState): Boolean {
+        val entity = state.dispatcher.dispatcher as LivingEntity
+        if (entity.isDead) {
+            onFlushThread { remove(state) }
+            return false
+        }
+
+        // Not in the world yet; removals are caught by events. Given up on if it never arrives.
+        if (!entity.isValid) {
+            val attempts = ++state.admissionAttempts
+            onFlushThread {
+                if (attempts < MAX_ADMISSION_ATTEMPTS) {
                     newStates.addLast(state)
                 } else {
                     remove(state)
                 }
-                continue
             }
+            return false
+        }
 
-            if (state.needsCleanup) {
-                state.needsCleanup = false
-                entity.removeEcoAttributeModifiers()
-            }
+        if (state.needsCleanup) {
+            state.needsCleanup = false
+            entity.removeEcoAttributeModifiers()
+        }
 
+        onFlushThread {
             state.admitted = true
             markDirty(state)
-            admitted++
         }
+        return true
     }
 
     private fun processDirty() {
@@ -614,12 +710,12 @@ internal object HolderStates {
         val now = System.currentTimeMillis()
 
         for (state in batch) {
-            update(state, now)
+            onOwner(state) { update(state, now) }
         }
     }
 
     private fun update(state: HolderState, now: Long) {
-        if (states[state.uuid] !== state || !state.admitted) {
+        if (state.isRemoved || states[state.uuid] !== state || !state.admitted) {
             return
         }
 
@@ -629,9 +725,13 @@ internal object HolderStates {
         }
 
         if (heldBack) {
-            dirty += state
-        } else if (state.kind == StateKind.CUSTOM && state.isIdle && states[state.uuid] === state) {
-            remove(state)
+            onFlushThread { dirty += state }
+        } else if (state.kind == StateKind.CUSTOM && state.isIdle) {
+            onFlushThread {
+                if (states[state.uuid] === state) {
+                    remove(state)
+                }
+            }
         }
     }
 
@@ -640,7 +740,7 @@ internal object HolderStates {
      * main thread or during a holder update, where the changes are applied in the next tick.
      */
     fun flushNow(dispatcher: Dispatcher<*>) {
-        if (!isFlushThread || flushing) {
+        if (!isFlushThread || flushing || !Regions.owns(dispatcher)) {
             return
         }
 
@@ -662,7 +762,7 @@ internal object HolderStates {
      * and asked on demand, storing nothing, for untracked dispatchers.
      */
     fun holders(dispatcher: Dispatcher<*>): List<ProvidedHolder> {
-        if (!isFlushThread) {
+        if (!Regions.owns(dispatcher)) {
             return publishedHolders[dispatcher.uuid]?.all ?: askOnDemand(dispatcher)
         }
 
@@ -684,7 +784,7 @@ internal object HolderStates {
      * The stored answer of [provider] for a tracked [dispatcher], or null if it must be scanned.
      */
     fun storedAnswer(dispatcher: Dispatcher<*>, provider: HolderProvider): Collection<ProvidedHolder>? {
-        if (!isFlushThread) {
+        if (!Regions.owns(dispatcher)) {
             return publishedHolders[dispatcher.uuid]?.byProvider?.get(provider)
         }
 
@@ -697,7 +797,7 @@ internal object HolderStates {
     }
 
     fun providedActiveEffects(dispatcher: Dispatcher<*>): List<ProvidedEffectBlock> {
-        if (!isFlushThread) {
+        if (!Regions.owns(dispatcher)) {
             return publishedActiveEffects[dispatcher.uuid] ?: emptyList()
         }
 
@@ -708,7 +808,7 @@ internal object HolderStates {
      * The cached placeholders of [holder] on a tracked [dispatcher], or null to generate them.
      */
     fun cachedPlaceholders(dispatcher: Dispatcher<*>, holder: Holder): List<InjectablePlaceholder>? {
-        if (!isFlushThread) {
+        if (!Regions.owns(dispatcher)) {
             return null
         }
 
@@ -773,7 +873,11 @@ internal object HolderStates {
             }
             task = null
 
-            for (state in states.values.toList()) {
+            for (state in synchronized(states) { states.values.toList() }) {
+                if (!canTouchNow(state)) {
+                    continue
+                }
+
                 try {
                     state.disableAll()
                 } catch (e: Exception) {
@@ -795,6 +899,15 @@ internal object HolderStates {
         }
     }
 
+    private fun canTouchNow(state: HolderState): Boolean {
+        val target = state.dispatcher.dispatcher
+        if (target is Entity) {
+            return Regions.canReach(target)
+        }
+
+        return state.dispatcher.location?.let { Regions.canReach(it) } ?: true
+    }
+
     /**
      * Handle a libreforge-based [disabledPlugin] being disabled: the shutdown sweep while the server is
      * stopping, otherwise only that plugin's effects and providers are removed.
@@ -810,13 +923,16 @@ internal object HolderStates {
         }
 
         val classLoader = disabledPlugin.javaClass.classLoader
-        unloadedClassLoaders += classLoader
+        unloadedClassLoaders = Collections.newSetFromMap(IdentityHashMap<ClassLoader, Boolean>()).apply {
+            addAll(unloadedClassLoaders)
+            add(classLoader)
+        }
         val removed = unregisterHolderProviders { it.ownerClass.classLoader === classLoader }
         HolderSignals.unregisterOwnedBy(classLoader, removed)
         unregisterHolderFunctions(classLoader)
 
-        for (state in states.values.toList()) {
-            state.disableOwnedBy(classLoader, removed)
+        for (state in synchronized(states) { states.values.toList() }) {
+            onOwner(state) { state.disableOwnedBy(classLoader, removed) }
         }
 
         plugin.logger.warning(

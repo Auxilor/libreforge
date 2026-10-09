@@ -1,9 +1,11 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.scheduling.TaskContext
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.ProvidedHolder
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -18,6 +20,7 @@ import org.bukkit.event.player.PlayerBucketEmptyEvent
 import org.bukkit.event.player.PlayerItemConsumeEvent
 import org.bukkit.inventory.ItemStack
 import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 
 object EffectInfiniteBucket : Effect<Set<String>>("infinite_bucket") {
     override val description = "Prevents the specified bucket types from being emptied, refilling them automatically."
@@ -32,7 +35,7 @@ object EffectInfiniteBucket : Effect<Set<String>>("infinite_bucket") {
         )
     }
 
-    private val activePlayers = mutableMapOf<UUID, Set<String>>()
+    private val activePlayers = ConcurrentHashMap<UUID, Set<String>>()
 
     @EventHandler
     fun onBucketEmpty(event: PlayerBucketEmptyEvent) {
@@ -42,7 +45,7 @@ object EffectInfiniteBucket : Effect<Set<String>>("infinite_bucket") {
 
         val slot = player.inventory.heldItemSlot
 
-        plugin.scheduler.runAsync {
+        refillContext(player).run {
             val item = player.inventory.getItem(slot)
             if (item != null && item.type == Material.BUCKET) {
                 player.inventory.setItem(slot, ItemStack(event.bucket))
@@ -59,13 +62,16 @@ object EffectInfiniteBucket : Effect<Set<String>>("infinite_bucket") {
 
         val slot = player.inventory.heldItemSlot
 
-        plugin.scheduler.runAsync {
+        refillContext(player).run {
             val item = player.inventory.getItem(slot)
             if (item != null && item.type == Material.BUCKET) {
                 player.inventory.setItem(slot, ItemStack(Material.MILK_BUCKET))
             }
         }
     }
+
+    private fun refillContext(player: Player): TaskContext =
+        if (Regions.isFolia) plugin.scheduler.on(player) else plugin.scheduler.async()
 
     override fun makeCompileData(config: Config, context: ViolationContext): Set<String> {
         val types = config.getStrings("types", "type")

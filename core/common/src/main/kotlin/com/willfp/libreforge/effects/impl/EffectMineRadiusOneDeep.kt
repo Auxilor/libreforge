@@ -6,6 +6,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.templates.MineBlockEffect
 import com.willfp.libreforge.getFormattedStrings
@@ -136,6 +137,10 @@ object EffectMineRadiusOneDeep : MineBlockEffect<NoCompileData>("mine_radius_one
                     val toBreak = block.world.getBlockAt(
                         block.location.clone().add(x.toDouble(), y.toDouble(), z.toDouble())
                     )
+
+                    if (!Regions.canReach(toBreak.location)) {
+                        continue
+                    }
 
                     if (toBreak.location.blockY !in block.world.minHeight..block.world.maxHeight) {
                         continue

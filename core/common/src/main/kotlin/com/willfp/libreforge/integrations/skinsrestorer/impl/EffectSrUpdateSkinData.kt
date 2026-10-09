@@ -28,7 +28,7 @@ object EffectSrUpdateSkinData : Effect<NoCompileData>("sr_update_skin_data") {
         val player = data.player ?: return false
         val api = skinsRestorer ?: return false
 
-        plugin.scheduler.runAsync {
+        plugin.scheduler.async().run {
             val property = runCatching { api.skinStorage.updatePlayerSkinData(player.uniqueId) }
                 .getOrNull()
                 ?.orElse(null)

@@ -2,6 +2,7 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -22,7 +23,8 @@ object EffectTeleportToHighestBlock : Effect<NoCompileData>("teleport_to_highest
 
         val y = world.getHighestBlockYAt(location)
 
-        player.teleport(
+        Regions.teleport(
+            player,
             Location(
                 world,
                 location.blockX + 0.5,

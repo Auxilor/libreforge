@@ -8,23 +8,26 @@ import org.bukkit.event.Listener
 import org.bukkit.plugin.EventExecutor
 import java.util.Collections
 import java.util.IdentityHashMap
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.CopyOnWriteArrayList
+import java.util.concurrent.CopyOnWriteArraySet
 
 /**
  * Routes change signals to the providers and conditions that declared them.
  */
 internal object HolderSignals {
-    private val providersBySignal = HashMap<HolderChange, MutableList<HolderProvider>>()
+    private val providersBySignal = ConcurrentHashMap<HolderChange, CopyOnWriteArrayList<HolderProvider>>()
 
-    private val conditionsBySignal = HashMap<HolderChange, MutableSet<Condition<*>>>()
+    private val conditionsBySignal = ConcurrentHashMap<HolderChange, CopyOnWriteArraySet<Condition<*>>>()
 
     private class CustomHandler(
         val owner: Any,
         val action: (Event) -> Unit
     )
 
-    private val customHandlers = HashMap<Class<out Event>, MutableList<CustomHandler>>()
+    private val customHandlers = ConcurrentHashMap<Class<out Event>, CopyOnWriteArrayList<CustomHandler>>()
 
-    private val listening = mutableSetOf<Class<out Event>>()
+    private val listening = ConcurrentHashMap.newKeySet<Class<out Event>>()
 
     private val registeredConditions: MutableSet<Condition<*>> = Collections.newSetFromMap(IdentityHashMap())
 
@@ -36,16 +39,18 @@ internal object HolderSignals {
     fun conditionsFor(change: HolderChange): Set<Condition<*>> =
         conditionsBySignal[change] ?: emptySet()
 
+    @Synchronized
     fun registerProvider(provider: HolderProvider) {
         for (change in provider.invalidatedBy) {
             if (change is HolderChange.Custom<*>) {
                 addCustom(change, provider) { dispatcher, scope -> HolderStates.markProvider(dispatcher, provider, scope) }
             } else {
-                providersBySignal.getOrPut(change) { mutableListOf() } += provider
+                providersBySignal.computeIfAbsent(change) { CopyOnWriteArrayList() } += provider
             }
         }
     }
 
+    @Synchronized
     fun registerCondition(condition: Condition<*>) {
         // Registration re-runs on every reload.
         if (!registeredConditions.add(condition)) {
@@ -58,7 +63,7 @@ internal object HolderSignals {
             if (change is HolderChange.Custom<*>) {
                 addCustom(change, condition) { dispatcher, scope -> HolderStates.markCondition(dispatcher, condition, scope) }
             } else {
-                conditionsBySignal.getOrPut(change) { mutableSetOf() } += condition
+                conditionsBySignal.computeIfAbsent(change) { CopyOnWriteArraySet() } += condition
             }
         }
     }
@@ -66,6 +71,7 @@ internal object HolderSignals {
     /**
      * Stop routing signals to [providers] and to the conditions loaded by [classLoader].
      */
+    @Synchronized
     fun unregisterOwnedBy(classLoader: ClassLoader, providers: Collection<HolderProvider>) {
         val removed: MutableSet<Any> = Collections.newSetFromMap(IdentityHashMap())
         removed.addAll(providers)
@@ -92,7 +98,7 @@ internal object HolderSignals {
         @Suppress("UNCHECKED_CAST")
         val scopeOf = change.scopeOf as ((Event) -> SignalScope?)?
 
-        customHandlers.getOrPut(change.event) { mutableListOf() } += CustomHandler(owner) { event ->
+        customHandlers.computeIfAbsent(change.event) { CopyOnWriteArrayList() } += CustomHandler(owner) { event ->
             dispatcherOf(event)?.let { mark(it, scopeOf?.invoke(event)) }
         }
 

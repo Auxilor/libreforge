@@ -1,6 +1,6 @@
 package com.willfp.libreforge.effects.arguments.impl
 
-import com.willfp.eco.core.map.nestedMap
+import com.willfp.eco.core.map.concurrentNestedMap
 import com.willfp.libreforge.ConfigurableElement
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.effects.arguments.EffectArgument
@@ -9,7 +9,7 @@ import com.willfp.libreforge.triggers.DispatchedTrigger
 import java.util.UUID
 
 object ArgumentEvery: EffectArgument<NoCompileData>("every") {
-    private val everyHandler = nestedMap<UUID, UUID, Int>()
+    private val everyHandler = concurrentNestedMap<UUID, UUID, Int>()
 
     override fun isMet(element: ConfigurableElement, trigger: DispatchedTrigger, compileData: NoCompileData): Boolean {
         val current = everyHandler[element.uuid][trigger.dispatcher.uuid] ?: 1

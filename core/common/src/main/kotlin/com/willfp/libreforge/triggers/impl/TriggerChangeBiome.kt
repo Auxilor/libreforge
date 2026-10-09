@@ -10,6 +10,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 
 object TriggerChangeBiome : Trigger("change_biome") {
     override val description = "Fires when the player moves into a different biome."
@@ -27,7 +28,7 @@ object TriggerChangeBiome : Trigger("change_biome") {
         TriggerParameter.TEXT
     )
 
-    private val lastBiome = mutableMapOf<UUID, Biome>()
+    private val lastBiome = ConcurrentHashMap<UUID, Biome>()
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerMoveEvent) {

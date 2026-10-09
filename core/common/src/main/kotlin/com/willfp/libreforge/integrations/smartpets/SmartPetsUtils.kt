@@ -3,6 +3,7 @@ package com.willfp.libreforge.integrations.smartpets
 import com.smartpets.api.SmartPetsAPI
 import com.smartpets.events.SmartPetEvent
 import com.smartpets.model.Pet
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
@@ -24,7 +25,7 @@ internal val SmartPetEvent.owner: Player?
  * SmartPets fires its events off the main thread when the change happens async.
  */
 internal fun Player.onMainThread(action: () -> Unit) {
-    if (Bukkit.isPrimaryThread()) {
+    if (Regions.owns(this)) {
         action()
     } else {
         plugin.scheduler.on(this).run { action() }

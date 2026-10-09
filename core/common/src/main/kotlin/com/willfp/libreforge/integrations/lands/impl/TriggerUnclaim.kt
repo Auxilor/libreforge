@@ -11,6 +11,7 @@ import me.angeschossen.lands.api.events.land.claiming.selection.LandUnclaimSelec
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 
 object TriggerUnclaim : Trigger("unclaim") {
     override val description = "Fires when the player unclaims Lands chunks."
@@ -31,7 +32,7 @@ object TriggerUnclaim : Trigger("unclaim") {
         TriggerParameter.VALUE
     )
 
-    private val multiChunkUnclaimingPlayers = mutableMapOf<UUID, Int>()
+    private val multiChunkUnclaimingPlayers = ConcurrentHashMap<UUID, Int>()
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: LandUnclaimSelectionEvent) {
@@ -42,7 +43,7 @@ object TriggerUnclaim : Trigger("unclaim") {
             multiChunkUnclaimingPlayers[player.uniqueId] = event.affectedChunks.size
         }
 
-        Bukkit.getScheduler().runTask(plugin, Runnable { 
+        plugin.scheduler.on(player).run {
         // TriggerDispatchEvent may only be triggered synchronously.
             this.dispatch(
                 player.toDispatcher(),
@@ -53,7 +54,7 @@ object TriggerUnclaim : Trigger("unclaim") {
                     value = event.affectedChunks.size.toDouble()
                 )
             )
-        })
+        }
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -92,7 +93,7 @@ object TriggerUnclaim : Trigger("unclaim") {
             return
         }
 
-        Bukkit.getScheduler().runTask(plugin, Runnable { 
+        plugin.scheduler.on(player).run {
         // TriggerDispatchEvent may only be triggered synchronously.
             this.dispatch(
                 player.toDispatcher(),
@@ -102,6 +103,6 @@ object TriggerUnclaim : Trigger("unclaim") {
                     location = player.location
                 )
             )
-        })
+        }
     }
 }

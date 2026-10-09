@@ -10,11 +10,21 @@ import com.willfp.eco.util.NumberUtils
 import com.willfp.eco.util.StringUtils
 import com.willfp.libreforge.triggers.TriggerData
 import org.bukkit.entity.Player
+import java.util.concurrent.ConcurrentHashMap
 
 private class SeparatorAmbivalentConfig(
-    private val config: Config
+    val config: Config,
+    private val boundScope: InjectionScope? = null
 ) : Config {
-    private val resolvedPaths = HashMap<String, String>()
+    private val resolvedPaths = ConcurrentHashMap<String, String>()
+
+    private val scope: InjectionScope?
+        get() = boundScope ?: InjectionScope.current()
+
+    private fun wrap(child: Config): Config {
+        scope?.inherit(config, child)
+        return SeparatorAmbivalentConfig(child, boundScope)
+    }
 
     private inline fun <reified T> preprocess(path: String, getter: (String) -> T): T? {
         return preprocess(path, getter, { it == null }, null)
@@ -61,7 +71,7 @@ private class SeparatorAmbivalentConfig(
     override fun set(path: String, obj: Any?) = config.set(path, obj)
 
     override fun getSubsectionOrNull(path: String): Config? = preprocess(path) {
-        config.getSubsectionOrNull(it)?.separatorAmbivalent()
+        config.getSubsectionOrNull(it)?.let { child -> wrap(child) }
     }
 
     override fun getIntOrNull(path: String): Int? = preprocess(path) { config.getIntOrNull(it) }
@@ -84,22 +94,31 @@ private class SeparatorAmbivalentConfig(
     override fun getDoublesOrNull(path: String): List<Double>? = preprocess(path) { config.getDoublesOrNull(it) }
 
     override fun getSubsectionsOrNull(path: String): List<Config>? =
-        preprocess(path) { config.getSubsectionsOrNull(it)?.map { cfg -> cfg.separatorAmbivalent() } }
+        preprocess(path) { config.getSubsectionsOrNull(it)?.map { cfg -> wrap(cfg) } }
 
     override fun getType(): ConfigType = config.type
 
     // Adding them all, because I'm lazy
     override fun injectPlaceholders(vararg placeholders: InjectablePlaceholder) =
-        config.injectPlaceholders(*placeholders)
+        addInjectablePlaceholder(placeholders.toMutableList())
 
     override fun injectPlaceholders(vararg placeholders: StaticPlaceholder) =
-        config.injectPlaceholders(*placeholders)
+        addInjectablePlaceholder(placeholders.toMutableList<InjectablePlaceholder>())
 
-    override fun addInjectablePlaceholder(placeholders: MutableIterable<InjectablePlaceholder>) =
-        config.addInjectablePlaceholder(placeholders)
+    override fun addInjectablePlaceholder(placeholders: MutableIterable<InjectablePlaceholder>) {
+        val scope = scope
 
-    override fun getPlaceholderInjections(): List<InjectablePlaceholder> =
-        config.placeholderInjections
+        if (scope != null) {
+            scope.inject(config, placeholders)
+        } else {
+            config.addInjectablePlaceholder(placeholders)
+        }
+    }
+
+    override fun getPlaceholderInjections(): List<InjectablePlaceholder> {
+        val base = config.placeholderInjections
+        return scope?.merge(config, base) ?: base
+    }
 
     override fun clearInjectedPlaceholders() =
         config.clearInjectedPlaceholders()
@@ -113,6 +132,19 @@ private class SeparatorAmbivalentConfig(
 
 fun Config.separatorAmbivalent(): Config =
     this as? SeparatorAmbivalentConfig ?: SeparatorAmbivalentConfig(this)
+
+/**
+ * This config as seen by [scope], whichever thread reads it, for configs that outlive the call
+ * that injected into them (such as one captured by a delayed task).
+ */
+internal fun Config.boundTo(scope: InjectionScope): Config =
+    SeparatorAmbivalentConfig((this as? SeparatorAmbivalentConfig)?.config ?: this, scope)
+
+/**
+ * This config bound to the call running on this thread, or itself outside of one.
+ */
+internal fun Config.inCurrentScope(): Config =
+    InjectionScope.current()?.let { boundTo(it) } ?: this
 
 fun Config.toPlaceholderContext(data: TriggerData? = null): PlaceholderContext {
     val additionalPlayers = if (data?.victim is Player) {

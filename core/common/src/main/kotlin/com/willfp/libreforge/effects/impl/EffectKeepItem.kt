@@ -6,7 +6,7 @@ import com.willfp.eco.core.data.keys.PersistentDataKey
 import com.willfp.eco.core.data.keys.PersistentDataKeyType
 import com.willfp.eco.core.data.profile
 import com.willfp.eco.core.items.Items
-import com.willfp.eco.core.map.listMap
+import com.willfp.eco.core.map.concurrentListMap
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
@@ -41,7 +41,7 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
         )
     }
 
-    private val players = listMap<UUID, Triple<UUID, Config, ItemStack?>>()
+    private val players = concurrentListMap<UUID, Triple<UUID, Config, ItemStack?>>()
 
     private val savedItemsKey by lazy {
         PersistentDataKey(
@@ -110,12 +110,12 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
 
     @EventHandler
     fun onRespawn(event: PlayerRespawnEvent) {
-        plugin.scheduler.run { restoreItems(event.player) }
+        plugin.scheduler.on(event.player).run { restoreItems(event.player) }
     }
 
     @EventHandler
     fun onJoin(event: PlayerJoinEvent) {
-        plugin.scheduler.run { restoreItems(event.player) }
+        plugin.scheduler.on(event.player).run { restoreItems(event.player) }
     }
 
     private fun restoreItems(player: Player) {
