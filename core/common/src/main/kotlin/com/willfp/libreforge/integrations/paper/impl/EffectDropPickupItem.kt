@@ -6,6 +6,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.items.Items
 import com.willfp.eco.util.TeamUtils
 import com.willfp.libreforge.ArgType
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Chain
@@ -66,6 +67,7 @@ object EffectDropPickupItem : Effect<Chain?>("drop_pickup_item") {
 
         val glowColor = config.getStringOrNull("glow-color")
             ?.let { runCatching { ChatColor.valueOf(it.uppercase()) }.getOrNull() }
+            ?.takeUnless { Regions.isUnsupported("drop_pickup_item glow-color") }
 
         val itemStack = Items.lookup(config.getString("item")).item
 
