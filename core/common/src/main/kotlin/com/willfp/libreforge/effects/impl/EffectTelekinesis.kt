@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.drops.DropQueue
 import com.willfp.eco.core.events.EntityDeathByEntityEvent
+import com.willfp.eco.core.integrations.DisabledIntegrations
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.eco.core.map.listMap
 import com.willfp.eco.util.TelekinesisUtils
@@ -15,7 +16,6 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.plugin
 import io.lumine.mythic.bukkit.MythicBukkit
-import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -128,7 +128,7 @@ object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
         val victim = event.victim
 
 
-        if (Bukkit.getPluginManager().isPluginEnabled("MythicMobs")) {
+        if (DisabledIntegrations.isEnabled("MythicMobs")) {
             if (MythicBukkit.inst().mobManager.isMythicMob(victim)) {
                 return
             }
@@ -174,7 +174,7 @@ object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
         val victim = event.entity
 
 
-        if (Bukkit.getPluginManager().isPluginEnabled("MythicMobs")) {
+        if (DisabledIntegrations.isEnabled("MythicMobs")) {
             if (MythicBukkit.inst().mobManager.isMythicMob(victim)) {
                 return
             }
