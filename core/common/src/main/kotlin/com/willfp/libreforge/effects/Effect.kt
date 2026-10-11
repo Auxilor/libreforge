@@ -5,6 +5,7 @@ import com.willfp.libreforge.Compilable
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.applyHolder
+import com.willfp.libreforge.inCurrentScope
 import com.willfp.libreforge.mutators.MutatorList
 import com.willfp.libreforge.mutators.emptyMutatorList
 import com.willfp.libreforge.plugin
@@ -269,7 +270,7 @@ abstract class Effect<T>(
         trigger: DispatchedTrigger,
         config: ChainElement<T>
     ): Boolean = onTrigger(
-        config.config,
+        config.config.inCurrentScope(),
         trigger.data.copy().apply { this.inheritedTriggerPlaceholders = trigger.rawPlaceholders },
         config.compileData
     )
@@ -296,7 +297,7 @@ abstract class Effect<T>(
     fun shouldTrigger(
         trigger: DispatchedTrigger,
         config: ChainElement<T>
-    ): Boolean = shouldTrigger(config.config, trigger.data, config.compileData)
+    ): Boolean = shouldTrigger(config.config.inCurrentScope(), trigger.data, config.compileData)
 
     /**
      * If the effect should trigger, ran before effect arguments in order

@@ -26,7 +26,7 @@ object EffectSrRefreshSkin : Effect<NoCompileData>("sr_refresh_skin") {
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val player = data.player ?: return false
 
-        plugin.scheduler.runAsync {
+        plugin.scheduler.async().run {
             invalidateSkinCache(player.uniqueId)
 
             runCatching { skinApplier?.applySkin(player) }

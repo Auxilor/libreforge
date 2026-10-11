@@ -13,6 +13,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.entity.CreatureSpawnEvent
 import org.bukkit.event.player.PlayerInteractEntityEvent
 import org.bukkit.inventory.ItemStack
+import java.util.concurrent.CopyOnWriteArrayList
 
 /**
  * RoseStacker breeds an entire stack at once (cumulative breeding), which it does by cancelling
@@ -32,11 +33,15 @@ object RoseStackerBreedListener : Listener {
         val bredWith: ItemStack
     )
 
-    private val pending = mutableListOf<PendingBreed>()
+    private val pending = CopyOnWriteArrayList<PendingBreed>()
 
     // Captured before RoseStacker consumes the breeding item at EventPriority.HIGH, then read
     // back at MONITOR once it's known whether RoseStacker has taken the breeding over.
-    private var captured: PendingBreed? = null
+    private val capturedByThread = ThreadLocal<PendingBreed?>()
+
+    private var captured: PendingBreed?
+        get() = capturedByThread.get()
+        set(value) = capturedByThread.set(value)
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     fun capture(event: PlayerInteractEntityEvent) {
@@ -79,7 +84,7 @@ object RoseStackerBreedListener : Listener {
         }
 
         pending += breed
-        plugin.scheduler.runLater(EXPIRY_TICKS) { pending -= breed }
+        plugin.scheduler.global().runLater(EXPIRY_TICKS) { pending -= breed }
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

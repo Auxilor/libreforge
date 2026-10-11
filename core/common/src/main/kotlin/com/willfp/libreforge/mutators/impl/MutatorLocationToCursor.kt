@@ -3,6 +3,7 @@ package com.willfp.libreforge.mutators.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.mutators.Mutator
 import com.willfp.libreforge.mutators.parameterTransformers
@@ -57,7 +58,7 @@ object MutatorLocationToCursor : Mutator<NoCompileData>("location_to_cursor") {
         val result = start?.world?.rayTrace(
             start.location,
             start.eyeLocation.direction,
-            plugin.configYml.getDouble("raytrace-distance"),
+            Regions.reachableDistance(start.location, plugin.configYml.getDouble("raytrace-distance")),
             FluidCollisionMode.NEVER,
             true,
             0.0,

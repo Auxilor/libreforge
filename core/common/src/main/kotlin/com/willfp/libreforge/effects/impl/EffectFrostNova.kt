@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
@@ -60,6 +61,10 @@ object EffectFrostNova : Effect<NoCompileData>("frost_nova") {
         val freezeTicks = config.getIntFromExpression("freeze_ticks", data)
         val slowDuration = config.getOrNull("slow_duration") { getIntFromExpression(it, data) } ?: 0
         val slowAmplifier = config.getOrNull("slow_amplifier") { getIntFromExpression(it, data) } ?: 0
+
+        if (!Regions.canReach(location, radius)) {
+            return false
+        }
 
         location.world?.getNearbyEntities(location, radius, radius, radius)
             ?.filterIsInstance<LivingEntity>()

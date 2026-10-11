@@ -41,7 +41,7 @@ class DispatchedTriggerFactory(
     }
 
     internal fun startTicking() {
-        plugin.scheduler.runTimer(1, 1) {
+        plugin.scheduler.global().runTimer(1, 1) {
             dispatcherTriggers.clear()
         }
     }

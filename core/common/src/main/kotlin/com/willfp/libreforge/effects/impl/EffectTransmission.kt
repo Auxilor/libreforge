@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
@@ -59,6 +60,6 @@ object EffectTransmission : Effect<NoCompileData>("transmission") {
         location.pitch = player.location.pitch
         location.yaw = player.location.yaw
 
-        return player.teleport(location)
+        return Regions.teleport(player, location)
     }
 }

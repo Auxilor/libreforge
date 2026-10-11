@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.placeholder.translatePlaceholders
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getStrings
@@ -46,16 +47,20 @@ object EffectRunPlayerCommand : Effect<NoCompileData>("run_player_command") {
             .map { it.translatePlaceholders(config.toPlaceholderContext(data)) }
             .dropLastWhile { it.isEmpty() }
 
-        val isOp = player.isOp
+        val asOp = config.getBool("as_op")
 
-        commands.forEach {
-            try {
-                if (!isOp) {
-                    player.isOp = config.getBool("as_op")
+        Regions.runOwned(player) {
+            val isOp = player.isOp
+
+            commands.forEach {
+                try {
+                    if (!isOp) {
+                        player.isOp = asOp
+                    }
+                    player.performCommand(it)
+                } finally {
+                    player.isOp = isOp
                 }
-                player.performCommand(it)
-            } finally {
-                player.isOp = isOp
             }
         }
 

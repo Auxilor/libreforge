@@ -5,12 +5,17 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.util.NumberUtils
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.getOrNull
 import com.willfp.libreforge.effects.Effect
+import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
+import org.bukkit.Location
+import org.bukkit.World
+import org.bukkit.entity.Player
 
 object EffectRandomTeleport : Effect<NoCompileData>("random_teleport") {
     override val description = "Teleports the player to a random location within a radius, landing on the highest safe block."
@@ -54,6 +59,16 @@ object EffectRandomTeleport : Effect<NoCompileData>("random_teleport") {
 
         loc.x += offsetX
         loc.z += offsetZ
+
+        if (!Regions.canReach(loc)) {
+            plugin.scheduler.at(loc).run { teleportToSurface(player, world, loc) }
+            return true
+        }
+
+        return teleportToSurface(player, world, loc)
+    }
+
+    private fun teleportToSurface(player: Player, world: World, loc: Location): Boolean {
         loc.y = world.getHighestBlockYAt(loc).toDouble() + 1
 
         if (loc.y < world.minHeight || loc.y > world.maxHeight) return false

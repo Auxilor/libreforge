@@ -4,6 +4,7 @@ import com.willfp.eco.core.blocks.Blocks
 import com.willfp.eco.core.blocks.TestableBlock
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ArgType
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -43,6 +44,11 @@ object EffectSetNearbyBlocks : Effect<TestableBlock>("set_nearby_blocks") {
             for (y in -radius..radius) {
                 for (z in -radius..radius) {
                     val blockLocation = location.clone().add(x.toDouble(), y.toDouble(), z.toDouble())
+
+                    if (!Regions.canReach(blockLocation)) {
+                        continue
+                    }
+
                     compileData.place(blockLocation)
                 }
             }

@@ -50,10 +50,10 @@ object EffectSrCopySkin : Effect<NoCompileData>("sr_copy_skin") {
 
         val persist = config.getBoolOrNull("persist") ?: true
 
-        plugin.scheduler.runAsync {
+        plugin.scheduler.async().run {
             val property = victim.lookupSkin().property
                 ?: runCatching { api.playerStorage.getSkinOfPlayer(victim.uniqueId).orElse(null) }.getOrNull()
-                ?: return@runAsync
+                ?: return@run
 
             if (persist) {
                 runCatching {

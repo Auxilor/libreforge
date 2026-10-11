@@ -67,10 +67,10 @@ object EffectSrSetSkin : Effect<NoCompileData>("sr_set_skin") {
         val variant = parseSkinVariant(config.getStringOrNull("variant"))
         val persist = config.getBoolOrNull("persist") ?: true
 
-        plugin.scheduler.runAsync {
+        plugin.scheduler.async().run {
             val result = runCatching { api.skinStorage.findOrCreateSkinData(skin, variant) }
                 .getOrNull()
-                ?.orElse(null) ?: return@runAsync
+                ?.orElse(null) ?: return@run
 
             if (persist) {
                 runCatching { api.playerStorage.setSkinIdOfPlayer(player.uniqueId, result.identifier) }

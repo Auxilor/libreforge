@@ -4,6 +4,7 @@ import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.dealDamage
 import com.willfp.libreforge.effects.Effect
@@ -79,11 +80,14 @@ object EffectBleed : Effect<NoCompileData>("bleed") {
                     victim.killer = data.player
                 }
 
-                if (data.player != null) {
-                    TriggerKill.force(
-                        data.player,
-                        victim
-                    )
+                val player = data.player
+                if (player != null) {
+                    Regions.runOwned(player) {
+                        TriggerKill.force(
+                            player,
+                            victim
+                        )
+                    }
                 }
             }
 

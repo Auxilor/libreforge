@@ -2,6 +2,7 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ArgType
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -62,7 +63,7 @@ object EffectAOEBlocks : Effect<AOECompileData>("aoe_blocks") {
             location.direction.toFloat3(),
             location.world,
             data
-        ).filterNot { it.isEmpty }) {
+        ).filter { Regions.canReach(it.location) }.filterNot { it.isEmpty }) {
             compileData.chain
                 ?.trigger(
                     data.copy(

@@ -14,6 +14,7 @@ import com.willfp.libreforge.slot.impl.SlotTypeMainhand
 import com.willfp.libreforge.slot.impl.SlotTypeOffhand
 
 object SlotTypes : Registry<SlotType>() {
+    @Volatile
     lateinit var baseTypes: List<SlotType>
         private set
 
@@ -38,8 +39,10 @@ object SlotTypes : Registry<SlotType>() {
         }
 
         // Create new slot type if it doesn't exist
-        return createNew(id)
-            ?.apply { register(this) }
+        return synchronized(this) {
+            super.get(id) ?: createNew(id)
+                ?.apply { register(this) }
+        }
     }
 
     private fun createNew(id: String): SlotType? {

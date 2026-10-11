@@ -105,6 +105,7 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
 
     val dispatchedTriggerFactory = DispatchedTriggerFactory(this)
 
+    @Volatile
     private var hasLoaded = false
 
     private val configCategories = listOf(

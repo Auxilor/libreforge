@@ -1,7 +1,7 @@
 package com.willfp.libreforge.integrations.vault.impl
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.map.listMap
+import com.willfp.eco.core.map.concurrentListMap
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
@@ -29,7 +29,7 @@ class EffectGivePermission(
         )
     }
 
-    private val permissions = listMap<UUID, GivenPermission>()
+    private val permissions = concurrentListMap<UUID, GivenPermission>()
 
     override fun onEnable(
         dispatcher: Dispatcher<*>,

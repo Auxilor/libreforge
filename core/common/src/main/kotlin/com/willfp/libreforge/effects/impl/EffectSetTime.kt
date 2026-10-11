@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getFormattedString
@@ -51,8 +52,11 @@ object EffectSetTime : Effect<NoCompileData>("set_time") {
         } ?: return false
 
         val time = config.getIntFromExpression("time", data).toLong()
+        val relative = config.getBool("relative")
 
-        world.time = if (config.getBool("relative")) world.time + time else time
+        Regions.runGlobal {
+            world.time = if (relative) world.time + time else time
+        }
 
         return true
     }

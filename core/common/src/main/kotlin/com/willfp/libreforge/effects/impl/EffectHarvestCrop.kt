@@ -35,7 +35,7 @@ object EffectHarvestCrop : Effect<NoCompileData>("harvest_crop") {
 
         block.drops.forEach { drop -> block.world.dropItemNaturally(block.location, drop) }
 
-        plugin.scheduler.run {
+        plugin.scheduler.at(block.location).run {
             blockData.age = 0
             block.type = block.type
             block.blockData = blockData

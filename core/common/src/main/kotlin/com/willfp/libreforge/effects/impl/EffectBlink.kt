@@ -4,6 +4,7 @@ import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getIntFromExpression
@@ -37,7 +38,7 @@ object EffectBlink : Effect<NoCompileData>("blink") {
 
         for (i in 1..distance) {
             val next = player.location.clone().add(direction.clone().multiply(i))
-            if (!next.block.isPassable) break
+            if (!Regions.canReach(next) || !next.block.isPassable) break
             destination = next
         }
 

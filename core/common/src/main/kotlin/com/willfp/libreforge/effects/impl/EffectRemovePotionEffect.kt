@@ -49,7 +49,7 @@ object EffectRemovePotionEffect : Effect<NoCompileData>("remove_potion_effect") 
             data.victim ?: return false
         }
 
-        plugin.scheduler.run {
+        plugin.scheduler.on(toApply).run {
             toApply.removePotionEffect(
                 @Suppress("DEPRECATION")
                 PotionEffectType.getByName(config.getFormattedString("effect", data).uppercase())

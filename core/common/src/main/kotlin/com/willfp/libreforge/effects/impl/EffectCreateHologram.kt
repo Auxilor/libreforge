@@ -45,7 +45,7 @@ object EffectCreateHologram : Effect<NoCompileData>("create_hologram") {
 
         val hologram = HologramManager.createHologram(location, text)
 
-        plugin.scheduler.runLater(duration.toLong()) {
+        plugin.scheduler.at(location).runLater(duration.toLong()) {
             hologram.remove()
         }
 

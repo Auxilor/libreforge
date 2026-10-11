@@ -25,7 +25,7 @@ object EffectSrClearSkin : Effect<NoCompileData>("sr_clear_skin") {
         val player = data.player ?: return false
         val api = skinsRestorer ?: return false
 
-        plugin.scheduler.runAsync {
+        plugin.scheduler.async().run {
             runCatching { api.playerStorage.removeSkinIdOfPlayer(player.uniqueId) }
 
             invalidateSkinCache(player.uniqueId)

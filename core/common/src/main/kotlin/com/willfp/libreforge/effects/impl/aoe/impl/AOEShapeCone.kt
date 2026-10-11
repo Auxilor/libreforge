@@ -2,6 +2,7 @@ package com.willfp.libreforge.effects.impl.aoe.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.angle
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.impl.aoe.AOEShape
@@ -38,7 +39,13 @@ object AOEShapeCone: AOEShape<NoCompileData>("cone") {
 
         val direction2 = direction.xz
 
-        return location.toLocation(world).getNearbyEntities(radius, radius, radius)
+        val center = location.toLocation(world)
+
+        if (!Regions.canReach(center, radius)) {
+            return emptyList()
+        }
+
+        return center.getNearbyEntities(radius, radius, radius)
             .filterIsInstance<LivingEntity>()
             .filter {
                 val entityPosition = it.location.toFloat3().xz
@@ -66,7 +73,13 @@ object AOEShapeCone: AOEShape<NoCompileData>("cone") {
 
         val direction2 = direction.xz
 
-        return location.toLocation(world).getNearbyBlocksInSphere(radius)
+        val center = location.toLocation(world)
+
+        if (!Regions.canReach(center, radius)) {
+            return emptyList()
+        }
+
+        return center.getNearbyBlocksInSphere(radius)
             .filter {
                 val blockPosition = it.location.toFloat3().xz
 

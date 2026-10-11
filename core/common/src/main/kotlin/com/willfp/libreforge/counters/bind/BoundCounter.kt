@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.placeholder.context.placeholderContext
 import com.willfp.eco.util.evaluateExpression
 import com.willfp.libreforge.DynamicConfigs
+import com.willfp.libreforge.InjectionScope
 import com.willfp.libreforge.counters.Accumulator
 import com.willfp.libreforge.counters.Counter
 import com.willfp.libreforge.get
@@ -41,6 +42,10 @@ internal data class BoundCounter(
      * Called only for dispatches of the counter's own trigger (bindings are indexed by trigger).
      */
     fun accept(trigger: DispatchedTrigger) {
+        InjectionScope.open { acceptInScope(trigger) }
+    }
+
+    private fun acceptInScope(trigger: DispatchedTrigger) {
         val data = trigger.data
 
         val player = trigger.dispatcher.get<Player>() ?: return

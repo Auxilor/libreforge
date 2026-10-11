@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.Compiled
 import com.willfp.libreforge.Dispatcher
+import com.willfp.libreforge.InjectionScope
 import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.Weighted
 import com.willfp.libreforge.getDoubleFromExpression
@@ -41,11 +42,13 @@ class ChainElement<T> internal constructor(
             return weight
         }
 
-        elementConfig.addInjectablePlaceholder(trigger.placeholders)
+        return InjectionScope.open {
+            elementConfig.addInjectablePlaceholder(trigger.placeholders)
 
-        return runCatching {
-            elementConfig.getDoubleFromExpression("weight", trigger.data)
-        }.getOrDefault(weight)
+            runCatching {
+                elementConfig.getDoubleFromExpression("weight", trigger.data)
+            }.getOrDefault(weight)
+        }
     }
 
     @Deprecated(

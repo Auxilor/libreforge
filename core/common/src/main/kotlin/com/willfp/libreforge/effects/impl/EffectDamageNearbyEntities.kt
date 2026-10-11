@@ -5,6 +5,7 @@ import com.willfp.eco.core.entities.Entities
 import com.willfp.eco.core.entities.TestableEntity
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.libreforge.ArgType
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.dealDamage
@@ -20,7 +21,10 @@ object EffectDamageNearbyEntities : Effect<Collection<TestableEntity>>("damage_n
     override val description = "Deals damage to all nearby entities within a radius."
     override val categories = setOf("combat")
 
-    private val damagedEntities = mutableSetOf<UUID>()
+    private val damagedEntitiesByThread = ThreadLocal.withInitial { mutableSetOf<UUID>() }
+
+    private val damagedEntities: MutableSet<UUID>
+        get() = damagedEntitiesByThread.get()
 
     override val parameters = setOf(
         TriggerParameter.LOCATION, TriggerParameter.PLAYER
@@ -83,6 +87,10 @@ object EffectDamageNearbyEntities : Effect<Collection<TestableEntity>>("damage_n
         val damage = config.getDoubleFromExpression("damage", data)
         val damageSelf = config.getBoolOrNull("damage_self") ?: true
 
+        if (!Regions.canReach(location, radius)) {
+            return false
+        }
+
         for (entity in world.getNearbyEntities(location, radius, radius, radius)) {
             if (entity.hasMetadata("ignore-nearby-damage") || damagedEntities.contains(entity.uniqueId)) {
                 continue
@@ -103,7 +111,7 @@ object EffectDamageNearbyEntities : Effect<Collection<TestableEntity>>("damage_n
             }
 
             entity.setMetadata("ignore-nearby-damage", plugin.metadataValueFactory.create(true))
-            plugin.scheduler.runLater(5) { entity.removeMetadata("ignore-nearby-damage", plugin) }
+            plugin.scheduler.on(entity).runLater(5) { entity.removeMetadata("ignore-nearby-damage", plugin) }
 
             if (!damageSelf && (entity == player)) {
                 continue

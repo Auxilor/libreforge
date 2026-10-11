@@ -33,7 +33,7 @@ object EffectSilence : Effect<NoCompileData>("silence") {
         val ticks = config.getIntFromExpression("ticks", data)
 
         victim.isSilent = true
-        plugin.scheduler.runLater(ticks.toLong()) {
+        plugin.scheduler.on(victim).runLater(ticks.toLong()) {
             victim.isSilent = false
         }
 

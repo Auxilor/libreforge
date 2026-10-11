@@ -1,7 +1,7 @@
 package com.willfp.libreforge.effects.templates
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.map.listMap
+import com.willfp.eco.core.map.concurrentListMap
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
@@ -24,7 +24,7 @@ abstract class MultiplierEffect(id: String) : Effect<NoCompileData>(id) {
         )
     }
 
-    private val modifiers = listMap<UUID, IdentifiedModifier>()
+    private val modifiers = concurrentListMap<UUID, IdentifiedModifier>()
 
     override fun onEnable(
         dispatcher: Dispatcher<*>,

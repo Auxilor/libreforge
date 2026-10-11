@@ -2,6 +2,7 @@ name: libreforge
 version: ${projectVersion}
 main: com.willfp.libreforge.LibreforgeSpigotPlugin
 api-version: 1.21.8
+folia-supported: true
 authors: [ Auxilor, Exanthiax, Callum ]
 website: willfp.com
 

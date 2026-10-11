@@ -1,6 +1,7 @@
 package com.willfp.libreforge.dates
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
@@ -11,13 +12,17 @@ import org.bukkit.Bukkit
  */
 internal fun Trigger.dispatchForOnlinePlayers() {
     for (player in Bukkit.getOnlinePlayers()) {
-        dispatch(
-            player.toDispatcher(),
-            TriggerData(
-                player = player,
-                location = player.location
-            )
-        )
+        Regions.runOwned(player) {
+            if (player.isOnline) {
+                dispatch(
+                    player.toDispatcher(),
+                    TriggerData(
+                        player = player,
+                        location = player.location
+                    )
+                )
+            }
+        }
     }
 }
 

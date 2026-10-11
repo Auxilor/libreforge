@@ -1,5 +1,6 @@
 package com.willfp.libreforge.integrations.rosestacker.impl
 
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.impl.TriggerEntityDeath
 import com.willfp.libreforge.triggers.impl.TriggerKill
@@ -29,12 +30,12 @@ object RoseStackerStackedDeathListener : Listener {
         val killer = event.killer
 
         // RoseStacker calls this event asynchronously when death-event-trigger-async is enabled.
-        plugin.scheduler.run {
+        plugin.scheduler.at(victim.location).run {
             repeat(extraDeaths) {
                 // The entity at the top of the stack has already been dispatched for by the
                 // EntityDeathEvent, so these would otherwise be filtered out as duplicates.
                 TriggerEntityDeath.force(victim, allowDuplicates = true)
-                killer?.let { TriggerKill.force(it, victim, allowDuplicates = true) }
+                killer?.let { Regions.runOwned(it) { TriggerKill.force(it, victim, allowDuplicates = true) } }
             }
         }
     }

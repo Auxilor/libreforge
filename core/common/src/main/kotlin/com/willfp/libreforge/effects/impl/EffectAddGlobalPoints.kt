@@ -11,6 +11,7 @@ import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.get
 import com.willfp.libreforge.globalPoints
 import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 
 object EffectAddGlobalPoints : Effect<NoCompileData>("add_global_points") {
     override val description = "Permanently increases a global point counter while the holder is active."
@@ -32,7 +33,7 @@ object EffectAddGlobalPoints : Effect<NoCompileData>("add_global_points") {
         )
     }
 
-    private val tracker = mutableMapOf<UUID, AddedPoint>()
+    private val tracker = ConcurrentHashMap<UUID, AddedPoint>()
 
     override fun onEnable(
         dispatcher: Dispatcher<*>,
@@ -48,13 +49,13 @@ object EffectAddGlobalPoints : Effect<NoCompileData>("add_global_points") {
             point, amount
         )
 
-        globalPoints[point] += amount
+        globalPoints.add(point, amount)
     }
 
     override fun onDisable(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder) {
         val addedPoint = tracker.remove(identifiers.uuid) ?: return
 
-        globalPoints[addedPoint.point] -= addedPoint.amount
+        globalPoints.add(addedPoint.point, -addedPoint.amount)
     }
 
     private data class AddedPoint(

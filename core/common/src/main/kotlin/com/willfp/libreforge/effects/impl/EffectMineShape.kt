@@ -6,6 +6,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.templates.MineBlockEffect
 import com.willfp.libreforge.getFormattedStrings
@@ -146,6 +147,10 @@ object EffectMineShape : MineBlockEffect<NoCompileData>("mine_shape") {
                             rightAxis.z * rightOffset + upAxis.z * upOffset + forwardAxis.z * depthOffset
                         )
                     )
+
+                    if (!Regions.canReach(targetBlock.location)) {
+                        continue
+                    }
 
                     if (targetBlock.location.blockY !in triggerBlock.world.minHeight..triggerBlock.world.maxHeight) {
                         continue

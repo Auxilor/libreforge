@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
@@ -39,7 +40,7 @@ object EffectTeleportToLookingAt : Effect<NoCompileData>("teleport_to_looking_at
         target.yaw = location.yaw
         target.pitch = location.pitch
 
-        player.teleport(target)
+        Regions.teleport(player, target)
 
         return true
     }

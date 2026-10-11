@@ -9,6 +9,7 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDeathEvent
 import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 
 object RoseStackerPlaceholderListener : Listener {
     // Long enough to outlive RoseStacker's asynchronous stack loot calculation.
@@ -16,7 +17,7 @@ object RoseStackerPlaceholderListener : Listener {
 
     // RoseStacker unstacks the entity while handling its death, so the stack size has to be
     // remembered beforehand for triggers like kill and entity_death to be able to read it.
-    private val stackSizes = mutableMapOf<UUID, Int>()
+    private val stackSizes = ConcurrentHashMap<UUID, Int>()
 
     @EventHandler(priority = EventPriority.LOWEST)
     fun cacheStackSize(event: EntityDeathEvent) {
@@ -24,7 +25,7 @@ object RoseStackerPlaceholderListener : Listener {
         val uuid = event.entity.uniqueId
 
         stackSizes[uuid] = stacked.stackSize
-        plugin.scheduler.runLater(CACHE_TICKS) { stackSizes -= uuid }
+        plugin.scheduler.global().runLater(CACHE_TICKS) { stackSizes -= uuid }
     }
 
     @EventHandler

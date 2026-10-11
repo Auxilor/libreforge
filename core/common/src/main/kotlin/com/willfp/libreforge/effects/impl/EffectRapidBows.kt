@@ -1,7 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.map.listMap
+import com.willfp.eco.core.map.concurrentListMap
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
@@ -31,7 +31,7 @@ object EffectRapidBows : Effect<NoCompileData>("rapid_bows") {
         )
     }
 
-    private val modifiers = listMap<UUID, IdentifiedModifier>()
+    private val modifiers = concurrentListMap<UUID, IdentifiedModifier>()
 
     private const val MAX_FORCE = 3.0
 

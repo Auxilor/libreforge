@@ -200,7 +200,8 @@ internal enum class StateKind {
 }
 
 /**
- * Everything libreforge tracks for one dispatcher. Accessed only on the main thread.
+ * Everything libreforge tracks for one dispatcher. Accessed only on the thread that owns the
+ * dispatcher (the main thread off Folia); [admitted] and [isRemoved] are also read by the engine.
  */
 internal class HolderState(
     val dispatcher: Dispatcher<*>,
@@ -261,6 +262,7 @@ internal class HolderState(
     private var clickScopes: ArrayList<SignalScope>? = ArrayList()
 
     // Set when the state is dropped, possibly by a handler in the middle of its own update.
+    @Volatile
     var isRemoved = false
 
     var admissionAttempts = 0
@@ -268,6 +270,7 @@ internal class HolderState(
     var bypassCooldown = false
 
     // Non-player states wait for the new-state budget before their first flush.
+    @Volatile
     var admitted = false
     var needsCleanup = false
 

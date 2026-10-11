@@ -2,7 +2,7 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
-import com.willfp.eco.core.map.listMap
+import com.willfp.eco.core.map.concurrentListMap
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
@@ -41,7 +41,7 @@ object EffectReplantCrops : Effect<NoCompileData>("replant_crops") {
         )
     }
 
-    private val players = listMap<UUID, ReplantConfig>()
+    private val players = concurrentListMap<UUID, ReplantConfig>()
 
     override fun onEnable(
         dispatcher: Dispatcher<*>,
@@ -134,7 +134,7 @@ object EffectReplantCrops : Effect<NoCompileData>("replant_crops") {
 
         data.age = 0
 
-        plugin.scheduler.run {
+        plugin.scheduler.at(block.location).run {
             block.type = type
             block.blockData = data
 

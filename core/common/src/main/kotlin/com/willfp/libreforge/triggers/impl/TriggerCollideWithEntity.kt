@@ -8,6 +8,7 @@ import org.bukkit.entity.LivingEntity
 import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerMoveEvent
 import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 
 object TriggerCollideWithEntity : Trigger("collide_with_entity") {
     override val description = "Fires when the player physically collides with a nearby entity."
@@ -29,7 +30,7 @@ object TriggerCollideWithEntity : Trigger("collide_with_entity") {
         TriggerParameter.LOCATION
     )
 
-    private val cooldown = mutableMapOf<Pair<UUID, UUID>, Long>()
+    private val cooldown = ConcurrentHashMap<Pair<UUID, UUID>, Long>()
     private const val COLLISION_COOLDOWN_MS = 500L
 
     @EventHandler(ignoreCancelled = true)

@@ -16,6 +16,7 @@ abstract class Condition<T>(
     /**
      * Whether this condition is enabled.
      */
+    @Volatile
     open var isEnabled: Boolean = false
         protected set
 

@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getFormattedString
@@ -50,30 +51,23 @@ object EffectSetWeather : Effect<NoCompileData>("set_weather") {
             Bukkit.getWorld(worldName)
         } ?: return false
 
-        when (config.getFormattedString("weather", data).lowercase()) {
-            "clear", "sun" -> {
-                world.setStorm(false)
-                world.isThundering = false
-            }
-
-            "rain", "downfall", "storm" -> {
-                world.setStorm(true)
-                world.isThundering = false
-            }
-
-            "thunder" -> {
-                world.setStorm(true)
-                world.isThundering = true
-            }
-
+        val (storm, thundering) = when (config.getFormattedString("weather", data).lowercase()) {
+            "clear", "sun" -> false to false
+            "rain", "downfall", "storm" -> true to false
+            "thunder" -> true to true
             else -> return false
         }
 
-        if (config.has("duration")) {
-            val duration = config.getIntFromExpression("duration", data)
+        val duration = if (config.has("duration")) config.getIntFromExpression("duration", data) else null
 
-            world.weatherDuration = duration
-            world.thunderDuration = duration
+        Regions.runGlobal {
+            world.setStorm(storm)
+            world.isThundering = thundering
+
+            if (duration != null) {
+                world.weatherDuration = duration
+                world.thunderDuration = duration
+            }
         }
 
         return true

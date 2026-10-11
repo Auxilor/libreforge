@@ -24,6 +24,7 @@ import org.bukkit.Bukkit
 import org.bukkit.NamespacedKey
 import java.util.Objects
 import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 
 object EffectAddPermanentHolderInRadius : Effect<HolderTemplate>("add_permanent_holder_in_radius") {
     override val description = "Permanently applies a set of effects and conditions to all nearby entities within a radius while the holder is active."
@@ -56,7 +57,7 @@ object EffectAddPermanentHolderInRadius : Effect<HolderTemplate>("add_permanent_
         )
     }
 
-    private val holders = mutableSetOf<PermanentNearbyHolder>()
+    private val holders = ConcurrentHashMap.newKeySet<PermanentNearbyHolder>()
 
     // Invalidated near a holder on a real enable or disable; polling covers movement.
     private val provider = object : HolderProvider {
@@ -146,9 +147,9 @@ object EffectAddPermanentHolderInRadius : Effect<HolderTemplate>("add_permanent_
 
     private class PermanentNearbyHolder(
         val holder: Holder,
-        var radius: Double,
+        @Volatile var radius: Double,
         val owner: UUID,
-        var applyToSelf: Boolean
+        @Volatile var applyToSelf: Boolean
     ) {
         fun canApplyTo(dispatcher: Dispatcher<*>): Boolean {
             val dispatcherLocation = dispatcher.location ?: return false

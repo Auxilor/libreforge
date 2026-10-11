@@ -1,5 +1,6 @@
 package com.willfp.libreforge.triggers.impl
 
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.plugin
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
@@ -15,6 +16,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 
 object TriggerAltClick : Trigger("alt_click") {
     override val description = "Fires when the player right-clicks with an item in hand, or left-clicks with a bow, rod, or trident."
@@ -73,7 +75,7 @@ object TriggerAltClick : Trigger("alt_click") {
         Material.DROPPER
     )
 
-    private val preventDoubleTriggers = mutableSetOf<UUID>()
+    private val preventDoubleTriggers = ConcurrentHashMap.newKeySet<UUID>()
 
     init {
         BLOCK_BLACKLIST.addAll(Tag.BUTTONS.values)
@@ -118,13 +120,13 @@ object TriggerAltClick : Trigger("alt_click") {
         val location: Location?
         val world = player.location.world ?: return
         val result = player.rayTraceBlocks(
-            plugin.configYml.getDouble("raytrace-distance"),
+            Regions.reachableDistance(player.eyeLocation, plugin.configYml.getDouble("raytrace-distance")),
             FluidCollisionMode.NEVER
         )
 
         val entityResult = world.rayTraceEntities(
             player.eyeLocation,
-            player.eyeLocation.direction, 50.0, 3.0
+            player.eyeLocation.direction, Regions.reachableDistance(player.eyeLocation, 50.0), 3.0
         ) { entity: Entity? -> entity is LivingEntity }
 
         location = result?.hitPosition?.toLocation(world)
@@ -140,7 +142,7 @@ object TriggerAltClick : Trigger("alt_click") {
 
         preventDoubleTriggers += player.uniqueId
 
-        plugin.scheduler.run {
+        plugin.scheduler.global().run {
             preventDoubleTriggers -= player.uniqueId
         }
 

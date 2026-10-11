@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.particle.Particles
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getFormattedString
@@ -44,7 +45,9 @@ object EffectSpawnParticle : Effect<NoCompileData>(
         val particle = Particles.lookup(config.getFormattedString("particle", data))
         val amount = config.getOrElse("amount", 1) { getIntFromExpression(it, data) }
 
-        plugin.scheduler.runAsync {
+        val context = if (Regions.isFolia) plugin.scheduler.at(location) else plugin.scheduler.async()
+
+        context.run {
             particle.spawn(location, amount)
         }
 

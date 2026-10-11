@@ -46,7 +46,7 @@ object EffectSetVelocity : Effect<NoCompileData>("set_velocity") {
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val player = data.player ?: return false
 
-        plugin.scheduler.runLater(1) {
+        plugin.scheduler.on(player).runLater(1) {
             player.velocity = Vector(
                 config.getDoubleFromExpression("x", data),
                 config.getDoubleFromExpression("y", data),

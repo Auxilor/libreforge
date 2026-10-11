@@ -57,7 +57,7 @@ object EffectVictimSpeedMultiplier : Effect<NoCompileData>("victim_speed_multipl
 
         victim.setMetadata(META_KEY, plugin.createMetadataValue(true))
 
-        plugin.scheduler.runLater(duration.toLong()) {
+        plugin.scheduler.on(victim).runLater(duration.toLong()) {
             attribute.baseValue = attributeValue
             victim.removeMetadata(META_KEY, plugin)
         }

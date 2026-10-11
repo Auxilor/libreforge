@@ -5,15 +5,16 @@ import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerGroup
 import com.willfp.libreforge.triggers.TriggerParameter
+import java.util.concurrent.ConcurrentHashMap
 
 object TriggerGroupCustom : TriggerGroup("custom") {
-    private val registry = mutableMapOf<String, TriggerCustom>()
+    private val registry = ConcurrentHashMap<String, TriggerCustom>()
 
     val knownTriggers: Set<String>
         get() = registry.keys
 
     override fun create(value: String): TriggerCustom {
-        return registry.getOrPut(value) { TriggerCustom(value) }
+        return registry.computeIfAbsent(value) { TriggerCustom(value) }
     }
 
     class TriggerCustom(id: String) : Trigger("custom_$id") {

@@ -112,7 +112,7 @@ abstract class AttributeEffect private constructor(
         // Run on next tick to prevent constraining to the lower value during reloads.
         // Skipped while the server is stopping: the scheduler may refuse it, and the tick never comes.
         if (!HolderLifecycle.isStopping()) {
-            plugin.scheduler.run {
+            plugin.scheduler.on(entity).run {
                 constrainAttribute(entity, instance.value)
             }
         }

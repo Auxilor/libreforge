@@ -18,6 +18,7 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 
 object EffectSetUnbreakable : Effect<NoCompileData>("set_unbreakable") {
     override val description = "Makes an item in a specific slot unbreakable while the effect is active."
@@ -50,7 +51,7 @@ object EffectSetUnbreakable : Effect<NoCompileData>("set_unbreakable") {
     private val VALID_SLOTS = setOf("holder", "mainhand", "offhand", "helmet", "chestplate", "leggings", "boots")
 
     private data class EnabledState(val slot: String, val persistOnDisable: Boolean)
-    private val enabledStates = HashMap<UUID, EnabledState>()
+    private val enabledStates = ConcurrentHashMap<UUID, EnabledState>()
 
     override fun makeCompileData(config: Config, context: ViolationContext): NoCompileData {
         val slot = config.getStringOrNull("slot")

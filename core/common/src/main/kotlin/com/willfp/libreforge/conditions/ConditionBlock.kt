@@ -6,10 +6,10 @@ import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.DynamicConfigs
 import com.willfp.libreforge.HolderStates
 import com.willfp.libreforge.ProvidedHolder
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.applyHolder
 import com.willfp.libreforge.effects.Chain
 import com.willfp.libreforge.plugin
-import org.bukkit.Bukkit
 
 /**
  * A single condition config block.
@@ -37,14 +37,14 @@ class ConditionBlock<T> internal constructor(
     fun isMet(dispatcher: Dispatcher<*>, holder: ProvidedHolder): Boolean {
         /*
 
-        Conditions are not thread-safe, so we must run them on the main thread.
-        However, conditions being met or not needs to work on packet processing threads,
-        so the synchronous result for tracked dispatchers is kept and returned if we are not
-        on the main thread.
+        Conditions are not thread-safe, so we must run them on the thread that owns the
+        dispatcher (the main thread, off Folia). However, conditions being met or not needs to
+        work on packet processing threads, so the synchronous result for tracked dispatchers is
+        kept and returned if we are not on that thread.
 
          */
 
-        if (!Bukkit.isPrimaryThread()) {
+        if (!Regions.owns(dispatcher)) {
             return HolderStates.conditionResult(dispatcher, this)
                 ?: plugin.configYml.getBool("conditions.default-state-off-main-thread")
         }

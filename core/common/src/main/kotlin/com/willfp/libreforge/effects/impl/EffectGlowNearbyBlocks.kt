@@ -6,6 +6,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.util.TeamUtils
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.enumValueOfOrNull
@@ -62,6 +63,10 @@ object EffectGlowNearbyBlocks : Effect<NoCompileData>("glow_nearby_blocks") {
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
+        if (Regions.isUnsupported("glow_nearby_blocks")) {
+            return false
+        }
+
         val location = data.location ?: return false
 
         val radius = config.getIntFromExpression("radius", data)
@@ -110,7 +115,7 @@ object EffectGlowNearbyBlocks : Effect<NoCompileData>("glow_nearby_blocks") {
             team.addEntry(shulker.uniqueId.toString())
             block.setMetadata("gnb-uuid", plugin.metadataValueFactory.create(shulker.uniqueId))
 
-            plugin.scheduler.runLater(duration.toLong()) {
+            plugin.scheduler.at(block.location).runLater(duration.toLong()) {
                 team.removeEntry(shulker.uniqueId.toString())
                 shulker.remove()
                 block.removeMetadata("gnb-uuid", plugin)

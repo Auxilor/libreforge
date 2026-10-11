@@ -2,6 +2,7 @@ package com.willfp.libreforge.effects.impl.aoe.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.impl.aoe.AOEShape
 import com.willfp.libreforge.getDoubleFromExpression
@@ -45,6 +46,10 @@ object AOEShapeBeam : AOEShape<NoCompileData>("beam") {
         for (i in 1..distance) {
             val center = (location + offset * i.toFloat()).toLocation(world)
 
+            if (!Regions.canReach(center, radius)) {
+                return entities
+            }
+
             val atBeamPoint = center.getNearbyEntities(radius, radius, radius)
                 .filterIsInstance<LivingEntity>()
                 .filterNot { it.uniqueId == data.player?.uniqueId }
@@ -85,6 +90,10 @@ object AOEShapeBeam : AOEShape<NoCompileData>("beam") {
 
         for (i in 0..distance) {
             val center = (location + offset * i.toFloat()).toLocation(world)
+
+            if (!Regions.canReach(center, radius)) {
+                return blocks
+            }
 
             val atBeamPoint = center.getNearbyBlocksInSphere(radius)
 

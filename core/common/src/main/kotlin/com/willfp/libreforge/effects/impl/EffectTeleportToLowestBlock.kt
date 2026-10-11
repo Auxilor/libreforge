@@ -2,6 +2,7 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -29,7 +30,8 @@ object EffectTeleportToLowestBlock : Effect<NoCompileData>("teleport_to_lowest_b
                 continue
             }
 
-            player.teleport(
+            Regions.teleport(
+                player,
                 Location(
                     world,
                     location.blockX + 0.5,

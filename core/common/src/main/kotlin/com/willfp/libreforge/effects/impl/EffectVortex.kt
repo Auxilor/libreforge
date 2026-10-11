@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.entities.Entities
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.dealDamage
 import com.willfp.libreforge.effects.Effect
@@ -91,6 +92,10 @@ object EffectVortex : Effect<NoCompileData>("vortex") {
 
         val whitelist = config.getStringsOrNull("whitelist")?.map { Entities.lookup(it) }
         val blacklist = config.getFormattedStrings("blacklist", data).map { Entities.lookup(it) }
+
+        if (!Regions.canReach(origin, radius)) {
+            return false
+        }
 
         val affected = mutableSetOf<LivingEntity>()
         var tick = 0

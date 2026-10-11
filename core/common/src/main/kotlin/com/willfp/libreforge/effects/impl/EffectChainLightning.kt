@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.dealDamage
 import com.willfp.libreforge.effects.Effect
@@ -73,6 +74,10 @@ object EffectChainLightning : Effect<NoCompileData>("chain_lightning") {
             hit.add(current)
             current.world.strikeLightningEffect(current.location)
             current.dealDamage(damage, source, trueDamage)
+
+            if (!Regions.canReach(current.location, range)) {
+                return true
+            }
 
             val next = current.getNearbyEntities(range, range, range)
                 .filterIsInstance<LivingEntity>()

@@ -4,6 +4,7 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.util.NumberUtils
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
@@ -67,6 +68,10 @@ object EffectArrowStorm : Effect<NoCompileData>("arrow_storm") {
         val damage = config.getOrNull("damage") { getDoubleFromExpression(it, data) }
         val respectFlame = config.getBoolOrNull("respect_flame") ?: true
         val flame = respectFlame && (data.item?.containsEnchantment(org.bukkit.enchantments.Enchantment.FLAME) ?: false)
+
+        if (!Regions.canReach(location, spread)) {
+            return false
+        }
 
         repeat(amount) {
             val spawnLoc = location.clone().add(

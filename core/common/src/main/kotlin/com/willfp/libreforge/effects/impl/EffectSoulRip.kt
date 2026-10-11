@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.Regions
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.dealDamage
 import com.willfp.libreforge.effects.Effect
@@ -65,6 +66,10 @@ object EffectSoulRip : Effect<NoCompileData>("soul_rip") {
         val healMultiplier = config.getOrNull("heal_multiplier") { getDoubleFromExpression(it, data) } ?: 1.0
         val trueDamage = config.getBool("true_damage")
         val source = if (config.getBool("use_source")) player else null
+
+        if (!Regions.canReach(location, radius)) {
+            return false
+        }
 
         val targets = location.world?.getNearbyEntities(location, radius, radius, radius)
             ?.filterIsInstance<LivingEntity>()

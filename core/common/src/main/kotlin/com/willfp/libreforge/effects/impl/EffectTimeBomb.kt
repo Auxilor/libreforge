@@ -56,7 +56,7 @@ object EffectTimeBomb : Effect<NoCompileData>("time_bomb") {
 
         if (glow) victim.isGlowing = true
 
-        plugin.scheduler.runLater(fuse.toLong()) {
+        plugin.scheduler.on(victim).runLater(fuse.toLong()) {
             if (glow) victim.isGlowing = false
             if (!victim.isDead) {
                 val loc = victim.location

@@ -43,11 +43,11 @@ class PointPriceFactory(private val type: String) : PriceFactory {
         }
 
         override fun pay(player: Player, multiplier: Double) {
-            player.points[type] -= getValue(player, multiplier)
+            player.points.add(type, -getValue(player, multiplier))
         }
 
         override fun giveTo(player: Player, multiplier: Double) {
-            player.points[type] += getValue(player, multiplier)
+            player.points.add(type, getValue(player, multiplier))
         }
 
         override fun getValue(player: Player, multiplier: Double): Double {
@@ -68,7 +68,7 @@ class PointPriceFactory(private val type: String) : PriceFactory {
     }
 }
 
-private val initializedPoints = mutableSetOf<String>()
+private val initializedPoints = ConcurrentHashMap.newKeySet<String>()
 
 class PointsMap(
     private val profile: Profile
@@ -88,11 +88,10 @@ class PointsMap(
     }
 
     private fun initializeIfNeeded(type: String) {
-        if (type in initializedPoints) {
+        if (!initializedPoints.add(type)) {
             return
         }
 
-        initializedPoints += type
         Prices.registerPriceFactory(PointPriceFactory(type))
     }
 
@@ -103,7 +102,9 @@ class PointsMap(
     }
 
     fun add(key: String, amount: Double) {
-        set(key, get(key) + amount)
+        initializeIfNeeded(key)
+
+        profile.add(getKey(key), amount)
     }
 
     operator fun set(key: String, value: Double) {

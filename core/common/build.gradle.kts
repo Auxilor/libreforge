@@ -74,6 +74,9 @@ dependencies {
     testImplementation("com.willfp:eco:${findProperty("eco-version")}")
     testImplementation(kotlin("stdlib", version = "2.3.0"))
 
+    // eco's placeholder types reference Bukkit classes, which the server provides at runtime.
+    testImplementation("org.purpurmc.purpur:purpur-api:1.21.4-R0.1-SNAPSHOT")
+
     // Reads the bundled holidays.yml in tests; the server provides SnakeYAML at runtime.
     testImplementation("org.yaml:snakeyaml:2.2")
 

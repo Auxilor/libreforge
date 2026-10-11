@@ -17,11 +17,12 @@ import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.DispatchedTrigger
 import org.bukkit.entity.Player
 import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.ceil
 
 object ArgumentCooldown : EffectArgument<Chain?>("cooldown") {
     // Maps cooldown groups to Player UUIDs mapped to expiry time
-    private val cooldownTracker = mutableMapOf<String, MutableMap<UUID, Long>>()
+    private val cooldownTracker = ConcurrentHashMap<String, ConcurrentHashMap<UUID, Long>>()
 
     override fun isMet(element: ConfigurableElement, trigger: DispatchedTrigger, compileData: Chain?): Boolean {
         return getCooldown(element, trigger) <= 0
@@ -41,10 +42,9 @@ object ArgumentCooldown : EffectArgument<Chain?>("cooldown") {
     override fun ifMet(element: ConfigurableElement, trigger: DispatchedTrigger, compileData: Chain?) {
         val group = element.config.getStringOrNull("cooldown_group") ?: element.uuid.toString()
 
-        val effectEndTimes = cooldownTracker[group] ?: mutableMapOf()
+        val effectEndTimes = cooldownTracker.computeIfAbsent(group) { ConcurrentHashMap() }
         effectEndTimes[trigger.dispatcher.uuid] = System.currentTimeMillis() +
                 (element.config.getDoubleFromExpression("cooldown", trigger.data) * 1000L).toLong()
-        cooldownTracker[group] = effectEndTimes
     }
 
     override fun ifNotMet(element: ConfigurableElement, trigger: DispatchedTrigger, compileData: Chain?) {
