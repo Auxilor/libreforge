@@ -52,6 +52,12 @@ abstract class Trigger(
     override val aliases: Set<String> = emptySet()
 
     /**
+     * The config option that must be enabled for this trigger to be used, or null if it is
+     * always available.
+     */
+    open val option: TriggerOption? = null
+
+    /**
      * Whether this trigger is enabled.
      */
     @Volatile
@@ -97,6 +103,10 @@ abstract class Trigger(
         forceHolders: Collection<ProvidedHolder>? = null,
         allowDuplicates: Boolean = false
     ) {
+        if (option?.isEnabled == false) {
+            return
+        }
+
         if (!Regions.canReach(dispatcher) && data.event != null) {
             Regions.isUnsupported("Triggers editing an event for a dispatcher in another region")
         }

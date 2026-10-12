@@ -2,6 +2,8 @@ package com.willfp.libreforge.triggers
 
 import com.willfp.eco.core.registry.Registry
 import com.willfp.libreforge.AliasedRegistry
+import com.willfp.libreforge.ConfigViolation
+import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.mutators.MutatorList
 import com.willfp.libreforge.triggers.impl.TriggerAltClick
 import com.willfp.libreforge.triggers.impl.TriggerBite
@@ -63,6 +65,7 @@ import com.willfp.libreforge.triggers.impl.TriggerHeadshot
 import com.willfp.libreforge.triggers.impl.TriggerHeal
 import com.willfp.libreforge.triggers.impl.TriggerHoldItem
 import com.willfp.libreforge.triggers.impl.TriggerHookInGround
+import com.willfp.libreforge.triggers.impl.TriggerHotkey
 import com.willfp.libreforge.triggers.impl.TriggerItemBreak
 import com.willfp.libreforge.triggers.impl.TriggerJoin
 import com.willfp.libreforge.triggers.impl.TriggerJump
@@ -124,6 +127,37 @@ object Triggers : AliasedRegistry<Trigger>() {
             enable()
         }
     }
+
+    /**
+     * Get a trigger by [id] for a config, logging a violation for [param] in [context] if
+     * the trigger's [Trigger.option] is not enabled.
+     *
+     * This will enable the trigger if it can be used.
+     */
+    fun get(id: String, context: ViolationContext, param: String): Trigger? {
+        val trigger = doGet(id) ?: return null
+        val option = trigger.option
+
+        if (option != null && !option.isEnabled) {
+            context.log(
+                ConfigViolation(
+                    param,
+                    "The $id trigger requires ${option.path} to be set to true in libreforge's config.yml!"
+                )
+            )
+
+            return null
+        }
+
+        return trigger.apply {
+            enable()
+        }
+    }
+
+    /**
+     * If a trigger exists with [id], without enabling it.
+     */
+    fun exists(id: String): Boolean = doGet(id) != null
 
     private fun doGet(id: String): Trigger? {
         for (group in groupRegistry.values()) {
@@ -264,5 +298,6 @@ object Triggers : AliasedRegistry<Trigger>() {
         register(TriggerTakeDamage)
         register(TriggerTakeEntityDamage)
         TriggerDateBoundary.values.forEach { register(it) }
+        TriggerHotkey.values.forEach { register(it) }
     }
 }
