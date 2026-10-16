@@ -167,6 +167,63 @@ triggers:
     # trigger can react to money given by plugins other than EcoBits. Set to -1 to disable.
     vault-poll-interval: 100
 
+  # The hotkey_<key> and shift_hotkey_<key> triggers, each of which must be enabled here before
+  # it can be used. Configs using a disabled one will show an error, and it will never fire.
+  # hotkey_<key> fires while the player isn't sneaking, and shift_hotkey_<key> while they are.
+  # While one is enabled, the key's normal action is cancelled for every player in that state:
+  # for example, enabling hotkey_1 stops players who aren't sneaking from selecting hotbar slot 1
+  # (by number key or by scrolling), enabling hotkey_drop stops them dropping items with Q, and
+  # enabling hotkey_advancements closes the advancements screen as soon as it opens.
+  hotkeys:
+    hotkey_swap_hands:
+      enabled: false
+    shift_hotkey_swap_hands:
+      enabled: false
+    hotkey_1:
+      enabled: false
+    shift_hotkey_1:
+      enabled: false
+    hotkey_2:
+      enabled: false
+    shift_hotkey_2:
+      enabled: false
+    hotkey_3:
+      enabled: false
+    shift_hotkey_3:
+      enabled: false
+    hotkey_4:
+      enabled: false
+    shift_hotkey_4:
+      enabled: false
+    hotkey_5:
+      enabled: false
+    shift_hotkey_5:
+      enabled: false
+    hotkey_6:
+      enabled: false
+    shift_hotkey_6:
+      enabled: false
+    hotkey_7:
+      enabled: false
+    shift_hotkey_7:
+      enabled: false
+    hotkey_8:
+      enabled: false
+    shift_hotkey_8:
+      enabled: false
+    hotkey_9:
+      enabled: false
+    shift_hotkey_9:
+      enabled: false
+    hotkey_drop:
+      enabled: false
+    shift_hotkey_drop:
+      enabled: false
+    hotkey_advancements:
+      enabled: false
+    shift_hotkey_advancements:
+      enabled: false
+
 integrations:
   rosestacker:
     # If the kill and entity_death triggers should fire once for every entity in a stack that is

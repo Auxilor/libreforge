@@ -87,7 +87,9 @@ import com.willfp.libreforge.tags.CustomBlockTag
 import com.willfp.libreforge.tags.CustomEntityTag
 import com.willfp.libreforge.tags.CustomTag
 import com.willfp.libreforge.triggers.DispatchedTriggerFactory
+import com.willfp.libreforge.triggers.TriggerOptions
 import com.willfp.libreforge.triggers.Triggers
+import com.willfp.libreforge.triggers.impl.HotkeyListener
 import com.willfp.libreforge.triggers.impl.TriggerDateBoundary
 import com.willfp.libreforge.triggers.impl.TriggerMeleeAttack
 import org.bukkit.event.Listener
@@ -120,6 +122,8 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
     }
 
     override fun handleLoad() {
+        TriggerOptions.reload()
+
         for (category in configCategories) {
             category.copyConfigs(this)
             category.reload(this)
@@ -177,6 +181,7 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
     }
 
     override fun handleReload() {
+        TriggerOptions.reload()
         HolderStates.reloadSettings()
 
         for (config in chainsYml.getSubsections("chains")) {
@@ -238,7 +243,8 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
     override fun loadListeners(): List<Listener> {
         val listeners = mutableListOf<Listener>(
             EffectDataFixer,
-            ItemRefreshListener
+            ItemRefreshListener,
+            HotkeyListener
         )
 
         listeners += HolderLifecycle.listeners()

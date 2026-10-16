@@ -24,9 +24,7 @@ object Counters {
         // Legacy support for 'id' instead of 'trigger'
         val id = if (config.has("trigger")) config.getString("trigger") else config.getString("id")
 
-        val trigger = Triggers[id]
-
-        if (trigger == null) {
+        if (!Triggers.exists(id)) {
             context.log(
                 ConfigViolation(
                     "trigger",
@@ -36,6 +34,8 @@ object Counters {
 
             return null
         }
+
+        val trigger = Triggers.get(id, context, "trigger") ?: return null
 
         val conditions = Conditions.compile(
             config.getSubsections("conditions"),
