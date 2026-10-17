@@ -4,7 +4,9 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.economy.balance
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
+import com.willfp.libreforge.earning.EarningLimits
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
@@ -26,11 +28,28 @@ object EffectGiveMoney : Effect<NoCompileData>("give_money") {
             type = ArgType.EXPRESSION,
             example = "%level% * 10"
         )
+        optional(
+            "earning-limit",
+            description = "The ID of the earning-limit group.",
+            type = ArgType.STRING
+        )
+    }
+
+    override fun makeCompileData(config: Config, context: ViolationContext): NoCompileData {
+        EarningLimits.validateReference(config, context)
+        return NoCompileData
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val player = data.player ?: return false
-        player.balance += config.getDoubleFromExpression("amount", data)
+
+        val amount = config.getDoubleFromExpression("amount", data)
+
+        val remainingLimit = EarningLimits.getRemaining(config, player)
+        val finalAmount = minOf(amount, remainingLimit)
+
+        EarningLimits.addEarned(config, player, finalAmount)
+        player.balance += finalAmount
 
         return true
     }

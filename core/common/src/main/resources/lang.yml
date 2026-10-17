@@ -35,6 +35,9 @@ messages:
   must-specify-point: "&cYou must specify the point!"
   invalid-point: "&cInvalid point name!"
 
+  must-specify-earning-limit: "&cYou must specify the earning-limit group!"
+  invalid-earning-limit: "&cInvalid earning-limit group!"
+
   must-specify-level-id: "&cYou must specify a level ID!"
   invalid-level-id: "&cInvalid level ID!"
   must-have-item: "&cThat player must be holding an item!"
@@ -54,6 +57,8 @@ messages:
   points-set-all: "&fSet all players to have &a%amount% &a%point%&f!"
   points-given-all: "&a%amount% &a%point% &fwere added to all players!"
   points-reset-all: "&fReset all players' &a%point% &f!"
+
+  earning-limit-reset: "&fReset &a%playername%'s &fearnings and interval timer for &a%group%&f!"
 
   plugin-not-installed: "&cYou don't have this plugin installed!"
 
