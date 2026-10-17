@@ -313,7 +313,7 @@ object Effects : AliasedRegistry<Effect<*>>() {
         val (arguments, conditions, mutators, filters) = compileEffectContext(config, context)
 
         val triggers = config.getStrings("triggers").mapNotNull {
-            Triggers[it]
+            Triggers.get(it, context, "triggers")
         }.toSet()
 
         val effectConfigs = if (config.has("id")) {
