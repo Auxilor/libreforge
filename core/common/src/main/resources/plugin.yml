@@ -68,6 +68,7 @@ permissions:
       libreforge.command.trigger: true
       libreforge.command.getitemdata: true
       libreforge.command.points.*: true
+      libreforge.command.reset_earning_limits: true
   libreforge.command.points.*:
     description: All points commands
     default: op
@@ -96,6 +97,9 @@ permissions:
     default: op
   libreforge.command.points:
     description: Allows the use of /libreforge points
+    default: op
+  libreforge.command.reset_earning_limits:
+    description: Allows the use of /libreforge reset_earning_limits
     default: op
   libreforge.command.points.get:
     description: Allows the use of /libreforge points get

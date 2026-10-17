@@ -16,6 +16,7 @@ tasks {
         relocate("dev.romainguy.kotlin.math", "com.willfp.libreforge.libs.math")
         relocate("org.apache.maven", "com.willfp.eco.libs.maven")
         relocate("com.willfp.modelenginebridge", "com.willfp.libreforge.libs.modelenginebridge")
+        relocate("org.quartz", "com.willfp.libreforge.libs.quartz")
     }
 
     build {
@@ -49,6 +50,7 @@ tasks {
         relocate("dev.romainguy.kotlin.math", "com.willfp.libreforge.libs.math")
         relocate("org.apache.maven", "com.willfp.eco.libs.maven")
         relocate("com.willfp.modelenginebridge", "com.willfp.libreforge.libs.modelenginebridge")
+        relocate("org.quartz", "com.willfp.libreforge.libs.quartz")
         relocate("kotlin", "com.willfp.eco.libs.kotlin")
         relocate("org.jetbrains.kotlin", "com.willfp.eco.libs.kotlin.jetbrains")
         relocate("org.intellij.lang.annotations", "com.willfp.eco.libs.intellij.annotations")

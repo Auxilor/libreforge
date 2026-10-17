@@ -4,7 +4,9 @@ import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
+import com.willfp.libreforge.earning.EarningLimits
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
@@ -32,15 +34,31 @@ object EffectGiveXp : Effect<NoCompileData>("give_xp") {
             type = ArgType.BOOLEAN,
             default = "true"
         )
+        optional(
+            "earning-limit",
+            description = "The ID of the earning-limit group.",
+            type = ArgType.STRING
+        )
+    }
+
+    override fun makeCompileData(config: Config, context: ViolationContext): NoCompileData {
+        EarningLimits.validateReference(config, context)
+        return NoCompileData
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val player = data.player ?: return false
 
+        val amount = config.getIntFromExpression("amount", data)
+
+        val remainingLimit = EarningLimits.getRemaining(config, player)
+        val finalAmount = minOf(amount.toDouble(), remainingLimit).toInt()
+
+        EarningLimits.addEarned(config, player, finalAmount.toDouble())
         if (Prerequisite.HAS_PAPER.isMet) {
-            player.giveExp(config.getIntFromExpression("amount", data), config.getBoolOrNull("apply_mending") ?: true)
+            player.giveExp(finalAmount, config.getBoolOrNull("apply_mending") ?: true)
         } else {
-            player.giveExp(config.getIntFromExpression("amount", data))
+            player.giveExp(finalAmount)
         }
 
         return true

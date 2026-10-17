@@ -16,6 +16,7 @@ import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.commands.custom.CustomCommands
 import com.willfp.libreforge.configs.ChainsYml
 import com.willfp.libreforge.configs.CommandsYml
+import com.willfp.libreforge.configs.EarningLimitsYml
 import com.willfp.libreforge.configs.HolidaysYml
 import com.willfp.libreforge.configs.PlaceholdersYml
 import com.willfp.libreforge.configs.SeasonsYml
@@ -26,6 +27,8 @@ import com.willfp.libreforge.dates.DateEdge
 import com.willfp.libreforge.dates.DatePeriod
 import com.willfp.libreforge.dates.dispatchForOnlinePlayers
 import com.willfp.libreforge.display.ItemFlagDisplay
+import com.willfp.libreforge.earning.EarningLimits
+import com.willfp.libreforge.earning.placeholder.EarningLimitPlaceholder
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.arguments.custom.CustomEffectArguments
 import com.willfp.libreforge.effects.impl.bossbar.BossBarProgressPlaceholder
@@ -104,6 +107,7 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
     val seasonsYml = SeasonsYml(this)
     val placeholdersYml = PlaceholdersYml(this)
     val commandsYml = CommandsYml(this)
+    val earningLimitsYml = EarningLimitsYml(this)
 
     val dispatchedTriggerFactory = DispatchedTriggerFactory(this)
 
@@ -122,6 +126,8 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
     }
 
     override fun handleLoad() {
+        EarningLimits.reload(earningLimitsYml, ViolationContext(this, "earning-limits.yml"))
+
         TriggerOptions.reload()
 
         for (category in configCategories) {
@@ -178,11 +184,14 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
         ItemProgressPlaceholder(this).register()
         ItemDataPlaceholder(this).register()
         BossBarProgressPlaceholder(this).register()
+        EarningLimitPlaceholder(this).register()
     }
 
     override fun handleReload() {
         TriggerOptions.reload()
         HolderStates.reloadSettings()
+
+        EarningLimits.reload(earningLimitsYml, ViolationContext(this, "earning-limits.yml"))
 
         for (config in chainsYml.getSubsections("chains")) {
             Effects.register(
