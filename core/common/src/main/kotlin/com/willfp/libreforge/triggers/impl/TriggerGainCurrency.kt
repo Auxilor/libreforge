@@ -4,8 +4,7 @@ import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerParameter
 
 object TriggerGainCurrency : Trigger("gain_currency") {
-    override val description = "Fires when the player gains currency, such as an EcoBits currency " +
-        "or Vault money."
+    override val description = "Fires when the player gains currency, such as an EcoBits currency or Vault money."
 
     override val categories = setOf("economy")
 
