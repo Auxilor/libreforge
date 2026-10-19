@@ -111,6 +111,13 @@ class EditableDropEvent(
     @Suppress("unused")
     val originalItems: List<ItemStack> = initialDrops.toList()
 
+    /**
+     * Whether these drops cannot be placed and broken again to farm them, such as
+     * drops that go straight into a minion's storage. Drop multipliers skip their
+     * anti-duplication check when this is true.
+     */
+    var duplicationSafe: Boolean = false
+
     private val modifiers = mutableListOf<DropModifier>()
 
     // ── Convenience accessors forwarded from context (backwards compat) ──────
