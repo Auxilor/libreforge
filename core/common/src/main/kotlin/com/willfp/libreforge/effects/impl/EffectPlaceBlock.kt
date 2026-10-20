@@ -43,12 +43,17 @@ object EffectPlaceBlock : Effect<NoCompileData>("place_block") {
         val duration = config.getOrNull("duration") { getIntFromExpression(it, data) }
 
         if (duration != null && duration > 0) {
-            val oldBlock = Blocks.getBlock(block)
+            val oldCustomBlock = if (Blocks.isCustomBlock(block)) Blocks.getBlock(block) else null
+            val oldData = block.blockData.clone()
             toPlace.place(location)
             val placedType = location.block.type
             plugin.scheduler.at(location).runLater(duration.toLong()) {
                 if (location.block.type == placedType) {
-                    oldBlock.place(location)
+                    if (oldCustomBlock != null) {
+                        oldCustomBlock.place(location)
+                    } else {
+                        location.block.setBlockData(oldData, false)
+                    }
                 }
             }
         } else {
