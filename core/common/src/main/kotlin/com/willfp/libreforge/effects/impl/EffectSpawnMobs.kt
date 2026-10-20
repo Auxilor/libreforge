@@ -64,9 +64,8 @@ object EffectSpawnMobs : Effect<NoCompileData>("spawn_mobs") {
         )
         optional(
             "health",
-            description = "The max health (and starting health) to set on each spawned mob. Supports expressions.",
+            description = "The max health (and starting health) to set on each spawned mob. Defaults to the mob's normal max health. Supports expressions.",
             type = ArgType.EXPRESSION,
-            default = "20",
             example = "20 + %level% * 5"
         )
     }
@@ -85,7 +84,7 @@ object EffectSpawnMobs : Effect<NoCompileData>("spawn_mobs") {
 
         val amount = config.getIntFromExpression("amount", data)
         val ticksToLive = config.getIntFromExpression("ticks_to_live", data)
-        val health = config.getDoubleFromExpression("health", data)
+        val health = if (config.has("health")) config.getDoubleFromExpression("health", data) else null
         val range = config.getDoubleFromExpression("range", data)
 
         val entityType = Entities.lookup(config.getFormattedString("entity", data))
@@ -102,8 +101,13 @@ object EffectSpawnMobs : Effect<NoCompileData>("spawn_mobs") {
             }
 
             val mob = entityType.spawn(locationToSpawn) as Mob
-            val healthAttr = mob.getAttribute(Attribute.MAX_HEALTH) ?: continue
-            healthAttr.baseValue = health
+
+            if (health != null) {
+                mob.getAttribute(Attribute.MAX_HEALTH)?.let { maxHealth ->
+                    maxHealth.baseValue = health
+                    mob.health = health
+                }
+            }
 
             if (victim != null) {
                 mob.target = victim
@@ -113,8 +117,6 @@ object EffectSpawnMobs : Effect<NoCompileData>("spawn_mobs") {
             if (player != null) {
                 mob.setMetadata("spawn-mobs-avoid", plugin.createMetadataValue(player.uniqueId))
             }
-
-            mob.health = health
 
             if (config.getBool("owner") && mob is Tameable) {
                 mob.owner = player
