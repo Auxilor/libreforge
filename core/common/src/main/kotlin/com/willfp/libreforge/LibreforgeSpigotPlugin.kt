@@ -233,6 +233,8 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
 
         // Applies everything marked on holder states, at the start of every tick.
         HolderStates.start()
+
+        DateClock.start()
     }
 
     override fun handleDisable() {

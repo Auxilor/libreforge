@@ -1,5 +1,6 @@
 package com.willfp.libreforge.dates
 
+import com.willfp.eco.core.scheduling.EcoTask
 import com.willfp.libreforge.plugin
 import java.time.LocalDateTime
 import java.util.concurrent.CopyOnWriteArrayList
@@ -19,26 +20,23 @@ object DateClock {
 
     private val tracker = DateBoundaryTracker()
 
-    private var isStarted = false
+    private var task: EcoTask? = null
 
     /**
      * Run [listener] with the current date and time each time a [period] reaches [edge].
-     * Starts the clock if needed.
      */
     @JvmStatic
     fun on(period: DatePeriod, edge: DateEdge, listener: (LocalDateTime) -> Unit) {
         listeners += Listener(period, edge, listener)
-        start()
     }
 
-    private fun start() {
-        if (isStarted) {
-            return
-        }
-
-        isStarted = true
-
-        plugin.scheduler.global().runTimer(20, 20) {
+    /**
+     * Start the clock, or restart it after the scheduler has cancelled its tasks.
+     */
+    @JvmStatic
+    fun start() {
+        task?.cancel()
+        task = plugin.scheduler.global().runTimer(20, 20) {
             for (boundary in tracker.advance(LocalDateTime.now(Dates.zone))) {
                 for (listener in listeners) {
                     if (listener.period == boundary.period && listener.edge == boundary.edge) {
