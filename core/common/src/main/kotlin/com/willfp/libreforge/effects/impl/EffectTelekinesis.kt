@@ -1,5 +1,6 @@
 package com.willfp.libreforge.effects.impl
 
+import com.willfp.eco.core.cache.EcoCache
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.drops.DropQueue
 import com.willfp.eco.core.events.EntityDeathByEntityEvent
@@ -16,8 +17,13 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.plugin
 import io.lumine.mythic.bukkit.MythicBukkit
+import org.bukkit.Bukkit
 import org.bukkit.GameMode
+import org.bukkit.Location
 import org.bukkit.Material
+import org.bukkit.Tag
+import org.bukkit.block.Block
+import org.bukkit.block.data.type.Leaves
 import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
 import org.bukkit.entity.Tameable
@@ -26,12 +32,14 @@ import org.bukkit.event.EventPriority
 import io.papermc.paper.event.block.PlayerShearBlockEvent
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockDropItemEvent
+import org.bukkit.event.block.LeavesDecayEvent
 import org.bukkit.event.player.PlayerFishEvent
 import org.bukkit.event.player.PlayerShearEntityEvent
+import java.time.Duration
 import java.util.UUID
 
 object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
-    override val description = "Automatically sends all drops and XP from blocks, entities, and fishing directly to the player's inventory."
+    override val description = "Automatically sends all drops and XP from blocks, entities, and fishing directly to the player's inventory. With on_leaf_decay, drops from leaves that decay after the player cuts a tree are sent too."
     override val categories = setOf("inventory")
 
     override val arguments = arguments {
@@ -41,7 +49,22 @@ object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
             type = ArgType.BOOLEAN,
             default = "false"
         )
+        optional(
+            "on_leaf_decay",
+            description = "If true, drops from leaves that decay after the player cuts a tree are also sent to the player, for up to 10 minutes after the cut.",
+            type = ArgType.BOOLEAN,
+            default = "false"
+        )
     }
+
+    private const val LEAF_RADIUS = 6
+
+    private val leafDecayPlayers = concurrentListMap<UUID, UUID>()
+
+    private val playerCutLeaves = EcoCache.builder<Location, UUID>()
+        .expireAfterWrite(Duration.ofMinutes(10))
+        .maxSize(100_000)
+        .build()
 
     private val players = concurrentListMap<UUID, UUID>()
 
@@ -58,10 +81,14 @@ object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
     ) {
         players[dispatcher.uuid].add(identifiers.uuid)
         allowTamedMobKills = config.getBoolOrNull("on_tamed_mob_kills") ?: false
+        if (config.getBoolOrNull("on_leaf_decay") == true) {
+            leafDecayPlayers[dispatcher.uuid].add(identifiers.uuid)
+        }
     }
 
     override fun onDisable(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder) {
         players[dispatcher.uuid].remove(identifiers.uuid)
+        leafDecayPlayers[dispatcher.uuid].remove(identifiers.uuid)
     }
 
     override fun postRegister() {
@@ -111,6 +138,10 @@ object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
             return
         }
 
+        if (Tag.LOGS.isTagged(block.type) && leafDecayPlayers[player.uniqueId].isNotEmpty()) {
+            trackLeaves(player, block)
+        }
+
         // Filter out telekinesis spawner xp to prevent dupe
         if (block.type == Material.SPAWNER) {
             event.expToDrop = 0
@@ -122,6 +153,44 @@ object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
             .push()
 
         event.expToDrop = 0
+    }
+
+    private fun trackLeaves(player: Player, log: Block) {
+        for (x in -LEAF_RADIUS..LEAF_RADIUS) {
+            for (y in -LEAF_RADIUS..LEAF_RADIUS) {
+                for (z in -LEAF_RADIUS..LEAF_RADIUS) {
+                    val leaf = log.getRelative(x, y, z)
+                    if ((leaf.blockData as? Leaves)?.isPersistent == false) {
+                        playerCutLeaves.put(leaf.location, player.uniqueId)
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    fun handle(event: LeavesDecayEvent) {
+        val block = event.block
+        val owner = playerCutLeaves.get(block.location) ?: return
+        playerCutLeaves.invalidate(block.location)
+
+        val player = Bukkit.getPlayer(owner) ?: return
+
+        if (leafDecayPlayers[player.uniqueId].isEmpty() || !TelekinesisUtils.testPlayer(player)) {
+            return
+        }
+
+        val drops = block.drops.toList()
+        event.isCancelled = true
+        block.type = Material.AIR
+
+        plugin.scheduler.on(player).run {
+            DropQueue(player)
+                .setLocation(block.location)
+                .addItems(drops)
+                .forceTelekinesis()
+                .push()
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
