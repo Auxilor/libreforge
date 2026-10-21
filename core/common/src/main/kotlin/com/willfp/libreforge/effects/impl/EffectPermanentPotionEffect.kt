@@ -19,7 +19,7 @@ import java.util.UUID
 
 @Suppress("UNCHECKED_CAST")
 object EffectPermanentPotionEffect : Effect<NoCompileData>("permanent_potion_effect") {
-    override val description = "Permanently applies a potion effect to the player for as long as the holder is active, surviving respawns."
+    override val description = "Permanently applies a potion effect to the player for as long as the holder is active, surviving respawns. Effects of the same type from potions, beacons or other plugins are kept, and a stronger one takes priority while it lasts."
     override val categories = setOf("potion", "player")
 
     override val shouldReload = false
@@ -78,12 +78,23 @@ object EffectPermanentPotionEffect : Effect<NoCompileData>("permanent_potion_eff
     }
 
     private fun refreshEffectsOfType(player: Player, type: PotionEffectType) {
-        player.removePotionEffect(type)
+        val existing = player.getPotionEffect(type)
         val active = getHolderData(player)
             .values
             .filter { it.effectType == type }
-        if (active.isEmpty()) return
+        if (active.isEmpty()) {
+            if (existing?.isInfinite == true) {
+                player.removePotionEffect(type)
+            }
+            return
+        }
         val best = active.maxByOrNull { it.level }!!
+        if (existing != null && !existing.isInfinite && existing.amplifier >= best.level) {
+            return
+        }
+        if (existing?.isInfinite == true) {
+            player.removePotionEffect(type)
+        }
         val effect = PotionEffect(
             type,
             DURATION,
