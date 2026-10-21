@@ -13,7 +13,7 @@ class NumericSlotType(
     private val slotList = slot.toSingletonList()
 
     override fun addToSlot(player: Player, item: ItemStack): Boolean {
-        if (!player.inventory.getItem(slot).isEcoEmpty) {
+        if (slot !in 0 until player.inventory.size || !player.inventory.getItem(slot).isEcoEmpty) {
             return false
         }
 
@@ -22,7 +22,7 @@ class NumericSlotType(
     }
 
     override fun getItems(entity: LivingEntity): List<ItemStack> {
-        return if (entity is Player) {
+        return if (entity is Player && slot in 0 until entity.inventory.size) {
             entity.inventory.getItem(slot).toSingletonList()
         } else {
             emptyList()
