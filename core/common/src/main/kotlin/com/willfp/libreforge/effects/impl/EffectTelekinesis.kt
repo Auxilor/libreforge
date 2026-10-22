@@ -39,11 +39,9 @@ import java.time.Duration
 import java.util.UUID
 
 object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
-    @Suppress("MaxLineLength")
     override val description = "Automatically sends all drops and XP from blocks, entities, and fishing directly to the player's inventory. With on_leaf_decay, drops from leaves that decay after the player cuts a tree are sent too."
     override val categories = setOf("inventory")
 
-    @Suppress("MaxLineLength")
     override val arguments = arguments {
         optional(
             "on_tamed_mob_kills",
