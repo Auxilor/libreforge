@@ -19,6 +19,7 @@ import java.util.UUID
 
 @Suppress("UNCHECKED_CAST")
 object EffectPermanentPotionEffect : Effect<NoCompileData>("permanent_potion_effect") {
+    @Suppress("MaxLineLength")
     override val description = "Permanently applies a potion effect to the player for as long as the holder is active, surviving respawns. Effects of the same type from potions, beacons or other plugins are kept, and a stronger one takes priority while it lasts."
     override val categories = setOf("potion", "player")
 
