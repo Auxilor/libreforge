@@ -37,7 +37,7 @@ concurrency:
   group: ${{ github.workflow }}-${{ inputs.ref || github.ref }}
   cancel-in-progress: true
 env:
-  JVM_LINT_VERSION: v1.0.0
+  JVM_LINT_VERSION: v1.0.1
   DETEKT_VERSION: 2.0.0-alpha.6
   DETEKT_SHA256: d46ca62ea4d62769b5d5c3ba94d49fa9b80ba11c7dba74ddb6df7fcc2c19c5fd
   FAIL_ON: error
