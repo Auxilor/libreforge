@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "findings": [
+    {
+      "code": "U002",
+      "path": "loader/src/main/kotlin/com/willfp/libreforge/loader/LibreforgePlugin.kt",
+      "message": "Unused function `isDisabledFor`"
+    },
+    {
+      "code": "U001",
+      "path": "loader/src/main/kotlin/com/willfp/libreforge/loader/configs/RegistrableCategory.kt",
+      "message": "Unused class `RegistrableCategory`"
+    }
+  ]
+}
