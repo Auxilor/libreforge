@@ -34,6 +34,7 @@ object EffectSpawnMobs : Effect<NoCompileData>("spawn_mobs") {
         TriggerParameter.LOCATION
     )
 
+    @Suppress("MaxLineLength")
     override val arguments = arguments {
         require(
             "amount",
@@ -74,12 +75,9 @@ object EffectSpawnMobs : Effect<NoCompileData>("spawn_mobs") {
         val location = data.location ?: return false
         location.world ?: return false
         val victim = data.victim
-        val player = data.player
 
-        if (victim != null) {
-            if (victim.getMetadata("spawn-mobs-target").isNotEmpty()) {
-                return false
-            }
+        if (victim != null && victim.getMetadata("spawn-mobs-target").isNotEmpty()) {
+            return false
         }
 
         val amount = config.getIntFromExpression("amount", data)
@@ -102,30 +100,37 @@ object EffectSpawnMobs : Effect<NoCompileData>("spawn_mobs") {
 
             val mob = entityType.spawn(locationToSpawn) as Mob
 
-            if (health != null) {
-                mob.getAttribute(Attribute.MAX_HEALTH)?.let { maxHealth ->
-                    maxHealth.baseValue = health
-                    mob.health = health
-                }
-            }
-
-            if (victim != null) {
-                mob.target = victim
-                mob.setMetadata("spawn-mobs-target", plugin.createMetadataValue(victim))
-            }
-
-            if (player != null) {
-                mob.setMetadata("spawn-mobs-avoid", plugin.createMetadataValue(player.uniqueId))
-            }
-
-            if (config.getBool("owner") && mob is Tameable) {
-                mob.owner = player
-            }
+            setUpMob(mob, config, data, health)
 
             plugin.scheduler.on(mob).runLater(ticksToLive.toLong()) { mob.remove() }
         }
 
         return true
+    }
+
+    private fun setUpMob(mob: Mob, config: Config, data: TriggerData, health: Double?) {
+        val victim = data.victim
+        val player = data.player
+
+        if (health != null) {
+            mob.getAttribute(Attribute.MAX_HEALTH)?.let { maxHealth ->
+                maxHealth.baseValue = health
+                mob.health = health
+            }
+        }
+
+        if (victim != null) {
+            mob.target = victim
+            mob.setMetadata("spawn-mobs-target", plugin.createMetadataValue(victim))
+        }
+
+        if (player != null) {
+            mob.setMetadata("spawn-mobs-avoid", plugin.createMetadataValue(player.uniqueId))
+        }
+
+        if (config.getBool("owner") && mob is Tameable) {
+            mob.owner = player
+        }
     }
 
     @EventHandler
