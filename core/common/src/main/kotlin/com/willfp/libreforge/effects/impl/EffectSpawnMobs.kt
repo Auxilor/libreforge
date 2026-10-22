@@ -65,7 +65,7 @@ object EffectSpawnMobs : Effect<NoCompileData>("spawn_mobs") {
         )
         optional(
             "health",
-            description = "Max and starting health per mob. Defaults to the mob's max health. Supports expressions.",
+            description = "The max health (and starting health) to set on each spawned mob. Defaults to the mob's normal max health. Supports expressions.",
             type = ArgType.EXPRESSION,
             example = "20 + %level% * 5"
         )
