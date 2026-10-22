@@ -82,8 +82,8 @@ object SlotTypes : Registry<SlotType>() {
         register(SlotTypeOffhand)
 
         // Register all numeric slots
-        (0..40).forEach {
-            get(it.toString())
+        for (slot in 0..40) {
+            get(slot.toString())
         }
     }
 }
