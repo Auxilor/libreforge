@@ -1,0 +1,1 @@
+library-modules = ["core/common", "gradle-plugin"]
