@@ -178,6 +178,12 @@ fun Config.getDoubleFromExpression(path: String, data: TriggerData?) = NumberUti
     this.getString(path), this.toPlaceholderContext(data)
 )
 
+fun Config.getIntFromExpressionOrNull(path: String, data: TriggerData?) =
+    if (this.has(path)) this.getIntFromExpression(path, data) else null
+
+fun Config.getDoubleFromExpressionOrNull(path: String, data: TriggerData?) =
+    if (this.has(path)) this.getDoubleFromExpression(path, data) else null
+
 fun Config.getFormattedString(path: String, data: TriggerData?) =
     this.getFormattedString(path, this.toPlaceholderContext(data))
 

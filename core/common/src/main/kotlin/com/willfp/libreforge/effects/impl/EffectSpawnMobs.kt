@@ -9,6 +9,7 @@ import com.willfp.libreforge.Regions
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
+import com.willfp.libreforge.getDoubleFromExpressionOrNull
 import com.willfp.libreforge.getFormattedString
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.plugin
@@ -34,7 +35,6 @@ object EffectSpawnMobs : Effect<NoCompileData>("spawn_mobs") {
         TriggerParameter.LOCATION
     )
 
-    @Suppress("MaxLineLength")
     override val arguments = arguments {
         require(
             "amount",
@@ -65,7 +65,7 @@ object EffectSpawnMobs : Effect<NoCompileData>("spawn_mobs") {
         )
         optional(
             "health",
-            description = "The max health (and starting health) to set on each spawned mob. Defaults to the mob's normal max health. Supports expressions.",
+            description = "Max and starting health per mob. Defaults to the mob's max health. Supports expressions.",
             type = ArgType.EXPRESSION,
             example = "20 + %level% * 5"
         )
@@ -82,7 +82,7 @@ object EffectSpawnMobs : Effect<NoCompileData>("spawn_mobs") {
 
         val amount = config.getIntFromExpression("amount", data)
         val ticksToLive = config.getIntFromExpression("ticks_to_live", data)
-        val health = if (config.has("health")) config.getDoubleFromExpression("health", data) else null
+        val health = config.getDoubleFromExpressionOrNull("health", data)
         val range = config.getDoubleFromExpression("range", data)
 
         val entityType = Entities.lookup(config.getFormattedString("entity", data))
