@@ -39,9 +39,11 @@ import java.time.Duration
 import java.util.UUID
 
 object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
+    @Suppress("MaxLineLength")
     override val description = "Automatically sends all drops and XP from blocks, entities, and fishing directly to the player's inventory. With on_leaf_decay, drops from leaves that decay after the player cuts a tree are sent too."
     override val categories = setOf("inventory")
 
+    @Suppress("MaxLineLength")
     override val arguments = arguments {
         optional(
             "on_tamed_mob_kills",
@@ -169,14 +171,14 @@ object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-    fun handle(event: LeavesDecayEvent) {
+    fun handleLeafDecay(event: LeavesDecayEvent) {
         val block = event.block
         val owner = playerCutLeaves.get(block.location) ?: return
         playerCutLeaves.invalidate(block.location)
 
-        val player = Bukkit.getPlayer(owner) ?: return
+        val player = Bukkit.getPlayer(owner)
 
-        if (leafDecayPlayers[player.uniqueId].isEmpty() || !TelekinesisUtils.testPlayer(player)) {
+        if (player == null || leafDecayPlayers[player.uniqueId].isEmpty() || !TelekinesisUtils.testPlayer(player)) {
             return
         }
 
