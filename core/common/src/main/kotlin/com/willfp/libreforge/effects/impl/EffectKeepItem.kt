@@ -75,15 +75,7 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
         val newEntries = mutableListOf<String>()
 
         for ((_, config, providedItem) in players[player.uniqueId]) {
-            val slotName = config.getString("slot")
-
-            val slots = if (slotName.isNotEmpty()) {
-                SlotTypes[slotName]?.getItemSlots(player) ?: continue
-            } else {
-                listOf(player.findProvidingSlot(providedItem ?: continue) ?: continue)
-            }
-
-            for (slot in slots) {
+            for (slot in player.slotsToKeep(config, providedItem)) {
                 val item = player.inventory.getItem(slot)
 
                 if (item.isEcoEmpty) {
@@ -107,11 +99,21 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
         }
     }
 
-    private fun Player.findProvidingSlot(providedItem: ItemStack): Int? {
-        val similarSlots = (0..40).filter { inventory.getItem(it)?.isSimilar(providedItem) == true }
+    private fun Player.slotsToKeep(config: Config, providedItem: ItemStack?): List<Int> {
+        val slotName = config.getString("slot")
 
-        return similarSlots.firstOrNull { inventory.getItem(it)?.amount == providedItem.amount }
-            ?: similarSlots.firstOrNull()
+        if (slotName.isNotEmpty()) {
+            return SlotTypes[slotName]?.getItemSlots(this) ?: emptyList()
+        }
+
+        val similarSlots = (0..40).filter {
+            providedItem != null && inventory.getItem(it)?.isSimilar(providedItem) == true
+        }
+
+        return listOfNotNull(
+            similarSlots.firstOrNull { inventory.getItem(it)?.amount == providedItem?.amount }
+                ?: similarSlots.firstOrNull()
+        )
     }
 
     @EventHandler
