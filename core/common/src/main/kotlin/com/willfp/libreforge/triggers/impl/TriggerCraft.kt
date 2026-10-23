@@ -108,7 +108,7 @@ object TriggerCraft : Trigger("craft") {
             return 0
         }
 
-        return minOf(inventoryContent.minOf { it!!.amount }, totalPossibleSlotsForItems / result.amount)
+        return inventoryContent.minOf { it!!.amount }.coerceAtMost(totalPossibleSlotsForItems / result.amount)
     }
 
     private fun handleSwapOffhandCompletion(player: Player): Int {
