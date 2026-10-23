@@ -136,7 +136,8 @@ abstract class MineBlockEffect<T : Any>(id: String) : Effect<T>(id) {
         }
 
         if (mode == PreventTriggerMode.ALL) {
-            reachable.forEach { it.breakNaturally() }
+            val tool = this.inventory.itemInMainHand
+            reachable.forEach { it.breakNaturally(tool) }
             return
         }
 
