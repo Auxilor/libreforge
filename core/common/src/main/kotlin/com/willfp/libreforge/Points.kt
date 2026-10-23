@@ -120,12 +120,16 @@ class PointsMap(
     }
 }
 
+private val pointsPattern = Pattern.compile("points_[a-zA-Z0-9_-]+")
+
+private val globalPointsPattern = Pattern.compile("global_points_[a-zA-Z0-9_-]+")
+
 fun pointsPlaceholder(
     plugin: EcoPlugin
 ): PlayerDynamicPlaceholder {
     return PlayerDynamicPlaceholder(
         plugin,
-        Pattern.compile("points_[a-zA-Z0-9_-]+")
+        pointsPattern
     ) { args, player ->
         val type = args.removePrefix("points_")
         player.points[type].toNiceString()
@@ -137,7 +141,7 @@ fun globalPointsPlaceholder(
 ): DynamicPlaceholder {
     return DynamicPlaceholder(
         plugin,
-        Pattern.compile("global_points_[a-zA-Z0-9_-]+")
+        globalPointsPattern
     ) { args ->
         val type = args.removePrefix("global_points_")
         globalPoints[type].toNiceString()
