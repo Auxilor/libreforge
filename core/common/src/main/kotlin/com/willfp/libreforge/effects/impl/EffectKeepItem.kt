@@ -80,14 +80,7 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
             val slots = if (slotName.isNotEmpty()) {
                 SlotTypes[slotName]?.getItemSlots(player) ?: continue
             } else {
-                if (providedItem == null) continue
-
-                val similarSlots = (0..40).filter { player.inventory.getItem(it)?.isSimilar(providedItem) == true }
-                val slot = similarSlots.firstOrNull { player.inventory.getItem(it)?.amount == providedItem.amount }
-                    ?: similarSlots.firstOrNull()
-                    ?: continue
-
-                listOf(slot)
+                listOf(player.findProvidingSlot(providedItem ?: continue) ?: continue)
             }
 
             for (slot in slots) {
@@ -112,6 +105,13 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
             val existing = player.profile.read(savedItemsKey)
             player.profile.write(savedItemsKey, existing + newEntries)
         }
+    }
+
+    private fun Player.findProvidingSlot(providedItem: ItemStack): Int? {
+        val similarSlots = (0..40).filter { inventory.getItem(it)?.isSimilar(providedItem) == true }
+
+        return similarSlots.firstOrNull { inventory.getItem(it)?.amount == providedItem.amount }
+            ?: similarSlots.firstOrNull()
     }
 
     @EventHandler
