@@ -35,14 +35,9 @@ object EffectStun : Effect<NoCompileData>("stun") {
 
         var current = 0
         plugin.scheduler.on(victim).runTimer({ task ->
-            if (victim.isDead || !victim.isValid) {
-                task.cancel()
-                return@runTimer
-            }
-
             current++
             victim.velocity = Vector(0, 0, 0)
-            if (current >= ticks) task.cancel()
+            if (current >= ticks || victim.isDead || !victim.isValid) task.cancel()
         }, 0L, 1L)
 
         return true
