@@ -8,6 +8,7 @@ import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.get
+import org.bukkit.GameMode
 import org.bukkit.entity.Player
 import java.util.UUID
 
@@ -41,6 +42,11 @@ object EffectFlight : Effect<NoCompileData>("flight") {
         val player = dispatcher.get<Player>() ?: return
 
         players[player.uniqueId].remove(identifiers.uuid)
+
+        if (player.gameMode == GameMode.CREATIVE || player.gameMode == GameMode.SPECTATOR) {
+            return
+        }
+
         player.allowFlight = players[player.uniqueId].isNotEmpty()
     }
 }
