@@ -149,8 +149,8 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
         if (Prerequisite.HAS_PAPER.isMet) {
             PaperIntegration.load(this)
             TriggerMeleeAttack.registerPaperExclusiveListeners()
-            TriggerMove.registerPaperExclusiveListeners()
-            EffectTelekinesis.registerPaperExclusiveListeners()
+            TriggerMove.registerPaperListeners()
+            EffectTelekinesis.registerPaperListeners()
         }
 
         if (ClassUtils.exists("org.purpurmc.purpur.event.inventory.AnvilTakeResultEvent")

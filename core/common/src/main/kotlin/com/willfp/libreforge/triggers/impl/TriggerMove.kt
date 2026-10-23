@@ -63,7 +63,7 @@ object TriggerMove : Trigger("move") {
         )
     }
 
-    fun registerPaperExclusiveListeners() {
+    fun registerPaperListeners() {
         plugin.eventManager.registerListener(PaperExclusiveListeners)
     }
 
@@ -72,11 +72,7 @@ object TriggerMove : Trigger("move") {
         fun handle(event: EntityMoveEvent) {
             val entity = event.entity as? LivingEntity ?: return
 
-            if (entity is Player) {
-                return
-            }
-
-            if (!event.hasChangedBlock()) {
+            if (entity is Player || !event.hasChangedBlock()) {
                 return
             }
 

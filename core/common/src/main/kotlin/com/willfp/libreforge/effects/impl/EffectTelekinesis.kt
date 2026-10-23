@@ -228,7 +228,7 @@ object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
         caught.remove()
     }
 
-    fun registerPaperExclusiveListeners() {
+    fun registerPaperListeners() {
         plugin.eventManager.registerListener(PaperExclusiveListeners)
     }
 
@@ -238,18 +238,11 @@ object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
             val player = event.player
             val block = event.block
 
-            if (!plugin.configYml.getBool("effects.telekinesis.always-process-blocks")
-                && !TelekinesisUtils.testPlayer(player)) {
-                return
-            }
-
-            if (!AntigriefManager.canBreakBlock(player, block)) {
-                return
-            }
-
             val drops = event.drops.toList()
+            val enabled = plugin.configYml.getBool("effects.telekinesis.always-process-blocks")
+                || TelekinesisUtils.testPlayer(player)
 
-            if (drops.isEmpty()) {
+            if (!enabled || !AntigriefManager.canBreakBlock(player, block) || drops.isEmpty()) {
                 return
             }
 
