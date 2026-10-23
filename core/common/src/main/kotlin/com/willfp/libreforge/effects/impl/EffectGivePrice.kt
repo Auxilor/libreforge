@@ -4,7 +4,9 @@ import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.price.Prices
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
+import com.willfp.libreforge.earning.EarningLimits
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getFormattedString
 import com.willfp.libreforge.toPlaceholderContext
@@ -34,16 +36,42 @@ object EffectGivePrice : Effect<NoCompileData>("give_price") {
             type = ArgType.STRING,
             example = "points:mytype"
         )
+        optional(
+            "earning-limit",
+            description = "The ID of the earning-limit group.",
+            type = ArgType.STRING
+        )
+    }
+
+    override fun makeCompileData(config: Config, context: ViolationContext): NoCompileData {
+        EarningLimits.validateReference(config, context)
+        return NoCompileData
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val player = data.player ?: return false
 
-        Prices.create(
-            config.getFormattedString("value", data),
-            config.getFormattedString("type", data),
-            config.toPlaceholderContext(data)
-        ).giveTo(player)
+        val value = config.getFormattedString("value", data)
+        val type = config.getFormattedString("type", data)
+        val context = config.toPlaceholderContext(data)
+
+        val amount = Prices.create(
+            value,
+            type,
+            context
+        ).getValue(player)
+
+        val remainingLimit = EarningLimits.getRemaining(config, player)
+        val finalAmount = minOf(amount, remainingLimit)
+
+        val finalPrice = Prices.create(
+            finalAmount.toString(),
+            type,
+            context
+        )
+
+        EarningLimits.addEarned(config, player, finalPrice.getValue(player))
+        finalPrice.giveTo(player)
 
         return true
     }

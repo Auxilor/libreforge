@@ -3,6 +3,9 @@ dependencies {
         isTransitive = false
     }
     implementation("com.willfp:ModelEngineBridge:1.4.0")
+    implementation("org.quartz-scheduler:quartz:2.5.2") {
+        isTransitive = false
+    }
     compileOnly("io.github.toxicity188:bettermodel-bukkit-api:2.2.0") {
         exclude("*", "kotlin-stdlib")
     }
