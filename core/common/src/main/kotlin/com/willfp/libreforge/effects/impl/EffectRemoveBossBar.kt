@@ -11,7 +11,7 @@ import com.willfp.libreforge.toPlaceholderContext
 import com.willfp.libreforge.triggers.TriggerData
 
 object EffectRemoveBossBar : Effect<NoCompileData>("remove_boss_bar") {
-    override val description = "Removes a currently displayed boss bar by its ID for the player, or for every player when there is no player."
+    override val description = "Removes a boss bar by its ID for the player, or for everyone when there is no player."
     override val categories = setOf("visual")
 
     override val isPermanent = false
