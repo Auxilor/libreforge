@@ -23,6 +23,7 @@ import org.bukkit.entity.Projectile
 import org.bukkit.entity.Tameable
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
+import org.bukkit.event.Listener
 import io.papermc.paper.event.block.PlayerShearBlockEvent
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockDropItemEvent
@@ -128,7 +129,6 @@ object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
     fun handle(event: EntityDeathByEntityEvent) {
         val victim = event.victim
 
-
         if (DisabledIntegrations.isEnabled("MythicMobs")) {
             if (MythicBukkit.inst().mobManager.isMythicMob(victim)) {
                 return
@@ -174,13 +174,11 @@ object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
     fun handle(event: PlayerShearEntityEvent) {
         val victim = event.entity
 
-
         if (DisabledIntegrations.isEnabled("MythicMobs")) {
             if (MythicBukkit.inst().mobManager.isMythicMob(victim)) {
                 return
             }
         }
-
 
         val player = event.player
 
@@ -198,34 +196,6 @@ object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
             .setLocation(victim.location)
             .addItems(drops)
             .forceTelekinesis()
-            .push()
-
-        event.drops.clear()
-    }
-
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-    fun handle(event: PlayerShearBlockEvent) {
-        val player = event.player
-        val block = event.block
-
-        if (!plugin.configYml.getBool("effects.telekinesis.always-process-blocks")
-            && !TelekinesisUtils.testPlayer(player)) {
-            return
-        }
-
-        if (!AntigriefManager.canBreakBlock(player, block)) {
-            return
-        }
-
-        val drops = event.drops.toList()
-
-        if (drops.isEmpty()) {
-            return
-        }
-
-        DropQueue(player)
-            .setLocation(block.location)
-            .addItems(drops)
             .push()
 
         event.drops.clear()
@@ -256,5 +226,32 @@ object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
 
         // Remove the entity so it doesn't also fly to the player naturally.
         caught.remove()
+    }
+
+    fun registerPaperListeners() {
+        plugin.eventManager.registerListener(PaperExclusiveListeners)
+    }
+
+    private object PaperExclusiveListeners : Listener {
+        @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+        fun handle(event: PlayerShearBlockEvent) {
+            val player = event.player
+            val block = event.block
+
+            val drops = event.drops.toList()
+            val enabled = plugin.configYml.getBool("effects.telekinesis.always-process-blocks")
+                || TelekinesisUtils.testPlayer(player)
+
+            if (!enabled || !AntigriefManager.canBreakBlock(player, block) || drops.isEmpty()) {
+                return
+            }
+
+            DropQueue(player)
+                .setLocation(block.location)
+                .addItems(drops)
+                .push()
+
+            event.drops.clear()
+        }
     }
 }
