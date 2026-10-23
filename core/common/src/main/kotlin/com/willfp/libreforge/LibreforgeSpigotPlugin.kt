@@ -29,6 +29,7 @@ import com.willfp.libreforge.display.ItemFlagDisplay
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.arguments.custom.CustomEffectArguments
 import com.willfp.libreforge.effects.impl.bossbar.BossBarProgressPlaceholder
+import com.willfp.libreforge.effects.impl.bossbar.BossBars
 import com.willfp.libreforge.filters.Filters
 import com.willfp.libreforge.holidays.Holidays
 import com.willfp.libreforge.integrations.auraskills.AuraSkillsIntegration
@@ -246,7 +247,8 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
         val listeners = mutableListOf<Listener>(
             EffectDataFixer,
             ItemRefreshListener,
-            HotkeyListener
+            HotkeyListener,
+            BossBars
         )
 
         listeners += HolderLifecycle.listeners()
