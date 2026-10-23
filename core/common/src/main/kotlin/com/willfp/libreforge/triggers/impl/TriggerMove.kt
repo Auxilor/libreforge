@@ -2,6 +2,7 @@ package com.willfp.libreforge.triggers.impl
 
 import com.willfp.eco.core.Prerequisite
 import com.willfp.libreforge.toDispatcher
+import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
@@ -9,6 +10,7 @@ import io.papermc.paper.event.entity.EntityMoveEvent
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerMoveEvent
 
 object TriggerMove : Trigger("move") {
@@ -31,36 +33,6 @@ object TriggerMove : Trigger("move") {
         TriggerParameter.ITEM,
         TriggerParameter.VALUE
     )
-
-    @EventHandler(ignoreCancelled = true)
-    fun handle(event: EntityMoveEvent) {
-        val entity = event.entity as? LivingEntity ?: return
-
-        if (entity is Player) {
-            return
-        }
-
-        if (!event.hasChangedBlock()) {
-            return
-        }
-
-        val distance = if (event.to.world == event.from.world) {
-            event.to.distance(event.from)
-        } else {
-            0.0
-        }
-
-        this.dispatch(
-            entity.toDispatcher(),
-            TriggerData(
-                location = entity.location,
-                velocity = entity.velocity,
-                event = event,
-                item = entity.equipment?.itemInMainHand,
-                value = distance
-            )
-        )
-    }
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerMoveEvent) {
@@ -89,5 +61,41 @@ object TriggerMove : Trigger("move") {
                 value = distance
             )
         )
+    }
+
+    fun registerPaperExclusiveListeners() {
+        plugin.eventManager.registerListener(PaperExclusiveListeners)
+    }
+
+    private object PaperExclusiveListeners : Listener {
+        @EventHandler(ignoreCancelled = true)
+        fun handle(event: EntityMoveEvent) {
+            val entity = event.entity as? LivingEntity ?: return
+
+            if (entity is Player) {
+                return
+            }
+
+            if (!event.hasChangedBlock()) {
+                return
+            }
+
+            val distance = if (event.to.world == event.from.world) {
+                event.to.distance(event.from)
+            } else {
+                0.0
+            }
+
+            TriggerMove.dispatch(
+                entity.toDispatcher(),
+                TriggerData(
+                    location = entity.location,
+                    velocity = entity.velocity,
+                    event = event,
+                    item = entity.equipment?.itemInMainHand,
+                    value = distance
+                )
+            )
+        }
     }
 }

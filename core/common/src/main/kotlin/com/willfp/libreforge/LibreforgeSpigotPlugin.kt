@@ -28,6 +28,7 @@ import com.willfp.libreforge.dates.dispatchForOnlinePlayers
 import com.willfp.libreforge.display.ItemFlagDisplay
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.arguments.custom.CustomEffectArguments
+import com.willfp.libreforge.effects.impl.EffectTelekinesis
 import com.willfp.libreforge.effects.impl.bossbar.BossBarProgressPlaceholder
 import com.willfp.libreforge.effects.impl.bossbar.BossBars
 import com.willfp.libreforge.filters.Filters
@@ -93,6 +94,7 @@ import com.willfp.libreforge.triggers.Triggers
 import com.willfp.libreforge.triggers.impl.HotkeyListener
 import com.willfp.libreforge.triggers.impl.TriggerDateBoundary
 import com.willfp.libreforge.triggers.impl.TriggerMeleeAttack
+import com.willfp.libreforge.triggers.impl.TriggerMove
 import org.bukkit.event.Listener
 
 internal lateinit var plugin: LibreforgeSpigotPlugin
@@ -147,6 +149,8 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
         if (Prerequisite.HAS_PAPER.isMet) {
             PaperIntegration.load(this)
             TriggerMeleeAttack.registerPaperExclusiveListeners()
+            TriggerMove.registerPaperExclusiveListeners()
+            EffectTelekinesis.registerPaperExclusiveListeners()
         }
 
         if (ClassUtils.exists("org.purpurmc.purpur.event.inventory.AnvilTakeResultEvent")
