@@ -108,13 +108,7 @@ object TriggerCraft : Trigger("craft") {
             return 0
         }
 
-        val totalCraftableItems = inventoryContent.minOf { it!!.amount }
-
-        return if (totalCraftableItems <= totalPossibleSlotsForItems) {
-            totalCraftableItems
-        } else {
-            totalPossibleSlotsForItems / result.amount
-        }
+        return inventoryContent.minOf { it!!.amount }.coerceAtMost(totalPossibleSlotsForItems / result.amount)
     }
 
     private fun handleSwapOffhandCompletion(player: Player): Int {
