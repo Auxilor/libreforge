@@ -103,7 +103,7 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
         val slotName = config.getString("slot")
 
         if (slotName.isNotEmpty()) {
-            return SlotTypes[slotName]?.getItemSlots(this) ?: emptyList()
+            return SlotTypes[slotName]?.getItemSlots(this).orEmpty()
         }
 
         val similarSlots = (0..40).filter {
