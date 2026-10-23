@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.map.concurrentListMap
 import com.willfp.eco.core.scheduling.TaskContext
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.Dispatcher
@@ -20,7 +21,6 @@ import org.bukkit.event.player.PlayerBucketEmptyEvent
 import org.bukkit.event.player.PlayerItemConsumeEvent
 import org.bukkit.inventory.ItemStack
 import java.util.UUID
-import java.util.concurrent.ConcurrentHashMap
 
 object EffectInfiniteBucket : Effect<Set<String>>("infinite_bucket") {
     override val description = "Prevents the specified bucket types from being emptied, refilling them automatically."
@@ -35,13 +35,17 @@ object EffectInfiniteBucket : Effect<Set<String>>("infinite_bucket") {
         )
     }
 
-    private val activePlayers = ConcurrentHashMap<UUID, Set<String>>()
+    private val activePlayers = concurrentListMap<UUID, Pair<UUID, Set<String>>>()
+
+    private fun Player.isInfinite(type: String): Boolean {
+        val active = activePlayers[this.uniqueId]
+        return active.any { (_, types) -> types.isEmpty() || type in types }
+    }
 
     @EventHandler
     fun onBucketEmpty(event: PlayerBucketEmptyEvent) {
         val player = event.player
-        val allowedTypes = activePlayers[player.uniqueId] ?: return
-        if (allowedTypes.isNotEmpty() && event.bucket.name !in allowedTypes) return
+        if (!player.isInfinite(event.bucket.name)) return
 
         val slot = player.inventory.heldItemSlot
 
@@ -56,9 +60,8 @@ object EffectInfiniteBucket : Effect<Set<String>>("infinite_bucket") {
     @EventHandler
     fun onMilkConsume(event: PlayerItemConsumeEvent) {
         val player = event.player
-        val allowedTypes = activePlayers[player.uniqueId] ?: return
         if (event.item.type != Material.MILK_BUCKET) return
-        if (allowedTypes.isNotEmpty() && "MILK_BUCKET" !in allowedTypes) return
+        if (!player.isInfinite("MILK_BUCKET")) return
 
         val slot = player.inventory.heldItemSlot
 
@@ -90,7 +93,7 @@ object EffectInfiniteBucket : Effect<Set<String>>("infinite_bucket") {
         compileData: Set<String>
     ) {
         val player = dispatcher.get<Player>() ?: return
-        activePlayers[player.uniqueId] = compileData
+        activePlayers[player.uniqueId].add(identifiers.uuid to compileData)
     }
 
     override fun onDisable(
@@ -99,6 +102,6 @@ object EffectInfiniteBucket : Effect<Set<String>>("infinite_bucket") {
         holder: ProvidedHolder
     ) {
         val player = dispatcher.get<Player>() ?: return
-        activePlayers.remove(player.uniqueId)
+        activePlayers[player.uniqueId].removeIf { it.first == identifiers.uuid }
     }
 }
