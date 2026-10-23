@@ -1,6 +1,7 @@
-package com.willfp.libreforge.integrations.modelengine.impl
+package com.willfp.libreforge.integrations.model.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.integrations.model.ModelManager
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
@@ -9,7 +10,7 @@ import com.willfp.libreforge.getFormattedString
 import com.willfp.libreforge.triggers.TriggerData
 
 object EffectStopAnimation : Effect<NoCompileData>("stop_animation") {
-    override val description = "Stops a ModelEngine animation on the triggering entity, or on the victim if the triggering entity has no model."
+    override val description = "Stops a ModelEngine or BetterModel animation on the triggering entity, or on the victim if the triggering entity has no model."
     override val categories = setOf("visual", "entity")
 
     override val isPermanent = false
@@ -18,12 +19,12 @@ object EffectStopAnimation : Effect<NoCompileData>("stop_animation") {
         require(
             "animation",
             "You must specify the animation name!",
-            description = "The name of the ModelEngine animation to stop.",
+            description = "The name of the animation to stop.",
             type = ArgType.STRING
         )
         optional(
             "fade",
-            description = "If the animation should blend out over its lerp out time. If false, it stops straight away.",
+            description = "If the animation should blend out over its lerp out time. If false, it stops straight away. ModelEngine only.",
             type = ArgType.BOOLEAN,
             default = "true"
         )
@@ -36,19 +37,12 @@ object EffectStopAnimation : Effect<NoCompileData>("stop_animation") {
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val entity = data.modelTarget() ?: return false
-        val animation = config.getFormattedString("animation", data)
 
-        val handlers = animationHandlers(entity, config.getStringOrNull("model"))
-            .filter { it.isPlayingAnimation(animation) }
-
-        for (handler in handlers) {
-            if (config.getBoolOrNull("fade") ?: true) {
-                handler.stopAnimation(animation)
-            } else {
-                handler.forceStopAnimation(animation)
-            }
-        }
-
-        return handlers.isNotEmpty()
+        return ModelManager.stopAnimation(
+            entity,
+            config.getStringOrNull("model"),
+            config.getFormattedString("animation", data),
+            config.getBoolOrNull("fade") ?: true
+        )
     }
 }

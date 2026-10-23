@@ -34,7 +34,6 @@ import com.willfp.libreforge.holidays.Holidays
 import com.willfp.libreforge.integrations.auraskills.AuraSkillsIntegration
 import com.willfp.libreforge.integrations.axplugins.axenvoy.AxEnvoyIntegration
 import com.willfp.libreforge.integrations.axplugins.axtrade.AxTradeIntegration
-import com.willfp.libreforge.integrations.bettermodel.BetterModelIntegration
 import com.willfp.libreforge.integrations.citizens.CitizensIntegration
 import com.willfp.libreforge.integrations.cmi.CMIIntegration
 import com.willfp.libreforge.integrations.custom_blocks.craftengine.CraftEngineIntegration
@@ -53,7 +52,7 @@ import com.willfp.libreforge.integrations.lands.LandsIntegration
 import com.willfp.libreforge.integrations.levelledmobs.LevelledMobsIntegration
 import com.willfp.libreforge.integrations.luckperms.LuckPermsIntegration
 import com.willfp.libreforge.integrations.mcmmo.McMMOIntegration
-import com.willfp.libreforge.integrations.modelengine.ModelEngineIntegration
+import com.willfp.libreforge.integrations.model.ModelIntegration
 import com.willfp.libreforge.integrations.mythicmobs.MythicMobsIntegration
 import com.willfp.libreforge.integrations.notbounties.NotBountiesIntegration
 import com.willfp.libreforge.integrations.paper.PaperIntegration
@@ -274,8 +273,8 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             IntegrationLoader("AxEnvoy") { AxEnvoyIntegration.load(this) },
             IntegrationLoader("AxTrade") { AxTradeIntegration.load(this) },
             IntegrationLoader("Votifier") { VotifierIntegration.load(this) },
-            IntegrationLoader("ModelEngine") { ModelEngineIntegration.load(this) },
-            IntegrationLoader("BetterModel") { BetterModelIntegration.load(this) },
+            IntegrationLoader("ModelEngine") { ModelIntegration("ModelEngine").load(this) },
+            IntegrationLoader("BetterModel") { ModelIntegration("BetterModel").load(this) },
             IntegrationLoader("FancyNpcs") { FancyNPCsIntegration.load(this) },
             IntegrationLoader("UltimateMobCoins") { UltimateMobCoinsIntegration.load(this) },
             IntegrationLoader("HuskTowns") { HuskTownsIntegration.load(this) },
