@@ -67,6 +67,10 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
 
     @EventHandler(ignoreCancelled = true)
     fun onDeath(event: PlayerDeathEvent) {
+        if (event.keepInventory) {
+            return
+        }
+
         val player = event.player
         val newEntries = mutableListOf<String>()
 
@@ -78,7 +82,9 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
             } else {
                 if (providedItem == null) continue
 
-                val slot = (0..40).firstOrNull { player.inventory.getItem(it)?.isSimilar(providedItem) == true }
+                val similarSlots = (0..40).filter { player.inventory.getItem(it)?.isSimilar(providedItem) == true }
+                val slot = similarSlots.firstOrNull { player.inventory.getItem(it)?.amount == providedItem.amount }
+                    ?: similarSlots.firstOrNull()
                     ?: continue
 
                 listOf(slot)
