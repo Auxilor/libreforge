@@ -15,7 +15,5 @@ class ModelIntegration(
         Effects.register(EffectStopAnimation)
     }
 
-    override fun getPluginName(): String {
-        return pluginName
-    }
+    override fun getPluginName(): String = pluginName
 }

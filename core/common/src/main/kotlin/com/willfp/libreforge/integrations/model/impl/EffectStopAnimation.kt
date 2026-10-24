@@ -10,7 +10,8 @@ import com.willfp.libreforge.getFormattedString
 import com.willfp.libreforge.triggers.TriggerData
 
 object EffectStopAnimation : Effect<NoCompileData>("stop_animation") {
-    override val description = "Stops a ModelEngine or BetterModel animation on the triggering entity, or on the victim if the triggering entity has no model."
+    override val description =
+        "Stops a ModelEngine or BetterModel animation on the triggering entity, or the victim if it has none."
     override val categories = setOf("visual", "entity")
 
     override val isPermanent = false
@@ -24,13 +25,15 @@ object EffectStopAnimation : Effect<NoCompileData>("stop_animation") {
         )
         optional(
             "fade",
-            description = "If the animation should blend out over its lerp out time. If false, it stops straight away. ModelEngine only.",
+            description =
+                "If the animation should blend out over its lerp out time, or stop straight away. ModelEngine only.",
             type = ArgType.BOOLEAN,
             default = "true"
         )
         optional(
             "model",
-            description = "Only stop the animation on the model with this ID. Leave out to stop it on every model on the entity.",
+            description =
+                "Only stop the animation on the model with this ID. Leave out to stop it on every model.",
             type = ArgType.STRING
         )
     }
@@ -42,7 +45,7 @@ object EffectStopAnimation : Effect<NoCompileData>("stop_animation") {
             entity,
             config.getStringOrNull("model"),
             config.getFormattedString("animation", data),
-            config.getBoolOrNull("fade") ?: true
+            config.getBoolOrNull("fade") != false
         )
     }
 }

@@ -14,7 +14,10 @@ import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 
 object EffectPlayAnimation : Effect<NoCompileData>("play_animation") {
-    override val description = "Plays a ModelEngine or BetterModel animation on the triggering entity, or on the victim if the triggering entity has no model."
+    private const val TICKS_PER_SECOND = 20.0
+
+    override val description =
+        "Plays a ModelEngine or BetterModel animation on the triggering entity, or the victim if it has none."
     override val categories = setOf("visual", "entity")
 
     override val isPermanent = false
@@ -34,13 +37,15 @@ object EffectPlayAnimation : Effect<NoCompileData>("play_animation") {
         )
         optional(
             "mode",
-            description = "How the animation repeats: PLAY_ONCE, LOOP or HOLD_ON_LAST. Leave out to use the model's own loop mode, or loop if loop is true.",
+            description =
+                "PLAY_ONCE, LOOP or HOLD_ON_LAST. Defaults to the model's own mode, or LOOP if loop is true.",
             type = ArgType.STRING,
             choices = listOf("PLAY_ONCE", "LOOP", "HOLD_ON_LAST")
         )
         optional(
             "duration",
-            description = "Ticks to play the animation for before stopping it. Leave out to let it finish on its own, or loop forever when looping.",
+            description =
+                "Ticks to play the animation for before stopping it. Leave out to let it finish, or loop forever.",
             type = ArgType.EXPRESSION
         )
         optional(
@@ -90,7 +95,8 @@ object EffectPlayAnimation : Effect<NoCompileData>("play_animation") {
         )
         optional(
             "model",
-            description = "Only play the animation on the model with this ID. Leave out to play it on every model on the entity.",
+            description =
+                "Only play the animation on the model with this ID. Leave out to play it on every model.",
             type = ArgType.STRING
         )
     }
@@ -107,8 +113,8 @@ object EffectPlayAnimation : Effect<NoCompileData>("play_animation") {
             ModelAnimation.builder()
                 .loopMode(loopMode(config, data))
                 .speed(if (config.has("speed")) config.getDoubleFromExpression("speed", data) else 1.0)
-                .lerpIn(ticks(config, data, "lerp_in", "start") / TICKS_PER_SECOND)
-                .lerpOut(ticks(config, data, "lerp_out", "end") / TICKS_PER_SECOND)
+                .lerpIn(ticks(config = config, data = data, key = "lerp_in", legacyKey = "start") / TICKS_PER_SECOND)
+                .lerpOut(ticks(config = config, data = data, key = "lerp_out", legacyKey = "end") / TICKS_PER_SECOND)
                 .force(config.getBool("force") || config.getBool("override"))
                 .viewer(if (config.getBool("self")) data.player else null)
                 .build()
@@ -134,6 +140,4 @@ object EffectPlayAnimation : Effect<NoCompileData>("play_animation") {
 
     private fun ticks(config: Config, data: TriggerData, key: String, legacyKey: String): Double =
         if (config.has(key)) config.getDoubleFromExpression(key, data) else config.getDouble(legacyKey)
-
-    private const val TICKS_PER_SECOND = 20.0
 }
