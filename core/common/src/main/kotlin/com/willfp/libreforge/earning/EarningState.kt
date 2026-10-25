@@ -5,7 +5,7 @@ import java.util.Base64
 internal data class EarningState(
     var amount: Double = 0.0,
     var expiresAt: Long = 0,
-    var kind: String = "",
+    var resetType: ResetType? = null,
     var signature: String = "",
     var checkedAt: Long = 0,
     var session: String = "",
@@ -24,11 +24,11 @@ internal data class EarningState(
         transition: Boolean = false
     ) {
         val now = maxOf(time, checkedAt)
-        val changed = kind != policy.kind || signature != policy.signature
+        val changed = resetType != policy.resetType || signature != policy.signature
 
-        if (kind.isEmpty()) {
+        if (resetType == null) {
             checkedAt = now
-        } else if (kind != policy.kind) {
+        } else if (resetType != policy.resetType) {
             expiresAt = 0
             checkedAt = now
         } else if (changed && policy.cron != null && !startup) {
@@ -53,7 +53,7 @@ internal data class EarningState(
             }
         }
 
-        kind = policy.kind
+        resetType = policy.resetType
         signature = policy.signature
         limit = policy.limit
         checkedAt = now
@@ -72,7 +72,7 @@ internal data class EarningState(
             "1",
             amount,
             expiresAt,
-            kind,
+            resetType?.name?.lowercase().orEmpty(),
             Base64.getEncoder().encodeToString(signature.toByteArray(Charsets.UTF_8)),
             checkedAt,
             session,
@@ -94,7 +94,7 @@ internal data class EarningState(
             return EarningState(
                 amount = parts[1].toDouble(),
                 expiresAt = parts[2].toLong(),
-                kind = parts[3],
+                resetType = parts[3].takeIf { it.isNotEmpty() }?.let { ResetType.valueOf(it.uppercase()) },
                 signature = String(Base64.getDecoder().decode(parts[4]), Charsets.UTF_8),
                 checkedAt = parts[5].toLong(),
                 session = parts[6],

@@ -10,6 +10,11 @@ internal enum class TimerStart {
     LIMIT_REACHED
 }
 
+internal enum class ResetType {
+    INTERVAL,
+    CRON
+}
+
 internal data class EarningPolicy(
     val limit: Double,
     val duration: Long = 0,
@@ -17,7 +22,7 @@ internal data class EarningPolicy(
     val cron: String? = null,
     val timezone: String = ZoneId.systemDefault().id
 ) {
-    val kind: String = if (cron == null) "interval" else "cron"
+    val resetType: ResetType = if (cron == null) ResetType.INTERVAL else ResetType.CRON
     val signature: String = if (cron == null) "$duration:$timerStart" else "$cron@$timezone"
 
     private val schedule = cron?.let {
@@ -29,14 +34,6 @@ internal data class EarningPolicy(
     init {
         require(limit.isFinite() && limit >= 0) { "limit must be a finite non-negative number" }
         require(cron != null || duration > 0) { "duration must be positive" }
-
-        if (cron == null) {
-            Math.addExact(System.currentTimeMillis(), duration)
-        }
-
-        require(schedule == null || nextAfter(System.currentTimeMillis()) != null) {
-            "cron must have a future reset time"
-        }
     }
 
     fun nextAfter(time: Long): Long? {
