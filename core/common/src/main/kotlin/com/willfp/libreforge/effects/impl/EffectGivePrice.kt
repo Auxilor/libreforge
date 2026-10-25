@@ -55,23 +55,28 @@ object EffectGivePrice : Effect<NoCompileData>("give_price") {
         val type = config.getFormattedString("type", data)
         val context = config.toPlaceholderContext(data)
 
-        val amount = Prices.create(
+        val price = Prices.create(
             value,
-            type,
-            context
-        ).getValue(player)
-
-        val remainingLimit = EarningLimits.getRemaining(config, player)
-        val finalAmount = minOf(amount, remainingLimit)
-
-        val finalPrice = Prices.create(
-            finalAmount.toString(),
             type,
             context
         )
 
-        EarningLimits.addEarned(config, player, finalPrice.getValue(player))
-        finalPrice.giveTo(player)
+        if (!config.has("earning-limit")) {
+            price.giveTo(player)
+        } else {
+            val amount = price.getValue(player)
+            val remainingLimit = EarningLimits.getRemaining(config, player)
+            val finalAmount = minOf(amount, remainingLimit)
+
+            val finalPrice = Prices.create(
+                finalAmount.toString(),
+                type,
+                context
+            )
+
+            EarningLimits.addEarned(config, player, finalPrice.getValue(player))
+            finalPrice.giveTo(player)
+        }
 
         return true
     }
