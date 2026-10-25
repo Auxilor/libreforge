@@ -44,7 +44,7 @@ object EffectGivePrice : Effect<NoCompileData>("give_price") {
     }
 
     override fun makeCompileData(config: Config, context: ViolationContext): NoCompileData {
-        EarningLimits.validateReference(config, context)
+        EarningLimits.validateGroup(config, context)
         return NoCompileData
     }
 
@@ -61,11 +61,13 @@ object EffectGivePrice : Effect<NoCompileData>("give_price") {
             context
         )
 
-        if (!config.has("earning-limit")) {
+        val groupId = config.getStringOrNull("earning-limit")
+
+        if (groupId == null) {
             price.giveTo(player)
         } else {
             val amount = price.getValue(player)
-            val remainingLimit = EarningLimits.getRemaining(config, player)
+            val remainingLimit = EarningLimits.getRemaining(player, groupId)
             val finalAmount = minOf(amount, remainingLimit)
 
             val finalPrice = Prices.create(
@@ -74,7 +76,7 @@ object EffectGivePrice : Effect<NoCompileData>("give_price") {
                 context
             )
 
-            EarningLimits.addEarned(config, player, finalPrice.getValue(player))
+            EarningLimits.addEarned(player, groupId, finalPrice.getValue(player))
             finalPrice.giveTo(player)
         }
 

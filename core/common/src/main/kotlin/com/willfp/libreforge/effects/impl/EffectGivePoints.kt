@@ -43,7 +43,7 @@ object EffectGivePoints : Effect<NoCompileData>("give_points") {
     }
 
     override fun makeCompileData(config: Config, context: ViolationContext): NoCompileData {
-        EarningLimits.validateReference(config, context)
+        EarningLimits.validateGroup(config, context)
         return NoCompileData
     }
 
@@ -51,13 +51,15 @@ object EffectGivePoints : Effect<NoCompileData>("give_points") {
         val player = data.player ?: return false
 
         val type = config.getFormattedString("type", data)
-        val amount = config.getDoubleFromExpression("amount", data)
+        var amount = config.getDoubleFromExpression("amount", data)
+        val groupId = config.getStringOrNull("earning-limit")
 
-        val remainingLimit = EarningLimits.getRemaining(config, player)
-        val finalAmount = minOf(amount, remainingLimit)
+        if (groupId != null) {
+            amount = minOf(amount, EarningLimits.getRemaining(player, groupId))
+            EarningLimits.addEarned(player, groupId, amount)
+        }
 
-        EarningLimits.addEarned(config, player, finalAmount)
-        player.points.add(type, finalAmount)
+        player.points.add(type, amount)
 
         return true
     }

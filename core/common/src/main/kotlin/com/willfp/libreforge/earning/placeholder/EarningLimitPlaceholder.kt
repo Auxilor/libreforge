@@ -18,12 +18,12 @@ class EarningLimitPlaceholder(
             return null
         }
 
-        val status = EarningLimits.status(player, matcher.group(2))
+        val state = EarningLimits.getState(player, matcher.group(2))
 
         return when (matcher.group(1)) {
-            "earned" -> status?.earned?.toNiceString() ?: "0"
-            "remaining" -> status?.remaining?.toNiceString() ?: "0"
-            else -> status?.remainingSeconds?.toString() ?: "-1"
+            "earned" -> state?.amount?.toNiceString() ?: "0"
+            "remaining" -> state?.remaining?.toNiceString() ?: "0"
+            else -> state?.remainingSeconds?.toString() ?: "-1"
         }
     }
 }

@@ -30,10 +30,10 @@ object EarningLimits {
     @Volatile
     private var active = emptySet<String>()
 
-    val groupIds: Set<String>
+    internal val groupIds: Set<String>
         get() = active
 
-    fun reload(config: Config, context: ViolationContext) {
+    internal fun reload(config: Config, context: ViolationContext) {
         val now = System.currentTimeMillis()
         val loaded = linkedMapOf<String, EarningPolicy>()
         val sections = config.getSubsection("groups")
@@ -98,7 +98,7 @@ object EarningLimits {
         active = loaded.keys.toSet()
     }
 
-    fun validateReference(config: Config, context: ViolationContext) {
+    fun validateGroup(config: Config, context: ViolationContext) {
         if (!config.has("earning-limit")) {
             return
         }
@@ -142,7 +142,7 @@ object EarningLimits {
         return state
     }
 
-    fun status(player: OfflinePlayer, id: String): EarningLimitStatus? {
+    internal fun getState(player: OfflinePlayer, id: String): EarningState? {
         if (id !in active) {
             return null
         }
@@ -151,14 +151,10 @@ object EarningLimits {
         val state = load(player, group, System.currentTimeMillis())
         player.profile.write(group.key, state.encode())
 
-        return EarningLimitStatus(
-            state.amount,
-            (group.versions.last().policy.limit - state.amount).coerceAtLeast(0.0),
-            state.expiresAt
-        )
+        return state
     }
 
-    fun reset(player: OfflinePlayer, id: String): Boolean {
+    internal fun reset(player: OfflinePlayer, id: String): Boolean {
         if (id !in active) {
             return false
         }
@@ -174,20 +170,16 @@ object EarningLimits {
         return true
     }
 
-    fun getRemaining(config: Config, player: OfflinePlayer): Double {
-        val id = config.getStringOrNull("earning-limit") ?: return Double.POSITIVE_INFINITY
-
-        return status(player, id)?.remaining ?: 0.0
+    fun getRemaining(player: OfflinePlayer, id: String): Double {
+        return getState(player, id)?.remaining ?: 0.0
     }
 
-    fun addEarned(config: Config, player: OfflinePlayer, amount: Double) {
+    fun addEarned(player: OfflinePlayer, id: String?, amount: Double) {
         if (!amount.isFinite() || amount <= 0) {
             return
         }
 
-        val id = config.getStringOrNull("earning-limit") ?: return
-
-        if (id !in active) {
+        if (id == null || id !in active) {
             return
         }
 

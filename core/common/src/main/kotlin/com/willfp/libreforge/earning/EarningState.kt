@@ -4,6 +4,7 @@ import java.util.Base64
 
 internal data class EarningState(
     var amount: Double = 0.0,
+    /** Reset timestamp in epoch milliseconds, or 0 if no reset is scheduled. */
     var expiresAt: Long = 0,
     var resetType: ResetType? = null,
     var signature: String = "",
@@ -12,6 +13,13 @@ internal data class EarningState(
     var revision: Int = -1,
     var limit: Double = 0.0
 ) {
+    val remaining: Double
+        get() = (limit - amount).coerceAtLeast(0.0)
+
+    /** Seconds until reset, rounded up, or -1 if no reset is scheduled. */
+    val remainingSeconds: Long
+        get() = if (expiresAt == 0L) -1 else ((expiresAt - System.currentTimeMillis()).coerceAtLeast(0) + 999) / 1000
+
     fun reset() {
         amount = 0.0
         expiresAt = 0

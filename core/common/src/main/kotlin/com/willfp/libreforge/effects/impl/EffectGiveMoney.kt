@@ -36,20 +36,22 @@ object EffectGiveMoney : Effect<NoCompileData>("give_money") {
     }
 
     override fun makeCompileData(config: Config, context: ViolationContext): NoCompileData {
-        EarningLimits.validateReference(config, context)
+        EarningLimits.validateGroup(config, context)
         return NoCompileData
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val player = data.player ?: return false
 
-        val amount = config.getDoubleFromExpression("amount", data)
+        var amount = config.getDoubleFromExpression("amount", data)
+        val groupId = config.getStringOrNull("earning-limit")
 
-        val remainingLimit = EarningLimits.getRemaining(config, player)
-        val finalAmount = minOf(amount, remainingLimit)
+        if (groupId != null) {
+            amount = minOf(amount, EarningLimits.getRemaining(player, groupId))
+            EarningLimits.addEarned(player, groupId, amount)
+        }
 
-        EarningLimits.addEarned(config, player, finalAmount)
-        player.balance += finalAmount
+        player.balance += amount
 
         return true
     }

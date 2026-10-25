@@ -42,23 +42,25 @@ object EffectGiveXp : Effect<NoCompileData>("give_xp") {
     }
 
     override fun makeCompileData(config: Config, context: ViolationContext): NoCompileData {
-        EarningLimits.validateReference(config, context)
+        EarningLimits.validateGroup(config, context)
         return NoCompileData
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val player = data.player ?: return false
 
-        val amount = config.getIntFromExpression("amount", data)
+        var amount = config.getIntFromExpression("amount", data)
+        val groupId = config.getStringOrNull("earning-limit")
 
-        val remainingLimit = EarningLimits.getRemaining(config, player)
-        val finalAmount = minOf(amount.toDouble(), remainingLimit).toInt()
+        if (groupId != null) {
+            amount = minOf(amount.toDouble(), EarningLimits.getRemaining(player, groupId)).toInt()
+            EarningLimits.addEarned(player, groupId, amount.toDouble())
+        }
 
-        EarningLimits.addEarned(config, player, finalAmount.toDouble())
         if (Prerequisite.HAS_PAPER.isMet) {
-            player.giveExp(finalAmount, config.getBoolOrNull("apply_mending") ?: true)
+            player.giveExp(amount, config.getBoolOrNull("apply_mending") ?: true)
         } else {
-            player.giveExp(finalAmount)
+            player.giveExp(amount)
         }
 
         return true
