@@ -239,12 +239,15 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
 
     override fun createTasks() {
         dispatchedTriggerFactory.startTicking()
+        EarningLimits.start()
 
         // Applies everything marked on holder states, at the start of every tick.
         HolderStates.start()
     }
 
     override fun handleDisable() {
+        EarningLimits.stop()
+
         // Fallback, if nothing earlier in the disable ran the shutdown sweep.
         HolderStates.shutdownSweep()
     }

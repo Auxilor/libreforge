@@ -1,14 +1,21 @@
 package com.willfp.libreforge.earning
 
+import com.willfp.eco.core.Eco
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.data.profile
+import com.willfp.eco.core.data.PlayerProfile
+import com.willfp.eco.core.data.ServerProfile
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.ViolationContext
-import com.willfp.libreforge.earning.EarningLimitGroup.Version
+import com.willfp.libreforge.plugin
 import org.bukkit.OfflinePlayer
-import java.time.ZoneId
+import java.util.UUID
+import java.util.logging.Level
 
 object EarningLimits {
+    private val scheduler = EarningLimitScheduler()
+    private val startedAt = System.currentTimeMillis()
+    private val idPattern = Regex("[a-z0-9_-]+")
+
     @Volatile
     private var groups = emptyMap<String, EarningLimitGroup>()
 
@@ -16,13 +23,12 @@ object EarningLimits {
         get() = groups.filterValues { it.active }.keys
 
     internal fun reload(config: Config, context: ViolationContext) {
-        val now = System.currentTimeMillis()
         val loaded = linkedMapOf<String, EarningPolicy>()
         val sections = config.getSubsection("groups")
 
         for (id in sections.getKeys(false)) {
             try {
-                require(Regex("[a-z0-9_-]+").matches(id)) { "group IDs must use lowercase letters, numbers, _ or -" }
+                require(idPattern.matches(id)) { "group IDs must use lowercase letters, numbers, _ or -" }
 
                 val section = sections.getSubsection(id)
                 val limit = section.getDoubleOrNull("limit") ?: error("limit is required")
@@ -31,8 +37,7 @@ object EarningLimits {
                 loaded[id] = when (reset.getString("type")) {
                     "cron" -> EarningPolicy(
                         limit = limit,
-                        cron = reset.getStringOrNull("cron") ?: error("reset.cron is required"),
-                        timezone = reset.getStringOrNull("timezone") ?: ZoneId.systemDefault().id
+                        cron = reset.getStringOrNull("cron") ?: error("reset.cron is required")
                     )
                     "interval" -> EarningPolicy(
                         limit = limit,
@@ -55,24 +60,55 @@ object EarningLimits {
             }
         }
 
+        val now = System.currentTimeMillis()
+        val profile = ServerProfile.load()
         val next = linkedMapOf<String, EarningLimitGroup>()
 
         for ((id, group) in groups) {
-            if (id !in loaded) group.active = false
+            if (id !in loaded) {
+                group.active = false
+                if (group.policy.cron != null) {
+                    profile.write(group.key, "")
+                }
+            }
         }
 
         for ((id, policy) in loaded) {
             val group = groups[id] ?: EarningLimitGroup(id)
+            val saved = profile.read(group.key)
+            val signature = policy.cronSignature
 
-            if (group.versions.lastOrNull()?.policy != policy) {
-                group.versions = group.versions + Version(policy, now)
+            val cronChangedAt = if (signature != null) {
+                val parts = saved.split('|', limit = 2)
+                if (parts.size == 2 && parts[1] == signature) {
+                    parts[0].toLongOrNull() ?: now
+                } else {
+                    now
+                }
+            } else {
+                0
             }
 
+            val updated = if (signature == null) "" else "$cronChangedAt|$signature"
+            if (saved != updated) {
+                profile.write(group.key, updated)
+            }
+
+            group.policy = policy.copy(cronChangedAt = cronChangedAt)
             group.active = true
             next[id] = group
         }
 
         groups = next.toMap()
+        scheduler.reload(groups.values)
+    }
+
+    internal fun start() {
+        scheduler.start(groups.values)
+    }
+
+    internal fun stop() {
+        scheduler.stop()
     }
 
     fun validateGroup(config: Config, context: ViolationContext): EarningLimitGroup? {
@@ -93,29 +129,37 @@ object EarningLimits {
         return group ?: EarningLimitGroup(id)
     }
 
-    private fun load(player: OfflinePlayer, group: EarningLimitGroup, now: Long): EarningState {
-        val state = EarningState.decode(player.profile.read(group.key))
-        val versions = group.versions
+    private fun update(
+        player: UUID,
+        group: EarningLimitGroup,
+        action: (EarningState, EarningPolicy, Long) -> Unit = { _, _, _ -> }
+    ) {
+        PlayerProfile.load(player).compute(group.key) { raw ->
+            val now = System.currentTimeMillis()
+            val policy = group.policy
+            val state = try {
+                EarningState.decode(raw)
+            } catch (exception: IllegalArgumentException) {
+                plugin.logger.log(Level.WARNING, "Resetting invalid earning limit ${group.key.key} for $player", exception)
+                EarningState()
+            }
+            resetIfExpiredBeforeStartup(state)
+            state.applyPolicy(policy, now)
+            action(state, policy, now)
 
-        if (state.session != group.session) {
-            val baseline = versions.indexOfLast { it.since <= state.checkedAt }.coerceAtLeast(0)
-
-            state.advance(versions[baseline].policy, maxOf(versions[baseline].since, state.checkedAt), startup = true)
-            state.session = group.session
-            state.revision = baseline
+            scheduler.schedule(player, group, policy, state)
+            state.encode()
         }
+    }
 
-        for (revision in state.revision + 1 until versions.size) {
-            val version = versions[revision]
-
-            state.advance(versions[revision - 1].policy, version.since)
-            state.advance(version.policy, version.since, transition = true)
-            state.revision = revision
+    private fun resetIfExpiredBeforeStartup(state: EarningState) {
+        if (state.checkedAt < startedAt && state.expiresAt != 0L && state.expiresAt <= startedAt) {
+            state.reset()
         }
+    }
 
-        state.advance(versions.last().policy, now)
-
-        return state
+    internal fun refresh(player: UUID, group: EarningLimitGroup) {
+        if (group.active) update(player, group)
     }
 
     internal fun getState(player: OfflinePlayer, id: String): EarningState? {
@@ -127,9 +171,16 @@ object EarningLimits {
             return null
         }
 
-        val state = load(player, group, System.currentTimeMillis())
-        player.profile.write(group.key, state.encode())
+        val uuid = Eco.get().playerProfileResolver.resolve(player)
+        val state = try {
+            EarningState.decode(PlayerProfile.load(uuid).read(group.key))
+        } catch (_: IllegalArgumentException) {
+            update(uuid, group)
+            return getState(player, group)
+        }
 
+        resetIfExpiredBeforeStartup(state)
+        state.applyPolicy(group.policy, System.currentTimeMillis())
         return state
     }
 
@@ -140,21 +191,15 @@ object EarningLimits {
             return false
         }
 
-        val now = System.currentTimeMillis()
-        val state = load(player, group, now)
-
-        state.reset()
-        state.advance(group.versions.last().policy, now)
-        player.profile.write(group.key, state.encode())
+        update(Eco.get().playerProfileResolver.resolve(player), group) { state, policy, now ->
+            state.reset()
+            state.applyPolicy(policy, now)
+        }
 
         return true
     }
 
-    fun getRemaining(player: OfflinePlayer, id: String): Double {
-        return getState(player, id)?.remaining ?: 0.0
-    }
-
-    internal fun getRemaining(player: OfflinePlayer, group: EarningLimitGroup): Double {
+    fun getRemaining(player: OfflinePlayer, group: EarningLimitGroup): Double {
         return getState(player, group)?.remaining ?: 0.0
     }
 
@@ -163,11 +208,9 @@ object EarningLimits {
             return
         }
 
-        val now = System.currentTimeMillis()
-        val state = load(player, group, now)
-
-        state.amount += amount
-        state.startTimer(group.versions.last().policy, now)
-        player.profile.write(group.key, state.encode())
+        update(Eco.get().playerProfileResolver.resolve(player), group) { state, policy, now ->
+            state.amount += amount
+            state.startTimer(policy, now)
+        }
     }
 }

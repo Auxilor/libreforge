@@ -1,7 +1,7 @@
 package com.willfp.libreforge.earning
 
+import com.willfp.libreforge.dates.Dates
 import org.quartz.CronExpression
-import java.time.ZoneId
 import java.util.Date
 import java.util.TimeZone
 
@@ -10,24 +10,19 @@ internal enum class TimerStart {
     LIMIT_REACHED
 }
 
-internal enum class ResetType {
-    INTERVAL,
-    CRON
-}
-
 internal data class EarningPolicy(
     val limit: Double,
     val duration: Long = 0,
     val timerStart: TimerStart = TimerStart.FIRST_EARNING,
     val cron: String? = null,
-    val timezone: String = ZoneId.systemDefault().id
+    val cronChangedAt: Long = 0
 ) {
-    val resetType: ResetType = if (cron == null) ResetType.INTERVAL else ResetType.CRON
-    val signature: String = if (cron == null) "$duration:$timerStart" else "$cron@$timezone"
+    private val zone = Dates.zone
+    val cronSignature: String? = cron?.let { "$it@${zone.id}" }
 
     private val schedule = cron?.let {
         CronExpression(it).apply {
-            timeZone = TimeZone.getTimeZone(ZoneId.of(timezone))
+            timeZone = TimeZone.getTimeZone(zone)
         }
     }
 
@@ -41,12 +36,15 @@ internal data class EarningPolicy(
     }
 }
 
+private val durationPattern = Regex("(?:[0-9]+[smhdw])+")
+private val durationPartPattern = Regex("([0-9]+)([smhdw])")
+
 internal fun parseEarningDuration(input: String): Long {
-    require(Regex("(?:[0-9]+[smhdw])+").matches(input)) {
+    require(durationPattern.matches(input)) {
         "duration must use units s, m, h, d or w, e.g. 30s or 1h30m"
     }
 
-    val total = Regex("([0-9]+)([smhdw])").findAll(input).fold(0L) { sum, match ->
+    val total = durationPartPattern.findAll(input).fold(0L) { sum, match ->
         val unit = when (match.groupValues[2]) {
             "s" -> 1000L
             "m" -> 60_000L

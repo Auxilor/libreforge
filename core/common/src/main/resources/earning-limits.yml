@@ -6,7 +6,6 @@ groups: {}
 #     reset:
 #       type: cron
 #       cron: "0 0 0 * * ?" # every midnight, refer to https://www.quartz-scheduler.org/documentation/quartz-2.3.0/tutorials/crontrigger.html
-#       timezone: ?/? # Optional, defaults to system timezone
 #   hourly-group:
 #     limit: 500
 #     reset:

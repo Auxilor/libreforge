@@ -4,15 +4,9 @@ import com.willfp.eco.core.data.keys.PersistentDataKey
 import com.willfp.eco.core.data.keys.PersistentDataKeyType
 import com.willfp.eco.util.NamespacedKeyUtils
 import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 
 class EarningLimitGroup internal constructor(id: String) {
-    internal data class Version(
-        val policy: EarningPolicy,
-        val since: Long
-    )
-
-    internal val session = UUID.randomUUID().toString()
-
     internal val key by lazy {
         PersistentDataKey(
             NamespacedKeyUtils.createEcoKey("earning_limit_$id"),
@@ -21,8 +15,10 @@ class EarningLimitGroup internal constructor(id: String) {
         )
     }
 
+    internal val players: MutableSet<UUID> = ConcurrentHashMap.newKeySet()
+
     @Volatile
-    internal var versions = emptyList<Version>()
+    internal lateinit var policy: EarningPolicy
 
     @Volatile
     internal var active = false
