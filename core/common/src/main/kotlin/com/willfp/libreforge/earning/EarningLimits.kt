@@ -7,11 +7,8 @@ import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.earning.EarningLimitGroup.Version
 import org.bukkit.OfflinePlayer
 import java.time.ZoneId
-import java.util.UUID
 
 object EarningLimits {
-    private val session = UUID.randomUUID().toString()
-
     @Volatile
     private var groups = emptyMap<String, EarningLimitGroup>()
 
@@ -58,20 +55,21 @@ object EarningLimits {
             }
         }
 
-        val next = groups.toMutableMap()
+        val next = linkedMapOf<String, EarningLimitGroup>()
 
-        for (group in next.values) {
-            group.active = false
+        for ((id, group) in groups) {
+            if (id !in loaded) group.active = false
         }
 
         for ((id, policy) in loaded) {
-            val group = next.getOrPut(id) { EarningLimitGroup(id) }
+            val group = groups[id] ?: EarningLimitGroup(id)
 
             if (group.versions.lastOrNull()?.policy != policy) {
                 group.versions = group.versions + Version(policy, now)
             }
 
             group.active = true
+            next[id] = group
         }
 
         groups = next.toMap()
@@ -99,11 +97,11 @@ object EarningLimits {
         val state = EarningState.decode(player.profile.read(group.key))
         val versions = group.versions
 
-        if (state.session != session) {
+        if (state.session != group.session) {
             val baseline = versions.indexOfLast { it.since <= state.checkedAt }.coerceAtLeast(0)
 
             state.advance(versions[baseline].policy, maxOf(versions[baseline].since, state.checkedAt), startup = true)
-            state.session = session
+            state.session = group.session
             state.revision = baseline
         }
 

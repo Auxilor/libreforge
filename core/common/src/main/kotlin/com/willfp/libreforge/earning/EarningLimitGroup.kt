@@ -3,12 +3,15 @@ package com.willfp.libreforge.earning
 import com.willfp.eco.core.data.keys.PersistentDataKey
 import com.willfp.eco.core.data.keys.PersistentDataKeyType
 import com.willfp.eco.util.NamespacedKeyUtils
+import java.util.UUID
 
 class EarningLimitGroup internal constructor(id: String) {
     internal data class Version(
         val policy: EarningPolicy,
         val since: Long
     )
+
+    internal val session = UUID.randomUUID().toString()
 
     internal val key by lazy {
         PersistentDataKey(
