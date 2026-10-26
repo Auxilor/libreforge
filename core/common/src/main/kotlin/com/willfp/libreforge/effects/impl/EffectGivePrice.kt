@@ -3,9 +3,9 @@ package com.willfp.libreforge.effects.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.price.Prices
 import com.willfp.libreforge.ArgType
-import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
+import com.willfp.libreforge.earning.EarningLimitGroup
 import com.willfp.libreforge.earning.EarningLimits
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getFormattedString
@@ -13,7 +13,7 @@ import com.willfp.libreforge.toPlaceholderContext
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
-object EffectGivePrice : Effect<NoCompileData>("give_price") {
+object EffectGivePrice : Effect<EarningLimitGroup?>("give_price") {
     override val description = "Gives the player a reward using the eco Price system, supporting any registered price type."
     override val categories = setOf("economy")
 
@@ -43,12 +43,11 @@ object EffectGivePrice : Effect<NoCompileData>("give_price") {
         )
     }
 
-    override fun makeCompileData(config: Config, context: ViolationContext): NoCompileData {
-        EarningLimits.validateGroup(config, context)
-        return NoCompileData
+    override fun makeCompileData(config: Config, context: ViolationContext): EarningLimitGroup? {
+        return EarningLimits.validateGroup(config, context)
     }
 
-    override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
+    override fun onTrigger(config: Config, data: TriggerData, compileData: EarningLimitGroup?): Boolean {
         val player = data.player ?: return false
 
         val value = config.getFormattedString("value", data)
@@ -61,13 +60,11 @@ object EffectGivePrice : Effect<NoCompileData>("give_price") {
             context
         )
 
-        val groupId = config.getStringOrNull("earning-limit")
-
-        if (groupId == null) {
+        if (compileData == null) {
             price.giveTo(player)
         } else {
             val amount = price.getValue(player)
-            val remainingLimit = EarningLimits.getRemaining(player, groupId)
+            val remainingLimit = EarningLimits.getRemaining(player, compileData)
             val finalAmount = minOf(amount, remainingLimit)
 
             val finalPrice = Prices.create(
@@ -76,7 +73,7 @@ object EffectGivePrice : Effect<NoCompileData>("give_price") {
                 context
             )
 
-            EarningLimits.addEarned(player, groupId, finalPrice.getValue(player))
+            EarningLimits.addEarned(player, compileData, finalPrice.getValue(player))
             finalPrice.giveTo(player)
         }
 

@@ -1,37 +1,22 @@
 package com.willfp.libreforge.earning
 
 import com.willfp.eco.core.config.interfaces.Config
-import com.willfp.eco.core.data.keys.PersistentDataKey
-import com.willfp.eco.core.data.keys.PersistentDataKeyType
 import com.willfp.eco.core.data.profile
 import com.willfp.libreforge.ConfigViolation
 import com.willfp.libreforge.ViolationContext
-import com.willfp.libreforge.plugin
+import com.willfp.libreforge.earning.EarningLimitGroup.Version
 import org.bukkit.OfflinePlayer
 import java.time.ZoneId
 import java.util.UUID
 
 object EarningLimits {
-    private data class Version(
-        val policy: EarningPolicy,
-        val since: Long
-    )
-
-    private data class Group(
-        val key: PersistentDataKey<String>,
-        val versions: List<Version>
-    )
-
     private val session = UUID.randomUUID().toString()
 
     @Volatile
-    private var groups = emptyMap<String, Group>()
-
-    @Volatile
-    private var active = emptySet<String>()
+    private var groups = emptyMap<String, EarningLimitGroup>()
 
     internal val groupIds: Set<String>
-        get() = active
+        get() = groups.filterValues { it.active }.keys
 
     internal fun reload(config: Config, context: ViolationContext) {
         val now = System.currentTimeMillis()
@@ -75,38 +60,29 @@ object EarningLimits {
 
         val next = groups.toMutableMap()
 
-        for ((id, policy) in loaded) {
-            val old = next[id]
+        for (group in next.values) {
+            group.active = false
+        }
 
-            next[id] = if (old == null) {
-                Group(
-                    PersistentDataKey(
-                        plugin.namespacedKeyFactory.create("earning_limit_$id"),
-                        PersistentDataKeyType.STRING,
-                        ""
-                    ),
-                    listOf(Version(policy, now))
-                )
-            } else if (old.versions.last().policy != policy) {
-                old.copy(versions = old.versions + Version(policy, now))
-            } else {
-                old
+        for ((id, policy) in loaded) {
+            val group = next.getOrPut(id) { EarningLimitGroup(id) }
+
+            if (group.versions.lastOrNull()?.policy != policy) {
+                group.versions = group.versions + Version(policy, now)
             }
+
+            group.active = true
         }
 
         groups = next.toMap()
-        active = loaded.keys.toSet()
     }
 
-    fun validateGroup(config: Config, context: ViolationContext) {
-        if (!config.has("earning-limit")) {
-            return
-        }
+    fun validateGroup(config: Config, context: ViolationContext): EarningLimitGroup? {
+        val id = config.getStringOrNull("earning-limit") ?: return null
+        val group = groups[id]
 
-        val id = config.getString("earning-limit")
-
-        if (id in active) {
-            return
+        if (group?.active == true) {
+            return group
         }
 
         context.log(
@@ -115,9 +91,11 @@ object EarningLimits {
                 "Unknown or invalid earning-limit group: $id"
             )
         )
+
+        return group ?: EarningLimitGroup(id)
     }
 
-    private fun load(player: OfflinePlayer, group: Group, now: Long): EarningState {
+    private fun load(player: OfflinePlayer, group: EarningLimitGroup, now: Long): EarningState {
         val state = EarningState.decode(player.profile.read(group.key))
         val versions = group.versions
 
@@ -143,11 +121,14 @@ object EarningLimits {
     }
 
     internal fun getState(player: OfflinePlayer, id: String): EarningState? {
-        if (id !in active) {
+        return groups[id]?.let { getState(player, it) }
+    }
+
+    private fun getState(player: OfflinePlayer, group: EarningLimitGroup): EarningState? {
+        if (!group.active) {
             return null
         }
 
-        val group = groups[id] ?: return null
         val state = load(player, group, System.currentTimeMillis())
         player.profile.write(group.key, state.encode())
 
@@ -155,11 +136,12 @@ object EarningLimits {
     }
 
     internal fun reset(player: OfflinePlayer, id: String): Boolean {
-        if (id !in active) {
+        val group = groups[id] ?: return false
+
+        if (!group.active) {
             return false
         }
 
-        val group = groups[id] ?: return false
         val now = System.currentTimeMillis()
         val state = load(player, group, now)
 
@@ -174,16 +156,15 @@ object EarningLimits {
         return getState(player, id)?.remaining ?: 0.0
     }
 
-    fun addEarned(player: OfflinePlayer, id: String?, amount: Double) {
-        if (!amount.isFinite() || amount <= 0) {
+    internal fun getRemaining(player: OfflinePlayer, group: EarningLimitGroup): Double {
+        return getState(player, group)?.remaining ?: 0.0
+    }
+
+    fun addEarned(player: OfflinePlayer, group: EarningLimitGroup?, amount: Double) {
+        if (group == null || !group.active || !amount.isFinite() || amount <= 0) {
             return
         }
 
-        if (id == null || id !in active) {
-            return
-        }
-
-        val group = groups[id] ?: return
         val now = System.currentTimeMillis()
         val state = load(player, group, now)
 

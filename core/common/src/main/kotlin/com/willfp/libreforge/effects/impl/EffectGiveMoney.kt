@@ -3,16 +3,16 @@ package com.willfp.libreforge.effects.impl
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.integrations.economy.balance
 import com.willfp.libreforge.ArgType
-import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
+import com.willfp.libreforge.earning.EarningLimitGroup
 import com.willfp.libreforge.earning.EarningLimits
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
-object EffectGiveMoney : Effect<NoCompileData>("give_money") {
+object EffectGiveMoney : Effect<EarningLimitGroup?>("give_money") {
     override val description = "Deposits money into the player's economy balance when triggered."
     override val categories = setOf("economy")
 
@@ -35,20 +35,18 @@ object EffectGiveMoney : Effect<NoCompileData>("give_money") {
         )
     }
 
-    override fun makeCompileData(config: Config, context: ViolationContext): NoCompileData {
-        EarningLimits.validateGroup(config, context)
-        return NoCompileData
+    override fun makeCompileData(config: Config, context: ViolationContext): EarningLimitGroup? {
+        return EarningLimits.validateGroup(config, context)
     }
 
-    override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
+    override fun onTrigger(config: Config, data: TriggerData, compileData: EarningLimitGroup?): Boolean {
         val player = data.player ?: return false
 
         var amount = config.getDoubleFromExpression("amount", data)
-        val groupId = config.getStringOrNull("earning-limit")
 
-        if (groupId != null) {
-            amount = minOf(amount, EarningLimits.getRemaining(player, groupId))
-            EarningLimits.addEarned(player, groupId, amount)
+        if (compileData != null) {
+            amount = minOf(amount, EarningLimits.getRemaining(player, compileData))
+            EarningLimits.addEarned(player, compileData, amount)
         }
 
         player.balance += amount
