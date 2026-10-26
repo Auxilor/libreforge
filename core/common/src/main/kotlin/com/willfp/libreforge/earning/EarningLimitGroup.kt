@@ -6,7 +6,7 @@ import com.willfp.eco.util.NamespacedKeyUtils
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 
-class EarningLimitGroup internal constructor(id: String) {
+class EarningLimitGroup internal constructor(internal val id: String) {
     internal val key by lazy {
         PersistentDataKey(
             NamespacedKeyUtils.createEcoKey("earning_limit_$id"),

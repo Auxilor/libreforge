@@ -200,11 +200,22 @@ object EarningLimits {
     }
 
     fun getRemaining(player: OfflinePlayer, group: EarningLimitGroup): Double {
-        return getState(player, group)?.remaining ?: 0.0
+        val state = getState(player, group)
+        if (state == null) {
+            plugin.logger.warning("Unknown or invalid earning-limit group: ${group.id}")
+            return 0.0
+        }
+
+        return state.remaining
     }
 
     fun addEarned(player: OfflinePlayer, group: EarningLimitGroup?, amount: Double) {
-        if (group == null || !group.active || !amount.isFinite() || amount <= 0) {
+        if (group == null || !amount.isFinite() || amount <= 0) {
+            return
+        }
+
+        if (!group.active) {
+            plugin.logger.warning("Unknown or invalid earning-limit group: ${group.id}")
             return
         }
 
