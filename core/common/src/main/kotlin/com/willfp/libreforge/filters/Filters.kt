@@ -44,6 +44,7 @@ import com.willfp.libreforge.filters.impl.FilterItemDurabilityAbovePercent
 import com.willfp.libreforge.filters.impl.FilterItemDurabilityBelow
 import com.willfp.libreforge.filters.impl.FilterItemDurabilityBelowPercent
 import com.willfp.libreforge.filters.impl.FilterItems
+import com.willfp.libreforge.filters.impl.FilterMinedByEffect
 import com.willfp.libreforge.filters.impl.FilterOnMaxHealth
 import com.willfp.libreforge.filters.impl.FilterOnlyBosses
 import com.willfp.libreforge.filters.impl.FilterOnlyNonBosses
@@ -152,6 +153,7 @@ object Filters : AliasedRegistry<Filter<*, *>>() {
         register(FilterItemDurabilityBelow)
         register(FilterItemDurabilityBelowPercent)
         register(FilterItems)
+        register(FilterMinedByEffect)
         register(FilterOnMaxHealth)
         register(FilterOnlyBosses)
         register(FilterOnlyNonBosses)
