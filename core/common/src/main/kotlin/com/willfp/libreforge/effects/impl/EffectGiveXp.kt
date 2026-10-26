@@ -52,6 +52,7 @@ object EffectGiveXp : Effect<EarningLimitGroup?>("give_xp") {
 
         if (compileData != null) {
             amount = minOf(amount.toDouble(), EarningLimits.getRemaining(player, compileData)).toInt()
+            if (amount == 0) return true
             EarningLimits.addEarned(player, compileData, amount.toDouble())
         }
 

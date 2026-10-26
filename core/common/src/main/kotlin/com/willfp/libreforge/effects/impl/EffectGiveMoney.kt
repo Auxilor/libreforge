@@ -46,6 +46,7 @@ object EffectGiveMoney : Effect<EarningLimitGroup?>("give_money") {
 
         if (compileData != null) {
             amount = minOf(amount, EarningLimits.getRemaining(player, compileData))
+            if (amount == 0.0) return true
             EarningLimits.addEarned(player, compileData, amount)
         }
 

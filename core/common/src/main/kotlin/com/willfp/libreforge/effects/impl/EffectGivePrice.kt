@@ -66,6 +66,7 @@ object EffectGivePrice : Effect<EarningLimitGroup?>("give_price") {
             val amount = price.getValue(player)
             val remainingLimit = EarningLimits.getRemaining(player, compileData)
             val finalAmount = minOf(amount, remainingLimit)
+            if (finalAmount == 0.0) return true
 
             val finalPrice = Prices.create(
                 finalAmount.toString(),
