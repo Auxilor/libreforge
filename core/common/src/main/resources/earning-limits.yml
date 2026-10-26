@@ -1,4 +1,18 @@
-groups: {}
+# Earning Limits Placeholders (replace <group> with a group ID):
+# %libreforge_earning_limit_earned_<group>% - The amount earned.
+# %libreforge_earning_limit_remaining_<group>% - The remaining earning limit.
+# %libreforge_earning_limit_reset_seconds_<group>% - Seconds until reset, returns -1 when no reset is scheduled.
+# Unknown group IDs leave the placeholder unresolved.
+
+# Limits are per player. Effects using the same group share its limit across money, XP, items and points.
+# Amounts are added directly without conversion: 100 coins + 20 XP = 120 earned in the same group.
+
+# Cron uses Quartz format: seconds minutes hours day-of-month month day-of-week [year].
+# The year is optional. * matches all values; ? leaves day-of-month or day-of-week unspecified.
+# Cron resets use dates.timezone from config.yml.
+
+# Interval duration units: s = seconds, m = minutes, h = hours, d = days.
+# Units can be combined, e.g. 1h30m = 1 hour and 30 minutes. Use 7d for one week.
 
 # groups:
 #   daily-group:
@@ -12,3 +26,5 @@ groups: {}
 #       type: interval
 #       duration: 1h30m
 #       timer-start: first-earning # Optional, defaults to first-earning, can be first-earning or limit-reached
+
+groups: {}

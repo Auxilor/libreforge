@@ -36,12 +36,12 @@ internal data class EarningPolicy(
     }
 }
 
-private val durationPattern = Regex("(?:[0-9]+[smhdw])+")
-private val durationPartPattern = Regex("([0-9]+)([smhdw])")
+private val durationPattern = Regex("(?:[0-9]+[smhd])+")
+private val durationPartPattern = Regex("([0-9]+)([smhd])")
 
 internal fun parseEarningDuration(input: String): Long {
     require(durationPattern.matches(input)) {
-        "duration must use units s, m, h, d or w, e.g. 30s or 1h30m"
+        "duration must use units s, m, h or d, e.g. 30s or 1h30m"
     }
 
     val total = durationPartPattern.findAll(input).fold(0L) { sum, match ->
@@ -49,8 +49,7 @@ internal fun parseEarningDuration(input: String): Long {
             "s" -> 1000L
             "m" -> 60_000L
             "h" -> 3_600_000L
-            "d" -> 86_400_000L
-            else -> 604_800_000L
+            else -> 86_400_000L
         }
 
         Math.addExact(sum, Math.multiplyExact(match.groupValues[1].toLong(), unit))
