@@ -2,7 +2,7 @@ package com.willfp.libreforge.earning
 
 import com.willfp.eco.core.data.keys.PersistentDataKey
 import com.willfp.eco.core.data.keys.PersistentDataKeyType
-import com.willfp.libreforge.plugin
+import com.willfp.eco.util.NamespacedKeyUtils
 
 class EarningLimitGroup internal constructor(id: String) {
     internal data class Version(
@@ -12,7 +12,7 @@ class EarningLimitGroup internal constructor(id: String) {
 
     internal val key by lazy {
         PersistentDataKey(
-            plugin.namespacedKeyFactory.create("earning_limit_$id"),
+            NamespacedKeyUtils.createEcoKey("earning_limit_$id"),
             PersistentDataKeyType.STRING,
             ""
         )
