@@ -76,6 +76,7 @@ import com.willfp.libreforge.conditions.impl.ConditionNearBlock
 import com.willfp.libreforge.conditions.impl.ConditionNearEntity
 import com.willfp.libreforge.conditions.impl.ConditionOnFire
 import com.willfp.libreforge.conditions.impl.ConditionOnGround
+import com.willfp.libreforge.conditions.impl.ConditionOnUseCooldown
 import com.willfp.libreforge.conditions.impl.ConditionPlaceholderContains
 import com.willfp.libreforge.conditions.impl.ConditionPlaceholderEquals
 import com.willfp.libreforge.conditions.impl.ConditionPlaceholderGreaterThan
@@ -236,6 +237,7 @@ object Conditions : AliasedRegistry<Condition<*>>() {
         register(ConditionItemPointsBelow)
         register(ConditionItemPointsEqual)
         register(ConditionOnGround)
+        register(ConditionOnUseCooldown)
         register(ConditionIsFalling)
         register(ConditionIsFlying)
         register(ConditionHasItemData)

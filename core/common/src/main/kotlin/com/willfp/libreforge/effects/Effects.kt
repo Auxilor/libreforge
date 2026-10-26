@@ -221,6 +221,7 @@ import com.willfp.libreforge.effects.impl.EffectSetPoints
 import com.willfp.libreforge.effects.impl.EffectSetSaturation
 import com.willfp.libreforge.effects.impl.EffectSetTime
 import com.willfp.libreforge.effects.impl.EffectSetUnbreakable
+import com.willfp.libreforge.effects.impl.EffectSetUseCooldown
 import com.willfp.libreforge.effects.impl.EffectSetVelocity
 import com.willfp.libreforge.effects.impl.EffectSetVictimVelocity
 import com.willfp.libreforge.effects.impl.EffectSetWeather
@@ -720,6 +721,7 @@ object Effects : AliasedRegistry<Effect<*>>() {
         register(EffectSetPoints)
         register(EffectSetSaturation)
         register(EffectSetUnbreakable)
+        register(EffectSetUseCooldown)
         register(EffectSetVelocity)
         register(EffectSetVictimVelocity)
         register(EffectShoot)
