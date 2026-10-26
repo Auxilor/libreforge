@@ -1,9 +1,11 @@
 package com.willfp.libreforge.commands
 
+import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.command.impl.Subcommand
 import com.willfp.libreforge.earning.EarningLimits
 import com.willfp.libreforge.plugin
 import org.bukkit.Bukkit
+import org.bukkit.OfflinePlayer
 import org.bukkit.command.CommandSender
 import org.bukkit.util.StringUtil
 import java.util.UUID
@@ -29,10 +31,18 @@ internal object CommandResetEarningLimits : Subcommand(
             return
         }
 
-        val player = runCatching { Bukkit.getOfflinePlayer(UUID.fromString(target)) }.getOrNull()
-            ?: Bukkit.getPlayerExact(target) ?: Bukkit.getOfflinePlayerIfCached(target)
+        val uuid = runCatching { UUID.fromString(target) }.getOrNull()
+        var player: OfflinePlayer? = Bukkit.getPlayerExact(target)
 
-        if (player == null) {
+        if (player == null && uuid != null) {
+            player = Bukkit.getOfflinePlayer(uuid)
+        }
+
+        if (player == null && Prerequisite.HAS_PAPER.isMet) {
+            player = Bukkit.getOfflinePlayerIfCached(target)
+        }
+
+        if (player == null || (!player.isOnline && !player.hasPlayedBefore())) {
             sender.sendMessage(plugin.langYml.getMessage("invalid-player"))
             return
         }
