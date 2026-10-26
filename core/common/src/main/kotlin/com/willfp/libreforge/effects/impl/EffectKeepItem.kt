@@ -7,6 +7,7 @@ import com.willfp.eco.core.data.keys.PersistentDataKeyType
 import com.willfp.eco.core.data.profile
 import com.willfp.eco.core.items.Items
 import com.willfp.eco.core.map.concurrentListMap
+import com.willfp.eco.util.NumberUtils
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
@@ -38,6 +39,12 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
             description = "The inventory slot of the item to keep, e.g. mainhand or slot_0. If omitted, the item providing this effect is kept.",
             type = ArgType.STRING,
             example = "mainhand"
+        )
+        optional(
+            "chance",
+            description = "The percent chance (0-100) that each item is kept on death. If omitted, the item is always kept. Supports expressions and placeholders.",
+            type = ArgType.EXPRESSION,
+            example = "50"
         )
     }
 
@@ -82,6 +89,10 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
                     continue
                 }
 
+                if (!player.rollKeepChance(config)) {
+                    continue
+                }
+
                 event.drops.remove(item)
 
                 if (Prerequisite.HAS_PAPER.isMet) {
@@ -97,6 +108,14 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
             val existing = player.profile.read(savedItemsKey)
             player.profile.write(savedItemsKey, existing + newEntries)
         }
+    }
+
+    private fun Player.rollKeepChance(config: Config): Boolean {
+        if (!config.has("chance")) {
+            return true
+        }
+
+        return NumberUtils.randFloat(0.0, 100.0) <= config.getDoubleFromExpression("chance", this)
     }
 
     private fun Player.slotsToKeep(config: Config, providedItem: ItemStack?): List<Int> {
