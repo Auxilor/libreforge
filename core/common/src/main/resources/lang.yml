@@ -58,7 +58,7 @@ messages:
   points-given-all: "&a%amount% &a%point% &fwere added to all players!"
   points-reset-all: "&fReset all players' &a%point% &f!"
 
-  earning-limit-reset: "&fReset &a%playername%'s &fearnings and interval timer for &a%group%&f!"
+  earning-limit-reset: "&fReset &a%playername%'s &fearnings for &a%group%&f!"
 
   plugin-not-installed: "&cYou don't have this plugin installed!"
 
