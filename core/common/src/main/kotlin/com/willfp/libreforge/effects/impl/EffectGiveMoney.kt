@@ -45,9 +45,8 @@ object EffectGiveMoney : Effect<EarningLimitGroup?>("give_money") {
         var amount = config.getDoubleFromExpression("amount", data)
 
         if (compileData != null) {
-            amount = minOf(amount, EarningLimits.getRemaining(player, compileData))
+            amount = EarningLimits.addEarned(player, compileData, amount)
             if (amount == 0.0) return true
-            EarningLimits.addEarned(player, compileData, amount)
         }
 
         player.balance += amount

@@ -199,29 +199,36 @@ object EarningLimits {
         return true
     }
 
-    fun getRemaining(player: OfflinePlayer, group: EarningLimitGroup): Double {
-        val state = getState(player, group)
-        if (state == null) {
+    /**
+     * Applies the earning limit and records earnings.
+     * This does not pay the reward, it needs to be done separately.
+     *
+     * @return Amount to actually be paid
+     */
+    fun addEarned(
+        player: OfflinePlayer,
+        group: EarningLimitGroup,
+        amount: Double,
+        convert: (Double) -> Double = { it }
+    ): Double {
+        if (!group.active) {
             plugin.logger.warning("Unknown or invalid earning-limit group: ${group.id}")
             return 0.0
         }
 
-        return state.remaining
-    }
+        if (amount == 0.0) return 0.0
 
-    fun addEarned(player: OfflinePlayer, group: EarningLimitGroup?, amount: Double) {
-        if (group == null || !amount.isFinite() || amount <= 0) {
-            return
-        }
-
-        if (!group.active) {
-            plugin.logger.warning("Unknown or invalid earning-limit group: ${group.id}")
-            return
-        }
-
+        var earned = 0.0
         update(Eco.get().playerProfileResolver.resolve(player), group) { state, policy, now ->
-            state.amount += amount
-            state.startTimer(policy, now)
+            val allowed = minOf(amount, state.remaining)
+            earned = if (allowed == 0.0) 0.0 else convert(allowed)
+
+            if (earned.isFinite() && earned > 0) {
+                state.amount += earned
+                state.startTimer(policy, now)
+            }
         }
+
+        return earned
     }
 }

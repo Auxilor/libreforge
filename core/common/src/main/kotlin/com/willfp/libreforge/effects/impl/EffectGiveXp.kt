@@ -51,9 +51,8 @@ object EffectGiveXp : Effect<EarningLimitGroup?>("give_xp") {
         var amount = config.getIntFromExpression("amount", data)
 
         if (compileData != null) {
-            amount = minOf(amount.toDouble(), EarningLimits.getRemaining(player, compileData)).toInt()
+            amount = EarningLimits.addEarned(player, compileData, amount.toDouble()) { it.toInt().toDouble() }.toInt()
             if (amount == 0) return true
-            EarningLimits.addEarned(player, compileData, amount.toDouble())
         }
 
         if (Prerequisite.HAS_PAPER.isMet) {

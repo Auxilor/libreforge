@@ -54,29 +54,25 @@ object EffectGivePrice : Effect<EarningLimitGroup?>("give_price") {
         val type = config.getFormattedString("type", data)
         val context = config.toPlaceholderContext(data)
 
-        val price = Prices.create(
+        var price = Prices.create(
             value,
             type,
             context
         )
 
-        if (compileData == null) {
-            price.giveTo(player)
-        } else {
-            val amount = price.getValue(player)
-            val remainingLimit = EarningLimits.getRemaining(player, compileData)
-            val finalAmount = minOf(amount, remainingLimit)
-            if (finalAmount == 0.0) return true
-
-            val finalPrice = Prices.create(
-                finalAmount.toString(),
-                type,
-                context
-            )
-
-            EarningLimits.addEarned(player, compileData, finalPrice.getValue(player))
-            finalPrice.giveTo(player)
+        if (compileData != null) {
+            val amount = EarningLimits.addEarned(player, compileData, price.getValue(player)) {
+                price = Prices.create(
+                    it.toString(),
+                    type,
+                    context
+                )
+                price.getValue(player)
+            }
+            if (amount == 0.0) return true
         }
+
+        price.giveTo(player)
 
         return true
     }

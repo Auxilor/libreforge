@@ -53,9 +53,8 @@ object EffectGivePoints : Effect<EarningLimitGroup?>("give_points") {
         var amount = config.getDoubleFromExpression("amount", data)
 
         if (compileData != null) {
-            amount = minOf(amount, EarningLimits.getRemaining(player, compileData))
+            amount = EarningLimits.addEarned(player, compileData, amount)
             if (amount == 0.0) return true
-            EarningLimits.addEarned(player, compileData, amount)
         }
 
         player.points.add(type, amount)
