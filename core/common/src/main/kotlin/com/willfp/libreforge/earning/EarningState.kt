@@ -27,13 +27,15 @@ internal data class EarningState(
         val now = maxOf(time, checkedAt)
 
         if (policy.cron != null) {
-            val lastCheck = maxOf(checkedAt, policy.cronChangedAt)
-
-            if (policy.nextAfter(lastCheck)?.let { it <= now } == true) {
-                reset()
+            if (expiresAt == 0L || checkedAt <= policy.cronChangedAt) {
+                val lastCheck = maxOf(checkedAt, policy.cronChangedAt)
+                expiresAt = policy.nextAfter(lastCheck) ?: 0
             }
 
-            expiresAt = policy.nextAfter(now) ?: 0
+            if (expiresAt != 0L && expiresAt <= now) {
+                reset()
+                expiresAt = policy.nextAfter(now) ?: 0
+            }
         } else {
             if (expiresAt != 0L && expiresAt <= now) {
                 reset()
