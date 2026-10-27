@@ -31,13 +31,14 @@ import com.willfp.libreforge.earning.EarningLimits
 import com.willfp.libreforge.earning.placeholder.EarningLimitPlaceholder
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.arguments.custom.CustomEffectArguments
+import com.willfp.libreforge.effects.impl.EffectTelekinesis
 import com.willfp.libreforge.effects.impl.bossbar.BossBarProgressPlaceholder
+import com.willfp.libreforge.effects.impl.bossbar.BossBars
 import com.willfp.libreforge.filters.Filters
 import com.willfp.libreforge.holidays.Holidays
 import com.willfp.libreforge.integrations.auraskills.AuraSkillsIntegration
 import com.willfp.libreforge.integrations.axplugins.axenvoy.AxEnvoyIntegration
 import com.willfp.libreforge.integrations.axplugins.axtrade.AxTradeIntegration
-import com.willfp.libreforge.integrations.bettermodel.BetterModelIntegration
 import com.willfp.libreforge.integrations.citizens.CitizensIntegration
 import com.willfp.libreforge.integrations.cmi.CMIIntegration
 import com.willfp.libreforge.integrations.custom_blocks.craftengine.CraftEngineIntegration
@@ -56,7 +57,7 @@ import com.willfp.libreforge.integrations.lands.LandsIntegration
 import com.willfp.libreforge.integrations.levelledmobs.LevelledMobsIntegration
 import com.willfp.libreforge.integrations.luckperms.LuckPermsIntegration
 import com.willfp.libreforge.integrations.mcmmo.McMMOIntegration
-import com.willfp.libreforge.integrations.modelengine.ModelEngineIntegration
+import com.willfp.libreforge.integrations.model.ModelIntegration
 import com.willfp.libreforge.integrations.mythicmobs.MythicMobsIntegration
 import com.willfp.libreforge.integrations.notbounties.NotBountiesIntegration
 import com.willfp.libreforge.integrations.paper.PaperIntegration
@@ -95,6 +96,7 @@ import com.willfp.libreforge.triggers.Triggers
 import com.willfp.libreforge.triggers.impl.HotkeyListener
 import com.willfp.libreforge.triggers.impl.TriggerDateBoundary
 import com.willfp.libreforge.triggers.impl.TriggerMeleeAttack
+import com.willfp.libreforge.triggers.impl.TriggerMove
 import org.bukkit.event.Listener
 
 internal lateinit var plugin: LibreforgeSpigotPlugin
@@ -152,6 +154,8 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
         if (Prerequisite.HAS_PAPER.isMet) {
             PaperIntegration.load(this)
             TriggerMeleeAttack.registerPaperExclusiveListeners()
+            TriggerMove.registerPaperListeners()
+            EffectTelekinesis.registerPaperListeners()
         }
 
         if (ClassUtils.exists("org.purpurmc.purpur.event.inventory.AnvilTakeResultEvent")
@@ -243,6 +247,8 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
 
         // Applies everything marked on holder states, at the start of every tick.
         HolderStates.start()
+
+        DateClock.start()
     }
 
     override fun handleDisable() {
@@ -256,7 +262,8 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
         val listeners = mutableListOf<Listener>(
             EffectDataFixer,
             ItemRefreshListener,
-            HotkeyListener
+            HotkeyListener,
+            BossBars
         )
 
         listeners += HolderLifecycle.listeners()
@@ -284,8 +291,8 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             IntegrationLoader("AxEnvoy") { AxEnvoyIntegration.load(this) },
             IntegrationLoader("AxTrade") { AxTradeIntegration.load(this) },
             IntegrationLoader("Votifier") { VotifierIntegration.load(this) },
-            IntegrationLoader("ModelEngine") { ModelEngineIntegration.load(this) },
-            IntegrationLoader("BetterModel") { BetterModelIntegration.load(this) },
+            IntegrationLoader("ModelEngine") { ModelIntegration("ModelEngine").load(this) },
+            IntegrationLoader("BetterModel") { ModelIntegration("BetterModel").load(this) },
             IntegrationLoader("FancyNpcs") { FancyNPCsIntegration.load(this) },
             IntegrationLoader("UltimateMobCoins") { UltimateMobCoinsIntegration.load(this) },
             IntegrationLoader("HuskTowns") { HuskTownsIntegration.load(this) },

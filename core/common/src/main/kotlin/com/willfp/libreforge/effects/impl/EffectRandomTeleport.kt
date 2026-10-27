@@ -18,6 +18,8 @@ import org.bukkit.World
 import org.bukkit.entity.Player
 
 object EffectRandomTeleport : Effect<NoCompileData>("random_teleport") {
+    private const val MAX_ATTEMPTS = 1000
+
     override val description = "Teleports the player to a random location within a radius, landing on the highest safe block."
     override val categories = setOf("movement")
 
@@ -45,14 +47,17 @@ object EffectRandomTeleport : Effect<NoCompileData>("random_teleport") {
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val player = data.player ?: return false
         val radius = config.getIntFromExpression("radius", data)
-        val minRadius = config.getOrNull("min_radius") { getIntFromExpression(it, data) } ?: 0
+        if (radius < 0) return false
+        val minRadius = (config.getOrNull("min_radius") { getIntFromExpression(it, data) } ?: 0).coerceAtLeast(0)
 
         val loc = player.location.clone()
         val world = loc.world ?: return false
 
         var offsetX: Int
         var offsetZ: Int
+        var attempts = 0
         do {
+            if (attempts++ >= MAX_ATTEMPTS) return false
             offsetX = NumberUtils.randInt(-radius, radius)
             offsetZ = NumberUtils.randInt(-radius, radius)
         } while (offsetX * offsetX + offsetZ * offsetZ < minRadius * minRadius)

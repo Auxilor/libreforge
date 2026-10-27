@@ -16,7 +16,9 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.event.DropResult
 import com.willfp.libreforge.triggers.event.EditableDropEvent
+import kotlin.math.floor
 import kotlin.math.roundToInt
+import kotlin.random.Random
 
 object EffectMultiplyDrops : Effect<NoCompileData>("multiply_drops") {
     override val description = "Multiplies the item drops from an event, either by a flat multiplier or by simulating a fortune level."
@@ -41,6 +43,13 @@ object EffectMultiplyDrops : Effect<NoCompileData>("multiply_drops") {
             type = ArgType.ITEM_LIST,
             default = "[]"
         )
+        optional(
+            "fractional",
+            description = "If a multiplier with a fraction, such as 1.25, gives an extra item that often instead of being rounded to a whole number.",
+            type = ArgType.BOOLEAN,
+            default = "false",
+            example = "true"
+        )
     }
 
     private val whitelist = mutableListOf<TestableItem>()
@@ -58,12 +67,14 @@ object EffectMultiplyDrops : Effect<NoCompileData>("multiply_drops") {
         val isBlacklisting = plugin.configYml.getBool("effects.multiply_drops.prevent-duplication")
         val whitelist = plugin.configYml.getStrings("effects.multiply_drops.whitelist").map { Items.lookup(it) }
 
+        val fractional = config.has("fractional") && config.getBool("fractional")
+
         val multiplier = if (config.has("fortune")) {
             val fortune = config.getIntFromExpression("fortune", data)
-            (Math.random() * (fortune.toDouble() - 1) + 1.1).roundToInt()
+            (Math.random() * (fortune.toDouble() - 1) + 1.1).roundToInt().toDouble()
         } else if (config.has("multiplier")) {
-            config.getDoubleFromExpression("multiplier", data).roundToInt()
-        } else 1
+            config.getDoubleFromExpression("multiplier", data)
+        } else 1.0
 
         event.addModifier {
             var matches = true
@@ -73,16 +84,22 @@ object EffectMultiplyDrops : Effect<NoCompileData>("multiply_drops") {
             }
 
             if (it.maxStackSize > 1 && matches) {
-                if (it.type.isOccluding && isBlacklisting && !whitelist.matches(it)) {
+                if (!event.duplicationSafe && it.type.isOccluding && isBlacklisting && !whitelist.matches(it)) {
                     return@addModifier DropResult(it, 0)
                 }
 
-                it.amount *= multiplier
+                it.amount = if (fractional) scaled(it.amount, multiplier) else it.amount * multiplier.roundToInt()
             }
 
             DropResult(it, 0)
         }
 
         return true
+    }
+
+    private fun scaled(amount: Int, multiplier: Double): Int {
+        val exact = amount * multiplier
+        val whole = floor(exact)
+        return whole.toInt() + if (Random.nextDouble() < exact - whole) 1 else 0
     }
 }

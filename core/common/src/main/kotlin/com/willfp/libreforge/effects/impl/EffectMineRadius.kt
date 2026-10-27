@@ -19,8 +19,7 @@ import org.bukkit.entity.Player
 import kotlin.math.abs
 
 object EffectMineRadius : MineBlockEffect<NoCompileData>("mine_radius") {
-    override val description = "Mines all blocks in a cube radius around the triggered block, " +
-            "or in flat layers facing the player if depth is set."
+    override val description = "Mines all blocks in a cube radius around the triggered block, or in flat layers facing the player if depth is set."
     override val categories = setOf("world")
 
     override val parameters = setOf(

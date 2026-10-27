@@ -31,6 +31,7 @@ import java.util.UUID
 object EffectAddHolderToVictim : Effect<HolderTemplate>("add_holder_to_victim") {
     override val description = "Temporarily applies a set of effects and conditions to the victim for a given duration."
     override val categories = setOf("meta")
+    override val additionalInfo = listOf("Mobs need entity holders enabled in the libreforge config.yml.")
 
     override val parameters = setOf(
         TriggerParameter.VICTIM
@@ -76,20 +77,20 @@ object EffectAddHolderToVictim : Effect<HolderTemplate>("add_holder_to_victim") 
     }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: HolderTemplate): Boolean {
-        val player = data.victim as? Player ?: return false
+        val victim = data.victim ?: return false
 
         val duration = config.getIntFromExpression("duration", data).coerceAtLeast(1)
         val holder = compileData.toHolder().nest(data.holder)
 
-        holders[player.uniqueId].add(holder)
-        player.toDispatcher().invalidate(provider)
+        holders[victim.uniqueId].add(holder)
+        victim.toDispatcher().invalidate(provider)
 
         plugin.scheduler.global().runLater(duration.toLong()) {
-            holders[player.uniqueId].remove(holder)
-            if (holders[player.uniqueId].isEmpty()) {
-                holders.remove(player.uniqueId)
+            holders[victim.uniqueId].remove(holder)
+            if (holders[victim.uniqueId].isEmpty()) {
+                holders.remove(victim.uniqueId)
             }
-            player.toDispatcher().invalidate(provider)
+            victim.toDispatcher().invalidate(provider)
         }
 
         return true

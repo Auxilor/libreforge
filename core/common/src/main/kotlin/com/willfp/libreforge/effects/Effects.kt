@@ -221,6 +221,7 @@ import com.willfp.libreforge.effects.impl.EffectSetPoints
 import com.willfp.libreforge.effects.impl.EffectSetSaturation
 import com.willfp.libreforge.effects.impl.EffectSetTime
 import com.willfp.libreforge.effects.impl.EffectSetUnbreakable
+import com.willfp.libreforge.effects.impl.EffectSetUseCooldown
 import com.willfp.libreforge.effects.impl.EffectSetVelocity
 import com.willfp.libreforge.effects.impl.EffectSetVictimVelocity
 import com.willfp.libreforge.effects.impl.EffectSetWeather
@@ -271,7 +272,6 @@ import com.willfp.libreforge.effects.impl.EffectWearHeldItem
 import com.willfp.libreforge.effects.impl.EffectXpMultiplier
 import com.willfp.libreforge.enumValueOfOrNull
 import com.willfp.libreforge.filters.Filters
-import com.willfp.libreforge.integrations.paper.impl.EffectDropPickupItem
 import com.willfp.libreforge.mutators.Mutators
 import com.willfp.libreforge.separatorAmbivalent
 import com.willfp.libreforge.toWeightedList
@@ -613,7 +613,6 @@ object Effects : AliasedRegistry<Effect<*>>() {
         register(EffectDrill)
         register(EffectDropItem)
         register(EffectDropItemSlot)
-        register(EffectDropPickupItem)
         register(EffectDropRandomItem)
         register(EffectDropWeightedRandomItem)
         register(EffectExtinguish)
@@ -722,6 +721,7 @@ object Effects : AliasedRegistry<Effect<*>>() {
         register(EffectSetPoints)
         register(EffectSetSaturation)
         register(EffectSetUnbreakable)
+        register(EffectSetUseCooldown)
         register(EffectSetVelocity)
         register(EffectSetVictimVelocity)
         register(EffectShoot)

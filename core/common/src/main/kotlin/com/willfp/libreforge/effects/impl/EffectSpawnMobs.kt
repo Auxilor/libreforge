@@ -9,6 +9,7 @@ import com.willfp.libreforge.Regions
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
+import com.willfp.libreforge.getDoubleFromExpressionOrNull
 import com.willfp.libreforge.getFormattedString
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.plugin
@@ -64,9 +65,8 @@ object EffectSpawnMobs : Effect<NoCompileData>("spawn_mobs") {
         )
         optional(
             "health",
-            description = "The max health (and starting health) to set on each spawned mob. Supports expressions.",
+            description = "The max health (and starting health) to set on each spawned mob. Defaults to the mob's normal max health. Supports expressions.",
             type = ArgType.EXPRESSION,
-            default = "20",
             example = "20 + %level% * 5"
         )
     }
@@ -75,17 +75,14 @@ object EffectSpawnMobs : Effect<NoCompileData>("spawn_mobs") {
         val location = data.location ?: return false
         location.world ?: return false
         val victim = data.victim
-        val player = data.player
 
-        if (victim != null) {
-            if (victim.getMetadata("spawn-mobs-target").isNotEmpty()) {
-                return false
-            }
+        if (victim != null && victim.getMetadata("spawn-mobs-target").isNotEmpty()) {
+            return false
         }
 
         val amount = config.getIntFromExpression("amount", data)
         val ticksToLive = config.getIntFromExpression("ticks_to_live", data)
-        val health = config.getDoubleFromExpression("health", data)
+        val health = config.getDoubleFromExpressionOrNull("health", data)
         val range = config.getDoubleFromExpression("range", data)
 
         val entityType = Entities.lookup(config.getFormattedString("entity", data))
@@ -102,28 +99,38 @@ object EffectSpawnMobs : Effect<NoCompileData>("spawn_mobs") {
             }
 
             val mob = entityType.spawn(locationToSpawn) as Mob
-            val healthAttr = mob.getAttribute(Attribute.MAX_HEALTH) ?: continue
-            healthAttr.baseValue = health
 
-            if (victim != null) {
-                mob.target = victim
-                mob.setMetadata("spawn-mobs-target", plugin.createMetadataValue(victim))
-            }
-
-            if (player != null) {
-                mob.setMetadata("spawn-mobs-avoid", plugin.createMetadataValue(player.uniqueId))
-            }
-
-            mob.health = health
-
-            if (config.getBool("owner") && mob is Tameable) {
-                mob.owner = player
-            }
+            setUpMob(mob, config, data, health)
 
             plugin.scheduler.on(mob).runLater(ticksToLive.toLong()) { mob.remove() }
         }
 
         return true
+    }
+
+    private fun setUpMob(mob: Mob, config: Config, data: TriggerData, health: Double?) {
+        val victim = data.victim
+        val player = data.player
+
+        if (health != null) {
+            mob.getAttribute(Attribute.MAX_HEALTH)?.let { maxHealth ->
+                maxHealth.baseValue = health
+                mob.health = health
+            }
+        }
+
+        if (victim != null) {
+            mob.target = victim
+            mob.setMetadata("spawn-mobs-target", plugin.createMetadataValue(victim))
+        }
+
+        if (player != null) {
+            mob.setMetadata("spawn-mobs-avoid", plugin.createMetadataValue(player.uniqueId))
+        }
+
+        if (config.getBool("owner") && mob is Tameable) {
+            mob.owner = player
+        }
     }
 
     @EventHandler

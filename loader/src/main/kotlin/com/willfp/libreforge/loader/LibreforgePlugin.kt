@@ -95,6 +95,14 @@ abstract class LibreforgePlugin : EcoPlugin() {
         }
 
         for (config in fetchConfigs(category)) {
+            if (!VALID_ID.matches(config.id)) {
+                this.logger.warning(
+                    "Skipping ${category.id} config '${config.id}': IDs may only contain lowercase letters, " +
+                        "numbers and underscores (a-z, 0-9, _), so rename the file."
+                )
+                continue
+            }
+
             withLogs(category, "loading config ${config.id}") {
                 category.handle.register(config.handle)
                 if (preload) {
@@ -256,4 +264,9 @@ abstract class LibreforgePlugin : EcoPlugin() {
     }
 
     private object RegistryLock
+
+    private companion object {
+        /** The pattern eco's registries accept for an ID. */
+        val VALID_ID = Regex("[a-z0-9_]{1,100}")
+    }
 }
