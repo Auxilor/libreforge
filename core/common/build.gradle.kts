@@ -2,12 +2,8 @@ dependencies {
     implementation("dev.romainguy:kotlin-math:1.6.0") {
         isTransitive = false
     }
-    implementation("com.willfp:ModelEngineBridge:1.4.0")
     implementation("org.quartz-scheduler:quartz:2.5.2") {
         isTransitive = false
-    }
-    compileOnly("io.github.toxicity188:bettermodel-bukkit-api:2.2.0") {
-        exclude("*", "kotlin-stdlib")
     }
 
     compileOnly("org.purpurmc.purpur:purpur-api:1.21.4-R0.1-SNAPSHOT")
