@@ -2,11 +2,9 @@ package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.map.concurrentListMap
-import com.willfp.eco.core.scheduling.TaskContext
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.ProvidedHolder
-import com.willfp.libreforge.Regions
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -49,12 +47,7 @@ object EffectInfiniteBucket : Effect<Set<String>>("infinite_bucket") {
 
         val slot = player.inventory.heldItemSlot
 
-        refillContext(player).run {
-            val item = player.inventory.getItem(slot)
-            if (item != null && item.type == Material.BUCKET) {
-                player.inventory.setItem(slot, ItemStack(event.bucket))
-            }
-        }
+        refillLater(player, slot, ItemStack(event.bucket))
     }
 
     @EventHandler
@@ -65,16 +58,17 @@ object EffectInfiniteBucket : Effect<Set<String>>("infinite_bucket") {
 
         val slot = player.inventory.heldItemSlot
 
-        refillContext(player).run {
+        refillLater(player, slot, ItemStack(Material.MILK_BUCKET))
+    }
+
+    private fun refillLater(player: Player, slot: Int, filled: ItemStack) {
+        plugin.scheduler.on(player).runLater(1) {
             val item = player.inventory.getItem(slot)
-            if (item != null && item.type == Material.BUCKET) {
-                player.inventory.setItem(slot, ItemStack(Material.MILK_BUCKET))
+            if (player.isOnline && item?.type == Material.BUCKET && item.amount == 1) {
+                player.inventory.setItem(slot, filled)
             }
         }
     }
-
-    private fun refillContext(player: Player): TaskContext =
-        if (Regions.isFolia) plugin.scheduler.on(player) else plugin.scheduler.async()
 
     override fun makeCompileData(config: Config, context: ViolationContext): Set<String> {
         val types = config.getStrings("types", "type")
