@@ -16,6 +16,7 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.event.DropResult
 import com.willfp.libreforge.triggers.event.EditableDropEvent
+import org.bukkit.inventory.ItemStack
 import kotlin.math.floor
 import kotlin.math.roundToInt
 import kotlin.random.Random
@@ -70,32 +71,37 @@ object EffectMultiplyDrops : Effect<NoCompileData>("multiply_drops") {
         val fractional = config.has("fractional") && config.getBool("fractional")
 
         val multiplier = if (config.has("fortune")) {
-            val fortune = config.getIntFromExpression("fortune", data)
-            (Math.random() * (fortune.toDouble() - 1) + 1.1).roundToInt().toDouble()
+            fortuneDropAmount(config.getIntFromExpression("fortune", data)).toDouble()
         } else if (config.has("multiplier")) {
             config.getDoubleFromExpression("multiplier", data)
         } else 1.0
 
-        event.addModifier {
+        event.addModifier { drop ->
             var matches = true
             if (config.has("on_items")) {
                 val items = config.getFormattedStrings("on_items", data).map { string -> Items.lookup(string) }
-                matches = items.any { test -> test.matches(it) }
+                matches = items.any { test -> test.matches(drop) }
             }
 
-            if (it.maxStackSize > 1 && matches) {
-                if (!event.duplicationSafe && it.type.isOccluding && isBlacklisting && !whitelist.matches(it)) {
-                    return@addModifier DropResult(it, 0)
+            if (drop.maxStackSize > 1 && matches) {
+                if (isBlacklisting && !event.duplicationSafe && isProtected(drop, whitelist)) {
+                    return@addModifier DropResult(drop, 0)
                 }
 
-                it.amount = if (fractional) scaled(it.amount, multiplier) else it.amount * multiplier.roundToInt()
+                drop.amount = if (fractional) scaled(drop.amount, multiplier) else drop.amount * wholeMultiplier(multiplier)
             }
 
-            DropResult(it, 0)
+            DropResult(drop, 0)
         }
 
         return true
     }
+
+    private fun isProtected(drop: ItemStack, whitelist: List<TestableItem>): Boolean =
+        drop.type.isOccluding && !whitelist.matches(drop)
+
+    private fun wholeMultiplier(multiplier: Double): Int =
+        if (multiplier > 0) multiplier.roundToInt().coerceAtLeast(1) else multiplier.roundToInt()
 
     private fun scaled(amount: Int, multiplier: Double): Int {
         val exact = amount * multiplier
