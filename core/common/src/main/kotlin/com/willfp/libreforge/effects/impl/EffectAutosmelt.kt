@@ -81,12 +81,12 @@ object EffectAutosmelt : Effect<NoCompileData>("autosmelt") {
             .getEnchantmentLevel(getEnchantment("fortune")!!, false)
 
         event.addModifier { drop ->
-            var (type, xp) = getOutput(drop.type)
+            val input = drop.type
+            var (type, xp) = getOutput(input)
             @Suppress("DEPRECATION")
             drop.type = type
 
-            if (fortune > 0 && isFortuneDrop(drop, type, event)) {
-                drop.amount = drop.amount.coerceAtLeast(fortuneDropAmount(fortune))
+            if (fortune > 0 && input != type && isFortuneDrop(drop, type, event)) {
                 xp++
             }
 
