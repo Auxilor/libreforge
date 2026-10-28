@@ -36,7 +36,7 @@ object EffectTriggerCustom : Effect<NoCompileData>("trigger_custom") {
         val trigger = TriggerGroupCustom.create(config.getFormattedString("trigger", data))
         val value = config.getDoubleFromExpression("value", data)
 
-        trigger.dispatch(dispatcher, data.copy(value = value))
+        trigger.dispatch(dispatcher, data.copy(value = value), allowDuplicates = true)
 
         return true
     }
