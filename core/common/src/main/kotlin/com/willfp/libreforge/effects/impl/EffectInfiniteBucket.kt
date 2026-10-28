@@ -11,7 +11,6 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.get
 import com.willfp.libreforge.getStrings
-import com.willfp.libreforge.plugin
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -45,9 +44,7 @@ object EffectInfiniteBucket : Effect<Set<String>>("infinite_bucket") {
         val player = event.player
         if (!player.isInfinite(event.bucket.name)) return
 
-        val slot = player.inventory.heldItemSlot
-
-        refillLater(player, slot, ItemStack(event.bucket))
+        event.itemStack = ItemStack(event.bucket)
     }
 
     @EventHandler
@@ -56,18 +53,7 @@ object EffectInfiniteBucket : Effect<Set<String>>("infinite_bucket") {
         if (event.item.type != Material.MILK_BUCKET) return
         if (!player.isInfinite("MILK_BUCKET")) return
 
-        val slot = player.inventory.heldItemSlot
-
-        refillLater(player, slot, ItemStack(Material.MILK_BUCKET))
-    }
-
-    private fun refillLater(player: Player, slot: Int, filled: ItemStack) {
-        plugin.scheduler.on(player).runLater(1) {
-            val item = player.inventory.getItem(slot)
-            if (player.isOnline && item?.type == Material.BUCKET && item.amount == 1) {
-                player.inventory.setItem(slot, filled)
-            }
-        }
+        event.replacement = ItemStack(Material.MILK_BUCKET)
     }
 
     override fun makeCompileData(config: Config, context: ViolationContext): Set<String> {
