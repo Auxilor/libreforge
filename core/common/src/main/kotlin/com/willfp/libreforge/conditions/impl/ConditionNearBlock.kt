@@ -14,6 +14,8 @@ import org.bukkit.Material
 import org.bukkit.World
 import org.bukkit.entity.LivingEntity
 
+private const val CHUNK_SHIFT = 4
+
 object ConditionNearBlock : Condition<NoCompileData>("near_block") {
     override val description = "Passes when a block of the specified type is found within a cubic radius of the entity."
     override val categories = setOf("world")
@@ -46,11 +48,14 @@ object ConditionNearBlock : Condition<NoCompileData>("near_block") {
         val minY = (location.blockY - radius).coerceAtLeast(world.minHeight)
         val maxY = (location.blockY + radius).coerceAtMost(world.maxHeight - 1)
         val areaReachable = Regions.canReach(location, radius.toDouble())
+        val reachableChunks = HashMap<Pair<Int, Int>, Boolean>()
 
         for (y in minY..maxY) {
             for (x in location.blockX - radius..location.blockX + radius) {
                 for (z in location.blockZ - radius..location.blockZ + radius) {
-                    val reachable = areaReachable || Regions.canReach(blockLocation(world, x, y, z))
+                    val reachable = areaReachable || reachableChunks.getOrPut(chunkOf(x, z)) {
+                        Regions.canReach(blockLocation(world, x, y, z))
+                    }
 
                     if (reachable && world.getType(x, y, z) == targetMaterial) {
                         return true
@@ -64,4 +69,6 @@ object ConditionNearBlock : Condition<NoCompileData>("near_block") {
 
     private fun blockLocation(world: World, x: Int, y: Int, z: Int) =
         Location(world, x.toDouble(), y.toDouble(), z.toDouble())
+
+    private fun chunkOf(x: Int, z: Int) = Pair(first = x shr CHUNK_SHIFT, second = z shr CHUNK_SHIFT)
 }
