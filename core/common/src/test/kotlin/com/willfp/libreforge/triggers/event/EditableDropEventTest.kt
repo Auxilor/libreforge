@@ -44,8 +44,34 @@ class EditableDropEventTest {
             DropResult(drop, 1)
         }
 
+        assertEquals(3, event.items.single().xp)
+    }
+
+    @Test
+    fun `equal drops each modify`() {
+        val event = eventWith(object : ItemStack() {}, object : ItemStack() {})
+        var runs = 0
+        event.addModifier { drop ->
+            runs++
+            DropResult(drop, 1)
+        }
+
         event.items
 
-        assertEquals(3, event.items.single().xp)
+        assertEquals(2, runs)
+        assertEquals(listOf(1, 1), event.items.map { it.xp })
+    }
+
+    @Test
+    fun `mid-read modifier hits all`() {
+        val event = eventWith(object : ItemStack() {}, object : ItemStack() {})
+        event.addModifier { drop ->
+            if (event.drops.first() === drop) {
+                event.addModifier { inner -> DropResult(inner, 2) }
+            }
+            DropResult(drop, 1)
+        }
+
+        assertEquals(listOf(3, 3), event.items.map { it.xp })
     }
 }

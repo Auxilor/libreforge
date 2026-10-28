@@ -155,7 +155,15 @@ class EditableDropEvent(
      * early (to sell drops, for example) does not multiply or convert them again.
      */
     val items: List<DropResult>
-        get() = drops.map { item -> DropResult(item, applyPendingModifiers(item)) }
+        get() {
+            var modifierCount: Int
+            var results: List<DropResult>
+            do {
+                modifierCount = modifiers.size
+                results = drops.map { item -> DropResult(item, applyPendingModifiers(item)) }
+            } while (modifiers.size != modifierCount)
+            return results
+        }
 
     private fun applyPendingModifiers(item: ItemStack): Int {
         val (applied, xp) = appliedModifiers[item] ?: 0 to 0
