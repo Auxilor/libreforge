@@ -31,12 +31,20 @@ object EffectTriggerCustom : Effect<NoCompileData>("trigger_custom") {
         )
     }
 
+    private val customDispatchDepth = ThreadLocal.withInitial { 0 }
+
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
         val dispatcher = data.dispatcher
         val trigger = TriggerGroupCustom.create(config.getFormattedString("trigger", data))
         val value = config.getDoubleFromExpression("value", data)
+        val depth = customDispatchDepth.get()
 
-        trigger.dispatch(dispatcher, data.copy(value = value), allowDuplicates = true)
+        customDispatchDepth.set(depth + 1)
+        try {
+            trigger.dispatch(dispatcher, data.copy(value = value), allowDuplicates = depth == 0)
+        } finally {
+            customDispatchDepth.set(depth)
+        }
 
         return true
     }
