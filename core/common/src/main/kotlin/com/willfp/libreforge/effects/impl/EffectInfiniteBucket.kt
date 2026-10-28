@@ -1,6 +1,7 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.map.concurrentListMap
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.Dispatcher
@@ -11,11 +12,13 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.get
 import com.willfp.libreforge.getStrings
+import com.willfp.libreforge.plugin
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerBucketEmptyEvent
 import org.bukkit.event.player.PlayerItemConsumeEvent
+import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
 import java.util.UUID
 
@@ -53,7 +56,19 @@ object EffectInfiniteBucket : Effect<Set<String>>("infinite_bucket") {
         if (event.item.type != Material.MILK_BUCKET) return
         if (!player.isInfinite("MILK_BUCKET")) return
 
-        event.replacement = ItemStack(Material.MILK_BUCKET)
+        if (Prerequisite.HAS_PAPER.isMet) {
+            event.replacement = ItemStack(Material.MILK_BUCKET)
+        } else {
+            refillMilkLater(player, event.hand)
+        }
+    }
+
+    private fun refillMilkLater(player: Player, hand: EquipmentSlot) {
+        plugin.scheduler.on(player).runLater(1) {
+            if (player.isOnline && player.inventory.getItem(hand).type == Material.BUCKET) {
+                player.inventory.setItem(hand, ItemStack(Material.MILK_BUCKET))
+            }
+        }
     }
 
     override fun makeCompileData(config: Config, context: ViolationContext): Set<String> {
