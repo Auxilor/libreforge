@@ -45,11 +45,14 @@ object ConditionNearBlock : Condition<NoCompileData>("near_block") {
         val targetMaterial = Material.matchMaterial(config.getString("block").uppercase()) ?: return false
         val minY = (location.blockY - radius).coerceAtLeast(world.minHeight)
         val maxY = (location.blockY + radius).coerceAtMost(world.maxHeight - 1)
+        val areaReachable = Regions.canReach(location, radius.toDouble())
 
         for (y in minY..maxY) {
             for (x in location.blockX - radius..location.blockX + radius) {
                 for (z in location.blockZ - radius..location.blockZ + radius) {
-                    if (world.getType(x, y, z) == targetMaterial && Regions.canReach(blockLocation(world, x, y, z))) {
+                    val reachable = areaReachable || Regions.canReach(blockLocation(world, x, y, z))
+
+                    if (reachable && world.getType(x, y, z) == targetMaterial) {
                         return true
                     }
                 }
