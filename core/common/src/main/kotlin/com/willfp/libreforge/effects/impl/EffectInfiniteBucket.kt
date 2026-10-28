@@ -35,6 +35,8 @@ object EffectInfiniteBucket : Effect<Set<String>>("infinite_bucket") {
         )
     }
 
+    private const val OFF_HAND_SLOT = 40
+
     private val activePlayers = concurrentListMap<UUID, Pair<UUID, Set<String>>>()
 
     private fun Player.isInfinite(type: String): Boolean {
@@ -64,9 +66,11 @@ object EffectInfiniteBucket : Effect<Set<String>>("infinite_bucket") {
     }
 
     private fun refillMilkLater(player: Player, hand: EquipmentSlot) {
+        val inventory = player.inventory
+        val slot = if (hand == EquipmentSlot.OFF_HAND) OFF_HAND_SLOT else inventory.heldItemSlot
         plugin.scheduler.on(player).runLater(1) {
-            if (player.isOnline && player.inventory.getItem(hand).type == Material.BUCKET) {
-                player.inventory.setItem(hand, ItemStack(Material.MILK_BUCKET))
+            if (player.isOnline && inventory.getItem(slot)?.type == Material.BUCKET) {
+                inventory.setItem(slot, ItemStack(Material.MILK_BUCKET))
             }
         }
     }
