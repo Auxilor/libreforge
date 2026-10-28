@@ -175,17 +175,13 @@ abstract class Trigger(
         // Finally, trigger effects
         for ((block, holder) in triggerableEffects) {
             // Fixes cancel_event not working
-            if (data.event is Cancellable && data.event.isCancelled) {
-                // alt_click triggers are special and should be allowed to trigger even if the event is cancelled
-                // Otherwise, clicking the air will not trigger the alt_click trigger
-                if (this !is TriggerAltClick) {
-                    return
-                }
+            // alt_click triggers are special and should be allowed to trigger even if the event is cancelled
+            // Otherwise, clicking the air will not trigger the alt_click trigger
+            if (data.event is Cancellable && data.event.isCancelled && this !is TriggerAltClick) {
+                break
             }
 
-            val dispatchWithHolder = holderDispatches[holder] ?: continue
-
-            block.tryTrigger(dispatchWithHolder)
+            holderDispatches[holder]?.let { block.tryTrigger(it) }
         }
 
         // Only the counters listening to this trigger.
