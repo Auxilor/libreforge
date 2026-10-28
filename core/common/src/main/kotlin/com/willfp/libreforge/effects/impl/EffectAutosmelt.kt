@@ -17,7 +17,6 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.FurnaceRecipe
 import org.bukkit.inventory.ItemStack
 import kotlin.math.ceil
-import kotlin.math.roundToInt
 
 object EffectAutosmelt : Effect<NoCompileData>("autosmelt") {
     override val description = "Automatically smelts blocks as they are mined, converting drops to their furnace output."
@@ -81,13 +80,13 @@ object EffectAutosmelt : Effect<NoCompileData>("autosmelt") {
         val fortune = FastItemStack.wrap(player.inventory.itemInMainHand)
             .getEnchantmentLevel(getEnchantment("fortune")!!, false)
 
-        event.addModifier {
-            var (type, xp) = getOutput(it.type)
+        event.addModifier { drop ->
+            val input = drop.type
+            var (type, xp) = getOutput(input)
             @Suppress("DEPRECATION")
-            it.type = type
+            drop.type = type
 
-            if (fortune > 0 && it.maxStackSize > 1 && event.cause == DropCause.BLOCK && fortuneMaterials.contains(type)) {
-                it.amount = (Math.random() * (fortune.toDouble() - 1) + 1.1).roundToInt()
+            if (fortune > 0 && input != type && isFortuneDrop(drop, type, event)) {
                 xp++
             }
 
@@ -95,9 +94,12 @@ object EffectAutosmelt : Effect<NoCompileData>("autosmelt") {
                 xp = 0
             }
 
-            DropResult(it, xp)
+            DropResult(drop, xp)
         }
     }
+
+    private fun isFortuneDrop(drop: ItemStack, type: Material, event: EditableDropEvent): Boolean =
+        drop.maxStackSize > 1 && event.cause == DropCause.BLOCK && type in fortuneMaterials
 
     private fun handleItem(item: ItemStack) {
         val (type, _) = getOutput(item.type)

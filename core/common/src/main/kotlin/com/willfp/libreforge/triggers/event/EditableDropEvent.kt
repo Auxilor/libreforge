@@ -9,6 +9,7 @@ import org.bukkit.event.Cancellable
 import org.bukkit.event.Event
 import org.bukkit.event.HandlerList
 import org.bukkit.inventory.ItemStack
+import java.util.IdentityHashMap
 
 /*
  * An ItemStack paired with accumulated XP from drop modifiers.
@@ -120,6 +121,8 @@ class EditableDropEvent(
 
     private val modifiers = mutableListOf<DropModifier>()
 
+    private val appliedModifiers = IdentityHashMap<ItemStack, Pair<Int, Int>>()
+
     // ── Convenience accessors forwarded from context (backwards compat) ──────
 
     /** Shorthand for [DropContext.player]. */
@@ -147,9 +150,28 @@ class EditableDropEvent(
     /**
      * The current [drops] with all registered modifiers applied.
      * XP values from every modifier are summed per item.
+     *
+     * Each modifier runs on a drop only once, however many times this is read, so reading it
+     * early (to sell drops, for example) does not multiply or convert them again.
      */
     val items: List<DropResult>
-        get() = drops.map { modifiers.modify(it) }
+        get() {
+            var modifierCount: Int
+            var results: List<DropResult>
+            do {
+                modifierCount = modifiers.size
+                results = drops.map { item -> DropResult(item, applyPendingModifiers(item)) }
+            } while (modifiers.size != modifierCount)
+            return results
+        }
+
+    private fun applyPendingModifiers(item: ItemStack): Int {
+        val (applied, xp) = appliedModifiers[item] ?: 0 to 0
+        val pending = modifiers.drop(applied)
+        val total = xp + pending.modify(item).xp
+        appliedModifiers[item] = applied + pending.size to total
+        return total
+    }
 
     /**
      * Remove [item] from [drops] by equality.
