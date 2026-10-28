@@ -35,4 +35,17 @@ class EditableDropEventTest {
 
         assertEquals(3, event.items.single().xp)
     }
+
+    @Test
+    fun `modifier added mid-read runs`() {
+        val event = eventWith(object : ItemStack() {})
+        event.addModifier { drop ->
+            event.addModifier { inner -> DropResult(inner, 2) }
+            DropResult(drop, 1)
+        }
+
+        event.items
+
+        assertEquals(3, event.items.single().xp)
+    }
 }

@@ -159,8 +159,9 @@ class EditableDropEvent(
 
     private fun applyPendingModifiers(item: ItemStack): Int {
         val (applied, xp) = appliedModifiers[item] ?: 0 to 0
-        val total = xp + modifiers.drop(applied).modify(item).xp
-        appliedModifiers[item] = modifiers.size to total
+        val pending = modifiers.drop(applied)
+        val total = xp + pending.modify(item).xp
+        appliedModifiers[item] = applied + pending.size to total
         return total
     }
 
