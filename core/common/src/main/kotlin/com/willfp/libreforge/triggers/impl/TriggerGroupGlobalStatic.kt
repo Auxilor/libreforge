@@ -58,7 +58,7 @@ object TriggerGroupGlobalStatic : TriggerGroup("global_static") {
 
     private class TriggerDynamicGlobalStatic(
         private val expression: String
-    ) : Trigger("global_static_expr_${expression.hashCode()}") {
+    ) : Trigger("global_static_expr_${expressionId(expression)}") {
         override val description = "Fires once globally on a tick interval defined by an expression, not tied to any player."
 
         override val categories = setOf("meta")
