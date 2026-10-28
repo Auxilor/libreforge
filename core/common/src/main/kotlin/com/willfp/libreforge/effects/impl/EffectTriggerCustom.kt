@@ -9,6 +9,7 @@ import com.willfp.libreforge.getDoubleFromExpression
 import com.willfp.libreforge.getFormattedString
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.impl.TriggerGroupCustom
+import java.util.concurrent.ConcurrentHashMap
 
 object EffectTriggerCustom : Effect<NoCompileData>("trigger_custom") {
     override val description = "Dispatches a named custom trigger, which can activate other effect chains listening for that trigger ID."
@@ -31,19 +32,22 @@ object EffectTriggerCustom : Effect<NoCompileData>("trigger_custom") {
         )
     }
 
-    private val customDispatchDepth = ThreadLocal.withInitial { 0 }
+    private val activeDispatches = ThreadLocal.withInitial { ConcurrentHashMap.newKeySet<Int>() }
 
     override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
-        val dispatcher = data.dispatcher
         val trigger = TriggerGroupCustom.create(config.getFormattedString("trigger", data))
-        val value = config.getDoubleFromExpression("value", data)
-        val depth = customDispatchDepth.get()
+        val dispatchData = data.copy(value = config.getDoubleFromExpression("value", data))
+        val dispatchKey = trigger.hashCode() shl 5 xor dispatchData.hashCode()
+        val active = activeDispatches.get()
 
-        customDispatchDepth.set(depth + 1)
+        if (!active.add(dispatchKey)) {
+            return true
+        }
+
         try {
-            trigger.dispatch(dispatcher, data.copy(value = value), allowDuplicates = depth == 0)
+            trigger.dispatch(data.dispatcher, dispatchData, allowDuplicates = true)
         } finally {
-            customDispatchDepth.set(depth)
+            active.remove(dispatchKey)
         }
 
         return true
