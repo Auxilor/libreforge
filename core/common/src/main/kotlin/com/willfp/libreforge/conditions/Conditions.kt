@@ -49,6 +49,7 @@ import com.willfp.libreforge.conditions.impl.ConditionInGamemode
 import com.willfp.libreforge.conditions.impl.ConditionInMainhand
 import com.willfp.libreforge.conditions.impl.ConditionInOffhand
 import com.willfp.libreforge.conditions.impl.ConditionInSlot
+import com.willfp.libreforge.conditions.impl.ConditionProviderInSlot
 import com.willfp.libreforge.conditions.impl.ConditionInWater
 import com.willfp.libreforge.conditions.impl.ConditionInWorld
 import com.willfp.libreforge.conditions.impl.ConditionIsAlive
@@ -246,6 +247,7 @@ object Conditions : AliasedRegistry<Condition<*>>() {
         register(ConditionHasCompletedAdvancement)
         register(ConditionLightLevelBelow)
         register(ConditionInSlot)
+        register(ConditionProviderInSlot)
         register(ConditionHasEnchant)
         register(ConditionIsAlive)
         register(ConditionIsSubmerged)
