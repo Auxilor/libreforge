@@ -7,6 +7,7 @@ import com.willfp.eco.core.data.keys.PersistentDataKeyType
 import com.willfp.eco.core.data.profile
 import com.willfp.eco.core.items.Items
 import com.willfp.eco.core.map.concurrentListMap
+import com.willfp.eco.util.NumberUtils
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.NoCompileData
@@ -17,6 +18,8 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.isEcoEmpty
 import com.willfp.libreforge.plugin
+import com.willfp.libreforge.slot.SlotItemProvidedHolder
+import com.willfp.libreforge.slot.SlotType
 import com.willfp.libreforge.slot.SlotTypes
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -28,7 +31,12 @@ import org.bukkit.inventory.ItemStack
 import java.util.UUID
 
 object EffectKeepItem : Effect<NoCompileData>("keep_item") {
-    override val description = "Keeps an item in the player's inventory when they die, instead of it being dropped."
+    private const val MAX_KEEP_CHANCE = 100.0
+    private val INVENTORY_SLOTS = 0..40
+
+    override val description =
+        "Keeps an item in the player's inventory when they die, instead of it being dropped."
+
     override val categories = setOf("player", "inventory")
 
     override val providerBinding = ProviderBinding.ITEM
@@ -40,9 +48,17 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
             type = ArgType.STRING,
             example = "mainhand"
         )
+
+        optional(
+            "chance",
+            description = "The percent chance (0-100) that each item is kept on death. If omitted, the item is always kept. Supports expressions and placeholders.",
+            type = ArgType.EXPRESSION,
+            example = "50"
+        )
     }
 
-    private val players = concurrentListMap<UUID, Triple<UUID, Config, ItemStack?>>()
+    private val players =
+        concurrentListMap<UUID, KeepEntry>()
 
     private val savedItemsKey by lazy {
         PersistentDataKey(
@@ -59,11 +75,24 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
         holder: ProvidedHolder,
         compileData: NoCompileData
     ) {
-        players[dispatcher.uuid].add(Triple(identifiers.uuid, config, (holder.provider as? ItemStack)?.clone()))
+        players[dispatcher.uuid].add(
+            KeepEntry(
+                identifiers.uuid,
+                config,
+                (holder.provider as? ItemStack)?.clone(),
+                (holder as? SlotItemProvidedHolder<*>)?.slotType
+            )
+        )
     }
 
-    override fun onDisable(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder) {
-        players[dispatcher.uuid].removeAll { it.first == identifiers.uuid }
+    override fun onDisable(
+        dispatcher: Dispatcher<*>,
+        identifiers: Identifiers,
+        holder: ProvidedHolder
+    ) {
+        players[dispatcher.uuid].removeAll { entry ->
+            entry.uuid == identifiers.uuid
+        }
     }
 
     @EventHandler(
@@ -76,28 +105,9 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
         }
 
         val player = event.player
-        val newEntries = mutableListOf<String>()
 
-        for ((_, config, providedItem) in players[player.uniqueId]) {
-            for (slot in player.slotsToKeep(config, providedItem)) {
-                val item = player.inventory.getItem(slot)
-
-                if (item.isEcoEmpty) {
-                    continue
-                }
-
-                if (!event.drops.remove(item)) {
-                    continue
-                }
-
-                if (Prerequisite.HAS_PAPER.isMet) {
-                    event.itemsToKeep += item!!
-                } else {
-                    newEntries.add("$slot:${Items.toSNBT(item!!)}")
-                    player.inventory.setItem(slot, null)
-                }
-            }
-        }
+        val newEntries = player.keepConfigsBySlot()
+            .mapNotNull { (slot, configs) -> event.keepItem(slot, configs) }
 
         if (newEntries.isNotEmpty()) {
             val existing = player.profile.read(savedItemsKey)
@@ -105,42 +115,105 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
         }
     }
 
-    private fun Player.slotsToKeep(config: Config, providedItem: ItemStack?): List<Int> {
-        val slotName = config.getString("slot")
+    private fun Player.keepConfigsBySlot(): Map<Int, List<Config>> {
+        val providerSlots = mutableSetOf<Int>()
+        val configsBySlot = mutableMapOf<Int, MutableList<Config>>()
+
+        for (entry in players[uniqueId]) {
+            for (slot in slotsToKeep(entry, providerSlots)) {
+                configsBySlot.getOrPut(slot) { mutableListOf() } += entry.config
+            }
+        }
+
+        return configsBySlot
+    }
+
+    private fun PlayerDeathEvent.keepItem(
+        slot: Int,
+        configs: List<Config>
+    ): String? {
+        val item = player.inventory.getItem(slot)?.takeIf { slotItem ->
+            !slotItem.isEcoEmpty && configs.any { config -> player.rollKeepChance(config) } && drops.remove(slotItem)
+        } ?: return null
+
+        return if (Prerequisite.HAS_PAPER.isMet) {
+            itemsToKeep += item
+            null
+        } else {
+            player.inventory.setItem(slot, null)
+            "$slot:${Items.toSNBT(item)}"
+        }
+    }
+
+    private fun Player.rollKeepChance(config: Config): Boolean {
+        if (!config.has("chance")) {
+            return true
+        }
+
+        return NumberUtils.randFloat(0.0, MAX_KEEP_CHANCE) <
+                config.getDoubleFromExpression("chance", this)
+    }
+
+    private fun Player.slotsToKeep(
+        entry: KeepEntry,
+        providerSlots: MutableSet<Int>
+    ): List<Int> {
+        val slotName = entry.config.getString("slot")
 
         if (slotName.isNotEmpty()) {
             return SlotTypes[slotName]?.getItemSlots(this).orEmpty()
         }
 
-        val similarSlots = (0..40).filter {
-            providedItem != null && inventory.getItem(it)?.isSimilar(providedItem) == true
+        return listOfNotNull(
+            findSimilarSlot(entry.providedItem, entry.slotType?.getItemSlots(this).orEmpty(), providerSlots)
+                ?: findSimilarSlot(entry.providedItem, INVENTORY_SLOTS, providerSlots)
+        ).onEach(providerSlots::add)
+    }
+
+    private fun Player.findSimilarSlot(
+        providedItem: ItemStack?,
+        slots: Iterable<Int>,
+        providerSlots: Set<Int>
+    ): Int? {
+        providedItem ?: return null
+
+        val similarSlots = slots.filter { slot ->
+            slot in INVENTORY_SLOTS &&
+                    slot !in providerSlots &&
+                    inventory.getItem(slot)?.isSimilar(providedItem) == true
         }
 
-        return listOfNotNull(
-            similarSlots.firstOrNull { inventory.getItem(it)?.amount == providedItem?.amount }
-                ?: similarSlots.firstOrNull()
-        )
+        return similarSlots.firstOrNull { slot ->
+            inventory.getItem(slot)?.amount == providedItem.amount
+        } ?: similarSlots.firstOrNull()
     }
 
     @EventHandler
     fun onRespawn(event: PlayerRespawnEvent) {
-        plugin.scheduler.on(event.player).run { restoreItems(event.player) }
+        plugin.scheduler.on(event.player).run {
+            restoreItems(event.player)
+        }
     }
 
     @EventHandler
     fun onJoin(event: PlayerJoinEvent) {
-        plugin.scheduler.on(event.player).run { restoreItems(event.player) }
+        plugin.scheduler.on(event.player).run {
+            restoreItems(event.player)
+        }
     }
 
     private fun restoreItems(player: Player) {
         val entries = player.profile.read(savedItemsKey)
+
         if (entries.isEmpty()) return
 
         player.profile.write(savedItemsKey, emptyList())
 
         for (entry in entries) {
             val colonIndex = entry.indexOf(':')
+
             if (colonIndex == -1) continue
+
             val slot = entry.substring(0, colonIndex).toIntOrNull() ?: continue
             val item = Items.fromSNBT(entry.substring(colonIndex + 1)) ?: continue
 
@@ -151,4 +224,11 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
             }
         }
     }
+
+    private data class KeepEntry(
+        val uuid: UUID,
+        val config: Config,
+        val providedItem: ItemStack?,
+        val slotType: SlotType?
+    )
 }
