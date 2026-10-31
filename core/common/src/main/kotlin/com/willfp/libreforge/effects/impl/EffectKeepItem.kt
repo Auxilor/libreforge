@@ -86,8 +86,8 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
         identifiers: Identifiers,
         holder: ProvidedHolder
     ) {
-        players[dispatcher.uuid].removeAll {
-            it.first == identifiers.uuid
+        players[dispatcher.uuid].removeAll { entry ->
+            entry.first == identifiers.uuid
         }
     }
 
@@ -101,37 +101,34 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
         }
 
         val player = event.player
-        val newEntries = mutableListOf<String>()
+        val attemptedSlots = mutableSetOf<Int>()
 
-        for ((_, config, providedItem) in players[player.uniqueId]) {
-            for (slot in player.slotsToKeep(config, providedItem)) {
-                val item = player.inventory.getItem(slot)
-
-                if (item.isEcoEmpty) {
-                    continue
-                }
-
-                if (!player.rollKeepChance(config)) {
-                    continue
-                }
-
-                event.drops.remove(item)
-                if (!event.drops.remove(item)) {
-                    continue
-                }
-
-                if (Prerequisite.HAS_PAPER.isMet) {
-                    event.itemsToKeep += item!!
-                } else {
-                    newEntries.add("$slot:${Items.toSNBT(item!!)}")
-                    player.inventory.setItem(slot, null)
-                }
-            }
+        val newEntries = players[player.uniqueId].flatMap { (_, config, providedItem) ->
+            player.slotsToKeep(config, providedItem, attemptedSlots)
+                .filter(attemptedSlots::add)
+                .mapNotNull { slot -> event.keepItem(slot, config) }
         }
 
         if (newEntries.isNotEmpty()) {
             val existing = player.profile.read(savedItemsKey)
             player.profile.write(savedItemsKey, existing + newEntries)
+        }
+    }
+
+    private fun PlayerDeathEvent.keepItem(
+        slot: Int,
+        config: Config
+    ): String? {
+        val item = player.inventory.getItem(slot)?.takeIf { slotItem ->
+            !slotItem.isEcoEmpty && player.rollKeepChance(config) && drops.remove(slotItem)
+        } ?: return null
+
+        return if (Prerequisite.HAS_PAPER.isMet) {
+            itemsToKeep += item
+            null
+        } else {
+            player.inventory.setItem(slot, null)
+            "$slot:${Items.toSNBT(item)}"
         }
     }
 
@@ -146,7 +143,8 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
 
     private fun Player.slotsToKeep(
         config: Config,
-        providedItem: ItemStack?
+        providedItem: ItemStack?,
+        attemptedSlots: Set<Int>
     ): List<Int> {
         val slotName = config.getString("slot")
 
@@ -154,14 +152,15 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
             return SlotTypes[slotName]?.getItemSlots(this).orEmpty()
         }
 
-        val similarSlots = (0..40).filter {
-            providedItem != null &&
-                    inventory.getItem(it)?.isSimilar(providedItem) == true
+        val similarSlots = (0..40).filter { slot ->
+            slot !in attemptedSlots &&
+                    providedItem != null &&
+                    inventory.getItem(slot)?.isSimilar(providedItem) == true
         }
 
         return listOfNotNull(
-            similarSlots.firstOrNull {
-                inventory.getItem(it)?.amount == providedItem?.amount
+            similarSlots.firstOrNull { slot ->
+                inventory.getItem(slot)?.amount == providedItem?.amount
             } ?: similarSlots.firstOrNull()
         )
     }
