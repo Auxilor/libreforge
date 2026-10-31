@@ -101,13 +101,9 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
         }
 
         val player = event.player
-        val attemptedSlots = mutableSetOf<Int>()
 
-        val newEntries = players[player.uniqueId].flatMap { (_, config, providedItem) ->
-            player.slotsToKeep(config, providedItem, attemptedSlots)
-                .filter(attemptedSlots::add)
-                .mapNotNull { slot -> event.keepItem(slot, config) }
-        }
+        val newEntries = player.keepConfigsBySlot()
+            .mapNotNull { (slot, configs) -> event.keepItem(slot, configs) }
 
         if (newEntries.isNotEmpty()) {
             val existing = player.profile.read(savedItemsKey)
@@ -115,12 +111,25 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
         }
     }
 
+    private fun Player.keepConfigsBySlot(): Map<Int, List<Config>> {
+        val providerSlots = mutableSetOf<Int>()
+        val configsBySlot = mutableMapOf<Int, MutableList<Config>>()
+
+        for ((_, config, providedItem) in players[uniqueId]) {
+            for (slot in slotsToKeep(config, providedItem, providerSlots)) {
+                configsBySlot.getOrPut(slot) { mutableListOf() } += config
+            }
+        }
+
+        return configsBySlot
+    }
+
     private fun PlayerDeathEvent.keepItem(
         slot: Int,
-        config: Config
+        configs: List<Config>
     ): String? {
         val item = player.inventory.getItem(slot)?.takeIf { slotItem ->
-            !slotItem.isEcoEmpty && player.rollKeepChance(config) && drops.remove(slotItem)
+            !slotItem.isEcoEmpty && configs.any { config -> player.rollKeepChance(config) } && drops.remove(slotItem)
         } ?: return null
 
         return if (Prerequisite.HAS_PAPER.isMet) {
@@ -137,14 +146,14 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
             return true
         }
 
-        return NumberUtils.randFloat(0.0, MAX_KEEP_CHANCE) <=
+        return NumberUtils.randFloat(0.0, MAX_KEEP_CHANCE) <
                 config.getDoubleFromExpression("chance", this)
     }
 
     private fun Player.slotsToKeep(
         config: Config,
         providedItem: ItemStack?,
-        attemptedSlots: Set<Int>
+        providerSlots: MutableSet<Int>
     ): List<Int> {
         val slotName = config.getString("slot")
 
@@ -153,7 +162,7 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
         }
 
         val similarSlots = (0..40).filter { slot ->
-            slot !in attemptedSlots &&
+            slot !in providerSlots &&
                     providedItem != null &&
                     inventory.getItem(slot)?.isSimilar(providedItem) == true
         }
@@ -162,7 +171,7 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
             similarSlots.firstOrNull { slot ->
                 inventory.getItem(slot)?.amount == providedItem?.amount
             } ?: similarSlots.firstOrNull()
-        )
+        ).onEach(providerSlots::add)
     }
 
     @EventHandler
