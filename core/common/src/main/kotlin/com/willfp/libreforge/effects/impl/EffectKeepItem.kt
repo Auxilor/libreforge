@@ -28,7 +28,11 @@ import org.bukkit.inventory.ItemStack
 import java.util.UUID
 
 object EffectKeepItem : Effect<NoCompileData>("keep_item") {
-    override val description = "Keeps an item in the player's inventory when they die, instead of it being dropped."
+    private const val MAX_KEEP_CHANCE = 100.0
+
+    override val description =
+        "Keeps an item in the player's inventory when they die, instead of it being dropped."
+
     override val categories = setOf("player", "inventory")
 
     override val providerBinding = ProviderBinding.ITEM
@@ -40,6 +44,7 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
             type = ArgType.STRING,
             example = "mainhand"
         )
+
         optional(
             "chance",
             description = "The percent chance (0-100) that each item is kept on death. If omitted, the item is always kept. Supports expressions and placeholders.",
@@ -48,7 +53,8 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
         )
     }
 
-    private val players = concurrentListMap<UUID, Triple<UUID, Config, ItemStack?>>()
+    private val players =
+        concurrentListMap<UUID, Triple<UUID, Config, ItemStack?>>()
 
     private val savedItemsKey by lazy {
         PersistentDataKey(
@@ -65,11 +71,23 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
         holder: ProvidedHolder,
         compileData: NoCompileData
     ) {
-        players[dispatcher.uuid].add(Triple(identifiers.uuid, config, (holder.provider as? ItemStack)?.clone()))
+        players[dispatcher.uuid].add(
+            Triple(
+                identifiers.uuid,
+                config,
+                (holder.provider as? ItemStack)?.clone()
+            )
+        )
     }
 
-    override fun onDisable(dispatcher: Dispatcher<*>, identifiers: Identifiers, holder: ProvidedHolder) {
-        players[dispatcher.uuid].removeAll { it.first == identifiers.uuid }
+    override fun onDisable(
+        dispatcher: Dispatcher<*>,
+        identifiers: Identifiers,
+        holder: ProvidedHolder
+    ) {
+        players[dispatcher.uuid].removeAll {
+            it.first == identifiers.uuid
+        }
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -115,10 +133,14 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
             return true
         }
 
-        return NumberUtils.randFloat(0.0, 100.0) <= config.getDoubleFromExpression("chance", this)
+        return NumberUtils.randFloat(0.0, MAX_KEEP_CHANCE) <=
+                config.getDoubleFromExpression("chance", this)
     }
 
-    private fun Player.slotsToKeep(config: Config, providedItem: ItemStack?): List<Int> {
+    private fun Player.slotsToKeep(
+        config: Config,
+        providedItem: ItemStack?
+    ): List<Int> {
         val slotName = config.getString("slot")
 
         if (slotName.isNotEmpty()) {
@@ -126,34 +148,43 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
         }
 
         val similarSlots = (0..40).filter {
-            providedItem != null && inventory.getItem(it)?.isSimilar(providedItem) == true
+            providedItem != null &&
+                    inventory.getItem(it)?.isSimilar(providedItem) == true
         }
 
         return listOfNotNull(
-            similarSlots.firstOrNull { inventory.getItem(it)?.amount == providedItem?.amount }
-                ?: similarSlots.firstOrNull()
+            similarSlots.firstOrNull {
+                inventory.getItem(it)?.amount == providedItem?.amount
+            } ?: similarSlots.firstOrNull()
         )
     }
 
     @EventHandler
     fun onRespawn(event: PlayerRespawnEvent) {
-        plugin.scheduler.on(event.player).run { restoreItems(event.player) }
+        plugin.scheduler.on(event.player).run {
+            restoreItems(event.player)
+        }
     }
 
     @EventHandler
     fun onJoin(event: PlayerJoinEvent) {
-        plugin.scheduler.on(event.player).run { restoreItems(event.player) }
+        plugin.scheduler.on(event.player).run {
+            restoreItems(event.player)
+        }
     }
 
     private fun restoreItems(player: Player) {
         val entries = player.profile.read(savedItemsKey)
+
         if (entries.isEmpty()) return
 
         player.profile.write(savedItemsKey, emptyList())
 
         for (entry in entries) {
             val colonIndex = entry.indexOf(':')
+
             if (colonIndex == -1) continue
+
             val slot = entry.substring(0, colonIndex).toIntOrNull() ?: continue
             val item = Items.fromSNBT(entry.substring(colonIndex + 1)) ?: continue
 
