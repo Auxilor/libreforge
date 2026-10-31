@@ -18,6 +18,8 @@ import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.effects.Identifiers
 import com.willfp.libreforge.isEcoEmpty
 import com.willfp.libreforge.plugin
+import com.willfp.libreforge.slot.SlotItemProvidedHolder
+import com.willfp.libreforge.slot.SlotType
 import com.willfp.libreforge.slot.SlotTypes
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -30,6 +32,7 @@ import java.util.UUID
 
 object EffectKeepItem : Effect<NoCompileData>("keep_item") {
     private const val MAX_KEEP_CHANCE = 100.0
+    private val INVENTORY_SLOTS = 0..40
 
     override val description =
         "Keeps an item in the player's inventory when they die, instead of it being dropped."
@@ -55,7 +58,7 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
     }
 
     private val players =
-        concurrentListMap<UUID, Triple<UUID, Config, ItemStack?>>()
+        concurrentListMap<UUID, KeepEntry>()
 
     private val savedItemsKey by lazy {
         PersistentDataKey(
@@ -73,10 +76,11 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
         compileData: NoCompileData
     ) {
         players[dispatcher.uuid].add(
-            Triple(
+            KeepEntry(
                 identifiers.uuid,
                 config,
-                (holder.provider as? ItemStack)?.clone()
+                (holder.provider as? ItemStack)?.clone(),
+                (holder as? SlotItemProvidedHolder<*>)?.slotType
             )
         )
     }
@@ -87,7 +91,7 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
         holder: ProvidedHolder
     ) {
         players[dispatcher.uuid].removeAll { entry ->
-            entry.first == identifiers.uuid
+            entry.uuid == identifiers.uuid
         }
     }
 
@@ -115,9 +119,9 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
         val providerSlots = mutableSetOf<Int>()
         val configsBySlot = mutableMapOf<Int, MutableList<Config>>()
 
-        for ((_, config, providedItem) in players[uniqueId]) {
-            for (slot in slotsToKeep(config, providedItem, providerSlots)) {
-                configsBySlot.getOrPut(slot) { mutableListOf() } += config
+        for (entry in players[uniqueId]) {
+            for (slot in slotsToKeep(entry, providerSlots)) {
+                configsBySlot.getOrPut(slot) { mutableListOf() } += entry.config
             }
         }
 
@@ -151,18 +155,19 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
     }
 
     private fun Player.slotsToKeep(
-        config: Config,
-        providedItem: ItemStack?,
+        entry: KeepEntry,
         providerSlots: MutableSet<Int>
     ): List<Int> {
-        val slotName = config.getString("slot")
+        val slotName = entry.config.getString("slot")
 
         if (slotName.isNotEmpty()) {
             return SlotTypes[slotName]?.getItemSlots(this).orEmpty()
         }
 
-        val similarSlots = (0..40).filter { slot ->
-            slot !in providerSlots &&
+        val providedItem = entry.providedItem
+        val similarSlots = (entry.slotType?.getItemSlots(this) ?: INVENTORY_SLOTS).filter { slot ->
+            slot in INVENTORY_SLOTS &&
+                    slot !in providerSlots &&
                     providedItem != null &&
                     inventory.getItem(slot)?.isSimilar(providedItem) == true
         }
@@ -210,4 +215,11 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
             }
         }
     }
+
+    private data class KeepEntry(
+        val uuid: UUID,
+        val config: Config,
+        val providedItem: ItemStack?,
+        val slotType: SlotType?
+    )
 }
