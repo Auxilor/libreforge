@@ -164,19 +164,28 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
             return SlotTypes[slotName]?.getItemSlots(this).orEmpty()
         }
 
-        val providedItem = entry.providedItem
-        val similarSlots = (entry.slotType?.getItemSlots(this) ?: INVENTORY_SLOTS).filter { slot ->
+        return listOfNotNull(
+            findSimilarSlot(entry.providedItem, entry.slotType?.getItemSlots(this).orEmpty(), providerSlots)
+                ?: findSimilarSlot(entry.providedItem, INVENTORY_SLOTS, providerSlots)
+        ).onEach(providerSlots::add)
+    }
+
+    private fun Player.findSimilarSlot(
+        providedItem: ItemStack?,
+        slots: Iterable<Int>,
+        providerSlots: Set<Int>
+    ): Int? {
+        providedItem ?: return null
+
+        val similarSlots = slots.filter { slot ->
             slot in INVENTORY_SLOTS &&
                     slot !in providerSlots &&
-                    providedItem != null &&
                     inventory.getItem(slot)?.isSimilar(providedItem) == true
         }
 
-        return listOfNotNull(
-            similarSlots.firstOrNull { slot ->
-                inventory.getItem(slot)?.amount == providedItem?.amount
-            } ?: similarSlots.firstOrNull()
-        ).onEach(providerSlots::add)
+        return similarSlots.firstOrNull { slot ->
+            inventory.getItem(slot)?.amount == providedItem.amount
+        } ?: similarSlots.firstOrNull()
     }
 
     @EventHandler
