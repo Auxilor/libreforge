@@ -38,10 +38,8 @@ object TriggerMove : Trigger("move") {
     fun handle(event: PlayerMoveEvent) {
         val player = event.player
 
-        if (Prerequisite.HAS_PAPER.isMet) {
-            if (!event.hasChangedBlock()) {
-                return
-            }
+        if (!hasChangedBlock(event)) {
+            return
         }
 
         val distance = if (event.to.world == event.from.world) {
@@ -62,6 +60,9 @@ object TriggerMove : Trigger("move") {
             )
         )
     }
+
+    private fun hasChangedBlock(event: PlayerMoveEvent): Boolean =
+        if (Prerequisite.HAS_PAPER.isMet) event.hasChangedBlock() else event.from.block != event.to.block
 
     fun registerPaperListeners() {
         plugin.eventManager.registerListener(PaperExclusiveListeners)

@@ -21,6 +21,7 @@ import com.willfp.libreforge.plugin
 import com.willfp.libreforge.slot.SlotTypes
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerRespawnEvent
@@ -90,7 +91,10 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
         }
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(
+        priority = EventPriority.LOW,
+        ignoreCancelled = true
+    )
     fun onDeath(event: PlayerDeathEvent) {
         if (event.keepInventory) {
             return
@@ -112,6 +116,9 @@ object EffectKeepItem : Effect<NoCompileData>("keep_item") {
                 }
 
                 event.drops.remove(item)
+                if (!event.drops.remove(item)) {
+                    continue
+                }
 
                 if (Prerequisite.HAS_PAPER.isMet) {
                     event.itemsToKeep += item!!

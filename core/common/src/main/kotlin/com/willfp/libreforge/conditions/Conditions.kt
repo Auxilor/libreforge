@@ -49,6 +49,7 @@ import com.willfp.libreforge.conditions.impl.ConditionInGamemode
 import com.willfp.libreforge.conditions.impl.ConditionInMainhand
 import com.willfp.libreforge.conditions.impl.ConditionInOffhand
 import com.willfp.libreforge.conditions.impl.ConditionInSlot
+import com.willfp.libreforge.conditions.impl.ConditionProviderInSlot
 import com.willfp.libreforge.conditions.impl.ConditionInWater
 import com.willfp.libreforge.conditions.impl.ConditionInWorld
 import com.willfp.libreforge.conditions.impl.ConditionIsAlive
@@ -76,6 +77,7 @@ import com.willfp.libreforge.conditions.impl.ConditionNearBlock
 import com.willfp.libreforge.conditions.impl.ConditionNearEntity
 import com.willfp.libreforge.conditions.impl.ConditionOnFire
 import com.willfp.libreforge.conditions.impl.ConditionOnGround
+import com.willfp.libreforge.conditions.impl.ConditionOnUseCooldown
 import com.willfp.libreforge.conditions.impl.ConditionPlaceholderContains
 import com.willfp.libreforge.conditions.impl.ConditionPlaceholderEquals
 import com.willfp.libreforge.conditions.impl.ConditionPlaceholderGreaterThan
@@ -236,6 +238,7 @@ object Conditions : AliasedRegistry<Condition<*>>() {
         register(ConditionItemPointsBelow)
         register(ConditionItemPointsEqual)
         register(ConditionOnGround)
+        register(ConditionOnUseCooldown)
         register(ConditionIsFalling)
         register(ConditionIsFlying)
         register(ConditionHasItemData)
@@ -244,6 +247,7 @@ object Conditions : AliasedRegistry<Condition<*>>() {
         register(ConditionHasCompletedAdvancement)
         register(ConditionLightLevelBelow)
         register(ConditionInSlot)
+        register(ConditionProviderInSlot)
         register(ConditionHasEnchant)
         register(ConditionIsAlive)
         register(ConditionIsSubmerged)

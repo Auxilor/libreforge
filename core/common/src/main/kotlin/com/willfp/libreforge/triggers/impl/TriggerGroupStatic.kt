@@ -13,7 +13,19 @@ import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.Bukkit
 import org.bukkit.FluidCollisionMode
 import org.bukkit.entity.Player
+import java.security.MessageDigest
+import java.util.HexFormat
 import java.util.concurrent.ConcurrentHashMap
+
+private const val EXPRESSION_ID_LENGTH = 16
+
+/**
+ * A trigger id suffix for an interval expression, unique to that expression.
+ */
+internal fun expressionId(expression: String): String =
+    HexFormat.of()
+        .formatHex(MessageDigest.getInstance("SHA-256").digest(expression.toByteArray()))
+        .take(EXPRESSION_ID_LENGTH)
 
 object TriggerGroupStatic : TriggerGroup("static") {
     private val registry = ConcurrentHashMap<Int, TriggerStatic>()
@@ -88,7 +100,7 @@ object TriggerGroupStatic : TriggerGroup("static") {
 
     private class TriggerDynamicStatic(
         private val expression: String
-    ) : Trigger("static_expr_${expression.hashCode()}") {
+    ) : Trigger("static_expr_${expressionId(expression)}") {
         override val description = "Fires on a tick interval defined by an expression, for every online player."
 
         override val categories = setOf("meta")

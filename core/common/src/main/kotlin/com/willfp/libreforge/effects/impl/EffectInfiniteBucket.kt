@@ -1,12 +1,11 @@
 package com.willfp.libreforge.effects.impl
 
 import com.willfp.eco.core.config.interfaces.Config
+import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.map.concurrentListMap
-import com.willfp.eco.core.scheduling.TaskContext
 import com.willfp.libreforge.ArgType
 import com.willfp.libreforge.Dispatcher
 import com.willfp.libreforge.ProvidedHolder
-import com.willfp.libreforge.Regions
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
@@ -19,6 +18,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerBucketEmptyEvent
 import org.bukkit.event.player.PlayerItemConsumeEvent
+import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
 import java.util.UUID
 
@@ -35,6 +35,8 @@ object EffectInfiniteBucket : Effect<Set<String>>("infinite_bucket") {
         )
     }
 
+    private const val OFF_HAND_SLOT = 40
+
     private val activePlayers = concurrentListMap<UUID, Pair<UUID, Set<String>>>()
 
     private fun Player.isInfinite(type: String): Boolean {
@@ -47,14 +49,7 @@ object EffectInfiniteBucket : Effect<Set<String>>("infinite_bucket") {
         val player = event.player
         if (!player.isInfinite(event.bucket.name)) return
 
-        val slot = player.inventory.heldItemSlot
-
-        refillContext(player).run {
-            val item = player.inventory.getItem(slot)
-            if (item != null && item.type == Material.BUCKET) {
-                player.inventory.setItem(slot, ItemStack(event.bucket))
-            }
-        }
+        event.itemStack = ItemStack(event.bucket)
     }
 
     @EventHandler
@@ -63,18 +58,22 @@ object EffectInfiniteBucket : Effect<Set<String>>("infinite_bucket") {
         if (event.item.type != Material.MILK_BUCKET) return
         if (!player.isInfinite("MILK_BUCKET")) return
 
-        val slot = player.inventory.heldItemSlot
-
-        refillContext(player).run {
-            val item = player.inventory.getItem(slot)
-            if (item != null && item.type == Material.BUCKET) {
-                player.inventory.setItem(slot, ItemStack(Material.MILK_BUCKET))
-            }
+        if (Prerequisite.HAS_PAPER.isMet) {
+            event.replacement = ItemStack(Material.MILK_BUCKET)
+        } else {
+            refillMilkLater(player, event.hand)
         }
     }
 
-    private fun refillContext(player: Player): TaskContext =
-        if (Regions.isFolia) plugin.scheduler.on(player) else plugin.scheduler.async()
+    private fun refillMilkLater(player: Player, hand: EquipmentSlot) {
+        val inventory = player.inventory
+        val slot = if (hand == EquipmentSlot.OFF_HAND) OFF_HAND_SLOT else inventory.heldItemSlot
+        plugin.scheduler.on(player).runLater(1) {
+            if (player.isOnline && inventory.getItem(slot)?.type == Material.BUCKET) {
+                inventory.setItem(slot, ItemStack(Material.MILK_BUCKET))
+            }
+        }
+    }
 
     override fun makeCompileData(config: Config, context: ViolationContext): Set<String> {
         val types = config.getStrings("types", "type")
