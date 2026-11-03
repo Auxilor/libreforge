@@ -41,10 +41,13 @@ class LevelType(
 
     val curve: LevelCurve = parsedCurve.curve
 
-    private val levelUpEffects = Effects.compileChain(
-        config.getSubsections("level-up-effects"),
-        ViolationContext(plugin, "level $id level-up-effects")
-    )
+    // Compiled on first use, as level types load before plugins register their own effects.
+    private val levelUpEffects by lazy {
+        Effects.compileChain(
+            config.getSubsections("level-up-effects"),
+            ViolationContext(plugin, "level $id level-up-effects")
+        )
+    }
 
     init {
         for (problem in parsedCurve.problems) {
