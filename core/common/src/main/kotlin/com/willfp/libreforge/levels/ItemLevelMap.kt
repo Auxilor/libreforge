@@ -7,6 +7,7 @@ import com.willfp.eco.core.data.set
 import com.willfp.eco.core.fast.FastItemStack
 import com.willfp.eco.core.fast.fast
 import com.willfp.eco.core.placeholder.context.PlaceholderContext
+import com.willfp.eco.core.progression.LevelProgression
 import com.willfp.eco.util.namespacedKeyOf
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataContainer
@@ -70,7 +71,14 @@ class ItemLevelMap(
         val currentData = this[level]
 
         if (xp >= 0) {
-            this[level] = currentData.gainXP(level, xp, itemStack, context)
+            val change = LevelProgression.progress(
+                curve = level.curve,
+                currentLevel = currentData.level,
+                currentXp = currentData.xp,
+                amount = xp
+            )
+            this[level] = LevelData(change.newLevel, change.newXp)
+            change.levelsGained?.forEach { gained -> level.handleLevelUp(gained, itemStack, context) }
             return
         }
 
@@ -96,13 +104,13 @@ class ItemLevelMap(
         val currentData = this[level]
         val targetLevel = maxOf(1, currentData.level + levels)
 
+        this[level] = LevelData(targetLevel, 0.0)
+
         if (levels > 0) {
             for (l in (currentData.level + 1)..targetLevel) {
                 level.handleLevelUp(l, itemStack, context)
             }
         }
-
-        this[level] = LevelData(targetLevel, 0.0)
     }
 
     fun setLevel(level: LevelType, newLevel: Int, context: PlaceholderContext) {
