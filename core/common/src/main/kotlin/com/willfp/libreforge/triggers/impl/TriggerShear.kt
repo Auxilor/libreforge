@@ -57,7 +57,7 @@ object TriggerShear : Trigger("shear") {
             ),
             dropLocation = entity.location,
             cancellable = event
-        )
+        ).apply { duplicationSafe = true }
 
         this.dispatch(
             event.player.toDispatcher(),
@@ -72,6 +72,8 @@ object TriggerShear : Trigger("shear") {
         )
 
         val totalXP = editableEvent.items.sumOf { it.xp }
+        event.drops = editableEvent.drops
+
         if (totalXP > 0) {
             DropQueue(event.player)
                 .setLocation(entity.location)
