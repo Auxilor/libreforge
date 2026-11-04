@@ -82,7 +82,10 @@ class ItemLevelMap(
             if (gainedLevels == null) {
                 this[level] = LevelData(change.newLevel, change.newXp)
             } else {
-                levelUpThrough(level, gainedLevels, change.newXp, context)
+                levelUpThrough(level, gainedLevels, change.newXp, context) { stoppedAt ->
+                    val owedLevels = stoppedAt + 1..gainedLevels.last
+                    gainXP(level, owedLevels.sumOf { level.curve.xpToReach(it) } + change.newXp, context)
+                }
             }
             return
         }
@@ -110,7 +113,9 @@ class ItemLevelMap(
         val targetLevel = maxOf(1, currentData.level + levels)
 
         if (levels > 0) {
-            levelUpThrough(level, (currentData.level + 1)..targetLevel, 0.0, context)
+            levelUpThrough(level, (currentData.level + 1)..targetLevel, 0.0, context) { stoppedAt ->
+                gainLevels(level, targetLevel - stoppedAt, context)
+            }
         } else {
             this[level] = LevelData(targetLevel, 0.0)
         }
@@ -120,22 +125,21 @@ class ItemLevelMap(
         level: LevelType,
         gainedLevels: IntRange,
         finalXp: Double,
-        context: PlaceholderContext
+        context: PlaceholderContext,
+        resumeFrom: (Int) -> Unit
     ) {
-        var writing = true
-
         for (gained in gainedLevels) {
             val step = LevelData(gained, if (gained == gainedLevels.last) finalXp else 0.0)
-
-            if (writing) {
-                this[level] = step
-            }
+            this[level] = step
 
             level.handleLevelUp(gained, itemStack, context)
 
-            if (writing) {
-                pdc = itemStack.fast().levelsPDC
-                writing = this[level] == step
+            pdc = itemStack.fast().levelsPDC
+            if (this[level] != step) {
+                if (gained != gainedLevels.last) {
+                    resumeFrom(gained)
+                }
+                break
             }
         }
     }
