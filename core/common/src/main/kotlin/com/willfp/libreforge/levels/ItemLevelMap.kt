@@ -71,22 +71,7 @@ class ItemLevelMap(
         val currentData = this[level]
 
         if (xp >= 0) {
-            val change = LevelProgression.progress(
-                curve = level.curve,
-                currentLevel = currentData.level,
-                currentXp = currentData.xp,
-                amount = xp
-            )
-            val gainedLevels = change.levelsGained
-
-            if (gainedLevels == null) {
-                this[level] = LevelData(change.newLevel, change.newXp)
-            } else {
-                levelUpThrough(level, gainedLevels, change.newXp, context) { stoppedAt ->
-                    val owedLevels = stoppedAt + 1..gainedLevels.last
-                    gainXP(level, owedLevels.sumOf { level.curve.xpToReach(it) } + change.newXp, context)
-                }
-            }
+            gainPositiveXP(level, xp, context)
             return
         }
 
@@ -110,38 +95,51 @@ class ItemLevelMap(
 
     fun gainLevels(level: LevelType, levels: Int, context: PlaceholderContext) {
         val currentData = this[level]
-        val targetLevel = maxOf(1, currentData.level + levels)
 
-        if (levels > 0) {
-            levelUpThrough(level, (currentData.level + 1)..targetLevel, 0.0, context) { stoppedAt ->
-                gainLevels(level, targetLevel - stoppedAt, context)
-            }
-        } else {
-            this[level] = LevelData(targetLevel, 0.0)
+        if (levels <= 0) {
+            this[level] = LevelData(maxOf(1, currentData.level + levels), 0.0)
+            return
+        }
+
+        var data = LevelData(currentData.level, 0.0)
+        repeat(levels) {
+            val step = LevelData(data.level + 1, data.xp)
+            this[level] = step
+            level.handleLevelUp(step.level, itemStack, context)
+            data = reread(level)
         }
     }
 
-    private fun levelUpThrough(
-        level: LevelType,
-        gainedLevels: IntRange,
-        finalXp: Double,
-        context: PlaceholderContext,
-        resumeFrom: (Int) -> Unit
-    ) {
-        for (gained in gainedLevels) {
-            val step = LevelData(gained, if (gained == gainedLevels.last) finalXp else 0.0)
-            this[level] = step
+    private fun gainPositiveXP(level: LevelType, xp: Double, context: PlaceholderContext) {
+        var owed = xp
+        var data = this[level]
+        var progressing = true
 
-            level.handleLevelUp(gained, itemStack, context)
+        while (progressing) {
+            val change = LevelProgression.progress(
+                curve = level.curve,
+                currentLevel = data.level,
+                currentXp = data.xp,
+                amount = owed
+            )
+            val nextLevel = change.levelsGained?.first
+            progressing = nextLevel != null && nextLevel != change.newLevel
 
-            pdc = itemStack.fast().levelsPDC
-            if (this[level] != step) {
-                if (gained != gainedLevels.last) {
-                    resumeFrom(gained)
-                }
-                break
+            if (nextLevel == null) {
+                this[level] = LevelData(change.newLevel, change.newXp)
+            } else {
+                val cost = if (level.curve.freeLevel == nextLevel) 0.0 else level.curve.xpToReach(nextLevel)
+                owed = (data.xp + owed - cost).coerceAtLeast(0.0)
+                this[level] = LevelData(nextLevel, if (progressing) 0.0 else change.newXp)
+                level.handleLevelUp(nextLevel, itemStack, context)
+                data = reread(level)
             }
         }
+    }
+
+    private fun reread(level: LevelType): LevelData {
+        pdc = itemStack.fast().levelsPDC
+        return this[level]
     }
 
     fun setLevel(level: LevelType, newLevel: Int, context: PlaceholderContext) {
