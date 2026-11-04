@@ -48,7 +48,7 @@ object EffectItemDurabilityMultiplier : Effect<NoCompileData>("item_durability_m
             return false
         }
 
-        val scaledDamage = event.damage / multiplier
+        val scaledDamage = (event.damage / multiplier).coerceAtMost(Int.MAX_VALUE - 1.0)
         val wholeDamage = floor(scaledDamage).toInt()
 
         event.damage = if (NumberUtils.randFloat(0.0, 1.0) < scaledDamage - wholeDamage) wholeDamage + 1 else wholeDamage
