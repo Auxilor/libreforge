@@ -12,7 +12,7 @@ import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import org.bukkit.event.player.PlayerItemDamageEvent
 import org.bukkit.inventory.ItemStack
-import kotlin.math.roundToInt
+import kotlin.math.floor
 
 object EffectItemDurabilityMultiplier : Effect<NoCompileData>("item_durability_multiplier") {
     override val description = "Multiplies the durability loss of the held item, effectively making it more or less durable."
@@ -42,13 +42,16 @@ object EffectItemDurabilityMultiplier : Effect<NoCompileData>("item_durability_m
             return false
         }
 
-        val multiplier = 1 / config.getDoubleFromExpression("multiplier", data)
+        val multiplier = config.getDoubleFromExpression("multiplier", data)
 
-        if (multiplier > 1.0) {
-            event.isCancelled = NumberUtils.randFloat(0.0, 1.0) > multiplier
-        } else {
-            event.damage = (event.damage * multiplier).roundToInt()
+        if (multiplier <= 0.0) {
+            return false
         }
+
+        val scaledDamage = (event.damage / multiplier).coerceAtMost(Int.MAX_VALUE - 1.0)
+        val wholeDamage = floor(scaledDamage).toInt()
+
+        event.damage = if (NumberUtils.randFloat(0.0, 1.0) < scaledDamage - wholeDamage) wholeDamage + 1 else wholeDamage
 
         return true
     }
