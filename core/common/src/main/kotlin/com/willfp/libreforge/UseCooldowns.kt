@@ -1,5 +1,7 @@
 package com.willfp.libreforge
 
+import com.willfp.libreforge.slot.SlotItemProvidedHolder
+import com.willfp.libreforge.slot.impl.SlotTypeOffhand
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
@@ -8,22 +10,22 @@ import org.bukkit.inventory.meta.components.UseCooldownComponent
 
 /**
  * The item whose cooldown group the player's use cooldown is read from and written to:
- * a stand-in item for [group] when given, otherwise the held item for [provider].
+ * a stand-in item for [group] when given, otherwise the held item for [holder].
  */
-internal fun Player.useCooldownItem(group: String?, provider: ItemStack?): ItemStack? =
+internal fun Player.useCooldownItem(group: String?, holder: ProvidedHolder): ItemStack? =
     if (group == null) {
-        heldCooldownItem(provider).takeUnless { it.type.isAir }
+        heldCooldownItem(holder).takeUnless { it.type.isAir }
     } else {
         NamespacedKey.fromString(group.lowercase())?.let { groupItem(it) }
     }
 
 /**
  * The full length in seconds of the cooldown in [group], read from the use_cooldown component
- * of a matching item the player holds or carries, or of the held item for [provider] with no [group].
+ * of a matching item the player holds or carries, or of the held item for [holder] with no [group].
  */
-internal fun Player.useCooldownSeconds(group: String?, provider: ItemStack?): Float? {
+internal fun Player.useCooldownSeconds(group: String?, holder: ProvidedHolder): Float? {
     val item = if (group == null) {
-        heldCooldownItem(provider)
+        heldCooldownItem(holder)
     } else {
         val key = NamespacedKey.fromString(group.lowercase())
         inventory.contents.filterNotNull().firstOrNull { key != null && it.useCooldownGroup == key }
@@ -32,10 +34,15 @@ internal fun Player.useCooldownSeconds(group: String?, provider: ItemStack?): Fl
     return item?.useCooldownComponent?.cooldownSeconds
 }
 
-private fun Player.heldCooldownItem(provider: ItemStack?): ItemStack {
+private fun Player.heldCooldownItem(holder: ProvidedHolder): ItemStack {
     val offhand = inventory.itemInOffHand
+    val isOffhandProvider = if (holder is SlotItemProvidedHolder<*>) {
+        holder.slotType == SlotTypeOffhand
+    } else {
+        holder.provider == offhand
+    }
 
-    return if (provider == offhand && offhand.useCooldownComponent != null) offhand else inventory.itemInMainHand
+    return if (isOffhandProvider && offhand.useCooldownComponent != null) offhand else inventory.itemInMainHand
 }
 
 private fun groupItem(group: NamespacedKey): ItemStack {

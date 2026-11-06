@@ -6,11 +6,9 @@ import com.willfp.libreforge.NoCompileData
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getDoubleFromExpression
-import com.willfp.libreforge.getProvider
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.useCooldownItem
-import org.bukkit.inventory.ItemStack
 import kotlin.math.roundToInt
 
 object EffectSetUseCooldown : Effect<NoCompileData>("set_use_cooldown") {
@@ -48,7 +46,7 @@ object EffectSetUseCooldown : Effect<NoCompileData>("set_use_cooldown") {
         val player = data.player ?: return false
         val ticks = (config.getDoubleFromExpression("seconds", data) * 20).roundToInt().coerceAtLeast(0)
 
-        val item = player.useCooldownItem(config.getStringOrNull("group"), data.holder.getProvider<ItemStack>())
+        val item = player.useCooldownItem(config.getStringOrNull("group"), data.holder)
 
         item?.let { cooldownItem ->
             player.setCooldown(
