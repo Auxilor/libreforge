@@ -8,14 +8,17 @@ import com.willfp.libreforge.ProvidedHolder
 import com.willfp.libreforge.arguments
 import com.willfp.libreforge.conditions.Condition
 import com.willfp.libreforge.get
+import com.willfp.libreforge.getProvider
 import com.willfp.libreforge.useCooldownItem
 import com.willfp.libreforge.useCooldownSeconds
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
 
 object ConditionOnUseCooldown : Condition<NoCompileData>("on_use_cooldown") {
     override val description = "Passes when the player has a use cooldown running, from the use_cooldown item component."
     override val categories = setOf("player")
     override val additionalInfo = listOf(
+        "With no group, the held item is the main hand item, or the offhand item when that item provides the effect and has a use_cooldown component.",
         "With percent set to true, the full cooldown length is read from the use_cooldown component of the held item, or of an item in the inventory with the same group. If no such item is found, the condition does not pass."
     )
 
@@ -54,11 +57,12 @@ object ConditionOnUseCooldown : Condition<NoCompileData>("on_use_cooldown") {
     ): Boolean {
         val player = dispatcher.get<Player>() ?: return false
         val group = config.getStringOrNull("group")
+        val provider = holder.getProvider<ItemStack>()
 
-        val secondsLeft = player.useCooldownItem(group)?.let { player.getCooldown(it) / 20.0 } ?: 0.0
+        val secondsLeft = player.useCooldownItem(group, provider)?.let { player.getCooldown(it) / 20.0 } ?: 0.0
 
         val value = if (config.getBool("percent")) {
-            player.useCooldownSeconds(group)?.takeIf { it > 0 }?.let { secondsLeft / it * 100 }
+            player.useCooldownSeconds(group, provider)?.takeIf { it > 0 }?.let { secondsLeft / it * 100 }
         } else {
             secondsLeft
         }
