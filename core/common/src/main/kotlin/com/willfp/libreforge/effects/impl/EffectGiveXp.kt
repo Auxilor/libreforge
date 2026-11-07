@@ -3,14 +3,16 @@ package com.willfp.libreforge.effects.impl
 import com.willfp.eco.core.Prerequisite
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.libreforge.ArgType
-import com.willfp.libreforge.NoCompileData
+import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.arguments
+import com.willfp.libreforge.earning.EarningLimitGroup
+import com.willfp.libreforge.earning.EarningLimits
 import com.willfp.libreforge.effects.Effect
 import com.willfp.libreforge.getIntFromExpression
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 
-object EffectGiveXp : Effect<NoCompileData>("give_xp") {
+object EffectGiveXp : Effect<EarningLimitGroup?>("give_xp") {
     override val description = "Gives the player experience points when triggered, with optional Mending repair support."
     override val categories = setOf("economy")
 
@@ -32,15 +34,31 @@ object EffectGiveXp : Effect<NoCompileData>("give_xp") {
             type = ArgType.BOOLEAN,
             default = "true"
         )
+        optional(
+            "earning-limit",
+            description = "The ID of the earning-limit group.",
+            type = ArgType.STRING
+        )
     }
 
-    override fun onTrigger(config: Config, data: TriggerData, compileData: NoCompileData): Boolean {
+    override fun makeCompileData(config: Config, context: ViolationContext): EarningLimitGroup? {
+        return EarningLimits.validateGroup(config, context)
+    }
+
+    override fun onTrigger(config: Config, data: TriggerData, compileData: EarningLimitGroup?): Boolean {
         val player = data.player ?: return false
 
+        var amount = config.getIntFromExpression("amount", data)
+
+        if (compileData != null) {
+            amount = EarningLimits.addEarned(player, compileData, amount.toDouble()) { it.toInt().toDouble() }.toInt()
+            if (amount == 0) return true
+        }
+
         if (Prerequisite.HAS_PAPER.isMet) {
-            player.giveExp(config.getIntFromExpression("amount", data), config.getBoolOrNull("apply_mending") ?: true)
+            player.giveExp(amount, config.getBoolOrNull("apply_mending") ?: true)
         } else {
-            player.giveExp(config.getIntFromExpression("amount", data))
+            player.giveExp(amount)
         }
 
         return true
