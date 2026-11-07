@@ -29,7 +29,7 @@ object EffectSetUseCooldown : Effect<NoCompileData>("set_use_cooldown") {
         )
         optional(
             "group",
-            description = "The cooldown group to change, as namespace:id. Defaults to the cooldown of the held item.",
+            description = "The cooldown group to change, as namespace:id. Defaults to the cooldown of the held item: the main hand item, or the offhand item when that item provides the effect and has a use_cooldown component.",
             type = ArgType.STRING,
             example = "myserver:dash"
         )
@@ -46,7 +46,7 @@ object EffectSetUseCooldown : Effect<NoCompileData>("set_use_cooldown") {
         val player = data.player ?: return false
         val ticks = (config.getDoubleFromExpression("seconds", data) * 20).roundToInt().coerceAtLeast(0)
 
-        val item = player.useCooldownItem(config.getStringOrNull("group"))
+        val item = player.useCooldownItem(config.getStringOrNull("group"), data.holder)
 
         item?.let { cooldownItem ->
             player.setCooldown(
