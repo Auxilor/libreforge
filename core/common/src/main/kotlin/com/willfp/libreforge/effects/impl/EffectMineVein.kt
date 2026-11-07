@@ -53,6 +53,12 @@ object EffectMineVein : MineBlockEffect<FilterList>("mine_vein") {
             default = "false"
         )
         optional(
+            "include_origin",
+            description = "Whether this effect should break the block that started the vein. Set this to false to leave that block to the original break event, as mine_radius does. It still counts towards the limit.",
+            type = ArgType.BOOLEAN,
+            default = "true"
+        )
+        optional(
             "filters",
             description = "A standard filters block restricting which blocks in the vein are broken. Each block in the vein is tested against these filters, and only the blocks that pass are broken.",
             type = ArgType.ANY
@@ -79,8 +85,11 @@ object EffectMineVein : MineBlockEffect<FilterList>("mine_vein") {
             whitelist,
             limit
         )
+            .asSequence()
+            .filter { it != block || config.getBoolOrNull("include_origin") != false }
             .filter { AntigriefManager.canBreakBlock(player, it) }
             .filter { compileData.isMet(data.copy(block = it)) }
+            .toList()
 
         data.breakBlocksSafely(blocks, preventTriggers)
 
