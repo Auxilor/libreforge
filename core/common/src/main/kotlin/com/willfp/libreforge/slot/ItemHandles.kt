@@ -6,7 +6,7 @@ import java.lang.reflect.Field
 
 /**
  * The server stack behind an item mirror. Mirrors are new objects on every read, so two reads of
- * one slot only show the same stack through its handle.
+ * one slot only show the same stack through its handle. Copies, such as mob equipment, have none.
  */
 internal object ItemHandles {
     private val handleField: Field? = runCatching {
@@ -16,8 +16,8 @@ internal object ItemHandles {
     }.getOrNull()
 
     /**
-     * The stack [item] mirrors, or [item] itself when it mirrors nothing.
+     * The stack [item] mirrors, or null when it mirrors nothing.
      */
-    fun handleOf(item: ItemStack): Any =
-        handleField?.takeIf { it.declaringClass.isInstance(item) }?.get(item) ?: item
+    fun handleOf(item: ItemStack): Any? =
+        handleField?.takeIf { it.declaringClass.isInstance(item) }?.get(item)
 }

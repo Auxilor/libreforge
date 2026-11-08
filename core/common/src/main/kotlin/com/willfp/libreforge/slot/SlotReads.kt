@@ -6,7 +6,8 @@ import org.bukkit.entity.LivingEntity
 import org.bukkit.inventory.ItemStack
 
 /**
- * One slot's items as read in a pass, with each item's type and stack handle, null where empty.
+ * One slot's items as read in a pass, with each item's type and stack handle, null where empty or
+ * where the item is a copy.
  */
 internal class ReadSlot(val items: List<ItemStack>) {
     val types: Array<Material?> = Array(items.size) { index ->
