@@ -57,9 +57,9 @@ abstract class ItemHolderFinder<T : Holder> {
     }
 
     /**
-     * The scan of [slot] from [read], re-finding only the items that [scopes] match or whose type
+     * The scan of [slot] from [read], re-finding only the items that [scopes] match or whose stack
      * changed since [scan]. Null [scopes] re-find every item. Keeps the provided holders of [scan]
-     * when the holders found are the same.
+     * when the stacks and the holders found are the same.
      */
     private fun rescan(slot: SlotType, read: ReadSlot, scan: SlotScan?, scopes: List<ItemScope>?): SlotScan {
         val size = read.items.size
@@ -70,16 +70,19 @@ abstract class ItemHolderFinder<T : Holder> {
 
         for (index in 0 until size) {
             val type = read.types[index]
+            val isSameStack = previous != null &&
+                previous.types[index] == type &&
+                previous.handles[index] === read.handles[index]
 
             holders[index] = if (type == null) {
                 emptyList()
-            } else if (reusable != null && reusable.types[index] == type && scopes!!.none { it.matches(slot, type) }) {
+            } else if (reusable != null && isSameStack && scopes!!.none { it.matches(slot, type) }) {
                 reusable.holders[index]
             } else {
                 this.find(read.items[index]).filter { holder -> isValidInSlot(holder, slot) }
             }
 
-            if (isSame && !isSameHolders(previous!!.holders[index], holders[index])) {
+            if (isSame && (!isSameStack || !isSameHolders(previous.holders[index], holders[index]))) {
                 isSame = false
             }
         }
@@ -94,7 +97,7 @@ abstract class ItemHolderFinder<T : Holder> {
             list
         }
 
-        return SlotScan(read.types.copyOf(), holders, provided)
+        return SlotScan(read.types.copyOf(), read.handles.copyOf(), holders, provided)
     }
 
     private fun isSameHolders(old: List<T>, new: List<T>): Boolean {
@@ -106,11 +109,12 @@ abstract class ItemHolderFinder<T : Holder> {
     }
 
     /**
-     * What one slot held when last scanned: per item, its type (null if empty) and holders, and
-     * the holders as provided.
+     * What one slot held when last scanned: per item, its type and stack handle (null if empty)
+     * and holders, and the holders as provided.
      */
     private inner class SlotScan(
         val types: Array<Material?>,
+        val handles: Array<Any?>,
         val holders: Array<List<T>>,
         val provided: List<TypedProvidedHolder<T>>
     )
