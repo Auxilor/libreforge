@@ -83,6 +83,7 @@ import com.willfp.libreforge.triggers.impl.TriggerMineBlockCascade
 import com.willfp.libreforge.triggers.impl.TriggerMineBlockProgress
 import com.willfp.libreforge.triggers.impl.TriggerMove
 import com.willfp.libreforge.triggers.impl.TriggerMoveItem
+import com.willfp.libreforge.triggers.impl.TriggerMoveToBlock
 import com.willfp.libreforge.triggers.impl.TriggerNoteBlockPlay
 import com.willfp.libreforge.triggers.impl.TriggerPickUpItem
 import com.willfp.libreforge.triggers.impl.TriggerPlaceBlock
@@ -266,6 +267,7 @@ object Triggers : AliasedRegistry<Trigger>() {
         register(TriggerMineBlockProgress)
         register(TriggerMove)
         register(TriggerMoveItem)
+        register(TriggerMoveToBlock)
         register(TriggerNoteBlockPlay)
         register(TriggerPickUpItem)
         register(TriggerPlaceBlock)

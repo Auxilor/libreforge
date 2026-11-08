@@ -61,7 +61,7 @@ object TriggerMove : Trigger("move") {
         )
     }
 
-    private fun hasChangedBlock(event: PlayerMoveEvent): Boolean =
+    internal fun hasChangedBlock(event: PlayerMoveEvent): Boolean =
         if (Prerequisite.HAS_PAPER.isMet) event.hasChangedBlock() else event.from.block != event.to.block
 
     fun registerPaperListeners() {
