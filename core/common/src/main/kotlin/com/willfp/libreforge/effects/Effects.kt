@@ -213,6 +213,7 @@ import com.willfp.libreforge.effects.impl.EffectSetGlowing
 import com.willfp.libreforge.effects.impl.EffectSetItemData
 import com.willfp.libreforge.effects.impl.EffectSetItemLevel
 import com.willfp.libreforge.effects.impl.EffectSetItemLore
+import com.willfp.libreforge.effects.impl.EffectSetItemMaterial
 import com.willfp.libreforge.effects.impl.EffectSetItemModel
 import com.willfp.libreforge.effects.impl.EffectSetItemPoints
 import com.willfp.libreforge.effects.impl.EffectSetNearbyBlocks
@@ -715,6 +716,7 @@ object Effects : AliasedRegistry<Effect<*>>() {
         register(EffectSetGlobalPoints)
         register(EffectSetItemData)
         register(EffectSetItemLevel)
+        register(EffectSetItemMaterial)
         register(EffectSetItemModel)
         register(EffectSetItemPoints)
         register(EffectSetNearbyBlocks)
