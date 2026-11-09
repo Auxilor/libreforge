@@ -14,13 +14,15 @@ object EffectDataFixer : Listener {
     fun clearOnQuit(event: PlayerQuitEvent) {
         val player = event.player
 
-        TriggerLeave.dispatchLeave(player)
+        try {
+            TriggerLeave.dispatchLeave(player)
+        } finally {
+            // Disables every active effect with the provided holder it was enabled with.
+            HolderStates.untrackPlayer(player)
 
-        // Disables every active effect with the provided holder it was enabled with.
-        HolderStates.untrackPlayer(player)
-
-        // Extra fix for pre-4.2.3
-        player.fixAttributes()
+            // Extra fix for pre-4.2.3
+            player.fixAttributes()
+        }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
