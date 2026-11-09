@@ -1,5 +1,6 @@
 package com.willfp.libreforge.triggers.impl
 
+import com.willfp.libreforge.holders
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
@@ -23,12 +24,15 @@ object TriggerLeave : Trigger("leave") {
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerQuitEvent) {
+        val dispatcher = event.player.toDispatcher()
+
         this.dispatch(
-            event.player.toDispatcher(),
+            dispatcher,
             TriggerData(
                 player = event.player,
                 location = event.player.location
-            )
+            ),
+            forceHolders = dispatcher.holders
         )
     }
 }
