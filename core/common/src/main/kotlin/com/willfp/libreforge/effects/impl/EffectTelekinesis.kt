@@ -40,7 +40,7 @@ import java.time.Duration
 import java.util.UUID
 
 object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
-    override val description = "Automatically sends all drops and XP from blocks, entities, and fishing directly to the player's inventory. With on_leaf_decay, drops from leaves that decay after the player cuts a tree are sent too."
+    override val description = "Automatically sends all drops and XP from blocks, entities, and fishing directly to the player's inventory, including plants that break along with the block and right click harvests such as berries. With on_leaf_decay, drops from leaves that decay after the player cuts a tree are sent too."
     override val categories = setOf("inventory")
 
     override val arguments = arguments {
@@ -142,6 +142,8 @@ object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
         if (Tag.LOGS.isTagged(block.type) && leafDecayPlayers[player.uniqueId].isNotEmpty()) {
             trackLeaves(player, block)
         }
+
+        TelekinesisChainDrops.track(player, block)
 
         // Filter out telekinesis spawner xp to prevent dupe
         if (block.type == Material.SPAWNER) {
