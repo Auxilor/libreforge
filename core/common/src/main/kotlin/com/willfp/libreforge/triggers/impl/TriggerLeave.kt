@@ -1,12 +1,10 @@
 package com.willfp.libreforge.triggers.impl
 
-import com.willfp.libreforge.holders
 import com.willfp.libreforge.toDispatcher
 import com.willfp.libreforge.triggers.Trigger
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
-import org.bukkit.event.EventHandler
-import org.bukkit.event.player.PlayerQuitEvent
+import org.bukkit.entity.Player
 
 object TriggerLeave : Trigger("leave") {
     override val description = "Fires when the player leaves the server."
@@ -22,17 +20,16 @@ object TriggerLeave : Trigger("leave") {
         TriggerParameter.LOCATION
     )
 
-    @EventHandler(ignoreCancelled = true)
-    fun handle(event: PlayerQuitEvent) {
-        val dispatcher = event.player.toDispatcher()
-
+    /**
+     * Dispatched by the quit cleanup before the player's effects are disabled.
+     */
+    internal fun dispatchLeave(player: Player) {
         this.dispatch(
-            dispatcher,
+            player.toDispatcher(),
             TriggerData(
-                player = event.player,
-                location = event.player.location
-            ),
-            forceHolders = dispatcher.holders
+                player = player,
+                location = player.location
+            )
         )
     }
 }
