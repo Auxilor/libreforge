@@ -1,6 +1,5 @@
 package com.willfp.libreforge.commands
 
-import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.command.impl.PluginCommand
 import com.willfp.libreforge.plugin
 import org.bukkit.command.CommandSender
@@ -14,6 +13,7 @@ object CommandLibreforge : PluginCommand(
     init {
         this.addSubcommand(CommandReload)
             .addSubcommand(CommandPoints)
+            .addSubcommand(CommandResetEarningLimits)
             .addSubcommand(CommandItemLevel)
             .addSubcommand(CommandTrigger)
             .addSubcommand(CommandDebug)
