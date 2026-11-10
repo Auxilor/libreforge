@@ -29,6 +29,7 @@ import com.willfp.libreforge.display.ItemFlagDisplay
 import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.arguments.custom.CustomEffectArguments
 import com.willfp.libreforge.effects.impl.EffectTelekinesis
+import com.willfp.libreforge.effects.impl.TelekinesisChainDrops
 import com.willfp.libreforge.effects.impl.bossbar.BossBarProgressPlaceholder
 import com.willfp.libreforge.effects.impl.bossbar.BossBars
 import com.willfp.libreforge.filters.Filters
@@ -151,6 +152,8 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             TriggerMove.registerPaperListeners()
             EffectTelekinesis.registerPaperListeners()
         }
+
+        this.eventManager.registerListener(TelekinesisChainDrops)
 
         if (ClassUtils.exists("org.purpurmc.purpur.event.inventory.AnvilTakeResultEvent")
         ) {
