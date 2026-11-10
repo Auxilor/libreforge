@@ -35,6 +35,7 @@ import com.willfp.libreforge.conditions.impl.ConditionBelowXPLevel
 import com.willfp.libreforge.conditions.impl.ConditionBelowY
 import com.willfp.libreforge.conditions.impl.ConditionCanAffordPrice
 import com.willfp.libreforge.conditions.impl.ConditionGlobalPointsEqual
+import com.willfp.libreforge.conditions.impl.ConditionHasActiveEffect
 import com.willfp.libreforge.conditions.impl.ConditionHasCompletedAdvancement
 import com.willfp.libreforge.conditions.impl.ConditionHasEnchant
 import com.willfp.libreforge.conditions.impl.ConditionHasInventorySpace
@@ -186,6 +187,7 @@ object Conditions : AliasedRegistry<Condition<*>>() {
         register(ConditionBelowXPLevel)
         register(ConditionBelowY)
         register(ConditionCanAffordPrice)
+        register(ConditionHasActiveEffect)
         register(ConditionHasInventorySpace)
         register(ConditionHasItem)
         register(ConditionHasPermission)
