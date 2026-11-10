@@ -15,7 +15,7 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta
 import org.bukkit.inventory.meta.ItemMeta
 
 object EffectAddEnchantLevel : Effect<NoCompileData>("add_enchant_level") {
-    override val description = "Adds levels to an enchantment on the triggering item, removing it at 0."
+    override val description = "Adds levels to an enchantment the triggering item already has, removing it at 0."
     override val categories = setOf("inventory")
 
     override val parameters = setOf(
@@ -54,7 +54,9 @@ object EffectAddEnchantLevel : Effect<NoCompileData>("add_enchant_level") {
             return false
         }
 
-        val target = current + config.getIntFromExpression("levels", data)
+        val target = (current.toLong() + config.getIntFromExpression("levels", data))
+            .coerceAtMost(Int.MAX_VALUE.toLong())
+            .toInt()
         val level = if (config.getBool("allow_unsafe")) {
             target
         } else {
