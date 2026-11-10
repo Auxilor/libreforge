@@ -18,6 +18,7 @@ import com.willfp.libreforge.effects.impl.EffectAOEBlocks
 import com.willfp.libreforge.effects.impl.EffectAddDamage
 import com.willfp.libreforge.effects.impl.EffectAddDurability
 import com.willfp.libreforge.effects.impl.EffectAddEnchant
+import com.willfp.libreforge.effects.impl.EffectAddEnchantLevel
 import com.willfp.libreforge.effects.impl.EffectAddGlobalPoints
 import com.willfp.libreforge.effects.impl.EffectAddHolder
 import com.willfp.libreforge.effects.impl.EffectAddHolderInRadius
@@ -567,6 +568,7 @@ object Effects : AliasedRegistry<Effect<*>>() {
         register(EffectGiveAbsorption)
         register(EffectAddDamage)
         register(EffectAddEnchant)
+        register(EffectAddEnchantLevel)
         register(EffectAddGlobalPoints)
         register(EffectAddHolder)
         register(EffectAddHolderInRadius)
