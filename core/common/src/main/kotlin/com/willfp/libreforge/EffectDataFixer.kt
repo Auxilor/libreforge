@@ -1,5 +1,6 @@
 package com.willfp.libreforge
 
+import com.willfp.libreforge.triggers.impl.TriggerLeave
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -13,11 +14,15 @@ object EffectDataFixer : Listener {
     fun clearOnQuit(event: PlayerQuitEvent) {
         val player = event.player
 
-        // Disables every active effect with the provided holder it was enabled with.
-        HolderStates.untrackPlayer(player)
+        try {
+            TriggerLeave.dispatchLeave(player)
+        } finally {
+            // Disables every active effect with the provided holder it was enabled with.
+            HolderStates.untrackPlayer(player)
 
-        // Extra fix for pre-4.2.3
-        player.fixAttributes()
+            // Extra fix for pre-4.2.3
+            player.fixAttributes()
+        }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
