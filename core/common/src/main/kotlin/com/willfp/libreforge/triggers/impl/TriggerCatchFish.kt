@@ -10,7 +10,10 @@ import com.willfp.libreforge.triggers.event.DropContext
 import com.willfp.libreforge.triggers.event.EditableDropEvent
 import org.bukkit.entity.Item
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.player.PlayerFishEvent
+import org.bukkit.inventory.ItemStack
+import java.util.concurrent.ConcurrentHashMap
 
 object TriggerCatchFish : Trigger("catch_fish") {
     override val description = "Fires when the player successfully catches a fish."
@@ -30,6 +33,10 @@ object TriggerCatchFish : Trigger("catch_fish") {
         TriggerParameter.ITEM,
         TriggerParameter.VALUE
     )
+
+    // Extra drops wait for the final cancellation state, so a later listener that
+    // cancels the catch does not leave them in the world.
+    private val pendingExtras = ConcurrentHashMap<PlayerFishEvent, List<ItemStack>>()
 
     @EventHandler(ignoreCancelled = true)
     fun handle(event: PlayerFishEvent) {
@@ -74,11 +81,23 @@ object TriggerCatchFish : Trigger("catch_fish") {
         } else {
             caught.itemStack = editableEvent.drops.first()
 
-            for (extra in editableEvent.drops.drop(1)) {
-                caught.world.dropItemNaturally(caught.location, extra)
+            val extras = editableEvent.drops.drop(1)
+            if (extras.isNotEmpty()) {
+                pendingExtras[event] = extras
             }
         }
 
         event.expToDrop += dropResults.sumOf { it.xp } + contributed.xp
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    fun dropExtras(event: PlayerFishEvent) {
+        val extras = pendingExtras.remove(event) ?: return
+        if (event.isCancelled) return
+
+        val caught = event.caught as? Item ?: return
+        for (extra in extras) {
+            caught.world.dropItemNaturally(caught.location, extra)
+        }
     }
 }
