@@ -102,6 +102,9 @@ object LibreforgeDrops {
      * Run [drops] through the pipeline, returning what survived it.
      *
      * Does not deliver the drops - see [dropAll] for that.
+     *
+     * Pass [contribution] when the contributions were gathered earlier, for example
+     * while a broken block was still in the world.
      */
     @JvmStatic
     @JvmOverloads
@@ -112,9 +115,10 @@ object LibreforgeDrops {
         location: Location,
         xp: Int = 0,
         cancellable: Cancellable? = null,
-        dispatchTrigger: Boolean = true
+        dispatchTrigger: Boolean = true,
+        contribution: DropContribution? = null
     ): DropOutcome {
-        val contributed = contributions(cause, context, location)
+        val contributed = contribution ?: contributions(cause, context, location)
         val initialDrops = drops + contributed.items
 
         val event = EditableDropEvent(
@@ -171,9 +175,10 @@ object LibreforgeDrops {
         context: DropContext,
         location: Location,
         xp: Int = 0,
-        cancellable: Cancellable? = null
+        cancellable: Cancellable? = null,
+        contribution: DropContribution? = null
     ) {
-        val outcome = process(drops, cause, context, location, xp, cancellable)
+        val outcome = process(drops, cause, context, location, xp, cancellable, contribution = contribution)
 
         if (outcome.isCancelled) {
             return
