@@ -34,8 +34,6 @@ object TriggerCatchFish : Trigger("catch_fish") {
         TriggerParameter.VALUE
     )
 
-    // Extra drops wait for the final cancellation state, so a later listener that
-    // cancels the catch does not leave them in the world.
     private val pendingExtras = ConcurrentHashMap<PlayerFishEvent, List<ItemStack>>()
 
     @EventHandler(ignoreCancelled = true)
@@ -93,9 +91,9 @@ object TriggerCatchFish : Trigger("catch_fish") {
     @EventHandler(priority = EventPriority.MONITOR)
     fun dropExtras(event: PlayerFishEvent) {
         val extras = pendingExtras.remove(event) ?: return
-        if (event.isCancelled) return
+        val caught = event.caught as? Item
+        if (event.isCancelled || caught == null) return
 
-        val caught = event.caught as? Item ?: return
         for (extra in extras) {
             caught.world.dropItemNaturally(caught.location, extra)
         }
