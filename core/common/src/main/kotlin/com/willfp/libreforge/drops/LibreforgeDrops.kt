@@ -62,10 +62,17 @@ object LibreforgeDrops {
 
     /**
      * Register a contributor, called whenever a drop pipeline is built.
+     *
+     * The drop triggers gather contributions in their own listeners, which only register once
+     * a trigger is enabled, so they are enabled here even when no config uses them.
      */
     @JvmStatic
     fun registerContributor(contributor: DropContributor) {
         contributors += contributor
+
+        TriggerBlockItemDrop.enable()
+        TriggerEntityItemDrop.enable()
+        TriggerCatchFish.enable()
     }
 
     /**
