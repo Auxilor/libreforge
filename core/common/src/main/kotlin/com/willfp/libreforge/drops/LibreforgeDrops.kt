@@ -102,9 +102,6 @@ object LibreforgeDrops {
      * Run [drops] through the pipeline, returning what survived it.
      *
      * Does not deliver the drops - see [dropAll] for that.
-     *
-     * Pass [contribution] when the contributions were gathered earlier, for example
-     * while a broken block was still in the world.
      */
     @JvmStatic
     @JvmOverloads
@@ -115,11 +112,35 @@ object LibreforgeDrops {
         location: Location,
         xp: Int = 0,
         cancellable: Cancellable? = null,
-        dispatchTrigger: Boolean = true,
-        contribution: DropContribution? = null
+        dispatchTrigger: Boolean = true
+    ): DropOutcome = process(
+        drops,
+        cause,
+        context,
+        location,
+        contributions(cause, context, location),
+        xp,
+        cancellable,
+        dispatchTrigger
+    )
+
+    /**
+     * Run [drops] through the pipeline with a [contribution] gathered earlier, for
+     * example while a broken block was still in the world.
+     */
+    @JvmStatic
+    @Suppress("LongParameterList")
+    fun process(
+        drops: Collection<ItemStack>,
+        cause: DropCause,
+        context: DropContext,
+        location: Location,
+        contribution: DropContribution,
+        xp: Int = 0,
+        cancellable: Cancellable? = null,
+        dispatchTrigger: Boolean = true
     ): DropOutcome {
-        val contributed = contribution ?: contributions(cause, context, location)
-        val initialDrops = drops + contributed.items
+        val initialDrops = drops + contribution.items
 
         val event = EditableDropEvent(
             initialDrops = initialDrops,
@@ -156,7 +177,7 @@ object LibreforgeDrops {
 
         return DropOutcome(
             event.drops.toList(),
-            xp + contributed.xp + results.sumOf { it.xp },
+            xp + contribution.xp + results.sumOf { it.xp },
             false
         )
     }
@@ -175,26 +196,49 @@ object LibreforgeDrops {
         context: DropContext,
         location: Location,
         xp: Int = 0,
-        cancellable: Cancellable? = null,
-        contribution: DropContribution? = null
+        cancellable: Cancellable? = null
     ) {
-        val outcome = process(drops, cause, context, location, xp, cancellable, contribution = contribution)
+        dropAll(drops, cause, context, location, contributions(cause, context, location), xp, cancellable)
+    }
 
-        if (outcome.isCancelled) {
-            return
-        }
-
+    /**
+     * Run [drops] through the pipeline with a [contribution] gathered earlier and
+     * deliver whatever survives it.
+     */
+    @JvmStatic
+    @Suppress("LongParameterList")
+    fun dropAll(
+        drops: Collection<ItemStack>,
+        cause: DropCause,
+        context: DropContext,
+        location: Location,
+        contribution: DropContribution,
+        xp: Int = 0,
+        cancellable: Cancellable? = null
+    ) {
+        val outcome = process(drops, cause, context, location, contribution, xp, cancellable)
         val player = context.player
 
-        if (player != null) {
-            DropQueue(player)
-                .addItems(outcome.items)
-                .addXP(outcome.xp)
-                .setLocation(location)
-                .push()
-            return
-        }
+        when {
+            outcome.isCancelled -> {
+                return
+            }
 
+            player != null -> {
+                DropQueue(player)
+                    .addItems(outcome.items)
+                    .addXP(outcome.xp)
+                    .setLocation(location)
+                    .push()
+            }
+
+            else -> {
+                dropInWorld(location, outcome)
+            }
+        }
+    }
+
+    private fun dropInWorld(location: Location, outcome: DropOutcome) {
         val world = location.world ?: return
         outcome.items.forEach { world.dropItemNaturally(location, it) }
         if (outcome.xp > 0) {
