@@ -55,6 +55,13 @@ object TriggerItemsAdderBlockItemDrop : Listener {
         }
     }
 
+    // A listener after ours can still cancel the break. Drop the pending entry so the
+    // stored contribution is not delivered for a block that never broke.
+    @EventHandler(priority = EventPriority.MONITOR)
+    fun handleCancelled(event: CustomBlockBreakEvent) {
+        if (event.isCancelled) pending.remove(event.block.location)
+    }
+
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     fun handle(event: ItemSpawnEvent) {
         if (reDropping.get()) return
