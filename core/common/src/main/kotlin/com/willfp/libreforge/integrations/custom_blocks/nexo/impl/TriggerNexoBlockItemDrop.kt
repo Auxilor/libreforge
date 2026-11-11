@@ -55,6 +55,13 @@ object TriggerNexoBlockItemDrop : Listener {
         }
     }
 
+    // A listener after ours can still cancel the break. Drop the pending entry so the
+    // stored contribution is not delivered for a block that never broke.
+    @EventHandler(priority = EventPriority.MONITOR)
+    fun handleCancelled(event: NexoBlockBreakEvent) {
+        if (event.isCancelled) pending.remove(event.block.location)
+    }
+
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     fun handleItemSpawn(event: ItemSpawnEvent) {
         if (reDropping.get()) return
