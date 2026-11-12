@@ -108,7 +108,10 @@ object TriggerCraft : Trigger("craft") {
             return 0
         }
 
-        return inventoryContent.minOf { it!!.amount }.coerceAtMost(totalPossibleSlotsForItems / result.amount)
+        // Some recipe results report an amount of 0; avoid dividing by zero.
+        val resultAmount = result.amount.coerceAtLeast(1)
+
+        return inventoryContent.minOf { it!!.amount }.coerceAtMost(totalPossibleSlotsForItems / resultAmount)
     }
 
     private fun handleSwapOffhandCompletion(player: Player): Int {
