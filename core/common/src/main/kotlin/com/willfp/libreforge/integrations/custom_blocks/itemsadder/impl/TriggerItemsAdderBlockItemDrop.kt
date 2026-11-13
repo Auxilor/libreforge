@@ -1,6 +1,7 @@
 package com.willfp.libreforge.integrations.custom_blocks.itemsadder.impl
 
 import com.willfp.eco.core.integrations.antigrief.AntigriefManager
+import com.willfp.libreforge.drops.DropContribution
 import com.willfp.libreforge.drops.LibreforgeDrops
 import com.willfp.libreforge.filterNotEmpty
 import com.willfp.libreforge.plugin
@@ -20,7 +21,11 @@ import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 
 object TriggerItemsAdderBlockItemDrop : Listener {
-    private data class PendingBreak(val playerUuid: UUID, val items: MutableList<ItemStack>)
+    private data class PendingBreak(
+        val playerUuid: UUID,
+        val items: MutableList<ItemStack>,
+        val contribution: DropContribution
+    )
 
     private val pending = ConcurrentHashMap<Location, PendingBreak>()
     private val reDropping = ThreadLocal.withInitial { false }
@@ -34,12 +39,28 @@ object TriggerItemsAdderBlockItemDrop : Listener {
         if (!AntigriefManager.canBreakBlock(player, event.block)) return
 
         val loc = event.block.location
-        val entry = PendingBreak(player.uniqueId, mutableListOf())
-        pending[loc] = entry
+        val contribution = LibreforgeDrops.contributions(
+            DropCause.BLOCK,
+            DropContext(
+                player = player,
+                block = event.block,
+                tool = player.inventory.itemInMainHand
+            ),
+            loc
+        )
+        pending[loc] = PendingBreak(player.uniqueId, mutableListOf(), contribution)
 
         plugin.scheduler.at(loc).runLater(1) {
-            val break_ = pending.remove(loc) ?: return@runLater
-            processDrops(loc, break_.playerUuid, break_.items)
+            processDrops(loc, pending.remove(loc) ?: return@runLater)
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    fun handleCancelled(event: CustomBlockBreakEvent) {
+        if (!event.isCancelled) return
+
+        pending.computeIfPresent(event.block.location) { _, pendingBreak ->
+            pendingBreak.copy(contribution = DropContribution.EMPTY)
         }
     }
 
@@ -59,11 +80,12 @@ object TriggerItemsAdderBlockItemDrop : Listener {
         entry.value.items.add(event.entity.itemStack.clone())
     }
 
-    private fun processDrops(loc: Location, playerUuid: UUID, collected: List<ItemStack>) {
-        val items = collected.filterNotEmpty()
-        if (items.isEmpty()) return
+    private fun processDrops(loc: Location, pendingBreak: PendingBreak) {
+        val items = pendingBreak.items.filterNotEmpty()
+        val contribution = pendingBreak.contribution
+        if (items.isEmpty() && contribution.items.isEmpty() && contribution.xp == 0) return
 
-        val player = Bukkit.getPlayer(playerUuid) ?: return
+        val player = Bukkit.getPlayer(pendingBreak.playerUuid) ?: return
 
         // The pipeline delivers through a DropQueue, which drops in the world
         // when the player has no telekinesis - guard so we don't re-collect our
@@ -78,7 +100,8 @@ object TriggerItemsAdderBlockItemDrop : Listener {
                     block = loc.block,
                     tool = player.inventory.itemInMainHand
                 ),
-                loc
+                loc,
+                contribution = contribution
             )
         } finally {
             reDropping.set(false)
