@@ -63,7 +63,9 @@ class ConditionalCustomPlaceholder(
             return
         }
 
-        plugin.scheduler.on(player).run {
+        plugin.scheduler.on(player).onRetired {
+            pendingRefreshes.remove(player.uniqueId)
+        }.run {
             pendingRefreshes.remove(player.uniqueId)
 
             val dispatcher = player.toDispatcher()
