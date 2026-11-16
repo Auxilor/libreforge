@@ -21,7 +21,8 @@ object TriggerTeleport : Trigger("teleport") {
     override val parameters = setOf(
         TriggerParameter.PLAYER,
         TriggerParameter.LOCATION,
-        TriggerParameter.TEXT
+        TriggerParameter.TEXT,
+        TriggerParameter.EVENT
     )
 
     @EventHandler(ignoreCancelled = true)
@@ -31,6 +32,7 @@ object TriggerTeleport : Trigger("teleport") {
                 event.player.toDispatcher(),
                 TriggerData(
                     player = event.player,
+                    event = event,
                     location = event.to,
                     text = event.cause.name.lowercase()
                 )

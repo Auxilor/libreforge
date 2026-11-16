@@ -27,6 +27,7 @@ import com.willfp.libreforge.mutators.impl.MutatorLocationToGround
 import com.willfp.libreforge.mutators.impl.MutatorLocationToHighestBlock
 import com.willfp.libreforge.mutators.impl.MutatorLocationToPlayer
 import com.willfp.libreforge.mutators.impl.MutatorLocationToProjectile
+import com.willfp.libreforge.mutators.impl.MutatorLocationToTeleportOrigin
 import com.willfp.libreforge.mutators.impl.MutatorLocationToVictim
 import com.willfp.libreforge.mutators.impl.MutatorLocationToWorldSpawn
 import com.willfp.libreforge.mutators.impl.MutatorMoveLocation
@@ -110,6 +111,7 @@ object Mutators : AliasedRegistry<Mutator<*>>() {
         register(MutatorLocationToCursor)
         register(MutatorLocationToPlayer)
         register(MutatorLocationToProjectile)
+        register(MutatorLocationToTeleportOrigin)
         register(MutatorLocationToVictim)
         register(MutatorPlayerAsVictim)
         register(MutatorSpinLocation)
