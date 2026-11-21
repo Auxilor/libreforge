@@ -33,6 +33,7 @@ softdepend:
   - AxTrade
   - Votifier
   - FancyNpcs
+  - PhoenixNPCs
   - HuskTowns
   - HuskClaims
   - CustomCrops

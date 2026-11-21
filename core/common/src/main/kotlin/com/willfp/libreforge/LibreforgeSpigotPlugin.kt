@@ -59,6 +59,7 @@ import com.willfp.libreforge.integrations.model.ModelIntegration
 import com.willfp.libreforge.integrations.mythicmobs.MythicMobsIntegration
 import com.willfp.libreforge.integrations.notbounties.NotBountiesIntegration
 import com.willfp.libreforge.integrations.paper.PaperIntegration
+import com.willfp.libreforge.integrations.phoenixnpcs.PhoenixNPCsIntegration
 import com.willfp.libreforge.integrations.plotsquared.PlotSquaredIntegration
 import com.willfp.libreforge.integrations.purpur.PurpurIntegration
 import com.willfp.libreforge.integrations.rosestacker.RoseStackerIntegration
@@ -285,6 +286,7 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
             IntegrationLoader("ModelEngine") { ModelIntegration("ModelEngine").load(this) },
             IntegrationLoader("BetterModel") { ModelIntegration("BetterModel").load(this) },
             IntegrationLoader("FancyNpcs") { FancyNPCsIntegration.load(this) },
+            IntegrationLoader("PhoenixNPCs") { PhoenixNPCsIntegration.load(this) },
             IntegrationLoader("UltimateMobCoins") { UltimateMobCoinsIntegration.load(this) },
             IntegrationLoader("HuskTowns") { HuskTownsIntegration.load(this) },
             IntegrationLoader("HuskClaims") { HuskClaimsIntegration.load(this) },
