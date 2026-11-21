@@ -49,7 +49,6 @@ object TriggerCraft : Trigger("craft") {
 
         val item = event.recipe.result
 
-        // The recipe's result can report an amount of 0; the result slot holds the real per-craft output.
         val amountPerCraft = (event.inventory.result?.amount ?: 0).takeIf { it > 0 }
             ?: item.amount.coerceAtLeast(1)
 
@@ -60,7 +59,14 @@ object TriggerCraft : Trigger("craft") {
             ClickType.DROP, ClickType.CONTROL_DROP -> handleDropCompletion(cursor)
             ClickType.SWAP_OFFHAND -> handleSwapOffhandCompletion(player)
             ClickType.SHIFT_RIGHT, ClickType.SHIFT_LEFT -> handleShiftClickCompletion(event, item, amountPerCraft)
-            else -> 1
+            ClickType.LEFT,
+            ClickType.RIGHT,
+            ClickType.WINDOW_BORDER_LEFT,
+            ClickType.WINDOW_BORDER_RIGHT,
+            ClickType.MIDDLE,
+            ClickType.DOUBLE_CLICK,
+            ClickType.CREATIVE,
+            ClickType.UNKNOWN -> 1
         }
 
         if (recipeRepetitions == CRAFTING_FAILED) {
