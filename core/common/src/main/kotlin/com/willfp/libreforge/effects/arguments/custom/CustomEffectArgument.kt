@@ -3,6 +3,7 @@ package com.willfp.libreforge.effects.arguments.custom
 import com.willfp.eco.core.EcoPlugin
 import com.willfp.eco.core.config.interfaces.Config
 import com.willfp.eco.core.registry.KRegistrable
+import com.willfp.libreforge.DynamicConfigs
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.conditions.Conditions
 import com.willfp.libreforge.effects.Effects
@@ -18,6 +19,8 @@ class CustomEffectArgument(
         config.getSubsections("is-met"),
         baseContext.with("is-met")
     )
+
+    val conditionConfigsToInject: List<Config> = isMet.map { it.config }.filter { DynamicConfigs.hasPlaceholder(it) }
 
     val ifMet = Effects.compileChain(
         config.getSubsections("if-met"),

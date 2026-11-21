@@ -20,9 +20,15 @@ class ArgumentCustom(private val customID: String) : EffectArgument<CustomEffect
         trigger: DispatchedTrigger,
         compileData: CustomEffectArgument?
     ): Boolean {
+        compileData ?: return false
+
         trigger.addCustomPlaceholders(element)
 
-        return compileData?.isMet?.areMetAndTrigger(trigger) ?: false
+        for (config in compileData.conditionConfigsToInject) {
+            config.addInjectablePlaceholder(trigger.placeholders)
+        }
+
+        return compileData.isMet.areMetAndTrigger(trigger)
     }
 
 
