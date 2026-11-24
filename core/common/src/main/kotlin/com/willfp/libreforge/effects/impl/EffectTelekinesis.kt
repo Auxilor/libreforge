@@ -269,7 +269,7 @@ object EffectTelekinesis : Effect<NoCompileData>("telekinesis") {
             .forceTelekinesis()
             .push()
 
-        event.drops.clear()
+        event.drops = emptyList()
     }
 
     // Fires at HIGH so TriggerCatchFish (NORMAL) has already applied modifiers
