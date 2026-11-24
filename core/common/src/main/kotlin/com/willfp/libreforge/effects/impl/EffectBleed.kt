@@ -14,11 +14,15 @@ import com.willfp.libreforge.plugin
 import com.willfp.libreforge.triggers.TriggerData
 import com.willfp.libreforge.triggers.TriggerParameter
 import com.willfp.libreforge.triggers.impl.TriggerKill
+import org.bukkit.Statistic
+import org.bukkit.entity.LivingEntity
+import org.bukkit.entity.Player
 
 
 object EffectBleed : Effect<NoCompileData>("bleed") {
     override val description = "Deals damage to the victim repeatedly over a set number of ticks."
     override val categories = setOf("combat")
+    override val additionalInfo = listOf("Stops when the victim dies, leaves, or respawns.")
 
     override val parameters = setOf(
         TriggerParameter.VICTIM
@@ -68,36 +72,50 @@ object EffectBleed : Effect<NoCompileData>("bleed") {
         val trueDamage = config.getBool("true_damage")
         val source = if (config.getBool("use_source")) data.player else null
 
+        val deaths = (victim as? Player)?.getStatistic(Statistic.DEATHS)
         var current = 0
 
         plugin.scheduler.on(victim).runTimer({ task ->
+            val finished = victim.hasDiedSince(deaths) || victim.bleed(damage, source, trueDamage, data.player)
+
             current++
 
-            val killed = damage >= victim.health
-
-            if (killed) {
-                if (Prerequisite.HAS_PAPER.isMet) {
-                    victim.killer = data.player
-                }
-
-                val player = data.player
-                if (player != null) {
-                    Regions.runOwned(player) {
-                        TriggerKill.force(
-                            player,
-                            victim
-                        )
-                    }
-                }
-            }
-
-            victim.dealDamage(damage, source, trueDamage)
-
-            if (current >= amount || killed) {
+            if (finished || current >= amount) {
                 task.cancel()
             }
         }, interval.toLong(), interval.toLong())
 
         return true
+    }
+
+    private fun LivingEntity.hasDiedSince(deaths: Int?): Boolean {
+        if (isDead || !isValid) {
+            return true
+        }
+
+        return this is Player && getStatistic(Statistic.DEATHS) != deaths
+    }
+
+    private fun LivingEntity.bleed(damage: Double, source: Player?, trueDamage: Boolean, player: Player?): Boolean {
+        val killed = damage >= health
+
+        if (killed) {
+            if (Prerequisite.HAS_PAPER.isMet) {
+                killer = player
+            }
+
+            if (player != null) {
+                Regions.runOwned(player) {
+                    TriggerKill.force(
+                        player,
+                        this
+                    )
+                }
+            }
+        }
+
+        dealDamage(damage, source, trueDamage)
+
+        return killed
     }
 }
