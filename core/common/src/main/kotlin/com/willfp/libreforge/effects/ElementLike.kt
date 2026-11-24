@@ -106,6 +106,7 @@ abstract class ElementLike : ConfigurableElement {
         var repeatTimes = 1
         var repeatIncrement = 0.0
         var repeatCount = 0.0
+        var recheckFilters = false
 
         if (config.has("repeat")) {
             // Extra initial injection, otherwise it's not possible to use injections
@@ -116,6 +117,7 @@ abstract class ElementLike : ConfigurableElement {
             val repeatStart = config.getDoubleFromExpression("repeat.start", trigger.data)
             repeatIncrement = config.getDoubleFromExpression("repeat.increment", trigger.data)
             repeatCount = repeatStart
+            recheckFilters = config.getBool("repeat.recheck_filters")
 
             trigger.addPlaceholder(NamedValue("repeat_times", repeatTimes))
             trigger.addPlaceholder(NamedValue("repeat_start", repeatStart))
@@ -153,13 +155,9 @@ abstract class ElementLike : ConfigurableElement {
         injectPlaceholders(trigger.placeholders)
 
         // Filter
-        val filterResult = if (config.getBool("filters_before_mutation")) {
-            filters.isMet(trigger.data)
-        } else {
-            filters.isMet(data)
-        }
+        val filtersBeforeMutation = config.getBool("filters_before_mutation")
 
-        if (!filterResult) {
+        if (!filters.isMet(if (filtersBeforeMutation) trigger.data else data)) {
             return false
         }
 
@@ -183,15 +181,14 @@ abstract class ElementLike : ConfigurableElement {
         var didTrigger = false
 
         fun trigger() {
-            // Set to true if triggered.
-            didTrigger = didTrigger or doTriggerOwned(
-                trigger,
-                trigger.copy(
-                    // Mutate again here for each repeat, as mutator args can
-                    // depend on %repeat_count% (e.g. spin_velocity in shoot_extra_arrows).
-                    data = mutators.mutate(trigger.data)
-                )
-            )
+            // Mutate again here for each repeat, as mutator args can
+            // depend on %repeat_count% (e.g. spin_velocity in shoot_extra_arrows).
+            val repeatData = mutators.mutate(trigger.data)
+
+            if (!recheckFilters || filters.isMet(if (filtersBeforeMutation) trigger.data else repeatData)) {
+                // Set to true if triggered.
+                didTrigger = didTrigger or doTriggerOwned(trigger, trigger.copy(data = repeatData))
+            }
 
             repeatCount += repeatIncrement
 
