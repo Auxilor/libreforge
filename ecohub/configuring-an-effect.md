@@ -137,9 +137,10 @@ args:
     times: 5 # How many times the effect repeats
     start: -10 # The initial value of the %repeat_count% placeholder
     increment: 10 # How much the count increases (or decreases) by on each repeat
+    recheck_filters: true # Optional; check the filters again before each repeat and skip the repeats that fail (defaults to false)
 ```
 
-If the effect has any mutators, they run again for each repeat. This provides new placeholders: `%repeat_times%`, `%repeat_start%`, `%repeat_increment%`, and `%repeat_count%`.
+If the effect has any mutators, they run again for each repeat. With `recheck_filters`, a delayed repeat can be skipped when its filters stop passing, for example `victim_conditions` with `is_alive` once the victim dies. This provides new placeholders: `%repeat_times%`, `%repeat_start%`, `%repeat_increment%`, and `%repeat_count%`.
 
 ### Price
 
