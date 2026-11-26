@@ -30,6 +30,7 @@ import com.willfp.libreforge.effects.Effects
 import com.willfp.libreforge.effects.arguments.custom.CustomEffectArguments
 import com.willfp.libreforge.effects.impl.EffectTelekinesis
 import com.willfp.libreforge.effects.impl.TelekinesisChainDrops
+import com.willfp.libreforge.effects.impl.TelekinesisLeafDecay
 import com.willfp.libreforge.effects.impl.bossbar.BossBarProgressPlaceholder
 import com.willfp.libreforge.effects.impl.bossbar.BossBars
 import com.willfp.libreforge.filters.Filters
@@ -155,6 +156,7 @@ class LibreforgeSpigotPlugin : EcoPlugin() {
         }
 
         this.eventManager.registerListener(TelekinesisChainDrops)
+        this.eventManager.registerListener(TelekinesisLeafDecay)
 
         if (ClassUtils.exists("org.purpurmc.purpur.event.inventory.AnvilTakeResultEvent")
         ) {
