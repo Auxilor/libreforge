@@ -21,7 +21,7 @@ class ArgumentCustom(private val customID: String) : EffectArgument<CustomEffect
     }
 
     private fun String.evaluateIfExpression(context: PlaceholderContext): String {
-        if (this.none { it in EXPRESSION_OPERATORS }) {
+        if (this.replace(PLACEHOLDER, "").none { it in EXPRESSION_OPERATORS }) {
             return this
         }
 
@@ -29,7 +29,9 @@ class ArgumentCustom(private val customID: String) : EffectArgument<CustomEffect
     }
 
     private companion object {
-        private const val EXPRESSION_OPERATORS = "+-*/^()"
+        private const val EXPRESSION_OPERATORS = "+-*/%^()<>=!&|"
+
+        private val PLACEHOLDER = Regex("%[^% ]+%")
     }
 
     override fun isMet(
