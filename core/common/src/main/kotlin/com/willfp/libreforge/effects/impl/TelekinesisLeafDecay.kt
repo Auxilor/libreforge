@@ -35,6 +35,8 @@ internal object TelekinesisLeafDecay : Listener {
         .maxSize(100_000)
         .build()
 
+    private val pushingOwnDrops = ThreadLocal.withInitial { false }
+
     fun enable(player: UUID, effect: UUID) {
         players[player].add(effect)
     }
@@ -81,7 +83,7 @@ internal object TelekinesisLeafDecay : Listener {
     fun onItemSpawn(event: ItemSpawnEvent) {
         val block = event.location.block
 
-        if ((block.blockData as? Leaves)?.isPersistent != false) {
+        if (pushingOwnDrops.get() || (block.blockData as? Leaves)?.isPersistent != false) {
             return
         }
 
@@ -97,11 +99,16 @@ internal object TelekinesisLeafDecay : Listener {
 
     private fun send(player: Player, block: Block, drops: List<ItemStack>) {
         plugin.scheduler.on(player).run {
-            DropQueue(player)
-                .setLocation(block.location)
-                .addItems(drops)
-                .forceTelekinesis()
-                .push()
+            pushingOwnDrops.set(true)
+            try {
+                DropQueue(player)
+                    .setLocation(block.location)
+                    .addItems(drops)
+                    .forceTelekinesis()
+                    .push()
+            } finally {
+                pushingOwnDrops.set(false)
+            }
         }
     }
 }
