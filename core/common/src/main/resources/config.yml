@@ -64,7 +64,7 @@ point-names: # If you have point names that look ugly (e.g. souls) then you can 
   souls: "Souls"
 
 dates:
-  # The timezone used to work out the current date for holidays and seasons,
+  # The timezone used to work out the current date for holidays, seasons and earning-limits,
   # e.g. "Europe/London" or "America/New_York". Leave blank to use the server's system timezone.
   timezone: ""
 

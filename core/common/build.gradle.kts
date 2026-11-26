@@ -2,6 +2,9 @@ dependencies {
     implementation("dev.romainguy:kotlin-math:1.6.0") {
         isTransitive = false
     }
+    implementation("org.quartz-scheduler:quartz:2.5.2") {
+        isTransitive = false
+    }
 
     compileOnly("org.purpurmc.purpur:purpur-api:1.21.4-R0.1-SNAPSHOT")
     compileOnly("net.kyori:adventure-text-minimessage:4.26.1")
